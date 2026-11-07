@@ -1,0 +1,71 @@
+package com.coolfreeze23.headinajar.client;
+
+import com.coolfreeze23.headinajar.HeadInAJar;
+import com.coolfreeze23.headinajar.form.JarState;
+import com.coolfreeze23.headinajar.menu.JarMenu;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+
+/** Module slots, charge and the feed slot. */
+public class JarScreen extends AbstractContainerScreen<JarMenu> {
+    private static final ResourceLocation BACKGROUND = HeadInAJar.id("textures/gui/jar.png");
+
+    public JarScreen(JarMenu menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
+        imageWidth = 176;
+        imageHeight = 166;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        addRenderableWidget(Button.builder(Component.translatable("gui.headinajar.let_go"), b -> confirmLetGo())
+                .bounds(leftPos + 8, topPos + 54, 56, 16)
+                .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.headinajar.let_go.tooltip")))
+                .build());
+    }
+
+    private void confirmLetGo() {
+        var self = this;
+        minecraft.setScreen(new ConfirmScreen(yes -> {
+            if (yes && minecraft.gameMode != null) {
+                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, JarMenu.BUTTON_LET_GO);
+            }
+            minecraft.setScreen(yes ? null : self);
+        }, Component.translatable("gui.headinajar.let_go.title"), Component.translatable("gui.headinajar.let_go.body")));
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        JarState state = menu.state();
+        // shut slots past the jar's tier
+        for (int i = state.slots(); i < JarState.MAX_SLOTS; i++) {
+            int x = leftPos + JarMenu.MODULE_X + i * 18;
+            int y = topPos + JarMenu.MODULE_Y;
+            graphics.blit(BACKGROUND, x - 1, y - 1, 176, 0, 18, 18);
+        }
+        float fraction = state.charge() / (float) JarState.maxCharge();
+        ChargeHud.drawBar(graphics, leftPos + 80, topPos + 61, 62, fraction);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
+        graphics.drawString(font, Component.translatable("gui.headinajar.modules"), JarMenu.MODULE_X, 18, 0x404040, false);
+        JarState state = menu.state();
+        graphics.drawString(font, Component.translatable("gui.headinajar.charge", Math.round(100f * state.charge() / JarState.maxCharge())), 80, 50, 0x404040, false);
+        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+        renderTooltip(graphics, mouseX, mouseY);
+    }
+}

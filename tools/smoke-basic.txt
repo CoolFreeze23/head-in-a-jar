@@ -1,0 +1,49 @@
+# Head in a Jar: the jar and body render, the Jar menu, Telekinesis, putting the head back
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s armor.chest with minecraft:iron_chestplate
+/item replace entity @s armor.legs with minecraft:iron_leggings
+/item replace entity @s armor.feet with minecraft:iron_boots
+wait 30
+shot 01_before
+jar
+wait 30
+/tp @s 2.5 -60 0.5 -90 8
+view 2
+wait 30
+shot 02_jar_and_body
+view 0
+wait 10
+shot 03_first_person
+fit propeller,telekinesis,armor_plating
+charge 700
+wait 10
+menu
+wait 20
+shot 04_menu
+closegui
+/setblock 2 -60 5 minecraft:oak_log
+/tp @s 2.5 -60 0.5 0 0
+wait 20
+grab
+wait 25
+shot 05_telekinesis
+view 2
+wait 10
+shot 06_telekinesis_front
+view 0
+throw
+wait 20
+shot 07_thrown
+/tp @s 1.6 -60 0.5 90 0
+wait 10
+body
+wait 20
+view 1
+wait 10
+shot 08_back_in_body
+report done
