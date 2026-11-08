@@ -49,7 +49,7 @@ def add(EN, PT, write, shaped):
         write(f'data/headinajar/loot_table/blocks/{b}.json', {
             'type': 'minecraft:block', 'pools': [{'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': f'headinajar:{b}'}],
                                                  'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
-    all_blocks = blocks + ['saline_mixer', 'body_printer', 'leyden_jar', 'tesla_node', 'relay_mast', 'relay_mast_mk2', 'signal_jammer', 'safety_placard', 'body_locker']
+    all_blocks = blocks + ['saline_mixer', 'body_printer', 'leyden_jar', 'tesla_node', 'relay_mast', 'relay_mast_mk2', 'signal_jammer', 'safety_placard', 'body_locker', 'assembly_gantry']
     write('data/minecraft/tags/block/mineable/pickaxe.json', {'values': [f'headinajar:{b}' for b in all_blocks]})
     write('data/minecraft/tags/block/needs_stone_tool.json', {'values': [f'headinajar:{b}' for b in all_blocks if b != 'safety_placard']})
 

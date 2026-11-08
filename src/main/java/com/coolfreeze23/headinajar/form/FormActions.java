@@ -205,14 +205,20 @@ public final class FormActions {
      */
     public static boolean mountHost(ServerPlayer player, net.minecraft.world.entity.Mob host) {
         JarState state = state(player);
-        if (!com.coolfreeze23.headinajar.host.Hosts.isHost(host) || host.isVehicle() || !host.isAlive()) return false;
+        if (!com.coolfreeze23.headinajar.host.Hosts.isHost(host) || !host.isAlive()) return false;
+        if (host.isVehicle() && !(host.getFirstPassenger() == null)) return false;
         if (state.form() == Form.LINKED && state.carryingHead()) {
             if (!linkedToJar(player)) return false;
         }
         if (state.form() != Form.JAR) return false;
+        boolean mecha = host instanceof com.coolfreeze23.headinajar.entity.MechaEntity;
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && !m.isOwnedBy(player)) {
+            player.displayClientMessage(Component.translatable("message.headinajar.not_your_mecha"), true);
+            return false;
+        }
         Telekinesis.release(player, state);
         if (!player.startRiding(host, true)) return false;
-        state.setForm(Form.HOSTED);
+        state.setForm(mecha ? Form.PILOT : Form.HOSTED);
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
         player.refreshDimensions();
         Network.sync(player);
@@ -225,7 +231,7 @@ public final class FormActions {
     /** The jar leaves its host (sneak, or the host died): it sits where the neck was. */
     public static void leaveHost(ServerPlayer player) {
         JarState state = state(player);
-        if (state.form() != Form.HOSTED) return;
+        if (state.form() != Form.HOSTED && state.form() != Form.PILOT) return;
         if (player.getVehicle() != null) player.stopRiding();
         state.setForm(Form.JAR);
         player.refreshDimensions();

@@ -120,6 +120,8 @@ import gen_p2
 p2_blocks = gen_p2.run(EN, PT, write, shaped)
 import gen_p3
 gen_p3.run(EN, PT, write, shaped)
+import gen_p4
+gen_p4.run(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

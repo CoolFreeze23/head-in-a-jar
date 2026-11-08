@@ -142,6 +142,12 @@ public final class ModRegistry {
                 }
             });
 
+    // P4: Mecha Division
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity>> ASSEMBLY_GANTRY =
+            BLOCKS.register("assembly_gantry", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
+                    () -> ModRegistry.GANTRY_BE.get(), com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, null,
+                    Block.box(0, 0, 0, 16, 6, 16)));
+
     // --- items -------------------------------------------------------------------------------
     private static <T extends Item> DeferredItem<T> item(String name, Supplier<T> sup) {
         DeferredItem<T> item = ITEMS.register(name, sup);
@@ -212,6 +218,30 @@ public final class ModRegistry {
     public static final DeferredItem<HeadSatchelItem> HEAD_SATCHEL = item("head_satchel", () -> new HeadSatchelItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<SutureKitItem> SUTURE_KIT = item("suture_kit", () -> new SutureKitItem(new Item.Properties().stacksTo(16)));
 
+    public static final DeferredItem<BlockItem> ASSEMBLY_GANTRY_ITEM = blockItem(ASSEMBLY_GANTRY);
+    public static final DeferredItem<Item> MECHA_PLATING = plain("mecha_plating");
+    public static final Map<com.coolfreeze23.headinajar.mecha.MechaFrame, DeferredItem<com.coolfreeze23.headinajar.item.MechaFrameItem>> FRAMES =
+            new EnumMap<>(com.coolfreeze23.headinajar.mecha.MechaFrame.class);
+    public static final Map<com.coolfreeze23.headinajar.mecha.MechaModule, DeferredItem<com.coolfreeze23.headinajar.item.MechaModuleItem>> MECHA_MODULES =
+            new EnumMap<>(com.coolfreeze23.headinajar.mecha.MechaModule.class);
+
+    static {
+        for (var frame : com.coolfreeze23.headinajar.mecha.MechaFrame.values()) {
+            FRAMES.put(frame, item(frame.id() + "_frame", () -> new com.coolfreeze23.headinajar.item.MechaFrameItem(frame, new Item.Properties().stacksTo(1))));
+        }
+        for (var module : com.coolfreeze23.headinajar.mecha.MechaModule.values()) {
+            MECHA_MODULES.put(module, item(module.id(), () -> new com.coolfreeze23.headinajar.item.MechaModuleItem(module, new Item.Properties().stacksTo(1))));
+        }
+    }
+
+    public static net.minecraft.world.item.Item frameItem(com.coolfreeze23.headinajar.mecha.MechaFrame frame) {
+        return FRAMES.get(frame).get();
+    }
+
+    public static net.minecraft.world.item.Item mechaModule(com.coolfreeze23.headinajar.mecha.MechaModule module) {
+        return MECHA_MODULES.get(module).get();
+    }
+
     public static final Map<ModuleType, DeferredItem<ModuleItem>> MODULES = new EnumMap<>(ModuleType.class);
 
     static {
@@ -244,6 +274,20 @@ public final class ModRegistry {
             () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.ShellEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.ShellEntity(t, l,
                     com.coolfreeze23.headinajar.entity.ShellEntity.Kind.SPIDER_WALKER), MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(10).build("spider_walker"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.MechaEntity>> HOPPER = ENTITIES.register("hopper",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.MechaEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.MechaEntity(t, l,
+                    com.coolfreeze23.headinajar.mecha.MechaFrame.HOPPER), MobCategory.MISC).sized(1.2f, 2.5f).clientTrackingRange(10).build("hopper"));
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.MechaEntity>> BULWARK = ENTITIES.register("bulwark",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.MechaEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.MechaEntity(t, l,
+                    com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK), MobCategory.MISC).sized(1.6f, 3.1f).clientTrackingRange(10).build("bulwark"));
+
+    public static EntityType<com.coolfreeze23.headinajar.entity.MechaEntity> mechaType(com.coolfreeze23.headinajar.mecha.MechaFrame frame) {
+        return switch (frame) {
+            case HOPPER -> HOPPER.get();
+            case BULWARK -> BULWARK.get();
+        };
+    }
+
     // --- block entities ----------------------------------------------------------------------
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SeparationChairBlockEntity>> CHAIR_BE = BLOCK_ENTITIES.register("separation_chair",
             () -> BlockEntityType.Builder.of(SeparationChairBlockEntity::new, SEPARATION_CHAIR.get()).build(null));
@@ -274,6 +318,9 @@ public final class ModRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.BodyLockerBlockEntity>> LOCKER_BE = BLOCK_ENTITIES.register("body_locker",
             () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.BodyLockerBlockEntity::new, BODY_LOCKER.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity>> GANTRY_BE = BLOCK_ENTITIES.register("assembly_gantry",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, ASSEMBLY_GANTRY.get()).build(null));
+
     // --- menus -------------------------------------------------------------------------------
     public static final DeferredHolder<MenuType<?>, MenuType<JarMenu>> JAR_MENU = MENUS.register("jar",
             () -> new MenuType<>(JarMenu::new, FeatureFlags.DEFAULT_FLAGS));
@@ -284,6 +331,9 @@ public final class ModRegistry {
             () -> IMenuTypeExtension.create(com.coolfreeze23.headinajar.menu.SalineMixerMenu::new));
     public static final DeferredHolder<MenuType<?>, MenuType<com.coolfreeze23.headinajar.menu.BodyPrinterMenu>> PRINTER_MENU = MENUS.register("body_printer",
             () -> IMenuTypeExtension.create(com.coolfreeze23.headinajar.menu.BodyPrinterMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<com.coolfreeze23.headinajar.menu.AssemblyGantryMenu>> GANTRY_MENU = MENUS.register("assembly_gantry",
+            () -> IMenuTypeExtension.create(com.coolfreeze23.headinajar.menu.AssemblyGantryMenu::new));
 
     public static final Supplier<CreativeModeTab> TAB = TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.headinajar"))
@@ -316,6 +366,8 @@ public final class ModRegistry {
         event.put(LUNK.get(), com.coolfreeze23.headinajar.entity.ShellEntity.lunk().build());
         event.put(ROVER.get(), com.coolfreeze23.headinajar.entity.ShellEntity.rover().build());
         event.put(SPIDER_WALKER.get(), com.coolfreeze23.headinajar.entity.ShellEntity.spiderWalker().build());
+        event.put(HOPPER.get(), com.coolfreeze23.headinajar.entity.MechaEntity.createAttributes().build());
+        event.put(BULWARK.get(), com.coolfreeze23.headinajar.entity.MechaEntity.createAttributes().build());
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {
@@ -326,6 +378,8 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, DOCK_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CRADLE_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, LOCKER_BE.get(), (be, side) -> be.energy());
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, GANTRY_BE.get(), (be, side) -> be.energy());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, GANTRY_BE.get(), (be, side) -> be.items());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CRADLE_BE.get(), (be, side) -> be.saline());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, MIXER_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MIXER_BE.get(), (be, side) -> be.items());

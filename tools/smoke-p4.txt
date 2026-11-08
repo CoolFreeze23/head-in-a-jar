@@ -1,0 +1,36 @@
+# Phase 4, Mecha Division: the Gantry GUI, two fitted mecha, piloting with the HUD, the drill arm
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 0.5 0 0
+/setblock 0 -61 -3 headinajar:assembly_gantry[facing=south]
+gantry 0 -61 -3
+mecha hopper -2 -60 4 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+mecha bulwark 3 -60 5 hydraulic_legs,rocket_pack,cargo_hold,galvanic_stack,armor_plating,coolant_loop,hydraulic_fist,riot_shield,night_optics
+wait 40
+shot 01_mecha_pair
+useblock 0 -61 -3
+wait 20
+shot 02_gantry_gui
+closegui
+/tp @s -2.5 -60 2.5 0 0
+jar
+wait 5
+mount
+wait 20
+/fill -3 -60 8 -1 -58 8 minecraft:stone
+view 2
+wait 20
+shot 03_pilot_front
+view 0
+wait 10
+shot 04_pilot_hud
+arms 1
+wait 40
+shot 05_drilling
+arms 0
+report done

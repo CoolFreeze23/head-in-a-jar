@@ -17,7 +17,7 @@ public abstract class HostSeatMixin {
     @Inject(method = "getPassengerRidingPosition", at = @At("HEAD"), cancellable = true, require = 0)
     private void headinajar$neck(Entity passenger, CallbackInfoReturnable<Vec3> cir) {
         Entity self = (Entity) (Object) this;
-        if (passenger instanceof Player && self instanceof LivingEntity living && Hosts.isHost(self)) {
+        if (passenger instanceof Player && self instanceof LivingEntity living && Hosts.isHost(self) && self.getFirstPassenger() == passenger) {
             cir.setReturnValue(HostControl.ridingPosition(living));
         }
     }

@@ -79,7 +79,10 @@ public final class Hosts {
 
     /** The jar riding this host, if any. */
     public static Player pilot(Entity host) {
-        if (host.getFirstPassenger() instanceof Player player && player.getData(ModRegistry.JAR_STATE).form() == Form.HOSTED) return player;
+        if (host.getFirstPassenger() instanceof Player player) {
+            Form form = player.getData(ModRegistry.JAR_STATE).form();
+            if (form == Form.HOSTED || form == Form.PILOT) return player;
+        }
         return null;
     }
 

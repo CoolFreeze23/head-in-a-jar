@@ -17,6 +17,7 @@ public final class HostControl {
     }
 
     public static Vec3 riddenInput(LivingEntity host, Player pilot) {
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) return com.coolfreeze23.headinajar.mecha.MechaLogic.riddenInput(m, pilot);
         if (!powered(host, pilot)) return Vec3.ZERO;
         float strafe = pilot.xxa * 0.5f;
         float forward = pilot.zza;
@@ -25,6 +26,10 @@ public final class HostControl {
     }
 
     public static void tickRidden(LivingEntity host, Player pilot) {
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) {
+            com.coolfreeze23.headinajar.mecha.MechaLogic.tickRidden(m, pilot);
+            return;
+        }
         host.setYRot(pilot.getYRot());
         host.yRotO = host.getYRot();
         host.setXRot(pilot.getXRot() * 0.5f);
@@ -54,6 +59,7 @@ public final class HostControl {
     }
 
     public static float riddenSpeed(LivingEntity host, Player pilot) {
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) return com.coolfreeze23.headinajar.mecha.MechaLogic.riddenSpeed(m);
         HostDefinition def = Hosts.definition(host);
         boolean flier = def != null && def.has("flight");
         double speed = flier && host.getAttribute(Attributes.FLYING_SPEED) != null

@@ -49,7 +49,7 @@ public final class FormEvents {
     public static boolean lockedOut(Player player) {
         JarState state = state(player);
         return state.form() == Form.JAR && !state.has(ModuleType.MANIPULATOR_ARM)
-                || state.form() == Form.SOCKET || state.form() == Form.HOSTED;
+                || state.form() == Form.SOCKET || state.form() == Form.HOSTED || state.form() == Form.PILOT;
     }
 
     @SubscribeEvent
@@ -75,7 +75,7 @@ public final class FormEvents {
         }
         if (state.form() == Form.LINKED) linkedTick(server, state);
         // a hosted jar whose host is gone (died, collapsed, dismounted) is just a jar again
-        if (state.form() == Form.HOSTED && !(player.getVehicle() != null && player.getVehicle().isAlive() && com.coolfreeze23.headinajar.host.Hosts.isHost(player.getVehicle()))) {
+        if ((state.form() == Form.HOSTED || state.form() == Form.PILOT) && !(player.getVehicle() != null && player.getVehicle().isAlive() && com.coolfreeze23.headinajar.host.Hosts.isHost(player.getVehicle()))) {
             FormActions.leaveHost(server);
         }
         if (state.takeDirty(player.tickCount % 10 == 0)) Network.sync(server);
@@ -266,6 +266,26 @@ public final class FormEvents {
             event.setCanceled(true);
             if (player.tickCount % 20 == 0) player.displayClientMessage(Component.translatable("message.headinajar.portal_blocked"), true);
         }
+    }
+
+    /** A mecha pilot only leaves by ejecting (hold sneak + J); sneaking is for the Anchor Clamps. */
+    @SubscribeEvent
+    public static void mechaDismount(EntityMountEvent event) {
+        if (event.isDismounting() && !event.getLevel().isClientSide() && event.getEntityBeingMounted() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha
+                && mecha.isAlive() && !mecha.ejecting && event.getEntityMounting() == mecha.getFirstPassenger()
+                && event.getEntityMounting() instanceof Player p && state(p).form() == Form.PILOT && p.isAlive()) {
+            event.setCanceled(true);
+        }
+    }
+
+    /** Hits on a pilot land on the mecha around them. */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void pilotHurt(LivingIncomingDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player) || state(player).form() != Form.PILOT) return;
+        if (!(player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
+        if (event.getSource().getEntity() == mecha) return;
+        event.setCanceled(true);
+        if (!player.level().isClientSide) mecha.hurt(event.getSource(), event.getAmount());
     }
 
     @SubscribeEvent

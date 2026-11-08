@@ -29,7 +29,7 @@ public final class Network {
     }
 
     public enum Action {
-        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY
+        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY, EJECT, JET
     }
 
     /** Client to server: a key the jarred player pressed. */
@@ -82,6 +82,17 @@ public final class Network {
         }
     }
 
+    /** Client to server: which mecha arm buttons are held (bit 0 left, bit 1 right). */
+    public record ArmInput(int held) implements CustomPacketPayload {
+        public static final Type<ArmInput> TYPE = new Type<>(HeadInAJar.id("arm_input"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, ArmInput> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, ArmInput::held, ArmInput::new);
+
+        @Override
+        public Type<ArmInput> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar("1");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
@@ -101,6 +112,11 @@ public final class Network {
             com.coolfreeze23.headinajar.host.Hosts.setClientNecks(necks);
         });
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);
+        registrar.playToServer(ArmInput.TYPE, ArmInput.CODEC, (msg, ctx) -> {
+            if (ctx.player().getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == ctx.player()) {
+                mecha.armsHeld = msg.held() & 3;
+            }
+        });
     }
 
     private static void onSync(FormSync msg, IPayloadContext ctx) {
@@ -125,6 +141,16 @@ public final class Network {
                 FormActions.jarToLinked(player);
             }
             return;
+        }
+        if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
+            if (msg.action() == Action.EJECT) {
+                com.coolfreeze23.headinajar.mecha.MechaLogic.eject(mecha, player);
+                return;
+            }
+            if (msg.action() == Action.JET) {
+                com.coolfreeze23.headinajar.mecha.MechaLogic.jet(mecha);
+                return;
+            }
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.HOSTED && player.getVehicle() instanceof net.minecraft.world.entity.Mob host) {
             if (msg.action() == Action.ABILITY || msg.action() == Action.SECONDARY) {

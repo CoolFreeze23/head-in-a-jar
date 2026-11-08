@@ -495,4 +495,6 @@ import draw_p2
 draw_p2.run(globals())
 import draw_p3
 draw_p3.run(globals())
+import draw_p4
+draw_p4.run(globals())
 print('textures written')

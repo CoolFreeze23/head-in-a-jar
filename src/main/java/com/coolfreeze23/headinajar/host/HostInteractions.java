@@ -55,6 +55,14 @@ public final class HostInteractions {
             return;
         }
         var form = FormActions.state(player).form();
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && form != Form.JAR
+                && !(form == Form.LINKED && FormActions.state(player).carryingHead())) {
+            // anyone can ride in a Passenger Pod
+            if (mecha.isVehicle() && mecha.has(com.coolfreeze23.headinajar.mecha.MechaModule.PASSENGER_POD)) player.startRiding(mecha);
+            else player.displayClientMessage(Component.translatable("message.headinajar.mecha_status", mecha.battery() / 1000,
+                    Math.round(mecha.getHealth()), Math.round(mecha.getMaxHealth())), true);
+            return;
+        }
         if (form == Form.JAR || form == Form.LINKED && FormActions.state(player).carryingHead()) {
             if (!FormActions.mountHost(player, host)) player.displayClientMessage(Component.translatable("message.headinajar.host_busy"), true);
         } else if (form == Form.BODY || form == Form.LINKED) {

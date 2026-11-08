@@ -134,6 +134,12 @@ public final class ClientEvents {
         }
         if (!FormEvents.lockedOut(player)) return;
         if (state.form() == Form.HOSTED && event.isAttack()) return;
+        if (state.form() == Form.PILOT) {
+            // the mouse buttons belong to the mecha's arms (sent by PilotClient)
+            event.setCanceled(true);
+            event.setSwingHand(false);
+            return;
+        }
         boolean ownBody = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit && hit.getEntity() instanceof HeadlessBody
                 || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
         if (!ownBody) {
@@ -148,7 +154,10 @@ public final class ClientEvents {
         if (mc.player == null) return;
         JarState state = state(mc.player);
         while (ClientSetup.JAR_MENU.consumeClick()) {
-            if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.OPEN_MENU));
+            // in a mecha, sneak + J is the eject handle
+            if (state.form().isJarred() && !(state.form() == Form.PILOT && mc.options.keyShift.isDown())) {
+                PacketDistributor.sendToServer(new Network.JarAction(Network.Action.OPEN_MENU));
+            }
         }
         while (ClientSetup.ABILITY.consumeClick()) {
             if (ClientHooks.handshakeActive()) ClientHooks.press();
@@ -158,6 +167,7 @@ public final class ClientEvents {
             if (state.form() == Form.HOSTED) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
         }
         ClientHooks.tick();
+        PilotClient.tick();
         while (ClientSetup.SWAP.consumeClick()) {
             if (state.form() == Form.LINKED || state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
         }

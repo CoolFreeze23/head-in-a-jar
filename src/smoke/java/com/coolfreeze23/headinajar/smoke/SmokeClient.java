@@ -190,7 +190,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -254,6 +254,53 @@ public class SmokeClient {
                                     }
                                 }
                             }
+                        }
+                        case "mecha" -> {
+                            // mecha FRAME X Y Z module,module,...: a fitted mecha owned by the player, battery full
+                            String[] a = parts[1].split(" ");
+                            var frame = com.coolfreeze23.headinajar.mecha.MechaFrame.valueOf(a[0].toUpperCase(java.util.Locale.ROOT));
+                            var m = ModRegistry.mechaType(frame).create(player.serverLevel());
+                            java.util.List<ItemStack> slots = new java.util.ArrayList<>();
+                            for (int i = 0; i < frame.totalSlots(); i++) slots.add(ItemStack.EMPTY);
+                            for (String name : a[4].split(",")) {
+                                var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
+                                int first = frame.firstIndex(type.slot);
+                                for (int i = first; i < first + frame.slots(type.slot); i++) {
+                                    if (slots.get(i).isEmpty()) {
+                                        slots.set(i, new ItemStack(ModRegistry.mechaModule(type)));
+                                        break;
+                                    }
+                                }
+                            }
+                            m.setModules(slots);
+                            m.setOwner(player.getUUID());
+                            m.setBattery(m.batteryCapacity());
+                            m.moveTo(Double.parseDouble(a[1]) + 0.5, Double.parseDouble(a[2]), Double.parseDouble(a[3]) + 0.5, 180, 0);
+                            player.serverLevel().addFreshEntity(m);
+                        }
+                        case "gantry" -> {
+                            String[] a = parts[1].split(" ");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
+                            if (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity g) {
+                                g.items().setStackInSlot(0, new ItemStack(ModRegistry.frameItem(com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK)));
+                                g.items().setStackInSlot(1, new ItemStack(ModRegistry.MECHA_PLATING.get(), 12));
+                                var frame = com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK;
+                                String[] mods = {"hydraulic_legs", "jump_jets", "cargo_hold", "galvanic_stack", "armor_plating", "life_support_recycler", "drill", "hydraulic_fist", "night_optics"};
+                                for (String name : mods) {
+                                    var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
+                                    int first = frame.firstIndex(type.slot);
+                                    for (int i = first; i < first + frame.slots(type.slot); i++) {
+                                        if (g.items().getStackInSlot(2 + i).isEmpty()) {
+                                            g.items().setStackInSlot(2 + i, new ItemStack(ModRegistry.mechaModule(type)));
+                                            break;
+                                        }
+                                    }
+                                }
+                                g.energy().set(100_000);
+                            }
+                        }
+                        case "arms" -> {
+                            if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) m.armsHeld = Integer.parseInt(parts[1]);
                         }
                         case "mount" -> {
                             var hosts = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(6),
