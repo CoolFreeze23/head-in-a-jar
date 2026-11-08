@@ -42,6 +42,7 @@ public class ClientSetup {
         modBus.addListener(ClientSetup::playerLayers);
         modBus.addListener(ClientSetup::fluids);
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent e) -> e.enqueueWork(() -> {
+            com.coolfreeze23.headinajar.compat.Compat.clientSetup();
             for (var fluid : com.coolfreeze23.headinajar.registry.ModFluids.ALL) {
                 net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(fluid.source.get(), net.minecraft.client.renderer.RenderType.translucent());
                 net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(fluid.flowing.get(), net.minecraft.client.renderer.RenderType.translucent());

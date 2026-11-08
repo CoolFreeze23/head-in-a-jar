@@ -7,14 +7,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -62,9 +67,39 @@ public final class HeadCarry {
     /** ...and when strapped to your back. */
     private static final float BACK_Y = 16, BACK_Z = 9.6f;
 
+    /** The model and walk cycle each carrying player was last posed with, so the pose can be put back after other mods animate. */
+    private static final Map<UUID, Posed> POSED = new HashMap<>();
+
+    private record Posed(HumanoidModel<?> model, float limbSwing, float limbSwingAmount, float age) {
+    }
+
     /** Called at the end of HumanoidModel.setupAnim: both arms come down and forward to grip the jar's sides. */
     public static void poseArms(HumanoidModel<?> model, LivingEntity entity, float limbSwing, float limbSwingAmount, float age) {
-        if (!(entity instanceof Player player) || !carrying(player)) return;
+        if (!(entity instanceof Player player) || drawingHands) return;
+        if (!carrying(player)) {
+            POSED.remove(player.getUUID());
+            return;
+        }
+        POSED.put(player.getUUID(), new Posed(model, limbSwing, limbSwingAmount, age));
+        applyArms(model, player, limbSwing, limbSwingAmount, age);
+    }
+
+    /**
+     * Puts the carrying pose back after an animation mod (Entity Model Features, under Fresh Animations' player pack) has
+     * moved the arms, sleeves included.
+     */
+    public static void reposeArms(Player player) {
+        Posed posed = POSED.get(player.getUUID());
+        if (posed == null || !carrying(player)) return;
+        HumanoidModel<?> model = posed.model();
+        applyArms(model, player, posed.limbSwing(), posed.limbSwingAmount(), posed.age());
+        if (model instanceof PlayerModel<?> playerModel) {
+            playerModel.rightSleeve.copyFrom(model.rightArm);
+            playerModel.leftSleeve.copyFrom(model.leftArm);
+        }
+    }
+
+    private static void applyArms(HumanoidModel<?> model, Player player, float limbSwing, float limbSwingAmount, float age) {
         float lift = lift(player, age);
         if (lift <= 0) return;
         // a gentle sway with each step, and a little breathing
@@ -102,8 +137,36 @@ public final class HeadCarry {
     }
 
     /**
-     * First person, life size: the jar sits low in front of you, its lid just under your line of sight, with your hands on
-     * its sides. It rises into view as you lift it. Returns whether it drew (so the vanilla hands are skipped).
+     * Replaces the whole first-person hand pass while the jar is in your arms (so no other mod adds hands of its own), with
+     * the same view sway the vanilla pass applies. Returns false when not carrying, to let the normal pass run.
+     */
+    public static boolean drawFirstPersonPass(PoseStack pose, MultiBufferSource.BufferSource buffers, LocalPlayer player, int light, float partialTick) {
+        if (player == null || !inArms(player)) return false;
+        pose.pushPose();
+        float xBob = Mth.lerp(partialTick, player.xBobO, player.xBob);
+        float yBob = Mth.lerp(partialTick, player.yBobO, player.yBob);
+        pose.mulPose(Axis.XP.rotationDegrees((player.getViewXRot(partialTick) - xBob) * 0.1f));
+        pose.mulPose(Axis.YP.rotationDegrees((player.getViewYRot(partialTick) - yBob) * 0.1f));
+        drawFirstPerson(pose, buffers, light, partialTick, 0);
+        pose.popPose();
+        buffers.endBatch();
+        return true;
+    }
+
+    /** Set while the first-person hands render, whose setupAnim call must not pick up the third-person carry pose. */
+    private static boolean drawingHands;
+
+    /** Jar tipped toward you in first person (degrees about X, round its middle). */
+    private static final float FP_TILT = -40;
+    /** Where each hand grips the jar, in the jar's own frame (blocks from the middle of its base): the upper sides. */
+    private static final float GRIP_X = 0.65f, GRIP_Y = 0.7f, GRIP_Z = 0.02f;
+    /** Your shoulders, from the camera (blocks): the arms run from here to the grip. */
+    private static final float SHOULDER_X = 0.42f, SHOULDER_Y = -0.45f, SHOULDER_Z = 0.3f;
+
+    /**
+     * First person, life size: the jar sits low in front of you, tipped toward you so you see your head inside, with a hand
+     * on each side. The arms run from your shoulders to the jar's sides, so they stay in view at any field of view. It rises
+     * into view as you lift it. Returns whether it drew (so the vanilla hands are skipped).
      */
     public static boolean drawFirstPerson(PoseStack pose, MultiBufferSource buffers, int light, float partialTick, float equip) {
         Minecraft mc = Minecraft.getInstance();
@@ -113,32 +176,40 @@ public final class HeadCarry {
         float lift = lift(player, age);
         float walk = Mth.lerp(partialTick, player.walkDistO, player.walkDist);
         float amount = Mth.clamp(Mth.lerp(partialTick, player.oBob, player.bob) * 6, 0, 1);
-        // camera (the Collar Cam) to the jar's base, in blocks: the same spot as in third person
+        // camera (the Collar Cam) to the jar's base, in blocks: held a little further out and lower than in third person
         float eye = player.getEyeHeight();
-        // held a little further out and lower than in third person, so you see down into the jar rather than its lid
         float baseY = 1.5f - FRONT_Y / 16f - eye - 0.04f;
         float baseZ = FRONT_Z / 16f - 0.55f;
         pose.pushPose();
         pose.translate(Mth.sin(walk * Mth.PI) * 0.02f * amount, -Math.abs(Mth.cos(walk * Mth.PI)) * 0.025f * amount - 0.9f * (1 - lift) - 0.2f * equip, 0);
-        // the hands, on the jar's sides
+        // the hands: each grip point on the tipped jar, reached from the shoulder on that side
         PlayerRenderer renderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(player);
-        for (int side = 0; side < 2; side++) {
-            float f = side == 0 ? 1 : -1;
-            pose.pushPose();
-            pose.translate(f * 0.5f, baseY + 0.45f, baseZ + 0.05f);
-            pose.mulPose(Axis.YP.rotationDegrees(f * -12));
-            pose.mulPose(Axis.XP.rotationDegrees(-78));
-            pose.mulPose(Axis.ZP.rotationDegrees(f * -6));
-            pose.translate(-f * 0.31f, -0.7f, 0);
-            if (side == 0) renderer.renderRightHand(pose, buffers, light, player);
-            else renderer.renderLeftHand(pose, buffers, light, player);
-            pose.popPose();
+        float cos = Mth.cos(FP_TILT * Mth.DEG_TO_RAD), sin = Mth.sin(FP_TILT * Mth.DEG_TO_RAD);
+        drawingHands = true;
+        try {
+            for (int side = 0; side < 2; side++) {
+                float f = side == 0 ? 1 : -1;
+                float ry = GRIP_Y - 0.5f, rz = GRIP_Z;
+                Vector3f grip = new Vector3f(f * GRIP_X, baseY + 0.5f + ry * cos - rz * sin, baseZ + ry * sin + rz * cos);
+                Vector3f along = new Vector3f(grip).sub(f * SHOULDER_X, SHOULDER_Y, SHOULDER_Z).normalize();
+                pose.pushPose();
+                pose.translate(grip.x, grip.y, grip.z);
+                // the arm model runs down its +Y from the shoulder: point that along shoulder-to-grip, palm turned in to the glass
+                pose.mulPose(new Quaternionf().rotationTo(0, 1, 0, along.x, along.y, along.z));
+                pose.mulPose(Axis.YP.rotationDegrees(f * 90));
+                // the hand (10 px down the arm, 1 px out from its middle) lands on the grip
+                pose.translate(f * 6 / 16f, -10 / 16f, 0);
+                if (side == 0) renderer.renderRightHand(pose, buffers, light, player);
+                else renderer.renderLeftHand(pose, buffers, light, player);
+                pose.popPose();
+            }
+        } finally {
+            drawingHands = false;
         }
         // the jar, life size, your head turned round to look up at you
         pose.translate(0, baseY, baseZ);
-        // tipped toward you round its middle, as if held up to look at: the glass faces you, not the lid
         pose.translate(0, 0.5f, 0);
-        pose.mulPose(Axis.XP.rotationDegrees(-40));
+        pose.mulPose(Axis.XP.rotationDegrees(FP_TILT));
         pose.translate(0, -0.5f, 0);
         var state = player.getData(ModRegistry.JAR_STATE);
         JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), 180 + Mth.sin(age * 0.05f) * 6, -18, age, true,

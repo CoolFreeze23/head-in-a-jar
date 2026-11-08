@@ -293,6 +293,9 @@ All optional. Nothing changes if a mod is missing.
 - **JEI:** an information page for every machine.
 - **Jade:** mecha power, heat and mass; host freshness and sync; whose body it is; the genes a creature carries.
 - **Patchouli:** the Employee Handbook.
+- **Fresh Animations (player extension) and other Entity Model Features packs:** keep animating you while you carry your
+  head; only your arms stay on the jar.
+- **Punchy and other first-person arm mods:** while the jar is in your arms, you see just your own two hands on it.
 
 ![Jade on a mecha](docs/images/jade.png)
 

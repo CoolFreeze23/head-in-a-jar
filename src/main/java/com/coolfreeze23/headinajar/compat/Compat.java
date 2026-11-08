@@ -17,4 +17,9 @@ public final class Compat {
     public static boolean wearsCurio(Player player, Item item) {
         return curios() && CuriosCompat.wears(player, item);
     }
+
+    /** Client setup: hooks into Entity Model Features' player animations when it is installed. */
+    public static void clientSetup() {
+        if (ModList.get() != null && ModList.get().isLoaded("entity_model_features")) EmfCompat.register();
+    }
 }

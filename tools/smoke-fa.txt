@@ -1,0 +1,40 @@
+# Carry with the pack's animation mods (SMOKE_PACK_MODS=1, Fresh Animations packs on): third person, first person, walking
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 20
+pickup
+wait 30
+view 2
+wait 15
+shot fa_front
+walk 1
+burst fa_walk 10
+walk 0
+view 1
+wait 15
+shot fa_back
+view 0
+wait 10
+shot fa_fp_level
+look 0 35
+wait 10
+shot fa_fp_down
+look 0 0
+/item replace entity @s weapon.mainhand with minecraft:stick
+wait 20
+view 2
+wait 15
+shot fa_onback_front
+view 1
+wait 15
+shot fa_onback_back
+view 0
+wait 10
+shot fa_fp_stick
+report done

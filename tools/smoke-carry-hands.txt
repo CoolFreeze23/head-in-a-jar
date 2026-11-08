@@ -1,0 +1,21 @@
+# First-person carry hands: level, looking down, looking up
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 20
+pickup
+wait 30
+view 0
+wait 10
+shot hands_level
+look 0 35
+wait 10
+shot hands_down
+look 0 -30
+wait 10
+shot hands_up
+report done

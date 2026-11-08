@@ -96,6 +96,8 @@ dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     // the hidden smoke client also runs them, so their screens and tooltips can be checked
     smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'])
+    // SMOKE_PACK_MODS=1 also runs the pack's animation mods (libs-smoke/, not committed) for compatibility checks
+    if (System.getenv('SMOKE_PACK_MODS')) smokeRuntimeOnly fileTree(dir: 'libs-smoke', include: ['*.jar'])
 }
 
 tasks.withType(ProcessResources).configureEach {
