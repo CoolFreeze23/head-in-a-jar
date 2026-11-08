@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.coolfreeze23.headinajar.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "HostControlMixin",
+    "HostRiddenMixin",
+    "HostAiMixin",
+    "HostSeatMixin",
+    "HostDespawnMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "ModelPartMixin"
+  ]
+}

@@ -168,6 +168,12 @@ public class SmokeClient {
                 wait = 1;
             }
             case "hud" -> mc.options.hideGui = !parts[1].equals("on");
+            case "clienthosts" -> {
+                for (var e : mc.level.entitiesForRendering()) {
+                    if (e instanceof net.minecraft.world.entity.Mob) report.add("client " + e.getType().toShortString() + " host=" + com.coolfreeze23.headinajar.host.Hosts.isHost(e)
+                            + " model=" + (mc.getEntityRenderDispatcher().getRenderer(e) instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> r ? r.getModel().getClass().getSimpleName() : "-"));
+                }
+            }
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "report" -> report.add(parts[1]);
             case "screen" -> mc.setScreen(switch (parts[1]) {
@@ -184,7 +190,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -215,6 +221,48 @@ public class SmokeClient {
                         case "pickup" -> {
                             var heads = player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.HeadJarEntity.class, player.getBoundingBox().inflate(8));
                             report.add("pickup -> " + (!heads.isEmpty() && FormActions.pickUpHead(player, heads.get(0))));
+                        }
+                        case "hostify", "jarhead" -> {
+                            // hostify ENTITY X Y Z: spawn a mob there and saw it into a host; jarhead ENTITY X Y Z: saw off its head into a placed jar
+                            String[] a = parts[1].split(" ");
+                            var type = net.minecraft.world.entity.EntityType.byString(a[0]).orElseThrow();
+                            var at = new net.minecraft.core.BlockPos(Integer.parseInt(a[1]), Integer.parseInt(a[2]), Integer.parseInt(a[3]));
+                            var mob = (net.minecraft.world.entity.Mob) type.spawn(player.serverLevel(), at, net.minecraft.world.entity.MobSpawnType.COMMAND);
+                            if (mob instanceof net.minecraft.world.entity.npc.Villager v) {
+                                v.setVillagerData(v.getVillagerData().setProfession(net.minecraft.world.entity.npc.VillagerProfession.LIBRARIAN));
+                                v.getOffers();
+                            }
+                            mob.setYRot(180);
+                            mob.setYBodyRot(180);
+                            mob.setHealth(1);
+                            if (parts[0].equals("jarhead")) player.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()));
+                            var result = com.coolfreeze23.headinajar.item.SurgicalSawItem.saw(player, new ItemStack(ModRegistry.SURGICAL_SAW.get()), mob,
+                                    net.minecraft.world.InteractionHand.MAIN_HAND);
+                            report.add(parts[0] + " " + a[0] + " -> " + result);
+                            if (parts[0].equals("jarhead")) {
+                                for (var stack : player.getInventory().items) {
+                                    if (stack.is(ModRegistry.JARRED_HEAD.get())) {
+                                        player.serverLevel().setBlockAndUpdate(at, ModRegistry.JARRED_HEAD_BLOCK.get().defaultBlockState()
+                                                .setValue(com.coolfreeze23.headinajar.block.JarredHeadBlock.FACING, net.minecraft.core.Direction.NORTH));
+                                        if (player.serverLevel().getBlockEntity(at) instanceof com.coolfreeze23.headinajar.block.JarredHeadBlockEntity head) {
+                                            head.load(stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA).copyTag());
+                                            head.setChanged();
+                                            player.serverLevel().sendBlockUpdated(at, head.getBlockState(), head.getBlockState(), 3);
+                                        }
+                                        stack.shrink(1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        case "mount" -> {
+                            var hosts = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(6),
+                                    com.coolfreeze23.headinajar.host.Hosts::isHost);
+                            hosts.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            report.add("mount -> " + (!hosts.isEmpty() && FormActions.mountHost(player, hosts.get(0))));
+                        }
+                        case "sync" -> {
+                            if (player.getVehicle() != null) com.coolfreeze23.headinajar.host.Hosts.data(player.getVehicle()).sync = Float.parseFloat(parts[1]);
                         }
                         case "chair", "sign" -> {
                             // chair X Y Z: fill the chair at X Y Z with parts and 50 kFE; sign X Y Z: sign Form 27-B as the seated player

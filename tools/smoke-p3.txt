@@ -1,0 +1,35 @@
+# Phase 3, Hostile Takeover: headless hosts, a jar riding one with the host HUD, shells, a jarred villager
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 0.5 0 0
+hostify minecraft:cow -1 -60 4
+hostify minecraft:enderman 2 -60 5
+hostify minecraft:spider 5 -60 5
+hostify minecraft:wolf -3 -60 3
+/summon headinajar:lunk -5 -60 6 {Rotation:[180f,0f]}
+/summon headinajar:rover -7 -60 4 {Rotation:[180f,0f]}
+/summon headinajar:spider_walker 7 -60 7 {Rotation:[180f,0f]}
+jarhead minecraft:villager 1 -60 2
+/effect give @e[type=!player] minecraft:slowness 99999 255 true
+wait 60
+clienthosts
+shot 01_hosts_and_shells
+/tp @s -0.5 -60 2.5 0 0
+jar
+wait 5
+mount
+wait 120
+sync 60
+wait 30
+view 2
+wait 20
+shot 02_jar_riding_cow
+view 0
+wait 5
+shot 03_hosted_hud
+report done

@@ -1,0 +1,25 @@
+{
+  "entity": "minecraft:warden",
+  "neck": [
+    0,
+    2.6,
+    0.2
+  ],
+  "blood": "grave",
+  "decay_per_minute": 2.0,
+  "attributes": {},
+  "flags": [
+    "night_vision",
+    "knockback_immune"
+  ],
+  "drawbacks": [],
+  "neutral_to": [],
+  "primary": {
+    "type": "sonic_boom",
+    "cooldown": 200,
+    "params": {
+      "damage": 10.0,
+      "range": 15.0
+    }
+  }
+}

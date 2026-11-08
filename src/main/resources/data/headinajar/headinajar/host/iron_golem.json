@@ -1,0 +1,25 @@
+{
+  "entity": "minecraft:iron_golem",
+  "neck": [
+    0,
+    2.35,
+    -0.05
+  ],
+  "blood": "oil",
+  "decay_per_minute": 2.0,
+  "attributes": {},
+  "flags": [
+    "knockback_immune"
+  ],
+  "drawbacks": [
+    "no_jump"
+  ],
+  "neutral_to": [],
+  "primary": {
+    "type": "toss",
+    "cooldown": 40,
+    "params": {
+      "power": 1.2
+    }
+  }
+}

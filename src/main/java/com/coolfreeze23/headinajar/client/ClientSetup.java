@@ -24,6 +24,8 @@ public class ClientSetup {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
     public static final KeyMapping SWAP = new KeyMapping("key.headinajar.swap", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+    public static final KeyMapping SECONDARY = new KeyMapping("key.headinajar.secondary", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
     public static final KeyMapping ABILITY = new KeyMapping("key.headinajar.ability", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
 
@@ -51,6 +53,10 @@ public class ClientSetup {
         event.registerEntityRenderer(ModRegistry.HEAD_JAR.get(), HeadJarRenderer::new);
         event.registerEntityRenderer(ModRegistry.SEAT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.CRADLE_BE.get(), CradleRenderer::new);
+        event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
+        event.registerEntityRenderer(ModRegistry.LUNK.get(), c -> new ShellRenderer(c, ShellRenderer.LUNK, "lunk", 0.8f));
+        event.registerEntityRenderer(ModRegistry.ROVER.get(), c -> new ShellRenderer(c, ShellRenderer.ROVER, "rover", 0.7f));
+        event.registerEntityRenderer(ModRegistry.SPIDER_WALKER.get(), c -> new ShellRenderer(c, ShellRenderer.SPIDER, "spider_walker", 0.8f));
     }
 
     private static void layers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -59,6 +65,9 @@ public class ClientSetup {
         event.registerLayerDefinition(JarModel.STUMP, JarModel::stump);
         event.registerLayerDefinition(JarModel.GOGGLES, JarModel::goggles);
         event.registerLayerDefinition(JarModel.COLLAR, JarModel::collar);
+        event.registerLayerDefinition(ShellRenderer.LUNK, ShellRenderer::lunk);
+        event.registerLayerDefinition(ShellRenderer.ROVER, ShellRenderer::rover);
+        event.registerLayerDefinition(ShellRenderer.SPIDER, ShellRenderer::spiderWalker);
     }
 
     private static void screens(RegisterMenuScreensEvent event) {
@@ -81,11 +90,13 @@ public class ClientSetup {
         event.register(JAR_MENU);
         event.register(ABILITY);
         event.register(SWAP);
+        event.register(SECONDARY);
     }
 
     private static void gui(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.FOOD_LEVEL, HeadInAJar.id("charge"), ChargeHud::render);
         event.registerAboveAll(HeadInAJar.id("neuro_link"), LinkHud::render);
+        event.registerAboveAll(HeadInAJar.id("host"), HostHud::render);
     }
 
     private static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {

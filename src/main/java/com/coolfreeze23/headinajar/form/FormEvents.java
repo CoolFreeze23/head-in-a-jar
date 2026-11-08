@@ -49,7 +49,7 @@ public final class FormEvents {
     public static boolean lockedOut(Player player) {
         JarState state = state(player);
         return state.form() == Form.JAR && !state.has(ModuleType.MANIPULATOR_ARM)
-                || state.form() == Form.SOCKET;
+                || state.form() == Form.SOCKET || state.form() == Form.HOSTED;
     }
 
     @SubscribeEvent
@@ -74,6 +74,10 @@ public final class FormEvents {
             LifeSupport.tick(server, state);
         }
         if (state.form() == Form.LINKED) linkedTick(server, state);
+        // a hosted jar whose host is gone (died, collapsed, dismounted) is just a jar again
+        if (state.form() == Form.HOSTED && !(player.getVehicle() != null && player.getVehicle().isAlive() && com.coolfreeze23.headinajar.host.Hosts.isHost(player.getVehicle()))) {
+            FormActions.leaveHost(server);
+        }
         if (state.takeDirty(player.tickCount % 10 == 0)) Network.sync(server);
     }
 
@@ -153,12 +157,21 @@ public final class FormEvents {
     public static void interactEntity(PlayerInteractEvent.EntityInteract event) {
         // your own body is the one thing a bare jar can reach for
         if (event.getTarget() instanceof HeadlessBody) return;
+        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) {
+            com.coolfreeze23.headinajar.host.HostInteractions.interact(event);
+            return;
+        }
         lockout(event.getEntity(), event);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void interactEntityAt(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.getTarget() instanceof HeadlessBody) return;
+        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) {
+            event.setCanceled(true);
+            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            return;
+        }
         lockout(event.getEntity(), event);
     }
 

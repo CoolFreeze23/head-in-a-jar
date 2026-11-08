@@ -1,0 +1,30 @@
+{
+  "entity": "minecraft:enderman",
+  "neck": [
+    0,
+    2.45,
+    0
+  ],
+  "blood": "ender",
+  "decay_per_minute": 2.0,
+  "attributes": {},
+  "flags": [],
+  "drawbacks": [],
+  "neutral_to": [
+    "minecraft:enderman"
+  ],
+  "primary": {
+    "type": "teleport",
+    "cooldown": 60,
+    "params": {
+      "range": 24.0
+    }
+  },
+  "secondary": {
+    "type": "teleport",
+    "cooldown": 200,
+    "params": {
+      "range": 48.0
+    }
+  }
+}

@@ -118,6 +118,20 @@ public final class JarRenderer {
         pose.popPose();
     }
 
+    /** A jar with something else inside: {@code inside} draws in jar model space and gets the bob offset. */
+    public static void drawWith(PoseStack pose, MultiBufferSource buffers, int light, float age, java.util.function.BiConsumer<PoseStack, Float> inside) {
+        if (jar == null) bake();
+        int overlay = OverlayTexture.NO_OVERLAY;
+        pose.pushPose();
+        pose.scale(-1.0f, -1.0f, 1.0f);
+        pose.translate(0.0f, -1.501f, 0.0f);
+        jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+        inside.accept(pose, Mth.sin(age * 0.08f) * 0.35f);
+        jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
+    }
+
     public static void drawStill(PoseStack pose, MultiBufferSource buffers, int light, ResourceLocation skin, float age, boolean withGoggles) {
         draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, skin, 0, 0, age, true, withGoggles);
     }

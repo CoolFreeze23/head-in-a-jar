@@ -44,6 +44,17 @@ public final class ClientEvents {
         }
     }
 
+    /** A host's head is gone: skip its head part while it draws. */
+    @SubscribeEvent
+    public static void renderHostPre(net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<?, ?> event) {
+        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getEntity())) HostHeads.hide(event.getRenderer().getModel());
+    }
+
+    @SubscribeEvent
+    public static void renderHostPost(net.neoforged.neoforge.client.event.RenderLivingEvent.Post<?, ?> event) {
+        HostHeads.reveal();
+    }
+
     @SubscribeEvent
     public static void renderPlayerPost(RenderPlayerEvent.Post event) {
         event.getRenderer().getModel().head.visible = true;
@@ -69,6 +80,12 @@ public final class ClientEvents {
         Input input = event.getInput();
         if (state.form() == Form.SOCKET) {
             stop(input, true);
+        } else if (state.form() == Form.HOSTED) {
+            // a host below 25% sync is clumsy: now and then its legs don't listen
+            var host = player.getVehicle();
+            if (ClientHooks.handshakeActive()) stop(input, true);
+            else if (host != null && com.coolfreeze23.headinajar.host.Hosts.isHost(host) && com.coolfreeze23.headinajar.host.Hosts.data(host).effectiveSync() < 25
+                    && (player.tickCount / 10 + host.getId()) % 20 == 0) stop(input, false);
         } else if (state.form() == Form.LINKED) {
             // a weak signal makes the body stutter
             int q = state.quality();
@@ -116,6 +133,7 @@ public final class ClientEvents {
             return;
         }
         if (!FormEvents.lockedOut(player)) return;
+        if (state.form() == Form.HOSTED && event.isAttack()) return;
         boolean ownBody = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit && hit.getEntity() instanceof HeadlessBody
                 || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
         if (!ownBody) {
@@ -133,8 +151,13 @@ public final class ClientEvents {
             if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.OPEN_MENU));
         }
         while (ClientSetup.ABILITY.consumeClick()) {
-            if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
+            if (ClientHooks.handshakeActive()) ClientHooks.press();
+            else if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
         }
+        while (ClientSetup.SECONDARY.consumeClick()) {
+            if (state.form() == Form.HOSTED) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
+        }
+        ClientHooks.tick();
         while (ClientSetup.SWAP.consumeClick()) {
             if (state.form() == Form.LINKED || state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
         }

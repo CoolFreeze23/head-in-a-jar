@@ -13,6 +13,7 @@ import net.neoforged.neoforge.common.NeoForge;
 @Mod(HeadInAJar.MOD_ID)
 public class HeadInAJar {
     public static final String MOD_ID = "headinajar";
+    public static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
 
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
@@ -23,6 +24,7 @@ public class HeadInAJar {
         modBus.addListener(Network::register);
         container.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         NeoForge.EVENT_BUS.register(FormEvents.class);
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.host.HostEvents.class);
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.RegisterCommandsEvent e) ->
                 com.coolfreeze23.headinajar.command.HeadOfficeCommand.register(e.getDispatcher()));
     }

@@ -68,6 +68,9 @@ public final class ModRegistry {
     /** Creative tab order. */
     private static final List<DeferredItem<? extends Item>> TAB_ORDER = new ArrayList<>();
 
+    public static final Supplier<AttachmentType<com.coolfreeze23.headinajar.host.HostData>> HOST_DATA = ATTACHMENTS.register("host",
+            () -> AttachmentType.builder(() -> new com.coolfreeze23.headinajar.host.HostData()).serialize(com.coolfreeze23.headinajar.host.HostData.CODEC,
+                    d -> d.host).build());
     public static final Supplier<AttachmentType<JarState>> JAR_STATE = ATTACHMENTS.register("jar_state",
             () -> AttachmentType.builder(() -> new JarState()).serialize(JarState.CODEC).build());
 
@@ -123,6 +126,22 @@ public final class ModRegistry {
             () -> new com.coolfreeze23.headinajar.block.SafetyPlacardBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
                     .strength(0.5f).sound(SoundType.METAL).noCollission()));
 
+    // P3: Hostile Takeover
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.JarredHeadBlock> JARRED_HEAD_BLOCK = BLOCKS.register("jarred_head",
+            () -> new com.coolfreeze23.headinajar.block.JarredHeadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.6f)
+                    .sound(SoundType.GLASS).noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.BodyLockerBlockEntity>> BODY_LOCKER =
+            BLOCKS.register("body_locker", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
+                    () -> ModRegistry.LOCKER_BE.get(), com.coolfreeze23.headinajar.block.BodyLockerBlockEntity::new, null, null) {
+                @Override
+                protected net.minecraft.world.InteractionResult useWithoutItem(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level,
+                                                                              net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
+                                                                              net.minecraft.world.phys.BlockHitResult hit) {
+                    if (!level.isClientSide && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity locker) locker.use(player);
+                    return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+                }
+            });
+
     // --- items -------------------------------------------------------------------------------
     private static <T extends Item> DeferredItem<T> item(String name, Supplier<T> sup) {
         DeferredItem<T> item = ITEMS.register(name, sup);
@@ -165,6 +184,19 @@ public final class ModRegistry {
     public static final DeferredItem<com.coolfreeze23.headinajar.item.SurgicalWrenchItem> SURGICAL_WRENCH = item("surgical_wrench",
             () -> new com.coolfreeze23.headinajar.item.SurgicalWrenchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> REPLACEMENT_BLADE = plain("replacement_blade");
+    public static final DeferredItem<BlockItem> BODY_LOCKER_ITEM = blockItem(BODY_LOCKER);
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.SurgicalSawItem> SURGICAL_SAW = item("surgical_saw",
+            () -> new com.coolfreeze23.headinajar.item.SurgicalSawItem(new Item.Properties().durability(200)));
+    public static final DeferredItem<Item> EMBALMING_FLUID = item("embalming_fluid", () -> new Item(new Item.Properties().stacksTo(16)));
+    public static final DeferredItem<Item> NEURAL_LACE = plain("neural_lace");
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.JarredHeadItem> JARRED_HEAD = item("jarred_head",
+            () -> new com.coolfreeze23.headinajar.item.JarredHeadItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.ShellChassisItem> LUNK_CHASSIS = item("lunk_chassis",
+            () -> new com.coolfreeze23.headinajar.item.ShellChassisItem(() -> ModRegistry.LUNK.get(), new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.ShellChassisItem> ROVER_CHASSIS = item("rover_chassis",
+            () -> new com.coolfreeze23.headinajar.item.ShellChassisItem(() -> ModRegistry.ROVER.get(), new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.ShellChassisItem> SPIDER_WALKER_CHASSIS = item("spider_walker_chassis",
+            () -> new com.coolfreeze23.headinajar.item.ShellChassisItem(() -> ModRegistry.SPIDER_WALKER.get(), new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> SALINE_BOTTLE = item("saline_bottle", () -> new Item(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<LifeSupportJarItem> LIFE_SUPPORT_JAR = item("life_support_jar",
             () -> new LifeSupportJarItem(3, new Item.Properties().stacksTo(1)));
@@ -202,6 +234,16 @@ public final class ModRegistry {
             () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon()
                     .clientTrackingRange(10).build("seat"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.ShellEntity>> LUNK = ENTITIES.register("lunk",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.ShellEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.ShellEntity(t, l,
+                    com.coolfreeze23.headinajar.entity.ShellEntity.Kind.LUNK), MobCategory.MISC).sized(1.4f, 2.7f).clientTrackingRange(10).build("lunk"));
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.ShellEntity>> ROVER = ENTITIES.register("rover",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.ShellEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.ShellEntity(t, l,
+                    com.coolfreeze23.headinajar.entity.ShellEntity.Kind.ROVER), MobCategory.MISC).sized(1.2f, 0.9f).clientTrackingRange(10).build("rover"));
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.ShellEntity>> SPIDER_WALKER = ENTITIES.register("spider_walker",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.ShellEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.ShellEntity(t, l,
+                    com.coolfreeze23.headinajar.entity.ShellEntity.Kind.SPIDER_WALKER), MobCategory.MISC).sized(1.4f, 0.9f).clientTrackingRange(10).build("spider_walker"));
+
     // --- block entities ----------------------------------------------------------------------
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SeparationChairBlockEntity>> CHAIR_BE = BLOCK_ENTITIES.register("separation_chair",
             () -> BlockEntityType.Builder.of(SeparationChairBlockEntity::new, SEPARATION_CHAIR.get()).build(null));
@@ -226,6 +268,11 @@ public final class ModRegistry {
             () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::mast2, RELAY_MAST_MK2.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.PowerBlockEntities.Station>> JAMMER_BE = BLOCK_ENTITIES.register("signal_jammer",
             () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::jammer, SIGNAL_JAMMER.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.JarredHeadBlockEntity>> JARRED_HEAD_BE = BLOCK_ENTITIES.register("jarred_head",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.JarredHeadBlockEntity::new, JARRED_HEAD_BLOCK.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.BodyLockerBlockEntity>> LOCKER_BE = BLOCK_ENTITIES.register("body_locker",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.BodyLockerBlockEntity::new, BODY_LOCKER.get()).build(null));
 
     // --- menus -------------------------------------------------------------------------------
     public static final DeferredHolder<MenuType<?>, MenuType<JarMenu>> JAR_MENU = MENUS.register("jar",
@@ -266,6 +313,9 @@ public final class ModRegistry {
 
     private static void attributes(EntityAttributeCreationEvent event) {
         event.put(HEADLESS_BODY.get(), HeadlessBody.createAttributes().build());
+        event.put(LUNK.get(), com.coolfreeze23.headinajar.entity.ShellEntity.lunk().build());
+        event.put(ROVER.get(), com.coolfreeze23.headinajar.entity.ShellEntity.rover().build());
+        event.put(SPIDER_WALKER.get(), com.coolfreeze23.headinajar.entity.ShellEntity.spiderWalker().build());
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {
@@ -275,6 +325,7 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PILE_BE.get(), (be, side) -> be.fuel());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, DOCK_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CRADLE_BE.get(), (be, side) -> be.energy());
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, LOCKER_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CRADLE_BE.get(), (be, side) -> be.saline());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, MIXER_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MIXER_BE.get(), (be, side) -> be.items());

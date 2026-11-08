@@ -197,6 +197,41 @@ public final class FormActions {
         body.discard();
     }
 
+    // --- hosts ---------------------------------------------------------------------------------------
+
+    /**
+     * A jar climbs onto a host body and takes it over. A linked body carrying its own head leaves the body standing
+     * and moves into the host. Returns whether the jar is now HOSTED.
+     */
+    public static boolean mountHost(ServerPlayer player, net.minecraft.world.entity.Mob host) {
+        JarState state = state(player);
+        if (!com.coolfreeze23.headinajar.host.Hosts.isHost(host) || host.isVehicle() || !host.isAlive()) return false;
+        if (state.form() == Form.LINKED && state.carryingHead()) {
+            if (!linkedToJar(player)) return false;
+        }
+        if (state.form() != Form.JAR) return false;
+        Telekinesis.release(player, state);
+        if (!player.startRiding(host, true)) return false;
+        state.setForm(Form.HOSTED);
+        registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
+        player.refreshDimensions();
+        Network.sync(player);
+        var data = com.coolfreeze23.headinajar.host.Hosts.data(host);
+        if (!data.handshaken && !data.shell) Network.startHandshake(player, host);
+        player.serverLevel().playSound(null, host.getX(), host.getY(), host.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 0.6f);
+        return true;
+    }
+
+    /** The jar leaves its host (sneak, or the host died): it sits where the neck was. */
+    public static void leaveHost(ServerPlayer player) {
+        JarState state = state(player);
+        if (state.form() != Form.HOSTED) return;
+        if (player.getVehicle() != null) player.stopRiding();
+        state.setForm(Form.JAR);
+        player.refreshDimensions();
+        Network.sync(player);
+    }
+
     // --- carrying and docking the head ----------------------------------------------------------------
 
     /** A LINKED player with a Head Satchel picks up their own placed head. */

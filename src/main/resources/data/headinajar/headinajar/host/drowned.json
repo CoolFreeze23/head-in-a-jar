@@ -1,0 +1,26 @@
+{
+  "entity": "minecraft:drowned",
+  "neck": [
+    0,
+    1.45,
+    0
+  ],
+  "blood": "grave",
+  "decay_per_minute": 2.0,
+  "attributes": {},
+  "flags": [
+    "water_breathing"
+  ],
+  "drawbacks": [],
+  "neutral_to": [
+    "minecraft:zombie",
+    "minecraft:husk",
+    "minecraft:drowned",
+    "minecraft:zombie_villager"
+  ],
+  "primary": {
+    "type": "groan",
+    "cooldown": 200,
+    "params": {}
+  }
+}

@@ -1,0 +1,30 @@
+# Phase 3 checks: client host flags, a jar riding a pig, the jarred villager up close
+wait 40
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+hostify minecraft:pig 0 -60 3
+hostify minecraft:enderman 3 -60 4
+jarhead minecraft:villager -2 -60 2
+/effect give @e[type=!player] minecraft:slowness 99999 255 true
+wait 60
+clienthosts
+/tp @s -2.5 -59.3 0.6 0 30
+wait 20
+shot 05_jarred_villager_close
+/tp @s 0.5 -60 1.5 0 0
+jar
+wait 5
+mount
+wait 120
+/tp @s 0.5 -59 8.5 180 10
+wait 10
+view 2
+wait 20
+shot 06_jar_on_pig
+view 0
+wait 5
+shot 07_hosted_view
+report done
