@@ -81,7 +81,7 @@ chair. The bar at the top of the screen is your **link quality**.
 ### Day 5: living with it
 
 - **Pick your head up.** With the Head Satchel in your inventory, use your jar. With an empty hand you carry it in
-  both arms; hold anything and it goes on your hip. A carried head always has a perfect link.
+  both arms; hold anything and it goes on your back. A carried head always has a perfect link.
 - **Or dock it.** Build a **Life Support Cradle**, power it, and use it while carrying your head. The Cradle keeps your
   saline and charge topped up and boosts the link.
 - **Swap** (**K**) between your body and your head whenever you like. Going back into your body needs a decent signal.
@@ -129,8 +129,9 @@ your own head. **Let Go** in the jar menu is the last resort: you die and respaw
   wears the goggles and sends the signal. The link quality bar (Q) falls with distance, water, rock, storms, portals and
   jammers; a weak link stutters and fills the screen with static; at zero you wake up in your head.
 - **Swap** between body and head whenever you like. Put your head down, dock it in a **Life Support Cradle**, or carry it in
-  a **Head Satchel** for a perfect link. With an empty hand you carry it in both arms; it rises out of the satchel,
-  sways with your steps, and your head turns round inside to look up at you. Hold anything and it goes back on your hip.
+  a **Head Satchel** for a perfect link. The jar is carried life size: with an empty hand you hold it in both arms,
+  your head turned round inside to look up at you; hold anything and it swings round onto your back, your head
+  watching behind you.
 - **Death is layered.** If your body dies it becomes a corpse that keeps your things, and you wake up in your jar; use a
   **Suture Kit** on it to get back in, or print a new body in the **Body Printer**. Only losing the head is a real death.
   **Let Go** in the jar menu ends it any time.

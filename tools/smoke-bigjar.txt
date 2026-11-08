@@ -1,0 +1,48 @@
+# The bigger jar with a life-size head: as a jar (turned, looking up), on wheels, tipped, as a placed head, carried
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+jar
+/tp @s 4.5 -60 0.5 0 0
+wait 10
+view 2
+look 0 0
+wait 15
+shot jar_front
+look 75 0
+wait 15
+shot jar_turned
+look -60 -40
+wait 15
+shot jar_up
+look 0 0
+fit wheels
+drive
+wait 15
+shot jar_wheels
+fit night_lens
+drive
+wait 15
+shot jar_tipped
+drive
+body
+wait 10
+view 0
+/tp @s 10.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 30
+view 2
+wait 10
+/tp @s 10.5 -60 -1.5 0 20
+wait 15
+shot placed_head
+pickup
+wait 30
+/tp @s 10.5 -60 0.5 0 0
+wait 15
+shot carried
+report done

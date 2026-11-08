@@ -1,0 +1,27 @@
+# Bigger jar: placed head, carried in arms, carried on the hip
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 30
+/tp @s 0.5 -60 -2.5 0 25
+wait 20
+shot placed_head
+/tp @s 0.5 -60 0.5 0 0
+pickup
+/item replace entity @s weapon.mainhand with minecraft:air
+wait 30
+view 2
+wait 15
+shot carried_arms
+/item replace entity @s weapon.mainhand with minecraft:stick
+wait 30
+shot carried_hip
+view 1
+wait 15
+shot carried_hip_back
+report done

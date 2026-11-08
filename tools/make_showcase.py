@@ -165,7 +165,7 @@ wait 20
 shot jade
 /gamemode survival
 /setblock 6 -60 -24 headinajar:neural_socket
-/tp @s 6.5 -59 -23.5 0 30
+/tp @s 6.5 -59 -23.5 0 0
 jar
 wait 5
 pilotgenes

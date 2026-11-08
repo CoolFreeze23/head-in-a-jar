@@ -37,7 +37,7 @@ import com.coolfreeze23.headinajar.block.SeparationChairBlockEntity;
 
 /** Common game rules of being a head in a jar. */
 public final class FormEvents {
-    public static final EntityDimensions JAR_SIZE = EntityDimensions.fixed(0.62f, 0.72f).withEyeHeight(0.42f);
+    public static final EntityDimensions JAR_SIZE = EntityDimensions.fixed(0.86f, 0.95f).withEyeHeight(0.5f);
     /** A headless body: fits under 1.5-block gaps; the Collar Cam sits on the neck. */
     public static final EntityDimensions LINKED_SIZE = EntityDimensions.fixed(0.6f, 1.45f).withEyeHeight(1.32f);
 

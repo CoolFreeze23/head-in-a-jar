@@ -359,7 +359,7 @@ public final class ModRegistry {
             () -> EntityType.Builder.<HeldBlockEntity>of(HeldBlockEntity::new, MobCategory.MISC).sized(0.98f, 0.98f)
                     .clientTrackingRange(10).updateInterval(1).build("held_block"));
     public static final DeferredHolder<EntityType<?>, EntityType<HeadJarEntity>> HEAD_JAR = ENTITIES.register("head_jar",
-            () -> EntityType.Builder.<HeadJarEntity>of(HeadJarEntity::new, MobCategory.MISC).sized(0.62f, 0.72f)
+            () -> EntityType.Builder.<HeadJarEntity>of(HeadJarEntity::new, MobCategory.MISC).sized(0.86f, 0.95f)
                     .clientTrackingRange(10).build("head_jar"));
     public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.MissileEntity>> MISSILE = ENTITIES.register("missile",
             () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.MissileEntity>of(com.coolfreeze23.headinajar.entity.MissileEntity::new, MobCategory.MISC)

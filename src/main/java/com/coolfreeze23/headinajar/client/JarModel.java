@@ -86,8 +86,8 @@ public final class JarModel {
         MeshDefinition mesh = new MeshDefinition();
         mesh.getRoot().addOrReplaceChild("goggles", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-4.3f, -5.4f, -4.3f, 8.6f, 2, 8.6f)
-                .texOffs(0, 12).addBox(-3.6f, -5.9f, -5.3f, 3, 3, 1)
-                .texOffs(8, 12).addBox(0.6f, -5.9f, -5.3f, 3, 3, 1)
+                .texOffs(0, 12).addBox(-3.6f, -5.9f, -5.0f, 3, 3, 1)
+                .texOffs(8, 12).addBox(0.6f, -5.9f, -5.0f, 3, 3, 1)
                 .texOffs(16, 12).addBox(2.5f, -10.5f, 0.5f, 1, 3, 1), PartPose.offset(0, NECK_Y, 0));
         return LayerDefinition.create(mesh, 64, 32);
     }
