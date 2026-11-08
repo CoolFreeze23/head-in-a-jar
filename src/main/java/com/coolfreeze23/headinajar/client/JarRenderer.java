@@ -66,6 +66,10 @@ public final class JarRenderer {
     /** A player in jar form. */
     public static void render(AbstractClientPlayer player, JarState state, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
         float bodyYaw = Mth.rotLerp(partialTick, player.yBodyRotO, player.yBodyRot);
+        // on a host the jar sits square on its neck, facing the way its body faces; the head inside looks where you look
+        if (state.form() == com.coolfreeze23.headinajar.form.Form.HOSTED && player.getVehicle() instanceof net.minecraft.world.entity.LivingEntity host) {
+            bodyYaw = Mth.rotLerp(partialTick, host.yBodyRotO, host.yBodyRot);
+        }
         float headYaw = Mth.rotLerp(partialTick, player.yHeadRotO, player.yHeadRot);
         float pitch = Mth.lerp(partialTick, player.xRotO, player.getXRot());
         pose.pushPose();

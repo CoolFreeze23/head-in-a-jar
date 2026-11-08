@@ -177,11 +177,19 @@ public class SmokeClient {
             }
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "report" -> report.add(parts[1]);
+            // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its
+            // feet (facing +Z): where the head was (centre x/z, lowest y) and the top of the body under a jar placed there
+            case "seatprobe" -> {
+                for (String id : parts[1].split(",")) report.add("seat " + id + " " + seatProbe(mc, id));
+            }
             // a real right-click, through the key binding, exactly as a player's mouse does it
             case "rightclick" -> net.minecraft.client.KeyMapping.click(mc.options.keyUse.getKey());
             case "riding" -> report.add("riding " + parts[1] + " -> " + (mc.player.getVehicle() == null ? "nothing"
                     : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mc.player.getVehicle().getType()))
-                    + " form=" + mc.player.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE).form());
+                    + " form=" + mc.player.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE).form()
+                    + (mc.player.getVehicle() instanceof net.minecraft.world.entity.LivingEntity v ? String.format(java.util.Locale.ROOT,
+                    " jarY-hostY=%.3f seatY=%.3f height=%.2f", mc.player.getY() - v.getY(),
+                    com.coolfreeze23.headinajar.host.HostControl.ridingPosition(v).y - v.getY(), mc.player.getBbHeight()) : ""));
             case "screen" -> mc.setScreen(switch (parts[1]) {
                 case "pause" -> new net.minecraft.client.gui.screens.PauseScreen(true);
                 default -> null;
@@ -541,5 +549,69 @@ public class SmokeClient {
         }
         LOGGER.info("SMOKE: finished, {} report lines", report.size());
         mc.stop();
+    }
+
+    private static String seatProbe(Minecraft mc, String id) {
+        var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.get(net.minecraft.resources.ResourceLocation.parse(id));
+        var entity = type.create(mc.level);
+        if (!(entity instanceof net.minecraft.world.entity.LivingEntity living)) return "not living";
+        entity.setPos(0, 0, 0);
+        entity.setYRot(0);
+        living.yBodyRot = living.yBodyRotO = 0;
+        living.yHeadRot = living.yHeadRotO = 0;
+        java.util.List<org.joml.Vector3f> whole = record(mc, entity);
+        com.coolfreeze23.headinajar.host.Hosts.data(entity).host = true;
+        java.util.List<org.joml.Vector3f> headless = record(mc, entity);
+        java.util.Map<String, Integer> left = new java.util.HashMap<>();
+        for (var v : headless) left.merge(key(v), 1, Integer::sum);
+        java.util.List<org.joml.Vector3f> head = new java.util.ArrayList<>();
+        for (var v : whole) {
+            Integer n = left.get(key(v));
+            if (n != null && n > 0) left.put(key(v), n - 1);
+            else head.add(v);
+        }
+        float hx = 0, hz = 0, hMin = Float.MAX_VALUE;
+        for (var v : head) {
+            hx += v.x;
+            hz += v.z;
+            hMin = Math.min(hMin, v.y);
+        }
+        if (!head.isEmpty()) {
+            hx /= head.size();
+            hz /= head.size();
+        }
+        float top = -1, topNear = -1, allTop = -1;
+        for (var v : headless) {
+            allTop = Math.max(allTop, v.y);
+            if (Math.abs(v.x - hx) < 0.3f && Math.abs(v.z - hz) < 0.3f) top = Math.max(top, v.y);
+            if (Math.abs(v.x - hx) < 0.15f && Math.abs(v.z - hz) < 0.15f) topNear = Math.max(topNear, v.y);
+        }
+        return String.format(java.util.Locale.ROOT, "headVerts=%d headX=%.3f headZ=%.3f headMinY=%.3f bodyTop=%.3f bodyTopNear=%.3f allTop=%.3f bb=%.2fx%.2f",
+                head.size(), hx, hz, head.isEmpty() ? -1 : hMin, top, topNear, allTop, entity.getBbWidth(), entity.getBbHeight());
+    }
+
+    private static String key(org.joml.Vector3f v) {
+        return Math.round(v.x * 1000) + "," + Math.round(v.y * 1000) + "," + Math.round(v.z * 1000);
+    }
+
+    private static java.util.List<org.joml.Vector3f> record(Minecraft mc, net.minecraft.world.entity.Entity entity) {
+        java.util.List<org.joml.Vector3f> out = new java.util.ArrayList<>();
+        com.mojang.blaze3d.vertex.VertexConsumer sink = new com.mojang.blaze3d.vertex.VertexConsumer() {
+            public com.mojang.blaze3d.vertex.VertexConsumer addVertex(float x, float y, float z) {
+                out.add(new org.joml.Vector3f(x, y, z));
+                return this;
+            }
+            public com.mojang.blaze3d.vertex.VertexConsumer setColor(int r, int g, int b, int a) { return this; }
+            public com.mojang.blaze3d.vertex.VertexConsumer setUv(float u, float v) { return this; }
+            public com.mojang.blaze3d.vertex.VertexConsumer setUv1(int u, int v) { return this; }
+            public com.mojang.blaze3d.vertex.VertexConsumer setUv2(int u, int v) { return this; }
+            public com.mojang.blaze3d.vertex.VertexConsumer setNormal(float x, float y, float z) { return this; }
+        };
+        try {
+            mc.getEntityRenderDispatcher().getRenderer(entity).render(entity, 0, 0, new com.mojang.blaze3d.vertex.PoseStack(), type -> sink, 0xF000F0);
+        } catch (RuntimeException e) {
+            LOGGER.warn("seat probe could not render {}: {}", entity, e.toString());
+        }
+        return out;
     }
 }

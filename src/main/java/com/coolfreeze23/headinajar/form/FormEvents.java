@@ -56,7 +56,8 @@ public final class FormEvents {
     public static void size(EntityEvent.Size event) {
         if (event.getEntity() instanceof Player player && player.hasData(ModRegistry.JAR_STATE)) {
             Form form = state(player).form();
-            if (form == Form.JAR || form == Form.SOCKET) event.setNewSize(JAR_SIZE);
+            // riding a host the jar keeps its own size: a full player size would seat it 0.6 below the neck, sunk into the body
+            if (form == Form.JAR || form == Form.SOCKET || form == Form.HOSTED) event.setNewSize(JAR_SIZE);
             else if (form == Form.LINKED && event.getPose() != net.minecraft.world.entity.Pose.SLEEPING
                     && !com.coolfreeze23.headinajar.item.QuantumItems.has(state(player).collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.PERISCOPE_STALK)) {
                 event.setNewSize(LINKED_SIZE);
