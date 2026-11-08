@@ -124,6 +124,8 @@ import gen_p4
 gen_p4.run(EN, PT, write, shaped)
 import gen_p5
 gen_p5.run(EN, PT, write, shaped)
+import gen_p6
+gen_p6.run(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

@@ -156,7 +156,8 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
     public static void serverTick(Level level, BlockPos pos, BlockState state, SalineMixerBlockEntity mixer) {
         if (mixer.canMix()) {
             mixer.energy.set(mixer.energy.getEnergyStored() - FE_PER_TICK);
-            if (++mixer.progress >= BATCH_TICKS) {
+            // a Fisherman on staff mixes 25% faster
+            if (++mixer.progress >= Math.round(BATCH_TICKS / (1 + 0.25f * HeadJobs.staff(level, pos, "fisherman")))) {
                 mixer.progress = 0;
                 mixer.water.drain(1000, IFluidHandler.FluidAction.EXECUTE);
                 for (int slot : new int[]{SLOT_SUGAR, SLOT_KELP, SLOT_REDSTONE}) mixer.items.extractItem(slot, 1, false);

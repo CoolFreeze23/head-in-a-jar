@@ -18,15 +18,20 @@ public class MachineMenu extends AbstractContainerMenu {
     private final int machineSlots;
 
     public MachineMenu(MenuType<?> type, int id, Inventory inventory, IItemHandler handler, ContainerData data, BlockPos pos, int[][] slotXY) {
+        this(type, id, inventory, handler, data, pos, slotXY, 84);
+    }
+
+    /** {@code invY}: where the player's inventory starts (84 on a standard 166-high screen). */
+    public MachineMenu(MenuType<?> type, int id, Inventory inventory, IItemHandler handler, ContainerData data, BlockPos pos, int[][] slotXY, int invY) {
         super(type, id);
         this.data = data;
         this.pos = pos;
         this.machineSlots = slotXY.length;
         for (int i = 0; i < slotXY.length; i++) addSlot(new SlotItemHandler(handler, i, slotXY[i][0], slotXY[i][1]));
         for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+            for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, invY + row * 18));
         }
-        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 8 + col * 18, 142));
+        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 8 + col * 18, invY + 58));
         addDataSlots(data);
     }
 

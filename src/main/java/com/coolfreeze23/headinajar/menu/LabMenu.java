@@ -25,7 +25,9 @@ public class LabMenu extends MachineMenu {
         /** catalyst, bio-gel, bottle, out. Data: energy, progress, gene 1-3 (+1), stability, mutation %, load */
         GENE_SPLICER(new int[][]{{26, 60}, {48, 60}, {70, 60}, {146, 60}}, 8),
         /** serum. Data: energy */
-        INJECTION_RIG(new int[][]{{80, 30}}, 2);
+        INJECTION_RIG(new int[][]{{80, 30}}, 2),
+        /** nine heads and the Board Room Core. Data: energy, output FE/t, broth mB, heads */
+        CEREBRAL_ARRAY(new int[][]{{44, 17}, {62, 17}, {80, 17}, {44, 35}, {62, 35}, {80, 35}, {44, 53}, {62, 53}, {80, 53}, {124, 53}}, 4);
 
         public final int[][] slots;
         public final int data;

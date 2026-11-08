@@ -294,7 +294,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
             say(player, "done");
         }
         sound(SoundEvents.PLAYER_LEVELUP, 0.6f, 0.6f);
-        setWear(wear + 5);
+        // a Mason on staff halves blade wear
+        setWear(wear + Math.round(5 * (1 - 0.5f * HeadJobs.staff(level, worldPosition, "mason"))));
         inJar = inGoggles = inCollar = ItemStack.EMPTY;
         opTick = -1;
         patient = null;

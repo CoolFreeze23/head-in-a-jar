@@ -22,13 +22,18 @@ public class RelayGogglesItem extends Item {
         return tier;
     }
 
+    /** Quantum Goggles (tier 4) reach anywhere in the dimension. */
     public double range() {
+        if (tier >= 4) return 30_000_000;
         return Config.goggleRange(tier);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.headinajar.relay_goggles.range", (int) range()).withStyle(ChatFormatting.GRAY));
+        tooltip.add((tier >= 4 ? Component.translatable("item.headinajar.quantum_goggles.range")
+                : Component.translatable("item.headinajar.relay_goggles.range", (int) range())).withStyle(ChatFormatting.GRAY));
+        com.coolfreeze23.headinajar.item.QuantumItems.entangled(stack).ifPresent(id ->
+                tooltip.add(Component.translatable("item.headinajar.entangled_shard.id", id.toString().substring(0, 8)).withStyle(ChatFormatting.LIGHT_PURPLE)));
         tooltip.add(Component.translatable("item.headinajar.relay_goggles.how").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

@@ -18,7 +18,7 @@ import net.minecraft.world.item.Items;
 /** The Jar menu: module slots, a feed slot for redstone, and the "Let go" button. */
 public class JarMenu extends AbstractContainerMenu {
     public static final int BUTTON_LET_GO = 0;
-    public static final int MODULE_X = 44;
+    public static final int MODULE_X = 26;
     public static final int MODULE_Y = 28;
     public static final int FEED_X = 152;
     public static final int FEED_Y = 56;

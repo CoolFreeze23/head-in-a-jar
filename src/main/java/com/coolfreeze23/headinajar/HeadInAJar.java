@@ -26,6 +26,7 @@ public class HeadInAJar {
         NeoForge.EVENT_BUS.register(FormEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.host.HostEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.genetics.GeneEvents.class);
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.form.BoardEvents.class);
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.RegisterCommandsEvent e) ->
                 com.coolfreeze23.headinajar.command.HeadOfficeCommand.register(e.getDispatcher()));
     }

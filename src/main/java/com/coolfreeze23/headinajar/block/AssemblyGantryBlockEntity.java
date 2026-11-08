@@ -34,7 +34,7 @@ import java.util.List;
  * Disassemble pulls a mecha on the pad back into the slots for editing; Repair spends Mecha Plating (20 HP each).
  */
 public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvider, HasItems {
-    public static final int SLOT_FRAME = 0, SLOT_PLATING = 1, FIRST_MODULE = 2, MODULE_SLOTS = 11;
+    public static final int SLOT_FRAME = 0, SLOT_PLATING = 1, FIRST_MODULE = 2, MODULE_SLOTS = MechaFrame.maxSlots();
     public static final int ASSEMBLE_COST = 10_000;
 
     private final Buffer energy = new Buffer(100_000, 5_000, 0, this::setChanged);
@@ -152,7 +152,8 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 ItemStack plating = items.getStackInSlot(SLOT_PLATING);
                 while (!plating.isEmpty() && mecha.getHealth() < mecha.getMaxHealth()) {
                     plating.shrink(1);
-                    mecha.heal(20);
+                    // smiths on staff make each plate go a third further
+                    mecha.heal(20 / (1 - 0.25f * com.coolfreeze23.headinajar.block.HeadJobs.staff(level, worldPosition, "armorer", "weaponsmith", "toolsmith")));
                 }
                 mecha.setBattery(mecha.battery() + Math.min(energy.getEnergyStored(), mecha.batteryCapacity() - mecha.battery()));
                 level.playSound(null, worldPosition, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.6f, 1.4f);
@@ -192,7 +193,11 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        // older Gantries had fewer module slots: read into a handler of the saved size, then copy across
+        CompoundTag saved = tag.getCompound("Items");
+        ItemStackHandler old = new ItemStackHandler();
+        old.deserializeNBT(registries, saved);
+        for (int i = 0; i < items.getSlots(); i++) items.setStackInSlot(i, i < old.getSlots() ? old.getStackInSlot(i) : ItemStack.EMPTY);
     }
 
     @Override

@@ -19,6 +19,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
  */
 public final class NeuroLink {
     public static final int QUALITY_TO_LINK = 20;
+    /** Link quality across dimensions over an Entangled Pair, before surroundings. */
+    public static final int ENTANGLED_ACROSS = 80;
     private static final int DEAD_LINK_GRACE = 100;
 
     /** Range of the goggles in blocks, after the Collar Cam's condition. */
@@ -26,6 +28,7 @@ public final class NeuroLink {
         double range = state.goggles().getItem() instanceof RelayGogglesItem goggles ? goggles.range() : 0;
         if (CollarCamItem.isCrooked(state.collar())) range *= 0.9;
         if (state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HUB_ANTENNA) && state.charge() > 0) range *= 1.5;
+        if (com.coolfreeze23.headinajar.item.QuantumItems.has(state.collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.ANTENNA_WHIP)) range *= 1.25;
         return range;
     }
 
@@ -42,7 +45,7 @@ public final class NeuroLink {
         ServerLevel level = player.serverLevel();
         BlockPos pos = player.blockPosition();
         double f = 1;
-        if (player.isUnderWater()) f *= 0.6;
+        if (player.isUnderWater() && !com.coolfreeze23.headinajar.item.QuantumItems.has(player, com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.WATERPROOF_SEAL)) f *= 0.6;
         if (level.getBrightness(LightLayer.SKY, pos) == 0 && pos.getY() < level.getHeight(Heightmap.Types.WORLD_SURFACE, pos.getX(), pos.getZ()) - 16) f *= 0.8;
         if (level.isThundering()) f *= 0.85;
         if (level.getPoiManager().getCountInRange(p -> p.is(PoiTypes.NETHER_PORTAL), pos, 8, PoiManager.Occupancy.ANY) > 0) f *= 0.7;
@@ -55,7 +58,11 @@ public final class NeuroLink {
     /** Q between this player and a spot (its head when LINKED, its body when a jar); -1 distance means another dimension. */
     public static int quality(ServerPlayer player, JarState state, HeadRegistry.Spot other) {
         if (state.carryingHead()) return 100;
-        if (other == null || !other.dimension().equals(player.level().dimension())) return 0;
+        if (other == null) return 0;
+        if (!other.dimension().equals(player.level().dimension())) {
+            // an Entangled Pair carries the link between dimensions, with a quantum hiss
+            return com.coolfreeze23.headinajar.item.QuantumItems.linked(state) ? (int) Math.round(ENTANGLED_ACROSS * environment(player) * jammers(player)) : 0;
+        }
         double range = range(state);
         double best = fromDistance(player.position().distanceTo(other.pos()), range);
         if (best < 100 && player.getServer() != null) best = Math.max(best, viaMasts(player, other.pos(), range));

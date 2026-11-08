@@ -1,0 +1,51 @@
+# Phase 6, Board of Directors: the frame line-up, the 16-slot Gantry, heads at work, the socket HUD, a missile salvo
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 -6.5 0 10
+mecha wheelhouse -9 -60 4 battery_rack,cargo_hold,galvanic_stack,armor_plating,rivet_gun,night_optics
+mecha skitter -5 -60 4 cargo_hold,galvanic_stack,armor_plating,drill,thermal_imaging
+mecha chimera -1 -60 4 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,hemo_syringe,flamethrower,night_optics
+mecha kite 3 -60 4 hydraulic_legs,galvanic_stack,armor_plating,rivet_gun,grapple_hook,target_lock
+mecha colossus 9 -60 6 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,fusion_bottle,armor_plating,energy_shield,tesla_coil,drill,hydraulic_fist,arc_cannon,plasma_lance,ore_scanner,target_lock
+mecha executive 16 -60 6 hydraulic_legs,rocket_pack,battery_rack,galvanic_stack,capacitor_bank,reactive_armour,armor_plating,hydraulic_fist,riot_shield,missile_pod
+wait 40
+shot 01_frames
+/tp @s 10.5 -60 -4.5 20 0
+wait 20
+shot 02_big_frames
+/tp @s 0.5 -60 -20.5 180 20
+/setblock 0 -61 -24 headinajar:assembly_gantry[facing=south]
+gantry 0 -61 -24 colossus
+useblock 0 -61 -24
+wait 20
+shot 03_gantry_colossus
+closegui
+/setblock -3 -60 -24 headinajar:turret_pedestal[facing=south]
+headblock -3 -60 -24 minecraft:blaze
+/setblock -1 -60 -25 headinajar:cerebral_array[facing=south]
+headblock -1 -60 -25 minecraft:zombie,minecraft:villager,minecraft:witch,minecraft:enderman,minecraft:wither_skeleton,minecraft:evoker,minecraft:husk,minecraft:piglin,dragon_head
+/setblock 1 -60 -25 headinajar:dna_sequencer[facing=south]
+/setblock 1 -60 -24 headinajar:employee_mount[facing=south]
+headblock 1 -60 -24 minecraft:villager
+/setblock 3 -60 -24 headinajar:neural_socket
+headblock 3 -60 -24 minecraft:zombie
+/summon minecraft:zombie -3 -60 -31
+wait 60
+shot 04_heads_at_work
+useblock -1 -60 -25
+wait 10
+shot 05_array_gui
+closegui
+/setblock 6 -60 -24 headinajar:neural_socket
+/tp @s 6.5 -59 -23.5 0 30
+jar
+wait 5
+pilotgenes
+wait 30
+shot 06_socket_hud
+report done

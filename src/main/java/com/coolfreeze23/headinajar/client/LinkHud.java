@@ -50,7 +50,10 @@ public final class LinkHud {
     }
 
     private static float intensity() {
-        return Config.CLIENT_SPEC.isLoaded() ? Config.STATIC_INTENSITY.get() / 100f : 1f;
+        float base = Config.CLIENT_SPEC.isLoaded() ? Config.STATIC_INTENSITY.get() / 100f : 1f;
+        var player = net.minecraft.client.Minecraft.getInstance().player;
+        boolean filter = player != null && com.coolfreeze23.headinajar.item.QuantumItems.has(player, com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.NOISE_FILTER);
+        return filter ? base * 0.5f : base;
     }
 
     public static void render(GuiGraphics g, DeltaTracker delta) {

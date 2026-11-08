@@ -28,7 +28,7 @@ public final class GeneHud {
         List<Gene> actives = GeneEffects.actives(body);
         if (actives.isEmpty()) return;
         String[] keys = {ClientSetup.ABILITY.getTranslatedKeyMessage().getString(), ClientSetup.SECONDARY.getTranslatedKeyMessage().getString()};
-        int y = g.guiHeight() - (form == Form.PILOT ? 102 : 34);
+        int y = g.guiHeight() - (form == Form.PILOT ? 114 : 34);
         for (int i = 0; i < Math.min(2, actives.size()); i++) {
             g.drawString(mc.font, Component.translatable("hud.headinajar.gene_key", keys[i], LabScreens.geneName(actives.get(i))), 6, y + i * 10, 0xFFB080FF);
         }

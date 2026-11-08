@@ -33,12 +33,37 @@ import java.util.Locale;
 public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model> {
     public static final ModelLayerLocation HOPPER = new ModelLayerLocation(HeadInAJar.id("hopper"), "main");
     public static final ModelLayerLocation BULWARK = new ModelLayerLocation(HeadInAJar.id("bulwark"), "main");
+    public static final ModelLayerLocation WHEELHOUSE = new ModelLayerLocation(HeadInAJar.id("wheelhouse"), "main");
+    public static final ModelLayerLocation SKITTER = new ModelLayerLocation(HeadInAJar.id("skitter"), "main");
+    public static final ModelLayerLocation KITE = new ModelLayerLocation(HeadInAJar.id("kite"), "main");
     public static final ModelLayerLocation MODULES = new ModelLayerLocation(HeadInAJar.id("mecha_modules"), "main");
     private static final ResourceLocation MODULE_TEXTURE = HeadInAJar.id("textures/entity/mecha_modules.png");
     private final ResourceLocation texture;
+    private final MechaFrame frame;
+
+    public static ModelLayerLocation layer(MechaFrame.Model model) {
+        return switch (model) {
+            case HOPPER -> HOPPER;
+            case BULWARK -> BULWARK;
+            case WHEELHOUSE -> WHEELHOUSE;
+            case SKITTER -> SKITTER;
+            case KITE -> KITE;
+        };
+    }
+
+    /** How far below the arm bone (in pixels) an arm module hangs. */
+    static float armDrop(MechaFrame.Model model) {
+        return switch (model) {
+            case HOPPER, KITE -> 14;
+            case BULWARK -> 18;
+            case WHEELHOUSE -> -3;
+            case SKITTER -> 1;
+        };
+    }
 
     public MechaRenderer(EntityRendererProvider.Context context, MechaFrame frame) {
-        super(context, new Model(context.bakeLayer(frame == MechaFrame.BULWARK ? BULWARK : HOPPER)), frame.width * 0.5f);
+        super(context, new Model(context.bakeLayer(layer(frame.model)), frame), frame.width * 0.5f);
+        this.frame = frame;
         this.texture = HeadInAJar.id("textures/entity/" + frame.id() + ".png");
         addLayer(new ModuleLayer(this, context.bakeLayer(MODULES)));
     }
@@ -48,10 +73,17 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
         return texture;
     }
 
+    @Override
+    protected void scale(MechaEntity entity, PoseStack pose, float partialTick) {
+        pose.scale(frame.renderScale, frame.renderScale, frame.renderScale);
+    }
+
     public static class Model extends EntityModel<MechaEntity> {
         final ModelPart root, body, armL, armR, legL, legR, back, cockpit;
+        final MechaFrame frame;
 
-        public Model(ModelPart root) {
+        public Model(ModelPart root, MechaFrame frame) {
+            this.frame = frame;
             this.root = root;
             this.body = root.getChild("body");
             this.armL = root.getChild("arm_l");
@@ -64,8 +96,26 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
 
         @Override
         public void setupAnim(MechaEntity e, float limbSwing, float limbSwingAmount, float age, float headYaw, float headPitch) {
-            legL.xRot = Mth.cos(limbSwing * 0.6f) * 0.9f * limbSwingAmount;
-            legR.xRot = Mth.cos(limbSwing * 0.6f + Mth.PI) * 0.9f * limbSwingAmount;
+            switch (frame.locomotion) {
+                case TREADS -> {
+                    legL.xRot = 0;
+                    legR.xRot = 0;
+                }
+                case SPIDER -> {
+                    legL.zRot = Mth.sin(limbSwing * 1.2f) * 0.25f * limbSwingAmount;
+                    legR.zRot = -Mth.sin(limbSwing * 1.2f + Mth.PI) * 0.25f * limbSwingAmount;
+                }
+                default -> {
+                    legL.xRot = Mth.cos(limbSwing * 0.6f) * 0.9f * limbSwingAmount;
+                    legR.xRot = Mth.cos(limbSwing * 0.6f + Mth.PI) * 0.9f * limbSwingAmount;
+                }
+            }
+            if (back.hasChild("wing_l")) {
+                // the Kite's wings flap in the air and fold on the ground
+                float flap = e.onGround() ? -0.2f : Mth.sin(age * 0.7f) * 0.6f;
+                back.getChild("wing_l").zRot = flap;
+                back.getChild("wing_r").zRot = -flap;
+            }
             int arms = e.armsShown();
             armL.xRot = (arms & 1) != 0 ? -1.4f + Mth.sin(age * 0.8f) * 0.1f : Mth.cos(limbSwing * 0.6f + Mth.PI) * 0.5f * limbSwingAmount;
             armR.xRot = (arms & 2) != 0 ? -1.4f + Mth.sin(age * 0.8f) * 0.1f : Mth.cos(limbSwing * 0.6f) * 0.5f * limbSwingAmount;
@@ -103,9 +153,16 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
                 pose.pushPose();
                 switch (mod.slot) {
                     case ARM -> {
-                        boolean left = i == m.frame().firstIndex(MechaModule.Slot.ARM);
-                        (left ? model.armL : model.armR).translateAndRotate(pose);
-                        pose.translate(0, (m.frame() == MechaFrame.BULWARK ? 18 : 14) / 16f, 0);
+                        int armIndex = i - m.frame().firstIndex(MechaModule.Slot.ARM);
+                        boolean left = armIndex % 2 == 0;
+                        if (armIndex >= 2) {
+                            // shoulder hardpoints sit on top of the hull, outboard
+                            model.body.translateAndRotate(pose);
+                            pose.translate((left ? -1 : 1) * 0.55, -1.3, 0);
+                        } else {
+                            (left ? model.armL : model.armR).translateAndRotate(pose);
+                            pose.translate(0, armDrop(m.frame().model) / 16f, 0);
+                        }
                         if (mod == MechaModule.DRILL && (m.armsShown() & (left ? 1 : 2)) != 0) pose.mulPose(com.mojang.math.Axis.YP.rotation(age * 0.9f));
                     }
                     case BACK -> {
@@ -176,6 +233,56 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
         body.addOrReplaceChild("cockpit", CubeListBuilder.create().texOffs(64, 0).addBox(-5, -2, -5, 10, 2, 10), PartPose.offset(0, -22, 0));
         body.addOrReplaceChild("back", CubeListBuilder.create(), PartPose.offset(0, -11, 7));
         limbs(root, -19, 10, 22, 0, 5, 24, 6, 7);
+        return LayerDefinition.create(mesh, 128, 64);
+    }
+
+    /** Wheelhouse: 2.2 x 1.5, a six-seat car with fixed wheels and a roof turret (the one arm). Texture 128 x 128. */
+    public static LayerDefinition wheelhouse() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
+        body.addOrReplaceChild("hull", CubeListBuilder.create().texOffs(0, 0).addBox(-13, 6, -18, 26, 10, 36), PartPose.ZERO);
+        body.addOrReplaceChild("cockpit", CubeListBuilder.create().texOffs(0, 48).addBox(-5, -2, -5, 10, 2, 10), PartPose.offset(0, 6, -6));
+        body.addOrReplaceChild("back", CubeListBuilder.create(), PartPose.offset(0, 6, 14));
+        root.addOrReplaceChild("arm_l", CubeListBuilder.create().texOffs(88, 48).addBox(-3, -6, -6, 6, 6, 10), PartPose.offset(0, 6, 6));
+        root.addOrReplaceChild("arm_r", CubeListBuilder.create(), PartPose.offset(0, 6, 6));
+        CubeListBuilder wheels = CubeListBuilder.create().texOffs(48, 48).addBox(-2, -6, -18, 4, 12, 12).addBox(-2, -6, 6, 4, 12, 12);
+        root.addOrReplaceChild("leg_l", wheels, PartPose.offset(-14, 18, 0));
+        root.addOrReplaceChild("leg_r", wheels, PartPose.offset(14, 18, 0));
+        return LayerDefinition.create(mesh, 128, 128);
+    }
+
+    /** Skitter: 2.0 x 1.6, a low body on eight legs with a pair of mandibles (only the left takes a module). Texture 128 x 64. */
+    public static LayerDefinition skitter() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
+        body.addOrReplaceChild("hull", CubeListBuilder.create().texOffs(0, 0).addBox(-8, 4, -10, 16, 8, 20), PartPose.ZERO);
+        body.addOrReplaceChild("cockpit", CubeListBuilder.create().texOffs(0, 30).addBox(-4, -2, -4, 8, 2, 8), PartPose.offset(0, 4, -2));
+        body.addOrReplaceChild("back", CubeListBuilder.create(), PartPose.offset(0, 4, 8));
+        root.addOrReplaceChild("arm_l", CubeListBuilder.create().texOffs(80, 30).addBox(-1, 0, -6, 2, 2, 6), PartPose.offset(-3, 9, -10));
+        root.addOrReplaceChild("arm_r", CubeListBuilder.create().texOffs(80, 30).mirror().addBox(-1, 0, -6, 2, 2, 6), PartPose.offset(3, 9, -10));
+        CubeListBuilder left = CubeListBuilder.create(), right = CubeListBuilder.create();
+        for (int z : new int[]{-9, -3, 3, 9}) {
+            left.texOffs(40, 30).addBox(-12, 0, z - 1, 12, 2, 2).texOffs(40, 36).addBox(-14, 0, z - 1, 2, 16, 2);
+            right.texOffs(40, 30).mirror().addBox(0, 0, z - 1, 12, 2, 2).texOffs(40, 36).mirror().addBox(12, 0, z - 1, 2, 16, 2);
+        }
+        root.addOrReplaceChild("leg_l", left, PartPose.offset(-8, 8, 0));
+        root.addOrReplaceChild("leg_r", right, PartPose.offset(8, 8, 0));
+        return LayerDefinition.create(mesh, 128, 64);
+    }
+
+    /** Kite: 1.8 x 2.0, a slim biped with flapping wings on its back. Texture 128 x 64. */
+    public static LayerDefinition kite() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.ZERO);
+        body.addOrReplaceChild("hull", CubeListBuilder.create().texOffs(0, 0).addBox(-6, -6, -4, 12, 10, 8), PartPose.ZERO);
+        body.addOrReplaceChild("cockpit", CubeListBuilder.create().texOffs(44, 0).addBox(-4, -2, -4, 8, 2, 8), PartPose.offset(0, -6, 0));
+        PartDefinition back = body.addOrReplaceChild("back", CubeListBuilder.create(), PartPose.offset(0, -3, 4));
+        back.addOrReplaceChild("wing_l", CubeListBuilder.create().texOffs(64, 20).addBox(-20, -1, 0, 20, 1, 10), PartPose.offset(-2, 0, 0));
+        back.addOrReplaceChild("wing_r", CubeListBuilder.create().texOffs(64, 20).mirror().addBox(0, -1, 0, 20, 1, 10), PartPose.offset(2, 0, 0));
+        limbs(root, -4, 6, 14, 4, 3, 20, 3, 4);
         return LayerDefinition.create(mesh, 128, 64);
     }
 

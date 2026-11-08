@@ -35,6 +35,7 @@ public enum Gene {
     HEROS_BLOOD(Category.METABOLISM, 1, 0, false, "minecraft:villager"),
     DRACONIC_WINGS(Category.LEGENDARY, 6, 30, false, "minecraft:ender_dragon"),
     SONIC_BOOM(Category.LEGENDARY, 6, 30, true, "minecraft:warden"),
+    DECAY_AURA(Category.LEGENDARY, 6, 30, true, "minecraft:wither"),
     // mutations: never sequenced from a species, only from a mutated body
     HICCUPS(Category.MUTATION, 1, 0, false),
     CLUCKING(Category.MUTATION, 1, 0, false),

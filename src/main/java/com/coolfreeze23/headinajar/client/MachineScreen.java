@@ -36,6 +36,11 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
         inventoryLabelY = imageHeight - 94;
     }
 
+    public MachineScreen<M> hideInventoryLabel() {
+        inventoryLabelY = 10_000;
+        return this;
+    }
+
     public MachineScreen<M> energy(int capacity) {
         gauges.add(new Gauge(8, 17, 6, 56, 0, capacity, 10, 0xFF3FD8F0, "gui.headinajar.energy"));
         return this;

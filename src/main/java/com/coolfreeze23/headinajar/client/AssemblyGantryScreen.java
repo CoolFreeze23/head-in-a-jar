@@ -23,6 +23,7 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
     public AssemblyGantryScreen(AssemblyGantryMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         energy(100_000);
+        imageHeight = 184;
         inventoryLabelY = 10_000;
     }
 
@@ -30,13 +31,13 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
     protected void init() {
         super.init();
         int x = leftPos, y = topPos;
-        add(x + 44, y + 56, 40, 14, "gui.headinajar.gantry.assemble", AssemblyGantryMenu.ASSEMBLE);
-        add(x + 86, y + 56, 44, 14, "gui.headinajar.gantry.disassemble", AssemblyGantryMenu.DISASSEMBLE);
-        add(x + 132, y + 56, 38, 14, "gui.headinajar.gantry.repair", AssemblyGantryMenu.REPAIR);
-        add(x + 135, y + 37, 9, 14, "<", AssemblyGantryMenu.PREV);
-        add(x + 144, y + 37, 9, 14, ">", AssemblyGantryMenu.NEXT);
-        add(x + 153, y + 37, 9, 14, "-", AssemblyGantryMenu.MINUS);
-        add(x + 162, y + 37, 9, 14, "+", AssemblyGantryMenu.PLUS);
+        add(x + 44, y + 74, 40, 14, "gui.headinajar.gantry.assemble", AssemblyGantryMenu.ASSEMBLE);
+        add(x + 86, y + 74, 44, 14, "gui.headinajar.gantry.disassemble", AssemblyGantryMenu.DISASSEMBLE);
+        add(x + 132, y + 74, 38, 14, "gui.headinajar.gantry.repair", AssemblyGantryMenu.REPAIR);
+        add(x + 117, y + 55, 13, 14, "<", AssemblyGantryMenu.PREV);
+        add(x + 130, y + 55, 13, 14, ">", AssemblyGantryMenu.NEXT);
+        add(x + 145, y + 55, 13, 14, "-", AssemblyGantryMenu.MINUS);
+        add(x + 158, y + 55, 13, 14, "+", AssemblyGantryMenu.PLUS);
     }
 
     private void add(int x, int y, int w, int h, String key, int id) {
@@ -78,10 +79,10 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
         super.renderLabels(g, mouseX, mouseY);
         MechaFrame frame = frame();
         if (frame == null) {
-            g.drawString(font, Component.translatable("gui.headinajar.gantry.need_frame"), 8, 73, 0x804040, false);
+            g.drawString(font, Component.translatable("gui.headinajar.gantry.need_frame"), 8, 91, 0x804040, false);
             return;
         }
-        int mass = frame.dryMass, power = frame == MechaFrame.BULWARK ? 5 : frame == MechaFrame.CHIMERA ? 3 : 2;
+        int mass = frame.dryMass, power = Math.round(frame.idleDrain());
         for (int i = 0; i < frame.totalSlots(); i++) {
             ItemStack stack = menu.getSlot(AssemblyGantryBlockEntity.FIRST_MODULE + i).getItem();
             if (stack.getItem() instanceof MechaModuleItem m) {
@@ -90,14 +91,14 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
             }
         }
         float load = mass / (float) frame.load;
-        g.drawString(font, Component.translatable("gui.headinajar.gantry.mass", mass, frame.load), 22, 73, load > 1 ? 0xC03030 : 0x404040, false);
+        g.drawString(font, Component.translatable("gui.headinajar.gantry.mass", mass, frame.load), 8, 91, load > 1 ? 0xC03030 : 0x404040, false);
         int selected = menu.data(1);
         ItemStack sel = selected < frame.totalSlots() ? menu.getSlot(AssemblyGantryBlockEntity.FIRST_MODULE + selected).getItem() : ItemStack.EMPTY;
         String kind = selected < frame.totalSlots() ? frame.slotAt(selected).name().toLowerCase(Locale.ROOT) : "torso";
         Component slotLine = sel.getItem() instanceof MechaModuleItem m && m.type().slider != null
                 ? Component.translatable("gui.headinajar.gantry.slider", Component.translatable("mecha_slider.headinajar." + m.type().slider), MechaModuleItem.slider(sel))
                 : Component.translatable("mecha_slot.headinajar." + kind);
-        g.drawString(font, slotLine, 104, 73, 0x404040, false);
+        g.drawString(font, slotLine, 96, 91, 0x404040, false);
         g.drawString(font, Component.translatable("gui.headinajar.gantry.power", power, frame.heatCap), 112, 6, 0x606060, false);
     }
 }

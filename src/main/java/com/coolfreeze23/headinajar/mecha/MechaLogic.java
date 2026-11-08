@@ -43,6 +43,9 @@ import java.util.Set;
 public final class MechaLogic {
     public static final float THROTTLE = 0.85f;
     public static final int VENT_TICKS = 100;
+    /** Ticks of Bio-Gel left in a Chimera's veins (persistent data key). One Bio-Gel is 60 s. */
+    public static final String VEINS = "headinajar_veins";
+    public static final int VEINS_PER_GEL = 1200;
 
     private MechaLogic() {
     }
@@ -85,7 +88,7 @@ public final class MechaLogic {
 
     public static Vec3 riddenInput(MechaEntity m, Player pilot) {
         boolean swimming = m.isInWater() && m.has(MechaModule.AQUA_FINS);
-        if (!m.has(MechaModule.HYDRAULIC_LEGS) && !swimming) return Vec3.ZERO;
+        if (!canWalk(m) && !swimming && !(canFly(m) && !m.onGround())) return Vec3.ZERO;
         if (m.load() > 1.25f || m.vent() > 0 && m.onGround()) return Vec3.ZERO;
         if (m.has(MechaModule.ANCHOR_CLAMPS) && pilot.isShiftKeyDown()) return Vec3.ZERO;
         float strafe = pilot.xxa * 0.5f, forward = pilot.zza;
@@ -93,12 +96,30 @@ public final class MechaLogic {
         return new Vec3(strafe, 0, forward);
     }
 
+    /** Whether the frame can walk: a Legs module that walks, or locomotion built into the frame. */
+    public static boolean canWalk(MechaEntity m) {
+        return m.frame().locomotion != MechaFrame.Locomotion.LEGS || m.has(MechaModule.HYDRAULIC_LEGS) || m.has(MechaModule.ARACHNID_LEGS)
+                || m.has(MechaModule.HOVER_SKIRT) || m.has(MechaModule.LAVA_TREADS) || m.has(MechaModule.STILTS);
+    }
+
+    /** Off-road for treads: soft natural ground. */
+    public static boolean offRoad(MechaEntity m) {
+        var below = m.level().getBlockState(m.getBlockPosBelowThatAffectsMyMovement());
+        return below.is(BlockTags.DIRT) || below.is(BlockTags.SAND) || below.is(BlockTags.SNOW) || below.is(net.minecraft.world.level.block.Blocks.GRAVEL)
+                || below.is(BlockTags.LEAVES) || below.is(net.minecraft.world.level.block.Blocks.MUD);
+    }
+
     public static float riddenSpeed(MechaEntity m) {
         int legs = m.indexOf(MechaModule.HYDRAULIC_LEGS);
         double stride = legs < 0 ? 1 : 0.6 + 0.8 * m.sliderAt(legs) / 100.0;
-        double speed = m.frame().speed * stride * loadSpeed(m.load());
+        double base = m.frame().speed;
+        if (m.frame().locomotion == MechaFrame.Locomotion.TREADS && offRoad(m)) base = 0.08;
+        if (m.frame().locomotion == MechaFrame.Locomotion.WINGS && !m.onGround()) base = MechaFrame.FLIGHT_SPEED;
+        double speed = base * stride * loadSpeed(m.load());
         if (m.battery() <= 0) speed *= 0.3;
         if (m.isInWater() && m.has(MechaModule.AQUA_FINS)) speed *= 2;
+        int servos = m.indexOf(MechaModule.SPRINT_SERVOS);
+        if (servos >= 0 && m.battery() > 0) speed *= 1 + 0.8 * m.sliderAt(servos) / 100.0;
         return (float) speed;
     }
 
@@ -108,8 +129,11 @@ public final class MechaLogic {
         return i < 0 ? 0 : 200 + 6 * m.sliderAt(i);
     }
 
+    /** Rocket thrust beats mass, wings are built in, or the frame carries Draconic Wings. */
     public static boolean canFly(MechaEntity m) {
-        return thrust(m) > m.mass() && m.battery() > 0;
+        if (m.battery() <= 0) return false;
+        return thrust(m) > m.mass() || m.frame().locomotion == MechaFrame.Locomotion.WINGS && m.load() <= 1.0f
+                || com.coolfreeze23.headinajar.genetics.GeneEffects.has(m, com.coolfreeze23.headinajar.genetics.Gene.DRACONIC_WINGS);
     }
 
     public static void tickRidden(MechaEntity m, Player pilot) {
@@ -117,10 +141,11 @@ public final class MechaLogic {
         m.yRotO = m.getYRot();
         m.yBodyRot = m.getYRot();
         m.yHeadRot = m.getYRot();
-        boolean jump = pilot.jumping;
+        boolean jump = pilot.jumping && m.frame().locomotion != MechaFrame.Locomotion.TREADS;
         Vec3 v = m.getDeltaMovement();
         if (jump && canFly(m)) {
-            m.setDeltaMovement(v.x, Math.min(0.45, v.y + 0.12), v.z);
+            double lift = m.frame().locomotion == MechaFrame.Locomotion.WINGS && thrust(m) <= m.mass() ? 0.08 : 0.12;
+            m.setDeltaMovement(v.x, Math.min(0.45, v.y + lift), v.z);
             m.fallDistance = 0;
             return;
         }
@@ -141,6 +166,13 @@ public final class MechaLogic {
             }
         }
         if (m.horizontalCollision && m.isInWater() && m.has(MechaModule.AQUA_FINS)) m.setDeltaMovement(v.x, 0.2, v.z);
+        // spiders and Arachnid Legs walk up walls
+        if (m.horizontalCollision && (m.frame().locomotion == MechaFrame.Locomotion.SPIDER || m.has(MechaModule.ARACHNID_LEGS)) && m.battery() > 0) {
+            int grip = m.indexOf(MechaModule.ARACHNID_LEGS);
+            m.setDeltaMovement(m.getDeltaMovement().x, grip < 0 ? 0.2 : 0.12 + 0.16 * m.sliderAt(grip) / 100.0, m.getDeltaMovement().z);
+            m.fallDistance = 0;
+        }
+        MechaSystems.riddenMovement(m);
     }
 
     /** Jump Jets: a mid-air burst (the client asks; the server spends). */
@@ -163,7 +195,7 @@ public final class MechaLogic {
         ServerLevel level = m.serverLevel();
         Player pilot = Hosts.pilot(m);
         boolean moving = m.getDeltaMovement().horizontalDistanceSqr() > 0.001;
-        float drain = m.frame() == MechaFrame.BULWARK ? 5 : m.frame() == MechaFrame.CHIMERA ? 3 : 2;
+        float drain = m.frame().idleDrain();
         float heat = 0;
         for (int i = 0; i < m.frame().totalSlots(); i++) {
             MechaModule mod = m.moduleAt(i);
@@ -186,16 +218,29 @@ public final class MechaLogic {
             drain += 120 + 1.8f * m.sliderAt(m.indexOf(MechaModule.ROCKET_PACK));
             heat += 6;
         }
+        if (m.frame().locomotion == MechaFrame.Locomotion.WINGS && !m.onGround() && pilot != null) {
+            drain += 40;
+            heat += 2;
+        }
         m.setBattery(m.battery() + gain - Math.round(drain));
+        MechaSystems.serverTick(m, pilot);
+        // Bio-Gel in a Chimera's veins: 1 HP every 5 s while it lasts
+        var data = m.getPersistentData();
+        int veins = data.getInt(VEINS);
+        if (veins > 0) {
+            data.putInt(VEINS, veins - 1);
+            if (veins % 100 == 0 && m.getHealth() < m.getMaxHealth()) m.heal(1);
+        }
 
         // arms
         if (pilot instanceof ServerPlayer sp && m.vent() == 0 && m.battery() > 0) {
-            for (int side = 0; side < 2; side++) {
-                boolean held = (m.armsHeld & (1 << side)) != 0, before = (m.armsBefore & (1 << side)) != 0;
+            for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) {
+                int bit = 1 << (side % 2);
+                boolean held = (m.armsHeld & bit) != 0, before = (m.armsBefore & bit) != 0;
                 MechaArms.tick(m, sp, side, held, held && !before, !held && before);
             }
         } else {
-            for (int side = 0; side < 2; side++) MechaArms.release(m, side);
+            for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) MechaArms.release(m, side);
         }
         m.armsBefore = m.armsHeld;
 
@@ -292,7 +337,7 @@ public final class MechaLogic {
         }
         int plating = m.indexOf(MechaModule.ARMOR_PLATING);
         if (plating >= 0) amount *= 1 - (0.1f + 0.002f * m.sliderAt(plating));
-        return amount;
+        return MechaSystems.absorb(m, source, amount);
     }
 
     /** Golden Parachute: under 10% health the pilot is thrown clear with slow falling. */

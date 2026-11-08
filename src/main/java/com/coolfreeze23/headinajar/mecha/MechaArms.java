@@ -29,6 +29,7 @@ public final class MechaArms {
         if (s.cooldown > 0) s.cooldown--;
         if (arm == null) return;
         float eff = MechaLogic.effectiveness(m);
+        if (pressed) MechaSystems.revealed(m);
         if (released) release(m, side);
         if (eff <= 0) return;
         switch (arm) {
@@ -92,9 +93,213 @@ public final class MechaArms {
                 m.setHeat(m.heat() + 0.5f);
                 m.playSound(SoundEvents.CROSSBOW_SHOOT, 0.6f, 1.8f);
             }
+            case MANIPULATOR_HAND -> {
+                if (pressed && s.cooldown <= 0 && m.spend(50)) {
+                    s.cooldown = 5;
+                    hand(m, pilot);
+                }
+            }
+            case EXCAVATOR_SCOOP -> {
+                if (held && s.cooldown <= 0) {
+                    s.cooldown = 4;
+                    scoop(m, pilot);
+                }
+            }
+            case FLAMETHROWER -> {
+                if (held && m.spend(60)) flame(m, pilot, side, eff);
+            }
+            case ARC_CANNON -> {
+                if (pressed && s.cooldown <= 0 && m.battery() >= 6000) {
+                    m.spend(6000);
+                    s.cooldown = 10 + 30 * m.armSlider(side) / 100;
+                    arc(m, pilot, (8 + 8 * m.armSlider(side) / 100f) * eff);
+                }
+            }
+            case HEMO_SYRINGE -> {
+                if (pressed && s.cooldown <= 0 && m.spend(20)) {
+                    s.cooldown = 10;
+                    hemo(m, pilot, eff);
+                }
+            }
+            case HARVESTER -> {
+                if (pressed && s.cooldown <= 0) {
+                    s.cooldown = 10;
+                    harvest(m, pilot);
+                }
+            }
+            case WELDING_TORCH -> {
+                if (held && m.spend(80)) weld(m, pilot, eff);
+            }
+            case PLASMA_LANCE -> {
+                if (held && m.spend(600)) lance(m, pilot, eff);
+            }
             default -> {
             }
         }
+    }
+
+    /** Manipulator Hand: uses the pilot's selected hotbar item like a hand would (on a block, a creature, or the air). */
+    private static void hand(MechaEntity m, ServerPlayer pilot) {
+        ItemStack stack = pilot.getMainHandItem();
+        Entity target = MechaLogic.lookEntity(pilot, m, 6);
+        if (target != null) {
+            pilot.attack(target);
+            return;
+        }
+        BlockHitResult hit = MechaLogic.lookBlock(pilot, 6);
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            pilot.gameMode.useItemOn(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND, hit);
+        } else if (!stack.isEmpty()) {
+            pilot.gameMode.useItem(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND);
+        }
+    }
+
+    /** Excavator Scoop: 3x3 of shovel blocks at a time, straight into the Cargo Hold. */
+    private static void scoop(MechaEntity m, ServerPlayer pilot) {
+        BlockHitResult hit = MechaLogic.lookBlock(pilot, 6);
+        if (MechaLogic.miss(hit)) return;
+        int dug = 0;
+        for (BlockPos p : square(hit.getBlockPos(), hit.getDirection())) {
+            BlockState state = m.serverLevel().getBlockState(p);
+            if (!state.is(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL) || m.battery() < 20) continue;
+            if (MechaLogic.breakAs(m, pilot, p)) {
+                m.spend(20);
+                dug++;
+            }
+        }
+        if (dug > 0) m.playSound(SoundEvents.GRAVEL_BREAK, 1, 0.7f);
+    }
+
+    /** Flamethrower: a 6-block cone that sets creatures alight. */
+    private static void flame(MechaEntity m, ServerPlayer pilot, int side, float eff) {
+        ServerLevel level = m.serverLevel();
+        Vec3 eye = pilot.getEyePosition(), look = pilot.getLookAngle();
+        double cone = 0.95 - 0.25 * m.armSlider(side) / 100.0;
+        for (int i = 0; i < 4; i++) {
+            Vec3 p = eye.add(look.scale(1.5 + level.random.nextDouble() * 4.5));
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, p.x, p.y, p.z, 2, 0.2, 0.2, 0.2, 0.02);
+        }
+        if (m.tickCount % 5 == 0) {
+            for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, m.getBoundingBox().inflate(7), e -> e != m && e != pilot && e.getVehicle() != m)) {
+                Vec3 to = e.position().add(0, e.getBbHeight() / 2, 0).subtract(eye);
+                if (to.length() > 7 || to.normalize().dot(look) < cone) continue;
+                e.igniteForSeconds(4);
+                e.hurt(level.damageSources().inFire(), 1 * eff);
+            }
+        }
+        m.setHeat(m.heat() + 8);
+    }
+
+    /** Arc Cannon: a hitscan bolt to the first creature in 16 blocks that jumps to up to three hostile ones nearby. */
+    private static void arc(MechaEntity m, ServerPlayer pilot, float damage) {
+        ServerLevel level = m.serverLevel();
+        Entity first = MechaLogic.lookEntity(pilot, m, 16);
+        m.setHeat(m.heat() + 25);
+        m.playSound(SoundEvents.LIGHTNING_BOLT_IMPACT, 1, 1.6f);
+        if (!(first instanceof LivingEntity victim)) return;
+        java.util.Set<Entity> hit = new java.util.HashSet<>();
+        LivingEntity from = pilot, at = victim;
+        for (int jump = 0; jump < 4 && at != null; jump++) {
+            hit.add(at);
+            at.hurt(level.damageSources().lightningBolt(), damage);
+            Vec3 a = from.getEyePosition(), b = at.getEyePosition();
+            for (int i = 0; i <= 10; i++) {
+                Vec3 p = a.lerp(b, i / 10.0);
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK, p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0);
+            }
+            from = at;
+            LivingEntity last = at;
+            at = level.getEntitiesOfClass(LivingEntity.class, at.getBoundingBox().inflate(4),
+                            e -> !hit.contains(e) && e != m && e != pilot && e instanceof net.minecraft.world.entity.monster.Enemy)
+                    .stream().min(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(last))).orElse(null);
+        }
+    }
+
+    /** Hemo-Syringe: a jab that draws a Blood Sample (quality 50-80) and patches the frame with 10% of the damage. */
+    private static void hemo(MechaEntity m, ServerPlayer pilot, float eff) {
+        Entity target = MechaLogic.lookEntity(pilot, m, 4);
+        if (!(target instanceof LivingEntity victim) || target instanceof net.minecraft.world.entity.player.Player) return;
+        float damage = 4 * eff;
+        if (!victim.hurt(m.serverLevel().damageSources().mobAttack(m), damage)) return;
+        m.heal(damage * 0.1f);
+        var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(victim);
+        if (blood.bloodless) return;
+        int quality = com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem.quality(victim, 50 + m.getRandom().nextInt(31));
+        ItemStack sample = com.coolfreeze23.headinajar.item.GeneticsItems.sample(com.coolfreeze23.headinajar.registry.ModRegistry.BLOOD_SAMPLE.get(), victim.getType(), quality);
+        ItemStack left = m.has(MechaModule.CARGO_HOLD) ? m.cargo().addItem(sample) : sample;
+        if (!left.isEmpty()) com.coolfreeze23.headinajar.form.FormActions.give(pilot, left);
+        m.playSound(SoundEvents.BEE_STING, 1, 0.8f);
+    }
+
+    /** Harvester: ripe crops in a 5x5 around the block you look at are picked and replanted. */
+    private static void harvest(MechaEntity m, ServerPlayer pilot) {
+        BlockHitResult hit = MechaLogic.lookBlock(pilot, 8);
+        if (MechaLogic.miss(hit)) return;
+        ServerLevel level = m.serverLevel();
+        for (BlockPos p : BlockPos.betweenClosed(hit.getBlockPos().offset(-2, -1, -2), hit.getBlockPos().offset(2, 1, 2))) {
+            BlockState state = level.getBlockState(p);
+            if (!(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop) || !crop.isMaxAge(state) || m.battery() < 10) continue;
+            if (!level.mayInteract(pilot, p)) continue;
+            BlockPos at = p.immutable();
+            var drops = net.minecraft.world.level.block.Block.getDrops(state, level, at, null, pilot, ItemStack.EMPTY);
+            ItemStack seed = crop.getCloneItemStack(level, at, state);
+            level.setBlock(at, crop.getStateForAge(0), 3);
+            m.spend(10);
+            boolean seedTaken = false;
+            for (ItemStack drop : drops) {
+                // replanting costs one seed
+                if (!seedTaken && drop.is(seed.getItem())) {
+                    drop.shrink(1);
+                    seedTaken = true;
+                }
+                if (drop.isEmpty()) continue;
+                ItemStack left = m.has(MechaModule.CARGO_HOLD) ? m.cargo().addItem(drop) : drop;
+                if (!left.isEmpty()) net.minecraft.world.level.block.Block.popResource(level, at, left);
+            }
+        }
+    }
+
+    /** Welding Torch: repairs the mecha you look at, or your own, 2 HP/s for Mecha Plating from the hold (1 per 20 HP). */
+    private static void weld(MechaEntity m, ServerPlayer pilot, float eff) {
+        Entity looked = MechaLogic.lookEntity(pilot, m, 5);
+        MechaEntity target = looked instanceof MechaEntity other ? other : m;
+        m.setHeat(m.heat() + 6);
+        if (m.tickCount % 10 != 0 || target.getHealth() >= target.getMaxHealth()) return;
+        var data = m.getPersistentData();
+        int credit = data.getInt("headinajar_weld");
+        if (credit <= 0) {
+            boolean plate = false;
+            for (int i = 0; i < m.cargo().getContainerSize() && !plate; i++) {
+                if (m.cargo().getItem(i).is(com.coolfreeze23.headinajar.registry.ModRegistry.MECHA_PLATING.get())) {
+                    m.cargo().removeItem(i, 1);
+                    plate = true;
+                }
+            }
+            if (!plate) return;
+            credit = 20;
+        }
+        target.heal(1 * eff);
+        data.putInt("headinajar_weld", credit - 1);
+        m.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.LAVA, target.getX(), target.getY() + target.getBbHeight() * 0.5,
+                target.getZ(), 2, 0.4, 0.4, 0.4, 0);
+    }
+
+    /** Plasma Lance: a 32-block beam, 20 damage a second, that sets things alight. */
+    private static void lance(MechaEntity m, ServerPlayer pilot, float eff) {
+        ServerLevel level = m.serverLevel();
+        Vec3 eye = pilot.getEyePosition(), look = pilot.getLookAngle();
+        Entity target = MechaLogic.lookEntity(pilot, m, 32);
+        BlockHitResult block = MechaLogic.lookBlock(pilot, 32);
+        Vec3 end = target != null ? target.position().add(0, target.getBbHeight() / 2, 0) : block.getLocation();
+        for (int i = 2; i < (int) eye.distanceTo(end); i += 2) {
+            Vec3 p = eye.add(look.scale(i));
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0);
+        }
+        if (target instanceof LivingEntity victim) {
+            victim.hurt(level.damageSources().indirectMagic(m, pilot), 1 * eff);
+            victim.igniteForSeconds(3);
+        }
+        m.setHeat(m.heat() + 15);
     }
 
     private static boolean takeAmmo(MechaEntity m, ServerPlayer pilot) {

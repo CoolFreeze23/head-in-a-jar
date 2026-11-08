@@ -39,6 +39,7 @@ public class MechaEntity extends PathfinderMob {
     private static final EntityDataAccessor<Integer> VENT = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<CompoundTag> MODULES = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.COMPOUND_TAG);
     private static final EntityDataAccessor<Byte> ARMS = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> UTILITY = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.INT);
 
     private final MechaFrame frame;
     private final NonNullList<ItemStack> modules;
@@ -49,7 +50,7 @@ public class MechaEntity extends PathfinderMob {
     public boolean ejecting;
     public int jetsLeft = 3, jetRecharge;
     /** Server-side work state for arms. */
-    public final MechaLogic.ArmState[] armState = {new MechaLogic.ArmState(), new MechaLogic.ArmState()};
+    public final MechaLogic.ArmState[] armState = {new MechaLogic.ArmState(), new MechaLogic.ArmState(), new MechaLogic.ArmState(), new MechaLogic.ArmState()};
 
     public MechaEntity(EntityType<? extends MechaEntity> type, Level level, MechaFrame frame) {
         super(type, level);
@@ -79,6 +80,7 @@ public class MechaEntity extends PathfinderMob {
         builder.define(VENT, 0);
         builder.define(MODULES, new CompoundTag());
         builder.define(ARMS, (byte) 0);
+        builder.define(UTILITY, 0);
     }
 
     public MechaFrame frame() {
@@ -135,7 +137,12 @@ public class MechaEntity extends PathfinderMob {
         return -1;
     }
 
-    /** The module on the left (0) or right (1) arm. */
+    /** Gene Ports: the frame's own plus one for a Bio-Integration Port. */
+    public int genePorts() {
+        return frame.genePorts() + (has(MechaModule.BIO_INTEGRATION_PORT) ? 1 : 0);
+    }
+
+    /** The module on arm slot {@code side}: 0 left, 1 right, 2 and 3 the shoulder hardpoints (left, right). */
     public MechaModule arm(int side) {
         int first = frame.firstIndex(MechaModule.Slot.ARM);
         return side < frame.slots(MechaModule.Slot.ARM) ? moduleAt(first + side) : null;
@@ -156,7 +163,8 @@ public class MechaEntity extends PathfinderMob {
     }
 
     public int batteryCapacity() {
-        return frame.battery + (has(MechaModule.BATTERY_RACK) ? 500_000 : 0);
+        int cap = frame.battery + (has(MechaModule.BATTERY_RACK) ? 500_000 : 0) + (has(MechaModule.CAPACITOR_BANK) ? 2_000_000 : 0);
+        return has(MechaModule.BIO_INTEGRATION_PORT) ? cap * 4 / 5 : cap;
     }
 
     public void setBattery(int fe) {
@@ -185,6 +193,15 @@ public class MechaEntity extends PathfinderMob {
 
     public void setVent(int ticks) {
         entityData.set(VENT, ticks);
+    }
+
+    /** Which fitted utility module R fires (an index into the fitted ones). */
+    public int utility() {
+        return entityData.get(UTILITY);
+    }
+
+    public void setUtility(int index) {
+        entityData.set(UTILITY, index);
     }
 
     /** Arm buttons as the client last drew them (for animation). */
@@ -241,13 +258,21 @@ public class MechaEntity extends PathfinderMob {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return getPassengers().size() < (has(MechaModule.PASSENGER_POD) ? 2 : 1);
+        return getPassengers().size() < 1 + frame.seats() + (has(MechaModule.PASSENGER_POD) ? 1 : 0);
     }
 
-    /** A Passenger Pod rider sits behind the cockpit. */
+    /** Passengers (Passenger Pod, the Wheelhouse's seats) sit behind the cockpit, side by side. */
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
-        return new Vec3(0, frame.height * 0.55, -frame.width * 0.6);
+        int index = Math.max(1, getPassengers().indexOf(passenger));
+        double side = getPassengers().size() > 2 ? (index % 2 == 1 ? -0.5 : 0.5) : 0;
+        return new Vec3(side, frame.height * 0.55, -frame.width * 0.6);
+    }
+
+    /** Colossus-sized frames don't fit through a nether portal. */
+    @Override
+    public boolean canUsePortal(boolean allowPassengers) {
+        return frame.height < 4 && super.canUsePortal(allowPassengers);
     }
 
     @Override
@@ -267,7 +292,14 @@ public class MechaEntity extends PathfinderMob {
 
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        return !has(MechaModule.ANCHOR_CLAMPS) && super.causeFallDamage(distance - 3, multiplier, source);
+        if (has(MechaModule.ANCHOR_CLAMPS) || has(MechaModule.HOVER_SKIRT) || frame.locomotion == MechaFrame.Locomotion.WINGS) return false;
+        return super.causeFallDamage(distance - 3, multiplier, source);
+    }
+
+    /** The Skitter (and Arachnid Legs) cling to walls. */
+    @Override
+    public boolean onClimbable() {
+        return horizontalCollision && (frame.locomotion == MechaFrame.Locomotion.SPIDER || has(MechaModule.ARACHNID_LEGS)) || super.onClimbable();
     }
 
     @Override

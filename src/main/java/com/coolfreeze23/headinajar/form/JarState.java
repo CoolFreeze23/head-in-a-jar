@@ -20,7 +20,7 @@ import java.util.UUID;
  * the Relay Goggles and Collar Cam, and which Headless Body is theirs. Saved with the player; not copied on death.
  */
 public final class JarState {
-    public static final int MAX_SLOTS = 5;
+    public static final int MAX_SLOTS = 7;
 
     public static final Codec<JarState> CODEC = RecordCodecBuilder.create(i -> i.group(
             Form.CODEC.optionalFieldOf("form", Form.BODY).forGetter(s -> s.form),

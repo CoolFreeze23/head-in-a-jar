@@ -485,7 +485,7 @@ public final class FormActions {
             if (!module.isEmpty()) give(player, module.copy());
             state.setModule(i, ItemStack.EMPTY);
         }
-        give(player, new ItemStack(state.slots() > 3 ? ModRegistry.REINFORCED_JAR.get() : ModRegistry.LIFE_SUPPORT_JAR.get()));
+        give(player, new ItemStack(state.slots() > 5 ? ModRegistry.EXECUTIVE_JAR.get() : state.slots() > 3 ? ModRegistry.REINFORCED_JAR.get() : ModRegistry.LIFE_SUPPORT_JAR.get()));
     }
 
     public static void give(ServerPlayer player, ItemStack stack) {

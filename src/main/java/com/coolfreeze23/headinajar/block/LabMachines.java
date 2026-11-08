@@ -46,11 +46,15 @@ public final class LabMachines {
 
         @Override
         protected boolean valid(int slot, ItemStack stack) {
-            return slot == 0 && stack.is(ModRegistry.BLOOD_SAMPLE.get());
+            return slot == 0 && (stack.is(ModRegistry.BLOOD_SAMPLE.get()) || stack.is(Items.DRAGON_BREATH));
         }
 
         private ItemStack[] results() {
             ItemStack in = items.getStackInSlot(0);
+            // the one boss you can sample from a bottle: dragon's breath spins down to quality 60
+            if (in.is(Items.DRAGON_BREATH)) {
+                return new ItemStack[]{GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), EntityType.ENDER_DRAGON, 60), new ItemStack(Items.GLASS_BOTTLE)};
+            }
             EntityType<?> species = GeneticsItems.species(in);
             if (species == null) return null;
             return new ItemStack[]{GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), species, GeneticsItems.quality(in)),
@@ -140,6 +144,10 @@ public final class LabMachines {
                     return false;
                 }
                 int right = correct(seed, id - CALL);
+                // a jar with a Cortex Coprocessor gets one miscall forgiven
+                if (com.coolfreeze23.headinajar.form.FormActions.state(player).has(com.coolfreeze23.headinajar.module.ModuleType.CORTEX_COPROCESSOR)) {
+                    right = Math.min(BASES, right + 1);
+                }
                 read(player.serverLevel(), 0.5f + 0.5f * right / BASES);
                 player.displayClientMessage(Component.translatable("message.headinajar.called", right, BASES), true);
                 return true;
@@ -171,7 +179,8 @@ public final class LabMachines {
             }
             if (++s.progress >= TICKS) {
                 s.progress = 0;
-                s.read((ServerLevel) level, AUTO_ACCURACY);
+                // a Librarian on staff reads at up to 90%
+                s.read((ServerLevel) level, AUTO_ACCURACY + 0.3f * HeadJobs.staff(level, pos, "librarian"));
             }
         }
 
@@ -253,9 +262,15 @@ public final class LabMachines {
             return true;
         }
 
+        /** The catalyst's bonus, plus up to 10 for a Cleric on staff. */
+        private int catalyst() {
+            int clerk = level == null ? 0 : Math.round(10 * HeadJobs.staff(level, worldPosition, "cleric"));
+            return Genetics.catalystBonus(items.getStackInSlot(SLOT_CATALYST)) + clerk;
+        }
+
         private void refresh() {
             List<Gene> genes = strand();
-            stability = Genetics.stability(genes, readouts(), Genetics.catalystBonus(items.getStackInSlot(SLOT_CATALYST)));
+            stability = Genetics.stability(genes, readouts(), catalyst());
             load = genes.stream().mapToInt(g -> g.load).sum();
         }
 
@@ -305,7 +320,7 @@ public final class LabMachines {
         /** Makes the cassette now (the tick calls this when the run ends; tests call it directly). */
         public ItemStack finish() {
             refresh();
-            Serum serum = Genetics.splice(strand(), readouts(), Genetics.catalystBonus(items.getStackInSlot(SLOT_CATALYST)));
+            Serum serum = Genetics.splice(strand(), readouts(), catalyst());
             ItemStack cassette = new ItemStack(ModRegistry.SERUM_CASSETTE.get());
             serum.writeTo(cassette);
             items.extractItem(SLOT_CATALYST, 1, false);

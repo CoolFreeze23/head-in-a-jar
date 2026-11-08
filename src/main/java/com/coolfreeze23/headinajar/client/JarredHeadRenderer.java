@@ -38,18 +38,23 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         pose.translate(0.5, 0, 0.5);
         pose.mulPose(Axis.YP.rotationDegrees(-head.getBlockState().getValue(JarredHeadBlock.FACING).toYRot()));
         pose.scale(0.8f, 0.8f, 0.8f);
-        JarRenderer.drawWith(pose, buffers, light, age, (p, bob) -> drawMobHead(type, head, p, buffers, light, bob));
+        drawJar(type, head.entityTag(), pose, buffers, light, age);
         pose.popPose();
+    }
+
+    /** A whole jarred head (jar and the mob's head inside), at the pose's origin. Used by turrets, mounts and the Array too. */
+    public static void drawJar(EntityType<?> type, net.minecraft.nbt.CompoundTag entityTag, PoseStack pose, MultiBufferSource buffers, int light, float age) {
+        JarRenderer.drawWith(pose, buffers, light, age, (p, bob) -> drawMobHead(type, entityTag, p, buffers, light, bob));
     }
 
     /** Draws the mob's head part, centred on the jar's neck (in jar model space). */
     @SuppressWarnings("unchecked")
-    static void drawMobHead(EntityType<?> type, JarredHeadBlockEntity head, PoseStack pose, MultiBufferSource buffers, int light, float bob) {
+    static void drawMobHead(EntityType<?> type, net.minecraft.nbt.CompoundTag entityTag, PoseStack pose, MultiBufferSource buffers, int light, float bob) {
         var mc = Minecraft.getInstance();
         Entity entity = STAND_INS.computeIfAbsent(type, t -> t.create(mc.level));
         if (!(entity instanceof LivingEntity living)) return;
-        if (entity instanceof net.minecraft.world.entity.npc.Villager villager && head.entityTag().contains("VillagerData")) {
-            net.minecraft.world.entity.npc.VillagerData.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, head.entityTag().get("VillagerData"))
+        if (entity instanceof net.minecraft.world.entity.npc.Villager villager && entityTag.contains("VillagerData")) {
+            net.minecraft.world.entity.npc.VillagerData.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, entityTag.get("VillagerData"))
                     .result().ifPresent(villager::setVillagerData);
         }
         if (!(mc.getEntityRenderDispatcher().getRenderer(entity) instanceof LivingEntityRenderer<?, ?> renderer)) return;

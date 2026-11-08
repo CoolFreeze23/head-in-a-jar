@@ -157,7 +157,7 @@ public final class GeneticsItems {
             if (serum.isEmpty()) return InteractionResult.PASS;
             Genetics.Target kind;
             if (target instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
-                if (mecha.frame().genePorts() == 0) {
+                if (mecha.genePorts() == 0) {
                     player.displayClientMessage(Component.translatable("message.headinajar.mecha_gene_port"), true);
                     return InteractionResult.FAIL;
                 }

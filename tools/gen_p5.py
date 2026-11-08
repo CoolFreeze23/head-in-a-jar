@@ -118,7 +118,6 @@ def run(EN, PT, write, shaped):
         EN[key], PT[key] = en, pt
 
     write('data/headinajar/tags/entity_type/thick_hide.json', {'values': ['#c:bosses', 'minecraft:elder_guardian', 'minecraft:warden']})
-    write('data/headinajar/headinajar/host/chimera.json', {'entity': 'headinajar:chimera', 'neck': [0, 2.25, 0], 'blood': 'warm', 'decay_per_minute': 0})
 
     # recipes
     shaped('syringe', ['N', 'G', 'S'], dict(N='iron_nugget', G='glass', S=S))
@@ -134,8 +133,6 @@ def run(EN, PT, write, shaped):
     shaped('gene_splicer', ['LHL', 'SBS', 'SRS'], dict(L='headinajar:lens', H='headinajar:synapse_chip', S=S, B='brewing_stand', R='redstone'))
     shaped('injection_rig', ['S S', 'SYS', 'SVS'], dict(S=S, Y='headinajar:syringe', V='headinajar:servo'))
     shaped('leech_jar', ['GKG', 'GBG', 'GGG'], dict(G='glass', K=S, B='slime_ball'))
-    shaped('chimera_frame', ['PCP', 'GNG', 'V V'], dict(P='headinajar:mecha_plating', C='headinajar:collar_cam', G='headinajar:bio_gel',
-                                                         N='nether_wart_block', V='headinajar:servo'))
 
     # blocks
     rot = {'north': 0, 'east': 90, 'south': 180, 'west': 270}

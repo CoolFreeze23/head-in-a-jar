@@ -68,6 +68,9 @@ public final class Config {
         B.push("genetics");
     }
 
+    public static final ModConfigSpec.BooleanValue PVP_TURRETS = B
+            .comment("Turret Pedestals may shoot players who are not on the owner's team.")
+            .define("pvpTurrets", false);
     public static final ModConfigSpec.BooleanValue KEEP_GENES = B
             .comment("Spliced genes stay in your body when you die and respawn.")
             .define("keepGenesOnDeath", true);

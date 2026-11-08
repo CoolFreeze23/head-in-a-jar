@@ -26,6 +26,8 @@ public class ClientSetup {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     public static final KeyMapping SECONDARY = new KeyMapping("key.headinajar.secondary", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
+    /** Collar Cam Zoom Optic: hold for x3 zoom while linked. */
+    public static final KeyMapping ZOOM = new KeyMapping("key.headinajar.zoom", org.lwjgl.glfw.GLFW.GLFW_KEY_C, "key.categories.headinajar");
     public static final KeyMapping ABILITY = new KeyMapping("key.headinajar.ability", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
 
@@ -45,6 +47,7 @@ public class ClientSetup {
         }));
         container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, com.coolfreeze23.headinajar.Config.CLIENT_SPEC);
         NeoForge.EVENT_BUS.register(ClientEvents.class);
+        NeoForge.EVENT_BUS.register(SocketClient.class);
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
     }
 
@@ -53,11 +56,17 @@ public class ClientSetup {
         event.registerEntityRenderer(ModRegistry.HELD_BLOCK.get(), HeldBlockRenderer::new);
         event.registerEntityRenderer(ModRegistry.HEAD_JAR.get(), HeadJarRenderer::new);
         event.registerEntityRenderer(ModRegistry.SEAT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
+        event.registerEntityRenderer(ModRegistry.MISSILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModRegistry.EMP_GRENADE_ENTITY.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.CRADLE_BE.get(), CradleRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
-        event.registerEntityRenderer(ModRegistry.HOPPER.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.HOPPER));
-        event.registerEntityRenderer(ModRegistry.BULWARK.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK));
-        event.registerEntityRenderer(ModRegistry.CHIMERA.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.CHIMERA));
+        event.registerBlockEntityRenderer(ModRegistry.TURRET_BE.get(), HeadWorkRenderers.Turret::new);
+        event.registerBlockEntityRenderer(ModRegistry.MOUNT_BE.get(), HeadWorkRenderers.Mount::new);
+        event.registerBlockEntityRenderer(ModRegistry.ARRAY_BE.get(), HeadWorkRenderers.Array::new);
+        event.registerBlockEntityRenderer(ModRegistry.SOCKET_BE.get(), HeadWorkRenderers.Socket::new);
+        for (var frame : com.coolfreeze23.headinajar.mecha.MechaFrame.values()) {
+            event.registerEntityRenderer(ModRegistry.mechaType(frame), c -> new MechaRenderer(c, frame));
+        }
         event.registerEntityRenderer(ModRegistry.LUNK.get(), c -> new ShellRenderer(c, ShellRenderer.LUNK, "lunk", 0.8f));
         event.registerEntityRenderer(ModRegistry.ROVER.get(), c -> new ShellRenderer(c, ShellRenderer.ROVER, "rover", 0.7f));
         event.registerEntityRenderer(ModRegistry.SPIDER_WALKER.get(), c -> new ShellRenderer(c, ShellRenderer.SPIDER, "spider_walker", 0.8f));
@@ -72,6 +81,9 @@ public class ClientSetup {
         event.registerLayerDefinition(ShellRenderer.LUNK, ShellRenderer::lunk);
         event.registerLayerDefinition(MechaRenderer.HOPPER, MechaRenderer::hopper);
         event.registerLayerDefinition(MechaRenderer.BULWARK, MechaRenderer::bulwark);
+        event.registerLayerDefinition(MechaRenderer.WHEELHOUSE, MechaRenderer::wheelhouse);
+        event.registerLayerDefinition(MechaRenderer.SKITTER, MechaRenderer::skitter);
+        event.registerLayerDefinition(MechaRenderer.KITE, MechaRenderer::kite);
         event.registerLayerDefinition(MechaRenderer.MODULES, MechaRenderer::modules);
         event.registerLayerDefinition(ShellRenderer.ROVER, ShellRenderer::rover);
         event.registerLayerDefinition(ShellRenderer.SPIDER, ShellRenderer::spiderWalker);
@@ -100,6 +112,7 @@ public class ClientSetup {
         event.register(ABILITY);
         event.register(SWAP);
         event.register(SECONDARY);
+        event.register(ZOOM);
     }
 
     private static void gui(RegisterGuiLayersEvent event) {
@@ -108,6 +121,7 @@ public class ClientSetup {
         event.registerAboveAll(HeadInAJar.id("host"), HostHud::render);
         event.registerAboveAll(HeadInAJar.id("pilot"), PilotClient::hud);
         event.registerAboveAll(HeadInAJar.id("genes"), GeneHud::render);
+        event.registerAboveAll(HeadInAJar.id("socket"), SocketClient::hud);
     }
 
     private static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {

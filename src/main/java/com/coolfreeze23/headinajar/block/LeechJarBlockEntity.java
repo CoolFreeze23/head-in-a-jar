@@ -54,7 +54,8 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems {
         AABB around = new AABB(worldPosition).inflate(0.6, 1, 0.6);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, around, e -> e.isAlive() && !(e instanceof Player)
                 && !e.getType().is(BloodType.THICK_HIDE) && !BloodType.of(e).bloodless)) {
-            int base = MIN + level.random.nextInt(MAX - MIN + 1);
+            // a Butcher on staff draws half again as much
+            int base = Math.round((MIN + level.random.nextInt(MAX - MIN + 1)) * (1 + 0.5f * HeadJobs.staff(level, worldPosition, "butcher")));
             ItemStack sample = GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), e.getType(), GeneticsItems.SyringeItem.quality(e, base));
             for (int i = 0; i < items.getSlots(); i++) {
                 if (items.getStackInSlot(i).isEmpty()) {

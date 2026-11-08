@@ -46,9 +46,13 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
     };
 
     protected LabMachine(BlockEntityType<?> type, BlockPos pos, BlockState state, LabMenu.Kind kind, int capacity) {
+        this(type, pos, state, kind, capacity, 0);
+    }
+
+    protected LabMachine(BlockEntityType<?> type, BlockPos pos, BlockState state, LabMenu.Kind kind, int capacity, int extract) {
         super(type, pos, state);
         this.kind = kind;
-        this.energy = new Buffer(capacity, Math.max(1000, capacity / 20), 0, this::setChanged);
+        this.energy = new Buffer(capacity, extract > 0 ? 0 : Math.max(1000, capacity / 20), extract, this::setChanged);
         this.items = new ItemStackHandler(kind.slots.length) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {

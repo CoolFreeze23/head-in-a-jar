@@ -90,7 +90,8 @@ public final class Genetics {
     public static Result inject(LivingEntity target, Serum serum, Target kind, RandomSource random) {
         GeneSet set = genes(target);
         if (serum.load() > kind.loadCap) return Result.TOO_HEAVY;
-        if (set.serums.size() >= kind.serums) return Result.FULL;
+        int capacity = kind == Target.MECHA && target instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha ? mecha.genePorts() : kind.serums;
+        if (set.serums.size() >= capacity) return Result.FULL;
         if (kind != Target.MECHA) {
             BloodType blood = BloodType.of(target);
             boolean donor = serum.genes().stream().anyMatch(e -> e.gene() == Gene.HEROS_BLOOD) || set.has(Gene.HEROS_BLOOD);

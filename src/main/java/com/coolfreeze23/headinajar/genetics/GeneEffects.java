@@ -146,6 +146,12 @@ public final class GeneEffects {
             }
         }
         light(e, level, has(e, Gene.GLOW_CELLS) || has(e, Gene.BIOLUMINESCENCE));
+        if (has(e, Gene.DECAY_AURA) && t % 20 == 0) {
+            for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, e.getBoundingBox().inflate(6),
+                    o -> o != e && o instanceof net.minecraft.world.entity.monster.Enemy)) {
+                other.addEffect(new MobEffectInstance(MobEffects.WITHER, 40, 0), e);
+            }
+        }
         int[] cd = COOLDOWNS.get(e);
         if (cd != null) {
             if (cd[0] > 0) cd[0]--;
@@ -222,6 +228,15 @@ public final class GeneEffects {
                 target.hurt(level.damageSources().sonicBoom(body), 10);
                 level.playSound(null, body.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS, 2, 1);
                 cd[which] = 300;
+                yield true;
+            }
+            case DECAY_AURA -> {
+                Vec3 eye = aim.getEyePosition().add(look);
+                var skull = new net.minecraft.world.entity.projectile.WitherSkull(level, body, look.scale(1.2));
+                skull.setPos(eye.x, eye.y, eye.z);
+                level.addFreshEntity(skull);
+                level.playSound(null, body.blockPosition(), SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 1, 1);
+                cd[which] = 40;
                 yield true;
             }
             default -> false;

@@ -72,6 +72,7 @@ public final class ModFluids {
     }
 
     public static final Set SALINE = new Set("cranial_saline", 0xFF5FC8C0, 1020, 1100);
+    public static final Set BROTH = new Set("nutrient_broth", 0xFFC89A48, 1040, 1400);
 
     public static void register(IEventBus bus) {
         TYPES.register(bus);

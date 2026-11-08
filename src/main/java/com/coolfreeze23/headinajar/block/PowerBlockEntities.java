@@ -162,7 +162,7 @@ public final class PowerBlockEntities {
         public static void tick(Level level, BlockPos pos, BlockState state, Station station) {
             if (station.energy.getEnergyStored() > 0) station.energy.set(station.energy.getEnergyStored() - station.drain);
             if (level.getGameTime() % 20 == 0 && level.getServer() != null) {
-                RelayRegistry.get(level.getServer()).put(new RelayRegistry.Station(station.kind, level.dimension(), pos, station.radius,
+                RelayRegistry.get(level.getServer()).put(new RelayRegistry.Station(station.kind, level.dimension(), pos, (int) (station.radius * (station.kind == RelayRegistry.Kind.MAST ? 1 + 0.5f * HeadJobs.staff(level, pos, "cartographer") : 1)),
                         station.owner, station.energy.getEnergyStored(), level.getGameTime(), station.drain));
             }
         }

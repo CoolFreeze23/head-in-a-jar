@@ -57,7 +57,10 @@ public final class FormEvents {
         if (event.getEntity() instanceof Player player && player.hasData(ModRegistry.JAR_STATE)) {
             Form form = state(player).form();
             if (form == Form.JAR || form == Form.SOCKET) event.setNewSize(JAR_SIZE);
-            else if (form == Form.LINKED && event.getPose() != net.minecraft.world.entity.Pose.SLEEPING) event.setNewSize(LINKED_SIZE);
+            else if (form == Form.LINKED && event.getPose() != net.minecraft.world.entity.Pose.SLEEPING
+                    && !com.coolfreeze23.headinajar.item.QuantumItems.has(state(player).collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.PERISCOPE_STALK)) {
+                event.setNewSize(LINKED_SIZE);
+            }
         }
     }
 

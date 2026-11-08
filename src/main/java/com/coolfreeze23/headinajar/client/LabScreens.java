@@ -31,6 +31,14 @@ public final class LabScreens {
                         .line(22, 56, "gui.headinajar.rig.how")
                         .button(104, 28, 56, 20, "gui.headinajar.rig.inject", LabMachines.InjectionRig.INJECT));
         event.register(ModRegistry.LAB_MENUS.get(LabMenu.Kind.DNA_SEQUENCER).get(), SequencerScreen::new);
+        event.register(ModRegistry.LAB_MENUS.get(LabMenu.Kind.CEREBRAL_ARRAY).get(), (LabMenu menu, Inventory inv, Component title) -> {
+            var screen = new MachineScreen<>(menu, inv, title).energy(500_000)
+                    .gauge(104, 17, 12, 52, 2, com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity.TANK, 0xFFC89A48, "gui.headinajar.broth")
+                    .line(120, 18, "gui.headinajar.array.output", 1)
+                    .line(120, 30, "gui.headinajar.array.heads", 3);
+            screen.hideInventoryLabel();
+            return screen;
+        });
         event.register(ModRegistry.LAB_MENUS.get(LabMenu.Kind.GENE_SPLICER).get(), SplicerScreen::new);
     }
 

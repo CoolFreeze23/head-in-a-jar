@@ -148,6 +148,17 @@ public final class ClientEvents {
         }
     }
 
+    /** Collar Cam optics while linked: the Wide Lens widens the view, the Zoom Optic zooms x3 while its key is held. */
+    @SubscribeEvent
+    public static void fov(net.neoforged.neoforge.client.event.ComputeFovModifierEvent event) {
+        JarState state = state(event.getPlayer());
+        if (state.form() != Form.LINKED) return;
+        float fov = event.getNewFovModifier();
+        if (com.coolfreeze23.headinajar.item.QuantumItems.has(state.collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.WIDE_LENS)) fov *= 1.15f;
+        if (ClientSetup.ZOOM.isDown() && com.coolfreeze23.headinajar.item.QuantumItems.has(state.collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.ZOOM_OPTIC)) fov /= 3f;
+        event.setNewFovModifier(fov);
+    }
+
     @SubscribeEvent
     public static void clientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -155,18 +166,22 @@ public final class ClientEvents {
         JarState state = state(mc.player);
         while (ClientSetup.JAR_MENU.consumeClick()) {
             // in a mecha, sneak + J is the eject handle
-            if (state.form().isJarred() && !(state.form() == Form.PILOT && mc.options.keyShift.isDown())) {
+            if (state.form() == Form.SOCKET && mc.options.keyShift.isDown()) {
+                PacketDistributor.sendToServer(new Network.SocketInput(2, 0, 0));
+            } else if (state.form().isJarred() && !(state.form() == Form.PILOT && mc.options.keyShift.isDown())) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.OPEN_MENU));
             }
         }
         while (ClientSetup.ABILITY.consumeClick()) {
             if (ClientHooks.handshakeActive()) ClientHooks.press();
+            else if (state.form() == Form.SOCKET) SocketClient.pulse();
             else if (state.form().isJarred() || state.form() == Form.BODY || state.form() == Form.LINKED) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
             }
         }
         while (ClientSetup.SECONDARY.consumeClick()) {
-            if (state.form() == Form.HOSTED || state.form() == Form.BODY || state.form() == Form.LINKED || state.form() == Form.PILOT) {
+            if (state.form() == Form.SOCKET) SocketClient.nextFace();
+            else if (state.form() == Form.HOSTED || state.form() == Form.BODY || state.form() == Form.LINKED || state.form() == Form.PILOT || state.form() == Form.JAR) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
             }
         }

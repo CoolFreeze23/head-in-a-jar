@@ -44,11 +44,37 @@ public final class PilotClient {
             PacketDistributor.sendToServer(new Network.JarAction(Network.Action.JET));
         }
         wasJumping = jumping;
+        boolean cortex = mc.player.getData(ModRegistry.JAR_STATE).has(com.coolfreeze23.headinajar.module.ModuleType.CORTEX_COPROCESSOR);
+        if ((m.has(MechaModule.TARGET_LOCK) || cortex) && m.battery() > 0) lockOn(mc, m);
         if (mc.options.keyShift.isDown() && ClientSetup.JAR_MENU.isDown()) {
             if (++ejectHold == 20) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.EJECT));
         } else {
             ejectHold = 0;
         }
+    }
+
+    /** Target Lock: a hostile within 24 blocks and about 12 degrees of your aim pulls the aim gently onto it. */
+    private static void lockOn(Minecraft mc, MechaEntity m) {
+        var player = mc.player;
+        var eye = player.getEyePosition();
+        var look = player.getLookAngle();
+        net.minecraft.world.entity.LivingEntity best = null;
+        double bestDot = 0.978;
+        for (var e : player.level().getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, m.getBoundingBox().inflate(24),
+                e -> e instanceof net.minecraft.world.entity.monster.Enemy && e.isAlive())) {
+            var to = e.getBoundingBox().getCenter().subtract(eye).normalize();
+            double dot = to.dot(look);
+            if (dot > bestDot) {
+                bestDot = dot;
+                best = e;
+            }
+        }
+        if (best == null) return;
+        var to = best.getBoundingBox().getCenter().subtract(eye);
+        float yaw = (float) (net.minecraft.util.Mth.atan2(to.z, to.x) * (180 / Math.PI)) - 90;
+        float pitch = (float) -(net.minecraft.util.Mth.atan2(to.y, to.horizontalDistance()) * (180 / Math.PI));
+        player.setYRot(player.getYRot() + net.minecraft.util.Mth.wrapDegrees(yaw - player.getYRot()) * 0.2f);
+        player.setXRot(player.getXRot() + (pitch - player.getXRot()) * 0.2f);
     }
 
     /** The chase camera sits further back from bigger frames. */
@@ -63,6 +89,11 @@ public final class PilotClient {
         if (m == null || mc.options.hideGui) return;
         int x = 8, y = g.guiHeight() - 70;
         g.drawString(mc.font, m.getDisplayName(), x, y - 10, 0xFFFFFF);
+        var utility = com.coolfreeze23.headinajar.mecha.MechaSystems.selectedUtility(m);
+        if (utility != null) {
+            g.drawString(mc.font, Component.translatable("hud.headinajar.utility", ClientSetup.ABILITY.getTranslatedKeyMessage(),
+                    Component.translatable("item.headinajar." + utility.id()), ClientSetup.SECONDARY.getTranslatedKeyMessage()), x, y - 20, 0xFFD080);
+        }
         ChargeHud.drawBar(g, x, y, 90, m.getHealth() / m.getMaxHealth(), 0xFFE04848, 0xFF9A2E2E);
         y += 9;
         ChargeHud.drawBar(g, x, y, 90, m.battery() / (float) m.batteryCapacity(), 0xFF3FD8F0, 0xFF1F9AB8);

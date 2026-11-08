@@ -22,7 +22,10 @@ public enum ModuleType {
     SELF_RIGHTING_GYRO(false),
     HUB_ANTENNA(true),
     LIFE_SIGN_MONITOR(false),
-    HAT_MOUNT(false);
+    HAT_MOUNT(false),
+    CORTEX_COPROCESSOR(true),
+    LACRIMAL_LASER(true),
+    BODY_RECALL_BEACON(true);
 
     public final boolean powered;
 

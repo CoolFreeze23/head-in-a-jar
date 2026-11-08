@@ -117,6 +117,30 @@ public final class Network {
         }
     }
 
+    /** Client to server, from a jar in a Neural Socket: 0 set a face's level, 1 pulse a face, 2 unplug. */
+    public record SocketInput(int action, int face, int level) implements CustomPacketPayload {
+        public static final Type<SocketInput> TYPE = new Type<>(HeadInAJar.id("socket_input"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, SocketInput> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, SocketInput::action, ByteBufCodecs.VAR_INT, SocketInput::face, ByteBufCodecs.VAR_INT, SocketInput::level, SocketInput::new);
+
+        @Override
+        public Type<SocketInput> type() {
+            return TYPE;
+        }
+    }
+
+    /** Server to client: what the socket's occupant reads (outputs, inputs, then item count, tank fill and capacity). */
+    public record SocketStatus(java.util.List<Integer> values) implements CustomPacketPayload {
+        public static final Type<SocketStatus> TYPE = new Type<>(HeadInAJar.id("socket_status"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, SocketStatus> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()), SocketStatus::values, SocketStatus::new);
+
+        @Override
+        public Type<SocketStatus> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar("1");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
@@ -150,6 +174,19 @@ public final class Network {
             });
             com.coolfreeze23.headinajar.genetics.GeneArchive.clientLibrary = lib;
         });
+        registrar.playToServer(SocketInput.TYPE, SocketInput.CODEC, (msg, ctx) -> {
+            if (!(ctx.player() instanceof ServerPlayer player) || com.coolfreeze23.headinajar.form.FormActions.state(player).form() != com.coolfreeze23.headinajar.form.Form.SOCKET) return;
+            if (msg.action() == 2) {
+                com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.unplug(player);
+                return;
+            }
+            if (!(player.level().getBlockEntity(player.blockPosition().below()) instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity socket)
+                    || !player.getUUID().equals(socket.occupant())) return;
+            var face = net.minecraft.core.Direction.from3DDataValue(Math.floorMod(msg.face(), 6));
+            if (msg.action() == 0) socket.setOutput(face, msg.level());
+            else if (msg.action() == 1) socket.pulse(face);
+        });
+        registrar.playToClient(SocketStatus.TYPE, SocketStatus.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.SocketClient.status = msg.values());
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);
         registrar.playToServer(ArmInput.TYPE, ArmInput.CODEC, (msg, ctx) -> {
             if (ctx.player().getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == ctx.player()) {
@@ -187,10 +224,17 @@ public final class Network {
             com.coolfreeze23.headinajar.genetics.GeneEffects.activate(player, player, which);
             return;
         }
-        if (power && state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha
-                && !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mecha).isEmpty()) {
-            com.coolfreeze23.headinajar.genetics.GeneEffects.activate(mecha, player, which);
-            return;
+        if (power && state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
+            boolean genes = !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mecha).isEmpty();
+            if (genes && (player.isShiftKeyDown() || com.coolfreeze23.headinajar.mecha.MechaSystems.utilities(mecha).isEmpty())) {
+                com.coolfreeze23.headinajar.genetics.GeneEffects.activate(mecha, player, which);
+                return;
+            }
+            if (!com.coolfreeze23.headinajar.mecha.MechaSystems.utilities(mecha).isEmpty()) {
+                if (which == 0) com.coolfreeze23.headinajar.mecha.MechaSystems.useUtility(mecha, player);
+                else com.coolfreeze23.headinajar.mecha.MechaSystems.nextUtility(mecha);
+                return;
+            }
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
             if (msg.action() == Action.EJECT) {
@@ -207,6 +251,10 @@ public final class Network {
                 com.coolfreeze23.headinajar.host.HostAbilities.use(player, host, msg.action() == Action.SECONDARY);
                 return;
             }
+        }
+        if (msg.action() == Action.SECONDARY && state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
+            com.coolfreeze23.headinajar.form.BoardEvents.laser(player);
+            return;
         }
         if (!state.form().isJarred()) return;
         switch (msg.action()) {
@@ -286,6 +334,14 @@ public final class Network {
         java.util.Map<String, Float> out = new java.util.HashMap<>();
         lib.forEach((g, v) -> out.put(g.id(), v));
         send(player, new ArchiveSync(out));
+    }
+
+    public static void socketStatus(ServerPlayer player, com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity socket) {
+        java.util.List<Integer> values = new java.util.ArrayList<>();
+        for (var d : net.minecraft.core.Direction.values()) values.add(socket.output(d));
+        for (int v : socket.inputs()) values.add(v);
+        for (int v : socket.reads()) values.add(v);
+        send(player, new SocketStatus(values));
     }
 
     /** Fake and mock players never agree channels with a client; sending to them would throw. */

@@ -190,7 +190,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -328,13 +328,60 @@ public class SmokeClient {
                             com.coolfreeze23.headinajar.network.Network.syncGenes(target);
                             report.add("genes " + a[0] + " -> " + set.strengths().keySet());
                         }
+                        case "headblock" -> {
+                            // headblock X Y Z ENTITY[,ENTITY...]: stock a turret, array, mount or socket with jarred heads (villagers as librarians)
+                            String[] a = parts[1].split(" ");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
+                            java.util.List<ItemStack> heads = new java.util.ArrayList<>();
+                            for (String id : a[3].split(",")) {
+                                if (id.equals("dragon_head")) {
+                                    heads.add(new ItemStack(net.minecraft.world.item.Items.DRAGON_HEAD));
+                                    continue;
+                                }
+                                var type = net.minecraft.world.entity.EntityType.byString(id).orElseThrow();
+                                var mob = (net.minecraft.world.entity.Mob) type.create(player.serverLevel());
+                                if (mob instanceof net.minecraft.world.entity.npc.Villager v) {
+                                    v.setVillagerData(v.getVillagerData().setProfession(net.minecraft.world.entity.npc.VillagerProfession.LIBRARIAN));
+                                }
+                                heads.add(com.coolfreeze23.headinajar.item.JarredHeadItem.of(mob));
+                            }
+                            var be = player.serverLevel().getBlockEntity(pos);
+                            if (be instanceof com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity t) {
+                                t.items().setStackInSlot(0, heads.get(0));
+                                t.energy().set(40_000);
+                                t.setOwner(player.getUUID());
+                            } else if (be instanceof com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity arr) {
+                                for (int i = 0; i < heads.size() && i < 9; i++) arr.items().setStackInSlot(i, heads.get(i));
+                                arr.items().setStackInSlot(9, new ItemStack(ModRegistry.BOARD_ROOM_CORE.get()));
+                                arr.broth().fill(new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.BROTH.source.get(), 8000),
+                                        net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                            } else if (be instanceof com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity m) {
+                                m.items().setStackInSlot(0, heads.get(0));
+                            } else if (be instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity sock) {
+                                sock.items().setStackInSlot(0, heads.get(0));
+                            }
+                            if (be != null) {
+                                be.setChanged();
+                                player.serverLevel().sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 3);
+                            }
+                            report.add("headblock " + a[3] + " -> " + (be == null ? "none" : be.getClass().getSimpleName()));
+                        }
+                        case "pilotgenes" -> {
+                            // pilotgenes: plug the jar into the socket under it (socket verb)
+                            var below = player.blockPosition().below();
+                            if (player.serverLevel().getBlockEntity(below) instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity sock) {
+                                report.add("socket -> " + sock.plugIn(player));
+                                for (var d : net.minecraft.core.Direction.values()) sock.setOutput(d, 3 + d.get3DDataValue() * 2);
+                            }
+                        }
                         case "gantry" -> {
                             String[] a = parts[1].split(" ");
                             var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
                             if (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity g) {
-                                g.items().setStackInSlot(0, new ItemStack(ModRegistry.frameItem(com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK)));
+                                var frame = a.length > 3 ? com.coolfreeze23.headinajar.mecha.MechaFrame.valueOf(a[3].toUpperCase(java.util.Locale.ROOT))
+                                        : com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK;
+                                g.items().setStackInSlot(0, new ItemStack(ModRegistry.frameItem(frame)));
                                 g.items().setStackInSlot(1, new ItemStack(ModRegistry.MECHA_PLATING.get(), 12));
-                                var frame = com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK;
                                 String[] mods = {"hydraulic_legs", "jump_jets", "cargo_hold", "galvanic_stack", "armor_plating", "life_support_recycler", "drill", "hydraulic_fist", "night_optics"};
                                 for (String name : mods) {
                                     var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
