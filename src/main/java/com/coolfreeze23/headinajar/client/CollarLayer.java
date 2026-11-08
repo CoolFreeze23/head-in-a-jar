@@ -39,14 +39,7 @@ public class CollarLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<A
         pose.pushPose();
         getParentModel().body.translateAndRotate(pose);
         collar().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
-        if (state.carryingHead()) {
-            // the satchel on the right hip, the jar facing forward
-            pose.translate(-5.2 / 16.0, 9.5 / 16.0, 0);
-            pose.scale(0.42f, 0.42f, 0.42f);
-            pose.mulPose(Axis.XP.rotationDegrees(180));
-            pose.translate(0, -0.7, 0);
-            JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), 0, 0, age, true, !state.goggles().isEmpty());
-        }
+        if (state.carryingHead()) HeadCarry.drawCarried(pose, buffers, light, player, state, limbSwing, limbSwingAmount, age);
         pose.popPose();
     }
 }

@@ -1,0 +1,25 @@
+# Carry check: third-person front and back, first person level and looking down
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 20
+pickup
+wait 30
+view 2
+wait 15
+shot carry_front
+view 1
+wait 15
+shot carry_back
+view 0
+wait 10
+shot carry_fp_level
+look 0 35
+wait 10
+shot carry_fp_down
+report done

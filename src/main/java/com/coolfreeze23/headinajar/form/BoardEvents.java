@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 /** Phase 6 behaviour on players and bodies: Collar Cam upgrades, the Lacrimal Laser's cooldown, the Body Recall Beacon. */
 public final class BoardEvents {
-    public static final int LASER_COST = 1500, LASER_COOLDOWN = 20, RECALL_DRAIN = 10;
+    public static final int LASER_COST = 1500, LASER_COOLDOWN = 20, RECALL_DRAIN = 10, WHEELS_DRAIN = 10;
     private static final String LASER_READY = "headinajar_laser_ready";
 
     private BoardEvents() {
@@ -30,6 +30,12 @@ public final class BoardEvents {
     public static void playerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         JarState state = FormActions.state(player);
+        if (state.form().isJarred()) Courier.tick(player);
+        if (state.form() == Form.JAR && state.wheels() && state.has(com.coolfreeze23.headinajar.module.ModuleType.WHEELS)
+                && player.getDeltaMovement().horizontalDistanceSqr() > 1e-4) {
+            state.setCharge(state.charge() - WHEELS_DRAIN);
+            if (player.tickCount % 20 == 0) com.coolfreeze23.headinajar.network.Network.sync(player);
+        }
         if (state.form() != Form.LINKED || state.collar().isEmpty()) return;
         if (player.tickCount % 100 == 0 && QuantumItems.has(state.collar(), QuantumItems.Upgrade.NIGHT_OPTICS)) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, false, false));

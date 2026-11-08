@@ -42,12 +42,31 @@ Fully playable in **English** and **Brazilian Portuguese** (every line of text, 
   wears the goggles and sends the signal. The link quality bar (Q) falls with distance, water, rock, storms, portals and
   jammers; a weak link stutters and fills the screen with static; at zero you wake up in your head.
 - **Swap** between body and head whenever you like. Put your head down, dock it in a **Life Support Cradle**, or carry it in
-  a **Head Satchel** for a perfect link.
+  a **Head Satchel** for a perfect link. With an empty hand you carry it in both arms; it rises out of the satchel,
+  sways with your steps, and your head turns round inside to look up at you. Hold anything and it goes back on your hip.
 - **Death is layered.** If your body dies it becomes a corpse that keeps your things, and you wake up in your jar; use a
   **Suture Kit** on it to get back in, or print a new body in the **Body Printer**. Only losing the head is a real death.
   **Let Go** in the jar menu ends it any time.
 
 ![Linked body](docs/images/linked.png)
+
+![Carrying your head](docs/images/carry.png)
+
+![Carrying it, first person](docs/images/carry_first_person.png)
+
+### Getting home
+
+Walk too far and the link breaks: you wake up in your head, wherever you left it. To get back:
+
+- **Drive.** The **Wheels** jar module drops four little wheels on the drive key (V): half walking speed for a little
+  charge.
+- **Roll.** No wheels? The same key tips a bare jar on its side, and it can roll, very, very slowly. The world looks
+  sideways while you do it.
+- **Call the Courier.** The jar menu's **Courier** button (or `/headoffice courier`) has your body delivered to your
+  head in 30 seconds, from anywhere, for a fifth of your charge.
+- Or reach further: better goggles, Relay Masts, the Antenna Whip, an Entangled Pair, the Body Recall Beacon.
+
+![Wheels](docs/images/wheels.gif) ![Rolling](docs/images/roll.gif)
 
 ## Life support
 
@@ -64,7 +83,7 @@ Fully playable in **English** and **Brazilian Portuguese** (every line of text, 
 
 A jar has 3 (Life Support Jar), 5 (Reinforced) or 7 (Executive) module slots:
 
-Hop Springs, Propeller (flight), Manipulator Arm, **Telekinesis** (grab and throw blocks, creatures and items), Drill Bit,
+Hop Springs, Propeller (flight), **Wheels**, Manipulator Arm, **Telekinesis** (grab and throw blocks, creatures and items), Drill Bit,
 Armour Plating, Heat Shield, Night Lens, Magnet, Water Jet, Suction Cups, Spider Legs, Speaker Grille, Saline Recycler,
 Shock Lid, Self-Righting Gyro, Hub Antenna, Life Sign Monitor, Hat Mount, Cortex Coprocessor, **Lacrimal Laser** (the head
 weeps a beam) and **Body Recall Beacon** (your body walks to you).
@@ -169,10 +188,11 @@ Active genes fire on R and G.
 
 | Key | Default | Does |
 |---|---|---|
-| Jar menu | J | the jar's modules, charge and Let Go (Sneak + J ejects from a mecha or unplugs a socket) |
+| Jar menu | J | the jar's modules, charge, the Courier and Let Go (Sneak + J ejects from a mecha or unplugs a socket) |
 | Ability | R | Telekinesis in a jar, a host's main ability, a mecha's utility module, your first active gene |
 | Secondary | G | a host's second ability, the next utility, the Lacrimal Laser, your second active gene |
 | Swap | | between your body and your head |
+| Wheels / tip over | V | in a jar: drop the Wheels, or tip over and roll |
 | Collar zoom | C | x3 zoom with the Zoom Optic |
 
 ## Other mods

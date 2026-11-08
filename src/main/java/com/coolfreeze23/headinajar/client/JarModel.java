@@ -21,6 +21,26 @@ public final class JarModel {
 
     /** Neck pivot height of the head inside the jar, in model units. */
     public static final float NECK_Y = 22.0f;
+    /** Four little wheels under the base plate (jar model space: y down, the base's underside at 24). */
+    public static final net.minecraft.client.model.geom.ModelLayerLocation WHEELS =
+            new net.minecraft.client.model.geom.ModelLayerLocation(com.coolfreeze23.headinajar.HeadInAJar.id("jar_wheels"), "main");
+
+    public static net.minecraft.client.model.geom.builders.LayerDefinition wheels() {
+        var mesh = new net.minecraft.client.model.geom.builders.MeshDefinition();
+        var root = mesh.getRoot();
+        int i = 0;
+        for (float x : new float[]{-6.5f, 4.5f}) {
+            for (float z : new float[]{-3.5f, 3.5f}) {
+                // a tyre (texture 0,0) and its hub cap (0,10)
+                root.addOrReplaceChild("wheel_" + i++, net.minecraft.client.model.geom.builders.CubeListBuilder.create()
+                        .texOffs(0, 0).addBox(0, -2, -2, 2, 4, 4)
+                        .texOffs(0, 10).addBox(x < 0 ? -0.3f : 1.3f, -1, -1, 1, 2, 2), net.minecraft.client.model.geom.PartPose.offset(x, 25.0f, z));
+            }
+        }
+        root.addOrReplaceChild("axle", net.minecraft.client.model.geom.builders.CubeListBuilder.create().texOffs(0, 16)
+                .addBox(-4.5f, -0.5f, -4.5f, 9, 1, 9), net.minecraft.client.model.geom.PartPose.offset(0, 24.5f, 0));
+        return net.minecraft.client.model.geom.builders.LayerDefinition.create(mesh, 64, 32);
+    }
 
     public static LayerDefinition jar() {
         MeshDefinition mesh = new MeshDefinition();

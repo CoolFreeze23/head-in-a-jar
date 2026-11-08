@@ -65,12 +65,24 @@ public final class ClientEvents {
         Player player = Minecraft.getInstance().player;
         // the botched cut: the head went in upside down
         if (player != null && state(player).rollTicks() > 0) event.setRoll(180);
+        // a jar lying on its side sees the world sideways
+        else if (player != null && state(player).tipped() && Minecraft.getInstance().options.getCameraType().isFirstPerson()) event.setRoll(90);
     }
 
     @SubscribeEvent
     public static void renderHand(RenderHandEvent event) {
         Player player = Minecraft.getInstance().player;
-        if (player != null && FormEvents.lockedOut(player)) event.setCanceled(true);
+        if (player != null && FormEvents.lockedOut(player)) {
+            event.setCanceled(true);
+            return;
+        }
+        // carrying your head in both arms: draw that instead of the hands
+        if (player != null && HeadCarry.inArms(player)) {
+            if (event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                HeadCarry.drawFirstPerson(event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight(), event.getPartialTick(), event.getEquipProgress());
+            }
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
@@ -93,6 +105,11 @@ public final class ClientEvents {
             if (q < 20 && t % 20 < 4 || q < 40 && t % 40 < 2) stop(input, true);
         } else if (state.form() == Form.JAR) {
             if (player.getAbilities().flying) return;
+            // wheels drive and a tipped jar rolls: both move, neither jumps
+            if (state.wheels() && state.has(ModuleType.WHEELS) || state.tipped()) {
+                input.jumping = false;
+                return;
+            }
             if (state.has(ModuleType.SPIDER_LEGS)) return;
             if (state.has(ModuleType.HOP_SPRINGS) || player.isInWater() && state.has(ModuleType.WATER_JET)) {
                 // the springs hop the jar along whenever it moves
@@ -187,6 +204,9 @@ public final class ClientEvents {
         }
         ClientHooks.tick();
         PilotClient.tick();
+        while (ClientSetup.DRIVE.consumeClick()) {
+            if (state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.DRIVE));
+        }
         while (ClientSetup.SWAP.consumeClick()) {
             if (state.form() == Form.LINKED || state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
         }

@@ -28,6 +28,8 @@ public class ClientSetup {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
     /** Collar Cam Zoom Optic: hold for x3 zoom while linked. */
     public static final KeyMapping ZOOM = new KeyMapping("key.headinajar.zoom", org.lwjgl.glfw.GLFW.GLFW_KEY_C, "key.categories.headinajar");
+    /** In a jar: deploy the Wheels module, or (without one) tip over and roll. */
+    public static final KeyMapping DRIVE = new KeyMapping("key.headinajar.drive", org.lwjgl.glfw.GLFW.GLFW_KEY_V, "key.categories.headinajar");
     public static final KeyMapping ABILITY = new KeyMapping("key.headinajar.ability", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
 
@@ -78,6 +80,7 @@ public class ClientSetup {
         event.registerLayerDefinition(JarModel.STUMP, JarModel::stump);
         event.registerLayerDefinition(JarModel.GOGGLES, JarModel::goggles);
         event.registerLayerDefinition(JarModel.COLLAR, JarModel::collar);
+        event.registerLayerDefinition(JarModel.WHEELS, JarModel::wheels);
         event.registerLayerDefinition(ShellRenderer.LUNK, ShellRenderer::lunk);
         event.registerLayerDefinition(MechaRenderer.HOPPER, MechaRenderer::hopper);
         event.registerLayerDefinition(MechaRenderer.BULWARK, MechaRenderer::bulwark);
@@ -113,6 +116,7 @@ public class ClientSetup {
         event.register(SWAP);
         event.register(SECONDARY);
         event.register(ZOOM);
+        event.register(DRIVE);
     }
 
     private static void gui(RegisterGuiLayersEvent event) {

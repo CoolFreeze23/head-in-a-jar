@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items;
 
 /** The Jar menu: module slots, a feed slot for redstone, and the "Let go" button. */
 public class JarMenu extends AbstractContainerMenu {
-    public static final int BUTTON_LET_GO = 0;
+    public static final int BUTTON_LET_GO = 0, BUTTON_COURIER = 1;
     public static final int MODULE_X = 26;
     public static final int MODULE_Y = 28;
     public static final int FEED_X = 152;
@@ -88,6 +88,10 @@ public class JarMenu extends AbstractContainerMenu {
         if (id == BUTTON_LET_GO && player instanceof ServerPlayer server) {
             server.closeContainer();
             FormActions.letGo(server);
+            return true;
+        }
+        if (id == BUTTON_COURIER && player instanceof ServerPlayer server) {
+            server.displayClientMessage(net.minecraft.network.chat.Component.translatable(com.coolfreeze23.headinajar.form.Courier.book(server)), true);
             return true;
         }
         return false;

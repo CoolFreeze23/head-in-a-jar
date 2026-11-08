@@ -75,6 +75,9 @@ SLIDERS = {'boost': ('Boost', 'Impulso'), 'altitude': ('Altitude', 'Altitude'), 
            'charge': ('Charge', 'Carga'), 'radius': ('Radius', 'Raio')}
 
 JAR_MODULES = {
+    'wheels': ('Wheels', 'Press the drive key (V) to drop four little wheels and drive at half walking speed. 10 FE/t while moving.', 'Rodinhas',
+               'Aperte a tecla de dirigir (V) para baixar quatro rodinhas e andar à metade da velocidade de caminhada. 10 FE/t em movimento.',
+               ['I I', 'WCW'], dict(I='iron_nugget', W='black_dye', C='copper_ingot')),
     'cortex_coprocessor': ('Cortex Coprocessor', 'Forgives one miscalled base at the DNA Sequencer; soft-locks your aim in a mecha.', 'Coprocessador Cortical',
                            'Perdoa uma base errada no Sequenciador de DNA; trava suavemente a mira num mecha.', ['GCG', 'RLR'],
                            dict(G='gold_nugget', C=C, R='redstone', L='headinajar:lens')),

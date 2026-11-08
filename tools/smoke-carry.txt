@@ -1,0 +1,41 @@
+# Carrying your head: in your arms (front, side, first person), walking, and stowing it when you hold something
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/difficulty peaceful
+/tp @s 0.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 20
+pickup
+wait 30
+view 2
+wait 15
+shot carry_front
+/tp @s 0.5 -60 0.5 90 0
+wait 15
+shot carry_side
+view 0
+/tp @s 0.5 -60 0.5 0 0
+wait 15
+shot carry_first_person
+view 2
+/tp @s 0.5 -60 0.5 180 0
+wait 10
+walk 1
+burst walk 40
+walk 0
+wait 20
+/item replace entity @s weapon.mainhand with minecraft:iron_sword
+burst stow 14
+/item replace entity @s weapon.mainhand with minecraft:air
+burst lift 14
+view 0
+/item replace entity @s weapon.mainhand with minecraft:iron_sword
+wait 15
+/item replace entity @s weapon.mainhand with minecraft:air
+burst fp_lift 14
+report done

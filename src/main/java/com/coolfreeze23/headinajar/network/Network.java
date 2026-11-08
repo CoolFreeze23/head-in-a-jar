@@ -29,7 +29,7 @@ public final class Network {
     }
 
     public enum Action {
-        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY, EJECT, JET
+        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY, EJECT, JET, DRIVE
     }
 
     /** Client to server: a key the jarred player pressed. */
@@ -219,6 +219,11 @@ public final class Network {
             } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
                 FormActions.jarToLinked(player);
             }
+            return;
+        }
+        if (msg.action() == Action.DRIVE) {
+            String result = FormActions.drive(player);
+            if (result != null) player.displayClientMessage(net.minecraft.network.chat.Component.translatable(result), true);
             return;
         }
         boolean power = msg.action() == Action.ABILITY || msg.action() == Action.SECONDARY;

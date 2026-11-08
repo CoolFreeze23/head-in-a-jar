@@ -28,6 +28,11 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
                 .bounds(leftPos + 8, topPos + 54, 56, 16)
                 .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.headinajar.let_go.tooltip")))
                 .build());
+        addRenderableWidget(Button.builder(Component.translatable("gui.headinajar.courier"),
+                        b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, JarMenu.BUTTON_COURIER))
+                .bounds(leftPos + 66, topPos + 54, 56, 16)
+                .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.headinajar.courier.tooltip")))
+                .build());
     }
 
     private void confirmLetGo() {

@@ -167,6 +167,7 @@ public class SmokeClient {
                 burstFrame = 0;
                 wait = 1;
             }
+            case "walk" -> mc.options.keyUp.setDown(parts[1].trim().equals("1"));
             case "hud" -> mc.options.hideGui = !parts[1].equals("on");
             case "clienthosts" -> {
                 for (var e : mc.level.entitiesForRendering()) {
@@ -197,7 +198,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -373,6 +374,7 @@ public class SmokeClient {
                             }
                             report.add("headblock " + a[3] + " -> " + (be == null ? "none" : be.getClass().getSimpleName()));
                         }
+                        case "drive" -> report.add("drive -> " + FormActions.drive(player));
                         case "pilotgenes" -> {
                             // pilotgenes: plug the jar into the socket under it (socket verb)
                             var below = player.blockPosition().below();

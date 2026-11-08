@@ -1,0 +1,41 @@
+# Getting about as a jar: the Wheels module, tipping over to roll, the head kept inside the glass, carrying in first person
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+jar
+/tp @s 4.5 -60 0.5 0 0
+wait 5
+fit wheels
+drive
+wait 20
+view 2
+wait 15
+shot wheels_still
+walk 1
+burst wheels 30
+walk 0
+fit night_lens
+drive
+wait 20
+shot tipped_still
+view 1
+walk 1
+burst roll 40
+walk 0
+view 0
+wait 10
+shot tipped_first_person
+drive
+wait 10
+view 2
+look 70 0
+wait 15
+shot head_turned
+look -70 -40
+wait 15
+shot head_turned_up
+report done

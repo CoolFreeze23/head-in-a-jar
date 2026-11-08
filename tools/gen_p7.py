@@ -159,6 +159,12 @@ HANDBOOK = {
 }
 # (category, entry, icon, en name, en pages, pt name, pt pages)
 ENTRIES = [
+    ('separation', 'getting_home', 'headinajar:wheels', 'Getting Home',
+     ['Walk too far and the link breaks: you wake up in your head. A jar with the $(item)Wheels$() module drives at half walking speed: press $(k:key.headinajar.drive). Without wheels the same key tips the jar on its side so it can roll, very, very slowly.',
+      'Stranded anyway? Press $(l)Courier$() in the jar menu. A Noggin & Sons courier delivers your body to your head in 30 seconds, from anywhere, for a fifth of your charge. Then press $(k:key.headinajar.swap).'],
+     'Voltando para Casa',
+     ['Ande longe demais e a conexão cai: você acorda na sua cabeça. Um pote com o módulo $(item)Rodinhas$() anda à metade da velocidade de caminhada: aperte $(k:key.headinajar.drive). Sem rodinhas, a mesma tecla tomba o pote de lado para ele rolar, bem, bem devagar.',
+      'Sem saída mesmo assim? Aperte $(l)Entregador$() no menu do pote. Um entregador da Noggin & Filhos leva seu corpo até sua cabeça em 30 segundos, de qualquer lugar, por um quinto da sua carga. Depois aperte $(k:key.headinajar.swap).']),
     ('hosting', 'the_saw', 'headinajar:surgical_saw', 'The Surgical Saw',
      ['Weaken a creature below a quarter of its health and use the $(item)Surgical Saw$() on it: its head comes off and its body stays up, ready for a jar. With an empty $(item)Life Support Jar$() in your off hand you keep the $(l)head$() instead.',
       'As a jar, use a host to climb on. It moves where you look, its own abilities answer $(k:key.headinajar.ability) and $(k:key.headinajar.secondary), and it slowly rots unless you embalm it. Sync grows the longer you pilot it.'],
@@ -202,6 +208,24 @@ ENTRIES = [
 ]
 
 LANG7 = [
+    ('key.headinajar.drive', 'Jar wheels / tip over', 'Rodinhas / tombar o pote'),
+    ('message.headinajar.wheels_down', 'Wheels down', 'Rodinhas abaixadas'),
+    ('message.headinajar.wheels_up', 'Wheels up', 'Rodinhas recolhidas'),
+    ('message.headinajar.tipped', 'You tip the jar over. Roll, very slowly. Press V again to sit up.',
+     'Você tomba o pote. Role, bem devagar. Aperte V de novo para se endireitar.'),
+    ('message.headinajar.upright', 'Upright again', 'De pé de novo'),
+    ('gui.headinajar.courier', 'Courier', 'Entregador'),
+    ('gui.headinajar.courier.tooltip', 'Stranded? A Noggin & Sons courier brings your body to your head in 30 seconds, from anywhere. Fee: a fifth of your charge.',
+     'Sem saída? Um entregador da Noggin & Filhos traz seu corpo até sua cabeça em 30 segundos, de qualquer lugar. Taxa: um quinto da sua carga.'),
+    ('courier.headinajar.booked', 'Courier booked: your body arrives in 30 seconds', 'Entregador chamado: seu corpo chega em 30 segundos'),
+    ('courier.headinajar.eta', 'Courier: %s seconds', 'Entregador: %s segundos'),
+    ('courier.headinajar.delivered', 'Delivery for you: one body, slightly used. Press Swap to get back in.',
+     'Entrega para você: um corpo, levemente usado. Aperte Trocar para voltar para ele.'),
+    ('courier.headinajar.lost', 'The courier could not find your body. It may be gone for good.', 'O entregador não encontrou seu corpo. Talvez ele tenha sumido de vez.'),
+    ('courier.headinajar.only_jars', 'Only a head in a jar can book the courier', 'Só uma cabeça no pote pode chamar o entregador'),
+    ('courier.headinajar.no_body', 'You have no body to deliver', 'Você não tem corpo para entregar'),
+    ('courier.headinajar.already_here', 'Your body is right here', 'Seu corpo está bem aqui'),
+    ('courier.headinajar.on_its_way', 'The courier is already on the way', 'O entregador já está a caminho'),
     ('fml.menu.mods.info.description.headinajar',
      'Take your head off and live in a life-support jar: drive your own headless body over a neuro-link, borrow mob bodies, build mecha, splice genes and put jarred heads to work.',
      'Tire a cabeça e viva num pote de suporte vital: controle seu próprio corpo sem cabeça por uma conexão neural, pegue corpos de criaturas emprestados, construa mechas, emende genes e coloque cabeças no pote para trabalhar.'),

@@ -32,6 +32,11 @@ public final class HeadOfficeCommand {
                         .then(Commands.literal("remove").then(Commands.argument("players", GameProfileArgument.gameProfile())
                                 .executes(c -> trust(c, false))))
                         .then(Commands.literal("list").executes(HeadOfficeCommand::listTrust)))
+                .then(Commands.literal("courier").executes(ctx -> {
+                    var player = ctx.getSource().getPlayerOrException();
+                    ctx.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.translatable(com.coolfreeze23.headinajar.form.Courier.book(player)), false);
+                    return 1;
+                }))
                 .then(Commands.literal("status")
                         .executes(c -> status(c, c.getSource().getPlayerOrException()))
                         .then(Commands.argument("player", EntityArgument.player()).requires(s -> s.hasPermission(2))

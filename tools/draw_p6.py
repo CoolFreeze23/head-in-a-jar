@@ -138,6 +138,8 @@ def run(g):
     jar_item, module = g['jar_item'], g['module']
     save(jar_item(GOLD, PURPLE[2]), 'item', 'executive_life_support_jar.png')
 
+    module('wheels', lambda im: (rect(im, 4, 8, 11, 9, STEEL[1]), [rect(im, x, 9, x + 2, 11, BLACK) for x in (3, 10)],
+                                 [px(im, [(x + 1, 10)], STEEL[2]) for x in (3, 10)]))
     module('cortex_coprocessor', lambda im: (rect(im, 5, 5, 10, 10, GREEN[1]), rect(im, 6, 6, 9, 9, GREEN[2]), px(im, [(4, 6), (4, 9), (11, 6), (11, 9)], GOLD[2])))
     module('lacrimal_laser', lambda im: (rect(im, 6, 4, 9, 7, CYAN[2]), rect(im, 7, 8, 8, 12, CYAN[1]), px(im, [(7, 13)], hexc('ffffff'))))
     module('body_recall_beacon', lambda im: (rect(im, 6, 4, 9, 10, GOLD[2]), rect(im, 5, 10, 10, 11, GOLD[1]), px(im, [(7, 12)], GOLD[0])))
@@ -221,3 +223,14 @@ def run(g):
     rect(im, 3, 5, 12, 13, IRON[1]); rect(im, 4, 6, 11, 12, IRON[2]); rect(im, 4, 6, 11, 8, hexc('c89a48')); rect(im, 3, 4, 12, 4, IRON[0])
     rect(im, 2, 3, 2, 4, IRON[0]); rect(im, 13, 3, 13, 4, IRON[0]); px(im, [(6, 7), (9, 7)], hexc('e8c070'))
     done(im, 'item', 'nutrient_broth_bucket.png')
+
+    # jar wheels: rubber tyres with tread, steel hub caps, a steel axle plate (64 x 32; matches JarModel.wheels)
+    wh = img(64, 32)
+    def tyre_fill(face, x, y, fw, fh):
+        if face in ('east', 'west'):
+            return hexc('3a3a3a') if (x in (0, fw - 1) or y in (0, fh - 1)) else hexc('2a2a2a')
+        return hexc('1e1e1e') if (x + y) % 2 else hexc('333333')
+    box_uv(wh, 0, 0, 2, 4, 4, tyre_fill)
+    box_uv(wh, 0, 10, 1, 2, 2, lambda f, x, y, fw, fh: STEEL[3] if (x + y) % 3 == 0 else STEEL[2])
+    box_uv(wh, 0, 16, 9, 1, 9, lambda f, x, y, fw, fh: STEEL[1] if (x + y) % 4 else STEEL[0])
+    save(wh, 'entity', 'jar_wheels.png')

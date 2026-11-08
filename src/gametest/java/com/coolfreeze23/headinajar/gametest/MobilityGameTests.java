@@ -1,0 +1,97 @@
+package com.coolfreeze23.headinajar.gametest;
+
+import com.coolfreeze23.headinajar.HeadInAJar;
+import com.coolfreeze23.headinajar.entity.HeadlessBody;
+import com.coolfreeze23.headinajar.form.Courier;
+import com.coolfreeze23.headinajar.form.FormActions;
+import com.coolfreeze23.headinajar.form.JarState;
+import com.coolfreeze23.headinajar.module.ModuleEffects;
+import com.coolfreeze23.headinajar.module.ModuleType;
+import com.coolfreeze23.headinajar.registry.ModRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+
+/** Getting a jar home: tipping over and rolling, the Wheels module, and the Courier. */
+@GameTestHolder(HeadInAJar.MOD_ID)
+@PrefixGameTestTemplate(false)
+public class MobilityGameTests {
+    private static final BlockPos FLOOR = new BlockPos(7, 2, 7);
+
+    private static ServerPlayer jar(GameTestHelper h) {
+        ServerPlayer player = h.makeMockServerPlayerInLevel();
+        player.setGameMode(GameType.SURVIVAL);
+        Vec3 v = h.absoluteVec(Vec3.atBottomCenterOf(FLOOR));
+        player.moveTo(v.x, v.y, v.z, 0, 0);
+        FormActions.detach(player, 3);
+        return player;
+    }
+
+    private static void done(GameTestHelper h, ServerPlayer p) {
+        h.getLevel().getServer().getPlayerList().remove(p);
+        h.succeed();
+    }
+
+    private static double speed(ServerPlayer p) {
+        ModuleEffects.apply(p, FormActions.state(p));
+        return p.getAttributeValue(Attributes.MOVEMENT_SPEED);
+    }
+
+    @GameTest(template = "platform")
+    public static void bareJarTipsAndRollsSlowly(GameTestHelper h) {
+        ServerPlayer p = jar(h);
+        double upright = speed(p);
+        h.assertTrue(FormActions.drive(p).equals("message.headinajar.tipped") && FormActions.state(p).tipped(), "did not tip over");
+        double rolling = speed(p);
+        h.assertTrue(rolling > 0 && rolling < upright * 0.15, "rolling speed " + rolling + " vs " + upright);
+        h.assertTrue(FormActions.drive(p).equals("message.headinajar.upright") && !FormActions.state(p).tipped(), "did not sit back up");
+        h.assertTrue(Math.abs(speed(p) - upright) < 1e-6, "speed not restored");
+        done(h, p);
+    }
+
+    @GameTest(template = "platform")
+    public static void wheelsDriveOnCharge(GameTestHelper h) {
+        ServerPlayer p = jar(h);
+        JarState state = FormActions.state(p);
+        double bare = speed(p);
+        state.setModule(0, new ItemStack(ModRegistry.module(ModuleType.WHEELS)));
+        h.assertTrue(FormActions.drive(p).equals("message.headinajar.wheels_down") && state.wheels() && !state.tipped(), "wheels did not come down");
+        double driving = speed(p);
+        h.assertTrue(Math.abs(driving - bare * 0.5) < 1e-6, "wheel speed " + driving + " vs " + bare);
+        state.setCharge(0);
+        h.assertTrue(Math.abs(speed(p) - bare) < 1e-6, "flat wheels still drove");
+        state.setCharge(JarState.maxCharge());
+        h.assertTrue(FormActions.drive(p).equals("message.headinajar.wheels_up") && !state.wheels(), "wheels did not fold");
+        FormActions.state(p).setForm(com.coolfreeze23.headinajar.form.Form.BODY);
+        state.setWheels(true);
+        ModuleEffects.apply(p, state);
+        h.assertFalse(state.wheels(), "wheels stayed down out of jar form");
+        done(h, p);
+    }
+
+    @GameTest(template = "platform")
+    public static void courierBringsTheBodyHome(GameTestHelper h) {
+        ServerPlayer p = jar(h);
+        HeadlessBody body = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(3)).stream().findFirst().orElse(null);
+        h.assertTrue(body != null, "no body");
+        h.assertTrue(Courier.book(p).equals("courier.headinajar.already_here"), "booked a courier for a body right here");
+        Vec3 far = p.position().add(40, 0, 0);
+        p.teleportTo(far.x, far.y, far.z);
+        int before = FormActions.state(p).charge();
+        h.assertTrue(Courier.book(p).equals("courier.headinajar.booked"), "could not book");
+        h.assertTrue(before - FormActions.state(p).charge() == JarState.maxCharge() / 5, "wrong fee");
+        h.assertTrue(Courier.book(p).equals("courier.headinajar.on_its_way"), "booked twice");
+        h.assertTrue(Courier.deliver(p), "not delivered");
+        HeadlessBody arrived = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(4)).stream().findFirst().orElse(null);
+        h.assertTrue(arrived != null && arrived.getUUID().equals(body.getUUID()), "the body is not beside the head");
+        h.assertTrue(arrived.position().distanceTo(p.position()) < Courier.NEARBY, "delivered too far away");
+        done(h, p);
+    }
+}

@@ -20,6 +20,9 @@ public final class ModuleEffects {
     private static final ResourceLocation PLATING_TOUGHNESS = HeadInAJar.id("armor_plating_toughness");
     private static final ResourceLocation SAFE_FALL = HeadInAJar.id("jar_safe_fall");
     private static final ResourceLocation HOP_SPEED = HeadInAJar.id("hop_springs");
+    private static final ResourceLocation WHEEL_SPEED = com.coolfreeze23.headinajar.HeadInAJar.id("wheels");
+    private static final ResourceLocation TIPPED_SPEED = com.coolfreeze23.headinajar.HeadInAJar.id("tipped_roll");
+    private static final ResourceLocation WHEEL_STEP = com.coolfreeze23.headinajar.HeadInAJar.id("wheels_step");
     private static final ResourceLocation FLIGHT = HeadInAJar.id("propeller");
     private static final ResourceLocation SWIM = HeadInAJar.id("water_jet");
     private static final ResourceLocation ARM_DAMAGE = HeadInAJar.id("manipulator_arm");
@@ -38,6 +41,16 @@ public final class ModuleEffects {
         set(player, NeoForgeMod.CREATIVE_FLIGHT, FLIGHT, state.has(ModuleType.PROPELLER) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
         set(player, NeoForgeMod.SWIM_SPEED, SWIM, state.has(ModuleType.WATER_JET) ? 1.5 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         set(player, Attributes.ATTACK_DAMAGE, ARM_DAMAGE, jar && state.has(ModuleType.MANIPULATOR_ARM) ? -0.5 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+
+        // out of jar form (or out of charge) the wheels fold away and the jar sits up
+        if (state.form() != com.coolfreeze23.headinajar.form.Form.JAR) {
+            state.setWheels(false);
+            state.setTipped(false);
+        }
+        boolean rolling = state.wheels() && state.has(ModuleType.WHEELS);
+        set(player, Attributes.MOVEMENT_SPEED, WHEEL_SPEED, rolling ? -0.5 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        set(player, Attributes.MOVEMENT_SPEED, TIPPED_SPEED, state.tipped() ? -0.88 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        set(player, Attributes.STEP_HEIGHT, WHEEL_STEP, rolling ? -0.1 : 0, AttributeModifier.Operation.ADD_VALUE);
 
         boolean legs = state.has(ModuleType.SPIDER_LEGS);
         set(player, Attributes.MOVEMENT_SPEED, LEGS_SPEED, legs && !state.has(ModuleType.HOP_SPRINGS) ? -0.2 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);

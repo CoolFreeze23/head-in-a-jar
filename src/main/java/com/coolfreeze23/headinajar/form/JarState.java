@@ -54,6 +54,8 @@ public final class JarState {
         buf.writeFloat(s.bodyHealth);
         buf.writeFloat(s.bodyMaxHealth);
         buf.writeUtf(s.speech);
+        buf.writeBoolean(s.wheels);
+        buf.writeBoolean(s.tipped);
     }, buf -> {
         JarState s = new JarState(Form.values()[buf.readVarInt()], buf.readVarInt(), ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf),
                 buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10);
@@ -69,6 +71,8 @@ public final class JarState {
         s.bodyHealth = buf.readFloat();
         s.bodyMaxHealth = buf.readFloat();
         s.speech = buf.readUtf();
+        s.wheels = buf.readBoolean();
+        s.tipped = buf.readBoolean();
         return s;
     });
 
@@ -91,6 +95,8 @@ public final class JarState {
     private float bodyHealth, bodyMaxHealth;
     /** The last thing the jar said through its Speaker Grille. Not saved. */
     private String speech = "";
+    /** Wheels module deployed, or the bare jar tipped on its side to roll: how a jar gets about without legs. */
+    private boolean wheels, tipped;
     private long speechUntil;
 
     /** Entity id held by Telekinesis, -1 for none. Not saved. */
@@ -143,6 +149,24 @@ public final class JarState {
         bodyMaxHealth = other.bodyMaxHealth;
         if (!other.speech.isEmpty() && !other.speech.equals(speech)) speechUntil = System.currentTimeMillis() + 5000;
         speech = other.speech;
+        wheels = other.wheels;
+        tipped = other.tipped;
+    }
+
+    public boolean wheels() {
+        return wheels;
+    }
+
+    public void setWheels(boolean wheels) {
+        this.wheels = wheels;
+    }
+
+    public boolean tipped() {
+        return tipped;
+    }
+
+    public void setTipped(boolean tipped) {
+        this.tipped = tipped;
     }
 
     // --- life support (P2) -------------------------------------------------------------------------

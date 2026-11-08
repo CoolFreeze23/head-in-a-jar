@@ -489,6 +489,27 @@ public final class FormActions {
         return true;
     }
 
+    /**
+     * The drive key in a jar: with a charged Wheels module, deploy or stow the wheels; without one, tip the jar on its
+     * side so it can roll, very slowly (or sit it back up). Returns the message key.
+     */
+    public static String drive(ServerPlayer player) {
+        JarState state = state(player);
+        if (state.form() != Form.JAR) return null;
+        if (state.has(com.coolfreeze23.headinajar.module.ModuleType.WHEELS)) {
+            state.setTipped(false);
+            state.setWheels(!state.wheels());
+            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.PISTON_EXTEND, SoundSource.PLAYERS, 0.5f, state.wheels() ? 1.6f : 1.2f);
+            Network.sync(player);
+            return state.wheels() ? "message.headinajar.wheels_down" : "message.headinajar.wheels_up";
+        }
+        state.setWheels(false);
+        state.setTipped(!state.tipped());
+        player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 0.8f, state.tipped() ? 0.7f : 1.1f);
+        Network.sync(player);
+        return state.tipped() ? "message.headinajar.tipped" : "message.headinajar.upright";
+    }
+
     /** Gives back the fitted modules and an empty jar of the same tier. */
     private static void returnJar(ServerPlayer player, JarState state) {
         for (int i = 0; i < JarState.MAX_SLOTS; i++) {

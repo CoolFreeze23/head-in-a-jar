@@ -25,7 +25,8 @@ public enum ModuleType {
     HAT_MOUNT(false),
     CORTEX_COPROCESSOR(true),
     LACRIMAL_LASER(true),
-    BODY_RECALL_BEACON(true);
+    BODY_RECALL_BEACON(true),
+    WHEELS(true);
 
     public final boolean powered;
 
