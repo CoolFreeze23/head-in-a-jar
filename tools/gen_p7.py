@@ -202,6 +202,9 @@ ENTRIES = [
 ]
 
 LANG7 = [
+    ('fml.menu.mods.info.description.headinajar',
+     'Take your head off and live in a life-support jar: drive your own headless body over a neuro-link, borrow mob bodies, build mecha, splice genes and put jarred heads to work.',
+     'Tire a cabeça e viva num pote de suporte vital: controle seu próprio corpo sem cabeça por uma conexão neural, pegue corpos de criaturas emprestados, construa mechas, emende genes e coloque cabeças no pote para trabalhar.'),
     ('jei.headinajar.separation_chair', 'Load a jar, goggles, Collar Cam and four bottles of Cranial Saline, power it, sit down and sign Form 27-B. It takes your head off and leaves your body linked to it.',
      'Coloque um pote, óculos, Câmera de Colar e quatro garrafas de Soro Craniano, dê energia, sente-se e assine o Formulário 27-B. Ela tira sua cabeça e deixa seu corpo conectado a ela.'),
     ('jei.headinajar.life_support_cradle', 'Docks a head: keeps its saline and charge topped up and boosts the link.', 'Acomoda uma cabeça: mantém soro e carga cheios e reforça a conexão.'),
