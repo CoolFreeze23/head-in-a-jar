@@ -21,9 +21,7 @@ def shaped(name, pattern, key, count=1):
         'result': {'id': 'headinajar:' + name, 'count': count}})
 
 
-shaped('life_support_jar', [' C ', 'GSG', 'IRI'], dict(C='copper_ingot', G='glass', S='slime_ball', I='iron_ingot', R='redstone'))
 shaped('reinforced_life_support_jar', [' N ', 'TJT', ' O '], dict(N='netherite_scrap', T='tinted_glass', J='headinajar:life_support_jar', O='obsidian'))
-shaped('charging_dock', ['CRC', 'III'], dict(C='copper_ingot', R='redstone_block', I='iron_ingot'))
 shaped('hop_springs', [' P ', 'ICI', ' S '], dict(P='piston', I='iron_ingot', C='copper_ingot', S='slime_ball'))
 shaped('propeller', ['FIF', 'ICI', 'FRF'], dict(F='feather', I='iron_ingot', C='copper_ingot', R='redstone'))
 shaped('manipulator_arm', [' II', 'RC ', ' I '], dict(I='iron_ingot', R='redstone', C='copper_ingot'))
@@ -114,6 +112,10 @@ for key, ((en_name, en_desc), (pt_name, pt_desc)) in MODULES.items():
     EN[f'item.headinajar.{key}'], EN[f'module.headinajar.{key}.desc'] = en_name, en_desc
     PT[f'item.headinajar.{key}'], PT[f'module.headinajar.{key}.desc'] = pt_name, pt_desc
 
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+import gen_p1
+gen_p1.add(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

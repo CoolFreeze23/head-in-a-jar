@@ -29,7 +29,7 @@ public final class Network {
     }
 
     public enum Action {
-        OPEN_MENU, ABILITY, THROW, LET_GO
+        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP
     }
 
     /** Client to server: a key the jarred player pressed. */
@@ -64,12 +64,23 @@ public final class Network {
     private static void onAction(JarAction msg, IPayloadContext ctx) {
         if (!(ctx.player() instanceof ServerPlayer player)) return;
         JarState state = player.getData(ModRegistry.JAR_STATE);
+        if (msg.action() == Action.SWAP) {
+            // body to head at any signal (if allowed), head to body only on a good signal
+            if (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED) {
+                if (com.coolfreeze23.headinajar.form.NeuroLink.manualUnlinkAllowed()) FormActions.linkedToJar(player);
+            } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
+                FormActions.jarToLinked(player);
+            }
+            return;
+        }
         if (!state.form().isJarred()) return;
         switch (msg.action()) {
             case OPEN_MENU -> FormActions.openMenu(player);
             case ABILITY -> Telekinesis.toggle(player, state);
             case THROW -> Telekinesis.throwHeld(player, state);
             case LET_GO -> FormActions.letGo(player);
+            default -> {
+            }
         }
     }
 

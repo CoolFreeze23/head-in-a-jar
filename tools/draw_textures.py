@@ -285,4 +285,208 @@ rect(gui, 176, 0, 193, 17, hexc('6a6a6a'))
 for i in range(18):
     px(gui, [(176 + i, i), (193 - i, i)], hexc('4a4a4a'))
 save(gui, 'gui', 'jar.png')
+
+# ============================================================================================
+# Phase 1: Head Start
+# ============================================================================================
+import random
+STEEL = [hexc('4c5a63'), hexc('7d8f99'), hexc('b3c4cc'), hexc('e6f0f2')]
+BRASS = [hexc('6b4a14'), hexc('a8782a'), hexc('d9a94a'), hexc('f6dc8c')]
+LEATHER = [hexc('4a2a14'), hexc('7a4a24'), hexc('a06a3a')]
+SALINE = [hexc('2f8f8a', 200), hexc('5fc8c0', 200), hexc('a8f0e8', 220)]
+WHITE = [hexc('8a8a8a'), hexc('c8c8c8'), hexc('f0f0f0')]
+
+
+def done(im, *path):
+    outline(im)
+    save(im, *path)
+
+
+# ingots and parts
+im = img(16, 16)
+for x, y in [(4, 8), (5, 7), (6, 7), (7, 6), (8, 6), (9, 7), (10, 7), (11, 8), (5, 9), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (5, 8)]:
+    im.putpixel((x, y + 2), random.Random(x * 31 + y).choice([STEEL[1], STEEL[2], hexc('d8d0c0'), hexc('3a3a3a')]))
+done(im, 'item', 'surgical_steel_blend.png')
+
+im = img(16, 16)
+rect(im, 3, 6, 12, 10, STEEL[1]); rect(im, 4, 5, 13, 5, STEEL[2]); rect(im, 2, 11, 11, 11, STEEL[0])
+rect(im, 4, 6, 11, 6, STEEL[3]); px(im, [(5, 7), (6, 7)], STEEL[3])
+done(im, 'item', 'surgical_steel_ingot.png')
+
+im = img(16, 16)
+for i in range(11):
+    x, y = 3 + i, 12 - i
+    im.putpixel((x, y), COPPER[2] if i % 2 else COPPER[1]); im.putpixel((x, y - 1), COPPER[3] if i % 3 == 0 else COPPER[2])
+px(im, [(6, 6), (10, 9), (7, 4)], RED[2])
+done(im, 'item', 'neuro_copper_wire.png')
+
+im = img(16, 16)
+for x in range(16):
+    for y in range(16):
+        d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+        if d <= 5.5:
+            im.putpixel((x, y), PURPLE[1] if d > 4.5 else (GLASS[2] if (x < 7 and y < 7) else hexc('c8b8f0', 210)))
+done(im, 'item', 'lens.png')
+
+im = img(16, 16)
+rect(im, 3, 5, 12, 11, STEEL[1]); rect(im, 3, 5, 12, 5, STEEL[2]); rect(im, 3, 11, 12, 11, STEEL[0])
+rect(im, 6, 2, 9, 4, BRASS[2]); rect(im, 7, 1, 8, 1, BRASS[3]); rect(im, 13, 7, 14, 9, COPPER[2])
+px(im, [(5, 8), (10, 8)], STEEL[0])
+done(im, 'item', 'servo.png')
+
+im = img(16, 16)
+rect(im, 3, 3, 12, 6, STEEL[1]); rect(im, 3, 3, 12, 3, STEEL[2])
+rect(im, 6, 7, 9, 9, PURPLE[2]); rect(im, 2, 10, 13, 11, STEEL[3]); rect(im, 2, 12, 13, 12, STEEL[0])
+px(im, [(4, 4), (11, 4)], RED[2])
+done(im, 'item', 'excision_head.png')
+
+im = img(16, 16)
+rect(im, 2, 3, 13, 12, STEEL[0]); rect(im, 3, 4, 12, 9, hexc('0f2a1a')); rect(im, 4, 5, 9, 5, GREEN[2]); rect(im, 4, 7, 7, 7, GREEN[1])
+px(im, [(11, 11), (9, 11)], RED[2]); px(im, [(4, 11)], GREEN[2])
+done(im, 'item', 'booth_console.png')
+
+im = img(16, 16)
+for i in range(10):
+    rect(im, 3 + i, 12 - i, 4 + i, 12 - i, STEEL[3] if i % 2 else STEEL[2])
+    im.putpixel((3 + i, 13 - i), STEEL[0])
+rect(im, 2, 13, 3, 14, BRASS[1])
+done(im, 'item', 'replacement_blade.png')
+
+im = img(16, 16)
+rect(im, 7, 2, 8, 3, LEATHER[1]); rect(im, 6, 4, 9, 4, GLASS[1])
+rect(im, 5, 5, 10, 13, GLASS[0]); rect(im, 6, 8, 9, 12, SALINE[1]); rect(im, 6, 8, 9, 8, SALINE[2]); px(im, [(6, 6)], GLASS[2])
+done(im, 'item', 'saline_bottle.png')
+
+im = img(16, 16)
+rect(im, 1, 7, 14, 8, LEATHER[1])
+for cx in (4, 11):
+    for x in range(16):
+        for y in range(16):
+            d = ((x - cx) ** 2 + (y - 7.5) ** 2) ** 0.5
+            if d <= 3.0:
+                im.putpixel((x, y), COPPER[2] if d > 2.0 else hexc('6fd8f0', 230))
+px(im, [(3, 6), (10, 6)], hexc('ffffff'))
+rect(im, 12, 1, 12, 4, STEEL[2]); px(im, [(12, 0)], RED[2])
+done(im, 'item', 'relay_goggles.png')
+
+im = img(16, 16)
+rect(im, 2, 6, 13, 10, BRASS[1]); rect(im, 2, 6, 13, 6, BRASS[3]); rect(im, 2, 10, 13, 10, BRASS[0])
+rect(im, 6, 7, 9, 9, hexc('202020')); rect(im, 7, 7, 8, 8, hexc('6fd8f0')); rect(im, 12, 2, 12, 5, STEEL[2]); px(im, [(12, 1)], GREEN[2])
+done(im, 'item', 'collar_cam.png')
+
+im = img(16, 16)
+rect(im, 3, 6, 12, 13, LEATHER[1]); rect(im, 3, 6, 12, 7, LEATHER[2]); rect(im, 3, 13, 12, 13, LEATHER[0])
+rect(im, 5, 2, 10, 2, LEATHER[0]); px(im, [(4, 3), (11, 3), (4, 4), (11, 4), (4, 5), (11, 5)], LEATHER[0])
+rect(im, 7, 8, 8, 9, BRASS[2])
+done(im, 'item', 'head_satchel.png')
+
+im = img(16, 16)
+rect(im, 3, 5, 12, 12, WHITE[2]); rect(im, 3, 5, 12, 5, WHITE[1]); rect(im, 7, 7, 8, 10, RED[2]); rect(im, 6, 8, 9, 9, RED[2])
+rect(im, 13, 2, 13, 6, STEEL[3]); px(im, [(13, 1)], STEEL[1]); px(im, [(12, 7), (11, 8)], hexc('d8d0c0'))
+done(im, 'item', 'suture_kit.png')
+
+# blocks
+def noise_fill(im, x0, y0, x1, y1, ramp, seed):
+    r = random.Random(seed)
+    for x in range(x0, x1 + 1):
+        for y in range(y0, y1 + 1):
+            im.putpixel((x, y), ramp[r.choice([1, 1, 1, 2, 0])])
+
+
+im = img(16, 16)
+noise_fill(im, 0, 0, 15, 15, STEEL, 7)
+rect(im, 0, 0, 15, 0, STEEL[3]); rect(im, 0, 15, 15, 15, STEEL[0]); rect(im, 0, 0, 0, 15, STEEL[2]); rect(im, 15, 0, 15, 15, STEEL[0])
+px(im, [(2, 2), (13, 2), (2, 13), (13, 13)], STEEL[0])
+save(im, 'block', 'surgical_steel_block.png')
+
+im = img(16, 16)
+rect(im, 0, 0, 15, 15, WHITE[1]); rect(im, 1, 1, 14, 14, WHITE[2])
+for x in (5, 10):
+    rect(im, x, 1, x, 14, WHITE[1])
+px(im, [(3, 7), (8, 7), (12, 7)], WHITE[0])
+save(im, 'block', 'chair_cushion.png')
+
+im = img(16, 16)
+noise_fill(im, 0, 0, 15, 15, STEEL, 11)
+rect(im, 0, 0, 15, 1, STEEL[3]); rect(im, 0, 14, 15, 15, STEEL[0])
+rect(im, 2, 6, 13, 7, hexc('ffd040')); rect(im, 2, 8, 13, 9, hexc('202020'))
+for x in range(2, 14, 4):
+    rect(im, x, 6, x + 1, 7, hexc('202020')); rect(im, x + 2, 8, x + 3, 9, hexc('ffd040'))
+save(im, 'block', 'chair_steel.png')
+
+im = img(16, 16)
+noise_fill(im, 0, 0, 15, 15, STEEL, 13)
+rect(im, 3, 3, 12, 12, hexc('151a1e')); rect(im, 4, 4, 11, 11, PURPLE[0]); rect(im, 6, 6, 9, 9, PURPLE[2]); px(im, [(6, 6)], PURPLE[3])
+save(im, 'block', 'excision_head.png')
+
+im = img(16, 16)
+noise_fill(im, 0, 0, 15, 15, STEEL, 17)
+rect(im, 2, 2, 13, 13, STEEL[0]); rect(im, 3, 3, 12, 12, SALINE[0]); rect(im, 5, 5, 10, 10, SALINE[1])
+rect(im, 0, 7, 2, 8, COPPER[2]); rect(im, 13, 7, 15, 8, COPPER[2])
+save(im, 'block', 'cradle_top.png')
+im = img(16, 16)
+noise_fill(im, 0, 0, 15, 15, STEEL, 19)
+rect(im, 0, 0, 15, 0, STEEL[3]); rect(im, 0, 15, 15, 15, STEEL[0])
+for x in (3, 8, 12):
+    rect(im, x, 12, x + 1, 12, GREEN[2] if x == 3 else SALINE[1])
+save(im, 'block', 'cradle_side.png')
+
+im = img(16, 16)
+for y in range(16):
+    c = COPPER[2] if y % 4 == 0 else (hexc('8a7a6a') if y % 4 == 2 else (COPPER[1] if y % 4 == 1 else hexc('b06a4a')))
+    rect(im, 0, y, 15, y, c)
+px(im, [(4, 6), (11, 10), (7, 14)], GREEN[2])
+save(im, 'block', 'galvanic_pile_side.png')
+im = img(16, 16)
+rect(im, 0, 0, 15, 15, COPPER[1])
+for x in range(16):
+    for y in range(16):
+        d = ((x - 7.5) ** 2 + (y - 7.5) ** 2) ** 0.5
+        if 3 < d < 4.2 or d < 1.2:
+            im.putpixel((x, y), COPPER[3])
+save(im, 'block', 'galvanic_pile_top.png')
+
+# entity parts
+gog = img(64, 32)
+box_uv(gog, 0, 0, 8.6, 2, 8.6, lambda f, x, y, w, h: LEATHER[1] if (x + y) % 5 else LEATHER[0])
+for u in (0, 8):
+    box_uv(gog, u, 12, 3, 3, 1, lambda f, x, y, w, h: (hexc('6fd8f0') if f == 'north' and 0 < x < 2 and 0 < y < 2 else COPPER[2]))
+box_uv(gog, 16, 12, 1, 3, 1, lambda f, x, y, w, h: RED[2] if y == 0 else STEEL[2])
+save(gog, 'entity', 'relay_goggles.png')
+
+col = img(32, 32)
+box_uv(col, 0, 0, 6, 2, 5, lambda f, x, y, w, h: BRASS[3] if y == 0 and f not in ('top', 'bottom') else (BRASS[1] if (x % 3) else BRASS[0]))
+box_uv(col, 0, 8, 2, 2, 1, lambda f, x, y, w, h: hexc('6fd8f0') if f == 'north' else hexc('202020'))
+box_uv(col, 8, 8, 1, 2, 1, lambda f, x, y, w, h: GREEN[2] if y == 0 else STEEL[2])
+save(col, 'entity', 'collar_cam.png')
+
+# HUD overlays
+scan = img(64, 64)
+for y in range(0, 64, 2):
+    rect(scan, 0, y, 63, y, hexc('000000', 120))
+save(scan, 'gui', 'scanlines.png')
+st = img(64, 64)
+r = random.Random(5)
+for x in range(64):
+    for y in range(64):
+        v = r.randint(0, 255)
+        st.putpixel((x, y), (v, v, v, 150 if r.random() < 0.6 else 0))
+save(st, 'gui', 'static.png')
+
+# chair console (176x180)
+gui = img(256, 256)
+rect(gui, 0, 0, 175, 179, PANEL)
+rect(gui, 0, 0, 175, 0, hexc('000000')); rect(gui, 0, 179, 175, 179, hexc('000000'))
+rect(gui, 0, 0, 0, 179, hexc('000000')); rect(gui, 175, 0, 175, 179, hexc('000000'))
+rect(gui, 1, 1, 174, 2, LIGHT); rect(gui, 1, 1, 2, 178, LIGHT)
+rect(gui, 173, 1, 174, 178, DARK); rect(gui, 1, 177, 174, 178, DARK)
+for xy in ((26, 26), (26, 48), (48, 26), (48, 48)):
+    slot(*xy)
+rect(gui, 72, 14, 169, 68, hexc('b8b8b8')); rect(gui, 72, 14, 169, 14, DARK); rect(gui, 72, 14, 72, 68, DARK)
+for row in range(3):
+    for col in range(9):
+        slot(8 + col * 18, 98 + row * 18)
+for col in range(9):
+    slot(8 + col * 18, 156)
+save(gui, 'gui', 'separation_chair.png')
 print('textures written')

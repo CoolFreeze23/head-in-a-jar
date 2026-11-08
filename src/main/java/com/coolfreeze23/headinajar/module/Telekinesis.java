@@ -74,7 +74,7 @@ public final class Telekinesis {
         }
         if (held == null) return null;
         state.setHeldEntity(held.getId());
-        state.spend(5);
+        state.spend(500);
         level.playSound(null, held.getX(), held.getY(), held.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.5f, 2.0f);
         return held;
     }
@@ -112,7 +112,7 @@ public final class Telekinesis {
         held.hurtMarked = true;
         if (held instanceof HeldBlockEntity block) block.keepHeld();
         if (held instanceof Mob mob) mob.getNavigation().stop();
-        if (player.tickCount % 2 == 0) state.spend(1);
+        state.spend(50);
     }
 
     /** Lets go of whatever is held. */
@@ -140,7 +140,7 @@ public final class Telekinesis {
             held.setDeltaMovement(velocity);
             held.hurtMarked = true;
         }
-        state.spend(20);
+        state.spend(2000);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.7f, 1.6f);
     }
 

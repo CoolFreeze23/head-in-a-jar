@@ -1,0 +1,59 @@
+# Phase 1, Head Start: the chair, the operation as the patient sees it, the linked body, the HUD, swapping and the Cradle
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 0.5 0 0
+/setblock 2 -60 2 headinajar:separation_chair[facing=west]
+/setblock 4 -60 2 headinajar:galvanic_pile
+/setblock -1 -60 2 headinajar:life_support_cradle
+/item replace entity @s armor.chest with minecraft:iron_chestplate
+/item replace entity @s armor.legs with minecraft:iron_leggings
+/give @s headinajar:head_satchel
+chair 2 -60 2
+wait 20
+/tp @s -1.5 -59 2.5 -90 15
+view 0
+wait 20
+shot 01_chair_and_cradle
+useblock 2 -60 2
+wait 20
+shot 02_console
+sign 2 -60 2
+wait 30
+shot 03_op_gas
+wait 40
+shot 04_op_scan
+wait 50
+shot 05_op_black
+wait 95
+shot 06_op_boot
+wait 40
+shot 07_linked_first_person
+view 2
+wait 20
+shot 08_linked_front
+view 1
+wait 10
+shot 09_linked_back
+view 0
+/tp @s 30.5 -60 2.5 90 0
+wait 40
+shot 10_far_link_hud
+/tp @s 1.5 -60 4.5 180 20
+wait 20
+swap
+wait 30
+shot 11_jar_view_of_body
+view 2
+wait 10
+shot 12_jar_front
+view 0
+swap
+wait 30
+view 2
+wait 10
+shot 13_back_in_body
+report done

@@ -19,6 +19,9 @@ import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -34,7 +37,23 @@ public final class ClientEvents {
         if (JarRenderer.isJar(player, state)) {
             event.setCanceled(true);
             JarRenderer.render(player, state, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
+        } else if (state.form() == Form.LINKED) {
+            // a headless body: the Collar Cam layer draws what sits on the neck
+            event.getRenderer().getModel().head.visible = false;
+            event.getRenderer().getModel().hat.visible = false;
         }
+    }
+
+    @SubscribeEvent
+    public static void renderPlayerPost(RenderPlayerEvent.Post event) {
+        event.getRenderer().getModel().head.visible = true;
+    }
+
+    @SubscribeEvent
+    public static void cameraAngles(ViewportEvent.ComputeCameraAngles event) {
+        Player player = Minecraft.getInstance().player;
+        // the botched cut: the head went in upside down
+        if (player != null && state(player).rollTicks() > 0) event.setRoll(180);
     }
 
     @SubscribeEvent
@@ -50,6 +69,11 @@ public final class ClientEvents {
         Input input = event.getInput();
         if (state.form() == Form.SOCKET) {
             stop(input, true);
+        } else if (state.form() == Form.LINKED) {
+            // a weak signal makes the body stutter
+            int q = state.quality();
+            long t = player.level().getGameTime();
+            if (q < 20 && t % 20 < 4 || q < 40 && t % 40 < 2) stop(input, true);
         } else if (state.form() == Form.JAR) {
             if (player.getAbilities().flying) return;
             if (state.has(ModuleType.HOP_SPRINGS) || player.isInWater() && state.has(ModuleType.WATER_JET)) {
@@ -76,6 +100,13 @@ public final class ClientEvents {
         Player player = mc.player;
         if (player == null) return;
         JarState state = state(player);
+        if (state.form() == Form.LINKED && state.quality() < 20 && player.getRandom().nextInt(4) == 0) {
+            // packet loss: a click doesn't arrive
+            event.setCanceled(true);
+            event.setSwingHand(false);
+            player.displayClientMessage(Component.translatable("hud.headinajar.packet_loss").withStyle(ChatFormatting.RED), true);
+            return;
+        }
         if (!state.form().isJarred()) return;
         if (event.isAttack() && state.heldEntity() >= 0) {
             event.setCanceled(true);
@@ -102,6 +133,10 @@ public final class ClientEvents {
         while (ClientSetup.ABILITY.consumeClick()) {
             if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
         }
+        while (ClientSetup.SWAP.consumeClick()) {
+            if (state.form() == Form.LINKED || state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
+        }
+        LinkHud.tick(mc.player);
     }
 
     @SubscribeEvent

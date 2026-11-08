@@ -211,7 +211,7 @@ public class JarGameTests {
         state(player).setCharge(0);
         JarMenu menu = new JarMenu(1, player.getInventory());
         menu.getSlot(JarState.MAX_SLOTS).set(new ItemStack(Items.REDSTONE, 3));
-        h.assertTrue(state(player).charge() == 150, "charge " + state(player).charge());
+        h.assertTrue(state(player).charge() == 15_000, "charge " + state(player).charge());
         h.assertTrue(menu.getSlot(JarState.MAX_SLOTS).getItem().isEmpty(), "redstone left over");
         done(h, player);
     }

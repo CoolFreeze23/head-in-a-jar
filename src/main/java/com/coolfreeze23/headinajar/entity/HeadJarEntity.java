@@ -1,0 +1,179 @@
+package com.coolfreeze23.headinajar.entity;
+
+import com.coolfreeze23.headinajar.Config;
+import com.coolfreeze23.headinajar.form.Form;
+import com.coolfreeze23.headinajar.form.FormActions;
+import com.coolfreeze23.headinajar.form.HeadRegistry;
+import com.coolfreeze23.headinajar.registry.ModRegistry;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * A player's head in its jar, set down in the world while the player walks around in their body.
+ * Breaking it while they are linked kills them for real.
+ */
+public class HeadJarEntity extends Entity {
+    private static final EntityDataAccessor<Optional<UUID>> OWNER = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<String> OWNER_NAME = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<ItemStack> GOGGLES = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.ITEM_STACK);
+    public static final float MAX_HEALTH = 10;
+    private float health = MAX_HEALTH;
+    private int hurtTicks;
+
+    public HeadJarEntity(EntityType<? extends HeadJarEntity> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(OWNER, Optional.empty());
+        builder.define(OWNER_NAME, "");
+        builder.define(GOGGLES, ItemStack.EMPTY);
+    }
+
+    public void setOwner(UUID id, String name) {
+        entityData.set(OWNER, Optional.of(id));
+        entityData.set(OWNER_NAME, name);
+    }
+
+    public UUID ownerId() {
+        return entityData.get(OWNER).orElse(null);
+    }
+
+    public String ownerName() {
+        return entityData.get(OWNER_NAME);
+    }
+
+    public ItemStack goggles() {
+        return entityData.get(GOGGLES);
+    }
+
+    public void setGoggles(ItemStack goggles) {
+        entityData.set(GOGGLES, goggles.copy());
+    }
+
+    public int hurtTicks() {
+        return hurtTicks;
+    }
+
+    @Override
+    protected Component getTypeName() {
+        String name = ownerName();
+        return name.isEmpty() ? super.getTypeName() : Component.translatable("entity.headinajar.head_jar.owned", name);
+    }
+
+    private ServerPlayer owner() {
+        return ownerId() == null || level().getServer() == null ? null : level().getServer().getPlayerList().getPlayer(ownerId());
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (hurtTicks > 0) hurtTicks--;
+        if (!isNoGravity()) setDeltaMovement(getDeltaMovement().add(0, -0.04, 0));
+        move(MoverType.SELF, getDeltaMovement());
+        setDeltaMovement(getDeltaMovement().multiply(0.6, 0.98, 0.6));
+        if (onGround()) setDeltaMovement(getDeltaMovement().multiply(0.5, -0.5, 0.5));
+        if (level().isClientSide || ownerId() == null || tickCount % 10 != 0 || level().getServer() == null) return;
+        // the registry is the truth: a head that is no longer here (the player swapped into it) disappears
+        HeadRegistry registry = HeadRegistry.get(level().getServer());
+        HeadRegistry.Head head = registry.head(ownerId());
+        if (head == null || head.where() != HeadRegistry.Where.ENTITY || !getUUID().equals(head.entity())) {
+            discard();
+            return;
+        }
+        registry.moveHead(ownerId(), getUUID(), HeadRegistry.Spot.of(this));
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (level().isClientSide || isRemoved()) return false;
+        boolean bypass = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+        if (!bypass && (isInvulnerableTo(source) || hurtTicks > 0)) return false;
+        if (!bypass && Config.get(Config.PROTECT_OFFLINE, true) && owner() == null) return false;
+        health -= amount;
+        hurtTicks = 10;
+        level().playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.2f);
+        if (health <= 0) shatter();
+        return true;
+    }
+
+    /** The jar breaks. If its owner is out walking their body, that is a real death. */
+    private void shatter() {
+        ServerLevel level = (ServerLevel) level();
+        level.playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.2f, 0.8f);
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.GLASS)), getX(), getY() + 0.4, getZ(), 30, 0.25, 0.25, 0.25, 0.1);
+        ServerPlayer owner = owner();
+        discard();
+        if (owner != null && owner.getData(ModRegistry.JAR_STATE).form() == Form.LINKED) {
+            FormActions.REAL_DEATH.add(owner.getUUID());
+            owner.hurt(owner.damageSources().genericKill(), Float.MAX_VALUE);
+        }
+    }
+
+    @Override
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        if (!player.getUUID().equals(ownerId())) return InteractionResult.PASS;
+        if (level().isClientSide) return InteractionResult.SUCCESS;
+        ServerPlayer server = (ServerPlayer) player;
+        if (FormActions.pickUpHead(server, this)) return InteractionResult.CONSUME;
+        if (player.getData(ModRegistry.JAR_STATE).form() == Form.LINKED && !FormActions.hasSatchel(player)) {
+            player.displayClientMessage(Component.translatable("message.headinajar.need_satchel"), true);
+        }
+        return InteractionResult.FAIL;
+    }
+
+    @Override
+    public boolean isPickable() {
+        return !isRemoved();
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        if (tag.hasUUID("Owner")) setOwner(tag.getUUID("Owner"), tag.getString("OwnerName"));
+        setGoggles(ItemStack.parseOptional(registryAccess(), tag.getCompound("Goggles")));
+        health = tag.contains("Health") ? tag.getFloat("Health") : MAX_HEALTH;
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        if (ownerId() != null) tag.putUUID("Owner", ownerId());
+        tag.putString("OwnerName", ownerName());
+        tag.put("Goggles", goggles().saveOptional(registryAccess()));
+        tag.putFloat("Health", health);
+    }
+}

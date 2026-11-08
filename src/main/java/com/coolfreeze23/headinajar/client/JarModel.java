@@ -61,6 +61,30 @@ public final class JarModel {
         return LayerDefinition.create(mesh, 16, 16);
     }
 
+    /** Relay Goggles strapped round the head, pivoting with it (texture 64x32). */
+    public static LayerDefinition goggles() {
+        MeshDefinition mesh = new MeshDefinition();
+        mesh.getRoot().addOrReplaceChild("goggles", CubeListBuilder.create()
+                .texOffs(0, 0).addBox(-4.3f, -5.4f, -4.3f, 8.6f, 2, 8.6f)
+                .texOffs(0, 12).addBox(-3.6f, -5.9f, -5.3f, 3, 3, 1)
+                .texOffs(8, 12).addBox(0.6f, -5.9f, -5.3f, 3, 3, 1)
+                .texOffs(16, 12).addBox(2.5f, -10.5f, 0.5f, 1, 3, 1), PartPose.offset(0, NECK_Y, 0));
+        return LayerDefinition.create(mesh, 64, 32);
+    }
+
+    /** The Collar Cam bolted on the neck of a body, in the body part's space (neck at y = 0, front is -Z; texture 32x32). */
+    public static LayerDefinition collar() {
+        MeshDefinition mesh = new MeshDefinition();
+        mesh.getRoot().addOrReplaceChild("collar", CubeListBuilder.create()
+                .texOffs(0, 0).addBox(-3.0f, -1.6f, -2.5f, 6, 2, 5)
+                .texOffs(0, 8).addBox(-1.0f, -2.8f, -3.4f, 2, 2, 1)
+                .texOffs(8, 8).addBox(1.6f, -3.8f, 0.5f, 1, 2, 1), PartPose.ZERO);
+        return LayerDefinition.create(mesh, 32, 32);
+    }
+
+    public static final ModelLayerLocation GOGGLES = new ModelLayerLocation(HeadInAJar.id("relay_goggles"), "main");
+    public static final ModelLayerLocation COLLAR = new ModelLayerLocation(HeadInAJar.id("collar_cam"), "main");
+
     public record Parts(ModelPart frame, ModelPart fluid, ModelPart glass) {
         public static Parts of(ModelPart root) {
             return new Parts(root.getChild("frame"), root.getChild("fluid"), root.getChild("glass"));

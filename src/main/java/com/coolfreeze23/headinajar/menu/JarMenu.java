@@ -57,8 +57,8 @@ public class JarMenu extends AbstractContainerMenu {
     }
 
     public static int chargeValue(ItemStack stack) {
-        if (stack.is(Items.REDSTONE)) return 50;
-        if (stack.is(Items.REDSTONE_BLOCK)) return 450;
+        if (stack.is(Items.REDSTONE)) return 5_000;
+        if (stack.is(Items.REDSTONE_BLOCK)) return 45_000;
         return 0;
     }
 

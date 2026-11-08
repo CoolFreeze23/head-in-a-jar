@@ -54,6 +54,21 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
     }
 
     @Override
+    protected void setupRotations(HeadlessBody body, PoseStack pose, float bob, float yBodyRot, float partialTick, float scale) {
+        super.setupRotations(body, pose, bob, yBodyRot, partialTick, scale);
+        if (body.isCorpse()) {
+            // a corpse lies on its back
+            pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90));
+            pose.translate(0, -0.9, -0.15);
+        }
+    }
+
+    @Override
+    protected float getBob(HeadlessBody body, float partialTick) {
+        return body.isCorpse() ? 0 : super.getBob(body, partialTick);
+    }
+
+    @Override
     protected void scale(HeadlessBody body, PoseStack pose, float partialTick) {
         pose.scale(0.9375f, 0.9375f, 0.9375f);
     }
@@ -72,7 +87,8 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
     void renderStump(HeadlessBody body, PoseStack pose, MultiBufferSource buffers, int light) {
         pose.pushPose();
         model.body.translateAndRotate(pose);
-        stump.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STUMP_TEXTURE)), light, OverlayTexture.NO_OVERLAY);
+        if (body.hasCollar()) CollarLayer.collar().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(CollarLayer.TEXTURE)), light, OverlayTexture.NO_OVERLAY);
+        else stump.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STUMP_TEXTURE)), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
     }
 

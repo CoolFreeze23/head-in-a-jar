@@ -7,7 +7,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
@@ -17,8 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Everything the mod keeps on a player: the form, the jar's tier, fitted modules and charge,
- * and which Headless Body is theirs. Saved with the player; not copied on death.
+ * Everything the mod keeps on a player: the form, the jar's tier, fitted modules and charge (FE),
+ * the Relay Goggles and Collar Cam, and which Headless Body is theirs. Saved with the player; not copied on death.
  */
 public final class JarState {
     public static final int MAX_SLOTS = 5;
@@ -28,45 +27,78 @@ public final class JarState {
             Codec.INT.optionalFieldOf("slots", 3).forGetter(s -> s.slots),
             ItemStack.OPTIONAL_CODEC.listOf().optionalFieldOf("modules", List.of()).forGetter(s -> s.modules),
             Codec.INT.optionalFieldOf("charge", 0).forGetter(s -> s.charge),
-            UUIDUtil.CODEC.optionalFieldOf("body").forGetter(s -> Optional.ofNullable(s.body))
+            UUIDUtil.CODEC.optionalFieldOf("body").forGetter(s -> Optional.ofNullable(s.body)),
+            ItemStack.OPTIONAL_CODEC.optionalFieldOf("goggles", ItemStack.EMPTY).forGetter(s -> s.goggles),
+            ItemStack.OPTIONAL_CODEC.optionalFieldOf("collar", ItemStack.EMPTY).forGetter(s -> s.collar),
+            Codec.BOOL.optionalFieldOf("carrying_head", false).forGetter(s -> s.carryingHead),
+            Codec.INT.optionalFieldOf("roll_ticks", 0).forGetter(s -> s.rollTicks)
     ).apply(i, JarState::new));
 
     /** What clients need to draw and predict a player: no body id. */
-    public static final StreamCodec<RegistryFriendlyByteBuf, JarState> SYNC_CODEC = StreamCodec.composite(
-            ByteBufCodecs.idMapper(i -> Form.values()[i], Form::ordinal), s -> s.form,
-            ByteBufCodecs.VAR_INT, s -> s.slots,
-            ItemStack.OPTIONAL_LIST_STREAM_CODEC, s -> s.modules,
-            ByteBufCodecs.VAR_INT, s -> s.charge,
-            ByteBufCodecs.VAR_INT, s -> s.heldEntity,
-            JarState::fromSync);
+    public static final StreamCodec<RegistryFriendlyByteBuf, JarState> SYNC_CODEC = StreamCodec.of((buf, s) -> {
+        buf.writeVarInt(s.form.ordinal());
+        buf.writeVarInt(s.slots);
+        ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buf, s.modules);
+        buf.writeVarInt(s.charge);
+        buf.writeVarInt(s.heldEntity);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, s.goggles);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, s.collar);
+        buf.writeBoolean(s.carryingHead);
+        buf.writeVarInt(s.rollTicks);
+        buf.writeByte(s.quality);
+        buf.writeFloat(s.headDistance);
+    }, buf -> {
+        JarState s = new JarState(Form.values()[buf.readVarInt()], buf.readVarInt(), ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf),
+                buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0);
+        s.heldEntity = buf.readVarInt();
+        s.goggles = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+        s.collar = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+        s.carryingHead = buf.readBoolean();
+        s.rollTicks = buf.readVarInt();
+        s.quality = buf.readByte();
+        s.headDistance = buf.readFloat();
+        return s;
+    });
 
     private Form form;
     private int slots;
     private final List<ItemStack> modules;
     private int charge;
     private UUID body;
+    private ItemStack goggles;
+    private ItemStack collar;
+    /** The player carries their own head (Head Satchel); the link is perfect. */
+    private boolean carryingHead;
+    /** Ticks left of the botched-cut upside-down view. */
+    private int rollTicks;
+
     /** Entity id held by Telekinesis, -1 for none. Not saved. */
     private int heldEntity = -1;
+    /** Neuro-link quality 0-100, server computed. Not saved. */
+    private int quality = 100;
+    /** Blocks between body and head, for the HUD (-1 = other dimension). Not saved. */
+    private float headDistance;
+    /** Ticks the link has been at zero. Not saved. */
+    private int deadLinkTicks;
     private boolean dirty;
     private boolean chargeDirty;
 
     public JarState() {
-        this(Form.BODY, 3, List.of(), 0, Optional.empty());
+        this(Form.BODY, 3, List.of(), 0, Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0);
     }
 
-    private JarState(Form form, int slots, List<ItemStack> modules, int charge, Optional<UUID> body) {
+    private JarState(Form form, int slots, List<ItemStack> modules, int charge, Optional<UUID> body,
+                     ItemStack goggles, ItemStack collar, boolean carryingHead, int rollTicks) {
         this.form = form;
         this.slots = Math.max(1, Math.min(MAX_SLOTS, slots));
         this.modules = new ArrayList<>(modules);
         while (this.modules.size() < MAX_SLOTS) this.modules.add(ItemStack.EMPTY);
         this.charge = charge;
         this.body = body.orElse(null);
-    }
-
-    private static JarState fromSync(Form form, int slots, List<ItemStack> modules, int charge, int held) {
-        JarState s = new JarState(form, slots, modules, charge, Optional.empty());
-        s.heldEntity = held;
-        return s;
+        this.goggles = goggles;
+        this.collar = collar;
+        this.carryingHead = carryingHead;
+        this.rollTicks = rollTicks;
     }
 
     /** Copies what the server sent into the client's copy. */
@@ -76,6 +108,12 @@ public final class JarState {
         for (int i = 0; i < MAX_SLOTS; i++) modules.set(i, other.modules.get(i));
         charge = other.charge;
         heldEntity = other.heldEntity;
+        goggles = other.goggles;
+        collar = other.collar;
+        carryingHead = other.carryingHead;
+        rollTicks = other.rollTicks;
+        quality = other.quality;
+        headDistance = other.headDistance;
     }
 
     public Form form() {
@@ -129,7 +167,7 @@ public final class JarState {
     }
 
     public static int maxCharge() {
-        return Config.SPEC.isLoaded() ? Config.MAX_CHARGE.get() : 1000;
+        return Config.SPEC.isLoaded() ? Config.MAX_CHARGE.get() : 100_000;
     }
 
     public void setCharge(int charge) {
@@ -140,7 +178,7 @@ public final class JarState {
         }
     }
 
-    /** Spends charge if there is any; returns whether the action is powered. */
+    /** Spends charge (FE) if there is any; returns whether the action is powered. */
     public boolean spend(int amount) {
         if (charge <= 0) return false;
         setCharge(charge - amount);
@@ -156,6 +194,49 @@ public final class JarState {
         dirty = true;
     }
 
+    public ItemStack goggles() {
+        return goggles;
+    }
+
+    public void setGoggles(ItemStack goggles) {
+        this.goggles = goggles;
+        dirty = true;
+    }
+
+    public ItemStack collar() {
+        return collar;
+    }
+
+    public void setCollar(ItemStack collar) {
+        this.collar = collar;
+        dirty = true;
+    }
+
+    public boolean carryingHead() {
+        return carryingHead;
+    }
+
+    public void setCarryingHead(boolean carrying) {
+        this.carryingHead = carrying;
+        dirty = true;
+    }
+
+    public int rollTicks() {
+        return rollTicks;
+    }
+
+    public void setRollTicks(int ticks) {
+        if (ticks != rollTicks) {
+            rollTicks = ticks;
+            dirty = true;
+        }
+    }
+
+    /** Counts the roll down on both sides without a sync each tick. */
+    public void tickRoll() {
+        if (rollTicks > 0) rollTicks--;
+    }
+
     public int heldEntity() {
         return heldEntity;
     }
@@ -165,6 +246,30 @@ public final class JarState {
             heldEntity = id;
             dirty = true;
         }
+    }
+
+    public int quality() {
+        return quality;
+    }
+
+    public float headDistance() {
+        return headDistance;
+    }
+
+    public void setLink(int quality, float distance) {
+        if (quality != this.quality || Math.abs(distance - headDistance) >= 1) {
+            this.quality = quality;
+            this.headDistance = distance;
+            dirty = true;
+        }
+    }
+
+    public int deadLinkTicks() {
+        return deadLinkTicks;
+    }
+
+    public void setDeadLinkTicks(int ticks) {
+        deadLinkTicks = ticks;
     }
 
     /** Whether the form or modules changed since the last sync; charge-only changes count when {@code chargeToo}. */

@@ -23,5 +23,7 @@ public class HeadInAJar {
         modBus.addListener(Network::register);
         container.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         NeoForge.EVENT_BUS.register(FormEvents.class);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.RegisterCommandsEvent e) ->
+                com.coolfreeze23.headinajar.command.HeadOfficeCommand.register(e.getDispatcher()));
     }
 }

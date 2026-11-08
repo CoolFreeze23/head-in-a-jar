@@ -184,7 +184,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -207,6 +207,31 @@ public class SmokeClient {
                         case "charge" -> state.setCharge(Integer.parseInt(parts[1]));
                         case "grab" -> report.add("grab -> " + Telekinesis.grab(player, state));
                         case "throw" -> Telekinesis.throwHeld(player, state);
+                        case "swap" -> report.add("swap -> " + (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED
+                                ? FormActions.linkedToJar(player) : FormActions.jarToLinked(player)));
+                        case "separate" -> report.add("separate -> " + FormActions.separate(player, new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()),
+                                new ItemStack(ModRegistry.RELAY_GOGGLES.get()), new ItemStack(ModRegistry.COLLAR_CAM.get()),
+                                player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(1.5)), null));
+                        case "pickup" -> {
+                            var heads = player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.HeadJarEntity.class, player.getBoundingBox().inflate(8));
+                            report.add("pickup -> " + (!heads.isEmpty() && FormActions.pickUpHead(player, heads.get(0))));
+                        }
+                        case "chair", "sign" -> {
+                            // chair X Y Z: fill the chair at X Y Z with parts and 50 kFE; sign X Y Z: sign Form 27-B as the seated player
+                            String[] xyz = parts[1].split(" ");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
+                            if (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.SeparationChairBlockEntity chair) {
+                                if (parts[0].equals("chair")) {
+                                    chair.items().setStackInSlot(0, new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()));
+                                    chair.items().setStackInSlot(1, new ItemStack(ModRegistry.RELAY_GOGGLES.get()));
+                                    chair.items().setStackInSlot(2, new ItemStack(ModRegistry.COLLAR_CAM.get()));
+                                    chair.items().setStackInSlot(3, new ItemStack(ModRegistry.SALINE_BOTTLE.get(), 4));
+                                    chair.energy().set(50_000);
+                                } else {
+                                    report.add("sign -> " + chair.sign(player));
+                                }
+                            }
+                        }
                         default -> {
                         }
                     }
