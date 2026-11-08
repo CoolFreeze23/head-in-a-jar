@@ -110,16 +110,27 @@ public final class HeadCarry {
     private static void applyArms(HumanoidModel<?> model, Player player, float limbSwing, float limbSwingAmount, float age) {
         float lift = lift(player, age);
         if (lift <= 0) return;
-        // a gentle sway with each step (the jar turns with it), and a little breathing
-        float sway = Mth.cos(limbSwing * 0.6662f) * 0.1f * limbSwingAmount;
-        float breathe = Mth.sin(age * 0.067f) * 0.03f;
-        float x = ARMS_FORWARD + breathe;
+        // the jar goes wherever the hands go, so all of its motion comes from here
+        float step = limbSwing * 0.6662f;
+        float walking = Mth.clamp(limbSwingAmount, 0, 1);
+        // each footfall: both hands dip under the weight and come back up (twice per stride, a little after the foot lands)
+        float bounce = (Mth.cos(step * 2 - 0.6f) * 0.5f + 0.5f) * 0.16f * walking;
+        // weight shifting from foot to foot: one hand rides higher, then the other, so the jar rocks with your stride
+        float rock = Mth.sin(step) * 0.07f * walking;
+        // and a little turn at the hips, one hand forward, then the other
+        float sway = Mth.cos(step) * 0.05f * walking;
+        // standing still: slow breathing, the jar rising and settling
+        float breathe = Mth.sin(age * 0.067f) * 0.035f * (1 - walking);
+        float x = ARMS_FORWARD + bounce + breathe;
         model.rightArm.xRot = Mth.lerp(lift, model.rightArm.xRot, x + sway);
         model.leftArm.xRot = Mth.lerp(lift, model.leftArm.xRot, x - sway);
         model.rightArm.yRot = Mth.lerp(lift, model.rightArm.yRot, 0);
         model.leftArm.yRot = Mth.lerp(lift, model.leftArm.yRot, 0);
-        model.rightArm.zRot = Mth.lerp(lift, model.rightArm.zRot, ARMS_OUT);
-        model.leftArm.zRot = Mth.lerp(lift, model.leftArm.zRot, -ARMS_OUT);
+        model.rightArm.zRot = Mth.lerp(lift, model.rightArm.zRot, ARMS_OUT + rock);
+        model.leftArm.zRot = Mth.lerp(lift, model.leftArm.zRot, -ARMS_OUT + rock);
+        // a load this size shortens your stride
+        model.rightLeg.xRot *= Mth.lerp(lift, 1, 0.65f);
+        model.leftLeg.xRot *= Mth.lerp(lift, 1, 0.65f);
     }
 
     /** Where the hands hold the jar: this far up from its base, and this far behind its middle (pixels). */
