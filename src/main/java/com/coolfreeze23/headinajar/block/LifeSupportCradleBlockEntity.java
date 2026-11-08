@@ -144,6 +144,9 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         head.moveTo(at.x, at.y, at.z, 0, 0);
         head.setOwner(owner, ownerName);
         head.setGoggles(goggles);
+        if (server.getServer().getPlayerList().getPlayer(owner) instanceof net.minecraft.server.level.ServerPlayer online) {
+            head.setCompact(com.coolfreeze23.headinajar.form.FormActions.state(online).compact());
+        }
         server.addFreshEntity(head);
         HeadRegistry.get(server.getServer()).setHead(owner, new HeadRegistry.Head(HeadRegistry.Where.ENTITY, new HeadRegistry.Spot(server.dimension(), at), head.getUUID()));
         owner = null;

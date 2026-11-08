@@ -66,7 +66,7 @@ HANDBOOK = {
             ('life_support', 'body_printer', 'The Body Printer', 'headinajar:body_printer', [
                 'Lost your body? Load the printer with rotten flesh, bone blocks, redstone blocks, slime and 2000 mB of saline, then press Print as a jar. Sixty seconds and 200 kFE later, a fresh body steps out, collar already fitted.']),
             ('modules', 'modules', 'Fitting Modules', 'headinajar:hop_springs', [
-                'Open the Jar menu with $(k:key.headinajar.jar_menu) while you are the jar. A Life Support Jar has three slots; a Reinforced Jar has five. Powered modules stop when the charge runs out.']),
+                'Open the Jar menu with $(k:key.headinajar.jar_menu) while you are the jar. A Life Support Jar has three slots; a Reinforced Jar has five. A $(item)Compact Jar$() also has three and is head-sized: your head faces the front and the whole jar turns with it (a jar alone in a crafting grid becomes the other kind). Powered modules stop when the charge runs out.']),
         ],
     },
     'pt_br': {
@@ -98,7 +98,7 @@ HANDBOOK = {
             ('life_support', 'body_printer', 'A Impressora de Corpos', 'headinajar:body_printer', [
                 'Perdeu o corpo? Carregue a impressora com carne podre, blocos de osso, blocos de redstone, slime e 2000 mB de soro, e aperte Imprimir como pote. Sessenta segundos e 200 kFE depois, sai um corpo novo, já com câmera.']),
             ('modules', 'modules', 'Instalando Módulos', 'headinajar:hop_springs', [
-                'Abra o menu do pote com $(k:key.headinajar.jar_menu) quando você for o pote. Um Pote de Suporte Vital tem três encaixes; um Reforçado tem cinco. Módulos com energia param quando a carga acaba.']),
+                'Abra o menu do pote com $(k:key.headinajar.jar_menu) quando você for o pote. Um Pote de Suporte Vital tem três encaixes; um Reforçado tem cinco. Um $(item)Pote Compacto$() também tem três e é do tamanho de uma cabeça: sua cabeça fica de frente e o pote inteiro gira com ela (um pote sozinho na grade de criação vira o outro tipo). Módulos com energia param quando a carga acaba.']),
         ],
     },
 }

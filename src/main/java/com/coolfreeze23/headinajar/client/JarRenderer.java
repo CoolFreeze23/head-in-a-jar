@@ -27,18 +27,29 @@ public final class JarRenderer {
     private static ModelPart head;
     private static ModelPart hat;
     private static ModelPart goggles;
-    /**
-     * The head and its goggles inside the jar, scaled so that turned any way they stay within the 10-pixel glass
-     * (the hat layer's corner is 6.2 px from the axis, the goggle lens 6.4: at 75%, under 4.8).
-     */
+    /** The head inside is life size. */
     public static final float HEAD_SCALE = 1.0f;
     /**
-     * The jar is drawn 1.3x wide and 1.1x tall around its base so a life-size head (8 px, 8.8 with the hat layer) fits
-     * turned any way: the hat's corner is 6.2 px from the axis and the goggle lenses 6.2, inside the 6.5 px glass.
+     * The two jars. Sizes scale the 11 px model around its base. Turn and nod are how far the head may move inside the glass;
+     * any more turn turns the whole jar, the way a head turns on a neck. The last three place the jar tipped on its side.
      */
-    public static final float JAR_WIDE = 1.3f, JAR_TALL = 1.1f;
-    /** Where the head's neck sits: just above the scaled base plate (base underside at 24, top at 22.9). */
-    public static final float NECK = 22.5f;
+    public record Shape(float wide, float tall, float neck, float turn, float nod, float rollLift, float rollSpin, float rollDrop) {
+    }
+
+    /**
+     * The wide jars (Life Support, Reinforced, Executive): 1.3x wide and 1.1x tall, so the life-size head (8.8 px with the hat
+     * layer) turns right round inside: its hat corner is 6.2 px from the axis and the goggle lenses 5.8, inside 6.5 px of glass.
+     */
+    public static final Shape WIDE = new Shape(1.3f, 1.1f, 22.5f, 180, 20, 0.45f, 127, 0.48f);
+    /**
+     * The Compact Jar, at the model's own size (10 px of glass): the head fits facing the front, turns 6 degrees and nods 3
+     * inside it, and the jar turns with the rest.
+     */
+    public static final Shape COMPACT = new Shape(1.0f, 1.0f, 22.8f, 6, 3, 0.34f, 168, 0.41f);
+
+    public static Shape shape(boolean compact) {
+        return compact ? COMPACT : WIDE;
+    }
 
     private static void bake() {
         var models = Minecraft.getInstance().getEntityModels();
@@ -76,18 +87,19 @@ public final class JarRenderer {
         pose.mulPose(Axis.YP.rotationDegrees(180.0f - bodyYaw));
         float walked = Mth.lerp(partialTick, player.walkDistO, player.walkDist) / 0.6f;
         boolean wheels = state.wheels() && state.fitted(com.coolfreeze23.headinajar.module.ModuleType.WHEELS);
+        Shape shape = shape(state.compact());
         if (state.tipped()) {
             // on its side, rolling along: the jar's axis lies across the direction of travel
-            pose.translate(0, 0.45, 0);
-            pose.mulPose(Axis.XP.rotationDegrees(walked * 127));
+            pose.translate(0, shape.rollLift(), 0);
+            pose.mulPose(Axis.XP.rotationDegrees(walked * shape.rollSpin()));
             pose.mulPose(Axis.ZP.rotationDegrees(90));
-            pose.translate(0, -0.48, 0);
+            pose.translate(0, -shape.rollDrop(), 0);
         } else if (wheels) {
             pose.translate(0, 3.5f / 16f, 0);
-            drawWheels(pose, buffers, light, walked);
+            drawWheels(pose, buffers, light, walked, shape);
         }
         draw(pose, buffers, light, LivingEntityRenderer.getOverlayCoords(player, 0), player.getSkin().texture(),
-                headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty());
+                headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty(), shape);
         var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
         if (state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HAT_MOUNT) && !helmet.isEmpty()) {
             pose.pushPose();
@@ -109,20 +121,31 @@ public final class JarRenderer {
      */
     public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
                             float headYaw, float pitch, float age, boolean charged, boolean withGoggles) {
+        draw(pose, buffers, light, overlay, skin, headYaw, pitch, age, charged, withGoggles, WIDE);
+    }
+
+    /** As above, in the given jar. */
+    public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
+                            float headYaw, float pitch, float age, boolean charged, boolean withGoggles, Shape shape) {
         if (jar == null) bake();
+        // the head turns as far as the glass lets it; the rest of the turn turns the jar
+        float turn = Mth.wrapDegrees(headYaw);
+        float inside = Mth.clamp(turn, -shape.turn(), shape.turn());
+        pose.pushPose();
+        pose.mulPose(Axis.YP.rotationDegrees(-(turn - inside)));
         pose.pushPose();
         pose.scale(-1.0f, -1.0f, 1.0f);
         pose.translate(0.0f, -1.501f, 0.0f);
-        scaled(pose);
+        scaled(pose, shape);
         jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
         pose.popPose();
 
         // the head bobs a little in the fluid and looks where it is told
         float bob = Mth.sin(age * 0.08f) * 0.35f;
-        float yaw = Mth.wrapDegrees(headYaw) * Mth.DEG_TO_RAD;
-        float xRot = Mth.clamp(pitch, -20, 20) * Mth.DEG_TO_RAD;
+        float yaw = inside * Mth.DEG_TO_RAD;
+        float xRot = Mth.clamp(pitch, -shape.nod(), shape.nod()) * Mth.DEG_TO_RAD;
         for (ModelPart part : new ModelPart[]{head, hat, goggles}) {
-            part.y = NECK + bob;
+            part.y = shape.neck() + bob;
             part.yRot = yaw;
             part.xRot = xRot;
             part.xScale = part.yScale = part.zScale = HEAD_SCALE;
@@ -132,18 +155,19 @@ public final class JarRenderer {
         if (withGoggles) goggles.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(GOGGLES_TEXTURE)), light, overlay);
 
         int fluid = charged ? 0xFFFFFFFF : 0xFF707070;
-        scaled(pose);
+        scaled(pose, shape);
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay, fluid);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
         pose.popPose();
         pose.popPose();
     }
 
     /** Pushes the jar's size onto the pose, around the base underside (y = 24 px in jar model space). Pop it after. */
-    private static void scaled(PoseStack pose) {
+    private static void scaled(PoseStack pose, Shape shape) {
         pose.pushPose();
         pose.translate(0, 1.5f, 0);
-        pose.scale(JAR_WIDE, JAR_TALL, JAR_WIDE);
+        pose.scale(shape.wide(), shape.tall(), shape.wide());
         pose.translate(0, -1.5f, 0);
     }
 
@@ -151,13 +175,13 @@ public final class JarRenderer {
     private static final ResourceLocation WHEELS_TEXTURE = HeadInAJar.id("textures/entity/jar_wheels.png");
 
     /** The Wheels module under the base plate, turning with the distance driven. */
-    private static void drawWheels(PoseStack pose, MultiBufferSource buffers, int light, float walked) {
+    private static void drawWheels(PoseStack pose, MultiBufferSource buffers, int light, float walked, Shape shape) {
         if (wheelParts == null) wheelParts = Minecraft.getInstance().getEntityModels().bakeLayer(JarModel.WHEELS);
         pose.pushPose();
         pose.scale(-1.0f, -1.0f, 1.0f);
         pose.translate(0.0f, -1.501f, 0.0f);
         pose.translate(0, 1.5f, 0);
-        pose.scale(JAR_WIDE, 1, JAR_WIDE);
+        pose.scale(shape.wide(), 1, shape.wide());
         pose.translate(0, -1.5f, 0);
         for (int i = 0; i < 4; i++) wheelParts.getChild("wheel_" + i).xRot = walked * 3.8f;
         wheelParts.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(WHEELS_TEXTURE)), light, OverlayTexture.NO_OVERLAY);
@@ -184,13 +208,14 @@ public final class JarRenderer {
         pose.pushPose();
         pose.scale(-1.0f, -1.0f, 1.0f);
         pose.translate(0.0f, -1.501f, 0.0f);
-        scaled(pose);
+        scaled(pose, WIDE);
         jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
         pose.popPose();
         inside.accept(pose, Mth.sin(age * 0.08f) * 0.35f);
-        scaled(pose);
+        scaled(pose, WIDE);
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
         pose.popPose();
         pose.popPose();
     }

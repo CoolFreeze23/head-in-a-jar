@@ -1,0 +1,236 @@
+# Compact Jar version
+# The jar seated on each kind of body: front and back views (mount via the verb; clicking is covered by smoke-clickmount)
+wait 60
+/gamemode creative
+/time set 18000
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 -40.5 0 0
+jar
+compact 1
+wait 20
+hud 0
+/summon headinajar:spider_walker 0.5 -60 3.5
+/tp @s 0.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding spider_walker
+look 180 15
+view 2
+wait 10
+shot c_seat_spider_walker_front
+view 1
+wait 5
+shot c_seat_spider_walker_back
+view 0
+/ride @s dismount
+wait 10
+/summon headinajar:lunk 12.5 -60 3.5
+/tp @s 12.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding lunk
+look 180 15
+view 2
+wait 10
+shot c_seat_lunk_front
+view 1
+wait 5
+shot c_seat_lunk_back
+view 0
+/ride @s dismount
+wait 10
+/summon headinajar:rover 24.5 -60 3.5
+/tp @s 24.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding rover
+look 180 15
+view 2
+wait 10
+shot c_seat_rover_front
+view 1
+wait 5
+shot c_seat_rover_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:zombie 36 -60 3
+/tp @s 36.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding zombie
+look 180 15
+view 2
+wait 10
+shot c_seat_zombie_front
+view 1
+wait 5
+shot c_seat_zombie_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:skeleton 48 -60 3
+/tp @s 48.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding skeleton
+look 180 15
+view 2
+wait 10
+shot c_seat_skeleton_front
+view 1
+wait 5
+shot c_seat_skeleton_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:spider 60 -60 3
+/tp @s 60.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding spider
+look 180 15
+view 2
+wait 10
+shot c_seat_spider_front
+view 1
+wait 5
+shot c_seat_spider_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:cow 72 -60 3
+/tp @s 72.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding cow
+look 180 15
+view 2
+wait 10
+shot c_seat_cow_front
+view 1
+wait 5
+shot c_seat_cow_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:pig 84 -60 3
+/tp @s 84.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding pig
+look 180 15
+view 2
+wait 10
+shot c_seat_pig_front
+view 1
+wait 5
+shot c_seat_pig_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:creeper 96 -60 3
+/tp @s 96.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding creeper
+look 180 15
+view 2
+wait 10
+shot c_seat_creeper_front
+view 1
+wait 5
+shot c_seat_creeper_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:enderman 108 -60 3
+/tp @s 108.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding enderman
+look 180 15
+view 2
+wait 10
+shot c_seat_enderman_front
+view 1
+wait 5
+shot c_seat_enderman_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:wolf 120 -60 3
+/tp @s 120.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding wolf
+look 180 15
+view 2
+wait 10
+shot c_seat_wolf_front
+view 1
+wait 5
+shot c_seat_wolf_back
+view 0
+/ride @s dismount
+wait 10
+hostify minecraft:villager 132 -60 3
+/tp @s 132.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding villager
+look 180 15
+view 2
+wait 10
+shot c_seat_villager_front
+view 1
+wait 5
+shot c_seat_villager_back
+view 0
+/ride @s dismount
+wait 10
+mecha hopper 200 -60 4 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+/tp @s 200.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding hopper
+look 180 15
+view 2
+wait 10
+shot c_seat_hopper_front
+view 1
+wait 5
+shot c_seat_hopper_back
+view 0
+/ride @s dismount
+wait 10
+mecha bulwark 220 -60 4 hydraulic_legs,rocket_pack,cargo_hold,galvanic_stack,armor_plating,coolant_loop,hydraulic_fist,riot_shield,night_optics
+/tp @s 220.5 -60 1.5 0 0
+wait 10
+mount
+wait 10
+riding bulwark
+look 180 15
+view 2
+wait 10
+shot c_seat_bulwark_front
+view 1
+wait 5
+shot c_seat_bulwark_back
+view 0
+report done

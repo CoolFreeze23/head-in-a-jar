@@ -38,6 +38,8 @@ import com.coolfreeze23.headinajar.block.SeparationChairBlockEntity;
 /** Common game rules of being a head in a jar. */
 public final class FormEvents {
     public static final EntityDimensions JAR_SIZE = EntityDimensions.fixed(0.86f, 0.95f).withEyeHeight(0.5f);
+    /** A Compact Jar: head-sized. */
+    public static final EntityDimensions COMPACT_SIZE = EntityDimensions.fixed(0.7f, 0.92f).withEyeHeight(0.5f);
     /** A headless body: fits under 1.5-block gaps; the Collar Cam sits on the neck. */
     public static final EntityDimensions LINKED_SIZE = EntityDimensions.fixed(0.6f, 1.45f).withEyeHeight(1.32f);
 
@@ -57,7 +59,7 @@ public final class FormEvents {
         if (event.getEntity() instanceof Player player && player.hasData(ModRegistry.JAR_STATE)) {
             Form form = state(player).form();
             // riding a host the jar keeps its own size: a full player size would seat it 0.6 below the neck, sunk into the body
-            if (form == Form.JAR || form == Form.SOCKET || form == Form.HOSTED) event.setNewSize(JAR_SIZE);
+            if (form == Form.JAR || form == Form.SOCKET || form == Form.HOSTED) event.setNewSize(state(player).compact() ? COMPACT_SIZE : JAR_SIZE);
             else if (form == Form.LINKED && event.getPose() != net.minecraft.world.entity.Pose.SLEEPING
                     && !com.coolfreeze23.headinajar.item.QuantumItems.has(state(player).collar(), com.coolfreeze23.headinajar.item.QuantumItems.Upgrade.PERISCOPE_STALK)) {
                 event.setNewSize(LINKED_SIZE);

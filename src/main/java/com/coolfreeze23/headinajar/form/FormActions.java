@@ -55,6 +55,7 @@ public final class FormActions {
         if (state.form().isDecapitated()) return false;
         state.setForm(Form.LINKED);
         state.setSlots(jar.getItem() instanceof LifeSupportJarItem j ? j.slots() : 3);
+        state.setCompact(jar.getItem() instanceof LifeSupportJarItem j && j.compact());
         state.setCharge(JarState.maxCharge());
         state.fillJar();
         state.setGoggles(goggles.copyWithCount(1));
@@ -82,6 +83,7 @@ public final class FormActions {
         head.moveTo(at.x, at.y, at.z, yaw, 0);
         head.setOwner(player.getUUID(), player.getGameProfile().getName());
         head.setGoggles(state(player).goggles());
+        head.setCompact(state(player).compact());
         level.addFreshEntity(head);
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.ENTITY, new HeadRegistry.Spot(level.dimension(), at), head.getUUID()));
         return head;
@@ -517,7 +519,9 @@ public final class FormActions {
             if (!module.isEmpty()) give(player, module.copy());
             state.setModule(i, ItemStack.EMPTY);
         }
-        give(player, new ItemStack(state.slots() > 5 ? ModRegistry.EXECUTIVE_JAR.get() : state.slots() > 3 ? ModRegistry.REINFORCED_JAR.get() : ModRegistry.LIFE_SUPPORT_JAR.get()));
+        give(player, new ItemStack(state.slots() > 5 ? ModRegistry.EXECUTIVE_JAR.get() : state.slots() > 3 ? ModRegistry.REINFORCED_JAR.get()
+                : state.compact() ? ModRegistry.COMPACT_JAR.get() : ModRegistry.LIFE_SUPPORT_JAR.get()));
+        state.setCompact(false);
     }
 
     public static void give(ServerPlayer player, ItemStack stack) {

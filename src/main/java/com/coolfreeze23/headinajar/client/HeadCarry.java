@@ -67,7 +67,12 @@ public final class HeadCarry {
     /** Body-space spot (pixels, y down from the shoulders) of the jar's base when held in front: low, so you can see over it. */
     private static final float FRONT_Y = 20, FRONT_Z = -9.7f;
     /** ...and when strapped to your back. */
-    private static final float BACK_Y = 16, BACK_Z = 9.6f;
+    private static final float BACK_Y = 16;
+
+    /** On your back, the jar's middle this far behind you (pixels): clear of your back. */
+    private static float backZ(boolean compact) {
+        return compact ? 7.8f : 9.6f;
+    }
 
     /** The model and walk cycle each carrying player was last posed with, so the pose can be put back after other mods animate. */
     private static final Map<UUID, Posed> POSED = new HashMap<>();
@@ -102,10 +107,17 @@ public final class HeadCarry {
     }
 
     /**
-     * The carrying pose: both arms forward and opened wide round the jar, which is twice as wide as you are, so each hand
-     * lands just outside the glass on its side (about 10.5 px out, 6 px down and 6 px in front of the shoulders).
+     * The carrying pose: both arms forward and opened round the jar so each hand lands flat on a side, just outside the glass.
+     * A wide jar is twice as wide as you are: the arms open wide, the hands 10.5 px out, 6 px down and 6 px in front of the
+     * shoulders. A Compact Jar is held close: 7.5 px out, 7 px down and 7 px in front.
      */
-    private static final float ARMS_FORWARD = -0.75f, ARMS_OUT = 0.82f;
+    private static float armsForward(boolean compact) {
+        return compact ? -0.9f : -0.75f;
+    }
+
+    private static float armsOut(boolean compact) {
+        return compact ? 0.27f : 0.82f;
+    }
 
     private static void applyArms(HumanoidModel<?> model, Player player, float limbSwing, float limbSwingAmount, float age) {
         float lift = lift(player, age);
@@ -121,20 +133,27 @@ public final class HeadCarry {
         float sway = Mth.cos(step) * 0.05f * walking;
         // standing still: slow breathing, the jar rising and settling
         float breathe = Mth.sin(age * 0.067f) * 0.035f * (1 - walking);
-        float x = ARMS_FORWARD + bounce + breathe;
+        boolean compact = player.getData(ModRegistry.JAR_STATE).compact();
+        float x = armsForward(compact) + bounce + breathe;
         model.rightArm.xRot = Mth.lerp(lift, model.rightArm.xRot, x + sway);
         model.leftArm.xRot = Mth.lerp(lift, model.leftArm.xRot, x - sway);
         model.rightArm.yRot = Mth.lerp(lift, model.rightArm.yRot, 0);
         model.leftArm.yRot = Mth.lerp(lift, model.leftArm.yRot, 0);
-        model.rightArm.zRot = Mth.lerp(lift, model.rightArm.zRot, ARMS_OUT + rock);
-        model.leftArm.zRot = Mth.lerp(lift, model.leftArm.zRot, -ARMS_OUT + rock);
+        model.rightArm.zRot = Mth.lerp(lift, model.rightArm.zRot, armsOut(compact) + rock);
+        model.leftArm.zRot = Mth.lerp(lift, model.leftArm.zRot, -armsOut(compact) + rock);
         // a load this size shortens your stride
         model.rightLeg.xRot *= Mth.lerp(lift, 1, 0.65f);
         model.leftLeg.xRot *= Mth.lerp(lift, 1, 0.65f);
     }
 
     /** Where the hands hold the jar: this far up from its base, and this far behind its middle (pixels). */
-    private static final float GRIP_UP = 9, GRIP_BACK = 4.5f;
+    private static float gripUp(boolean compact) {
+        return compact ? 8 : 9;
+    }
+
+    private static float gripBack(boolean compact) {
+        return compact ? 0.6f : 4.5f;
+    }
 
     /**
      * Third person, in model space, life size. In your arms the jar is held by your hands: it is placed between them every
@@ -149,7 +168,7 @@ public final class HeadCarry {
         PoseStack back = new PoseStack();
         model.body.translateAndRotate(back);
         float bob = Mth.sin(limbSwing * 0.6662f * 2) * 0.012f * limbSwingAmount;
-        back.translate(0, BACK_Y / 16.0 + bob, BACK_Z / 16.0);
+        back.translate(0, BACK_Y / 16.0 + bob, backZ(state.compact()) / 16.0);
         back.mulPose(Axis.ZP.rotationDegrees(Mth.sin(limbSwing * 0.6662f) * 4 * limbSwingAmount));
         back.mulPose(Axis.XP.rotationDegrees(180));
         back.mulPose(Axis.YP.rotationDegrees(180));
@@ -161,7 +180,7 @@ public final class HeadCarry {
         front.translate((right.x + left.x) / 2, (right.y + left.y) / 2, (right.z + left.z) / 2);
         front.mulPose(Axis.YP.rotation((float) -Math.atan2(across.z, across.x)));
         front.mulPose(Axis.ZP.rotation((float) Math.atan2(across.y, flat)));
-        front.translate(0, GRIP_UP / 16.0, -GRIP_BACK / 16.0);
+        front.translate(0, gripUp(state.compact()) / 16.0, -gripBack(state.compact()) / 16.0);
         front.mulPose(Axis.XP.rotationDegrees(180));
         // between the two while it is being picked up or put away, swinging out round your side
         Matrix4f a = back.last().pose(), b = front.last().pose();
@@ -173,7 +192,8 @@ public final class HeadCarry {
         // your head turns round inside to look up at you while you hold it
         float headYaw = 180 * lift + Mth.sin(age * 0.05f) * 8 * lift;
         float pitch = -18 * lift;
-        JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), headYaw, pitch, age, true, !state.goggles().isEmpty());
+        JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), headYaw, pitch, age, true, !state.goggles().isEmpty(),
+                JarRenderer.shape(state.compact()));
     }
 
     /** The middle of a hand (2 px in from the end of the arm; side -1 right, 1 left), in model space (blocks). */
@@ -206,7 +226,7 @@ public final class HeadCarry {
     /** Jar tipped toward you in first person (degrees about X, round its middle). */
     private static final float FP_TILT = -40;
     /** Where each hand grips the jar, in the jar's own frame (blocks from the middle of its base): the upper sides. */
-    private static final float GRIP_X = 0.65f, GRIP_Y = 0.7f, GRIP_Z = 0.02f;
+    private static final float GRIP_Z = 0.02f;
     /** Your shoulders, from the camera (blocks): the arms run from here to the grip. */
     private static final float SHOULDER_X = 0.42f, SHOULDER_Y = -0.45f, SHOULDER_Z = 0.3f;
 
@@ -232,12 +252,15 @@ public final class HeadCarry {
         // the hands: each grip point on the tipped jar, reached from the shoulder on that side
         PlayerRenderer renderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(player);
         float cos = Mth.cos(FP_TILT * Mth.DEG_TO_RAD), sin = Mth.sin(FP_TILT * Mth.DEG_TO_RAD);
+        var state = player.getData(ModRegistry.JAR_STATE);
+        // the hands just outside the glass, on its upper sides
+        float gripX = state.compact() ? 0.48f : 0.65f, gripY = state.compact() ? 0.6f : 0.7f;
         drawingHands = true;
         try {
             for (int side = 0; side < 2; side++) {
                 float f = side == 0 ? 1 : -1;
-                float ry = GRIP_Y - 0.5f, rz = GRIP_Z;
-                Vector3f grip = new Vector3f(f * GRIP_X, baseY + 0.5f + ry * cos - rz * sin, baseZ + ry * sin + rz * cos);
+                float ry = gripY - 0.5f, rz = GRIP_Z;
+                Vector3f grip = new Vector3f(f * gripX, baseY + 0.5f + ry * cos - rz * sin, baseZ + ry * sin + rz * cos);
                 Vector3f along = new Vector3f(grip).sub(f * SHOULDER_X, SHOULDER_Y, SHOULDER_Z).normalize();
                 pose.pushPose();
                 pose.translate(grip.x, grip.y, grip.z);
@@ -258,9 +281,8 @@ public final class HeadCarry {
         pose.translate(0, 0.5f, 0);
         pose.mulPose(Axis.XP.rotationDegrees(FP_TILT));
         pose.translate(0, -0.5f, 0);
-        var state = player.getData(ModRegistry.JAR_STATE);
         JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), 180 + Mth.sin(age * 0.05f) * 6, -18, age, true,
-                !state.goggles().isEmpty());
+                !state.goggles().isEmpty(), JarRenderer.shape(state.compact()));
         pose.popPose();
         return true;
     }

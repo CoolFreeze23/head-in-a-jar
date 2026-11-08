@@ -82,6 +82,24 @@ save(jar_item(IRON, RED[2]), 'item', 'life_support_jar.png')
 save(jar_item(NETH, CYAN[2]), 'item', 'reinforced_life_support_jar.png')
 
 
+def compact_jar_item(metal, light):
+    """The Compact Jar: a head-sized jar, narrower and shorter, without the side pipes."""
+    im = img(16, 16)
+    rect(im, 5, 4, 10, 4, metal[2]); rect(im, 4, 5, 11, 5, metal[1])          # lid
+    rect(im, 7, 3, 8, 3, metal[3])                                            # valve
+    rect(im, 5, 6, 10, 12, GLASS[0])                                          # glass body
+    rect(im, 6, 9, 9, 12, FLUID[1]); rect(im, 6, 9, 9, 9, FLUID[2])           # fluid
+    rect(im, 5, 6, 5, 12, GLASS[1]); px(im, [(6, 7)], GLASS[2])               # glint
+    rect(im, 10, 6, 10, 12, hexc('6fb8cc', 150))
+    rect(im, 4, 13, 11, 13, metal[1]); rect(im, 4, 14, 11, 14, metal[0])      # base
+    px(im, [(9, 13)], light)
+    outline(im)
+    return im
+
+
+save(compact_jar_item(IRON, GREEN[2]), 'item', 'compact_life_support_jar.png')
+
+
 def gear_base(m, im=None):
     """A round module housing with a socket pin, in metal ramp m."""
     im = im or img(16, 16)

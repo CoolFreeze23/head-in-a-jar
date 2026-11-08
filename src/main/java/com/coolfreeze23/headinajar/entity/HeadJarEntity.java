@@ -40,6 +40,7 @@ public class HeadJarEntity extends Entity {
     private static final EntityDataAccessor<Optional<UUID>> OWNER = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<String> OWNER_NAME = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> GOGGLES = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Boolean> COMPACT = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.BOOLEAN);
     public static final float MAX_HEALTH = 10;
     private float health = MAX_HEALTH;
     private int hurtTicks;
@@ -53,6 +54,7 @@ public class HeadJarEntity extends Entity {
         builder.define(OWNER, Optional.empty());
         builder.define(OWNER_NAME, "");
         builder.define(GOGGLES, ItemStack.EMPTY);
+        builder.define(COMPACT, false);
     }
 
     public void setOwner(UUID id, String name) {
@@ -66,6 +68,27 @@ public class HeadJarEntity extends Entity {
 
     public String ownerName() {
         return entityData.get(OWNER_NAME);
+    }
+
+    /** The head is in a Compact Jar (head-sized). */
+    public boolean compact() {
+        return entityData.get(COMPACT);
+    }
+
+    public void setCompact(boolean compact) {
+        entityData.set(COMPACT, compact);
+        refreshDimensions();
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (COMPACT.equals(key)) refreshDimensions();
+    }
+
+    @Override
+    public net.minecraft.world.entity.EntityDimensions getDimensions(net.minecraft.world.entity.Pose pose) {
+        return compact() ? com.coolfreeze23.headinajar.form.FormEvents.COMPACT_SIZE : super.getDimensions(pose);
     }
 
     public ItemStack goggles() {
@@ -184,6 +207,7 @@ public class HeadJarEntity extends Entity {
         if (tag.hasUUID("Owner")) setOwner(tag.getUUID("Owner"), tag.getString("OwnerName"));
         setGoggles(ItemStack.parseOptional(registryAccess(), tag.getCompound("Goggles")));
         health = tag.contains("Health") ? tag.getFloat("Health") : MAX_HEALTH;
+        setCompact(tag.getBoolean("Compact"));
     }
 
     @Override
@@ -192,5 +216,6 @@ public class HeadJarEntity extends Entity {
         tag.putString("OwnerName", ownerName());
         tag.put("Goggles", goggles().saveOptional(registryAccess()));
         tag.putFloat("Health", health);
+        tag.putBoolean("Compact", compact());
     }
 }

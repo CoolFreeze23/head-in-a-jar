@@ -211,7 +211,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -220,6 +220,12 @@ public class SmokeClient {
                     var state = FormActions.state(player);
                     switch (parts[0]) {
                         case "jar" -> report.add("jar -> " + FormActions.detach(player, 3));
+                        case "compact" -> {
+                            // compact 1|0: put the head in a Compact Jar, or back in a wide one
+                            state.setCompact(parts[1].equals("1"));
+                            player.refreshDimensions();
+                            com.coolfreeze23.headinajar.network.Network.sync(player);
+                        }
                         case "jar5" -> report.add("jar5 -> " + FormActions.detach(player, 5));
                         case "body" -> {
                             var bodies = player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.HeadlessBody.class, player.getBoundingBox().inflate(16));

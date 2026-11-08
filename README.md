@@ -125,6 +125,12 @@ your own head. **Let Go** in the jar menu is the last resort: you die and respaw
   Cranial Saline, give it 40 kFE, sit down and hold **Sign** on Form 27-B. You watch the whole operation from the chair: the
   clamps, the anaesthetic, the scan, the cut, and the feed coming back online. A worn blade can botch the cut and leave your
   Collar Cam crooked; Replacement Blades fix that.
+- **Two jars.** The **Life Support Jar** is roomy: your life-size head turns right round inside it. The **Compact Jar** is
+  head-sized: your head faces its front and the whole jar turns with you, like a head on a neck, so it sits on a host
+  like a head instead of a fish tank. Both have three module slots; put either one on its own in a crafting grid to swap it
+  for the other. (Reinforced and Executive jars are roomy.)
+
+  ![Life Support Jar and Compact Jar on a zombie and a cow](docs/images/jars.png)
 - **Linked form.** Afterwards you walk around in your own headless body and see through the **Collar Cam**. Your head
   wears the goggles and sends the signal. The link quality bar (Q) falls with distance, water, rock, storms, portals and
   jammers; a weak link stutters and fills the screen with static; at zero you wake up in your head.

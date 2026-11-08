@@ -257,6 +257,8 @@ public final class ModRegistry {
     public static final DeferredItem<Item> SALINE_BOTTLE = item("saline_bottle", () -> new Item(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<LifeSupportJarItem> LIFE_SUPPORT_JAR = item("life_support_jar",
             () -> new LifeSupportJarItem(3, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<LifeSupportJarItem> COMPACT_JAR = item("compact_life_support_jar",
+            () -> new LifeSupportJarItem(3, true, new Item.Properties().stacksTo(1)));
     public static final DeferredItem<LifeSupportJarItem> REINFORCED_JAR = item("reinforced_life_support_jar",
             () -> new LifeSupportJarItem(5, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant()));
     public static final DeferredItem<RelayGogglesItem> RELAY_GOGGLES = item("relay_goggles",

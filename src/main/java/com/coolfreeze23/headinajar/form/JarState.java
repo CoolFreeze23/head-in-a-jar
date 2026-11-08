@@ -33,7 +33,8 @@ public final class JarState {
             Codec.BOOL.optionalFieldOf("carrying_head", false).forGetter(s -> s.carryingHead),
             Codec.INT.optionalFieldOf("roll_ticks", 0).forGetter(s -> s.rollTicks),
             Codec.INT.optionalFieldOf("saline", 0).forGetter(s -> s.saline),
-            Codec.INT.optionalFieldOf("integrity", 10).forGetter(s -> s.integrity)
+            Codec.INT.optionalFieldOf("integrity", 10).forGetter(s -> s.integrity),
+            Codec.BOOL.optionalFieldOf("compact", false).forGetter(s -> s.compact)
     ).apply(i, JarState::new));
 
     /** What clients need to draw and predict a player: no body id. */
@@ -56,9 +57,10 @@ public final class JarState {
         buf.writeUtf(s.speech);
         buf.writeBoolean(s.wheels);
         buf.writeBoolean(s.tipped);
+        buf.writeBoolean(s.compact);
     }, buf -> {
         JarState s = new JarState(Form.values()[buf.readVarInt()], buf.readVarInt(), ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf),
-                buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10);
+                buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10, false);
         s.heldEntity = buf.readVarInt();
         s.goggles = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
         s.collar = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
@@ -73,6 +75,7 @@ public final class JarState {
         s.speech = buf.readUtf();
         s.wheels = buf.readBoolean();
         s.tipped = buf.readBoolean();
+        s.compact = buf.readBoolean();
         return s;
     });
 
@@ -97,6 +100,8 @@ public final class JarState {
     private String speech = "";
     /** Wheels module deployed, or the bare jar tipped on its side to roll: how a jar gets about without legs. */
     private boolean wheels, tipped;
+    /** The head is in a Compact Jar: head-sized, the head facing its front. Saved. */
+    private boolean compact;
     private long speechUntil;
 
     /** Entity id held by Telekinesis, -1 for none. Not saved. */
@@ -111,11 +116,11 @@ public final class JarState {
     private boolean chargeDirty;
 
     public JarState() {
-        this(Form.BODY, 3, List.of(), 0, Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10);
+        this(Form.BODY, 3, List.of(), 0, Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10, false);
     }
 
     private JarState(Form form, int slots, List<ItemStack> modules, int charge, Optional<UUID> body,
-                     ItemStack goggles, ItemStack collar, boolean carryingHead, int rollTicks, int saline, int integrity) {
+                     ItemStack goggles, ItemStack collar, boolean carryingHead, int rollTicks, int saline, int integrity, boolean compact) {
         this.form = form;
         this.slots = Math.max(1, Math.min(MAX_SLOTS, slots));
         this.modules = new ArrayList<>(modules);
@@ -128,6 +133,7 @@ public final class JarState {
         this.rollTicks = rollTicks;
         this.saline = saline;
         this.integrity = integrity;
+        this.compact = compact;
     }
 
     /** Copies what the server sent into the client's copy. */
@@ -151,6 +157,16 @@ public final class JarState {
         speech = other.speech;
         wheels = other.wheels;
         tipped = other.tipped;
+        compact = other.compact;
+    }
+
+    public boolean compact() {
+        return compact;
+    }
+
+    public void setCompact(boolean compact) {
+        this.compact = compact;
+        dirty = true;
     }
 
     public boolean wheels() {

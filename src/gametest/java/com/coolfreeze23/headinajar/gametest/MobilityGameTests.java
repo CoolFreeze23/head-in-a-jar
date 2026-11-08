@@ -77,6 +77,27 @@ public class MobilityGameTests {
     }
 
     @GameTest(template = "platform")
+    public static void compactJarIsHeadSized(GameTestHelper h) {
+        ServerPlayer p = h.makeMockServerPlayerInLevel();
+        p.setGameMode(GameType.SURVIVAL);
+        Vec3 v = h.absoluteVec(Vec3.atBottomCenterOf(FLOOR));
+        p.moveTo(v.x, v.y, v.z, 0, 0);
+        h.assertTrue(FormActions.separate(p, new ItemStack(ModRegistry.COMPACT_JAR.get()), new ItemStack(ModRegistry.RELAY_GOGGLES.get()),
+                new ItemStack(ModRegistry.COLLAR_CAM.get()), p.position().add(1.5, 0, 0), null), "could not separate");
+        JarState state = FormActions.state(p);
+        h.assertTrue(state.compact() && state.slots() == 3, "not a three-slot compact jar");
+        var head = h.getLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.HeadJarEntity.class, p.getBoundingBox().inflate(4)).stream().findFirst().orElse(null);
+        h.assertTrue(head != null && head.compact() && Math.abs(head.getBbWidth() - 0.7f) < 1e-4, "the head set down is not in a compact jar");
+        h.assertTrue(FormActions.linkedToJar(p) || FormActions.state(p).form() == com.coolfreeze23.headinajar.form.Form.JAR, "could not become the jar");
+        p.refreshDimensions();
+        h.assertTrue(Math.abs(p.getBbWidth() - 0.7f) < 1e-4, "jar hitbox " + p.getBbWidth());
+        state.setCompact(false);
+        p.refreshDimensions();
+        h.assertTrue(Math.abs(p.getBbWidth() - 0.86f) < 1e-4, "wide jar hitbox " + p.getBbWidth());
+        done(h, p);
+    }
+
+    @GameTest(template = "platform")
     public static void courierBringsTheBodyHome(GameTestHelper h) {
         ServerPlayer p = jar(h);
         HeadlessBody body = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(3)).stream().findFirst().orElse(null);
