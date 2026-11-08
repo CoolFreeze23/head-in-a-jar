@@ -15,6 +15,7 @@ Fully playable in **English** and **Brazilian Portuguese** (every line of text, 
 
 ## Contents
 
+- [Tutorial: your first week at Head Office](#tutorial-your-first-week-at-head-office)
 - [Getting your head off](#getting-your-head-off)
 - [Life support](#life-support)
 - [Jar modules](#jar-modules)
@@ -27,6 +28,92 @@ Fully playable in **English** and **Brazilian Portuguese** (every line of text, 
 - [Other mods](#other-mods)
 - [Handbook, advancements and sounds](#handbook-advancements-and-sounds)
 - [Building from source](#building-from-source)
+
+---
+
+## Tutorial: your first week at Head Office
+
+A walkthrough from a fresh world to driving a mecha. The handbook in-game (a Patchouli book in the Head in a Jar creative
+tab) and JEI cover the same ground; every recipe here shows up in JEI.
+
+### Day 1: Surgical Steel and parts
+
+Almost everything is made from **Surgical Steel**.
+
+1. **Surgical Steel Blend** (shapeless): iron ingot + bone meal + coal. Smelt or blast it into a **Surgical Steel Ingot**.
+2. Make the basic parts:
+
+| Part | Recipe |
+|---|---|
+| **Neuro-Copper Wire** (x4) | copper ingot, redstone, copper ingot in a row |
+| **Lens** | glass, amethyst shard, glass in a row |
+| **Servo** | a piston on top; steel ingot, wire, steel ingot underneath |
+| **Synapse Chip** | quartz, wire, quartz; gold ingot, lapis, gold ingot underneath |
+
+### Day 2: power and saline
+
+- **Power.** Build a **Galvanic Pile** (copper and wire around rotten flesh). Feed it raw meat or fish and it makes 20 FE/t,
+  pushed into every machine it touches. Later: Leyden Jars to store FE, Tesla Nodes to send it without wires.
+- **Cranial Saline** keeps a head alive. Craft a **Saline Bottle** by hand (a water bottle + sugar + kelp + redstone) or
+  build a **Saline Mixer** for bulk. You need **four** bottles for the operation and a few spares.
+
+### Day 3: the equipment
+
+| Item | What it's for |
+|---|---|
+| **Life Support Jar** | your new home: 3 module slots (Reinforced and Executive jars have more) |
+| **Relay Goggles** | your head wears them to send the signal (Mk I reaches 48 blocks) |
+| **Collar Cam** | bolted to your neck: the camera you'll see through |
+| **Head Satchel** | strongly recommended: carry your head with a perfect link at any distance |
+| **Suture Kit** | puts your head back on (keep one spare) |
+
+### Day 4: the operation
+
+1. Craft the **Excision Head** and **Booth Console**, then the **Separation Chair**.
+2. Place the chair with your Galvanic Pile touching it and let it charge to **40 kFE** (a fed pile takes under two minutes).
+3. Open the chair and load the jar, the goggles, the Collar Cam and the four saline bottles.
+4. Sit down, open the console and **hold Sign**. You can still get up until the cut; after that DOLORES finishes the job.
+   A worn blade can botch it; a Replacement Blade fixes that.
+
+You wake up standing in your own headless body, seeing through the Collar Cam. Your head sits in its jar in front of the
+chair. The bar at the top of the screen is your **link quality**.
+
+### Day 5: living with it
+
+- **Pick your head up.** With the Head Satchel in your inventory, use your jar. With an empty hand you carry it in
+  both arms; hold anything and it goes on your hip. A carried head always has a perfect link.
+- **Or dock it.** Build a **Life Support Cradle**, power it, and use it while carrying your head. The Cradle keeps your
+  saline and charge topped up and boosts the link.
+- **Swap** (**K**) between your body and your head whenever you like. Going back into your body needs a decent signal.
+- **Keep the head alive.** A head out in the world slowly drinks its saline. In jar form, press **J** for the jar menu
+  and put Saline Bottles (or Glass Patches, for a cracked jar) in its feed slot. Charge the jar on a **Charging Dock** or
+  in the Cradle.
+- **Your body can die without you.** It becomes a corpse that keeps your things, and you wake up in your jar. Only losing
+  the head itself is a real death.
+
+### Day 6: when it goes wrong
+
+Walk too far and the link breaks: you wake up in your head. To get back:
+
+- **Drive:** fit the **Wheels** module in the jar menu, then press **V**.
+- **Roll:** no wheels? **V** tips the jar over to roll, very slowly.
+- **Courier:** press **Courier** in the jar menu, and your body is delivered to your head in 30 seconds.
+
+To put your head back on for good, use a **Suture Kit**: as a jar next to your body (or its corpse), or while carrying
+your own head. **Let Go** in the jar menu is the last resort: you die and respawn whole.
+
+### Day 7: what's next
+
+- **Borrow a body.** Make a **Surgical Saw**, weaken a mob below a quarter of its health and saw its head off. As a jar,
+  use the body to climb on. R and G use its abilities; play the Neural Handshake (press R as the rings line up) for a
+  better start. Embalming Fluid stops it rotting.
+- **Build a mecha.** Make an **Assembly Gantry** and **Mecha Plating**, then a **Hopper Frame**, **Hydraulic Legs** (so
+  it can walk), a **Galvanic Stack** (power) and a **Drill**. Put them in the Gantry, give it 10 kFE, press Assemble,
+  and use the cockpit as a jar. The mouse buttons work the arms.
+- **Start the lab.** Draw blood with a **Syringe**, spin it in a **Centrifuge**, read it in the **DNA Sequencer**, splice
+  in the **Gene Splicer**, and inject yourself at the **Injection Rig**.
+- **Put heads to work.** Saw a head off with an empty jar in your other hand. Mob heads guard a **Turret Pedestal** or
+  power a **Cerebral Array**; villagers staff your machines from an **Employee Mount**.
 
 ---
 
@@ -191,7 +278,7 @@ Active genes fire on R and G.
 | Jar menu | J | the jar's modules, charge, the Courier and Let Go (Sneak + J ejects from a mecha or unplugs a socket) |
 | Ability | R | Telekinesis in a jar, a host's main ability, a mecha's utility module, your first active gene |
 | Secondary | G | a host's second ability, the next utility, the Lacrimal Laser, your second active gene |
-| Swap | | between your body and your head |
+| Swap | K | between your body and your head |
 | Wheels / tip over | V | in a jar: drop the Wheels, or tip over and roll |
 | Collar zoom | C | x3 zoom with the Zoom Optic |
 
