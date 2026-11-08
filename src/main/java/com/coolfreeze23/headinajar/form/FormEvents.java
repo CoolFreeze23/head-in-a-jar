@@ -181,11 +181,8 @@ public final class FormEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void interactEntityAt(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.getTarget() instanceof HeadlessBody) return;
-        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) {
-            event.setCanceled(true);
-            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
-            return;
-        }
+        // a host is handled by the plain interaction that follows; consuming this one here would stop the client sending it
+        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) return;
         lockout(event.getEntity(), event);
     }
 

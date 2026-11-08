@@ -157,9 +157,12 @@ public final class ClientEvents {
             event.setSwingHand(false);
             return;
         }
-        boolean ownBody = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit && hit.getEntity() instanceof HeadlessBody
+        // without arms a jar can still reach for its own body, a body it can climb into (a host, a shell, a mecha) and the
+        // machines built for heads
+        boolean reachable = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit
+                && (hit.getEntity() instanceof HeadlessBody || com.coolfreeze23.headinajar.host.Hosts.isHost(hit.getEntity()) && state.form() == Form.JAR)
                 || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
-        if (!ownBody) {
+        if (!reachable) {
             event.setCanceled(true);
             event.setSwingHand(false);
         }

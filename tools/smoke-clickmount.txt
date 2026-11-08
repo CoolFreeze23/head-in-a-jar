@@ -1,0 +1,44 @@
+# Real right-clicks: as a jar, climb on a Spider Walker and a sawn host; carrying your head, put it on a Spider Walker
+wait 60
+/gamemode survival
+/time set 6000
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+jar
+wait 20
+/summon headinajar:spider_walker 0.5 -60 2.5
+wait 10
+look 0 10
+wait 2
+shot click_walker_aim
+rightclick
+wait 10
+riding walker
+/ride @s dismount
+wait 10
+/tp @s 10.5 -60 0.5 0 0
+hostify minecraft:zombie 10 -60 2
+wait 10
+look 0 10
+wait 2
+rightclick
+wait 10
+riding zombie
+/ride @s dismount
+wait 10
+body
+wait 20
+/tp @s 20.5 -60 0.5 0 0
+/item replace entity @s hotbar.8 with headinajar:head_satchel
+separate
+wait 20
+pickup
+wait 20
+/summon headinajar:spider_walker 20.5 -60 2.5
+wait 10
+look 0 30
+wait 2
+rightclick
+wait 10
+riding carried
+report done

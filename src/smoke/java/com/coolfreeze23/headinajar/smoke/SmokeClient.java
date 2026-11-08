@@ -177,6 +177,11 @@ public class SmokeClient {
             }
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "report" -> report.add(parts[1]);
+            // a real right-click, through the key binding, exactly as a player's mouse does it
+            case "rightclick" -> net.minecraft.client.KeyMapping.click(mc.options.keyUse.getKey());
+            case "riding" -> report.add("riding " + parts[1] + " -> " + (mc.player.getVehicle() == null ? "nothing"
+                    : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mc.player.getVehicle().getType()))
+                    + " form=" + mc.player.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE).form());
             case "screen" -> mc.setScreen(switch (parts[1]) {
                 case "pause" -> new net.minecraft.client.gui.screens.PauseScreen(true);
                 default -> null;
