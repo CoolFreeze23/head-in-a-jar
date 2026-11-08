@@ -127,8 +127,19 @@ public final class FormActions {
             player.setItemSlot(slot, ItemStack.EMPTY);
         }
         if (corpse) body.becomeCorpse(player);
+        moveGenes(player, body);
         level.addFreshEntity(body);
         return body;
+    }
+
+    /** Genes belong to the body: they move with it between the player entity and a Headless Body. */
+    public static void moveGenes(net.minecraft.world.entity.LivingEntity from, net.minecraft.world.entity.LivingEntity to) {
+        var genes = from.getData(ModRegistry.GENES);
+        if (genes.isEmpty()) return;
+        to.getData(ModRegistry.GENES).copyFrom(genes);
+        genes.clear();
+        if (from instanceof ServerPlayer p) Network.syncGenes(p);
+        if (to instanceof ServerPlayer p) Network.syncGenes(p);
     }
 
     /** Moves the player into their head: onto its Cradle, to its Head Jar, or right here if they carried it. */
@@ -192,6 +203,7 @@ public final class FormActions {
             player.setItemSlot(slot, worn.copy());
             body.setItemSlot(slot, ItemStack.EMPTY);
         }
+        moveGenes(body, player);
         state.setBody(null);
         registry(player).setBody(player.getUUID(), null);
         body.discard();
@@ -382,6 +394,7 @@ public final class FormActions {
                 body.giveInventoryTo(player);
                 player.setHealth(Math.min(player.getMaxHealth(), 6));
             }
+            moveGenes(body, player);
             body.discard();
         } else {
             return false;
@@ -433,6 +446,7 @@ public final class FormActions {
         player.onUpdateAbilities();
         player.refreshDimensions();
         player.teleportTo(player.serverLevel(), body.getX(), body.getY(), body.getZ(), body.getYRot(), player.getXRot());
+        moveGenes(body, player);
         body.discard();
         Network.sync(player);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.PLAYERS, 1.0f, 0.7f);

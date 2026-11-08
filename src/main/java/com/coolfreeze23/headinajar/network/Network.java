@@ -93,6 +93,30 @@ public final class Network {
         }
     }
 
+    /** Server to clients: the genes a body carries (so movement genes work where the body is steered). */
+    public record GeneSync(int entityId, com.coolfreeze23.headinajar.genetics.GeneSet genes) implements CustomPacketPayload {
+        public static final Type<GeneSync> TYPE = new Type<>(HeadInAJar.id("gene_sync"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, GeneSync> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, GeneSync::entityId, ByteBufCodecs.fromCodec(com.coolfreeze23.headinajar.genetics.GeneSet.CODEC), GeneSync::genes, GeneSync::new);
+
+        @Override
+        public Type<GeneSync> type() {
+            return TYPE;
+        }
+    }
+
+    /** Server to client: the player's gene library (gene id to readout %), for the lab screens. */
+    public record ArchiveSync(java.util.Map<String, Float> library) implements CustomPacketPayload {
+        public static final Type<ArchiveSync> TYPE = new Type<>(HeadInAJar.id("archive_sync"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, ArchiveSync> CODEC = StreamCodec.composite(
+                ByteBufCodecs.map(java.util.HashMap::new, ByteBufCodecs.STRING_UTF8, ByteBufCodecs.FLOAT), ArchiveSync::library, ArchiveSync::new);
+
+        @Override
+        public Type<ArchiveSync> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar("1");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
@@ -110,6 +134,21 @@ public final class Network {
             java.util.Map<net.minecraft.resources.ResourceLocation, net.minecraft.world.phys.Vec3> necks = new java.util.HashMap<>();
             msg.necks().forEach((id, v) -> necks.put(id, new net.minecraft.world.phys.Vec3(v.get(0), v.get(1), v.get(2))));
             com.coolfreeze23.headinajar.host.Hosts.setClientNecks(necks);
+        });
+        registrar.playToClient(GeneSync.TYPE, GeneSync.CODEC, (msg, ctx) -> {
+            if (ctx.player().level().getEntity(msg.entityId()) instanceof net.minecraft.world.entity.LivingEntity e) {
+                e.getData(ModRegistry.GENES).copyFrom(msg.genes());
+            }
+        });
+        registrar.playToClient(ArchiveSync.TYPE, ArchiveSync.CODEC, (msg, ctx) -> {
+            java.util.EnumMap<com.coolfreeze23.headinajar.genetics.Gene, Float> lib = new java.util.EnumMap<>(com.coolfreeze23.headinajar.genetics.Gene.class);
+            msg.library().forEach((id, v) -> {
+                try {
+                    lib.put(com.coolfreeze23.headinajar.genetics.Gene.valueOf(id.toUpperCase(java.util.Locale.ROOT)), v);
+                } catch (IllegalArgumentException ignored) {
+                }
+            });
+            com.coolfreeze23.headinajar.genetics.GeneArchive.clientLibrary = lib;
         });
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);
         registrar.playToServer(ArmInput.TYPE, ArmInput.CODEC, (msg, ctx) -> {
@@ -140,6 +179,17 @@ public final class Network {
             } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
                 FormActions.jarToLinked(player);
             }
+            return;
+        }
+        boolean power = msg.action() == Action.ABILITY || msg.action() == Action.SECONDARY;
+        int which = msg.action() == Action.SECONDARY ? 1 : 0;
+        if (power && (state.form() == com.coolfreeze23.headinajar.form.Form.BODY || state.form() == com.coolfreeze23.headinajar.form.Form.LINKED)) {
+            com.coolfreeze23.headinajar.genetics.GeneEffects.activate(player, player, which);
+            return;
+        }
+        if (power && state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha
+                && !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mecha).isEmpty()) {
+            com.coolfreeze23.headinajar.genetics.GeneEffects.activate(mecha, player, which);
             return;
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
@@ -217,6 +267,25 @@ public final class Network {
         for (ServerPlayer viewer : player.serverLevel().getChunkSource().chunkMap.getPlayersWatching(player)) {
             if (viewer != player) send(viewer, msg);
         }
+    }
+
+    /** Sends a body's genes to everyone watching it (and to itself, if it is a player). */
+    public static void syncGenes(net.minecraft.world.entity.LivingEntity entity) {
+        if (!(entity.level() instanceof net.minecraft.server.level.ServerLevel level)) return;
+        GeneSync msg = new GeneSync(entity.getId(), entity.getData(ModRegistry.GENES));
+        if (entity instanceof ServerPlayer self) send(self, msg);
+        for (ServerPlayer viewer : level.getChunkSource().chunkMap.getPlayersWatching(entity)) if (viewer != entity) send(viewer, msg);
+    }
+
+    public static void syncGenesTo(ServerPlayer viewer, net.minecraft.world.entity.LivingEntity entity) {
+        send(viewer, new GeneSync(entity.getId(), entity.getData(ModRegistry.GENES)));
+    }
+
+    public static void syncArchive(ServerPlayer player) {
+        var lib = com.coolfreeze23.headinajar.genetics.GeneArchive.get(player.server).library(com.coolfreeze23.headinajar.genetics.GeneArchive.key(player));
+        java.util.Map<String, Float> out = new java.util.HashMap<>();
+        lib.forEach((g, v) -> out.put(g.id(), v));
+        send(player, new ArchiveSync(out));
     }
 
     /** Fake and mock players never agree channels with a client; sending to them would throw. */

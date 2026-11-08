@@ -74,6 +74,10 @@ public final class ModRegistry {
     public static final Supplier<AttachmentType<JarState>> JAR_STATE = ATTACHMENTS.register("jar_state",
             () -> AttachmentType.builder(() -> new JarState()).serialize(JarState.CODEC).build());
 
+    public static final Supplier<AttachmentType<com.coolfreeze23.headinajar.genetics.GeneSet>> GENES = ATTACHMENTS.register("genes",
+            () -> AttachmentType.builder(() -> new com.coolfreeze23.headinajar.genetics.GeneSet()).serialize(com.coolfreeze23.headinajar.genetics.GeneSet.CODEC,
+                    g -> !g.isEmpty()).build());
+
     // --- blocks ------------------------------------------------------------------------------
     private static BlockBehaviour.Properties steel() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0f, 6.0f).sound(SoundType.METAL).requiresCorrectToolForDrops();
@@ -148,6 +152,32 @@ public final class ModRegistry {
                     () -> ModRegistry.GANTRY_BE.get(), com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, null,
                     Block.box(0, 0, 0, 16, 6, 16)));
 
+    // P5: Genetics Department
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Centrifuge>> CENTRIFUGE = BLOCKS.register("centrifuge",
+            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(), () -> ModRegistry.CENTRIFUGE_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Centrifuge::new,
+                    com.coolfreeze23.headinajar.block.LabMachines.Centrifuge::serverTick, null));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Sequencer>> DNA_SEQUENCER = BLOCKS.register("dna_sequencer",
+            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion().lightLevel(s -> 4), () -> ModRegistry.SEQUENCER_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Sequencer::new,
+                    com.coolfreeze23.headinajar.block.LabMachines.Sequencer::serverTick, null));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Splicer>> GENE_SPLICER = BLOCKS.register("gene_splicer",
+            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion().lightLevel(s -> 6), () -> ModRegistry.SPLICER_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Splicer::new,
+                    com.coolfreeze23.headinajar.block.LabMachines.Splicer::serverTick, null));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.InjectionRig>> INJECTION_RIG = BLOCKS.register("injection_rig",
+            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(), () -> ModRegistry.RIG_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.InjectionRig::new,
+                    null, null));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LeechJarBlockEntity>> LEECH_JAR =
+            BLOCKS.register("leech_jar", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.6f)
+                    .sound(SoundType.GLASS).noOcclusion(), () -> ModRegistry.LEECH_JAR_BE.get(), com.coolfreeze23.headinajar.block.LeechJarBlockEntity::new,
+                    com.coolfreeze23.headinajar.block.LeechJarBlockEntity::serverTick, Block.box(4, 0, 4, 12, 10, 12)) {
+                @Override
+                protected net.minecraft.world.InteractionResult useWithoutItem(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level,
+                                                                              net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
+                                                                              net.minecraft.world.phys.BlockHitResult hit) {
+                    if (!level.isClientSide && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LeechJarBlockEntity jar) jar.empty(player);
+                    return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+                }
+            });
+
     // --- items -------------------------------------------------------------------------------
     private static <T extends Item> DeferredItem<T> item(String name, Supplier<T> sup) {
         DeferredItem<T> item = ITEMS.register(name, sup);
@@ -218,6 +248,31 @@ public final class ModRegistry {
     public static final DeferredItem<HeadSatchelItem> HEAD_SATCHEL = item("head_satchel", () -> new HeadSatchelItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<SutureKitItem> SUTURE_KIT = item("suture_kit", () -> new SutureKitItem(new Item.Properties().stacksTo(16)));
 
+    // P5
+    public static final DeferredItem<BlockItem> CENTRIFUGE_ITEM = blockItem(CENTRIFUGE);
+    public static final DeferredItem<BlockItem> DNA_SEQUENCER_ITEM = blockItem(DNA_SEQUENCER);
+    public static final DeferredItem<BlockItem> GENE_SPLICER_ITEM = blockItem(GENE_SPLICER);
+    public static final DeferredItem<BlockItem> INJECTION_RIG_ITEM = blockItem(INJECTION_RIG);
+    public static final DeferredItem<BlockItem> LEECH_JAR_ITEM = blockItem(LEECH_JAR);
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> SYRINGE = item("syringe",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.WARM, 30, 60, false, false, new Item.Properties().durability(32)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> PRECISION_SYRINGE = item("precision_syringe",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.WARM, 60, 90, true, false, new Item.Properties().durability(64)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> LEVIATHAN_NEEDLE = item("leviathan_needle",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.WARM, 50, 80, false, true, new Item.Properties().durability(16).rarity(Rarity.RARE)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> MARROW_DRILL = item("marrow_drill",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.MARROW, 40, 80, false, true, new Item.Properties().durability(64)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> OIL_TAP = item("oil_tap",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.OIL, 40, 80, true, true, new Item.Properties().durability(64)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> ECTO_TRAP = item("ecto_trap",
+            () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.ECTO, 40, 80, true, true, new Item.Properties().durability(64)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SampleItem> BLOOD_SAMPLE = item("blood_sample", () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SampleItem(new Item.Properties().stacksTo(16)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SampleItem> DNA_FRACTION = item("dna_fraction", () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SampleItem(new Item.Properties().stacksTo(16)));
+    public static final DeferredItem<Item> PLASMA_VIAL = plain("plasma_vial");
+    public static final DeferredItem<Item> BIO_GEL = plain("bio_gel");
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SerumItem> SERUM_CASSETTE = item("serum_cassette", () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SerumItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.GeneWashItem> GENE_WASH = item("gene_wash", () -> new com.coolfreeze23.headinajar.item.GeneticsItems.GeneWashItem(new Item.Properties().stacksTo(16)));
+
     public static final DeferredItem<BlockItem> ASSEMBLY_GANTRY_ITEM = blockItem(ASSEMBLY_GANTRY);
     public static final DeferredItem<Item> MECHA_PLATING = plain("mecha_plating");
     public static final Map<com.coolfreeze23.headinajar.mecha.MechaFrame, DeferredItem<com.coolfreeze23.headinajar.item.MechaFrameItem>> FRAMES =
@@ -281,10 +336,15 @@ public final class ModRegistry {
             () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.MechaEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.MechaEntity(t, l,
                     com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK), MobCategory.MISC).sized(1.6f, 3.1f).clientTrackingRange(10).build("bulwark"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<com.coolfreeze23.headinajar.entity.MechaEntity>> CHIMERA = ENTITIES.register("chimera",
+            () -> EntityType.Builder.<com.coolfreeze23.headinajar.entity.MechaEntity>of((t, l) -> new com.coolfreeze23.headinajar.entity.MechaEntity(t, l,
+                    com.coolfreeze23.headinajar.mecha.MechaFrame.CHIMERA), MobCategory.MISC).sized(1.2f, 2.5f).clientTrackingRange(10).build("chimera"));
+
     public static EntityType<com.coolfreeze23.headinajar.entity.MechaEntity> mechaType(com.coolfreeze23.headinajar.mecha.MechaFrame frame) {
         return switch (frame) {
             case HOPPER -> HOPPER.get();
             case BULWARK -> BULWARK.get();
+            case CHIMERA -> CHIMERA.get();
         };
     }
 
@@ -321,6 +381,17 @@ public final class ModRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity>> GANTRY_BE = BLOCK_ENTITIES.register("assembly_gantry",
             () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, ASSEMBLY_GANTRY.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.LabMachines.Centrifuge>> CENTRIFUGE_BE = BLOCK_ENTITIES.register("centrifuge",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.LabMachines.Centrifuge::new, CENTRIFUGE.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.LabMachines.Sequencer>> SEQUENCER_BE = BLOCK_ENTITIES.register("dna_sequencer",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.LabMachines.Sequencer::new, DNA_SEQUENCER.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.LabMachines.Splicer>> SPLICER_BE = BLOCK_ENTITIES.register("gene_splicer",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.LabMachines.Splicer::new, GENE_SPLICER.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.LabMachines.InjectionRig>> RIG_BE = BLOCK_ENTITIES.register("injection_rig",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.LabMachines.InjectionRig::new, INJECTION_RIG.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.LeechJarBlockEntity>> LEECH_JAR_BE = BLOCK_ENTITIES.register("leech_jar",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.LeechJarBlockEntity::new, LEECH_JAR.get()).build(null));
+
     // --- menus -------------------------------------------------------------------------------
     public static final DeferredHolder<MenuType<?>, MenuType<JarMenu>> JAR_MENU = MENUS.register("jar",
             () -> new MenuType<>(JarMenu::new, FeatureFlags.DEFAULT_FLAGS));
@@ -334,6 +405,15 @@ public final class ModRegistry {
 
     public static final DeferredHolder<MenuType<?>, MenuType<com.coolfreeze23.headinajar.menu.AssemblyGantryMenu>> GANTRY_MENU = MENUS.register("assembly_gantry",
             () -> IMenuTypeExtension.create(com.coolfreeze23.headinajar.menu.AssemblyGantryMenu::new));
+
+    public static final Map<com.coolfreeze23.headinajar.menu.LabMenu.Kind, DeferredHolder<MenuType<?>, MenuType<com.coolfreeze23.headinajar.menu.LabMenu>>> LAB_MENUS =
+            new EnumMap<>(com.coolfreeze23.headinajar.menu.LabMenu.Kind.class);
+
+    static {
+        for (var kind : com.coolfreeze23.headinajar.menu.LabMenu.Kind.values()) {
+            LAB_MENUS.put(kind, MENUS.register(kind.id(), () -> IMenuTypeExtension.create((id, inv, buf) -> new com.coolfreeze23.headinajar.menu.LabMenu(kind, id, inv, buf))));
+        }
+    }
 
     public static final Supplier<CreativeModeTab> TAB = TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.headinajar"))
@@ -368,6 +448,7 @@ public final class ModRegistry {
         event.put(SPIDER_WALKER.get(), com.coolfreeze23.headinajar.entity.ShellEntity.spiderWalker().build());
         event.put(HOPPER.get(), com.coolfreeze23.headinajar.entity.MechaEntity.createAttributes().build());
         event.put(BULWARK.get(), com.coolfreeze23.headinajar.entity.MechaEntity.createAttributes().build());
+        event.put(CHIMERA.get(), com.coolfreeze23.headinajar.entity.MechaEntity.createAttributes().build());
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {
@@ -393,6 +474,11 @@ public final class ModRegistry {
         for (var type : java.util.List.of(MAST_BE.get(), MAST2_BE.get(), JAMMER_BE.get())) {
             event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type, (be, side) -> be.energy());
         }
+        for (var type : java.util.List.of(CENTRIFUGE_BE.get(), SEQUENCER_BE.get(), SPLICER_BE.get(), RIG_BE.get())) {
+            event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.LabMachine) be).energy());
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.LabMachine) be).items());
+        }
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LEECH_JAR_BE.get(), (be, side) -> be.items());
     }
 
     private ModRegistry() {

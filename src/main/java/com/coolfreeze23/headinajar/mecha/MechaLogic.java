@@ -163,7 +163,7 @@ public final class MechaLogic {
         ServerLevel level = m.serverLevel();
         Player pilot = Hosts.pilot(m);
         boolean moving = m.getDeltaMovement().horizontalDistanceSqr() > 0.001;
-        float drain = m.frame() == MechaFrame.HOPPER ? 2 : 5;
+        float drain = m.frame() == MechaFrame.BULWARK ? 5 : m.frame() == MechaFrame.CHIMERA ? 3 : 2;
         float heat = 0;
         for (int i = 0; i < m.frame().totalSlots(); i++) {
             MechaModule mod = m.moduleAt(i);

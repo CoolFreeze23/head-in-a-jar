@@ -117,6 +117,7 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 List<ItemStack> modules = new ArrayList<>();
                 for (int i = 0; i < frame.totalSlots(); i++) modules.add(items.extractItem(FIRST_MODULE + i, 1, false));
                 mecha.setModules(modules);
+                com.coolfreeze23.headinajar.item.MechaFrameItem.genes(items.getStackInSlot(SLOT_FRAME)).ifPresent(g -> mecha.getData(ModRegistry.GENES).copyFrom(g));
                 mecha.setOwner(player.getUUID());
                 mecha.setBattery(mecha.batteryCapacity() / 4);
                 mecha.moveTo(worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, player.getYRot() + 180, 0);
@@ -134,7 +135,9 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 if (!mecha.isOwnedBy(player)) return say(player, "gantry.headinajar.not_yours");
                 if (frame != null) return say(player, "gantry.headinajar.slots_busy");
                 for (int i = 0; i < MODULE_SLOTS; i++) if (!items.getStackInSlot(FIRST_MODULE + i).isEmpty()) return say(player, "gantry.headinajar.slots_busy");
-                items.setStackInSlot(SLOT_FRAME, new ItemStack(ModRegistry.frameItem(mecha.frame())));
+                ItemStack frameStack = new ItemStack(ModRegistry.frameItem(mecha.frame()));
+                com.coolfreeze23.headinajar.item.MechaFrameItem.setGenes(frameStack, mecha.getData(ModRegistry.GENES));
+                items.setStackInSlot(SLOT_FRAME, frameStack);
                 for (int i = 0; i < mecha.modules().size(); i++) items.setStackInSlot(FIRST_MODULE + i, mecha.modules().get(i).copy());
                 energy.set(energy.getEnergyStored() + mecha.battery() / 10);
                 for (int i = 0; i < mecha.cargo().getContainerSize(); i++) net.minecraft.world.Containers.dropItemStack(level,

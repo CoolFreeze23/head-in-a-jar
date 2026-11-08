@@ -57,6 +57,7 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
         event.registerEntityRenderer(ModRegistry.HOPPER.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.HOPPER));
         event.registerEntityRenderer(ModRegistry.BULWARK.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK));
+        event.registerEntityRenderer(ModRegistry.CHIMERA.get(), c -> new MechaRenderer(c, com.coolfreeze23.headinajar.mecha.MechaFrame.CHIMERA));
         event.registerEntityRenderer(ModRegistry.LUNK.get(), c -> new ShellRenderer(c, ShellRenderer.LUNK, "lunk", 0.8f));
         event.registerEntityRenderer(ModRegistry.ROVER.get(), c -> new ShellRenderer(c, ShellRenderer.ROVER, "rover", 0.7f));
         event.registerEntityRenderer(ModRegistry.SPIDER_WALKER.get(), c -> new ShellRenderer(c, ShellRenderer.SPIDER, "spider_walker", 0.8f));
@@ -80,6 +81,7 @@ public class ClientSetup {
         event.register(ModRegistry.JAR_MENU.get(), JarScreen::new);
         event.register(ModRegistry.CHAIR_MENU.get(), SeparationChairScreen::new);
         event.register(ModRegistry.GANTRY_MENU.get(), AssemblyGantryScreen::new);
+        LabScreens.register(event);
         event.register(ModRegistry.MIXER_MENU.get(), (com.coolfreeze23.headinajar.menu.SalineMixerMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
                 new MachineScreen<>(menu, inv, title).energy(20_000)
                         .gauge(52, 17, 12, 56, 1, 4000, 0xFF3F76E4, "gui.headinajar.water")
@@ -105,6 +107,7 @@ public class ClientSetup {
         event.registerAboveAll(HeadInAJar.id("neuro_link"), LinkHud::render);
         event.registerAboveAll(HeadInAJar.id("host"), HostHud::render);
         event.registerAboveAll(HeadInAJar.id("pilot"), PilotClient::hud);
+        event.registerAboveAll(HeadInAJar.id("genes"), GeneHud::render);
     }
 
     private static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {

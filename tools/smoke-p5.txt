@@ -1,0 +1,66 @@
+# Phase 5, Genetics Department: the lab row, each lab screen, gene keys on the HUD, a Chimera with genes
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 0.5 0 15
+/setblock -3 -60 3 headinajar:centrifuge[facing=north]
+/setblock -1 -60 3 headinajar:dna_sequencer[facing=north]
+/setblock 1 -60 3 headinajar:gene_splicer[facing=north]
+/setblock 3 -60 3 headinajar:injection_rig[facing=north]
+/setblock 5 -60 3 headinajar:leech_jar
+/summon minecraft:cow 5 -60 5
+/give @s headinajar:syringe
+/give @s headinajar:precision_syringe
+/give @s headinajar:leviathan_needle
+/give @s headinajar:marrow_drill
+/give @s headinajar:oil_tap
+/give @s headinajar:ecto_trap
+/give @s headinajar:bio_gel 4
+/give @s headinajar:gene_wash
+/give @s headinajar:chimera_frame
+mecha chimera -4 -60 7 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,night_optics
+wait 20
+lab
+wait 30
+shot 01_lab_row
+inventory
+wait 10
+shot 02_items
+closegui
+useblock -3 -60 3
+wait 30
+shot 03_centrifuge
+closegui
+useblock -1 -60 3
+wait 10
+shot 04_sequencer
+closegui
+useblock 1 -60 3
+wait 10
+shot 05_splicer
+closegui
+useblock 3 -60 3
+wait 10
+shot 06_rig
+closegui
+genes me breeze_updraft,glow_cells,rabbit_spring
+wait 20
+shot 07_gene_hud
+/tp @s -3.5 -60 4.5 0 0
+jar
+wait 5
+mount
+wait 10
+genes mecha sonic_boom,spider_climb
+wait 10
+view 2
+wait 20
+shot 08_chimera
+view 0
+wait 10
+shot 09_chimera_hud
+report done

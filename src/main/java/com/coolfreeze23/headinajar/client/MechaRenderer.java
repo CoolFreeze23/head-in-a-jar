@@ -38,7 +38,7 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
     private final ResourceLocation texture;
 
     public MechaRenderer(EntityRendererProvider.Context context, MechaFrame frame) {
-        super(context, new Model(context.bakeLayer(frame == MechaFrame.HOPPER ? HOPPER : BULWARK)), frame.width * 0.5f);
+        super(context, new Model(context.bakeLayer(frame == MechaFrame.BULWARK ? BULWARK : HOPPER)), frame.width * 0.5f);
         this.texture = HeadInAJar.id("textures/entity/" + frame.id() + ".png");
         addLayer(new ModuleLayer(this, context.bakeLayer(MODULES)));
     }
@@ -105,7 +105,7 @@ public class MechaRenderer extends MobRenderer<MechaEntity, MechaRenderer.Model>
                     case ARM -> {
                         boolean left = i == m.frame().firstIndex(MechaModule.Slot.ARM);
                         (left ? model.armL : model.armR).translateAndRotate(pose);
-                        pose.translate(0, (m.frame() == MechaFrame.HOPPER ? 14 : 18) / 16f, 0);
+                        pose.translate(0, (m.frame() == MechaFrame.BULWARK ? 18 : 14) / 16f, 0);
                         if (mod == MechaModule.DRILL && (m.armsShown() & (left ? 1 : 2)) != 0) pose.mulPose(com.mojang.math.Axis.YP.rotation(age * 0.9f));
                     }
                     case BACK -> {

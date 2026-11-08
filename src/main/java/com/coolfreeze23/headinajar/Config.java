@@ -65,6 +65,15 @@ public final class Config {
 
     static {
         B.pop();
+        B.push("genetics");
+    }
+
+    public static final ModConfigSpec.BooleanValue KEEP_GENES = B
+            .comment("Spliced genes stay in your body when you die and respawn.")
+            .define("keepGenesOnDeath", true);
+
+    static {
+        B.pop();
     }
 
     public static final ModConfigSpec SPEC = B.build();

@@ -161,10 +161,14 @@ public final class ClientEvents {
         }
         while (ClientSetup.ABILITY.consumeClick()) {
             if (ClientHooks.handshakeActive()) ClientHooks.press();
-            else if (state.form().isJarred()) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
+            else if (state.form().isJarred() || state.form() == Form.BODY || state.form() == Form.LINKED) {
+                PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
+            }
         }
         while (ClientSetup.SECONDARY.consumeClick()) {
-            if (state.form() == Form.HOSTED) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
+            if (state.form() == Form.HOSTED || state.form() == Form.BODY || state.form() == Form.LINKED || state.form() == Form.PILOT) {
+                PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
+            }
         }
         ClientHooks.tick();
         PilotClient.tick();

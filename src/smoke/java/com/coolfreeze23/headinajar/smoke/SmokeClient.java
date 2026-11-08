@@ -190,7 +190,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms" -> {
+            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -277,6 +277,56 @@ public class SmokeClient {
                             m.setBattery(m.batteryCapacity());
                             m.moveTo(Double.parseDouble(a[1]) + 0.5, Double.parseDouble(a[2]), Double.parseDouble(a[3]) + 0.5, 180, 0);
                             player.serverLevel().addFreshEntity(m);
+                        }
+                        case "lab" -> {
+                            // stocks every lab machine within 10 blocks, and fills the player's gene library
+                            String key = com.coolfreeze23.headinajar.genetics.GeneArchive.key(player);
+                            var archive = com.coolfreeze23.headinajar.genetics.GeneArchive.get(server);
+                            archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.SPIDER_CLIMB, 100);
+                            archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.VENOM_SAC, 45);
+                            archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.ECHOLOCATION, 70);
+                            archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.ENDER_BLINK, 100);
+                            archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.GILLS, 18);
+                            var base = player.blockPosition();
+                            for (var pos : net.minecraft.core.BlockPos.betweenClosed(base.offset(-10, -3, -10), base.offset(10, 3, 10))) {
+                                var be = player.serverLevel().getBlockEntity(pos);
+                                if (be instanceof com.coolfreeze23.headinajar.block.LabMachine lab) lab.energy().set(lab.energy().getMaxEnergyStored());
+                                if (be instanceof com.coolfreeze23.headinajar.block.LabMachines.Centrifuge c) {
+                                    c.items().setStackInSlot(0, com.coolfreeze23.headinajar.item.GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(),
+                                            net.minecraft.world.entity.EntityType.CAVE_SPIDER, 82));
+                                } else if (be instanceof com.coolfreeze23.headinajar.block.LabMachines.Sequencer q) {
+                                    q.items().setStackInSlot(0, com.coolfreeze23.headinajar.item.GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(),
+                                            net.minecraft.world.entity.EntityType.CAVE_SPIDER, 82));
+                                } else if (be instanceof com.coolfreeze23.headinajar.block.LabMachines.Splicer sp) {
+                                    sp.pick(player, 0, com.coolfreeze23.headinajar.genetics.Gene.SPIDER_CLIMB);
+                                    sp.pick(player, 1, com.coolfreeze23.headinajar.genetics.Gene.VENOM_SAC);
+                                    sp.items().setStackInSlot(0, new ItemStack(net.minecraft.world.item.Items.AMETHYST_SHARD));
+                                    sp.items().setStackInSlot(1, new ItemStack(ModRegistry.BIO_GEL.get(), 4));
+                                    sp.items().setStackInSlot(2, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE, 4));
+                                } else if (be instanceof com.coolfreeze23.headinajar.block.LabMachines.InjectionRig rig) {
+                                    ItemStack cassette = new ItemStack(ModRegistry.SERUM_CASSETTE.get());
+                                    new com.coolfreeze23.headinajar.genetics.Serum(java.util.List.of(new com.coolfreeze23.headinajar.genetics.Serum.Entry(
+                                            com.coolfreeze23.headinajar.genetics.Gene.CAT_EYES, 1f)), 85).writeTo(cassette);
+                                    rig.items().setStackInSlot(0, cassette);
+                                }
+                                if (be != null) be.setChanged();
+                            }
+                            com.coolfreeze23.headinajar.network.Network.syncArchive(player);
+                            report.add("lab stocked");
+                        }
+                        case "genes" -> {
+                            // genes TARGET GENE,GENE: TARGET is "me" or "mecha" (the one ridden); one full-strength serum per gene
+                            String[] a = parts[1].split(" ");
+                            net.minecraft.world.entity.LivingEntity target = a[0].equals("me") ? player : (net.minecraft.world.entity.LivingEntity) player.getVehicle();
+                            var set = target.getData(ModRegistry.GENES);
+                            set.clear();
+                            for (String name : a[1].split(",")) {
+                                set.serums.add(new com.coolfreeze23.headinajar.genetics.Serum(java.util.List.of(new com.coolfreeze23.headinajar.genetics.Serum.Entry(
+                                        com.coolfreeze23.headinajar.genetics.Gene.valueOf(name.trim().toUpperCase(java.util.Locale.ROOT)), 1f)), 100));
+                            }
+                            set.changed();
+                            com.coolfreeze23.headinajar.network.Network.syncGenes(target);
+                            report.add("genes " + a[0] + " -> " + set.strengths().keySet());
                         }
                         case "gantry" -> {
                             String[] a = parts[1].split(" ");

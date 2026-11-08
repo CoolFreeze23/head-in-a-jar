@@ -1,12 +1,16 @@
 package com.coolfreeze23.headinajar.mecha;
 
+import com.coolfreeze23.headinajar.genetics.Genetics;
+
 import java.util.Locale;
 
 /** A mecha chassis: size, toughness, carrying capacity, battery, heat, and how many modules of each kind it takes. */
 public enum MechaFrame {
     //       w     h     hp   armor load dry  speed  battery     heatCap dissip legs back core torso arm sensor
     HOPPER(1.2f, 2.5f, 60, 6, 350, 150, 0.13, 400_000, 400, 3, 1, 1, 1, 2, 2, 1),
-    BULWARK(1.6f, 3.1f, 140, 12, 800, 320, 0.11, 1_200_000, 800, 5, 1, 2, 1, 3, 2, 2);
+    BULWARK(1.6f, 3.1f, 140, 12, 800, 320, 0.11, 1_200_000, 800, 5, 1, 2, 1, 3, 2, 2),
+    /** grown more than built: three Gene Ports take serums (never rejected) */
+    CHIMERA(1.2f, 2.5f, 90, 8, 500, 220, 0.12, 600_000, 600, 4, 1, 1, 1, 2, 2, 1);
 
     public final float width, height;
     public final int health, armor, load, dryMass;
@@ -31,6 +35,11 @@ public enum MechaFrame {
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);
+    }
+
+    /** Serums the frame's Gene Ports hold. */
+    public int genePorts() {
+        return this == CHIMERA ? Genetics.Target.MECHA.serums : 0;
     }
 
     public int slots(MechaModule.Slot slot) {

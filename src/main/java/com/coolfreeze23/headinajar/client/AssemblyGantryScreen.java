@@ -81,7 +81,7 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
             g.drawString(font, Component.translatable("gui.headinajar.gantry.need_frame"), 8, 73, 0x804040, false);
             return;
         }
-        int mass = frame.dryMass, power = frame == MechaFrame.HOPPER ? 2 : 5;
+        int mass = frame.dryMass, power = frame == MechaFrame.BULWARK ? 5 : frame == MechaFrame.CHIMERA ? 3 : 2;
         for (int i = 0; i < frame.totalSlots(); i++) {
             ItemStack stack = menu.getSlot(AssemblyGantryBlockEntity.FIRST_MODULE + i).getItem();
             if (stack.getItem() instanceof MechaModuleItem m) {
