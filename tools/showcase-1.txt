@@ -1,0 +1,40 @@
+# README showcase, part 1
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/difficulty peaceful
+/tp @s 0.5 -60 0.5 0 0
+/setblock 2 -60 2 headinajar:separation_chair[facing=west]
+/setblock 4 -60 2 headinajar:galvanic_pile
+/setblock -1 -60 2 headinajar:life_support_cradle
+/item replace entity @s armor.chest with minecraft:iron_chestplate
+/item replace entity @s armor.legs with minecraft:iron_leggings
+/give @s headinajar:head_satchel
+chair 2 -60 2
+wait 20
+/tp @s -1.5 -59 2.5 -90 15
+view 0
+wait 20
+shot chair
+sign 2 -60 2
+burst op 115
+wait 30
+view 2
+wait 20
+shot linked
+view 0
+/setblock 0 -60 9 headinajar:saline_mixer[facing=north]
+/setblock 2 -60 9 headinajar:body_printer[facing=north]
+/setblock -2 -60 9 headinajar:leyden_jar
+/setblock -4 -60 9 headinajar:tesla_node
+/setblock 4 -60 9 headinajar:relay_mast
+/setblock 6 -60 9 headinajar:relay_mast_mk2
+/setblock -6 -60 9 headinajar:signal_jammer
+/tp @s 0.5 -59 4.5 0 15
+wait 40
+shot life_support
+report done

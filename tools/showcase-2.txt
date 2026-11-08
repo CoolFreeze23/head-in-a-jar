@@ -1,0 +1,179 @@
+# README showcase, part 2
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/difficulty peaceful
+/tp @s 0.5 -60 0.5 0 0
+hostify minecraft:cow -1 -60 4
+hostify minecraft:enderman 2 -60 5
+hostify minecraft:spider 5 -60 5
+hostify minecraft:wolf -3 -60 3
+/summon headinajar:lunk -5 -60 6 {Rotation:[180f,0f]}
+/summon headinajar:rover -7 -60 4 {Rotation:[180f,0f]}
+/summon headinajar:spider_walker 7 -60 7 {Rotation:[180f,0f]}
+jarhead minecraft:villager 1 -60 2
+/effect give @e[type=!player] minecraft:slowness 99999 255 true
+wait 60
+clienthosts
+shot hosts
+/tp @s -0.5 -60 2.5 0 0
+jar
+wait 5
+mount
+wait 120
+sync 60
+wait 30
+view 2
+wait 20
+shot hosted
+view 0
+body
+wait 10
+/kill @e[type=!player]
+/tp @s 0.5 -60 30.5 0 10
+mecha wheelhouse -9 -60 34 battery_rack,cargo_hold,galvanic_stack,armor_plating,rivet_gun,night_optics
+mecha skitter -5 -60 34 cargo_hold,galvanic_stack,armor_plating,drill,thermal_imaging
+mecha chimera -1 -60 34 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,hemo_syringe,flamethrower,night_optics
+mecha kite 3 -60 34 hydraulic_legs,galvanic_stack,armor_plating,rivet_gun,grapple_hook,target_lock
+mecha hopper 7 -60 34 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+mecha bulwark 11 -60 35 hydraulic_legs,rocket_pack,cargo_hold,galvanic_stack,armor_plating,coolant_loop,hydraulic_fist,riot_shield,night_optics
+wait 60
+/tp @s 1.5 -60 24.5 0 5
+wait 20
+shot frames
+/setblock 40 -61 -3 headinajar:assembly_gantry[facing=south]
+gantry 40 -61 -3 colossus
+/tp @s 40.5 -60 0.5 180 30
+useblock 40 -61 -3
+wait 20
+shot gantry
+closegui
+mecha colossus 60 -60 6 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,fusion_bottle,armor_plating,energy_shield,tesla_coil,drill,hydraulic_fist,arc_cannon,plasma_lance,ore_scanner,target_lock
+wait 40
+/tp @s 60.50 -58.5 -2.50 -0.0 10
+wait 2
+shot colossus_000
+/tp @s 62.06 -58.5 -2.36 10.0 10
+wait 2
+shot colossus_001
+/tp @s 63.58 -58.5 -1.96 20.0 10
+wait 2
+shot colossus_002
+/tp @s 65.00 -58.5 -1.29 30.0 10
+wait 2
+shot colossus_003
+/tp @s 66.29 -58.5 -0.39 40.0 10
+wait 2
+shot colossus_004
+/tp @s 67.39 -58.5 0.71 50.0 10
+wait 2
+shot colossus_005
+/tp @s 68.29 -58.5 2.00 60.0 10
+wait 2
+shot colossus_006
+/tp @s 68.96 -58.5 3.42 70.0 10
+wait 2
+shot colossus_007
+/tp @s 69.36 -58.5 4.94 80.0 10
+wait 2
+shot colossus_008
+/tp @s 69.50 -58.5 6.50 90.0 10
+wait 2
+shot colossus_009
+/tp @s 69.36 -58.5 8.06 100.0 10
+wait 2
+shot colossus_010
+/tp @s 68.96 -58.5 9.58 110.0 10
+wait 2
+shot colossus_011
+/tp @s 68.29 -58.5 11.00 120.0 10
+wait 2
+shot colossus_012
+/tp @s 67.39 -58.5 12.29 130.0 10
+wait 2
+shot colossus_013
+/tp @s 66.29 -58.5 13.39 140.0 10
+wait 2
+shot colossus_014
+/tp @s 65.00 -58.5 14.29 150.0 10
+wait 2
+shot colossus_015
+/tp @s 63.58 -58.5 14.96 160.0 10
+wait 2
+shot colossus_016
+/tp @s 62.06 -58.5 15.36 170.0 10
+wait 2
+shot colossus_017
+/tp @s 60.50 -58.5 15.50 -180.0 10
+wait 2
+shot colossus_018
+/tp @s 58.94 -58.5 15.36 -170.0 10
+wait 2
+shot colossus_019
+/tp @s 57.42 -58.5 14.96 -160.0 10
+wait 2
+shot colossus_020
+/tp @s 56.00 -58.5 14.29 -150.0 10
+wait 2
+shot colossus_021
+/tp @s 54.71 -58.5 13.39 -140.0 10
+wait 2
+shot colossus_022
+/tp @s 53.61 -58.5 12.29 -130.0 10
+wait 2
+shot colossus_023
+/tp @s 52.71 -58.5 11.00 -120.0 10
+wait 2
+shot colossus_024
+/tp @s 52.04 -58.5 9.58 -110.0 10
+wait 2
+shot colossus_025
+/tp @s 51.64 -58.5 8.06 -100.0 10
+wait 2
+shot colossus_026
+/tp @s 51.50 -58.5 6.50 -90.0 10
+wait 2
+shot colossus_027
+/tp @s 51.64 -58.5 4.94 -80.0 10
+wait 2
+shot colossus_028
+/tp @s 52.04 -58.5 3.42 -70.0 10
+wait 2
+shot colossus_029
+/tp @s 52.71 -58.5 2.00 -60.0 10
+wait 2
+shot colossus_030
+/tp @s 53.61 -58.5 0.71 -50.0 10
+wait 2
+shot colossus_031
+/tp @s 54.71 -58.5 -0.39 -40.0 10
+wait 2
+shot colossus_032
+/tp @s 56.00 -58.5 -1.29 -30.0 10
+wait 2
+shot colossus_033
+/tp @s 57.42 -58.5 -1.96 -20.0 10
+wait 2
+shot colossus_034
+/tp @s 58.94 -58.5 -2.36 -10.0 10
+wait 2
+shot colossus_035
+/tp @s 79.5 -60 0.5 0 0
+mecha hopper 79 -60 3 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+/fill 77 -60 8 81 -57 8 minecraft:stone
+wait 20
+/tp @s 79.5 -60 2.5 0 0
+jar
+wait 5
+mount
+wait 20
+view 2
+wait 20
+arms 1
+burst drill 45
+arms 0
+report done
