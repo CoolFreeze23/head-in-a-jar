@@ -115,10 +115,18 @@ public class HeadJarEntity extends Entity {
         boolean bypass = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
         if (!bypass && (isInvulnerableTo(source) || hurtTicks > 0)) return false;
         if (!bypass && Config.get(Config.PROTECT_OFFLINE, true) && owner() == null) return false;
-        health -= amount;
         hurtTicks = 10;
         level().playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.2f);
-        if (health <= 0) shatter();
+        ServerPlayer owner = owner();
+        if (owner != null) {
+            // the jar's glass is the owner's Jar Integrity
+            var state = owner.getData(ModRegistry.JAR_STATE);
+            state.setIntegrity(state.integrity() - (int) Math.ceil(amount));
+            if (state.integrity() <= 0) shatter();
+        } else {
+            health -= amount;
+            if (health <= 0) shatter();
+        }
         return true;
     }
 
@@ -140,6 +148,15 @@ public class HeadJarEntity extends Entity {
         if (!player.getUUID().equals(ownerId())) return InteractionResult.PASS;
         if (level().isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
+        ItemStack held = player.getItemInHand(hand);
+        if (FormActions.fitGoggles(server, held, this, null)) {
+            held.shrink(1);
+            return InteractionResult.CONSUME;
+        }
+        if (com.coolfreeze23.headinajar.form.LifeSupport.refill(server, player.getData(ModRegistry.JAR_STATE), held.getItem())) {
+            held.consume(1, player);
+            return InteractionResult.CONSUME;
+        }
         if (FormActions.pickUpHead(server, this)) return InteractionResult.CONSUME;
         if (player.getData(ModRegistry.JAR_STATE).form() == Form.LINKED && !FormActions.hasSatchel(player)) {
             player.displayClientMessage(Component.translatable("message.headinajar.need_satchel"), true);

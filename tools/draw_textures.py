@@ -489,4 +489,8 @@ for row in range(3):
 for col in range(9):
     slot(8 + col * 18, 156)
 save(gui, 'gui', 'separation_chair.png')
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+import draw_p2
+draw_p2.run(globals())
 print('textures written')

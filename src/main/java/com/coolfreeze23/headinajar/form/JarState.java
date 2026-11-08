@@ -31,7 +31,9 @@ public final class JarState {
             ItemStack.OPTIONAL_CODEC.optionalFieldOf("goggles", ItemStack.EMPTY).forGetter(s -> s.goggles),
             ItemStack.OPTIONAL_CODEC.optionalFieldOf("collar", ItemStack.EMPTY).forGetter(s -> s.collar),
             Codec.BOOL.optionalFieldOf("carrying_head", false).forGetter(s -> s.carryingHead),
-            Codec.INT.optionalFieldOf("roll_ticks", 0).forGetter(s -> s.rollTicks)
+            Codec.INT.optionalFieldOf("roll_ticks", 0).forGetter(s -> s.rollTicks),
+            Codec.INT.optionalFieldOf("saline", 0).forGetter(s -> s.saline),
+            Codec.INT.optionalFieldOf("integrity", 10).forGetter(s -> s.integrity)
     ).apply(i, JarState::new));
 
     /** What clients need to draw and predict a player: no body id. */
@@ -47,9 +49,14 @@ public final class JarState {
         buf.writeVarInt(s.rollTicks);
         buf.writeByte(s.quality);
         buf.writeFloat(s.headDistance);
+        buf.writeVarInt(s.saline);
+        buf.writeVarInt(s.integrity);
+        buf.writeFloat(s.bodyHealth);
+        buf.writeFloat(s.bodyMaxHealth);
+        buf.writeUtf(s.speech);
     }, buf -> {
         JarState s = new JarState(Form.values()[buf.readVarInt()], buf.readVarInt(), ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf),
-                buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0);
+                buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10);
         s.heldEntity = buf.readVarInt();
         s.goggles = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
         s.collar = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
@@ -57,6 +64,11 @@ public final class JarState {
         s.rollTicks = buf.readVarInt();
         s.quality = buf.readByte();
         s.headDistance = buf.readFloat();
+        s.saline = buf.readVarInt();
+        s.integrity = buf.readVarInt();
+        s.bodyHealth = buf.readFloat();
+        s.bodyMaxHealth = buf.readFloat();
+        s.speech = buf.readUtf();
         return s;
     });
 
@@ -71,6 +83,15 @@ public final class JarState {
     private boolean carryingHead;
     /** Ticks left of the botched-cut upside-down view. */
     private int rollTicks;
+    /** Cranial Saline in the jar, mB. */
+    private int saline;
+    /** Jar Integrity: the glass's own health pool, taken before the player's. */
+    private int integrity;
+    /** The idle body's health while the player is the jar (Life Sign Monitor). Not saved. */
+    private float bodyHealth, bodyMaxHealth;
+    /** The last thing the jar said through its Speaker Grille. Not saved. */
+    private String speech = "";
+    private long speechUntil;
 
     /** Entity id held by Telekinesis, -1 for none. Not saved. */
     private int heldEntity = -1;
@@ -84,11 +105,11 @@ public final class JarState {
     private boolean chargeDirty;
 
     public JarState() {
-        this(Form.BODY, 3, List.of(), 0, Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0);
+        this(Form.BODY, 3, List.of(), 0, Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10);
     }
 
     private JarState(Form form, int slots, List<ItemStack> modules, int charge, Optional<UUID> body,
-                     ItemStack goggles, ItemStack collar, boolean carryingHead, int rollTicks) {
+                     ItemStack goggles, ItemStack collar, boolean carryingHead, int rollTicks, int saline, int integrity) {
         this.form = form;
         this.slots = Math.max(1, Math.min(MAX_SLOTS, slots));
         this.modules = new ArrayList<>(modules);
@@ -99,6 +120,8 @@ public final class JarState {
         this.collar = collar;
         this.carryingHead = carryingHead;
         this.rollTicks = rollTicks;
+        this.saline = saline;
+        this.integrity = integrity;
     }
 
     /** Copies what the server sent into the client's copy. */
@@ -114,6 +137,80 @@ public final class JarState {
         rollTicks = other.rollTicks;
         quality = other.quality;
         headDistance = other.headDistance;
+        saline = other.saline;
+        integrity = other.integrity;
+        bodyHealth = other.bodyHealth;
+        bodyMaxHealth = other.bodyMaxHealth;
+        if (!other.speech.isEmpty() && !other.speech.equals(speech)) speechUntil = System.currentTimeMillis() + 5000;
+        speech = other.speech;
+    }
+
+    // --- life support (P2) -------------------------------------------------------------------------
+
+    /** Saline capacity of this jar, by tier. */
+    public int maxSaline() {
+        return slots >= 7 ? 2000 : slots >= 5 ? 1500 : 1000;
+    }
+
+    /** Integrity capacity of this jar, by tier. */
+    public int maxIntegrity() {
+        return slots >= 7 ? 30 : slots >= 5 ? 20 : 10;
+    }
+
+    public int saline() {
+        return saline;
+    }
+
+    public void setSaline(int saline) {
+        int v = Math.max(0, Math.min(maxSaline(), saline));
+        if (v != this.saline) {
+            this.saline = v;
+            chargeDirty = true;
+        }
+    }
+
+    public int integrity() {
+        return integrity;
+    }
+
+    public void setIntegrity(int integrity) {
+        int v = Math.max(0, Math.min(maxIntegrity(), integrity));
+        if (v != this.integrity) {
+            this.integrity = v;
+            dirty = true;
+        }
+    }
+
+    /** Fills a fresh jar: full saline and integrity. */
+    public void fillJar() {
+        saline = maxSaline();
+        integrity = maxIntegrity();
+        dirty = true;
+    }
+
+    public float bodyHealth() {
+        return bodyHealth;
+    }
+
+    public float bodyMaxHealth() {
+        return bodyMaxHealth;
+    }
+
+    public void setBodyHealth(float health, float max) {
+        if (Math.abs(health - bodyHealth) >= 0.5f || max != bodyMaxHealth) {
+            bodyHealth = health;
+            bodyMaxHealth = max;
+            dirty = true;
+        }
+    }
+
+    public String speech() {
+        return System.currentTimeMillis() < speechUntil ? speech : "";
+    }
+
+    public void say(String text) {
+        speech = text.length() > 60 ? text.substring(0, 60) + "..." : text;
+        dirty = true;
     }
 
     public Form form() {

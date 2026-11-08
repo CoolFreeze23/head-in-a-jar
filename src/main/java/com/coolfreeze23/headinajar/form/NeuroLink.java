@@ -25,6 +25,7 @@ public final class NeuroLink {
     public static double range(JarState state) {
         double range = state.goggles().getItem() instanceof RelayGogglesItem goggles ? goggles.range() : 0;
         if (CollarCamItem.isCrooked(state.collar())) range *= 0.9;
+        if (state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HUB_ANTENNA) && state.charge() > 0) range *= 1.5;
         return range;
     }
 
@@ -55,8 +56,55 @@ public final class NeuroLink {
     public static int quality(ServerPlayer player, JarState state, HeadRegistry.Spot other) {
         if (state.carryingHead()) return 100;
         if (other == null || !other.dimension().equals(player.level().dimension())) return 0;
-        double distance = player.position().distanceTo(other.pos());
-        return (int) Math.round(fromDistance(distance, range(state)) * environment(player));
+        double range = range(state);
+        double best = fromDistance(player.position().distanceTo(other.pos()), range);
+        if (best < 100 && player.getServer() != null) best = Math.max(best, viaMasts(player, other.pos(), range));
+        return (int) Math.round(best * environment(player) * jammers(player));
+    }
+
+    /**
+     * The best link through Relay Masts: the head reaches a mast within the goggles' range, masts reach each other within
+     * their radius, and the last mast reaches the body. A path is as good as its weakest hop, less 3% per mast.
+     */
+    static double viaMasts(ServerPlayer player, net.minecraft.world.phys.Vec3 head, double range) {
+        var masts = RelayRegistry.get(player.getServer()).powered(RelayRegistry.Kind.MAST, player.level().dimension(), player.level().getGameTime());
+        int n = masts.size();
+        if (n == 0) return 0;
+        net.minecraft.world.phys.Vec3[] at = new net.minecraft.world.phys.Vec3[n];
+        double[] q = new double[n];
+        boolean[] done = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            at[i] = net.minecraft.world.phys.Vec3.atCenterOf(masts.get(i).pos()).add(0, 1, 0);
+            q[i] = fromDistance(head.distanceTo(at[i]), range) * 0.97;
+        }
+        for (int step = 0; step < n; step++) {
+            int best = -1;
+            for (int i = 0; i < n; i++) if (!done[i] && (best < 0 || q[i] > q[best])) best = i;
+            if (best < 0 || q[best] <= 0) break;
+            done[best] = true;
+            for (int j = 0; j < n; j++) {
+                if (done[j]) continue;
+                double hop = fromDistance(at[best].distanceTo(at[j]), Math.min(masts.get(best).radius(), masts.get(j).radius()));
+                double cand = Math.min(q[best], hop) * 0.97;
+                if (cand > q[j]) q[j] = cand;
+            }
+        }
+        double result = 0;
+        for (int i = 0; i < n; i++) {
+            result = Math.max(result, Math.min(q[i], fromDistance(player.position().distanceTo(at[i]), masts.get(i).radius())));
+        }
+        return result;
+    }
+
+    /** An enemy Signal Jammer within its radius cuts the link to 30%. Its owner and those they trust are immune. */
+    static double jammers(ServerPlayer player) {
+        if (player.getServer() == null) return 1;
+        HeadRegistry heads = HeadRegistry.get(player);
+        for (var jammer : RelayRegistry.get(player.getServer()).powered(RelayRegistry.Kind.JAMMER, player.level().dimension(), player.level().getGameTime())) {
+            if (jammer.owner() != null && heads.trusts(jammer.owner(), player)) continue;
+            if (player.position().distanceTo(net.minecraft.world.phys.Vec3.atCenterOf(jammer.pos())) <= jammer.radius()) return 0.3;
+        }
+        return 1;
     }
 
     /** Runs every server tick for a decapitated player. */

@@ -56,6 +56,9 @@ public final class Config {
     public static final ModConfigSpec.ConfigValue<String> LINK_LOSS_INVENTORY = B
             .comment("When a linked body dies: 'corpse' keeps your things on the corpse, 'keep' leaves them with you, 'vanilla' drops them.")
             .define("linkLossInventory", "corpse", o -> "corpse".equals(o) || "keep".equals(o) || "vanilla".equals(o));
+    public static final ModConfigSpec.IntValue SALINE_DRAIN_SECONDS = B
+            .comment("Seconds per mB of Cranial Saline a head uses while out in the world (docked and carried heads use none).")
+            .defineInRange("salineDrainSeconds", 12, 1, 3600);
     public static final ModConfigSpec.BooleanValue PROTECT_OFFLINE = B
             .comment("Idle bodies, corpses and placed heads of offline players can't be hurt.")
             .define("protectOfflineBodies", true);

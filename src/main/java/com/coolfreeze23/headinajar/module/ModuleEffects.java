@@ -23,6 +23,9 @@ public final class ModuleEffects {
     private static final ResourceLocation FLIGHT = HeadInAJar.id("propeller");
     private static final ResourceLocation SWIM = HeadInAJar.id("water_jet");
     private static final ResourceLocation ARM_DAMAGE = HeadInAJar.id("manipulator_arm");
+    private static final ResourceLocation LEGS_SPEED = HeadInAJar.id("spider_legs");
+    private static final ResourceLocation LEGS_STEP = HeadInAJar.id("spider_legs_step");
+    private static final ResourceLocation GYRO = HeadInAJar.id("self_righting_gyro");
 
     public static void apply(Player player, JarState state) {
         boolean jar = state.form().isJarred();
@@ -35,6 +38,18 @@ public final class ModuleEffects {
         set(player, NeoForgeMod.CREATIVE_FLIGHT, FLIGHT, state.has(ModuleType.PROPELLER) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
         set(player, NeoForgeMod.SWIM_SPEED, SWIM, state.has(ModuleType.WATER_JET) ? 1.5 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         set(player, Attributes.ATTACK_DAMAGE, ARM_DAMAGE, jar && state.has(ModuleType.MANIPULATOR_ARM) ? -0.5 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+
+        boolean legs = state.has(ModuleType.SPIDER_LEGS);
+        set(player, Attributes.MOVEMENT_SPEED, LEGS_SPEED, legs && !state.has(ModuleType.HOP_SPRINGS) ? -0.2 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        set(player, Attributes.STEP_HEIGHT, LEGS_STEP, legs ? 0.45 : 0, AttributeModifier.Operation.ADD_VALUE);
+        set(player, Attributes.KNOCKBACK_RESISTANCE, GYRO, state.has(ModuleType.SELF_RIGHTING_GYRO) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
+        if (state.has(ModuleType.SELF_RIGHTING_GYRO) && state.rollTicks() > 0) state.setRollTicks(0);
+        // suction cups: walking into a wall climbs it, sneaking hangs on
+        if (state.has(ModuleType.SUCTION_CUPS) && player.horizontalCollision) {
+            var v = player.getDeltaMovement();
+            player.setDeltaMovement(v.x, player.isShiftKeyDown() ? Math.max(v.y, 0) : 0.2, v.z);
+            player.fallDistance = 0;
+        }
 
         if (player.getAbilities().flying && !player.mayFly()) {
             player.getAbilities().flying = false;

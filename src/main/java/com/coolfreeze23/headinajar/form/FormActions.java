@@ -56,6 +56,7 @@ public final class FormActions {
         state.setForm(Form.LINKED);
         state.setSlots(jar.getItem() instanceof LifeSupportJarItem j ? j.slots() : 3);
         state.setCharge(JarState.maxCharge());
+        state.fillJar();
         state.setGoggles(goggles.copyWithCount(1));
         state.setCollar(collar.copyWithCount(1));
         state.setBody(null);
@@ -243,6 +244,20 @@ public final class FormActions {
         return true;
     }
 
+    /** Fits new Relay Goggles on your own head (placed or docked); the old pair comes back. */
+    public static boolean fitGoggles(ServerPlayer player, ItemStack goggles, HeadJarEntity head, LifeSupportCradleBlockEntity cradle) {
+        JarState state = state(player);
+        if (!state.form().isDecapitated() || !(goggles.getItem() instanceof com.coolfreeze23.headinajar.item.RelayGogglesItem)) return false;
+        ItemStack old = state.goggles();
+        state.setGoggles(goggles.copyWithCount(1));
+        give(player, old.copy());
+        if (head != null) head.setGoggles(state.goggles());
+        if (cradle != null) cradle.dock(player.getUUID(), player.getGameProfile().getName(), state.goggles());
+        Network.sync(player);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1, 1.2f);
+        return true;
+    }
+
     public static boolean hasSatchel(Player player) {
         return player.getInventory().contains(new ItemStack(ModRegistry.HEAD_SATCHEL.get()));
     }
@@ -395,6 +410,7 @@ public final class FormActions {
         state.setForm(Form.JAR);
         state.setSlots(slots);
         state.setCharge(JarState.maxCharge());
+        state.fillJar();
         state.setBody(body.getUUID());
         registry(player).setBody(player.getUUID(), new HeadRegistry.Body(body.getUUID(), HeadRegistry.Spot.of(body), false));
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));

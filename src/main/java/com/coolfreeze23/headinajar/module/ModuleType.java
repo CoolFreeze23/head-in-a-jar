@@ -13,7 +13,16 @@ public enum ModuleType {
     HEAT_SHIELD(true),
     NIGHT_LENS(false),
     MAGNET(false),
-    WATER_JET(true);
+    WATER_JET(true),
+    SUCTION_CUPS(true),
+    SPIDER_LEGS(true),
+    SPEAKER_GRILLE(false),
+    SALINE_RECYCLER(true),
+    SHOCK_LID(true),
+    SELF_RIGHTING_GYRO(false),
+    HUB_ANTENNA(true),
+    LIFE_SIGN_MONITOR(false),
+    HAT_MOUNT(false);
 
     public final boolean powered;
 

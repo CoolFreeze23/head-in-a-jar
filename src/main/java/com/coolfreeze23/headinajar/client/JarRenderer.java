@@ -59,7 +59,18 @@ public final class JarRenderer {
         pose.mulPose(Axis.YP.rotationDegrees(180.0f - bodyYaw));
         draw(pose, buffers, light, LivingEntityRenderer.getOverlayCoords(player, 0), player.getSkin().texture(),
                 headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty());
+        var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
+        if (state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HAT_MOUNT) && !helmet.isEmpty()) {
+            pose.pushPose();
+            pose.translate(0, 0.98, 0);
+            pose.scale(0.62f, 0.62f, 0.62f);
+            Minecraft.getInstance().getItemRenderer().renderStatic(helmet, net.minecraft.world.item.ItemDisplayContext.HEAD, light,
+                    OverlayTexture.NO_OVERLAY, pose, buffers, player.level(), player.getId());
+            pose.popPose();
+        }
         pose.popPose();
+        String speech = state.speech();
+        if (!speech.isEmpty()) bubble(pose, buffers, light, speech);
     }
 
     /**
@@ -91,6 +102,19 @@ public final class JarRenderer {
         int fluid = charged ? 0xFFFFFFFF : 0xFF707070;
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay, fluid);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
+    }
+
+    /** The Speaker Grille's words, floating over the jar like a name tag. */
+    private static void bubble(PoseStack pose, MultiBufferSource buffers, int light, String text) {
+        var mc = Minecraft.getInstance();
+        pose.pushPose();
+        pose.translate(0, 1.2, 0);
+        pose.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
+        pose.scale(-0.022f, -0.022f, 0.022f);
+        var font = mc.font;
+        float x = -font.width(text) / 2f;
+        font.drawInBatch(text, x, 0, 0xFFFFFFFF, false, pose.last().pose(), buffers, net.minecraft.client.gui.Font.DisplayMode.NORMAL, 0x80000000, light);
         pose.popPose();
     }
 

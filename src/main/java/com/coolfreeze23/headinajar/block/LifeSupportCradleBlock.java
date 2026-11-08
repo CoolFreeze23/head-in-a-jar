@@ -57,6 +57,30 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                                  Player player, net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof LifeSupportCradleBlockEntity cradle)) return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (player instanceof ServerPlayer server && player.getUUID().equals(cradle.owner()) && FormActions.fitGoggles(server, stack, null, cradle)) {
+            stack.shrink(1);
+            return net.minecraft.world.ItemInteractionResult.CONSUME;
+        }
+        if (stack.is(ModRegistry.SALINE_BOTTLE.get())) {
+            if (!level.isClientSide && cradle.saline().fill(new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), 250),
+                    net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE) == 250) {
+                cradle.saline().fill(new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), 250),
+                        net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                stack.consume(1, player);
+                player.getInventory().placeItemBackInInventory(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
+            }
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (net.neoforged.neoforge.fluids.FluidUtil.interactWithFluidHandler(player, hand, level, pos, hit.getDirection())) {
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof LifeSupportCradleBlockEntity cradle)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
@@ -65,6 +89,9 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
             if (!FormActions.dockCarried(server, cradle)) player.displayClientMessage(Component.translatable("message.headinajar.cradle_empty"), true);
         } else if (!FormActions.undock(server, cradle)) {
             player.displayClientMessage(Component.translatable("message.headinajar.cradle_holds", cradle.ownerName()), true);
+        }
+        if (cradle.isEmpty() || !player.getUUID().equals(cradle.owner())) {
+            player.displayClientMessage(Component.translatable("message.headinajar.cradle_status", cradle.energy().getEnergyStored(), cradle.saline().getFluidAmount()), false);
         }
         return InteractionResult.CONSUME;
     }

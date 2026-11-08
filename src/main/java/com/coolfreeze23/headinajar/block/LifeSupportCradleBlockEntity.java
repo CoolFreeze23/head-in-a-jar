@@ -24,6 +24,22 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     private UUID owner;
     private String ownerName = "";
     private ItemStack goggles = ItemStack.EMPTY;
+    private final Buffer energy = new Buffer(50_000, 2_000, 0, this::setChanged);
+    private final net.neoforged.neoforge.fluids.capability.templates.FluidTank saline =
+            new net.neoforged.neoforge.fluids.capability.templates.FluidTank(4000, f -> f.getFluid().isSame(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get())) {
+                @Override
+                protected void onContentsChanged() {
+                    setChanged();
+                }
+            };
+
+    public Buffer energy() {
+        return energy;
+    }
+
+    public net.neoforged.neoforge.fluids.capability.templates.FluidTank saline() {
+        return saline;
+    }
 
     public LifeSupportCradleBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.CRADLE_BE.get(), pos, state);
@@ -91,12 +107,33 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, LifeSupportCradleBlockEntity cradle) {
         if (cradle.owner == null || level.getGameTime() % 20 != 0 || level.getServer() == null) return;
+        cradle.upkeep(level.getServer().getPlayerList().getPlayer(cradle.owner), level.getGameTime());
         // the registry is the truth: if the player swapped into this head, the Cradle is empty again
         HeadRegistry.Head head = HeadRegistry.get(level.getServer()).head(cradle.owner);
         if (head == null || head.where() != HeadRegistry.Where.CRADLE || !head.spot().dimension().equals(level.dimension())
                 || !BlockPos.containing(head.spot().pos()).equals(pos)) {
             cradle.clear();
         }
+    }
+
+    /** Keeps the docked head topped up: saline from the tank, charge from the buffer, +1 integrity every 10 s. */
+    private void upkeep(net.minecraft.server.level.ServerPlayer owner, long time) {
+        if (owner == null) return;
+        var state = owner.getData(ModRegistry.JAR_STATE);
+        if (!state.form().isDecapitated()) return;
+        energy.set(energy.getEnergyStored() - 100);
+        int want = state.maxSaline() - state.saline();
+        if (want > 0) {
+            int got = saline.drain(want, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE).getAmount();
+            state.setSaline(state.saline() + got);
+        }
+        int room = com.coolfreeze23.headinajar.form.JarState.maxCharge() - state.charge();
+        int moved = Math.min(Math.min(10_000, room), energy.getEnergyStored());
+        if (moved > 0) {
+            energy.set(energy.getEnergyStored() - moved);
+            state.setCharge(state.charge() + moved);
+        }
+        if (time % 200 == 0 && state.integrity() < state.maxIntegrity()) state.setIntegrity(state.integrity() + 1);
     }
 
     /** The Cradle is being broken: its head is set down where it stood. */
@@ -115,6 +152,8 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
+        tag.put("Energy", energy.serializeNBT(registries));
+        tag.put("Saline", saline.writeToNBT(registries, new CompoundTag()));
         if (owner != null) {
             tag.putUUID("Owner", owner);
             tag.putString("OwnerName", ownerName);
@@ -126,6 +165,8 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
+        if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
+        if (tag.contains("Saline")) saline.readFromNBT(registries, tag.getCompound("Saline"));
         ownerName = tag.getString("OwnerName");
         goggles = ItemStack.parseOptional(registries, tag.getCompound("Goggles"));
     }

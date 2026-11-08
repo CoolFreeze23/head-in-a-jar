@@ -1,0 +1,44 @@
+# Phase 2, Life Support: machines, fluids, placards, the jar HUD bars
+wait 40
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule announceAdvancements false
+/tp @s 0.5 -60 0.5 0 0
+/setblock 0 -60 4 headinajar:saline_mixer[facing=north]
+/setblock 2 -60 4 headinajar:body_printer[facing=north]
+/setblock -2 -60 4 headinajar:leyden_jar
+/setblock -4 -60 4 headinajar:tesla_node
+/setblock 4 -60 4 headinajar:relay_mast
+/setblock 6 -60 4 headinajar:relay_mast_mk2
+/setblock -6 -60 4 headinajar:signal_jammer
+/setblock 0 -60 7 minecraft:stone_bricks
+/setblock 1 -60 7 minecraft:stone_bricks
+/setblock 2 -60 7 minecraft:stone_bricks
+/setblock 0 -59 7 minecraft:stone_bricks
+/setblock 1 -59 7 minecraft:stone_bricks
+/setblock 2 -59 7 minecraft:stone_bricks
+/setblock 0 -59 6 headinajar:safety_placard[facing=north,notice=0]
+/setblock 1 -59 6 headinajar:safety_placard[facing=north,notice=5]
+/setblock 2 -59 6 headinajar:safety_placard[facing=north,notice=11]
+/setblock 4 -61 1 headinajar:cranial_saline
+/setblock -2 -60 1 headinajar:life_support_cradle
+/tp @s 0.5 -59 -1.5 0 15
+wait 40
+shot 01_p2_machines
+useblock 0 -60 4
+wait 20
+shot 02_mixer_gui
+closegui
+useblock 2 -60 4
+wait 20
+shot 03_printer_gui
+closegui
+jar
+fit spider_legs,life_sign_monitor,hub_antenna
+wait 20
+/tp @s 0.5 -60 1.5 0 10
+wait 20
+shot 04_jar_hud_bars
+report done

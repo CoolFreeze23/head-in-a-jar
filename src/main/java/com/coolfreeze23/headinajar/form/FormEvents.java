@@ -69,7 +69,10 @@ public final class FormEvents {
         state.tickRoll();
         if (!(player instanceof ServerPlayer server)) return;
         if (state.form().isJarred()) serverTick(server, state);
-        if (state.form().isDecapitated()) NeuroLink.tick(server, state);
+        if (state.form().isDecapitated()) {
+            NeuroLink.tick(server, state);
+            LifeSupport.tick(server, state);
+        }
         if (state.form() == Form.LINKED) linkedTick(server, state);
         if (state.takeDirty(player.tickCount % 10 == 0)) Network.sync(server);
     }
@@ -128,8 +131,13 @@ public final class FormEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        // the mod's machines are built for heads: a jar can work them without an arm
+        if (event.getLevel().getBlockState(event.getPos()).is(HEAD_OPERABLE)) return;
         lockout(event.getEntity(), event);
     }
+
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> HEAD_OPERABLE =
+            net.minecraft.tags.BlockTags.create(com.coolfreeze23.headinajar.HeadInAJar.id("head_operable"));
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
@@ -212,6 +220,8 @@ public final class FormEvents {
             event.setCanceled(true);
         } else if (source.is(DamageTypeTags.IS_FIRE) && state.has(ModuleType.HEAT_SHIELD)) {
             event.setCanceled(true);
+        } else if (state.form().isJarred() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            LifeSupport.absorb(player, state, event);
         }
     }
 
@@ -226,6 +236,12 @@ public final class FormEvents {
             return;
         }
         FormActions.shatter(player);
+    }
+
+    @SubscribeEvent
+    public static void chat(net.neoforged.neoforge.event.ServerChatEvent event) {
+        JarState state = state(event.getPlayer());
+        if (state.form().isJarred() && state.has(ModuleType.SPEAKER_GRILLE)) state.say(event.getRawText());
     }
 
     @SubscribeEvent

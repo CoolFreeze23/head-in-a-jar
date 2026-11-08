@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "headinajar:block/tesla_coil",
+    "coil": "headinajar:block/tesla_coil",
+    "base": "headinajar:block/surgical_steel_block",
+    "ball": "headinajar:block/tesla_ball"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#base"
+        },
+        "south": {
+          "texture": "#base"
+        },
+        "east": {
+          "texture": "#base"
+        },
+        "west": {
+          "texture": "#base"
+        },
+        "up": {
+          "texture": "#base"
+        },
+        "down": {
+          "texture": "#base"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        3,
+        6
+      ],
+      "to": [
+        10,
+        11,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#coil"
+        },
+        "south": {
+          "texture": "#coil"
+        },
+        "east": {
+          "texture": "#coil"
+        },
+        "west": {
+          "texture": "#coil"
+        },
+        "up": {
+          "texture": "#coil"
+        },
+        "down": {
+          "texture": "#coil"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        11,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ball"
+        },
+        "south": {
+          "texture": "#ball"
+        },
+        "east": {
+          "texture": "#ball"
+        },
+        "west": {
+          "texture": "#ball"
+        },
+        "up": {
+          "texture": "#ball"
+        },
+        "down": {
+          "texture": "#ball"
+        }
+      }
+    }
+  ]
+}

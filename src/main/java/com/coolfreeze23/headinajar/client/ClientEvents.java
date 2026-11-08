@@ -76,6 +76,7 @@ public final class ClientEvents {
             if (q < 20 && t % 20 < 4 || q < 40 && t % 40 < 2) stop(input, true);
         } else if (state.form() == Form.JAR) {
             if (player.getAbilities().flying) return;
+            if (state.has(ModuleType.SPIDER_LEGS)) return;
             if (state.has(ModuleType.HOP_SPRINGS) || player.isInWater() && state.has(ModuleType.WATER_JET)) {
                 // the springs hop the jar along whenever it moves
                 boolean moving = input.forwardImpulse != 0 || input.leftImpulse != 0;
@@ -115,7 +116,8 @@ public final class ClientEvents {
             return;
         }
         if (!FormEvents.lockedOut(player)) return;
-        boolean ownBody = event.isUseItem() && mc.hitResult instanceof EntityHitResult hit && hit.getEntity() instanceof HeadlessBody;
+        boolean ownBody = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit && hit.getEntity() instanceof HeadlessBody
+                || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
         if (!ownBody) {
             event.setCanceled(true);
             event.setSwingHand(false);

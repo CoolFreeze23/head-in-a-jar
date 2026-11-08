@@ -1,0 +1,139 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "headinajar:block/surgical_steel_block",
+    "pole": "headinajar:block/mast_pole_gold",
+    "dish": "headinajar:block/mast_dish"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        2,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "down": {
+          "texture": "#pole"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        7
+      ],
+      "to": [
+        9,
+        30,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "down": {
+          "texture": "#pole"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        24,
+        6
+      ],
+      "to": [
+        14,
+        32,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dish"
+        },
+        "south": {
+          "texture": "#dish"
+        },
+        "east": {
+          "texture": "#dish"
+        },
+        "west": {
+          "texture": "#dish"
+        },
+        "up": {
+          "texture": "#dish"
+        },
+        "down": {
+          "texture": "#dish"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        14,
+        6
+      ],
+      "to": [
+        10,
+        18,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dish"
+        },
+        "south": {
+          "texture": "#dish"
+        },
+        "east": {
+          "texture": "#dish"
+        },
+        "west": {
+          "texture": "#dish"
+        },
+        "up": {
+          "texture": "#dish"
+        },
+        "down": {
+          "texture": "#dish"
+        }
+      }
+    }
+  ]
+}

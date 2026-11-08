@@ -116,6 +116,8 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 import gen_p1
 gen_p1.add(EN, PT, write, shaped)
+import gen_p2
+p2_blocks = gen_p2.run(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

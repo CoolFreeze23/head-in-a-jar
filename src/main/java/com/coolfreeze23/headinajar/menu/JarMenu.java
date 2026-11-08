@@ -2,6 +2,7 @@ package com.coolfreeze23.headinajar.menu;
 
 import com.coolfreeze23.headinajar.form.FormActions;
 import com.coolfreeze23.headinajar.form.JarState;
+import com.coolfreeze23.headinajar.form.LifeSupport;
 import com.coolfreeze23.headinajar.item.ModuleItem;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,6 +58,7 @@ public class JarMenu extends AbstractContainerMenu {
     }
 
     public static int chargeValue(ItemStack stack) {
+        if (stack.is(ModRegistry.SALINE_BOTTLE.get()) || stack.is(ModRegistry.GLASS_PATCH.get())) return 1;
         if (stack.is(Items.REDSTONE)) return 5_000;
         if (stack.is(Items.REDSTONE_BLOCK)) return 45_000;
         return 0;
@@ -66,6 +68,10 @@ public class JarMenu extends AbstractContainerMenu {
     private void feedCharge() {
         if (player.level().isClientSide) return;
         ItemStack stack = feed.getItem(0);
+        if (stack.is(ModRegistry.SALINE_BOTTLE.get()) || stack.is(ModRegistry.GLASS_PATCH.get())) {
+            while (!stack.isEmpty() && player instanceof net.minecraft.server.level.ServerPlayer sp && LifeSupport.refill(sp, state, stack.getItem())) stack.shrink(1);
+            return;
+        }
         int value = chargeValue(stack);
         while (value > 0 && !stack.isEmpty() && state.charge() + value <= JarState.maxCharge()) {
             state.setCharge(state.charge() + value);

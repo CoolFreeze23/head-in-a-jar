@@ -34,6 +34,13 @@ public class ClientSetup {
         modBus.addListener(ClientSetup::keys);
         modBus.addListener(ClientSetup::gui);
         modBus.addListener(ClientSetup::playerLayers);
+        modBus.addListener(ClientSetup::fluids);
+        modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent e) -> e.enqueueWork(() -> {
+            for (var fluid : com.coolfreeze23.headinajar.registry.ModFluids.ALL) {
+                net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(fluid.source.get(), net.minecraft.client.renderer.RenderType.translucent());
+                net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(fluid.flowing.get(), net.minecraft.client.renderer.RenderType.translucent());
+            }
+        }));
         container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, com.coolfreeze23.headinajar.Config.CLIENT_SPEC);
         NeoForge.EVENT_BUS.register(ClientEvents.class);
     }
@@ -57,6 +64,17 @@ public class ClientSetup {
     private static void screens(RegisterMenuScreensEvent event) {
         event.register(ModRegistry.JAR_MENU.get(), JarScreen::new);
         event.register(ModRegistry.CHAIR_MENU.get(), SeparationChairScreen::new);
+        event.register(ModRegistry.MIXER_MENU.get(), (com.coolfreeze23.headinajar.menu.SalineMixerMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
+                new MachineScreen<>(menu, inv, title).energy(20_000)
+                        .gauge(52, 17, 12, 56, 1, 4000, 0xFF3F76E4, "gui.headinajar.water")
+                        .arrow(70, 37, 3, 200)
+                        .gauge(100, 17, 12, 56, 2, 4000, 0xFF5FC8C0, "gui.headinajar.saline"));
+        event.register(ModRegistry.PRINTER_MENU.get(), (com.coolfreeze23.headinajar.menu.BodyPrinterMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
+                new MachineScreen<>(menu, inv, title).energy(250_000)
+                        .gauge(72, 17, 12, 56, 1, 4000, 0xFF5FC8C0, "gui.headinajar.saline")
+                        .arrow(92, 30, 2, 1200)
+                        .line(30, 62, "gui.headinajar.printer.need")
+                        .button(120, 26, 48, 20, "gui.headinajar.printer.print", 0));
     }
 
     private static void keys(RegisterKeyMappingsEvent event) {
@@ -68,6 +86,28 @@ public class ClientSetup {
     private static void gui(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.FOOD_LEVEL, HeadInAJar.id("charge"), ChargeHud::render);
         event.registerAboveAll(HeadInAJar.id("neuro_link"), LinkHud::render);
+    }
+
+    private static void fluids(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {
+        for (var fluid : com.coolfreeze23.headinajar.registry.ModFluids.ALL) {
+            int tint = fluid.tint;
+            event.registerFluidType(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions() {
+                @Override
+                public net.minecraft.resources.ResourceLocation getStillTexture() {
+                    return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_still");
+                }
+
+                @Override
+                public net.minecraft.resources.ResourceLocation getFlowingTexture() {
+                    return net.minecraft.resources.ResourceLocation.withDefaultNamespace("block/water_flow");
+                }
+
+                @Override
+                public int getTintColor() {
+                    return tint;
+                }
+            }, fluid.type.get());
+        }
     }
 
     @SuppressWarnings("unchecked")
