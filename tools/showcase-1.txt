@@ -20,9 +20,13 @@ wait 20
 view 0
 wait 20
 shot chair
+useblock 2 -60 2
+wait 20
 sign 2 -60 2
 burst op 115
 wait 30
+/tp @s -5.5 -60 2.5 -90 10
+wait 20
 view 2
 wait 20
 shot linked

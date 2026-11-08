@@ -1,0 +1,166 @@
+# README showcase, part 4
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule announceAdvancements false
+/difficulty peaceful
+/tp @s 0.5 -60 30.5 0 10
+mecha wheelhouse -9 -60 34 battery_rack,cargo_hold,galvanic_stack,armor_plating,rivet_gun,night_optics
+mecha skitter -5 -60 34 cargo_hold,galvanic_stack,armor_plating,drill,thermal_imaging
+mecha chimera -1 -60 34 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,hemo_syringe,flamethrower,night_optics
+mecha kite 3 -60 34 hydraulic_legs,galvanic_stack,armor_plating,rivet_gun,grapple_hook,target_lock
+mecha hopper 7 -60 34 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+mecha bulwark 11 -60 35 hydraulic_legs,rocket_pack,cargo_hold,galvanic_stack,armor_plating,coolant_loop,hydraulic_fist,riot_shield,night_optics
+wait 60
+/tp @s 1.5 -60 24.5 0 5
+wait 20
+shot frames
+/setblock 40 -61 -3 headinajar:assembly_gantry[facing=south]
+gantry 40 -61 -3 colossus
+/tp @s 40.5 -60 0.5 180 30
+useblock 40 -61 -3
+wait 20
+shot gantry
+closegui
+mecha colossus 60 -60 6 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,fusion_bottle,armor_plating,energy_shield,tesla_coil,drill,hydraulic_fist,arc_cannon,plasma_lance,ore_scanner,target_lock
+wait 40
+hud 0
+/tp @s 60.50 -59.6 0.00 -0.0 -12
+wait 2
+shot colossus_000
+/tp @s 61.52 -59.6 0.08 9.0 -12
+wait 2
+shot colossus_001
+/tp @s 62.51 -59.6 0.32 18.0 -12
+wait 2
+shot colossus_002
+/tp @s 63.45 -59.6 0.71 27.0 -12
+wait 2
+shot colossus_003
+/tp @s 64.32 -59.6 1.24 36.0 -12
+wait 2
+shot colossus_004
+/tp @s 65.10 -59.6 1.90 45.0 -12
+wait 2
+shot colossus_005
+/tp @s 65.76 -59.6 2.68 54.0 -12
+wait 2
+shot colossus_006
+/tp @s 66.29 -59.6 3.55 63.0 -12
+wait 2
+shot colossus_007
+/tp @s 66.68 -59.6 4.49 72.0 -12
+wait 2
+shot colossus_008
+/tp @s 66.92 -59.6 5.48 81.0 -12
+wait 2
+shot colossus_009
+/tp @s 67.00 -59.6 6.50 90.0 -12
+wait 2
+shot colossus_010
+/tp @s 66.92 -59.6 7.52 99.0 -12
+wait 2
+shot colossus_011
+/tp @s 66.68 -59.6 8.51 108.0 -12
+wait 2
+shot colossus_012
+/tp @s 66.29 -59.6 9.45 117.0 -12
+wait 2
+shot colossus_013
+/tp @s 65.76 -59.6 10.32 126.0 -12
+wait 2
+shot colossus_014
+/tp @s 65.10 -59.6 11.10 135.0 -12
+wait 2
+shot colossus_015
+/tp @s 64.32 -59.6 11.76 144.0 -12
+wait 2
+shot colossus_016
+/tp @s 63.45 -59.6 12.29 153.0 -12
+wait 2
+shot colossus_017
+/tp @s 62.51 -59.6 12.68 162.0 -12
+wait 2
+shot colossus_018
+/tp @s 61.52 -59.6 12.92 171.0 -12
+wait 2
+shot colossus_019
+/tp @s 60.50 -59.6 13.00 -180.0 -12
+wait 2
+shot colossus_020
+/tp @s 59.48 -59.6 12.92 -171.0 -12
+wait 2
+shot colossus_021
+/tp @s 58.49 -59.6 12.68 -162.0 -12
+wait 2
+shot colossus_022
+/tp @s 57.55 -59.6 12.29 -153.0 -12
+wait 2
+shot colossus_023
+/tp @s 56.68 -59.6 11.76 -144.0 -12
+wait 2
+shot colossus_024
+/tp @s 55.90 -59.6 11.10 -135.0 -12
+wait 2
+shot colossus_025
+/tp @s 55.24 -59.6 10.32 -126.0 -12
+wait 2
+shot colossus_026
+/tp @s 54.71 -59.6 9.45 -117.0 -12
+wait 2
+shot colossus_027
+/tp @s 54.32 -59.6 8.51 -108.0 -12
+wait 2
+shot colossus_028
+/tp @s 54.08 -59.6 7.52 -99.0 -12
+wait 2
+shot colossus_029
+/tp @s 54.00 -59.6 6.50 -90.0 -12
+wait 2
+shot colossus_030
+/tp @s 54.08 -59.6 5.48 -81.0 -12
+wait 2
+shot colossus_031
+/tp @s 54.32 -59.6 4.49 -72.0 -12
+wait 2
+shot colossus_032
+/tp @s 54.71 -59.6 3.55 -63.0 -12
+wait 2
+shot colossus_033
+/tp @s 55.24 -59.6 2.68 -54.0 -12
+wait 2
+shot colossus_034
+/tp @s 55.90 -59.6 1.90 -45.0 -12
+wait 2
+shot colossus_035
+/tp @s 56.68 -59.6 1.24 -36.0 -12
+wait 2
+shot colossus_036
+/tp @s 57.55 -59.6 0.71 -27.0 -12
+wait 2
+shot colossus_037
+/tp @s 58.49 -59.6 0.32 -18.0 -12
+wait 2
+shot colossus_038
+/tp @s 59.48 -59.6 0.08 -9.0 -12
+wait 2
+shot colossus_039
+hud 1
+/tp @s 79.5 -60 0.5 0 0
+mecha hopper 79 -60 3 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,drill,rivet_gun,night_optics
+/fill 77 -60 8 81 -57 8 minecraft:stone
+wait 20
+/tp @s 79.5 -60 2.5 0 0
+jar
+wait 5
+mount
+wait 20
+view 2
+wait 20
+arms 1
+burst drill 45
+arms 0
+report done

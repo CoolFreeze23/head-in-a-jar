@@ -28,9 +28,13 @@ wait 20
 view 0
 wait 20
 shot chair
+useblock 2 -60 2
+wait 20
 sign 2 -60 2
 burst op 115
 wait 30
+/tp @s -5.5 -60 2.5 -90 10
+wait 20
 view 2
 wait 20
 shot linked
@@ -72,11 +76,11 @@ wait 30
 view 2
 wait 20
 shot hosted
-view 0
-body
-wait 10
-/kill @e[type=!player]
-/tp @s 0.5 -60 30.5 0 10
+report done
+'''
+
+# 4: mecha, the Gantry, a Colossus turntable, drilling
+FOUR = HEADER + '''/tp @s 0.5 -60 30.5 0 10
 mecha wheelhouse -9 -60 34 battery_rack,cargo_hold,galvanic_stack,armor_plating,rivet_gun,night_optics
 mecha skitter -5 -60 34 cargo_hold,galvanic_stack,armor_plating,drill,thermal_imaging
 mecha chimera -1 -60 34 hydraulic_legs,jump_jets,galvanic_stack,armor_plating,hemo_syringe,flamethrower,night_optics
@@ -178,13 +182,14 @@ def orbit(cx, cz, radius, frames, y=-58.5):
         x, z = cx + 0.5 + radius * math.sin(a), cz + 0.5 - radius * math.cos(a)
         dx, dz = cx + 0.5 - x, cz + 0.5 - z
         yaw = math.degrees(math.atan2(-dx, dz))
-        lines.append(f'/tp @s {x:.2f} {y} {z:.2f} {yaw:.1f} 10')
+        lines.append(f'/tp @s {x:.2f} {y} {z:.2f} {yaw:.1f} -12')
         lines.append('wait 2')
         lines.append(f'shot colossus_{i:03d}')
     return '\n'.join(lines)
 
 
-for name, text in (('1', ONE), ('2', TWO.replace('{orbit}', orbit(60, 6, 9, 36))), ('3', THREE)):
+TURNTABLE = 'hud 0\n' + orbit(60, 6, 6.5, 40, y=-59.6) + '\nhud 1'
+for name, text in (('1', ONE), ('2', TWO), ('3', THREE), ('4', FOUR.replace('{orbit}', TURNTABLE))):
     with open(os.path.join(TOOLS, f'showcase-{name}.txt'), 'w', encoding='utf-8') as f:
         f.write('# README showcase, part ' + name + '\n' + text)
 print('ok')

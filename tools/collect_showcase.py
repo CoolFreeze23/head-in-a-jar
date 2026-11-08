@@ -12,7 +12,7 @@ FFMPEG = shutil.which('ffmpeg') or os.path.expandvars(
     r'%LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.2-full_build\bin\ffmpeg.exe')
 STILLS = ['chair', 'linked', 'life_support', 'hosts', 'hosted', 'frames', 'gantry', 'lab', 'splicer', 'heads_at_work', 'array', 'handbook', 'jade', 'socket']
 # gif: (frame prefix, fps, width)
-GIFS = {'operation': ('op', 12, 560), 'drill': ('drill', 12, 560), 'colossus': ('colossus', 10, 480)}
+GIFS = {'operation': ('op', 12, 560), 'drill': ('drill', 12, 560), 'colossus': ('colossus', 12, 480)}
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
             subprocess.run([FFMPEG, '-y', '-loglevel', 'error', '-i', src, '-vf', 'scale=960:-1:flags=lanczos', os.path.join(OUT, name + '.png')], check=True)
             print('still', name)
     for gif, (prefix, fps, width) in GIFS.items():
-        frames = sorted(glob.glob(os.path.join(SHOTS, prefix + '_*.png')))
+        frames = sorted(glob.glob(os.path.join(SHOTS, prefix + '_[0-9][0-9][0-9].png')))
         if not frames:
             continue
         pattern = os.path.join(SHOTS, prefix + '_%03d.png')
