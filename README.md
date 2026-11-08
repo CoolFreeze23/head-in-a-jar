@@ -129,8 +129,8 @@ your own head. **Let Go** in the jar menu is the last resort: you die and respaw
   wears the goggles and sends the signal. The link quality bar (Q) falls with distance, water, rock, storms, portals and
   jammers; a weak link stutters and fills the screen with static; at zero you wake up in your head.
 - **Swap** between body and head whenever you like. Put your head down, dock it in a **Life Support Cradle**, or carry it in
-  a **Head Satchel** for a perfect link. The jar is carried life size: with an empty hand you hold it in both arms,
-  your head turned round inside to look up at you; hold anything and it swings round onto your back, your head
+  a **Head Satchel** for a perfect link. The jar is carried life size: with an empty hand you hug it in both arms, a
+  hand on each side, and it sways and tilts with your hands as you walk, your head turned round inside to look up at you; hold anything and it swings round onto your back, your head
   watching behind you.
 - **Death is layered.** If your body dies it becomes a corpse that keeps your things, and you wake up in your jar; use a
   **Suture Kit** on it to get back in, or print a new body in the **Body Printer**. Only losing the head is a real death.

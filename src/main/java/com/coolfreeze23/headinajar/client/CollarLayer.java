@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-/** On a linked (headless) player: the Collar Cam on the neck, and their own head in its jar on the hip when carried. */
+/** On a linked (headless) player: the Collar Cam on the neck, and their own head in its jar when carried. */
 public class CollarLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     public static final ResourceLocation TEXTURE = HeadInAJar.id("textures/entity/collar_cam.png");
     private static ModelPart collar;
@@ -39,7 +39,12 @@ public class CollarLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<A
         pose.pushPose();
         getParentModel().body.translateAndRotate(pose);
         collar().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
-        if (state.carryingHead()) HeadCarry.drawCarried(pose, buffers, light, player, state, limbSwing, limbSwingAmount, age);
         pose.popPose();
+        if (state.carryingHead()) {
+            // in model space: in your arms the jar follows your hands, not your body
+            pose.pushPose();
+            HeadCarry.drawCarried(pose, buffers, light, player, state, getParentModel(), limbSwing, limbSwingAmount, age);
+            pose.popPose();
+        }
     }
 }
