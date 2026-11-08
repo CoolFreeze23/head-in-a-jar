@@ -1,0 +1,23 @@
+{
+  "entity": "orespawn:baryonyx",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "water_breathing"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "orespawn"
+    }
+  ],
+  "primary": {
+    "type": "pounce",
+    "params": {
+      "damage": 6.0,
+      "speed": 1.2
+    },
+    "cooldown": 60
+  }
+}

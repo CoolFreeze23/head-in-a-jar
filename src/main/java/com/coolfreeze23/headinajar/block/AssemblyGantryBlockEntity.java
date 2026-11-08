@@ -126,7 +126,10 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 items.extractItem(SLOT_FRAME, 1, false);
                 energy.set(energy.getEnergyStored() - ASSEMBLE_COST);
                 level.addFreshEntity(mecha);
+                com.coolfreeze23.headinajar.Advance.grant(player, "assembled");
+                if (frame == MechaFrame.EXECUTIVE) com.coolfreeze23.headinajar.Advance.grant(player, "chairman");
                 level.playSound(null, worldPosition, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 0.7f);
+                level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.MECHA_BOOT.get(), SoundSource.BLOCKS, 1, 1);
                 return true;
             }
             case AssemblyGantryMenu.DISASSEMBLE -> {

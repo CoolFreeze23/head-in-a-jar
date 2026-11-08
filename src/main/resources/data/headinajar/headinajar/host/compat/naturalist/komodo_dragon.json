@@ -1,0 +1,21 @@
+{
+  "entity": "naturalist:komodo_dragon",
+  "blood": "cold",
+  "decay_per_minute": 2.0,
+  "flags": [],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "naturalist"
+    }
+  ],
+  "primary": {
+    "type": "pounce",
+    "params": {
+      "damage": 5.0,
+      "speed": 1.0
+    },
+    "cooldown": 60
+  }
+}

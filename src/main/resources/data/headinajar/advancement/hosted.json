@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:surgical_saw"
+    },
+    "title": {
+      "translate": "advancements.headinajar.hosted.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.hosted.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "hosted"
+      }
+    }
+  },
+  "parent": "headinajar:separated"
+}

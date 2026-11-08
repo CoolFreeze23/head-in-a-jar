@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:dragon_breath"
+    },
+    "title": {
+      "translate": "advancements.headinajar.legendary.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.legendary.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "legendary"
+      }
+    }
+  },
+  "parent": "headinajar:spliced"
+}

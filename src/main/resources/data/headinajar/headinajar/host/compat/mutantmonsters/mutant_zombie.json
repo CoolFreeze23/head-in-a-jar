@@ -1,0 +1,32 @@
+{
+  "entity": "mutantmonsters:mutant_zombie",
+  "blood": "grave",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "knockback_immune"
+  ],
+  "neutral_to": [
+    "minecraft:zombie"
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mutantmonsters"
+    }
+  ],
+  "primary": {
+    "type": "roar",
+    "params": {
+      "radius": 6.0,
+      "duration": 40.0
+    },
+    "cooldown": 160
+  },
+  "secondary": {
+    "type": "toss",
+    "params": {
+      "power": 1.6
+    },
+    "cooldown": 60
+  }
+}

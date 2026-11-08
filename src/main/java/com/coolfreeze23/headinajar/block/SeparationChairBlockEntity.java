@@ -184,6 +184,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         player.closeContainer();
         changed();
         say(player, "start");
+        com.coolfreeze23.headinajar.Advance.grant(player, "signed");
         return true;
     }
 
@@ -286,10 +287,14 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         Vec3 stand = Vec3.atBottomCenterOf(worldPosition).add(front.getStepX() * 0.9, 0, front.getStepZ() * 0.9);
         player.teleportTo(stand.x, stand.y, stand.z);
         FormActions.separate(player, inJar, inGoggles, inCollar, outlet, cradle);
+        com.coolfreeze23.headinajar.Advance.grant(player, "separated");
+        if (botched) com.coolfreeze23.headinajar.Advance.grant(player, "botched");
         player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160));
+        sound(com.coolfreeze23.headinajar.registry.ModSounds.BOOTH_CUT.get(), 1, 1);
         if (botched) {
             FormActions.state(player).setRollTicks(600);
             say(player, "oopsie");
+            sound(com.coolfreeze23.headinajar.registry.ModSounds.BOOTH_OOPSIE.get(), 1, 1);
         } else {
             say(player, "done");
         }

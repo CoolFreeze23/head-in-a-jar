@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:employee_mount"
+    },
+    "title": {
+      "translate": "advancements.headinajar.staffed.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.staffed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "staffed"
+      }
+    }
+  },
+  "parent": "headinajar:root"
+}

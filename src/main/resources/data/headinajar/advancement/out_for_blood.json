@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:syringe"
+    },
+    "title": {
+      "translate": "advancements.headinajar.out_for_blood.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.out_for_blood.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "out_for_blood"
+      }
+    }
+  },
+  "parent": "headinajar:root"
+}

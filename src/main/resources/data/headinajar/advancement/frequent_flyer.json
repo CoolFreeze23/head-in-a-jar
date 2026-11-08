@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:kite_frame"
+    },
+    "title": {
+      "translate": "advancements.headinajar.frequent_flyer.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.frequent_flyer.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "frequent_flyer"
+      }
+    }
+  },
+  "parent": "headinajar:assembled"
+}

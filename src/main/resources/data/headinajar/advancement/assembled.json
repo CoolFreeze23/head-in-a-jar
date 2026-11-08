@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:assembly_gantry"
+    },
+    "title": {
+      "translate": "advancements.headinajar.assembled.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.assembled.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "assembled"
+      }
+    }
+  },
+  "parent": "headinajar:root"
+}

@@ -94,7 +94,10 @@ public final class HostEvents {
             }
         }
         // sync: 1% per 12 s of piloting
-        if (pilot != null && !data.shell && data.sync < 100) data.sync = Math.min(100, data.sync + 1f / 240f);
+        if (pilot != null && !data.shell && data.sync < 100) {
+            data.sync = Math.min(100, data.sync + 1f / 240f);
+            if (data.sync >= 100) com.coolfreeze23.headinajar.Advance.grant(pilot, "synced");
+        }
 
         float sync = data.effectiveSync();
         attributes(host, def, data, sync);

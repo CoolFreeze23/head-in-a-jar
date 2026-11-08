@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:relay_goggles"
+    },
+    "title": {
+      "translate": "advancements.headinajar.link_lost.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.link_lost.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "link_lost"
+      }
+    }
+  },
+  "parent": "headinajar:separated"
+}

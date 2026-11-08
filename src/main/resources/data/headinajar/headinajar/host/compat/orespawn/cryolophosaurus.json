@@ -1,0 +1,21 @@
+{
+  "entity": "orespawn:cryolophosaurus",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "orespawn"
+    }
+  ],
+  "primary": {
+    "type": "charge",
+    "params": {
+      "damage": 6.0,
+      "speed": 1.7
+    },
+    "cooldown": 60
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:saddle"
+    },
+    "title": {
+      "translate": "advancements.headinajar.headless_horseman.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.headless_horseman.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "headless_horseman"
+      }
+    }
+  },
+  "parent": "headinajar:separated"
+}

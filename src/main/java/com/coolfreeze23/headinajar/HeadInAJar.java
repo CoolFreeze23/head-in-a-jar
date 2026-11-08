@@ -21,6 +21,8 @@ public class HeadInAJar {
 
     public HeadInAJar(IEventBus modBus, ModContainer container) {
         ModRegistry.register(modBus);
+        Advance.register(modBus);
+        com.coolfreeze23.headinajar.registry.ModSounds.register(modBus);
         modBus.addListener(Network::register);
         container.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
         NeoForge.EVENT_BUS.register(FormEvents.class);

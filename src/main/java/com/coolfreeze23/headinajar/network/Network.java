@@ -184,7 +184,10 @@ public final class Network {
                     || !player.getUUID().equals(socket.occupant())) return;
             var face = net.minecraft.core.Direction.from3DDataValue(Math.floorMod(msg.face(), 6));
             if (msg.action() == 0) socket.setOutput(face, msg.level());
-            else if (msg.action() == 1) socket.pulse(face);
+            else if (msg.action() == 1) {
+                socket.pulse(face);
+                com.coolfreeze23.headinajar.Advance.grant(player, "socket_pulse");
+            }
         });
         registrar.playToClient(SocketStatus.TYPE, SocketStatus.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.SocketClient.status = msg.values());
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);

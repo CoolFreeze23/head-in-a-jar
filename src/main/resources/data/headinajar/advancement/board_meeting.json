@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:cerebral_array"
+    },
+    "title": {
+      "translate": "advancements.headinajar.board_meeting.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.board_meeting.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "board_meeting"
+      }
+    }
+  },
+  "parent": "headinajar:staffed"
+}

@@ -8,7 +8,8 @@ import java.util.Locale;
  * whether it is an active power (R / G) or a passive trait. Effects are in {@link GeneEffects}.
  */
 public enum Gene {
-    SPIDER_CLIMB(Category.MOVEMENT, 2, 10, false, "minecraft:spider", "minecraft:cave_spider"),
+    SPIDER_CLIMB(Category.MOVEMENT, 2, 10, false, "minecraft:spider", "minecraft:cave_spider", "twilightforest:hedge_spider", "twilightforest:king_spider",
+            "orespawn:emperor_scorpion"),
     ENDER_BLINK(Category.MOVEMENT, 4, 20, true, "minecraft:enderman"),
     RABBIT_SPRING(Category.MOVEMENT, 1, 5, false, "minecraft:rabbit"),
     STRIDER_SOLES(Category.MOVEMENT, 3, 15, false, "minecraft:strider"),
@@ -17,9 +18,10 @@ public enum Gene {
     EQUINE_GAIT(Category.MOVEMENT, 2, 10, false, "minecraft:horse", "minecraft:camel", "minecraft:donkey", "minecraft:mule"),
     BREEZE_UPDRAFT(Category.MOVEMENT, 3, 15, true, "minecraft:breeze"),
     GILLS(Category.MOVEMENT, 2, 10, false, "minecraft:squid", "minecraft:cod", "minecraft:salmon", "minecraft:drowned", "minecraft:tropical_fish"),
-    GOLEM_FRAME(Category.DEFENCE, 3, 15, false, "minecraft:iron_golem"),
+    GOLEM_FRAME(Category.DEFENCE, 3, 15, false, "minecraft:iron_golem", "friendsandfoes:copper_golem", "friendsandfoes:tuff_golem",
+            "twilightforest:carminite_golem"),
     TURTLE_SHELL(Category.DEFENCE, 2, 10, false, "minecraft:turtle"),
-    BLAZE_CORE(Category.DEFENCE, 3, 15, false, "minecraft:blaze", "minecraft:magma_cube"),
+    BLAZE_CORE(Category.DEFENCE, 3, 15, false, "minecraft:blaze", "minecraft:magma_cube", "friendsandfoes:wildfire"),
     SLIME_BODY(Category.DEFENCE, 2, 10, false, "minecraft:slime"),
     WITHER_WARD(Category.DEFENCE, 3, 15, false, "minecraft:wither_skeleton"),
     CAT_EYES(Category.SENSES, 1, 5, false, "minecraft:cat", "minecraft:ocelot"),
@@ -36,6 +38,17 @@ public enum Gene {
     DRACONIC_WINGS(Category.LEGENDARY, 6, 30, false, "minecraft:ender_dragon"),
     SONIC_BOOM(Category.LEGENDARY, 6, 30, true, "minecraft:warden"),
     DECAY_AURA(Category.LEGENDARY, 6, 30, true, "minecraft:wither"),
+    // from other mods in the pack (inert when the mod is absent: nothing carries them)
+    MOA_WINGS(Category.MOVEMENT, 3, 15, false, "aether:moa"),
+    SACI_WHIRL(Category.MOVEMENT, 3, 15, true, "brazil_legends:saci_perere"),
+    MULE_FIRE(Category.OFFENCE, 3, 15, false, "brazil_legends:headless_mule"),
+    FROST_BREATH(Category.OFFENCE, 4, 20, true, "mowziesmobs:frostmaw", "friendsandfoes:iceologer"),
+    MUTANT_MIGHT(Category.OFFENCE, 3, 15, false, "mutantmonsters:mutant_zombie", "mutantmonsters:mutant_skeleton"),
+    PACHYDERM_HIDE(Category.DEFENCE, 2, 10, false, "naturalist:elephant", "naturalist:rhino", "naturalist:hippo"),
+    PHOTOSYNTHESIS(Category.METABOLISM, 1, 5, false, "plantz:sunflower", "plantz:marigold"),
+    REGROWTH(Category.LEGENDARY, 5, 25, false, "twilightforest:hydra"),
+    BLAZING_SOUL(Category.LEGENDARY, 6, 30, false, "cataclysm:ignis"),
+    ATOMIC_BREATH(Category.LEGENDARY, 6, 35, true, "orespawn:godzilla"),
     // mutations: never sequenced from a species, only from a mutated body
     HICCUPS(Category.MUTATION, 1, 0, false),
     CLUCKING(Category.MUTATION, 1, 0, false),

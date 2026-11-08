@@ -96,7 +96,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
                 : "staff.headinajar.complaint." + COMPLAINTS[level.random.nextInt(COMPLAINTS.length)];
         Component line = Component.translatable("staff.headinajar.says", Component.translatable("entity.minecraft.villager." + job), Component.translatable(key));
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(12))) p.displayClientMessage(line, false);
-        level.playSound(null, worldPosition, SoundEvents.VILLAGER_NO, SoundSource.BLOCKS, 0.7f, 1);
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.STAFF_COMPLAIN.get(), SoundSource.BLOCKS, 0.8f, 1);
     }
 
     /** Use: hang a jarred villager, check on your staff, or (sneaking) take them down. */
@@ -109,6 +109,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
             }
             items.setStackInSlot(0, held.split(1));
             payroll();
+            com.coolfreeze23.headinajar.Advance.grant(player, "staffed");
             level.playSound(null, worldPosition, SoundEvents.VILLAGER_WORK_LIBRARIAN, SoundSource.BLOCKS, 1, 1);
             return;
         }

@@ -1,0 +1,31 @@
+{
+  "entity": "brazil_legends:mapinguari",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "knockback_immune"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "brazil_legends"
+    }
+  ],
+  "primary": {
+    "type": "roar",
+    "params": {
+      "radius": 5.0,
+      "duration": 40.0
+    },
+    "cooldown": 200
+  },
+  "secondary": {
+    "type": "charge",
+    "params": {
+      "damage": 8.0,
+      "speed": 1.5
+    },
+    "cooldown": 120
+  }
+}

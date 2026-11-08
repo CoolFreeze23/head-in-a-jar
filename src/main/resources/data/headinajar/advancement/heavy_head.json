@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:colossus_frame"
+    },
+    "title": {
+      "translate": "advancements.headinajar.heavy_head.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.heavy_head.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "heavy_head"
+      }
+    }
+  },
+  "parent": "headinajar:assembled"
+}

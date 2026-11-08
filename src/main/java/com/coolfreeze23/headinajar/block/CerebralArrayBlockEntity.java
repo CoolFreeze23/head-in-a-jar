@@ -100,6 +100,10 @@ public class CerebralArrayBlockEntity extends LabMachine {
             }
         }
         if (heads >= MEETING && fed && level.getGameTime() % VOTE_TICKS == pos.asLong() % VOTE_TICKS) a.vote(level);
+        if (fed && level.getGameTime() % 100 == 0) {
+            if (heads >= MEETING) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "board_meeting");
+            if (a.output >= 500) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "brain_trust");
+        }
     }
 
     /** Sends FE to every neighbour that takes it. */
@@ -118,6 +122,7 @@ public class CerebralArrayBlockEntity extends LabMachine {
         Component line = Component.translatable("array.headinajar.vote", Component.translatable("array.headinajar.motion." + MOTIONS[level.random.nextInt(MOTIONS.length)]),
                 ayes, heads() - ayes);
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(32))) p.displayClientMessage(line, false);
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.ARRAY_MURMUR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
     }
 
     @Override

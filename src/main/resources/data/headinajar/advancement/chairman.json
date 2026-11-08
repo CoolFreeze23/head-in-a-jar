@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:executive_frame"
+    },
+    "title": {
+      "translate": "advancements.headinajar.chairman.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.chairman.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "chairman"
+      }
+    }
+  },
+  "parent": "headinajar:heavy_head"
+}

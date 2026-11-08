@@ -91,6 +91,13 @@ neoForge {
 }
 
 
+dependencies {
+    // optional integrations: compiled against the pack's own JEI, Jade and Curios jars (tools copy them into libs/)
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    // the hidden smoke client also runs them, so their screens and tooltips can be checked
+    smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'])
+}
+
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
             minecraft_version      : minecraft_version,

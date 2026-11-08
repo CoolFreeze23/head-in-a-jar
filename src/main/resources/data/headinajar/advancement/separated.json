@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:life_support_jar"
+    },
+    "title": {
+      "translate": "advancements.headinajar.separated.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.separated.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "separated"
+      }
+    }
+  },
+  "parent": "headinajar:signed"
+}

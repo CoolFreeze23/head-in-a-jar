@@ -156,6 +156,8 @@ public final class NeuroLink {
     public static void breakLink(ServerPlayer player, Component why) {
         if (FormActions.linkedToJar(player)) {
             player.displayClientMessage(why, true);
+            com.coolfreeze23.headinajar.Advance.grant(player, "link_lost");
+            player.serverLevel().playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.registry.ModSounds.LINK_LOST.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1, 1);
         }
     }
 

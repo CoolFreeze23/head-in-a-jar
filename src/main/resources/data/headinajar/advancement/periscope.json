@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:collar_periscope_stalk"
+    },
+    "title": {
+      "translate": "advancements.headinajar.periscope.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.periscope.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "periscope"
+      }
+    }
+  },
+  "parent": "headinajar:separated"
+}

@@ -160,6 +160,17 @@ public final class FormEvents {
     public static void interactEntity(PlayerInteractEvent.EntityInteract event) {
         // your own body is the one thing a bare jar can reach for
         if (event.getTarget() instanceof HeadlessBody) return;
+        // a creature that never had a head (the Headless Mule) takes a jar without the saw
+        if (!event.getLevel().isClientSide && event.getTarget() instanceof net.minecraft.world.entity.Mob mob && !com.coolfreeze23.headinajar.host.Hosts.isHost(mob)
+                && state(event.getEntity()).form() == Form.JAR) {
+            var def = com.coolfreeze23.headinajar.host.Hosts.definition(mob);
+            if (def != null && def.has("headless")) {
+                var data = com.coolfreeze23.headinajar.host.Hosts.data(mob);
+                data.host = true;
+                data.freshness = 100;
+                com.coolfreeze23.headinajar.network.Network.syncHost(mob);
+            }
+        }
         if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) {
             com.coolfreeze23.headinajar.host.HostInteractions.interact(event);
             return;

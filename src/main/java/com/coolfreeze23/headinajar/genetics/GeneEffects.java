@@ -94,6 +94,10 @@ public final class GeneEffects {
         set(e, Attributes.KNOCKBACK_RESISTANCE, "golem_frame", on ? 0.5 * s(e, Gene.GOLEM_FRAME) * k : 0, AttributeModifier.Operation.ADD_VALUE);
         set(e, Attributes.SCALE, "size", on ? (has(e, Gene.GIGANTISM) ? 0.1 : 0) - (has(e, Gene.SHRINKAGE) ? 0.1 : 0) : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         set(e, Attributes.MAX_HEALTH, "hybrid_vigour", on && has(e, Gene.HYBRID_VIGOUR) ? 0.1 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        set(e, Attributes.ATTACK_DAMAGE, "mutant_might", on ? 3 * s(e, Gene.MUTANT_MIGHT) * k : 0, AttributeModifier.Operation.ADD_VALUE);
+        set(e, Attributes.ATTACK_KNOCKBACK, "mutant_might", on ? 0.5 * s(e, Gene.MUTANT_MIGHT) * k : 0, AttributeModifier.Operation.ADD_VALUE);
+        set(e, Attributes.ARMOR, "pachyderm_hide", on ? 3 * s(e, Gene.PACHYDERM_HIDE) * k : 0, AttributeModifier.Operation.ADD_VALUE);
+        set(e, Attributes.KNOCKBACK_RESISTANCE, "pachyderm_hide", on ? 0.3 * s(e, Gene.PACHYDERM_HIDE) * k : 0, AttributeModifier.Operation.ADD_VALUE);
         boolean daylight = e.level().isDay() && e.level().canSeeSky(e.blockPosition());
         set(e, Attributes.MOVEMENT_SPEED, "photophobia", on && has(e, Gene.PHOTOPHOBIA) && daylight ? -0.15 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         if (e instanceof Player p) set(e, NeoForgeMod.CREATIVE_FLIGHT, "draconic_wings", on && has(e, Gene.DRACONIC_WINGS) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
@@ -119,6 +123,12 @@ public final class GeneEffects {
             e.fallDistance = 0;
         }
         if (has(e, Gene.STRIDER_SOLES) && e.isInLava()) e.setDeltaMovement(v.x, Math.max(v.y, 0.12), v.z);
+        // Moa Wings: a slow, steerable fall unless you sneak
+        if (has(e, Gene.MOA_WINGS) && !e.onGround() && e.getDeltaMovement().y < -0.12 && !e.isShiftKeyDown()) {
+            Vec3 now = e.getDeltaMovement();
+            e.setDeltaMovement(now.x * 1.02, -0.12, now.z * 1.02);
+            e.fallDistance = 0;
+        }
     }
 
     private static void serverTick(LivingEntity e, ServerLevel level) {
@@ -146,6 +156,18 @@ public final class GeneEffects {
             }
         }
         light(e, level, has(e, Gene.GLOW_CELLS) || has(e, Gene.BIOLUMINESCENCE));
+        if (has(e, Gene.MULE_FIRE) && t % 5 == 0 && e.getDeltaMovement().horizontalDistanceSqr() > 0.002) {
+            // a trail of fire: sparks behind, and anything right on your heels catches light
+            level.sendParticles(ParticleTypes.FLAME, e.getX(), e.getY() + 0.1, e.getZ(), 3, 0.2, 0.05, 0.2, 0.01);
+            for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, e.getBoundingBox().inflate(1.5), o -> o != e && o != e.getVehicle()
+                    && !e.getPassengers().contains(o))) {
+                other.igniteForSeconds(3);
+            }
+        }
+        if (has(e, Gene.PHOTOSYNTHESIS) && t % 100 == 0 && level.isDay() && level.canSeeSky(e.blockPosition().above())) {
+            if (e instanceof Player p) p.getFoodData().eat(1, 0.5f);
+            else e.heal(1);
+        }
         if (has(e, Gene.DECAY_AURA) && t % 20 == 0) {
             for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, e.getBoundingBox().inflate(6),
                     o -> o != e && o instanceof net.minecraft.world.entity.monster.Enemy)) {
@@ -227,6 +249,54 @@ public final class GeneEffects {
                 if (target == null) yield false;
                 target.hurt(level.damageSources().sonicBoom(body), 10);
                 level.playSound(null, body.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS, 2, 1);
+                cd[which] = 300;
+                yield true;
+            }
+            case SACI_WHIRL -> {
+                // a whirlwind hop 8 blocks along your look, leaving a dust devil behind
+                Vec3 from = body.position();
+                Vec3 flat = new Vec3(look.x, 0, look.z).normalize().scale(8);
+                BlockHitResult hit = level.clip(new ClipContext(from.add(0, 0.5, 0), from.add(flat).add(0, 0.5, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, body));
+                Vec3 to = hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().subtract(flat.normalize()) : from.add(flat);
+                Entity mover = body.getVehicle() != null ? body.getVehicle() : body;
+                level.sendParticles(ParticleTypes.CLOUD, from.x, from.y + 0.5, from.z, 30, 0.3, 0.8, 0.3, 0.05);
+                mover.teleportTo(to.x, to.y, to.z);
+                level.playSound(null, body.blockPosition(), SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), SoundSource.PLAYERS, 0.8f, 1.4f);
+                cd[which] = 80;
+                yield true;
+            }
+            case FROST_BREATH -> {
+                Vec3 eye = aim.getEyePosition();
+                for (int i = 1; i <= 8; i++) {
+                    Vec3 p = eye.add(look.scale(i));
+                    level.sendParticles(ParticleTypes.SNOWFLAKE, p.x, p.y, p.z, 4, 0.2 * i / 4, 0.2 * i / 4, 0.2 * i / 4, 0.01);
+                }
+                for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, body.getBoundingBox().inflate(9), o -> o != body && o != aim && o.isAlive())) {
+                    Vec3 to = other.getEyePosition().subtract(eye);
+                    if (to.length() > 9 || to.normalize().dot(look) < 0.8) continue;
+                    other.setTicksFrozen(Math.max(other.getTicksFrozen(), 200));
+                    other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1), body);
+                    other.hurt(level.damageSources().freeze(), 4 * scale(body));
+                }
+                level.playSound(null, body.blockPosition(), SoundEvents.POWDER_SNOW_STEP, SoundSource.PLAYERS, 1.5f, 0.6f);
+                cd[which] = 100;
+                yield true;
+            }
+            case ATOMIC_BREATH -> {
+                // a long fire beam with a huge heat cost on a mecha
+                Vec3 eye = aim.getEyePosition();
+                LivingEntity target = target(aim, body, 24);
+                Vec3 end = target != null ? target.getEyePosition() : eye.add(look.scale(24));
+                for (int i = 1; i < (int) eye.distanceTo(end); i++) {
+                    Vec3 p = eye.add(end.subtract(eye).normalize().scale(i));
+                    level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, p.x, p.y, p.z, 3, 0.1, 0.1, 0.1, 0.01);
+                }
+                if (target != null) {
+                    target.hurt(level.damageSources().indirectMagic(body, aim), 12 * scale(body));
+                    target.igniteForSeconds(6);
+                }
+                if (body instanceof MechaEntity mecha) mecha.setHeat(mecha.heat() + mecha.frame().heatCap * 0.4f);
+                level.playSound(null, body.blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.PLAYERS, 1.5f, 0.6f);
                 cd[which] = 300;
                 yield true;
             }

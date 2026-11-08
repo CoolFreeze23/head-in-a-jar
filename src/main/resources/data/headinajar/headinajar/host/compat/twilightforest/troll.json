@@ -1,0 +1,22 @@
+{
+  "entity": "twilightforest:troll",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "knockback_immune"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "primary": {
+    "type": "toss",
+    "params": {
+      "power": 1.4
+    },
+    "cooldown": 60
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "entity": "aether:moa",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "slow_fall",
+    "no_fall_damage"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "aether"
+    }
+  ],
+  "primary": {
+    "type": "hover",
+    "params": {
+      "duration": 60.0
+    },
+    "cooldown": 120
+  },
+  "secondary": {
+    "type": "sprint",
+    "params": {},
+    "cooldown": 200
+  }
+}

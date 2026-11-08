@@ -187,7 +187,7 @@ public final class FormActions {
         Network.sync(player);
         // the body entity steps into the player when it next ticks (its chunk may still be loading)
         if (level.getEntity(body.entity()) instanceof HeadlessBody entity) absorbBody(player, entity);
-        level.playSound(null, to.x, to.y, to.z, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.6f, 1.4f);
+        level.playSound(null, to.x, to.y, to.z, com.coolfreeze23.headinajar.registry.ModSounds.LINK_RESTORED.get(), SoundSource.PLAYERS, 0.8f, 1);
         return true;
     }
 
@@ -236,6 +236,16 @@ public final class FormActions {
         Network.sync(player);
         var data = com.coolfreeze23.headinajar.host.Hosts.data(host);
         if (!data.handshaken && !data.shell) Network.startHandshake(player, host);
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity boarded) {
+            if (boarded.frame() == com.coolfreeze23.headinajar.mecha.MechaFrame.COLOSSUS || boarded.frame() == com.coolfreeze23.headinajar.mecha.MechaFrame.EXECUTIVE) {
+                com.coolfreeze23.headinajar.Advance.grant(player, "heavy_head");
+            }
+        } else if (!data.shell) {
+            com.coolfreeze23.headinajar.Advance.grant(player, "hosted");
+            if (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(host.getType()).toString().equals("brazil_legends:headless_mule")) {
+                com.coolfreeze23.headinajar.Advance.grant(player, "mula");
+            }
+        }
         player.serverLevel().playSound(null, host.getX(), host.getY(), host.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 0.6f);
         return true;
     }
@@ -312,7 +322,8 @@ public final class FormActions {
     }
 
     public static boolean hasSatchel(Player player) {
-        return player.getInventory().contains(new ItemStack(ModRegistry.HEAD_SATCHEL.get()));
+        return player.getInventory().contains(new ItemStack(ModRegistry.HEAD_SATCHEL.get()))
+                || com.coolfreeze23.headinajar.compat.Compat.wearsCurio(player, ModRegistry.HEAD_SATCHEL.get());
     }
 
     // --- dying -----------------------------------------------------------------------------------

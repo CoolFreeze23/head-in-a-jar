@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:neural_lace"
+    },
+    "title": {
+      "translate": "advancements.headinajar.synced.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.synced.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "synced"
+      }
+    }
+  },
+  "parent": "headinajar:hosted"
+}

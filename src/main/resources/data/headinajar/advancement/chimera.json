@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:chimera_frame"
+    },
+    "title": {
+      "translate": "advancements.headinajar.chimera.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.chimera.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "chimera"
+      }
+    }
+  },
+  "parent": "headinajar:spliced"
+}

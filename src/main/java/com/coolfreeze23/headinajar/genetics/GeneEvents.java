@@ -22,6 +22,31 @@ public final class GeneEvents {
     private GeneEvents() {
     }
 
+    public static final String REGROWTH_READY = "headinajar_regrowth_ready";
+    public static final int REGROWTH_COOLDOWN = 12_000;
+
+    /** Blazing Soul: landing from a fall of 3 or more sends a ring of flame strikes out to 4 blocks. */
+    @SubscribeEvent
+    public static void fall(net.neoforged.neoforge.event.entity.living.LivingFallEvent event) {
+        LivingEntity e = event.getEntity();
+        if (e.level().isClientSide || event.getDistance() < 3 || !carries(e) || !GeneEffects.has(e, Gene.BLAZING_SOUL)) return;
+        burst(e);
+        event.setDamageMultiplier(0);
+    }
+
+    public static void burst(LivingEntity e) {
+        var level = (net.minecraft.server.level.ServerLevel) e.level();
+        for (int i = 0; i < 16; i++) {
+            double a = i * Math.PI / 8;
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, e.getX() + Math.cos(a) * 3, e.getY() + 0.1, e.getZ() + Math.sin(a) * 3, 4, 0.2, 0.3, 0.2, 0.02);
+        }
+        for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, e.getBoundingBox().inflate(4), o -> o != e && o != e.getVehicle())) {
+            other.hurt(level.damageSources().onFire(), 4 * GeneEffects.scale(e));
+            other.igniteForSeconds(4);
+        }
+        level.playSound(null, e.blockPosition(), net.minecraft.sounds.SoundEvents.BLAZE_SHOOT, e.getSoundSource(), 1.2f, 0.6f);
+    }
+
     private static boolean carries(LivingEntity e) {
         return e.hasData(ModRegistry.GENES) && !e.getData(ModRegistry.GENES).isEmpty();
     }
@@ -36,7 +61,7 @@ public final class GeneEvents {
         LivingEntity victim = event.getEntity();
         var source = event.getSource();
         if (carries(victim) && GeneEffects.active(victim)) {
-            if (source.is(DamageTypeTags.IS_FIRE) && GeneEffects.has(victim, Gene.BLAZE_CORE)) {
+            if (source.is(DamageTypeTags.IS_FIRE) && (GeneEffects.has(victim, Gene.BLAZE_CORE) || GeneEffects.has(victim, Gene.MULE_FIRE))) {
                 event.setCanceled(true);
                 return;
             }
@@ -49,6 +74,18 @@ public final class GeneEvents {
             }
             if (source.is(DamageTypeTags.IS_PROJECTILE)) event.setAmount(event.getAmount() * (1 - 0.3f * GeneEffects.s(victim, Gene.TURTLE_SHELL)));
             if (GeneEffects.has(victim, Gene.GLASS_JAW)) event.setAmount(event.getAmount() * 1.1f);
+            // Regrowth: once every 10 minutes a lethal hit leaves you at 30% instead
+            if (GeneEffects.has(victim, Gene.REGROWTH) && event.getAmount() >= victim.getHealth()) {
+                long now = victim.level().getGameTime();
+                var data = victim.getPersistentData();
+                if (data.getLong(REGROWTH_READY) <= now) {
+                    data.putLong(REGROWTH_READY, now + REGROWTH_COOLDOWN);
+                    event.setAmount(0);
+                    victim.setHealth(victim.getMaxHealth() * 0.3f);
+                    victim.level().playSound(null, victim.blockPosition(), net.minecraft.sounds.SoundEvents.TOTEM_USE, victim.getSoundSource(), 0.6f, 1.4f);
+                    return;
+                }
+            }
             if (GeneEffects.has(victim, Gene.SLIME_BODY) && source.getDirectEntity() instanceof LivingEntity attacker && source.getDirectEntity() == source.getEntity()) {
                 attacker.knockback(1.2, victim.getX() - attacker.getX(), victim.getZ() - attacker.getZ());
             }

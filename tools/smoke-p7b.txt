@@ -1,0 +1,12 @@
+# Phase 7 retake: Jade on a mecha
+wait 60
+/gamemode creative
+/time set 6000
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+mecha colossus 0 -60 3 hydraulic_legs,galvanic_stack,armor_plating,drill,target_lock
+wait 30
+look 0 -20
+wait 20
+shot 01_jade_mecha
+report done

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:feather"
+    },
+    "title": {
+      "translate": "advancements.headinajar.parachute.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.parachute.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "parachute"
+      }
+    }
+  },
+  "parent": "headinajar:assembled"
+}

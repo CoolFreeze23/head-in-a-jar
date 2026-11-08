@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:bio_gel"
+    },
+    "title": {
+      "translate": "advancements.headinajar.synergy.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.synergy.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "synergy"
+      }
+    }
+  },
+  "parent": "headinajar:spliced"
+}

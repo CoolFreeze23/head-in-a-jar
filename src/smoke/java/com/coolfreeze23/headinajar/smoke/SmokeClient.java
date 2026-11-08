@@ -184,6 +184,13 @@ public class SmokeClient {
             case "hitboxes" -> mc.getEntityRenderDispatcher().setRenderHitBoxes(parts[1].equals("on"));
             case "closegui" -> mc.player.closeContainer();
             case "inventory" -> mc.setScreen(new InventoryScreen(mc.player));
+            case "use" -> mc.gameMode.useItem(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND);
+            case "look" -> {
+                // look YAW PITCH
+                String[] a = parts[1].split(" ");
+                mc.player.setYRot(Float.parseFloat(a[0]));
+                mc.player.setXRot(Float.parseFloat(a[1]));
+            }
             case "book" -> {
                 if (mc.screen instanceof AbstractFurnaceScreen<?> furnace) {
                     furnace.recipeBookComponent.toggleVisibility();

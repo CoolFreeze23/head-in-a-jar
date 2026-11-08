@@ -1,0 +1,34 @@
+# Phase 7, integrations and polish: the handbook, an advancement toast, Jade on a mecha, JEI's info page, the wider Gantry buttons
+wait 60
+/gamemode survival
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+/give @s patchouli:guide_book[patchouli:book="headinajar:handbook"]
+wait 10
+use
+wait 30
+shot 01_handbook
+closegui
+/advancement grant @s only headinajar:board_meeting
+wait 15
+shot 02_advancement_toast
+mecha colossus 0 -60 5 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,armor_plating,drill,hydraulic_fist,target_lock
+wait 30
+look 0 0
+wait 20
+shot 03_jade_mecha
+/give @s headinajar:cerebral_array
+inventory
+wait 20
+shot 04_jei
+closegui
+/setblock 3 -61 3 headinajar:assembly_gantry[facing=south]
+gantry 3 -61 3 hopper
+useblock 3 -61 3
+wait 20
+shot 05_gantry_buttons
+closegui
+report done

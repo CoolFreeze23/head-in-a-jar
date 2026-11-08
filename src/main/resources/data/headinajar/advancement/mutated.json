@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:gene_wash"
+    },
+    "title": {
+      "translate": "advancements.headinajar.mutated.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.mutated.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "mutated"
+      }
+    }
+  },
+  "parent": "headinajar:spliced"
+}

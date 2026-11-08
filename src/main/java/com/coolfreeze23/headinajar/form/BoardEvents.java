@@ -41,6 +41,14 @@ public final class BoardEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void mount(net.neoforged.neoforge.event.entity.EntityMountEvent event) {
+        if (event.isMounting() && event.getEntityMounting() instanceof ServerPlayer p && FormActions.state(p).form() == Form.LINKED
+                && event.getEntityBeingMounted() instanceof net.minecraft.world.entity.animal.horse.AbstractHorse) {
+            com.coolfreeze23.headinajar.Advance.grant(p, "headless_horseman");
+        }
+    }
+
     /** Lacrimal Laser: the head weeps a beam, 4 damage at 8 blocks, once a second, 1,500 FE. */
     public static boolean laser(ServerPlayer player) {
         JarState state = FormActions.state(player);

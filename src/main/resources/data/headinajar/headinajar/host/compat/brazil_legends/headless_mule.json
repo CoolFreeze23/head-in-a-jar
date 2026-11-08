@@ -1,0 +1,28 @@
+{
+  "entity": "brazil_legends:headless_mule",
+  "blood": "brimstone",
+  "decay_per_minute": 0.0,
+  "flags": [
+    "headless",
+    "fire_immune"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "brazil_legends"
+    }
+  ],
+  "primary": {
+    "type": "fireball",
+    "params": {
+      "count": 1.0
+    },
+    "cooldown": 40
+  },
+  "secondary": {
+    "type": "sprint",
+    "params": {},
+    "cooldown": 200
+  }
+}

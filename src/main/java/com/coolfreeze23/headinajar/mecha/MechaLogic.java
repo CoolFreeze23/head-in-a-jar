@@ -221,6 +221,9 @@ public final class MechaLogic {
         if (m.frame().locomotion == MechaFrame.Locomotion.WINGS && !m.onGround() && pilot != null) {
             drain += 40;
             heat += 2;
+            int aloft = m.getPersistentData().getInt("headinajar_aloft") + 1;
+            m.getPersistentData().putInt("headinajar_aloft", aloft);
+            if (aloft == 600) com.coolfreeze23.headinajar.Advance.grant(pilot, "frequent_flyer");
         }
         m.setBattery(m.battery() + gain - Math.round(drain));
         MechaSystems.serverTick(m, pilot);
@@ -345,6 +348,7 @@ public final class MechaLogic {
         Player pilot = Hosts.pilot(m);
         if (pilot instanceof ServerPlayer sp && m.getHealth() < m.getMaxHealth() * 0.1f && m.isAlive()) {
             eject(m, sp);
+            com.coolfreeze23.headinajar.Advance.grant(sp, "parachute");
             sp.setDeltaMovement(0, 1.2, 0);
             sp.hurtMarked = true;
             sp.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 200));

@@ -122,6 +122,9 @@ public final class GeneticsItems {
             int quality = quality(target, min + player.getRandom().nextInt(max - min + 1));
             if (!harmless) target.hurt(player.damageSources().playerAttack(player), 1);
             com.coolfreeze23.headinajar.form.FormActions.give(player, sample(ModRegistry.BLOOD_SAMPLE.get(), target.getType(), quality));
+            int drawn = player.getPersistentData().getInt("headinajar_samples") + 1;
+            player.getPersistentData().putInt("headinajar_samples", drawn);
+            if (drawn >= 10) com.coolfreeze23.headinajar.Advance.grant(player, "out_for_blood");
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             player.serverLevel().playSound(null, target.blockPosition(), SoundEvents.BEE_STING, target.getSoundSource(), 0.8f, 1.4f);
             return InteractionResult.CONSUME;
@@ -173,6 +176,7 @@ public final class GeneticsItems {
             }
             Genetics.Result result = Genetics.inject(target, serum.get(), kind, player.getRandom());
             report(player, result);
+            if (result == Genetics.Result.OK || result == Genetics.Result.MUTATED) injected(player, serum.get(), target);
             if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) return InteractionResult.FAIL;
             stack.shrink(1);
             com.coolfreeze23.headinajar.form.FormActions.give(player, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
@@ -181,6 +185,22 @@ public final class GeneticsItems {
         }
 
         public static void report(ServerPlayer player, Genetics.Result result) {
+            if (result == Genetics.Result.MUTATED) {
+                com.coolfreeze23.headinajar.Advance.grant(player, "mutated");
+                player.serverLevel().playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.registry.ModSounds.GENE_MUTATION.get(), player.getSoundSource(), 1, 1);
+            }
+            reportOnly(player, result);
+        }
+
+        /** Achievements for a serum that went in: a synergy pair, and a mecha carrying five or more genes. */
+        public static void injected(ServerPlayer player, Serum serum, LivingEntity target) {
+            java.util.Set<Gene> genes = new java.util.HashSet<>();
+            for (Serum.Entry e : serum.genes()) genes.add(e.gene());
+            for (Gene[] pair : Gene.SYNERGIES) if (genes.contains(pair[0]) && genes.contains(pair[1])) com.coolfreeze23.headinajar.Advance.grant(player, "synergy");
+            if (target instanceof com.coolfreeze23.headinajar.entity.MechaEntity && Genetics.genes(target).strengths().size() >= 5) com.coolfreeze23.headinajar.Advance.grant(player, "chimera");
+        }
+
+        private static void reportOnly(ServerPlayer player, Genetics.Result result) {
             player.displayClientMessage(Component.translatable("message.headinajar.inject." + result.name().toLowerCase(java.util.Locale.ROOT)), true);
             player.serverLevel().playSound(null, player.blockPosition(), result == Genetics.Result.REJECTED ? SoundEvents.SLIME_HURT : SoundEvents.BREWING_STAND_BREW,
                     player.getSoundSource(), 1, 1.2f);

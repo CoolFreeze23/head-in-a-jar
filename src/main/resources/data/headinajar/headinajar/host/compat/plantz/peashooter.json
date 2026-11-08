@@ -1,0 +1,20 @@
+{
+  "entity": "plantz:peashooter",
+  "blood": "ichor",
+  "decay_per_minute": 1.0,
+  "flags": [],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "plantz"
+    }
+  ],
+  "primary": {
+    "type": "arrows",
+    "params": {
+      "count": 1.0
+    },
+    "cooldown": 20
+  }
+}

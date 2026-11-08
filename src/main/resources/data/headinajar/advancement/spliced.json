@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:serum_cassette"
+    },
+    "title": {
+      "translate": "advancements.headinajar.spliced.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.spliced.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "spliced"
+      }
+    }
+  },
+  "parent": "headinajar:out_for_blood"
+}

@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:surgical_steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.headinajar.root.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/white_terracotta.png"
+  },
+  "criteria": {
+    "steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "headinajar:surgical_steel_ingot"
+          }
+        ]
+      }
+    }
+  }
+}

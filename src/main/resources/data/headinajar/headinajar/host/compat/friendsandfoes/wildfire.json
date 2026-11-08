@@ -1,0 +1,25 @@
+{
+  "entity": "friendsandfoes:wildfire",
+  "blood": "brimstone",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "fire_immune",
+    "slow_fall"
+  ],
+  "neutral_to": [
+    "minecraft:blaze"
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "friendsandfoes"
+    }
+  ],
+  "primary": {
+    "type": "fireball",
+    "params": {
+      "count": 3.0
+    },
+    "cooldown": 40
+  }
+}

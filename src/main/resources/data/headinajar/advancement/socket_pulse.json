@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:neural_socket"
+    },
+    "title": {
+      "translate": "advancements.headinajar.socket_pulse.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.socket_pulse.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "socket_pulse"
+      }
+    }
+  },
+  "parent": "headinajar:root"
+}

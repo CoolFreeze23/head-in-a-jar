@@ -1,0 +1,30 @@
+{
+  "entity": "plantz:gargantuar",
+  "blood": "grave",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "knockback_immune"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "plantz"
+    }
+  ],
+  "primary": {
+    "type": "toss",
+    "params": {
+      "power": 1.6
+    },
+    "cooldown": 60
+  },
+  "secondary": {
+    "type": "roar",
+    "params": {
+      "radius": 5.0,
+      "duration": 30.0
+    },
+    "cooldown": 200
+  }
+}

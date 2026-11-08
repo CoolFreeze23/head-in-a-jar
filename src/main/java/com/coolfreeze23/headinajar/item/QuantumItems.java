@@ -106,6 +106,7 @@ public final class QuantumItems {
                 Network.sync(sp);
             }
             stack.shrink(1);
+            if (upgrade == Upgrade.PERISCOPE_STALK) com.coolfreeze23.headinajar.Advance.grant(player, "periscope");
             level.playSound(null, player.blockPosition(), SoundEvents.SMITHING_TABLE_USE, player.getSoundSource(), 0.8f, 1.4f);
             player.displayClientMessage(Component.translatable("collar.headinajar.installed", Component.translatable(getDescriptionId())), true);
             return InteractionResultHolder.consume(stack);

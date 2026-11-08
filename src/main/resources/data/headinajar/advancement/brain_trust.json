@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:board_room_core"
+    },
+    "title": {
+      "translate": "advancements.headinajar.brain_trust.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.brain_trust.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "brain_trust"
+      }
+    }
+  },
+  "parent": "headinajar:board_meeting"
+}

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:separation_chair"
+    },
+    "title": {
+      "translate": "advancements.headinajar.signed.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.signed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "signed"
+      }
+    }
+  },
+  "parent": "headinajar:root"
+}

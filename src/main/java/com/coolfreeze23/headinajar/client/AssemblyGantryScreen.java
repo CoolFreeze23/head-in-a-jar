@@ -31,9 +31,9 @@ public class AssemblyGantryScreen extends MachineScreen<AssemblyGantryMenu> {
     protected void init() {
         super.init();
         int x = leftPos, y = topPos;
-        add(x + 44, y + 74, 40, 14, "gui.headinajar.gantry.assemble", AssemblyGantryMenu.ASSEMBLE);
-        add(x + 86, y + 74, 44, 14, "gui.headinajar.gantry.disassemble", AssemblyGantryMenu.DISASSEMBLE);
-        add(x + 132, y + 74, 38, 14, "gui.headinajar.gantry.repair", AssemblyGantryMenu.REPAIR);
+        add(x + 6, y + 74, 52, 14, "gui.headinajar.gantry.assemble", AssemblyGantryMenu.ASSEMBLE);
+        add(x + 59, y + 74, 66, 14, "gui.headinajar.gantry.disassemble", AssemblyGantryMenu.DISASSEMBLE);
+        add(x + 126, y + 74, 44, 14, "gui.headinajar.gantry.repair", AssemblyGantryMenu.REPAIR);
         add(x + 117, y + 55, 13, 14, "<", AssemblyGantryMenu.PREV);
         add(x + 130, y + 55, 13, 14, ">", AssemblyGantryMenu.NEXT);
         add(x + 145, y + 55, 13, 14, "-", AssemblyGantryMenu.MINUS);

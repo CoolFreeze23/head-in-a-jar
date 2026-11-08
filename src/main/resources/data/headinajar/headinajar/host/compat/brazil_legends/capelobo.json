@@ -1,0 +1,23 @@
+{
+  "entity": "brazil_legends:capelobo",
+  "blood": "warm",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "night_vision"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "brazil_legends"
+    }
+  ],
+  "primary": {
+    "type": "pounce",
+    "params": {
+      "damage": 5.0,
+      "speed": 1.2
+    },
+    "cooldown": 60
+  }
+}

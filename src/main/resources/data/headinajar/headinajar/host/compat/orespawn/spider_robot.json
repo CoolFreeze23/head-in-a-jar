@@ -1,0 +1,23 @@
+{
+  "entity": "orespawn:spider_robot",
+  "blood": "oil",
+  "decay_per_minute": 0.0,
+  "flags": [
+    "climb",
+    "no_fall_damage"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "orespawn"
+    }
+  ],
+  "primary": {
+    "type": "web",
+    "params": {
+      "range": 16.0
+    },
+    "cooldown": 60
+  }
+}

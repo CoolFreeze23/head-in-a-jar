@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "headinajar:replacement_blade"
+    },
+    "title": {
+      "translate": "advancements.headinajar.botched.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.botched.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "botched"
+      }
+    }
+  },
+  "parent": "headinajar:separated"
+}

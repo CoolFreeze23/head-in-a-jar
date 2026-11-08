@@ -164,6 +164,10 @@ public final class LabMachines {
             GeneArchive archive = GeneArchive.get(level.getServer());
             float gain = Genetics.readGain(GeneticsItems.quality(in), accuracy, genes.size());
             for (Gene g : genes) archive.add(owner, g, gain);
+            for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
+                if (!GeneArchive.key(p).equals(owner)) continue;
+                for (Gene g : genes) if (g.category == Gene.Category.LEGENDARY && archive.readout(owner, g) >= 100) com.coolfreeze23.headinajar.Advance.grant(p, "legendary");
+            }
             items.extractItem(0, 1, false);
             seed = level.random.nextInt(1 << 20);
             setChanged();
@@ -330,7 +334,12 @@ public final class LabMachines {
             running = false;
             progress = 0;
             refresh();
-            if (level != null) level.playSound(null, worldPosition, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1, 0.8f);
+            if (level != null) {
+                level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.GENE_SPLICE.get(), SoundSource.BLOCKS, 1, 1);
+                for (var p : level.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(16))) {
+                    if (GeneArchive.key(p).equals(owner)) com.coolfreeze23.headinajar.Advance.grant(p, "spliced");
+                }
+            }
             return cassette;
         }
 
@@ -387,6 +396,7 @@ public final class LabMachines {
             }
             Genetics.Result result = Genetics.inject(player, serum.get(), Genetics.Target.BODY, player.getRandom());
             GeneticsItems.SerumItem.report(player, result);
+            if (result == Genetics.Result.OK || result == Genetics.Result.MUTATED) GeneticsItems.SerumItem.injected(player, serum.get(), player);
             if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) return result;
             spend(COST);
             items.extractItem(0, 1, false);

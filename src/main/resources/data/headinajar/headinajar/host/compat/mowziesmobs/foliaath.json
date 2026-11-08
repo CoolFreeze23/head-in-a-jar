@@ -1,0 +1,23 @@
+{
+  "entity": "mowziesmobs:foliaath",
+  "blood": "ichor",
+  "decay_per_minute": 1.0,
+  "flags": [
+    "knockback_immune"
+  ],
+  "neutral_to": [],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mowziesmobs"
+    }
+  ],
+  "primary": {
+    "type": "pounce",
+    "params": {
+      "damage": 6.0,
+      "speed": 0.6
+    },
+    "cooldown": 40
+  }
+}

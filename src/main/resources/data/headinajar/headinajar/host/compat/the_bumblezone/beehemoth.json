@@ -1,0 +1,18 @@
+{
+  "entity": "the_bumblezone:beehemoth",
+  "blood": "ichor",
+  "decay_per_minute": 2.0,
+  "flags": [
+    "flight",
+    "slow_fall"
+  ],
+  "neutral_to": [
+    "minecraft:bee"
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "the_bumblezone"
+    }
+  ]
+}
