@@ -1,0 +1,1453 @@
+{
+ "about": "DOLORES, the Separation Chair's assistant: machine-generated speech (VoxCPM2, a voice designed from a written description, through a 30 Hz ring modulator and a small-speaker chain; see README.md). One entry per line; ticks are the chair operation's (ChairTimeline).",
+ "requirements": [
+  "The client picks the English or the Portuguese event from its own language setting: Minecraft.getInstance().getLanguageManager().getSelected() starting with \"pt\" plays the pt event, anything else the en event. The server never chooses; it sends which line (and the chair) to every player tracking the chair.",
+  "Sound category VOICE (the Voice/Speech slider), so players can turn DOLORES down on her own.",
+  "Positional at the chair block centre, mono, volume 1.0, pitch 1.0 (never randomised), linear attenuation, range 16 blocks.",
+  "Voiced during the operation: start, gas, scan, jar, then done or oopsie. cut and privacy have voiced_in_operation false: text only during the operation (their files are kept, unused).",
+  "Each language has its own spacing: start tick = trigger tick + en.offset_ticks or pt.offset_ticks (the language the client plays). A line never overlaps the next line's start; a new DOLORES line from the same chair stops the one still playing.",
+  "The patient hears the *_muffled event for voiced lines marked muffled (gas, scan, jar); everyone else hears the clear event.",
+  "Ducking: a chair effect from the same chair that starts inside a line's window plays at the listed dB (volume x 10^(dB/20)) for that client; the cut, the latch at 100, the barrier latch, the clamp and the ding never duck.",
+  "Refusal and blade lines: at most one per chair every 60 ticks, and the same refusal at most once per sitting.",
+  "Off switch: a client config doloresVoice (default true); off means the payload is ignored and the text stays.",
+  "Subtitles: register the subtitle key on each event; the action-bar line keeps the full written text."
+ ],
+ "category": "voice",
+ "range_blocks": 16,
+ "volume": 1.0,
+ "pitch": 1.0,
+ "stream": false,
+ "loudness": "every clear file M max -24 (vanilla villager idle1 -24.1); muffled files 6 dB under (-30); peak <= -1 dBFS",
+ "muffle": {
+  "lowpass_hz": 1400,
+  "order": 2,
+  "gain_db": -6.0
+ },
+ "room": {
+  "source": "the chair's own sounds measured per tick as a bystander hears them (short-term loudness, 400 ms)",
+  "conflicts": {
+   "start.en": [
+    "0-20 restraint (the barrier latch at 13 is -22)"
+   ],
+   "start.pt": [
+    "0-20 restraint (the barrier latch at 13 is -22)"
+   ],
+   "jar.en": [
+    "200-240 lid, collar and handshake, the loudest stretch"
+   ],
+   "jar.pt": [
+    "200-240 lid, collar and handshake, the loudest stretch"
+   ]
+  }
+ },
+ "totals": {
+  "en": {
+   "lines": 21,
+   "heard_s": 59.6,
+   "bytes": 746432
+  },
+  "pt": {
+   "lines": 21,
+   "heard_s": 64.0,
+   "bytes": 798950
+  }
+ },
+ "lines": [
+  {
+   "id": "start",
+   "key": "dolores.headinajar.start",
+   "trigger": "sign() after the Form 27-B signature",
+   "trigger_tick": 0,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "alt0",
+    "spoken": "Thank you.",
+    "heard_s": 1.07,
+    "file_s": 1.284,
+    "heard_ticks": 22,
+    "wer": 0.0,
+    "asr_heard": "Thank you.",
+    "offset_ticks": 0,
+    "start_tick": 0,
+    "end_tick": 22,
+    "window": "0-22",
+    "fits": true,
+    "air_after_ticks": 0,
+    "cue_gap_ticks": 20,
+    "duck": [
+     {
+      "tick": 0,
+      "event": "chair.servo_barrier",
+      "db": -6
+     },
+     {
+      "tick": 21,
+      "event": "chair.hood_nod",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.barrier_drop@3",
+     "chair.barrier_latch@11",
+     "chair.barrier_settle@17"
+    ],
+    "over_no_room": [
+     "0-20 restraint (the barrier latch at 13 is -22)"
+    ],
+    "file": "assets/headinajar/sounds/voice/en/start.ogg",
+    "sound_id": "headinajar:voice/en/start",
+    "event": "headinajar:dolores.en.start",
+    "bytes": 14675,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt1",
+    "spoken": "Muito obrigada.",
+    "heard_s": 1.38,
+    "file_s": 1.594,
+    "heard_ticks": 28,
+    "wer": 0.0,
+    "asr_heard": "Muito obrigada.",
+    "offset_ticks": 0,
+    "start_tick": 0,
+    "end_tick": 28,
+    "window": "0-28",
+    "fits": true,
+    "air_after_ticks": 0,
+    "cue_gap_ticks": 20,
+    "duck": [
+     {
+      "tick": 0,
+      "event": "chair.servo_barrier",
+      "db": -6
+     },
+     {
+      "tick": 21,
+      "event": "chair.hood_nod",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.barrier_drop@3",
+     "chair.barrier_latch@11",
+     "chair.barrier_settle@17"
+    ],
+    "over_no_room": [
+     "0-20 restraint (the barrier latch at 13 is -22)"
+    ],
+    "file": "assets/headinajar/sounds/voice/pt/start.ogg",
+    "sound_id": "headinajar:voice/pt/start",
+    "event": "headinajar:dolores.pt.start",
+    "bytes": 18204,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "gas",
+   "key": "dolores.headinajar.gas",
+   "trigger": "step() tick 20",
+   "trigger_tick": 20,
+   "muffled": true,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "short",
+    "spoken": "Breathe normally.",
+    "heard_s": 1.66,
+    "file_s": 1.874,
+    "heard_ticks": 34,
+    "wer": 0.0,
+    "asr_heard": "Breathe normally.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Breathe normally.",
+    "offset_ticks": 2,
+    "start_tick": 22,
+    "end_tick": 56,
+    "window": "22-60",
+    "fits": true,
+    "air_after_ticks": 4,
+    "cue_gap_ticks": 40,
+    "duck": [
+     {
+      "tick": 30,
+      "event": "chair.gas_hiss",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.beep@40",
+     "chair.beep@47",
+     "chair.beep@54"
+    ],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/gas.ogg",
+    "sound_id": "headinajar:voice/en/gas",
+    "event": "headinajar:dolores.en.gas",
+    "bytes": 20033,
+    "file_muffled": "assets/headinajar/sounds/voice/en/gas_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/en/gas_muffled",
+    "event_muffled": "headinajar:dolores.en.gas.muffled",
+    "bytes_muffled": 17542
+   },
+   "pt": {
+    "variant": "short",
+    "spoken": "Respire normalmente.",
+    "heard_s": 2.04,
+    "file_s": 2.254,
+    "heard_ticks": 41,
+    "wer": 0.0,
+    "asr_heard": "Respire normalmente.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Respire normalmente.",
+    "offset_ticks": 8,
+    "start_tick": 28,
+    "end_tick": 69,
+    "window": "28-69",
+    "fits": true,
+    "air_after_ticks": 0,
+    "cue_gap_ticks": 40,
+    "duck": [
+     {
+      "tick": 30,
+      "event": "chair.gas_hiss",
+      "db": -6
+     },
+     {
+      "tick": 56,
+      "event": "chair.hood_nod",
+      "db": -6
+     },
+     {
+      "tick": 60,
+      "event": "chair.scan_chirp",
+      "db": -6
+     },
+     {
+      "tick": 68,
+      "event": "chair.servo_tick",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.beep@40",
+     "chair.beep@47",
+     "chair.beep@54"
+    ],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/gas.ogg",
+    "sound_id": "headinajar:voice/pt/gas",
+    "event": "headinajar:dolores.pt.gas",
+    "bytes": 23613,
+    "file_muffled": "assets/headinajar/sounds/voice/pt/gas_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/pt/gas_muffled",
+    "event_muffled": "headinajar:dolores.pt.gas.muffled",
+    "bytes_muffled": 20601
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "scan",
+   "key": "dolores.headinajar.scan",
+   "trigger": "step() ChairTimeline.SCAN (60)",
+   "trigger_tick": 60,
+   "muffled": true,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "short",
+    "spoken": "Please hold still.",
+    "heard_s": 1.72,
+    "file_s": 1.934,
+    "heard_ticks": 35,
+    "wer": 0.0,
+    "asr_heard": "Please hold still.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Please hold still.",
+    "offset_ticks": 0,
+    "start_tick": 60,
+    "end_tick": 95,
+    "window": "60-100 (ends before the latch at 100)",
+    "fits": true,
+    "air_after_ticks": 5,
+    "cue_gap_ticks": 40,
+    "duck": [
+     {
+      "tick": 60,
+      "event": "chair.scan_chirp",
+      "db": -6
+     },
+     {
+      "tick": 68,
+      "event": "chair.servo_tick",
+      "db": -6
+     },
+     {
+      "tick": 74,
+      "event": "chair.servo_tick",
+      "db": -6
+     },
+     {
+      "tick": 80,
+      "event": "chair.servo_tick",
+      "db": -6
+     },
+     {
+      "tick": 86,
+      "event": "chair.servo_tick",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.beep@94"
+    ],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/scan.ogg",
+    "sound_id": "headinajar:voice/en/scan",
+    "event": "headinajar:dolores.en.scan",
+    "bytes": 20056,
+    "file_muffled": "assets/headinajar/sounds/voice/en/scan_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/en/scan_muffled",
+    "event_muffled": "headinajar:dolores.en.scan.muffled",
+    "bytes_muffled": 18254
+   },
+   "pt": {
+    "variant": "short",
+    "spoken": "Fique parado.",
+    "heard_s": 1.44,
+    "file_s": 1.654,
+    "heard_ticks": 29,
+    "wer": 0.0,
+    "asr_heard": "Fique parado.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Fique parado.",
+    "offset_ticks": 9,
+    "start_tick": 69,
+    "end_tick": 98,
+    "window": "69-100 (ends before the latch at 100)",
+    "fits": true,
+    "air_after_ticks": 2,
+    "cue_gap_ticks": 40,
+    "duck": [
+     {
+      "tick": 74,
+      "event": "chair.servo_tick",
+      "db": -6
+     },
+     {
+      "tick": 80,
+      "event": "chair.servo_tick",
+      "db": -6
+     },
+     {
+      "tick": 86,
+      "event": "chair.servo_tick",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.beep@94"
+    ],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/scan.ogg",
+    "sound_id": "headinajar:voice/pt/scan",
+    "event": "headinajar:dolores.pt.scan",
+    "bytes": 18396,
+    "file_muffled": "assets/headinajar/sounds/voice/pt/scan_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/pt/scan_muffled",
+    "event_muffled": "headinajar:dolores.pt.scan.muffled",
+    "bytes_muffled": 15879
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "cut",
+   "key": "dolores.headinajar.cut",
+   "trigger": "step() CUT_COMMIT (100)",
+   "trigger_tick": 100,
+   "muffled": true,
+   "voiced_in_operation": false,
+   "en": {
+    "variant": "main",
+    "spoken": "Commencing.",
+    "heard_s": 1.23,
+    "file_s": 1.444,
+    "heard_ticks": 25,
+    "wer": 0.0,
+    "asr_heard": "Commencing.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Commencing.",
+    "offset_ticks": null,
+    "start_tick": null,
+    "end_tick": null,
+    "fits": null,
+    "window": "text only during the operation (nothing may play over 114-120)",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/cut.ogg",
+    "sound_id": "headinajar:voice/en/cut",
+    "event": "headinajar:dolores.en.cut",
+    "bytes": 16061,
+    "file_muffled": "assets/headinajar/sounds/voice/en/cut_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/en/cut_muffled",
+    "event_muffled": "headinajar:dolores.en.cut.muffled",
+    "bytes_muffled": 14346
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Iniciando.",
+    "heard_s": 1.33,
+    "file_s": 1.554,
+    "heard_ticks": 27,
+    "wer": 0.0,
+    "asr_heard": "Iniciando.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Iniciando.",
+    "offset_ticks": null,
+    "start_tick": null,
+    "end_tick": null,
+    "fits": null,
+    "window": "text only during the operation (nothing may play over 114-120)",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/cut.ogg",
+    "sound_id": "headinajar:voice/pt/cut",
+    "event": "headinajar:dolores.pt.cut",
+    "bytes": 16808,
+    "file_muffled": "assets/headinajar/sounds/voice/pt/cut_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/pt/cut_muffled",
+    "event_muffled": "headinajar:dolores.pt.cut.muffled",
+    "bytes_muffled": 14987
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "privacy",
+   "key": "dolores.headinajar.privacy",
+   "trigger": "step() ChairTimeline.CURTAIN_UP (106)",
+   "trigger_tick": 106,
+   "muffled": true,
+   "voiced_in_operation": false,
+   "en": {
+    "variant": "alt0",
+    "spoken": "A little privacy, please.",
+    "heard_s": 1.83,
+    "file_s": 2.054,
+    "heard_ticks": 37,
+    "wer": 0.0,
+    "asr_heard": "A little privacy, please.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "A little privacy, please.",
+    "offset_ticks": null,
+    "start_tick": null,
+    "end_tick": null,
+    "fits": null,
+    "window": "text only during the operation (nothing may play over 114-120)",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/privacy.ogg",
+    "sound_id": "headinajar:voice/en/privacy",
+    "event": "headinajar:dolores.en.privacy",
+    "bytes": 21815,
+    "file_muffled": "assets/headinajar/sounds/voice/en/privacy_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/en/privacy_muffled",
+    "event_muffled": "headinajar:dolores.en.privacy.muffled",
+    "bytes_muffled": 18896
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Um pouco de privacidade, por favor.",
+    "heard_s": 3.1,
+    "file_s": 3.324,
+    "heard_ticks": 62,
+    "wer": 0.0,
+    "asr_heard": "Um pouco de privacidade, por favor.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Um pouco de privacidade, por favor.",
+    "offset_ticks": null,
+    "start_tick": null,
+    "end_tick": null,
+    "fits": null,
+    "window": "text only during the operation (nothing may play over 114-120)",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/privacy.ogg",
+    "sound_id": "headinajar:voice/pt/privacy",
+    "event": "headinajar:dolores.pt.privacy",
+    "bytes": 32997,
+    "file_muffled": "assets/headinajar/sounds/voice/pt/privacy_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/pt/privacy_muffled",
+    "event_muffled": "headinajar:dolores.pt.privacy.muffled",
+    "bytes_muffled": 29079
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "jar",
+   "key": "dolores.headinajar.jar",
+   "trigger": "step() ChairTimeline.GLUG_LID (140)",
+   "trigger_tick": 140,
+   "muffled": true,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "short",
+    "spoken": "Your head is now in a jar.",
+    "heard_s": 2.34,
+    "file_s": 2.554,
+    "heard_ticks": 47,
+    "wer": 0.0,
+    "asr_heard": "Your head is now in a jar.",
+    "muffled_wer": 0.0,
+    "muffled_asr_heard": "Your head is now in a jar.",
+    "offset_ticks": 18,
+    "start_tick": 158,
+    "end_tick": 205,
+    "window": "152-205 (during the head's transfer, ending by 205)",
+    "fits": true,
+    "duck": [
+     {
+      "tick": 166,
+      "event": "chair.servo",
+      "db": -6
+     },
+     {
+      "tick": 174,
+      "event": "chair.servo_hiccup",
+      "db": -6
+     },
+     {
+      "tick": 184,
+      "event": "chair.hydraulic",
+      "db": -6
+     },
+     {
+      "tick": 199,
+      "event": "chair.saline_glug",
+      "db": -6
+     },
+     {
+      "tick": 204,
+      "event": "chair.hydraulic_short",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.oopsie_squeak@177",
+     "chair.plop@198"
+    ],
+    "over_no_room": [
+     "200-240 lid, collar and handshake, the loudest stretch"
+    ],
+    "file": "assets/headinajar/sounds/voice/en/jar.ogg",
+    "sound_id": "headinajar:voice/en/jar",
+    "event": "headinajar:dolores.en.jar",
+    "bytes": 27651,
+    "file_muffled": "assets/headinajar/sounds/voice/en/jar_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/en/jar_muffled",
+    "event_muffled": "headinajar:dolores.en.jar.muffled",
+    "bytes_muffled": 23011
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Agora sua cabeça está num pote.",
+    "heard_s": 2.39,
+    "file_s": 2.604,
+    "heard_ticks": 48,
+    "wer": 0.167,
+    "asr_heard": "Agora a sua cabeça está num pote.",
+    "muffled_wer": 0.167,
+    "muffled_asr_heard": "Agora a sua cabeça está num pote.",
+    "offset_ticks": 17,
+    "start_tick": 157,
+    "end_tick": 205,
+    "window": "152-205 (during the head's transfer, ending by 205)",
+    "fits": true,
+    "duck": [
+     {
+      "tick": 166,
+      "event": "chair.servo",
+      "db": -6
+     },
+     {
+      "tick": 174,
+      "event": "chair.servo_hiccup",
+      "db": -6
+     },
+     {
+      "tick": 184,
+      "event": "chair.hydraulic",
+      "db": -6
+     },
+     {
+      "tick": 199,
+      "event": "chair.saline_glug",
+      "db": -6
+     },
+     {
+      "tick": 204,
+      "event": "chair.hydraulic_short",
+      "db": -6
+     }
+    ],
+    "overlaps_without_duck": [
+     "chair.oopsie_squeak@177",
+     "chair.plop@198"
+    ],
+    "over_no_room": [
+     "200-240 lid, collar and handshake, the loudest stretch"
+    ],
+    "file": "assets/headinajar/sounds/voice/pt/jar.ogg",
+    "sound_id": "headinajar:voice/pt/jar",
+    "event": "headinajar:dolores.pt.jar",
+    "bytes": 27246,
+    "file_muffled": "assets/headinajar/sounds/voice/pt/jar_muffled.ogg",
+    "sound_id_muffled": "headinajar:voice/pt/jar_muffled",
+    "event_muffled": "headinajar:dolores.pt.jar.muffled",
+    "bytes_muffled": 23718
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "done",
+   "key": "dolores.headinajar.done",
+   "trigger": "finish() at 240, clean cut",
+   "trigger_tick": 240,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Neuro-link established. Please collect your head on the way out.",
+    "heard_s": 3.57,
+    "file_s": 3.784,
+    "heard_ticks": 72,
+    "wer": 0.182,
+    "asr_heard": "NeuroLink established. Please collect your head on the way out.",
+    "offset_ticks": 24,
+    "start_tick": 264,
+    "end_tick": 336,
+    "fits": true,
+    "window": "after 240",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/done.ogg",
+    "sound_id": "headinajar:voice/en/done",
+    "event": "headinajar:dolores.en.done",
+    "bytes": 38942,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Neuroconexão estabelecida. Retire sua cabeça na saída.",
+    "heard_s": 3.4,
+    "file_s": 3.614,
+    "heard_ticks": 68,
+    "wer": 0.286,
+    "asr_heard": "Neu conexão estabelecida. Retire sua cabeça na saída.",
+    "offset_ticks": 24,
+    "start_tick": 264,
+    "end_tick": 332,
+    "fits": true,
+    "window": "after 240",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/done.ogg",
+    "sound_id": "headinajar:voice/pt/done",
+    "event": "headinajar:dolores.pt.done",
+    "bytes": 36430,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "oopsie",
+   "key": "dolores.headinajar.oopsie",
+   "trigger": "finish() at 240, botched cut",
+   "trigger_tick": 240,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Oopsie.",
+    "heard_s": 1.05,
+    "file_s": 1.274,
+    "heard_ticks": 21,
+    "wer": 0.0,
+    "asr_heard": "Oopsie.",
+    "offset_ticks": 34,
+    "start_tick": 274,
+    "end_tick": 295,
+    "fits": true,
+    "window": "after 240",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/oopsie.ogg",
+    "sound_id": "headinajar:voice/en/oopsie",
+    "event": "headinajar:dolores.en.oopsie",
+    "bytes": 13848,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Opa. Desculpe.",
+    "heard_s": 2.05,
+    "file_s": 2.274,
+    "heard_ticks": 41,
+    "wer": 0.0,
+    "asr_heard": "Opa! Desculpe.",
+    "offset_ticks": 34,
+    "start_tick": 274,
+    "end_tick": 315,
+    "fits": true,
+    "window": "after 240",
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/oopsie.ogg",
+    "sound_id": "headinajar:voice/pt/oopsie",
+    "event": "headinajar:dolores.pt.oopsie",
+    "bytes": 22870,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.apologises",
+    "en_us": "DOLORES apologises",
+    "pt_br": "DOLORES se desculpa"
+   }
+  },
+  {
+   "id": "abort",
+   "key": "dolores.headinajar.abort",
+   "trigger": "abort() before the cut (the patient got up)",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Procedure cancelled. Your head remains attached. For now.",
+    "heard_s": 5.06,
+    "file_s": 5.284,
+    "heard_ticks": 102,
+    "wer": 0.0,
+    "asr_heard": "procedure cancelled. Your head remains attached. For now...",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/abort.ogg",
+    "sound_id": "headinajar:voice/en/abort",
+    "event": "headinajar:dolores.en.abort",
+    "bytes": 50850,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Procedimento cancelado. Sua cabeça continua no lugar. Por enquanto.",
+    "heard_s": 5.09,
+    "file_s": 5.304,
+    "heard_ticks": 102,
+    "wer": 0.0,
+    "asr_heard": "Procedimento cancelado. Sua cabeça continua no lugar. Por enquanto.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/abort.ogg",
+    "sound_id": "headinajar:voice/pt/abort",
+    "event": "headinajar:dolores.pt.abort",
+    "bytes": 52003,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "new_blade",
+   "key": "dolores.headinajar.new_blade",
+   "trigger": "SeparationChairBlock, Replacement Blade fitted",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "New blade fitted. So shiny.",
+    "heard_s": 2.93,
+    "file_s": 3.144,
+    "heard_ticks": 59,
+    "wer": 0.0,
+    "asr_heard": "New blade fitted. So shiny.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/new_blade.ogg",
+    "sound_id": "headinajar:voice/en/new_blade",
+    "event": "headinajar:dolores.en.new_blade",
+    "bytes": 31087,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Lâmina nova instalada. Que brilho.",
+    "heard_s": 3.16,
+    "file_s": 3.374,
+    "heard_ticks": 64,
+    "wer": 0.0,
+    "asr_heard": "Lâmina nova instalada. Que brilho!",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/new_blade.ogg",
+    "sound_id": "headinajar:voice/pt/new_blade",
+    "event": "headinajar:dolores.pt.new_blade",
+    "bytes": 34168,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "refuse_power",
+   "key": "dolores.headinajar.refuse.power",
+   "trigger": "sign() refused: power",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Insufficient power. I refuse to stop halfway.",
+    "heard_s": 3.79,
+    "file_s": 4.014,
+    "heard_ticks": 76,
+    "wer": 0.286,
+    "asr_heard": "in sufficient power. I refuse to stop halfway.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_power.ogg",
+    "sound_id": "headinajar:voice/en/refuse_power",
+    "event": "headinajar:dolores.en.refuse_power",
+    "bytes": 38881,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Energia insuficiente. Eu me recuso a parar no meio.",
+    "heard_s": 3.27,
+    "file_s": 3.484,
+    "heard_ticks": 66,
+    "wer": 0.0,
+    "asr_heard": "Energia insuficiente. Eu me recuso a parar no meio.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_power.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_power",
+    "event": "headinajar:dolores.pt.refuse_power",
+    "bytes": 35773,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "refuse_jar",
+   "key": "dolores.headinajar.refuse.jar",
+   "trigger": "sign() refused: no jar",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Where would we put your head? Insert a Life Support Jar.",
+    "heard_s": 3.43,
+    "file_s": 3.644,
+    "heard_ticks": 69,
+    "wer": 0.0,
+    "asr_heard": "Where would we put your head? Insert a life support jar.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_jar.ogg",
+    "sound_id": "headinajar:voice/en/refuse_jar",
+    "event": "headinajar:dolores.en.refuse_jar",
+    "bytes": 37226,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Onde colocaríamos sua cabeça? Insira um Pote de Suporte Vital.",
+    "heard_s": 4.78,
+    "file_s": 4.994,
+    "heard_ticks": 96,
+    "wer": 0.0,
+    "asr_heard": "Onde colocaríamos sua cabeça? Insira um pote de suporte vital.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_jar.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_jar",
+    "event": "headinajar:dolores.pt.refuse_jar",
+    "bytes": 50093,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "refuse_goggles",
+   "key": "dolores.headinajar.refuse.goggles",
+   "trigger": "sign() refused: no goggles",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Relay Goggles required. You will want to see.",
+    "heard_s": 3.33,
+    "file_s": 3.554,
+    "heard_ticks": 67,
+    "wer": 0.0,
+    "asr_heard": "Relay goggles required you will want to see",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_goggles.ogg",
+    "sound_id": "headinajar:voice/en/refuse_goggles",
+    "event": "headinajar:dolores.en.refuse_goggles",
+    "bytes": 35207,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Faltam os Óculos Retransmissores. Você vai querer enxergar.",
+    "heard_s": 4.18,
+    "file_s": 4.404,
+    "heard_ticks": 84,
+    "wer": 0.0,
+    "asr_heard": "Faltam os óculos retransmissores. Você vai querer enxergar.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_goggles.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_goggles",
+    "event": "headinajar:dolores.pt.refuse_goggles",
+    "bytes": 42457,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "refuse_collar",
+   "key": "dolores.headinajar.refuse.collar",
+   "trigger": "sign() refused: no Collar Cam",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Collar Cam required. Your neck needs a hat.",
+    "heard_s": 3.15,
+    "file_s": 3.364,
+    "heard_ticks": 63,
+    "wer": 0.125,
+    "asr_heard": "Color cam required. Your neck needs a hat.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_collar.ogg",
+    "sound_id": "headinajar:voice/en/refuse_collar",
+    "event": "headinajar:dolores.en.refuse_collar",
+    "bytes": 34812,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Falta a Câmera de Colarinho. Seu pescoço precisa de um chapéu.",
+    "heard_s": 3.8,
+    "file_s": 4.024,
+    "heard_ticks": 76,
+    "wer": 0.091,
+    "asr_heard": "Falta a câmera de colarinha Seu pescoço precisa de um chapéu",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_collar.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_collar",
+    "event": "headinajar:dolores.pt.refuse_collar",
+    "bytes": 39552,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "refuse_saline",
+   "key": "dolores.headinajar.refuse.saline",
+   "trigger": "sign() refused: saline",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Four bottles of Cranial Saline, please. Heads get thirsty.",
+    "heard_s": 4.11,
+    "file_s": 4.324,
+    "heard_ticks": 83,
+    "wer": 0.0,
+    "asr_heard": "Four bottles of cranial saline please. Heads get thirsty.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_saline.ogg",
+    "sound_id": "headinajar:voice/en/refuse_saline",
+    "event": "headinajar:dolores.en.refuse_saline",
+    "bytes": 41259,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "Quatro frascos de Soro Craniano, por favor. A cabeça também tem sede.",
+    "heard_s": 5.24,
+    "file_s": 5.464,
+    "heard_ticks": 105,
+    "wer": 0.083,
+    "asr_heard": "4 frascos de soro-craniano, por favor. A cabeça também tem sede.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_saline.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_saline",
+    "event": "headinajar:dolores.pt.refuse_saline",
+    "bytes": 54593,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "refuse_already",
+   "key": "dolores.headinajar.refuse.already",
+   "trigger": "sign() refused: head already off",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Our records show your head is already off.",
+    "heard_s": 2.65,
+    "file_s": 2.864,
+    "heard_ticks": 53,
+    "wer": 0.0,
+    "asr_heard": "Our records show your head is already off.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/refuse_already.ogg",
+    "sound_id": "headinajar:voice/en/refuse_already",
+    "event": "headinajar:dolores.en.refuse_already",
+    "bytes": 30587,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Nossos registros mostram que sua cabeça já saiu.",
+    "heard_s": 3.26,
+    "file_s": 3.474,
+    "heard_ticks": 66,
+    "wer": 0.0,
+    "asr_heard": "Nossos registros mostram que sua cabeça já saiu",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/refuse_already.ogg",
+    "sound_id": "headinajar:voice/pt/refuse_already",
+    "event": "headinajar:dolores.pt.refuse_already",
+    "bytes": 34955,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "chair_blocked",
+   "key": "refusal.headinajar.chair.blocked",
+   "trigger": "sign() refused: work space blocked (the screen names the block)",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "The chair needs room to work.",
+    "heard_s": 2.67,
+    "file_s": 2.884,
+    "heard_ticks": 54,
+    "wer": 0.0,
+    "asr_heard": "The chair needs room to work.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/chair_blocked.ogg",
+    "sound_id": "headinajar:voice/en/chair_blocked",
+    "event": "headinajar:dolores.en.chair_blocked",
+    "bytes": 30468,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "A cadeira precisa de espaço.",
+    "heard_s": 2.39,
+    "file_s": 2.604,
+    "heard_ticks": 48,
+    "wer": 0.0,
+    "asr_heard": "A cadeira precisa de espaço.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/chair_blocked.ogg",
+    "sound_id": "headinajar:voice/pt/chair_blocked",
+    "event": "headinajar:dolores.pt.chair_blocked",
+    "bytes": 27299,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "chair_in_use",
+   "key": "refusal.headinajar.chair.in_use",
+   "trigger": "a bystander clicks a chair in use",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Operation in progress. Kindly wait behind the line.",
+    "heard_s": 3.92,
+    "file_s": 4.144,
+    "heard_ticks": 79,
+    "wer": 0.0,
+    "asr_heard": "Operation in progress, kindly wait behind the line.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/chair_in_use.ogg",
+    "sound_id": "headinajar:voice/en/chair_in_use",
+    "event": "headinajar:dolores.en.chair_in_use",
+    "bytes": 41218,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Operação em andamento. Aguarde atrás da faixa.",
+    "heard_s": 3.23,
+    "file_s": 3.454,
+    "heard_ticks": 65,
+    "wer": 0.0,
+    "asr_heard": "Operação em andamento. Aguarde atrás da faixa.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/chair_in_use.ogg",
+    "sound_id": "headinajar:voice/pt/chair_in_use",
+    "event": "headinajar:dolores.pt.chair_in_use",
+    "bytes": 34836,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "chair_tray_blocked",
+   "key": "refusal.headinajar.chair.tray_blocked",
+   "trigger": "tray cannot come out (the screen names the block)",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "The jar tray can't come out.",
+    "heard_s": 2.93,
+    "file_s": 3.154,
+    "heard_ticks": 59,
+    "wer": 0.0,
+    "asr_heard": "The jar tray can't come out.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/chair_tray_blocked.ogg",
+    "sound_id": "headinajar:voice/en/chair_tray_blocked",
+    "event": "headinajar:dolores.en.chair_tray_blocked",
+    "bytes": 31991,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "A bandeja do pote não sai.",
+    "heard_s": 2.01,
+    "file_s": 2.234,
+    "heard_ticks": 41,
+    "wer": 0.0,
+    "asr_heard": "A bandeja do pote não sai.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/chair_tray_blocked.ogg",
+    "sound_id": "headinajar:voice/pt/chair_tray_blocked",
+    "event": "headinajar:dolores.pt.chair_tray_blocked",
+    "bytes": 23902,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "chair_no_break",
+   "key": "refusal.headinajar.chair.no_break",
+   "trigger": "breaking a chair mid-operation",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Not mid-operation. It comes apart once it is done.",
+    "heard_s": 3.57,
+    "file_s": 3.784,
+    "heard_ticks": 72,
+    "wer": 0.0,
+    "asr_heard": "Not mid-operation. It comes apart once it is done.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/chair_no_break.ogg",
+    "sound_id": "headinajar:voice/en/chair_no_break",
+    "event": "headinajar:dolores.en.chair_no_break",
+    "bytes": 39014,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Não durante a operação. Ela se desmonta depois.",
+    "heard_s": 3.33,
+    "file_s": 3.554,
+    "heard_ticks": 67,
+    "wer": 0.0,
+    "asr_heard": "Não durante a operação. Ela se desmonta depois.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/chair_no_break.ogg",
+    "sound_id": "headinajar:voice/pt/chair_no_break",
+    "event": "headinajar:dolores.pt.chair_no_break",
+    "bytes": 34883,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  },
+  {
+   "id": "chair_blade_busy",
+   "key": "refusal.headinajar.chair.blade_busy",
+   "trigger": "Replacement Blade during the operation",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Not mid-operation. Change the blade afterwards.",
+    "heard_s": 3.59,
+    "file_s": 3.814,
+    "heard_ticks": 72,
+    "wer": 0.0,
+    "asr_heard": "Not mid operation. Change the blade afterwards.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/chair_blade_busy.ogg",
+    "sound_id": "headinajar:voice/en/chair_blade_busy",
+    "event": "headinajar:dolores.en.chair_blade_busy",
+    "bytes": 38702,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Não durante a operação. Troque a lâmina depois.",
+    "heard_s": 3.16,
+    "file_s": 3.374,
+    "heard_ticks": 64,
+    "wer": 0.0,
+    "asr_heard": "Não durante a operação. Troque a lâmina depois.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/chair_blade_busy.ogg",
+    "sound_id": "headinajar:voice/pt/chair_blade_busy",
+    "event": "headinajar:dolores.pt.chair_blade_busy",
+    "bytes": 33608,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.refuses",
+    "en_us": "DOLORES refuses",
+    "pt_br": "DOLORES recusa"
+   }
+  }
+ ]
+}

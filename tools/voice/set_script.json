@@ -1,0 +1,261 @@
+{
+ "_about": "DOLORES's spoken set. 'key' is the language key whose full text stays on screen; 'en'/'pt' are what she says. 'trigger' is where the game calls the line; 'tick' is the operation tick of that trigger (null outside the operation). Variants: main, short, alt0.. (fit_set.py picks one per line). 'muffled' marks lines the patient hears muffled (between the gas and the lid).",
+ "lines": [
+  {
+   "id": "start",
+   "key": "dolores.headinajar.start",
+   "trigger": "sign() after the Form 27-B signature",
+   "tick": 0,
+   "en": "Thank you for choosing Elective Separation.",
+   "pt": "Obrigada por escolher a Separação Eletiva.",
+   "short": {
+    "en": "Thank you for choosing us.",
+    "pt": "Obrigada pela preferência."
+   },
+   "alt": {
+    "en": [
+     "Thank you."
+    ],
+    "pt": [
+     "Obrigada.",
+     "Muito obrigada."
+    ]
+   }
+  },
+  {
+   "id": "gas",
+   "key": "dolores.headinajar.gas",
+   "trigger": "step() tick 20",
+   "tick": 20,
+   "muffled": true,
+   "en": "A pleasant gas. Breathe normally.",
+   "pt": "Um gás agradável. Respire normalmente.",
+   "short": {
+    "en": "Breathe normally.",
+    "pt": "Respire normalmente."
+   }
+  },
+  {
+   "id": "scan",
+   "key": "dolores.headinajar.scan",
+   "trigger": "step() ChairTimeline.SCAN (60)",
+   "tick": 60,
+   "muffled": true,
+   "en": "Scanning. Please hold still.",
+   "pt": "Escaneando. Fique parado.",
+   "short": {
+    "en": "Please hold still.",
+    "pt": "Fique parado."
+   }
+  },
+  {
+   "id": "cut",
+   "key": "dolores.headinajar.cut",
+   "trigger": "step() CUT_COMMIT (100)",
+   "tick": 100,
+   "muffled": true,
+   "en": "Commencing.",
+   "pt": "Iniciando.",
+   "alt": {
+    "pt": [
+     "Vamos começar.",
+     "Começando."
+    ]
+   }
+  },
+  {
+   "id": "privacy",
+   "key": "dolores.headinajar.privacy",
+   "trigger": "step() ChairTimeline.CURTAIN_UP (106)",
+   "tick": 106,
+   "muffled": true,
+   "en": "Privacy, please.",
+   "pt": "Privacidade, por favor.",
+   "alt": {
+    "en": [
+     "A little privacy, please."
+    ],
+    "pt": [
+     "Um pouco de privacidade, por favor.",
+     "Privacidade, por gentileza."
+    ]
+   }
+  },
+  {
+   "id": "jar",
+   "key": "dolores.headinajar.jar",
+   "trigger": "step() ChairTimeline.GLUG_LID (140)",
+   "tick": 140,
+   "muffled": true,
+   "en": "Your head is now in a jar. Congratulations on your promotion.",
+   "pt": "Sua cabeça agora está num pote. Parabéns pela promoção.",
+   "short": {
+    "en": "Your head is now in a jar.",
+    "pt": "Sua cabeça agora está num pote."
+   },
+   "alt": {
+    "pt": [
+     "Agora sua cabeça está num pote.",
+     "Sua cabeça já está no pote."
+    ]
+   }
+  },
+  {
+   "id": "done",
+   "key": "dolores.headinajar.done",
+   "trigger": "finish() at 240, clean cut",
+   "tick": 240,
+   "en": "Neuro-link established. Please collect your head on the way out.",
+   "pt": "Neuroconexão estabelecida. Retire sua cabeça na saída."
+  },
+  {
+   "id": "oopsie",
+   "key": "dolores.headinajar.oopsie",
+   "trigger": "finish() at 240, botched cut",
+   "tick": 240,
+   "en": "Oopsie.",
+   "pt": "Opa.",
+   "alt": {
+    "en": [
+     "Oopsie daisy."
+    ],
+    "pt": [
+     "Opa. Desculpe.",
+     "Ops.",
+     "Opa, perdão.",
+     "Ih, desculpe.",
+     "Opa, que pena."
+    ]
+   }
+  },
+  {
+   "id": "abort",
+   "key": "dolores.headinajar.abort",
+   "trigger": "abort() before the cut (the patient got up)",
+   "tick": null,
+   "en": "Procedure cancelled. Your head remains attached. For now.",
+   "pt": "Procedimento cancelado. Sua cabeça continua no lugar. Por enquanto."
+  },
+  {
+   "id": "new_blade",
+   "key": "dolores.headinajar.new_blade",
+   "trigger": "SeparationChairBlock, Replacement Blade fitted",
+   "tick": null,
+   "en": "New blade fitted. So shiny.",
+   "pt": "Lâmina nova instalada. Que brilho.",
+   "alt": {
+    "pt": [
+     "Lâmina nova no lugar. Que brilho."
+    ]
+   }
+  },
+  {
+   "id": "refuse_power",
+   "key": "dolores.headinajar.refuse.power",
+   "trigger": "sign() refused: power",
+   "tick": null,
+   "en": "Insufficient power. I refuse to stop halfway.",
+   "pt": "Energia insuficiente. Eu me recuso a parar no meio."
+  },
+  {
+   "id": "refuse_jar",
+   "key": "dolores.headinajar.refuse.jar",
+   "trigger": "sign() refused: no jar",
+   "tick": null,
+   "en": "Where would we put your head? Insert a Life Support Jar.",
+   "pt": "Onde colocaríamos sua cabeça? Insira um Pote de Suporte Vital."
+  },
+  {
+   "id": "refuse_goggles",
+   "key": "dolores.headinajar.refuse.goggles",
+   "trigger": "sign() refused: no goggles",
+   "tick": null,
+   "en": "Relay Goggles required. You will want to see.",
+   "pt": "Óculos Retransmissores necessários. Você vai querer enxergar.",
+   "alt": {
+    "pt": [
+     "Faltam os Óculos Retransmissores. Você vai querer enxergar."
+    ]
+   }
+  },
+  {
+   "id": "refuse_collar",
+   "key": "dolores.headinajar.refuse.collar",
+   "trigger": "sign() refused: no Collar Cam",
+   "tick": null,
+   "en": "Collar Cam required. Your neck needs a hat.",
+   "pt": "Câmera de Colarinho necessária. Seu pescoço precisa de um chapéu.",
+   "alt": {
+    "pt": [
+     "Falta a Câmera de Colarinho. Seu pescoço precisa de um chapéu."
+    ]
+   }
+  },
+  {
+   "id": "refuse_saline",
+   "key": "dolores.headinajar.refuse.saline",
+   "trigger": "sign() refused: saline",
+   "tick": null,
+   "en": "Four bottles of Cranial Saline, please. Heads get thirsty.",
+   "pt": "Quatro frascos de Soro Craniano, por favor. Cabeças sentem sede.",
+   "alt": {
+    "pt": [
+     "Quatro frascos de Soro Craniano, por favor. A cabeça também tem sede."
+    ]
+   }
+  },
+  {
+   "id": "refuse_already",
+   "key": "dolores.headinajar.refuse.already",
+   "trigger": "sign() refused: head already off",
+   "tick": null,
+   "en": "Our records show your head is already off.",
+   "pt": "Nossos registros mostram que sua cabeça já saiu."
+  },
+  {
+   "id": "chair_blocked",
+   "key": "refusal.headinajar.chair.blocked",
+   "trigger": "sign() refused: work space blocked (the screen names the block)",
+   "tick": null,
+   "en": "The chair needs room to work.",
+   "pt": "A cadeira precisa de espaço."
+  },
+  {
+   "id": "chair_in_use",
+   "key": "refusal.headinajar.chair.in_use",
+   "trigger": "a bystander clicks a chair in use",
+   "tick": null,
+   "en": "Operation in progress. Kindly wait behind the line.",
+   "pt": "Operação em andamento. Aguarde atrás da faixa."
+  },
+  {
+   "id": "chair_tray_blocked",
+   "key": "refusal.headinajar.chair.tray_blocked",
+   "trigger": "tray cannot come out (the screen names the block)",
+   "tick": null,
+   "en": "The jar tray can't come out.",
+   "pt": "A bandeja do pote não sai.",
+   "alt": {
+    "pt": [
+     "A bandeja do pote não consegue sair."
+    ]
+   }
+  },
+  {
+   "id": "chair_no_break",
+   "key": "refusal.headinajar.chair.no_break",
+   "trigger": "breaking a chair mid-operation",
+   "tick": null,
+   "en": "Not mid-operation. It comes apart once it is done.",
+   "pt": "Não durante a operação. Ela se desmonta depois."
+  },
+  {
+   "id": "chair_blade_busy",
+   "key": "refusal.headinajar.chair.blade_busy",
+   "trigger": "Replacement Blade during the operation",
+   "tick": null,
+   "en": "Not mid-operation. Change the blade afterwards.",
+   "pt": "Não durante a operação. Troque a lâmina depois."
+  }
+ ]
+}

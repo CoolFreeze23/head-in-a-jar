@@ -67,34 +67,37 @@ def voice_lines():
         return json.load(f)
 
 
-# What DOLORES says during the operation, and when (the rulings): the greeting at the signature, the gas line, the scan
-# line (only if it ends before the latch at 100: the silence before the cut is the joke), the jar line during the head's
-# transfer (ending by about 205); the cut and privacy lines are text only. After the operation: the closing line, or
-# "Oopsie." on a botch, at the delays the voice hand-off measured.
-LATCH, JAR_END, TRANSFER_START = 100, 205, 150
+# What DOLORES says during the operation, and when: the voice hand-off places each line (`start_tick` per language) and
+# marks the ones voiced during the operation (`voiced_in_operation`; the cut and privacy lines are text only). This
+# keeps those placements and checks the rules they must keep: lines never overlap, nothing plays over the silence
+# before the cut (114-120), the scan line ends before the latch at 100, the jar line ends by about 205. A line that
+# breaks a rule stays text in that language, with a note.
+LATCH, SILENCE, JAR_END, AFTER = 100, (114, 120), 205, 240
+OPERATION_LINES = ('gas', 'scan', 'jar')
 
 
 def voice_schedule(voice):
     lines = {l['id']: l for l in voice['lines']}
     out = {}
     for lang in ('en', 'pt'):
-        ticks = lambda i: lines[i][lang]['heard_ticks']
         sched, notes = {}, []
-        end = ticks('start')
-        gas = max(lines['gas']['trigger_tick'], end)
-        sched[gas] = 'gas'
-        end = gas + ticks('gas')
-        scan = max(lines['scan']['trigger_tick'], end)
-        if scan + ticks('scan') <= LATCH:
-            sched[scan] = 'scan'
-            end = scan + ticks('scan')
-        else:
-            notes.append('scan stays text: it would end at %d, after the latch at %d' % (scan + ticks('scan'), LATCH))
-        jar = max(TRANSFER_START, end, JAR_END - ticks('jar'))
-        sched[jar] = 'jar'
+        end = lines['start'][lang]['heard_ticks']
+        for line_id in OPERATION_LINES:
+            line = lines[line_id]
+            v = line[lang]
+            if not line.get('voiced_in_operation', True) or v.get('start_tick') is None:
+                notes.append(f'{line_id} is text only')
+                continue
+            start, stop = v['start_tick'], v['start_tick'] + v['heard_ticks']
+            broken = (start < end and 'overlaps the line before') or                      (start < SILENCE[1] and stop > SILENCE[0] and 'plays over the silence before the cut') or                      (line_id == 'scan' and stop > LATCH and 'ends after the latch at 100') or                      (line_id == 'jar' and stop > JAR_END + 2 and 'ends after the lid')
+            if broken:
+                notes.append(f'{line_id} stays text: it {broken} ({start}-{stop})')
+                continue
+            sched[start] = line_id
+            end = stop
         out[lang] = {'operation': {str(t): l for t, l in sorted(sched.items())},
-                     'done_delay': lines['done'][lang]['start_tick'] - 240,
-                     'oopsie_delay': lines['oopsie'][lang]['start_tick'] - 240,
+                     'done_delay': lines['done'][lang]['start_tick'] - AFTER,
+                     'oopsie_delay': lines['oopsie'][lang]['start_tick'] - AFTER,
                      'notes': notes}
     return out
 

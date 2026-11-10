@@ -2,116 +2,116 @@
   "lines": {
     "start": {
       "muffled": false,
-      "en": 24,
-      "pt": 33
+      "en": 22,
+      "pt": 28
     },
     "gas": {
       "muffled": true,
-      "en": 28,
-      "pt": 39
+      "en": 34,
+      "pt": 41
     },
     "scan": {
       "muffled": true,
-      "en": 31,
-      "pt": 30
+      "en": 35,
+      "pt": 29
     },
     "cut": {
       "muffled": true,
-      "en": 24,
-      "pt": 28
+      "en": 25,
+      "pt": 27
     },
     "privacy": {
       "muffled": true,
-      "en": 38,
-      "pt": 56
+      "en": 37,
+      "pt": 62
     },
     "jar": {
       "muffled": true,
-      "en": 37,
-      "pt": 50
+      "en": 47,
+      "pt": 48
     },
     "done": {
       "muffled": false,
-      "en": 77,
-      "pt": 82
+      "en": 72,
+      "pt": 68
     },
     "oopsie": {
       "muffled": false,
-      "en": 23,
-      "pt": 32
+      "en": 21,
+      "pt": 41
     },
     "abort": {
       "muffled": false,
-      "en": 75,
-      "pt": 93
+      "en": 102,
+      "pt": 102
     },
     "new_blade": {
       "muffled": false,
-      "en": 49,
-      "pt": 52
+      "en": 59,
+      "pt": 64
     },
     "refuse_power": {
       "muffled": false,
-      "en": 68,
-      "pt": 71
+      "en": 76,
+      "pt": 66
     },
     "refuse_jar": {
       "muffled": false,
-      "en": 68,
-      "pt": 90
+      "en": 69,
+      "pt": 96
     },
     "refuse_goggles": {
       "muffled": false,
-      "en": 62,
-      "pt": 80
+      "en": 67,
+      "pt": 84
     },
     "refuse_collar": {
       "muffled": false,
-      "en": 61,
-      "pt": 90
+      "en": 63,
+      "pt": 76
     },
     "refuse_saline": {
       "muffled": false,
-      "en": 82,
-      "pt": 96
+      "en": 83,
+      "pt": 105
     },
     "refuse_already": {
       "muffled": false,
-      "en": 51,
-      "pt": 74
+      "en": 53,
+      "pt": 66
     },
     "chair_blocked": {
       "muffled": false,
-      "en": 40,
+      "en": 54,
       "pt": 48
     },
     "chair_in_use": {
       "muffled": false,
-      "en": 74,
-      "pt": 70
+      "en": 79,
+      "pt": 65
     },
     "chair_tray_blocked": {
       "muffled": false,
-      "en": 41,
-      "pt": 46
+      "en": 59,
+      "pt": 41
     },
     "chair_no_break": {
       "muffled": false,
-      "en": 71,
-      "pt": 68
+      "en": 72,
+      "pt": 67
     },
     "chair_blade_busy": {
       "muffled": false,
-      "en": 68,
-      "pt": 67
+      "en": 72,
+      "pt": 64
     }
   },
   "schedule": {
     "en": {
       "operation": {
-        "24": "gas",
+        "22": "gas",
         "60": "scan",
-        "168": "jar"
+        "158": "jar"
       },
       "done_delay": 24,
       "oopsie_delay": 34,
@@ -119,14 +119,13 @@
     },
     "pt": {
       "operation": {
-        "33": "gas",
-        "155": "jar"
+        "28": "gas",
+        "69": "scan",
+        "157": "jar"
       },
       "done_delay": 24,
       "oopsie_delay": 34,
-      "notes": [
-        "scan stays text: it would end at 102, after the latch at 100"
-      ]
+      "notes": []
     }
   },
   "duck_db": -6,
