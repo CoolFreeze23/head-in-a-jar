@@ -1,0 +1,46 @@
+# Separation Chair trial under shaders or the owner's pack settings: the operation from three-quarter on the jar side
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock -3 -60 0 minecraft:iron_block
+/setblock 3 -60 -1 minecraft:brewing_stand
+/tp @s 4.7 -58.6 4.7 135 18
+hud off
+view 0
+bystander spawn 0 -60 -2 0
+wait 40
+bystander chair 0 -60 0
+wait 40
+shot p_ready
+frames pack_op 270
+bystander button 0
+wait 110
+shot p_t110
+wait 50
+shot p_t160
+wait 30
+shot p_t190
+wait 40
+shot p_t230
+wait 50
+shot p_after
+
+# the blade's ring-down, from above and behind (the strike and the settle 117-135)
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 0 -60 -2 0 0
+wait 10
+/tp @s 0.5 -58.2 -2.6 0 30
+view 0
+wait 5
+bystander operate 0 -60 0
+wait 110
+frames ringdown_back 30
+wait 40
+report pack done

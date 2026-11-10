@@ -1,0 +1,84 @@
+# Separation Chair trial: the whole operation from a bystander (frames), from the front, the botch, a late join,
+# an abort, and the patient's own eyes. Chair at 0 -60 0 facing south: the patient's left (the jar) is east (+X).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/tp @s 4.7 -58.6 4.7 135 18
+hud off
+bystander spawn 0 -60 -2 0
+wait 20
+shot a_rest_3q
+bystander chair 0 -60 0
+wait 30
+shot a_ready_3q
+# 1. the whole operation, bystander at about six blocks, three-quarter on the jar side, every frame
+frames op_3q 275
+bystander button 0
+wait 285
+shot a_after_3q
+# 2. from the front, with the botch forced at the point of no return
+/kill @e[type=headinajar:head_jar]
+bystander form body
+wait 10
+/tp @s 0.5 -58.6 6.5 180 14
+bystander operate 0 -60 0
+wait 104
+/data merge block 0 -60 0 {Botched:1b}
+wait 4
+shot b_front_t110
+wait 10
+shot b_front_t120
+wait 30
+shot b_front_t160
+frames botch_front 60
+wait 12
+shot b_front_t172
+wait 10
+shot b_front_t182
+wait 20
+shot b_front_t202
+wait 25
+shot b_front_t227
+wait 40
+shot b_front_after
+# 3. a late join: away beyond render distance, back at about tick 150
+/kill @e[type=headinajar:head_jar]
+bystander form body
+wait 10
+/tp @s 400.5 -60 400.5
+wait 20
+bystander operate 0 -60 0
+wait 140
+/tp @s 4.7 -58.6 4.7 135 18
+frames latejoin 50
+wait 60
+shot c_late_t210
+wait 60
+# 4. an abort at about tick 50 (the patient is moved off the seat)
+/kill @e[type=headinajar:head_jar]
+bystander form body
+wait 10
+bystander operate 0 -60 0
+wait 48
+frames abort_3q 50
+bystander tp 0 -60 -2 0 0
+wait 4
+shot d_abort_t4
+wait 8
+shot d_abort_t12
+wait 50
+# 5. the patient's own eyes: the real player sits and signs
+/tp @s 0.5 -60 2.5 180 30
+chair 0 -60 0
+key use
+wait 10
+press escape
+view 0
+look 180 0
+sign 0 -60 0
+frames firstperson 260
+wait 270
+report chair op done

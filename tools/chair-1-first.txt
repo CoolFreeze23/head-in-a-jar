@@ -1,0 +1,40 @@
+# Separation Chair trial, first look: the baked body plus the GeckoLib parts at rest and through the operation
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/tp @s 4.7 -58.6 4.7 135 18
+hud off
+wait 20
+shot chair_rest_empty
+bystander spawn 0 -60 -2 0
+wait 10
+bystander chair 0 -60 0
+wait 30
+shot chair_ready
+bystander button 0
+wait 8
+shot op_t008
+wait 10
+shot op_t023
+wait 20
+shot op_t048
+wait 30
+shot op_t083
+wait 33
+shot op_t121
+wait 25
+shot op_t151
+wait 22
+shot op_t178
+wait 20
+shot op_t203
+wait 22
+shot op_t230
+wait 20
+shot op_t255
+wait 20
+shot after_t280
+report chair first done

@@ -1,0 +1,47 @@
+# Separation Chair trial: rest and ready poses beside vanilla blocks of similar materials, by day, at night, by torchlight
+@observe 10
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock -6 -60 0 minecraft:iron_block
+/setblock -4 -60 0 minecraft:smooth_stone
+/setblock -2 -60 0 minecraft:piston[facing=up]
+/setblock 3 -60 0 minecraft:brewing_stand
+/setblock 5 -60 0 minecraft:anvil
+/tp @s 0.5 -58.4 7.5 180 12
+hud off
+wait 20
+shot row_rest_day
+bystander spawn 0 -60 -3 0
+wait 5
+bystander chair 0 -60 0
+wait 40
+shot row_ready_day
+/tp @s 4.2 -58.6 4.2 135 18
+wait 10
+shot ready_3q_day
+/tp @s 0.5 -58.4 7.5 180 12
+/time set 18000
+wait 10
+shot row_ready_night
+/setblock -1 -60 2 minecraft:torch
+/setblock 2 -60 2 minecraft:torch
+wait 10
+shot row_ready_torch
+bystander tp 0 -60 -3 0 0
+wait 40
+shot row_rest_torch
+
+# the blade's ring-down, from above and behind (the strike and the settle 117-135)
+/time set 6000
+/setblock -1 -60 2 minecraft:air
+/setblock 2 -60 2 minecraft:air
+/tp @s 0.5 -57.2 -2.2 0 48
+wait 5
+bystander operate 0 -60 0
+wait 110
+frames ringdown_back 30
+wait 40
+report ringdown done
