@@ -116,12 +116,18 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
 
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
-        super.renderLabels(g, mouseX, mouseY);
-        // a paused machine says why, top right, opposite its name
+        // a paused machine says why, top right, opposite its name; when the two don't fit side by side (a long name, or
+        // Portuguese), the reason takes the name's place while the machine is paused
         int status = menu.statusIndex() < 0 ? 0 : menu.data(menu.statusIndex());
-        if (status > 0 && status < MachineMenu.STALLS.length) {
-            Component why = Component.translatable("gui.headinajar.stall." + MachineMenu.STALLS[status]);
-            g.drawString(font, why, imageWidth - 7 - font.width(why), titleLabelY, 0x902020, false);
+        Component why = status > 0 && status < MachineMenu.STALLS.length
+                ? Component.translatable("gui.headinajar.stall." + MachineMenu.STALLS[status]) : null;
+        int whyX = why == null ? 0 : imageWidth - 7 - font.width(why);
+        if (why != null && titleLabelX + font.width(title) + 6 > whyX) {
+            g.drawString(font, why, titleLabelX, titleLabelY, 0x902020, false);
+            g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+        } else {
+            super.renderLabels(g, mouseX, mouseY);
+            if (why != null) g.drawString(font, why, whyX, titleLabelY, 0x902020, false);
         }
         for (String[] row : lines) {
             String[] xy = row[0].split(",");

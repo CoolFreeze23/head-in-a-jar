@@ -25,6 +25,8 @@ public final class HostHud {
         if (vehicle == null || !Hosts.isHost(vehicle)) return;
         HostData data = Hosts.data(vehicle);
         int x = 8, y = g.guiHeight() - 56;
+        // at a large GUI scale the hotbar and the hearts reach this corner: the panel (about 140 wide) sits above them
+        if (x + 140 > g.guiWidth() / 2 - 95) y -= 46;
         g.drawString(mc.font, vehicle.getDisplayName(), x, y - 10, 0xFFFFFF);
         if (vehicle instanceof LivingEntity living) {
             ChargeHud.drawBar(g, x, y, 80, living.getHealth() / living.getMaxHealth(), 0xFFE04848, 0xFF9A2E2E);

@@ -201,6 +201,8 @@ public final class HostEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void saw(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
         if (!event.getItemStack().is(ModRegistry.SURGICAL_SAW.get()) || !(whole(event.getTarget()) instanceof Mob mob)) return;
+        // a bare jar has no hands to saw with: whatever its hotbar holds, its click on a host is a climb (HostInteractions)
+        if (com.coolfreeze23.headinajar.form.FormEvents.lockedOut(event.getEntity())) return;
         event.setCanceled(true);
         if (event.getEntity() instanceof ServerPlayer player) {
             event.setCancellationResult(com.coolfreeze23.headinajar.item.SurgicalSawItem.saw(player, event.getItemStack(), mob, event.getHand()));

@@ -92,6 +92,9 @@ public final class PilotClient {
         MechaEntity m = mecha();
         if (m == null || mc.options.hideGui) return;
         int x = 8, y = g.guiHeight() - 70;
+        // its widest line ("NO LEGS: ...") runs about 250 wide: where the hotbar and the hearts reach that far (a narrow window or a
+        // large GUI scale), the panel sits above them instead of under them
+        if (x + 250 > g.guiWidth() / 2 - 95) y -= 50;
         g.drawString(mc.font, m.getDisplayName(), x, y - 10, 0xFFFFFF);
         var utility = com.coolfreeze23.headinajar.mecha.MechaSystems.selectedUtility(m);
         if (utility != null) {
