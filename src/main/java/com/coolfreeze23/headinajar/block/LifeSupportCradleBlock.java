@@ -1,5 +1,7 @@
 package com.coolfreeze23.headinajar.block;
 
+import com.coolfreeze23.headinajar.feedback.Refusals;
+import com.coolfreeze23.headinajar.feedback.Refuser;
 import com.coolfreeze23.headinajar.form.FormActions;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import com.mojang.serialization.MapCodec;
@@ -71,10 +73,18 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
                         net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
                 stack.consume(1, player);
                 player.getInventory().placeItemBackInInventory(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
+            } else if (player instanceof ServerPlayer server) {
+                Refusals.deny(server, Refuser.at(cradle), "cradle.full");
             }
             return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         if (net.neoforged.neoforge.fluids.FluidUtil.interactWithFluidHandler(player, hand, level, pos, hit.getDirection())) {
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        // a bucket of something else: the tank only takes saline
+        var carried = net.neoforged.neoforge.fluids.FluidUtil.getFluidContained(stack);
+        if (carried.isPresent() && !carried.get().isEmpty() && !carried.get().getFluid().isSame(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get())) {
+            if (player instanceof ServerPlayer server) Refusals.deny(server, Refuser.at(cradle), "cradle.wrong_fluid", Component.translatable("fluid_type.headinajar.cranial_saline"));
             return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -85,15 +95,34 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof LifeSupportCradleBlockEntity cradle)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
+        Component satchel = Component.translatable("item.headinajar.head_satchel");
         if (cradle.isEmpty()) {
-            if (!FormActions.dockCarried(server, cradle)) player.displayClientMessage(Component.translatable("message.headinajar.cradle_empty"), true);
+            if (FormActions.state(server).form() == com.coolfreeze23.headinajar.form.Form.JAR) {
+                // a jar climbs in: sitting in the Cradle, a swap leaves the head docked here
+                if (!climbIn(server, pos)) Refusals.deny(server, Refuser.at(cradle), "cradle.blocked");
+                return InteractionResult.CONSUME;
+            }
+            if (!FormActions.dockCarried(server, cradle)) Refusals.deny(server, Refuser.at(cradle), "cradle.empty", satchel);
         } else if (!FormActions.undock(server, cradle)) {
-            player.displayClientMessage(Component.translatable("message.headinajar.cradle_holds", cradle.ownerName()), true);
+            if (player.getUUID().equals(cradle.owner())) Refusals.deny(server, Refuser.at(cradle), "cradle.need_satchel", satchel);
+            else player.displayClientMessage(Component.translatable("message.headinajar.cradle_holds", cradle.ownerName()), true);
         }
         if (cradle.isEmpty() || !player.getUUID().equals(cradle.owner())) {
             player.displayClientMessage(Component.translatable("message.headinajar.cradle_status", cradle.energy().getEnergyStored(), cradle.saline().getFluidAmount()), false);
         }
         return InteractionResult.CONSUME;
+    }
+
+    /** Moves a jar onto the Cradle's pad, if there is room above it. */
+    private static boolean climbIn(ServerPlayer player, BlockPos pos) {
+        Level level = player.level();
+        net.minecraft.world.phys.Vec3 seat = net.minecraft.world.phys.Vec3.atBottomCenterOf(pos.above());
+        if (!level.noCollision(player, player.getDimensions(player.getPose()).makeBoundingBox(seat))) return false;
+        player.teleportTo(seat.x, seat.y, seat.z);
+        player.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        level.playSound(null, pos, net.minecraft.sounds.SoundEvents.BOTTLE_FILL, net.minecraft.sounds.SoundSource.BLOCKS, 0.8f, 1.2f);
+        player.displayClientMessage(Component.translatable("message.headinajar.cradle_climbed"), true);
+        return true;
     }
 
     @Override

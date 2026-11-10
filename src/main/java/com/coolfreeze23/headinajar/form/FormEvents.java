@@ -49,6 +49,14 @@ public final class FormEvents {
         return player.getData(ModRegistry.JAR_STATE);
     }
 
+    static {
+        // keys the client answers itself, where the form has nothing behind them
+        Refusals.allowFromClient("swap.riding", Refusals.Cue.PLAIN);
+        Refusals.allowFromClient("jar.menu_linked", Refusals.Cue.PLAIN);
+        Refusals.allowFromClient("drive.linked", Refusals.Cue.PLAIN);
+        Refusals.allowFromClient("jar.refill_feed", Refusals.Cue.NUDGE);
+    }
+
     /** A jar with no Manipulator Arm can't touch the world. */
     public static boolean lockedOut(Player player) {
         JarState state = state(player);
@@ -110,6 +118,7 @@ public final class FormEvents {
 
     /** A headless body can't wear a helmet: it goes into the inventory. */
     private static void linkedTick(ServerPlayer player, JarState state) {
+        FormActions.noteGround(player);
         var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
         if (!helmet.isEmpty()) {
             player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, net.minecraft.world.item.ItemStack.EMPTY);
@@ -156,7 +165,33 @@ public final class FormEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (refill(event)) return;
         lockout(event.getEntity(), event, () -> Nudge.USE);
+    }
+
+    /**
+     * A Saline Bottle or Glass Patch used in the air by a head: a jar with an arm (or a body carrying its head) pours it
+     * in; a bare jar is pointed to the feed slot, and a body whose head is elsewhere to its head.
+     */
+    private static boolean refill(PlayerInteractEvent.RightClickItem event) {
+        var stack = event.getItemStack();
+        boolean saline = stack.is(ModRegistry.SALINE_BOTTLE.get()), patch = stack.is(ModRegistry.GLASS_PATCH.get());
+        Player player = event.getEntity();
+        JarState state = state(player);
+        if (!saline && !patch || !state.form().isDecapitated()) return false;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.sidedSuccess(player.level().isClientSide));
+        if (!(player instanceof ServerPlayer server)) return true;
+        if (state.form() == Form.LINKED && !state.carryingHead()) {
+            Refusals.deny(server, "jar.refill_linked", Component.translatable("block.headinajar.life_support_cradle"));
+        } else if (lockedOut(player)) {
+            Refusals.nudge(server, "jar.refill_feed");
+        } else if (LifeSupport.refill(server, state, stack.getItem())) {
+            stack.consume(1, player);
+        } else {
+            Refusals.deny(server, saline ? "head.full" : "head.intact");
+        }
+        return true;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -172,6 +207,8 @@ public final class FormEvents {
     public static void interactEntity(PlayerInteractEvent.EntityInteract event) {
         // your own body is the one thing a bare jar can reach for
         if (event.getTarget() instanceof HeadlessBody) return;
+        // sitting needs no hands: a jar rides along in a boat or a minecart
+        if (jarCanBoard(event.getEntity(), event.getTarget())) return;
         // a creature that never had a head (the Headless Mule) takes a jar without the saw
         if (!event.getLevel().isClientSide && event.getTarget() instanceof net.minecraft.world.entity.Mob mob && !com.coolfreeze23.headinajar.host.Hosts.isHost(mob)
                 && state(event.getEntity()).form() == Form.JAR) {
@@ -192,10 +229,17 @@ public final class FormEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void interactEntityAt(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (event.getTarget() instanceof HeadlessBody) return;
+        if (event.getTarget() instanceof HeadlessBody || jarCanBoard(event.getEntity(), event.getTarget())) return;
         // a host is handled by the plain interaction that follows; consuming this one here would stop the client sending it
         if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) return;
         lockout(event.getEntity(), event, () -> Nudge.forEntity(event.getTarget(), false));
+    }
+
+    /** A plain jar may climb into a vanilla boat or a rideable minecart (not a chest boat's chest). */
+    public static boolean jarCanBoard(Player player, net.minecraft.world.entity.Entity target) {
+        if (state(player).form() != Form.JAR) return false;
+        if (target instanceof net.minecraft.world.entity.vehicle.Minecart) return true;
+        return target instanceof net.minecraft.world.entity.vehicle.Boat && !(target instanceof net.minecraft.world.entity.vehicle.ChestBoat && player.isSecondaryUseActive());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -272,9 +316,13 @@ public final class FormEvents {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void death(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
-        boolean real = FormActions.REAL_DEATH.remove(player.getUUID()) || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+        JarState state = state(player);
+        // the void takes a linked body, not its head (unless the head went down with it, carried)
+        boolean fellOut = event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD);
+        boolean bodyOnly = fellOut && state.form() == Form.LINKED && !state.carryingHead();
+        boolean real = FormActions.REAL_DEATH.remove(player.getUUID()) || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !bodyOnly;
         if (player.getVehicle() instanceof SeatEntity seat && seat.chair() != null) seat.chair().abort(player, "abort");
-        if (!real && state(player).form() == Form.LINKED && FormActions.bodyDied(player)) {
+        if (!real && state.form() == Form.LINKED && FormActions.bodyDied(player, fellOut)) {
             // the body died, not the player: they wake up in their head
             event.setCanceled(true);
             return;
@@ -292,12 +340,20 @@ public final class FormEvents {
     public static void travel(EntityTravelToDimensionEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         JarState state = state(player);
-        if (state.form() == Form.LINKED && !state.carryingHead()) {
+        // an Entangled Pair carries the link between dimensions, so the body may go where the link goes
+        if (state.form() == Form.LINKED && !state.carryingHead() && !com.coolfreeze23.headinajar.item.QuantumItems.linked(state)) {
             if ("break".equals(Config.get(Config.PORTAL_RULE, "block"))) return;
             event.setCanceled(true);
-            if (player.tickCount % 20 == 0) player.displayClientMessage(Component.translatable("message.headinajar.portal_blocked"), true);
+            // a portal tries again every tick it is stood in: say it once every few seconds
+            Integer told = PORTAL_TOLD.get(player.getUUID());
+            if (told == null || player.tickCount < told || player.tickCount - told >= 60) {
+                PORTAL_TOLD.put(player.getUUID(), player.tickCount);
+                Refusals.deny(player, "portal.head_behind", Component.translatable("item.headinajar.head_satchel"));
+            }
         }
     }
+
+    private static final java.util.Map<java.util.UUID, Integer> PORTAL_TOLD = new java.util.HashMap<>();
 
     /** A mecha pilot only leaves by ejecting (hold sneak + J); sneaking is for the Anchor Clamps. */
     @SubscribeEvent
@@ -348,6 +404,7 @@ public final class FormEvents {
 
     @SubscribeEvent
     public static void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        Telekinesis.landStranded(event.getEntity());
         resync(event.getEntity());
     }
 

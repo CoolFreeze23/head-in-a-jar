@@ -166,7 +166,7 @@ public final class Network {
     }
 
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("2");
+        var registrar = event.registrar("3");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
         registrar.playToServer(JarAction.TYPE, JarAction.CODEC, Network::onAction);
         registrar.playToClient(HostSync.TYPE, HostSync.CODEC, (msg, ctx) -> {

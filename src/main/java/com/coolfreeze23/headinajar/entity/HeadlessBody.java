@@ -1,6 +1,8 @@
 package com.coolfreeze23.headinajar.entity;
 
 import com.coolfreeze23.headinajar.Config;
+import com.coolfreeze23.headinajar.feedback.Refusals;
+import com.coolfreeze23.headinajar.feedback.Refuser;
 import com.coolfreeze23.headinajar.form.Form;
 import com.coolfreeze23.headinajar.form.FormActions;
 import com.coolfreeze23.headinajar.form.HeadRegistry;
@@ -50,7 +52,13 @@ public class HeadlessBody extends LivingEntity {
 
     private final NonNullList<ItemStack> armor = NonNullList.withSize(4, ItemStack.EMPTY);
     private final NonNullList<ItemStack> hands = NonNullList.withSize(2, ItemStack.EMPTY);
-    private final SimpleContainer belongings = new SimpleContainer(CORPSE_SLOTS);
+    /** The corpse's things. A view of them closes once the corpse is gone or left behind. */
+    private final SimpleContainer belongings = new SimpleContainer(CORPSE_SLOTS) {
+        @Override
+        public boolean stillValid(Player player) {
+            return HeadlessBody.this.isAlive() && player.distanceToSqr(HeadlessBody.this) < 64;
+        }
+    };
 
     public HeadlessBody(EntityType<? extends HeadlessBody> type, Level level) {
         super(type, level);
@@ -153,6 +161,12 @@ public class HeadlessBody extends LivingEntity {
                     return;
                 }
             } else if (tickCount % 40 == 0) {
+                // a body printed while its owner was away (offline, or riding something) is theirs: they take it on
+                HeadRegistry.Body record = level().getServer() == null ? null : HeadRegistry.get(level().getServer()).body(ownerId());
+                if (record != null && record.entity().equals(getUUID()) && state.form().isJarred()) {
+                    state.setBody(getUUID());
+                    return;
+                }
                 // a body whose owner has moved on gives out
                 collapse();
                 return;
@@ -183,6 +197,8 @@ public class HeadlessBody extends LivingEntity {
             }
             return;
         }
+        // killed for good (by command, or by the void): nothing is left to link into
+        if (!level().isClientSide) forget();
         super.die(source);
     }
 
@@ -194,25 +210,91 @@ public class HeadlessBody extends LivingEntity {
             return own || isCorpse() ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         ServerPlayer server = (ServerPlayer) player;
-        if (own && form == Form.JAR && player.getItemInHand(hand).is(ModRegistry.SUTURE_KIT.get())) {
-            if (FormActions.suture(server, this)) {
-                player.getItemInHand(hand).shrink(1);
+        ItemStack held = player.getItemInHand(hand);
+        boolean kit = held.is(ModRegistry.SUTURE_KIT.get());
+        if (ownerId() == null || level().getServer() == null) return InteractionResult.PASS;
+        if (!own) {
+            if (isCorpse() && HeadRegistry.get(level().getServer()).trusts(ownerId(), player)) {
+                openBelongings(player);
                 return InteractionResult.CONSUME;
             }
+            String why = kit ? "suture.not_yours" : isCorpse() ? "body.corpse_untrusted" : "body.not_yours";
+            Refusals.deny(server, Refuser.at(this), why, ownerName());
             return InteractionResult.FAIL;
         }
-        if (isCorpse()) {
-            if (level().getServer() != null && HeadRegistry.get(level().getServer()).trusts(ownerId(), player)) {
-                player.openMenu(new SimpleMenuProvider((id, inv, p) -> ChestMenu.sixRows(id, inv, belongings), getDisplayName()));
-                return InteractionResult.CONSUME;
-            }
-            return InteractionResult.PASS;
+        if (form == Form.HOSTED || form == Form.PILOT || form == Form.SOCKET) {
+            // the head has to be a plain jar again before it can go back on
+            return fail(Refusals.deny(server, "body.riding"));
         }
-        if (own && form == Form.JAR) {
+        if (form == Form.JAR) {
+            if (kit) {
+                if (FormActions.suture(server, this)) {
+                    held.shrink(1);
+                    return InteractionResult.CONSUME;
+                }
+                return InteractionResult.FAIL;
+            }
+            if (isCorpse()) return selfService(server);
             boolean done = hasCollar() ? FormActions.jarToLinked(server) : FormActions.reattach(server, this);
             return done ? InteractionResult.CONSUME : InteractionResult.FAIL;
         }
+        if (isCorpse()) {
+            openBelongings(player);
+            return InteractionResult.CONSUME;
+        }
         return InteractionResult.PASS;
+    }
+
+    private static InteractionResult fail(boolean ignored) {
+        return InteractionResult.FAIL;
+    }
+
+    private void openBelongings(Player player) {
+        player.openMenu(new SimpleMenuProvider((id, inv, p) -> ChestMenu.sixRows(id, inv, belongings), getDisplayName()));
+    }
+
+    /**
+     * A jar at its own corpse, hands or no hands: a Suture Kit on the jar or among the corpse's things is used, and the
+     * head goes back on. With no kit anywhere, the corpse's things open, so the parts for one can be taken out.
+     */
+    private InteractionResult selfService(ServerPlayer player) {
+        Inventory inv = player.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            if (inv.getItem(i).is(ModRegistry.SUTURE_KIT.get())) {
+                ItemStack kit = inv.getItem(i);
+                if (!FormActions.suture(player, this)) return InteractionResult.FAIL;
+                kit.shrink(1);
+                return InteractionResult.CONSUME;
+            }
+        }
+        for (int i = 0; i < CORPSE_SLOTS; i++) {
+            if (belongings.getItem(i).is(ModRegistry.SUTURE_KIT.get())) {
+                ItemStack kit = belongings.removeItem(i, 1);
+                if (FormActions.suture(player, this)) return InteractionResult.CONSUME;
+                FormActions.give(player, kit);
+                return InteractionResult.FAIL;
+            }
+        }
+        openBelongings(player);
+        Refusals.deny(player, "suture.no_kit", Component.translatable("item.headinajar.suture_kit"));
+        return InteractionResult.CONSUME;
+    }
+
+    /** A body that leaves the world for good (collapsed, killed by command, lost to the void) leaves no record behind. */
+    @Override
+    public void remove(RemovalReason reason) {
+        boolean gone = reason.shouldDestroy() && !level().isClientSide && !isRemoved();
+        super.remove(reason);
+        if (gone) forget();
+    }
+
+    private void forget() {
+        if (ownerId() == null || level().getServer() == null) return;
+        HeadRegistry registry = HeadRegistry.get(level().getServer());
+        HeadRegistry.Body record = registry.body(ownerId());
+        if (record != null && record.entity().equals(getUUID())) registry.setBody(ownerId(), null);
+        ServerPlayer owner = owner();
+        if (owner != null && getUUID().equals(owner.getData(ModRegistry.JAR_STATE).body())) owner.getData(ModRegistry.JAR_STATE).setBody(null);
     }
 
     /** The body falls down for good, dropping what it wears and holds. */

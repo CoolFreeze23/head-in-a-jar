@@ -33,6 +33,7 @@ public final class BoardEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         JarState state = FormActions.state(player);
         if (state.form().isJarred()) Courier.tick(player);
+        else Courier.cancel(player);
         if (state.form() == Form.JAR && state.wheels() && state.has(com.coolfreeze23.headinajar.module.ModuleType.WHEELS)
                 && player.getDeltaMovement().horizontalDistanceSqr() > 1e-4) {
             state.setCharge(state.charge() - WHEELS_DRAIN);
@@ -106,13 +107,44 @@ public final class BoardEvents {
         if (!state.form().isJarred() || !state.fitted(ModuleType.BODY_RECALL_BEACON) || state.charge() < RECALL_DRAIN) return;
         Vec3 to = owner.position().subtract(body.position());
         if (to.horizontalDistanceSqr() < 9) return;
-        state.setCharge(state.charge() - RECALL_DRAIN);
         Vec3 step = new Vec3(to.x, 0, to.z).normalize().scale(0.15);
+        // the body walks blind: it stops at a drop, lava or fire rather than go in
+        if (hazardAhead(body, step)) {
+            body.setDeltaMovement(0, body.getDeltaMovement().y, 0);
+            return;
+        }
+        state.setCharge(state.charge() - RECALL_DRAIN);
         Vec3 v = body.getDeltaMovement();
         double up = body.horizontalCollision && body.onGround() ? 0.42 : v.y;
         body.setDeltaMovement(step.x, up, step.z);
         body.setYRot((float) (Math.atan2(to.z, to.x) * 180 / Math.PI) - 90);
         body.setYBodyRot(body.getYRot());
         body.hurtMarked = true;
+    }
+
+    /** Deepest drop the recalled body will walk off. */
+    private static final int SAFE_DROP = 3;
+
+    /** Whether the next stride (half a block ahead) puts the body in lava or fire, or over a drop deeper than it takes. */
+    static boolean hazardAhead(HeadlessBody body, Vec3 step) {
+        var level = body.level();
+        Vec3 ahead = body.position().add(step.normalize().scale(0.6 + body.getBbWidth() / 2));
+        net.minecraft.core.BlockPos feet = net.minecraft.core.BlockPos.containing(ahead.x, body.getY() + 0.01, ahead.z);
+        for (int up = 0; up <= 1; up++) {
+            var at = level.getBlockState(feet.above(up));
+            if (at.getFluidState().is(net.minecraft.tags.FluidTags.LAVA) || at.is(net.minecraft.tags.BlockTags.FIRE)) return true;
+        }
+        // a wall or a step up is the jump's business, not a hazard
+        if (!level.getBlockState(feet).getCollisionShape(level, feet).isEmpty()) return false;
+        for (int down = 1; down <= SAFE_DROP + 1; down++) {
+            net.minecraft.core.BlockPos p = feet.below(down);
+            if (p.getY() < level.getMinBuildHeight()) return true;
+            var below = level.getBlockState(p);
+            if (below.getFluidState().is(net.minecraft.tags.FluidTags.LAVA) || below.is(net.minecraft.tags.BlockTags.FIRE)) return true;
+            // something to stand on (or water to land in) within reach: a step down, not a drop
+            if (!below.getCollisionShape(level, p).isEmpty() || below.getFluidState().is(net.minecraft.tags.FluidTags.WATER)) return false;
+        }
+        // nothing within reach below: a drop
+        return true;
     }
 }

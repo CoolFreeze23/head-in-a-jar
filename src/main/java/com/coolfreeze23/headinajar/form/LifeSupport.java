@@ -59,6 +59,8 @@ public final class LifeSupport {
             // the placed head dried out completely
             FormActions.REAL_DEATH.add(player.getUUID());
             player.hurt(player.damageSources().dryOut(), Float.MAX_VALUE);
+            // a totem or creative mode kept them alive: the next death of their body is an ordinary one again
+            FormActions.REAL_DEATH.remove(player.getUUID());
         } else {
             player.hurt(player.damageSources().dryOut(), 1);
         }

@@ -58,6 +58,7 @@ public final class JarState {
         buf.writeBoolean(s.wheels);
         buf.writeBoolean(s.tipped);
         buf.writeBoolean(s.compact);
+        buf.writeByte(s.headAt);
     }, buf -> {
         JarState s = new JarState(Form.values()[buf.readVarInt()], buf.readVarInt(), ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buf),
                 buf.readVarInt(), Optional.empty(), ItemStack.EMPTY, ItemStack.EMPTY, false, 0, 0, 10, false);
@@ -76,6 +77,7 @@ public final class JarState {
         s.wheels = buf.readBoolean();
         s.tipped = buf.readBoolean();
         s.compact = buf.readBoolean();
+        s.headAt = buf.readByte();
         return s;
     });
 
@@ -110,6 +112,9 @@ public final class JarState {
     private int quality = 100;
     /** Blocks between body and head, for the HUD (-1 = other dimension). Not saved. */
     private float headDistance;
+    /** Where a linked body's head is, for the HUD: one of the HEAD_ values. Server computed, not saved. */
+    private int headAt;
+    public static final int HEAD_UNKNOWN = 0, HEAD_PLACED = 1, HEAD_DOCKED = 2;
     /** Ticks the link has been at zero. Not saved. */
     private int deadLinkTicks;
     private boolean dirty;
@@ -158,6 +163,7 @@ public final class JarState {
         wheels = other.wheels;
         tipped = other.tipped;
         compact = other.compact;
+        headAt = other.headAt;
     }
 
     public boolean compact() {
@@ -397,6 +403,17 @@ public final class JarState {
         if (quality != this.quality || Math.abs(distance - headDistance) >= 1) {
             this.quality = quality;
             this.headDistance = distance;
+            dirty = true;
+        }
+    }
+
+    public int headAt() {
+        return headAt;
+    }
+
+    public void setHeadAt(int where) {
+        if (where != headAt) {
+            headAt = where;
             dirty = true;
         }
     }
