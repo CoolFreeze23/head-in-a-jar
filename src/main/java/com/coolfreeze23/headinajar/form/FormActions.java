@@ -4,6 +4,7 @@ import com.coolfreeze23.headinajar.Config;
 import com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity;
 import com.coolfreeze23.headinajar.entity.HeadJarEntity;
 import com.coolfreeze23.headinajar.entity.HeadlessBody;
+import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.item.LifeSupportJarItem;
 import com.coolfreeze23.headinajar.menu.JarMenu;
 import com.coolfreeze23.headinajar.module.Telekinesis;
@@ -166,16 +167,23 @@ public final class FormActions {
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.6f, 1.6f);
     }
 
-    /** JAR to LINKED: put the head down here (or into the Cradle under it) and wake up in the body. */
+    /**
+     * JAR to LINKED: put the head down here (or into the Cradle under it) and wake up in the body. When it can't, the
+     * player is told why and what to do instead.
+     */
     public static boolean jarToLinked(ServerPlayer player) {
         JarState state = state(player);
         HeadRegistry registry = registry(player);
         HeadRegistry.Body body = registry.body(player.getUUID());
-        if (state.form() != Form.JAR || state.collar().isEmpty() || body == null || body.corpse()) return false;
-        if (NeuroLink.quality(player, state, body.spot()) <= NeuroLink.QUALITY_TO_LINK) {
-            player.displayClientMessage(Component.translatable("message.headinajar.signal_too_weak"), true);
-            return false;
+        if (state.form() != Form.JAR) return false;
+        if (body == null) return Refusals.deny(player, "swap.no_body", Component.translatable("block.headinajar.body_printer"));
+        // a corpse takes the head back only by hand: the Suture Kit, used on it as a jar
+        if (body.corpse()) return Refusals.deny(player, "swap.corpse", Component.translatable("item.headinajar.suture_kit"));
+        if (state.collar().isEmpty()) {
+            return Refusals.deny(player, "swap.no_collar", Component.translatable("item.headinajar.collar_cam"), Component.translatable("item.headinajar.suture_kit"));
         }
+        int quality = NeuroLink.quality(player, state, body.spot());
+        if (quality <= NeuroLink.QUALITY_TO_LINK) return Refusals.deny(player, "swap.weak_signal", quality, Component.translatable("block.headinajar.relay_mast"));
         Telekinesis.release(player, state);
         LifeSupportCradleBlockEntity cradle = LifeSupportCradleBlockEntity.under(player);
         if (cradle != null && cradle.isEmpty()) dock(player, cradle);

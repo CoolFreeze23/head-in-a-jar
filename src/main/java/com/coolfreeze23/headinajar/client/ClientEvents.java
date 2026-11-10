@@ -165,6 +165,11 @@ public final class ClientEvents {
         if (!reachable) {
             event.setCanceled(true);
             event.setSwingHand(false);
+            // the Nudge: the server says why (and bystanders hear it), with the line for what the jar reached for
+            if (state.form() == Form.JAR) {
+                ClientRefusals.deny(com.coolfreeze23.headinajar.feedback.Nudge.reason(mc.level, mc.hitResult, event.isAttack()),
+                        mc.hitResult instanceof EntityHitResult hit ? hit.getEntity() : null);
+            }
         }
     }
 
@@ -195,7 +200,9 @@ public final class ClientEvents {
         while (ClientSetup.ABILITY.consumeClick()) {
             if (ClientHooks.handshakeActive()) ClientHooks.press();
             else if (state.form() == Form.SOCKET) SocketClient.pulse();
-            else if (state.form().isJarred() || state.form() == Form.BODY || state.form() == Form.LINKED) {
+            else if (state.form() == Form.JAR && state.heldEntity() < 0 && !state.fitted(ModuleType.TELEKINESIS) && ClientSetup.ABILITY.same(mc.options.keySprint)) {
+                // the ability shares its key with sprint and there is no Telekinesis: the press was a sprint, not a request
+            } else if (state.form().isJarred() || state.form() == Form.BODY || state.form() == Form.LINKED) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
             }
         }

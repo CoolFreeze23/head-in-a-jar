@@ -3,6 +3,8 @@ package com.coolfreeze23.headinajar.form;
 import com.coolfreeze23.headinajar.Config;
 import com.coolfreeze23.headinajar.block.ChargingDockBlock;
 import com.coolfreeze23.headinajar.entity.HeadlessBody;
+import com.coolfreeze23.headinajar.feedback.Nudge;
+import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.module.ModuleEffects;
 import com.coolfreeze23.headinajar.module.ModuleType;
 import com.coolfreeze23.headinajar.module.Telekinesis;
@@ -135,15 +137,18 @@ public final class FormEvents {
 
     // --- what a bare jar can't do -------------------------------------------------------
 
-    private static void lockout(Player player, ICancellableEvent event) {
-        if (lockedOut(player)) event.setCanceled(true);
+    /** Cancels what a locked-out jar tried; a bare jar is told why (the Nudge), with the line for what it reached for. */
+    private static void lockout(Player player, ICancellableEvent event, java.util.function.Supplier<String> reason) {
+        if (!lockedOut(player)) return;
+        event.setCanceled(true);
+        if (player instanceof ServerPlayer server && state(player).form() == Form.JAR) Refusals.nudge(server, reason.get());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         // the mod's machines are built for heads: a jar can work them without an arm
         if (event.getLevel().getBlockState(event.getPos()).is(HEAD_OPERABLE)) return;
-        lockout(event.getEntity(), event);
+        lockout(event.getEntity(), event, () -> Nudge.forBlock(event.getLevel(), event.getPos(), event.getHitVec().getLocation(), false));
     }
 
     public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> HEAD_OPERABLE =
@@ -151,12 +156,16 @@ public final class FormEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
-        lockout(event.getEntity(), event);
+        lockout(event.getEntity(), event, () -> Nudge.USE);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        lockout(event.getEntity(), event);
+        if (event.getAction() != PlayerInteractEvent.LeftClickBlock.Action.START) {
+            if (lockedOut(event.getEntity())) event.setCanceled(true);
+            return;
+        }
+        lockout(event.getEntity(), event, () -> Nudge.forBlock(event.getLevel(), event.getPos(), net.minecraft.world.phys.Vec3.atCenterOf(event.getPos()), true));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -178,7 +187,7 @@ public final class FormEvents {
             com.coolfreeze23.headinajar.host.HostInteractions.interact(event);
             return;
         }
-        lockout(event.getEntity(), event);
+        lockout(event.getEntity(), event, () -> Nudge.forEntity(event.getTarget(), false));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -186,14 +195,14 @@ public final class FormEvents {
         if (event.getTarget() instanceof HeadlessBody) return;
         // a host is handled by the plain interaction that follows; consuming this one here would stop the client sending it
         if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getTarget()) && state(event.getEntity()).form() != Form.HOSTED) return;
-        lockout(event.getEntity(), event);
+        lockout(event.getEntity(), event, () -> Nudge.forEntity(event.getTarget(), false));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void attack(AttackEntityEvent event) {
         Player player = event.getEntity();
         if (lockedOut(player)) {
-            event.setCanceled(true);
+            lockout(player, event, () -> Nudge.forEntity(event.getTarget(), true));
         } else if (!player.level().isClientSide && state(player).form() == Form.JAR) {
             state(player).spend(200);
         }
@@ -232,8 +241,16 @@ public final class FormEvents {
         JarState state = state(player);
         if (state.form().isJarred() && !state.has(ModuleType.MANIPULATOR_ARM) && !state.has(ModuleType.MAGNET)) {
             event.setCanPickup(TriState.FALSE);
+            // told once per item it rolls onto, not every tick it sits there
+            if (player instanceof ServerPlayer server && state.form() == Form.JAR
+                    && !Integer.valueOf(event.getItemEntity().getId()).equals(TOUCHED.put(player.getUUID(), event.getItemEntity().getId()))) {
+                Refusals.nudge(server, Nudge.PICKUP);
+            }
         }
     }
+
+    /** The last item each bare jar was told it can't pick up. */
+    private static final java.util.Map<java.util.UUID, Integer> TOUCHED = new java.util.HashMap<>();
 
     // --- what a jar is safe from ----------------------------------------------------------
 
@@ -314,6 +331,7 @@ public final class FormEvents {
 
     @SubscribeEvent
     public static void loggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        TOUCHED.remove(event.getEntity().getUUID());
         if (event.getEntity() instanceof ServerPlayer player && player.getVehicle() instanceof SeatEntity seat && seat.chair() != null) {
             seat.chair().finishNow(player);
         }

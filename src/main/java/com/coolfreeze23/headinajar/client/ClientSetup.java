@@ -51,6 +51,7 @@ public class ClientSetup {
         container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, com.coolfreeze23.headinajar.Config.CLIENT_SPEC);
         NeoForge.EVENT_BUS.register(ClientEvents.class);
         NeoForge.EVENT_BUS.register(SocketClient.class);
+        NeoForge.EVENT_BUS.register(ClientRefusals.class);
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
     }
 

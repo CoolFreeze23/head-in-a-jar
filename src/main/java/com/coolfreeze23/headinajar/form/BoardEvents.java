@@ -1,10 +1,12 @@
 package com.coolfreeze23.headinajar.form;
 
 import com.coolfreeze23.headinajar.entity.HeadlessBody;
+import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.item.QuantumItems;
 import com.coolfreeze23.headinajar.module.ModuleType;
 import com.coolfreeze23.headinajar.network.Network;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -55,12 +57,26 @@ public final class BoardEvents {
         }
     }
 
+    /**
+     * A jar key with no module behind it: bubbles in the jar and a line naming the module and the jar menu key. A module
+     * that is fitted but has no charge left gets the charging line instead. Returns false.
+     */
+    public static boolean noModule(ServerPlayer player, ModuleType module) {
+        if (FormActions.state(player).fitted(module)) {
+            return Refusals.glug(player, "jar.no_charge", Component.translatable("block.headinajar.charging_dock"));
+        }
+        return Refusals.glug(player, "jar.no_module", Component.translatable("item.headinajar." + module.id()),
+                Component.keybind("key.headinajar.jar_menu"));
+    }
+
     /** Lacrimal Laser: the head weeps a beam, 4 damage at 8 blocks, once a second, 1,500 FE. */
     public static boolean laser(ServerPlayer player) {
         JarState state = FormActions.state(player);
-        if (!state.form().isJarred() || !state.fitted(ModuleType.LACRIMAL_LASER) || state.charge() < LASER_COST) return false;
+        if (!state.form().isJarred()) return false;
+        if (!state.fitted(ModuleType.LACRIMAL_LASER)) return noModule(player, ModuleType.LACRIMAL_LASER);
+        if (state.charge() < LASER_COST) return Refusals.glug(player, "jar.laser_low", Component.translatable("block.headinajar.charging_dock"));
         long now = player.level().getGameTime();
-        if (player.getPersistentData().getLong(LASER_READY) > now) return false;
+        if (player.getPersistentData().getLong(LASER_READY) > now) return Refusals.deny(player, "jar.laser_cooling");
         player.getPersistentData().putLong(LASER_READY, now + LASER_COOLDOWN);
         state.setCharge(state.charge() - LASER_COST);
         Network.sync(player);

@@ -141,8 +141,32 @@ public final class Network {
         }
     }
 
+    /** Server to client: a refusal's line, shown on the action bar or over the open screen. */
+    public record Refused(net.minecraft.network.chat.Component line) implements CustomPacketPayload {
+        public static final Type<Refused> TYPE = new Type<>(HeadInAJar.id("refused"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, Refused> CODEC = StreamCodec.composite(
+                net.minecraft.network.chat.ComponentSerialization.TRUSTED_STREAM_CODEC, Refused::line, Refused::new);
+
+        @Override
+        public Type<Refused> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: input the client cancelled itself, to be refused out loud (with the entity aimed at, or -1). */
+    public record RefuseRequest(String reason, int target) implements CustomPacketPayload {
+        public static final Type<RefuseRequest> TYPE = new Type<>(HeadInAJar.id("refuse_request"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, RefuseRequest> CODEC = StreamCodec.composite(
+                ByteBufCodecs.stringUtf8(64), RefuseRequest::reason, ByteBufCodecs.VAR_INT, RefuseRequest::target, RefuseRequest::new);
+
+        @Override
+        public Type<RefuseRequest> type() {
+            return TYPE;
+        }
+    }
+
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("1");
+        var registrar = event.registrar("2");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
         registrar.playToServer(JarAction.TYPE, JarAction.CODEC, Network::onAction);
         registrar.playToClient(HostSync.TYPE, HostSync.CODEC, (msg, ctx) -> {
@@ -192,10 +216,25 @@ public final class Network {
         registrar.playToClient(SocketStatus.TYPE, SocketStatus.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.SocketClient.status = msg.values());
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);
         registrar.playToServer(ArmInput.TYPE, ArmInput.CODEC, (msg, ctx) -> {
-            if (ctx.player().getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == ctx.player()) {
-                mecha.armsHeld = msg.held() & 3;
-            }
+            if (ctx.player() instanceof ServerPlayer player) arms(player, msg.held());
         });
+        registrar.playToClient(Refused.TYPE, Refused.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.ClientRefusals.show(msg.line()));
+        registrar.playToServer(RefuseRequest.TYPE, RefuseRequest.CODEC, (msg, ctx) -> {
+            if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.feedback.Refusals.fromClient(player, msg.reason(), msg.target());
+        });
+    }
+
+    /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */
+    public static void arms(ServerPlayer player, int held) {
+        if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == player) {
+            mecha.armsHeld = held & 3;
+        }
+    }
+
+    /** Shows a refusal's line to its player (over an open screen too, where the action bar is hidden). */
+    public static void refused(ServerPlayer player, net.minecraft.network.chat.Component line) {
+        if (player.connection != null && player.connection.hasChannel(Refused.TYPE)) PacketDistributor.sendToPlayer(player, new Refused(line));
+        else player.displayClientMessage(line, true);
     }
 
     private static void onSync(FormSync msg, IPayloadContext ctx) {
@@ -210,12 +249,20 @@ public final class Network {
     }
 
     private static void onAction(JarAction msg, IPayloadContext ctx) {
-        if (!(ctx.player() instanceof ServerPlayer player)) return;
+        if (ctx.player() instanceof ServerPlayer player) action(player, msg);
+    }
+
+    /** A key the jarred player pressed (the JarAction payload's handler). */
+    public static void action(ServerPlayer player, JarAction msg) {
         JarState state = player.getData(ModRegistry.JAR_STATE);
         if (msg.action() == Action.SWAP) {
             // body to head at any signal (if allowed), head to body only on a good signal
             if (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED) {
-                if (com.coolfreeze23.headinajar.form.NeuroLink.manualUnlinkAllowed()) FormActions.linkedToJar(player);
+                if (!com.coolfreeze23.headinajar.form.NeuroLink.manualUnlinkAllowed()) {
+                    com.coolfreeze23.headinajar.feedback.Refusals.deny(player, "swap.unlink_disabled");
+                } else if (!FormActions.linkedToJar(player)) {
+                    com.coolfreeze23.headinajar.feedback.Refusals.deny(player, "swap.no_head");
+                }
             } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
                 FormActions.jarToLinked(player);
             }
@@ -267,7 +314,14 @@ public final class Network {
         if (!state.form().isJarred()) return;
         switch (msg.action()) {
             case OPEN_MENU -> FormActions.openMenu(player);
-            case ABILITY -> Telekinesis.toggle(player, state);
+            case ABILITY -> {
+                if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR && state.heldEntity() < 0
+                        && !state.has(com.coolfreeze23.headinajar.module.ModuleType.TELEKINESIS)) {
+                    com.coolfreeze23.headinajar.form.BoardEvents.noModule(player, com.coolfreeze23.headinajar.module.ModuleType.TELEKINESIS);
+                } else {
+                    Telekinesis.toggle(player, state);
+                }
+            }
             case THROW -> Telekinesis.throwHeld(player, state);
             case LET_GO -> FormActions.letGo(player);
             default -> {
