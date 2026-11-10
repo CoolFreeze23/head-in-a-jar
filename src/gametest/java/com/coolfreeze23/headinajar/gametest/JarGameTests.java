@@ -248,7 +248,9 @@ public class JarGameTests {
         ServerPlayer player = player(h);
         FormActions.detach(player, 3);
         HeadlessBody body = body(h, player);
+        // the owner has moved on: neither the jar nor the registry names this body any more
         state(player).setBody(null);
+        com.coolfreeze23.headinajar.form.HeadRegistry.get(player).setBody(player.getUUID(), null);
         h.succeedWhen(() -> {
             h.assertFalse(body.isAlive(), "orphan body still standing");
             h.getLevel().getServer().getPlayerList().remove(player);
