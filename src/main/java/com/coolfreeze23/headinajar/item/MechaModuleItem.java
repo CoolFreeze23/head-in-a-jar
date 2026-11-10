@@ -43,5 +43,9 @@ public class MechaModuleItem extends Item {
             tooltip.add(Component.translatable("mecha_module.headinajar.slider", Component.translatable("mecha_slider.headinajar." + type.slider), slider(stack))
                     .withStyle(ChatFormatting.DARK_AQUA));
         }
+        if (type == com.coolfreeze23.headinajar.mecha.MechaModule.CARGO_HOLD) {
+            // how to get at it: the swap key from the cockpit, by its binding
+            tooltip.add(Component.translatable("mecha_module.headinajar.cargo_hold.open", Component.keybind("key.headinajar.swap")).withStyle(ChatFormatting.DARK_GRAY));
+        }
     }
 }
