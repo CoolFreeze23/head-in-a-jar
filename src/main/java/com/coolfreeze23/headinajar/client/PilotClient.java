@@ -19,6 +19,8 @@ public final class PilotClient {
     private static int sentArms;
     private static boolean wasJumping;
     private static int ejectHold;
+    /** The mecha the arm state was last sent for: a new one is always told what is held, even if nothing is. */
+    private static int sentFor = -1;
 
     private PilotClient() {
     }
@@ -35,10 +37,12 @@ public final class PilotClient {
         if (m == null || mc.screen != null) {
             if (sentArms != 0) PacketDistributor.sendToServer(new Network.ArmInput(sentArms = 0));
             ejectHold = 0;
+            if (m == null) sentFor = -1;
             return;
         }
         int arms = (mc.options.keyAttack.isDown() ? 1 : 0) | (mc.options.keyUse.isDown() ? 2 : 0);
-        if (arms != sentArms) PacketDistributor.sendToServer(new Network.ArmInput(sentArms = arms));
+        if (arms != sentArms || sentFor != m.getId()) PacketDistributor.sendToServer(new Network.ArmInput(sentArms = arms));
+        sentFor = m.getId();
         boolean jumping = mc.options.keyJump.isDown();
         if (jumping && !wasJumping && !m.onGround() && m.has(MechaModule.JUMP_JETS)) {
             PacketDistributor.sendToServer(new Network.JarAction(Network.Action.JET));
@@ -94,6 +98,11 @@ public final class PilotClient {
             g.drawString(mc.font, Component.translatable("hud.headinajar.utility", ClientSetup.ABILITY.getTranslatedKeyMessage(),
                     Component.translatable("item.headinajar." + utility.id()), ClientSetup.SECONDARY.getTranslatedKeyMessage()), x, y - 20, 0xFFD080);
         }
+        if (m.has(MechaModule.CARGO_HOLD)) {
+            // the swap key opens the hold from the cockpit
+            g.drawString(mc.font, Component.translatable("hud.headinajar.cargo", ClientSetup.SWAP.getTranslatedKeyMessage(),
+                    Component.translatable("item.headinajar." + MechaModule.CARGO_HOLD.id())), x, utility != null ? y - 30 : y - 20, 0xFFD080);
+        }
         ChargeHud.drawBar(g, x, y, 90, m.getHealth() / m.getMaxHealth(), 0xFFE04848, 0xFF9A2E2E);
         y += 9;
         ChargeHud.drawBar(g, x, y, 90, m.battery() / (float) m.batteryCapacity(), 0xFF3FD8F0, 0xFF1F9AB8);
@@ -113,6 +122,9 @@ public final class PilotClient {
         if (m.vent() > 0) g.drawString(mc.font, Component.translatable("hud.headinajar.venting").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), x, y, 0xFFFFFF);
         else if (m.battery() <= 0) g.drawString(mc.font, Component.translatable("hud.headinajar.limp").withStyle(ChatFormatting.YELLOW), x, y, 0xFFFFFF);
         else if (load > 1.25f) g.drawString(mc.font, Component.translatable("hud.headinajar.servos_locked").withStyle(ChatFormatting.RED), x, y, 0xFFFFFF);
+        else if (!MechaLogic.canWalk(m) && !MechaLogic.canFly(m) && !(m.isInWater() && m.has(MechaModule.AQUA_FINS))) {
+            g.drawString(mc.font, Component.translatable("hud.headinajar.no_legs", Component.translatable("block.headinajar.assembly_gantry")).withStyle(ChatFormatting.YELLOW), x, y, 0xFFFFFF);
+        }
         else if (ejectHold > 0) g.drawString(mc.font, Component.translatable("hud.headinajar.ejecting", 100 * ejectHold / 20), x, y, 0xFFD040);
     }
 

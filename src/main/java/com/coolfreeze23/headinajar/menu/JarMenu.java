@@ -91,7 +91,7 @@ public class JarMenu extends AbstractContainerMenu {
             return true;
         }
         if (id == BUTTON_COURIER && player instanceof ServerPlayer server) {
-            server.displayClientMessage(net.minecraft.network.chat.Component.translatable(com.coolfreeze23.headinajar.form.Courier.book(server)), true);
+            com.coolfreeze23.headinajar.form.Courier.bookFromMenu(server);
             return true;
         }
         return false;

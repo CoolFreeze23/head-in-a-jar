@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -45,9 +46,13 @@ public final class MechaArms {
                 if (pressed) {
                     Entity target = MechaLogic.lookEntity(pilot, m, 4);
                     if (target instanceof LivingEntity victim && m.spend(40)) {
-                        victim.hurt(m.serverLevel().damageSources().mobAttack(m), 8 * eff);
+                        victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), 8 * eff);
                         m.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1, 0.6f);
                         return;
+                    }
+                    BlockHitResult hit = MechaLogic.lookBlock(pilot, 5);
+                    if (MechaLogic.miss(hit) || !m.serverLevel().getBlockState(hit.getBlockPos()).is(net.minecraft.tags.BlockTags.LOGS)) {
+                        refuse(m, pilot, s, "mecha.arm.chainsaw_log");
                     }
                 }
                 if (held) chainsaw(m, pilot, side, eff);
@@ -57,8 +62,12 @@ public final class MechaArms {
                 if (!pressed || s.cooldown > 0) return;
                 Entity target = MechaLogic.lookEntity(pilot, m, 4.5);
                 int force = m.armSlider(side);
+                if (!(target instanceof LivingEntity)) {
+                    refuse(m, pilot, s, "mecha.arm.no_target");
+                    return;
+                }
                 if (target instanceof LivingEntity victim && m.spend(300 + 12 * force)) {
-                    victim.hurt(m.serverLevel().damageSources().mobAttack(m), (10 + 0.12f * force) * eff);
+                    victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), (10 + 0.12f * force) * eff);
                     Vec3 push = pilot.getLookAngle().multiply(1, 0, 1).normalize();
                     victim.knockback(1 + force / 50.0, -push.x, -push.z);
                     m.setHeat(m.heat() + 4 * force / 100f);
@@ -77,7 +86,10 @@ public final class MechaArms {
                     target.hurtMarked = true;
                 } else {
                     BlockHitResult hit = MechaLogic.lookBlock(pilot, 32);
-                    if (MechaLogic.miss(hit)) return;
+                    if (MechaLogic.miss(hit)) {
+                        refuse(m, pilot, s, "mecha.arm.no_target");
+                        return;
+                    }
                     Vec3 pull = hit.getLocation().subtract(m.position()).normalize().scale(1.6);
                     m.setDeltaMovement(pull.add(0, 0.35, 0));
                     m.hurtMarked = true;
@@ -107,13 +119,13 @@ public final class MechaArms {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0 && m.spend(50)) {
                     s.cooldown = 5;
-                    hand(m, pilot);
+                    hand(m, pilot, s);
                 }
             }
             case EXCAVATOR_SCOOP -> {
                 if (held && s.cooldown <= 0) {
                     s.cooldown = 4;
-                    scoop(m, pilot);
+                    scoop(m, pilot, s);
                 }
             }
             case FLAMETHROWER -> {
@@ -132,18 +144,18 @@ public final class MechaArms {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0 && m.spend(20)) {
                     s.cooldown = 10;
-                    hemo(m, pilot, eff);
+                    hemo(m, pilot, side, eff);
                 }
             }
             case HARVESTER -> {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0) {
                     s.cooldown = 10;
-                    harvest(m, pilot);
+                    harvest(m, pilot, side);
                 }
             }
             case WELDING_TORCH -> {
-                if (held && m.spend(80)) weld(m, pilot, eff);
+                if (held && m.spend(80)) weld(m, pilot, side, eff);
             }
             case PLASMA_LANCE -> {
                 if (held && m.spend(600)) lance(m, pilot, eff);
@@ -153,24 +165,35 @@ public final class MechaArms {
         }
     }
 
+    /** The pilot whose Manipulator Hand is acting right now (its clicks are the hand's, so the jar's lockout lets them through). */
+    private static ServerPlayer acting;
+
+    /** Whether this player's clicks come from their mecha's Manipulator Hand. */
+    public static boolean acting(net.minecraft.world.entity.player.Player player) {
+        return acting != null && acting == player;
+    }
+
     /** Manipulator Hand: uses the pilot's selected hotbar item like a hand would (on a block, a creature, or the air). */
-    private static void hand(MechaEntity m, ServerPlayer pilot) {
+    private static void hand(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s) {
         ItemStack stack = pilot.getMainHandItem();
         Entity target = MechaLogic.lookEntity(pilot, m, 6);
-        if (target != null) {
-            pilot.attack(target);
+        BlockHitResult hit = target == null ? MechaLogic.lookBlock(pilot, 6) : null;
+        if (target == null && hit.getType() != HitResult.Type.BLOCK && stack.isEmpty()) {
+            refuse(m, pilot, s, "mecha.arm.no_target");
             return;
         }
-        BlockHitResult hit = MechaLogic.lookBlock(pilot, 6);
-        if (hit.getType() == HitResult.Type.BLOCK) {
-            pilot.gameMode.useItemOn(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND, hit);
-        } else if (!stack.isEmpty()) {
-            pilot.gameMode.useItem(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND);
+        acting = pilot;
+        try {
+            if (target != null) pilot.attack(target);
+            else if (hit.getType() == HitResult.Type.BLOCK) pilot.gameMode.useItemOn(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND, hit);
+            else pilot.gameMode.useItem(pilot, m.serverLevel(), stack, net.minecraft.world.InteractionHand.MAIN_HAND);
+        } finally {
+            acting = null;
         }
     }
 
     /** Excavator Scoop: 3x3 of shovel blocks at a time, straight into the Cargo Hold. */
-    private static void scoop(MechaEntity m, ServerPlayer pilot) {
+    private static void scoop(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s) {
         BlockHitResult hit = MechaLogic.lookBlock(pilot, 6);
         if (MechaLogic.miss(hit)) return;
         int dug = 0;
@@ -183,6 +206,7 @@ public final class MechaArms {
             }
         }
         if (dug > 0) m.playSound(SoundEvents.GRAVEL_BREAK, 1, 0.7f);
+        else if (m.battery() >= 20 && m.serverLevel().getBlockState(hit.getBlockPos()).is(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL)) refuse(m, pilot, s, "mecha.arm.protected");
     }
 
     /** Flamethrower: a 6-block cone that sets creatures alight. */
@@ -199,7 +223,7 @@ public final class MechaArms {
                 Vec3 to = e.position().add(0, e.getBbHeight() / 2, 0).subtract(eye);
                 if (to.length() > 7 || to.normalize().dot(look) < cone) continue;
                 e.igniteForSeconds(4);
-                e.hurt(level.damageSources().inFire(), 1 * eff);
+                e.hurt(by(m, pilot, DamageTypes.IN_FIRE), 1 * eff);
             }
         }
         m.setHeat(m.heat() + 8);
@@ -216,7 +240,7 @@ public final class MechaArms {
         LivingEntity from = pilot, at = victim;
         for (int jump = 0; jump < 4 && at != null; jump++) {
             hit.add(at);
-            at.hurt(level.damageSources().lightningBolt(), damage);
+            at.hurt(by(m, pilot, DamageTypes.LIGHTNING_BOLT), damage);
             Vec3 a = from.getEyePosition(), b = at.getEyePosition();
             for (int i = 0; i <= 10; i++) {
                 Vec3 p = a.lerp(b, i / 10.0);
@@ -231,11 +255,18 @@ public final class MechaArms {
     }
 
     /** Hemo-Syringe: a jab that draws a Blood Sample (quality 50-80) and patches the frame with 10% of the damage. */
-    private static void hemo(MechaEntity m, ServerPlayer pilot, float eff) {
+    private static void hemo(MechaEntity m, ServerPlayer pilot, int side, float eff) {
         Entity target = MechaLogic.lookEntity(pilot, m, 4);
-        if (!(target instanceof LivingEntity victim) || target instanceof net.minecraft.world.entity.player.Player) return;
+        if (target instanceof net.minecraft.world.entity.player.Player) {
+            refuse(m, pilot, m.armState[side], "mecha.arm.hemo_player");
+            return;
+        }
+        if (!(target instanceof LivingEntity victim)) {
+            refuse(m, pilot, m.armState[side], "mecha.arm.no_target");
+            return;
+        }
         float damage = 4 * eff;
-        if (!victim.hurt(m.serverLevel().damageSources().mobAttack(m), damage)) return;
+        if (!victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), damage)) return;
         m.heal(damage * 0.1f);
         var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(victim);
         if (blood.bloodless) return;
@@ -247,10 +278,14 @@ public final class MechaArms {
     }
 
     /** Harvester: ripe crops in a 5x5 around the block you look at are picked and replanted. */
-    private static void harvest(MechaEntity m, ServerPlayer pilot) {
+    private static void harvest(MechaEntity m, ServerPlayer pilot, int side) {
         BlockHitResult hit = MechaLogic.lookBlock(pilot, 8);
-        if (MechaLogic.miss(hit)) return;
+        if (MechaLogic.miss(hit)) {
+            refuse(m, pilot, m.armState[side], "mecha.arm.nothing_ripe");
+            return;
+        }
         ServerLevel level = m.serverLevel();
+        int picked = 0;
         for (BlockPos p : BlockPos.betweenClosed(hit.getBlockPos().offset(-2, -1, -2), hit.getBlockPos().offset(2, 1, 2))) {
             BlockState state = level.getBlockState(p);
             if (!(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop) || !crop.isMaxAge(state) || m.battery() < 10) continue;
@@ -260,6 +295,7 @@ public final class MechaArms {
             ItemStack seed = crop.getCloneItemStack(level, at, state);
             level.setBlock(at, crop.getStateForAge(0), 3);
             m.spend(10);
+            picked++;
             boolean seedTaken = false;
             for (ItemStack drop : drops) {
                 // replanting costs one seed
@@ -272,10 +308,11 @@ public final class MechaArms {
                 if (!left.isEmpty()) net.minecraft.world.level.block.Block.popResource(level, at, left);
             }
         }
+        if (picked == 0) refuse(m, pilot, m.armState[side], "mecha.arm.nothing_ripe");
     }
 
     /** Welding Torch: repairs the mecha you look at, or your own, 2 HP/s for Mecha Plating from the hold (1 per 20 HP). */
-    private static void weld(MechaEntity m, ServerPlayer pilot, float eff) {
+    private static void weld(MechaEntity m, ServerPlayer pilot, int side, float eff) {
         Entity looked = MechaLogic.lookEntity(pilot, m, 5);
         MechaEntity target = looked instanceof MechaEntity other ? other : m;
         m.setHeat(m.heat() + 6);
@@ -290,7 +327,12 @@ public final class MechaArms {
                     plate = true;
                 }
             }
-            if (!plate) return;
+            if (!plate) {
+                refuse(m, pilot, m.armState[side], "mecha.arm.no_plating",
+                        Component.translatable(com.coolfreeze23.headinajar.registry.ModRegistry.MECHA_PLATING.get().getDescriptionId()),
+                        Component.translatable(com.coolfreeze23.headinajar.registry.ModRegistry.mechaModule(MechaModule.CARGO_HOLD).getDescriptionId()));
+                return;
+            }
             credit = 20;
         }
         target.heal(1 * eff);
@@ -362,6 +404,7 @@ public final class MechaArms {
                 broken++;
             }
         }
+        if (broken == 0 && m.battery() >= 50 && !m.serverLevel().getBlockState(pos).isAir()) refuse(m, pilot, s, "mecha.arm.protected");
         m.setHeat(m.heat() + broken);
     }
 
@@ -423,10 +466,13 @@ public final class MechaArms {
                     }
                 }
             }
-            if (target != null) {
-                s.held = target.getId();
-                target.setNoGravity(true);
+            if (target != null && !mayGrab(pilot, target)) {
+                refuse(m, pilot, s, "mecha.arm.beam_refused");
+                target = null;
+            } else if (target == null) {
+                refuse(m, pilot, s, "mecha.arm.no_target");
             }
+            if (target != null) s.held = target.getId();
         }
         if (s.held < 0) return;
         Entity held = level.getEntity(s.held);
@@ -435,14 +481,27 @@ public final class MechaArms {
             return;
         }
         Vec3 target = pilot.getEyePosition().add(pilot.getLookAngle().scale(4 + held.getBbWidth())).subtract(0, held.getBbHeight() / 2, 0);
-        held.setDeltaMovement(target.subtract(held.position()).scale(0.35));
+        // gravity is cancelled by lifting it each tick, not by the saved NoGravity flag, so nothing is left floating
+        // when the pilot logs out or the held thing leaves (a lifted block keeps its own flag)
+        held.setDeltaMovement(target.subtract(held.position()).scale(0.35).add(0, held instanceof HeldBlockEntity ? 0 : held.getGravity(), 0));
         held.hurtMarked = true;
         held.fallDistance = 0;
         if (held instanceof HeldBlockEntity block) block.keepHeld();
         m.setHeat(m.heat() + 3 * 0.05f);
     }
 
-    /** Lets go of anything the arm carries. */
+    /** What the beam may pick up: not a player this pilot may not hurt, not someone's ride, not another person's mecha. */
+    private static boolean mayGrab(ServerPlayer pilot, Entity target) {
+        if (target instanceof net.minecraft.world.entity.player.Player other) return pilot.canHarmPlayer(other);
+        if (target.hasPassenger(e -> e instanceof net.minecraft.world.entity.player.Player)) return false;
+        return !(target instanceof MechaEntity other) || other.isOwnedBy(pilot);
+    }
+
+    /** Damage an arm deals: from the mecha, on its pilot's behalf, so PvP rules, claims, kill credit and XP apply. */
+    static net.minecraft.world.damagesource.DamageSource by(MechaEntity m, net.minecraft.world.entity.player.Player pilot, net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType> type) {
+        return com.coolfreeze23.headinajar.host.HostEvents.byPilot(m, pilot, type);
+    }
+
     /** Refuses this press of an arm, once however long the button stays held. */
     private static void refuse(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s, String reason, Object... args) {
         if (s.refused) return;
@@ -450,13 +509,13 @@ public final class MechaArms {
         Refusals.deny(pilot, Refuser.at(m), reason, args);
     }
 
+    /** Lets go of anything the arm carries. */
     public static void release(MechaEntity m, int side) {
         MechaLogic.ArmState s = m.armState[side];
         s.target = null;
         if (s.held >= 0) {
             Entity held = m.level().getEntity(s.held);
             if (held instanceof HeldBlockEntity block) block.drop(block.getDeltaMovement().scale(0.5), false);
-            else if (held != null) held.setNoGravity(false);
             s.held = -1;
         }
     }

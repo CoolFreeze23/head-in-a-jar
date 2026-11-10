@@ -14,14 +14,20 @@ import java.util.Optional;
 /** A spliced serum: genes at their potency, and the stability it was made with. Kept on a Serum Cassette and in bodies. */
 public record Serum(List<Entry> genes, int stability) {
     public record Entry(Gene gene, float potency) {
-        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(i -> i.group(
-                Codec.STRING.xmap(s -> Gene.valueOf(s.toUpperCase(java.util.Locale.ROOT)), Gene::id).fieldOf("gene").forGetter(Entry::gene),
-                Codec.FLOAT.fieldOf("potency").forGetter(Entry::potency)
-        ).apply(i, Entry::new));
+        /** As saved: the gene by id. An id this version doesn't know decodes to a null gene, which {@link #CODEC} drops. */
+        private record Saved(String gene, float potency) {
+        }
+
+        private static final Codec<Saved> SAVED = RecordCodecBuilder.create(i -> i.group(
+                Codec.STRING.fieldOf("gene").forGetter(Saved::gene),
+                Codec.FLOAT.fieldOf("potency").forGetter(Saved::potency)
+        ).apply(i, Saved::new));
+        public static final Codec<Entry> CODEC = SAVED.xmap(s -> new Entry(Gene.byId(s.gene()), s.potency()), e -> new Saved(e.gene().id(), e.potency()));
     }
 
     public static final Codec<Serum> CODEC = RecordCodecBuilder.create(i -> i.group(
-            Entry.CODEC.listOf().fieldOf("genes").forGetter(Serum::genes),
+            Entry.CODEC.listOf().<List<Entry>>xmap(list -> list.stream().filter(e -> e.gene() != null).toList(), list -> list)
+                    .fieldOf("genes").forGetter(Serum::genes),
             Codec.INT.fieldOf("stability").forGetter(Serum::stability)
     ).apply(i, Serum::new));
 

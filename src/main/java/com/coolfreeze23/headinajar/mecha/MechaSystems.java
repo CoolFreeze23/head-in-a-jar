@@ -181,7 +181,7 @@ public final class MechaSystems {
         Vec3 from = m.position().add(0, m.getBbHeight() * 0.8, 0);
         for (int i = 0; i < Math.min(3, targets.size()); i++) {
             LivingEntity t = targets.get(i);
-            t.hurt(level.damageSources().lightningBolt(), damage);
+            t.hurt(MechaArms.by(m, pilot, net.minecraft.world.damagesource.DamageTypes.LIGHTNING_BOLT), damage);
             Vec3 to = t.getEyePosition();
             for (int k = 0; k <= 8; k++) {
                 Vec3 p = from.lerp(to, k / 8.0);
@@ -283,14 +283,25 @@ public final class MechaSystems {
         m.setUtility(m.utility() + 1);
     }
 
-    /** R in a mecha: fires the selected utility module. */
+    /** A utility that can't fire now, and why: venting, a flat battery, or not enough FE for this one. */
+    private static boolean refuse(MechaEntity m, ServerPlayer pilot, MechaModule mod, int needFe) {
+        var gantry = Component.translatable("block.headinajar.assembly_gantry");
+        var source = com.coolfreeze23.headinajar.feedback.Refuser.at(m);
+        if (m.vent() > 0) return com.coolfreeze23.headinajar.feedback.Refusals.deny(pilot, source, "mecha.venting");
+        if (m.battery() <= 0) return com.coolfreeze23.headinajar.feedback.Refusals.deny(pilot, source, "mecha.no_power", gantry);
+        return com.coolfreeze23.headinajar.feedback.Refusals.deny(pilot, source, "mecha.utility.low_power",
+                Component.translatable("item.headinajar." + mod.id()), (needFe + 999) / 1000, gantry);
+    }
+
+    /** R in a mecha: fires the selected utility module, or says why it can't. */
     public static boolean useUtility(MechaEntity m, ServerPlayer pilot) {
         MechaModule mod = selectedUtility(m);
-        if (mod == null || MechaLogic.effectiveness(m) <= 0) return false;
+        if (mod == null) return false;
+        if (MechaLogic.effectiveness(m) <= 0) return refuse(m, pilot, mod, 0);
         ServerLevel level = m.serverLevel();
         switch (mod) {
             case ENDER_SATCHEL -> {
-                if (!m.spend(2000)) return false;
+                if (!m.spend(2000)) return refuse(m, pilot, mod, 2000);
                 pilot.openMenu(new SimpleMenuProvider((id, inv, p) -> ChestMenu.threeRows(id, inv, p.getEnderChestInventory()),
                         Component.translatable("container.enderchest")));
                 m.playSound(SoundEvents.ENDER_CHEST_OPEN, 1, 1);
@@ -298,7 +309,7 @@ public final class MechaSystems {
             case WORKBENCH -> pilot.openMenu(new SimpleMenuProvider((id, inv, p) -> new CraftingMenu(id, inv, ContainerLevelAccess.NULL),
                     Component.translatable("container.crafting")));
             case SMOKE_MORTAR -> {
-                if (m.battery() < 2000) return false;
+                if (m.battery() < 2000) return refuse(m, pilot, mod, 2000);
                 m.spend(2000);
                 m.setHeat(m.heat() + 10);
                 BlockHitResult hit = MechaLogic.lookBlock(pilot, 24);
@@ -329,13 +340,13 @@ public final class MechaSystems {
                     level.addFreshEntity(missile);
                     fired++;
                 }
-                if (fired == 0) return false;
+                if (fired == 0) return refuse(m, pilot, mod, 4000);
                 m.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 1.4f, 0.8f);
             }
             case ORE_SCANNER -> {
                 int radius = 8 + 16 * m.sliderAt(m.indexOf(MechaModule.ORE_SCANNER)) / 100;
                 int cost = 4000 * radius / 8;
-                if (m.battery() < cost) return false;
+                if (m.battery() < cost) return refuse(m, pilot, mod, cost);
                 m.spend(cost);
                 m.setHeat(m.heat() + 6);
                 m.getPersistentData().putInt(SCAN, 100);

@@ -153,22 +153,47 @@ public class HeadJarEntity extends Entity {
         return true;
     }
 
-    /** The jar breaks. If its owner is out walking their body, that is a real death. */
+    /** The jar breaks. If its owner is out walking their body, that is a real death ({@link #remove}). */
     private void shatter() {
         ServerLevel level = (ServerLevel) level();
         level.playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.2f, 0.8f);
         level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.GLASS)), getX(), getY() + 0.4, getZ(), 30, 0.25, 0.25, 0.25, 0.1);
-        ServerPlayer owner = owner();
         discard();
+    }
+
+    /**
+     * However the head leaves the world for good (shattered, killed by command, fallen into the void), its record goes
+     * with it, and an owner out walking their body dies for real. The mod's own moves (picking it up, swapping into it)
+     * change the record first, so they are not read as a loss.
+     */
+    @Override
+    public void remove(RemovalReason reason) {
+        boolean lost = reason.shouldDestroy() && !level().isClientSide && !isRemoved();
+        super.remove(reason);
+        if (lost) lost();
+    }
+
+    private void lost() {
+        UUID id = ownerId();
+        if (id == null || level().getServer() == null) return;
+        HeadRegistry registry = HeadRegistry.get(level().getServer());
+        HeadRegistry.Head head = registry.head(id);
+        if (head == null || head.where() != HeadRegistry.Where.ENTITY || !getUUID().equals(head.entity())) return;
+        registry.setHead(id, null);
+        ServerPlayer owner = owner();
         if (owner != null && owner.getData(ModRegistry.JAR_STATE).form() == Form.LINKED) {
             FormActions.REAL_DEATH.add(owner.getUUID());
             owner.hurt(owner.damageSources().genericKill(), Float.MAX_VALUE);
+            FormActions.REAL_DEATH.remove(owner.getUUID());
         }
     }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!player.getUUID().equals(ownerId())) return InteractionResult.PASS;
+        if (!player.getUUID().equals(ownerId())) {
+            if (level().isClientSide) return InteractionResult.PASS;
+            return othersUse((ServerPlayer) player, player.getItemInHand(hand));
+        }
         if (level().isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
         ItemStack held = player.getItemInHand(hand);
@@ -176,14 +201,49 @@ public class HeadJarEntity extends Entity {
             held.shrink(1);
             return InteractionResult.CONSUME;
         }
-        if (com.coolfreeze23.headinajar.form.LifeSupport.refill(server, player.getData(ModRegistry.JAR_STATE), held.getItem())) {
-            held.consume(1, player);
-            return InteractionResult.CONSUME;
+        boolean saline = held.is(ModRegistry.SALINE_BOTTLE.get()), patch = held.is(ModRegistry.GLASS_PATCH.get());
+        if (saline || patch) {
+            if (com.coolfreeze23.headinajar.form.LifeSupport.refill(server, player.getData(ModRegistry.JAR_STATE), held.getItem())) {
+                held.consume(1, player);
+                return InteractionResult.CONSUME;
+            }
+            // a full jar keeps the bottle (and stays where it is: picking it up is an empty hand's job)
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(server, saline ? "head.full" : "head.intact");
+            return InteractionResult.FAIL;
         }
         if (FormActions.pickUpHead(server, this)) return InteractionResult.CONSUME;
         if (player.getData(ModRegistry.JAR_STATE).form() == Form.LINKED && !FormActions.hasSatchel(player)) {
             player.displayClientMessage(Component.translatable("message.headinajar.need_satchel"), true);
         }
+        return InteractionResult.FAIL;
+    }
+
+    /**
+     * Someone else's head. A player its owner trusts may top it up with saline or patch its glass (the owner must be
+     * online: the jar's levels live with them); anything else is politely refused.
+     */
+    private InteractionResult othersUse(ServerPlayer player, ItemStack held) {
+        ServerPlayer owner = owner();
+        boolean saline = held.is(ModRegistry.SALINE_BOTTLE.get()), patch = held.is(ModRegistry.GLASS_PATCH.get());
+        if ((saline || patch) && owner != null && HeadRegistry.get(owner.getServer()).trusts(ownerId(), player)) {
+            var state = owner.getData(ModRegistry.JAR_STATE);
+            if (saline && state.saline() < state.maxSaline()) {
+                state.setSaline(state.saline() + 250);
+                held.consume(1, player);
+                FormActions.give(player, new ItemStack(Items.GLASS_BOTTLE));
+                level().playSound(null, getX(), getY(), getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1, 1);
+                return InteractionResult.CONSUME;
+            }
+            if (patch && state.integrity() < state.maxIntegrity()) {
+                state.setIntegrity(state.integrity() + 5);
+                held.consume(1, player);
+                level().playSound(null, getX(), getY(), getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 1.4f);
+                return InteractionResult.CONSUME;
+            }
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, saline ? "head.full" : "head.intact");
+            return InteractionResult.FAIL;
+        }
+        com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "head.not_yours", ownerName());
         return InteractionResult.FAIL;
     }
 

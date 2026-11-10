@@ -72,6 +72,9 @@ public final class LinkHud {
         if ((state.form() == Form.LINKED || state.form() == Form.JAR && !state.collar().isEmpty()) && !mc.options.hideGui) {
             topBar(g, mc, state, w);
         }
+        if (state.form() == Form.LINKED && !state.carryingHead() && state.headAt() != JarState.HEAD_UNKNOWN && !mc.options.hideGui) {
+            headPill(g, mc, state, w);
+        }
         if (wipeTicks > 0) {
             float a = wipeTicks / 10f;
             if (photosensitive()) g.fill(0, 0, w, h, ((int) (a * 200) << 24));
@@ -118,6 +121,39 @@ public final class LinkHud {
         Component text = Component.translatable("hud.headinajar.bar", q, ping, Component.translatable(label), dist);
         g.drawString(mc.font, text, x + 28, y + 2, 0xE0FFFFFF & 0xFFFFFF | a, false);
         if (state.carryingHead()) g.drawString(mc.font, Component.translatable("hud.headinajar.carried"), x + 140, y + 2, 0x55FF77 | a, false);
+    }
+
+    /**
+     * The head pill: a linked body's view of the head it left behind, its saline and its glass. A placed head drying out
+     * is the one way a linked player dies for real, so this is always shown while the head is away. Right of the link
+     * bar, or under it when the screen is too narrow (a large GUI scale).
+     */
+    private static void headPill(GuiGraphics g, Minecraft mc, JarState state, int w) {
+        boolean docked = state.headAt() == JarState.HEAD_DOCKED;
+        Component label = Component.translatable(docked ? "hud.headinajar.pill.docked" : "hud.headinajar.pill.placed");
+        int barW = 24, pad = 3;
+        int pw = pad + mc.font.width(label) + 4 + barW + pad;
+        int barX = w / 2 - 90;
+        int x = barX + 184, y = 4;
+        if (x + pw > w - 2) {
+            x = Math.max(2, w / 2 - pw / 2);
+            y = 18;
+        }
+        float saline = state.saline() / (float) Math.max(1, state.maxSaline());
+        float glass = state.integrity() / (float) Math.max(1, state.maxIntegrity());
+        // a placed head is drying: low saline goes red, steady (no blinking)
+        boolean dry = !docked && saline < 0.1f;
+        g.fill(x, y, x + pw, y + 12, 0x90000000);
+        g.drawString(mc.font, label, x + pad, y + 2, dry ? 0xFF5050 : 0xE0E0E0, false);
+        int bx = x + pad + mc.font.width(label) + 4;
+        bar(g, bx, y + 2, barW, saline, dry ? 0xFF4040 : 0x50A8FF);
+        bar(g, bx, y + 7, barW, glass, glass < 0.3f ? 0xFF4040 : 0xD8E8F0);
+    }
+
+    private static void bar(GuiGraphics g, int x, int y, int width, float fill, int color) {
+        g.fill(x, y, x + width, y + 3, 0xFF303030);
+        int f = Math.round(Mth.clamp(fill, 0, 1) * width);
+        if (f > 0) g.fill(x, y, x + f, y + 3, 0xFF000000 | color);
     }
 
     /** What the patient sees during the operation, on the chair's own clock (the machine's animation reads it too). */
@@ -176,11 +212,8 @@ public final class LinkHud {
     private static void tile(GuiGraphics g, ResourceLocation tex, int w, int h, float alpha, float u, float v) {
         RenderSystem.enableBlend();
         g.setColor(1, 1, 1, alpha);
-        // textures clamp at the edge, so tile by hand from a shifted origin
-        int ox = -(int) u, oy = -(int) v;
-        for (int x = ox; x < w; x += 64) {
-            for (int y = oy; y < h; y += 64) g.blit(tex, x, y, 0, 0, 64, 64, 64, 64);
-        }
+        // the textures repeat (no clamp in their metadata), so one quad covers the screen: one draw per layer
+        g.blit(tex, 0, 0, u, v, w, h, 64, 64);
         g.setColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
     }

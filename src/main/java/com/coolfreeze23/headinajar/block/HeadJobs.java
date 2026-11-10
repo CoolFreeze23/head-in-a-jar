@@ -21,23 +21,37 @@ public final class HeadJobs {
         return stack.is(ModRegistry.JARRED_HEAD.get()) ? JarredHeadItem.type(stack) : null;
     }
 
+    /** The stored mob's record, read-only: it is the item's own tag, never copied (callers must not change it). */
     public static CompoundTag entityTag(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data == null ? new CompoundTag() : data.copyTag().getCompound("Entity");
+        return data == null ? new CompoundTag() : data.getUnsafe().getCompound("Entity");
     }
 
     /** A jarred villager's profession ("librarian", "nitwit", ...), or "" for anything else. */
     public static String profession(ItemStack stack) {
-        if (type(stack) != EntityType.VILLAGER) return "";
-        String id = entityTag(stack).getCompound("VillagerData").getString("profession");
-        int colon = id.indexOf(':');
-        return colon < 0 ? id : id.substring(colon + 1);
+        return HeadInfo.of(stack).profession();
+    }
+
+    /** What a head would do on a Turret Pedestal: false for heads with no attack (a pig, a cow). */
+    public static boolean turretJob(EntityType<?> type) {
+        return type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED || type == EntityType.BLAZE
+                || type == EntityType.GUARDIAN || type == EntityType.ELDER_GUARDIAN || type == EntityType.CREEPER || type == EntityType.ZOMBIE
+                || type == EntityType.HUSK || type == EntityType.DROWNED || type == EntityType.SNOW_GOLEM || type == EntityType.WITCH || type == EntityType.EVOKER;
+    }
+
+    /** Whether a head has a program to run in a Neural Socket on its own. */
+    public static boolean socketJob(EntityType<?> type) {
+        return type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED || type == EntityType.VILLAGER || type == EntityType.ENDERMAN;
     }
 
     /** FE/t a head makes in a Cerebral Array by thinking very hard about broth. The Dragon Head needs a Board Room Core. */
     public static int arrayOutput(ItemStack stack, boolean boardRoom) {
         if (stack.is(Items.DRAGON_HEAD)) return boardRoom ? 1000 : 0;
-        EntityType<?> type = type(stack);
+        return arrayOutput(type(stack));
+    }
+
+    /** FE/t a jarred head of this creature makes in a Cerebral Array (0 for none). */
+    public static int arrayOutput(EntityType<?> type) {
         if (type == null) return 0;
         if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) return 20;
         if (type == EntityType.VILLAGER || type == EntityType.ZOMBIE_VILLAGER || type == EntityType.WANDERING_TRADER) return 40;
@@ -58,7 +72,7 @@ public final class HeadJobs {
         float best = 0;
         for (Direction d : Direction.values()) {
             if (!(level.getBlockEntity(machine.relative(d)) instanceof EmployeeMountBlockEntity mount) || !mount.facesInto(machine)) continue;
-            String job = profession(mount.head());
+            String job = mount.profession();
             for (String p : professions) if (p.equals(job)) best = Math.max(best, mount.paid() ? 1f : 0.5f);
         }
         return best;

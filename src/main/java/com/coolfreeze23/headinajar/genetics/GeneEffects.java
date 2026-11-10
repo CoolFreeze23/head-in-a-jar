@@ -43,6 +43,11 @@ import java.util.WeakHashMap;
 public final class GeneEffects {
     private static final Map<Entity, int[]> COOLDOWNS = new WeakHashMap<>();
     private static final Map<Entity, BlockPos> LIGHTS = new WeakHashMap<>();
+    /** Bodies whose genes were working at their last tick, per side: they get one more tick to switch everything off. */
+    private static final java.util.Set<Entity> APPLIED_SERVER = java.util.Collections.newSetFromMap(new WeakHashMap<>());
+    private static final java.util.Set<Entity> APPLIED_CLIENT = java.util.Collections.newSetFromMap(new WeakHashMap<>());
+    /** Where a body's Glow Cells light was last put (saved with the body, so a light left by an unload is found again). */
+    public static final String GLOW_AT = "headinajar_glow_at";
 
     private GeneEffects() {
     }
@@ -101,9 +106,35 @@ public final class GeneEffects {
         boolean daylight = e.level().isDay() && e.level().canSeeSky(e.blockPosition());
         set(e, Attributes.MOVEMENT_SPEED, "photophobia", on && has(e, Gene.PHOTOPHOBIA) && daylight ? -0.15 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         if (e instanceof Player p) set(e, NeoForgeMod.CREATIVE_FLIGHT, "draconic_wings", on && has(e, Gene.DRACONIC_WINGS) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
-        if (!on) return;
+        java.util.Set<Entity> applied = e.level().isClientSide ? APPLIED_CLIENT : APPLIED_SERVER;
+        if (!on) {
+            // the modifiers above are now off; the light goes too (washed, detached, in a jar, or no genes left)
+            applied.remove(e);
+            if (e.level() instanceof ServerLevel level) light(e, level, false);
+            return;
+        }
+        applied.add(e);
         movement(e);
         if (!e.level().isClientSide) serverTick(e, (ServerLevel) e.level());
+    }
+
+    /** Whether this body's genes were working at its last tick (so it needs a tick to switch them off). */
+    public static boolean applied(Entity e) {
+        return (e.level().isClientSide ? APPLIED_CLIENT : APPLIED_SERVER).contains(e);
+    }
+
+    /** Asks for one more tick of this body, which settles every gene effect to what its genes say now. */
+    public static void settle(Entity e) {
+        (e.level().isClientSide ? APPLIED_CLIENT : APPLIED_SERVER).add(e);
+    }
+
+    /** The body is leaving its level (death, unload, logout, another dimension): its light goes with it. */
+    public static void left(Entity e, ServerLevel level) {
+        BlockPos old = LIGHTS.remove(e);
+        if (old != null && level.isLoaded(old) && level.getBlockState(old).is(Blocks.LIGHT)) {
+            level.removeBlock(old, false);
+            e.getPersistentData().remove(GLOW_AT);
+        }
     }
 
     /** Climbing, gliding, slow fall, lava floating. Also called from host and mecha steering. */
@@ -181,16 +212,44 @@ public final class GeneEffects {
         }
     }
 
-    /** Glow Cells: an invisible light block follows the body. */
+    /**
+     * Glow Cells: an invisible light block follows the body. Where it was last put is also saved on the body, so a light
+     * left behind when the body unloaded with its chunk is taken away when the body is next ticked.
+     */
     private static void light(LivingEntity e, ServerLevel level, boolean glow) {
         BlockPos old = LIGHTS.get(e);
+        var data = e.getPersistentData();
+        if (old == null && data.contains(GLOW_AT)) old = saved(data.getString(GLOW_AT), level);
         BlockPos now = glow && e.isAlive() ? e.blockPosition().above() : null;
-        if (old != null && !old.equals(now) && level.getBlockState(old).is(Blocks.LIGHT)) level.removeBlock(old, false);
-        if (now != null && level.getBlockState(now).isAir()) {
-            level.setBlock(now, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 10), 3);
-            LIGHTS.put(e, now);
-        } else if (now == null) {
+        if (old != null && !old.equals(now)) {
+            if (level.isLoaded(old) && level.getBlockState(old).is(Blocks.LIGHT)) level.removeBlock(old, false);
             LIGHTS.remove(e);
+            data.remove(GLOW_AT);
+            old = null;
+        }
+        if (now == null) {
+            if (data.contains(GLOW_AT)) data.remove(GLOW_AT);
+            return;
+        }
+        boolean lit = level.getBlockState(now).is(Blocks.LIGHT);
+        // a light already there that isn't this body's (another glowing body's, or one placed by hand) is left alone
+        if (lit && old == null) return;
+        if (!lit) {
+            if (!level.getBlockState(now).isAir()) return;
+            level.setBlock(now, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 10), 3);
+        }
+        LIGHTS.put(e, now);
+        if (old == null) data.putString(GLOW_AT, level.dimension().location() + "|" + now.asLong());
+    }
+
+    /** A saved light position, if it is in this level. */
+    private static BlockPos saved(String at, ServerLevel level) {
+        int bar = at.lastIndexOf('|');
+        if (bar < 0 || !at.substring(0, bar).equals(level.dimension().location().toString())) return null;
+        try {
+            return BlockPos.of(Long.parseLong(at.substring(bar + 1)));
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 

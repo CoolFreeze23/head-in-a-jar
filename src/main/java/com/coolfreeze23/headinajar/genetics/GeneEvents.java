@@ -51,9 +51,25 @@ public final class GeneEvents {
         return e.hasData(ModRegistry.GENES) && !e.getData(ModRegistry.GENES).isEmpty();
     }
 
+    /** Carriers tick their genes; a body whose genes just went (washed, moved to the body, injected away) ticks once more to switch them off. */
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof LivingEntity e && carries(e)) GeneEffects.tick(e);
+        if (event.getEntity() instanceof LivingEntity e && (carries(e) || GeneEffects.applied(e))) GeneEffects.tick(e);
+    }
+
+    /** Dying, unloading, logging out or changing dimension: a Glow Cells light never stays behind. */
+    @SubscribeEvent
+    public static void leave(net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent event) {
+        if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level) GeneEffects.left(event.getEntity(), level);
+    }
+
+    /** The client builds a new player on a dimension change, without its genes: send them again (movement genes are client-side). */
+    @SubscribeEvent
+    public static void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p) {
+            GeneEffects.settle(p);
+            Network.syncGenes(p);
+        }
     }
 
     @SubscribeEvent
@@ -123,7 +139,10 @@ public final class GeneEvents {
     /** Syringes and collection tools draw from creatures; serums go into hosts and Chimera Gene Ports. */
     @SubscribeEvent
     public static void interact(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
-        if (!(event.getTarget() instanceof LivingEntity target)) return;
+        var clicked = event.getTarget();
+        // a click on one of the Ender Dragon's parts is a click on the dragon
+        if (clicked instanceof net.neoforged.neoforge.entity.PartEntity<?> part) clicked = part.getParent();
+        if (!(clicked instanceof LivingEntity target)) return;
         var stack = event.getItemStack();
         net.minecraft.world.InteractionResult result = null;
         if (stack.getItem() instanceof com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem syringe) {
@@ -142,6 +161,7 @@ public final class GeneEvents {
     public static void clone(PlayerEvent.Clone event) {
         if (event.isWasDeath() && !com.coolfreeze23.headinajar.Config.KEEP_GENES.get()) return;
         event.getEntity().getData(ModRegistry.GENES).copyFrom(event.getOriginal().getData(ModRegistry.GENES));
+        GeneEffects.settle(event.getEntity());
     }
 
     @SubscribeEvent

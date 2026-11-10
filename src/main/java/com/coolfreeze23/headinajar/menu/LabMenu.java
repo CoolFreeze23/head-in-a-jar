@@ -49,12 +49,18 @@ public class LabMenu extends MachineMenu {
     public final Kind kind;
 
     public LabMenu(Kind kind, int id, Inventory inventory, RegistryFriendlyByteBuf buf) {
-        this(kind, id, inventory, new ItemStackHandler(kind.slots.length), new SimpleContainerData(kind.data), buf.readBlockPos());
+        this(kind, id, inventory, new ItemStackHandler(kind.slots.length), new SimpleContainerData(kind.data + 1), buf.readBlockPos());
     }
 
     public LabMenu(Kind kind, int id, Inventory inventory, IItemHandler items, ContainerData data, BlockPos pos) {
         super(kind.type(), id, inventory, items, data, pos, kind.slots);
         this.kind = kind;
+    }
+
+    /** After the kind's own numbers comes the stall reason. */
+    @Override
+    public int statusIndex() {
+        return kind.data;
     }
 
     @Override

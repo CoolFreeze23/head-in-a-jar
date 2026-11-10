@@ -35,6 +35,8 @@ public class CerebralArrayBlockEntity extends LabMachine {
     private int output;
     /** What the clients last saw in the head slots (the rack is drawn from it). */
     private int shownHeads = -1;
+    private final HeadInfo.Cache[] info = HeadInfo.caches(HEAD_SLOTS);
+    private static final MachineItems.Role[] ROLES = MachineItems.all(HEAD_SLOTS + 1, MachineItems.Role.HAND);
 
     public CerebralArrayBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.ARRAY_BE.get(), pos, state, LabMenu.Kind.CEREBRAL_ARRAY, 500_000, 20_000);
@@ -44,6 +46,17 @@ public class CerebralArrayBlockEntity extends LabMachine {
     protected boolean valid(int slot, ItemStack stack) {
         if (slot == SLOT_CORE) return stack.is(ModRegistry.BOARD_ROOM_CORE.get());
         return HeadJobs.type(stack) != null || stack.is(Items.DRAGON_HEAD);
+    }
+
+    /** Heads and the Board Room Core go in by hand only. */
+    @Override
+    public MachineItems.Role[] roles() {
+        return ROLES;
+    }
+
+    /** What the head in slot {@code i} is (cached until the slot changes). */
+    public HeadInfo headInfo(int i) {
+        return info[i].get(items.getStackInSlot(i));
     }
 
     @Override
@@ -69,7 +82,10 @@ public class CerebralArrayBlockEntity extends LabMachine {
     public int potential() {
         boolean boardRoom = !items.getStackInSlot(SLOT_CORE).isEmpty();
         int sum = 0;
-        for (int i = 0; i < HEAD_SLOTS; i++) sum += HeadJobs.arrayOutput(items.getStackInSlot(i), boardRoom);
+        for (int i = 0; i < HEAD_SLOTS; i++) {
+            ItemStack head = items.getStackInSlot(i);
+            sum += head.is(Items.DRAGON_HEAD) ? (boardRoom ? 1000 : 0) : HeadJobs.arrayOutput(headInfo(i).type());
+        }
         return heads() >= MEETING ? Math.round(sum * 1.1f) : sum;
     }
 
@@ -93,7 +109,12 @@ public class CerebralArrayBlockEntity extends LabMachine {
         a.push(level, pos);
         if (level.getGameTime() % 10 == 0) {
             int signature = 0;
-            for (int i = 0; i <= SLOT_CORE; i++) signature = signature * 31 + ItemStack.hashItemAndComponents(a.items.getStackInSlot(i));
+            // cheap: what is drawn is the creature in each slot, not the whole stored mob
+            for (int i = 0; i <= SLOT_CORE; i++) {
+                ItemStack stack = a.items.getStackInSlot(i);
+                var type = i < HEAD_SLOTS ? a.headInfo(i).type() : null;
+                signature = signature * 31 + (stack.isEmpty() ? 0 : stack.getItem().hashCode() * 7 + (type == null ? 0 : type.hashCode()) + stack.getCount());
+            }
             if (signature != a.shownHeads) {
                 a.shownHeads = signature;
                 level.sendBlockUpdated(pos, state, state, 3);
@@ -128,7 +149,7 @@ public class CerebralArrayBlockEntity extends LabMachine {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Items", items.serializeNBT(registries));
+        tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
         return tag;
     }

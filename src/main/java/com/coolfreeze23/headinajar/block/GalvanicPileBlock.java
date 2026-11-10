@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -80,8 +81,14 @@ public class GalvanicPileBlock extends BaseEntityBlock {
         }
         if (!level.isClientSide) {
             ItemStack left = pile.fuel().insertItem(0, stack.copy(), false);
-            stack.setCount(left.getCount());
-            level.playSound(null, pos, SoundEvents.SLIME_SQUISH_SMALL, SoundSource.BLOCKS, 1, 1);
+            if (left.getCount() == stack.getCount()) {
+                // nothing went in: the fuel slot is full, or holds another kind of meat
+                ItemStack there = pile.fuel().getStackInSlot(0);
+                com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at(pile), "pile.full", there.getHoverName());
+            } else {
+                stack.setCount(left.getCount());
+                level.playSound(null, pos, SoundEvents.SLIME_SQUISH_SMALL, SoundSource.BLOCKS, 1, 1);
+            }
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }

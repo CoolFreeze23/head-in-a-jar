@@ -19,7 +19,11 @@ public final class GeneSet {
     ).apply(i, (serums, mutations) -> {
         GeneSet set = new GeneSet();
         set.serums.addAll(serums);
-        mutations.forEach(m -> set.mutations.add(Gene.valueOf(m.toUpperCase(java.util.Locale.ROOT))));
+        // an unknown gene id (renamed or removed in a later version) is skipped, not fatal
+        mutations.forEach(m -> {
+            Gene gene = Gene.byId(m);
+            if (gene != null) set.mutations.add(gene);
+        });
         return set;
     }));
 

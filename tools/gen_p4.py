@@ -56,8 +56,9 @@ MODULES = {
                   ['IIC', ' V '], dict(I='iron_ingot', C='crossbow', V='headinajar:servo')),
     'riot_shield': ('Riot Shield', 'Hold: 80% less damage from the front.', 'Escudo de Choque', 'Segure: 80% menos dano pela frente.',
                     ['PSP', 'PPP'], dict(P='headinajar:mecha_plating', S='shield')),
+    # a servo under it, so it doesn't share the Collar Cam's Night Optics recipe
     'night_optics': ('Night Optics', 'Night vision for the pilot.', 'Óptica Noturna', 'Visão noturna para o piloto.',
-                     ['L', 'G'], dict(L='headinajar:lens', G='golden_carrot')),
+                     ['L', 'G', 'V'], dict(L='headinajar:lens', G='golden_carrot', V='headinajar:servo')),
     'bio_scanner': ('Bio-Scanner', 'Shows what you look at in more detail.', 'Bioscanner', 'Mostra o que você olha com mais detalhes.',
                     ['L', 'C'], dict(L='headinajar:lens', C='headinajar:synapse_chip')),
 }

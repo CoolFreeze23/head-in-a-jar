@@ -31,12 +31,18 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     private static final String[] COMPLAINTS = {"dental", "overtime", "jar", "union", "view", "smell", "pension", "broth", "chair", "manager"};
     private final ItemStackHandler items = new ItemStackHandler(1) {
         @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return HeadJobs.type(stack) == EntityType.VILLAGER;
+        }
+
+        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
             if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     };
     private long paidThrough = -1;
+    private final HeadInfo.Cache info = new HeadInfo.Cache();
 
     public EmployeeMountBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.MOUNT_BE.get(), pos, state);
@@ -51,6 +57,16 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         return items.getStackInSlot(0);
     }
 
+    /** What the head is (cached until the slot changes). */
+    public HeadInfo headInfo() {
+        return info.get(head());
+    }
+
+    /** The villager's profession, or "" (cached until the slot changes). */
+    public String profession() {
+        return headInfo().profession();
+    }
+
     /** The machine this mount is bolted to: the block behind it (as placed facing the machine), or the one under it. */
     public boolean facesInto(BlockPos machine) {
         Direction facing = getBlockState().getValue(MachineBlock.FACING);
@@ -62,7 +78,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     }
 
     public boolean paid() {
-        return !head().isEmpty() && !"nitwit".equals(HeadJobs.profession(head())) && paidThrough >= day();
+        return !head().isEmpty() && !"nitwit".equals(profession()) && paidThrough >= day();
     }
 
     /** Takes today's emerald from any container touching the mount (never the machine itself). Returns whether it paid. */
@@ -91,7 +107,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     }
 
     private void complain() {
-        String job = HeadJobs.profession(head());
+        String job = profession();
         String key = "nitwit".equals(job) ? "staff.headinajar.nitwit." + level.random.nextInt(4)
                 : "staff.headinajar.complaint." + COMPLAINTS[level.random.nextInt(COMPLAINTS.length)];
         Component line = Component.translatable("staff.headinajar.says", Component.translatable("entity.minecraft.villager." + job), Component.translatable(key));
@@ -104,7 +120,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     public void use(ServerPlayer player, ItemStack held) {
         if (head().isEmpty()) {
             if (HeadJobs.type(held) != EntityType.VILLAGER) {
-                player.displayClientMessage(Component.translatable("staff.headinajar.needs_villager"), true);
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "mount.needs_villager", EntityType.VILLAGER.getDescription());
                 return;
             }
             items.setStackInSlot(0, held.split(1));
@@ -117,7 +133,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
             com.coolfreeze23.headinajar.form.FormActions.give(player, items.extractItem(0, 1, false));
             return;
         }
-        String job = HeadJobs.profession(head());
+        String job = profession();
         player.displayClientMessage(Component.translatable(paid() ? "staff.headinajar.status_paid" : "staff.headinajar.status_unpaid",
                 Component.translatable("entity.minecraft.villager." + job)), true);
     }
@@ -132,14 +148,14 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         paidThrough = tag.contains("PaidThrough") ? tag.getLong("PaidThrough") : -1;
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Items", items.serializeNBT(registries));
+        tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
         return tag;
     }

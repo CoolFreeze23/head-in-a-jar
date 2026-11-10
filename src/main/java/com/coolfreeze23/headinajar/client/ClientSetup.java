@@ -27,9 +27,11 @@ public class ClientSetup {
     public static final KeyMapping SECONDARY = new KeyMapping("key.headinajar.secondary", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
     /** Collar Cam Zoom Optic: hold for x3 zoom while linked. */
-    public static final KeyMapping ZOOM = new KeyMapping("key.headinajar.zoom", org.lwjgl.glfw.GLFW.GLFW_KEY_C, "key.categories.headinajar");
+    public static final KeyMapping ZOOM = new KeyMapping("key.headinajar.zoom", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
     /** In a jar: deploy the Wheels module, or (without one) tip over and roll. */
-    public static final KeyMapping DRIVE = new KeyMapping("key.headinajar.drive", org.lwjgl.glfw.GLFW.GLFW_KEY_V, "key.categories.headinajar");
+    public static final KeyMapping DRIVE = new KeyMapping("key.headinajar.drive", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
     public static final KeyMapping ABILITY = new KeyMapping("key.headinajar.ability", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
 

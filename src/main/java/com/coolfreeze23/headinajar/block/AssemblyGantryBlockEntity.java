@@ -105,31 +105,45 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
         return list.isEmpty() ? null : list.get(0);
     }
 
+    /** Whether a mecha with someone aboard stands on the pad (it can't be worked on until they get out). */
+    private boolean padOccupied() {
+        return level != null && !level.getEntitiesOfClass(MechaEntity.class, new AABB(worldPosition.above()).inflate(1, 2, 1), MechaEntity::isVehicle).isEmpty();
+    }
+
+    /** "Pad empty", or "someone's aboard" when the only mecha there has a pilot or passenger. */
+    private boolean noMecha(ServerPlayer player) {
+        return say(player, padOccupied() ? "pad_occupied" : "pad_empty");
+    }
+
     public boolean button(ServerPlayer player, int id) {
         MechaFrame frame = frame();
         switch (id) {
             case AssemblyGantryMenu.ASSEMBLE -> {
-                if (frame == null) return say(player, "gantry.headinajar.no_frame");
-                if (onPad() != null) return say(player, "gantry.headinajar.pad_busy");
+                if (frame == null) return say(player, "no_frame");
+                if (onPad() != null || padOccupied()) return say(player, "pad_busy");
                 if (!com.coolfreeze23.headinajar.mecha.MechaLogic.walks(frame, this::fitted)) {
                     Object[] legs = com.coolfreeze23.headinajar.mecha.MechaLogic.WALKING_LEGS.stream()
                             .map(leg -> Component.translatable(ModRegistry.mechaModule(leg).getDescriptionId())).toArray();
                     return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "gantry.no_legs", legs);
                 }
-                if (energy.getEnergyStored() < ASSEMBLE_COST) return say(player, "gantry.headinajar.no_power");
+                if (energy.getEnergyStored() < ASSEMBLE_COST) return say(player, "no_power");
                 MechaEntity mecha = ModRegistry.mechaType(frame).create(level);
-                if (mecha == null) return false;
+                if (mecha == null) return say(player, "failed");
                 List<ItemStack> modules = new ArrayList<>();
                 for (int i = 0; i < frame.totalSlots(); i++) modules.add(items.extractItem(FIRST_MODULE + i, 1, false));
                 mecha.setModules(modules);
                 com.coolfreeze23.headinajar.item.MechaFrameItem.genes(items.getStackInSlot(SLOT_FRAME)).ifPresent(g -> mecha.getData(ModRegistry.GENES).copyFrom(g));
                 mecha.setOwner(player.getUUID());
-                mecha.setBattery(mecha.batteryCapacity() / 4);
+                // the new battery holds what the Gantry gives it after the assembly (up to a quarter of the battery), and
+                // the Gantry is left with the rest
+                int left = energy.getEnergyStored() - ASSEMBLE_COST;
+                int given = Math.max(0, Math.min(left, mecha.batteryCapacity() / 4));
+                mecha.setBattery(given);
                 mecha.moveTo(worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, player.getYRot() + 180, 0);
                 mecha.setYBodyRot(player.getYRot() + 180);
                 mecha.setYHeadRot(player.getYRot() + 180);
                 items.extractItem(SLOT_FRAME, 1, false);
-                energy.set(energy.getEnergyStored() - ASSEMBLE_COST);
+                energy.set(left - given);
                 level.addFreshEntity(mecha);
                 com.coolfreeze23.headinajar.Advance.grant(player, "assembled");
                 if (frame == MechaFrame.EXECUTIVE) com.coolfreeze23.headinajar.Advance.grant(player, "chairman");
@@ -139,10 +153,10 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
             }
             case AssemblyGantryMenu.DISASSEMBLE -> {
                 MechaEntity mecha = onPad();
-                if (mecha == null) return say(player, "gantry.headinajar.pad_empty");
-                if (!mecha.isOwnedBy(player)) return say(player, "gantry.headinajar.not_yours");
-                if (frame != null) return say(player, "gantry.headinajar.slots_busy");
-                for (int i = 0; i < MODULE_SLOTS; i++) if (!items.getStackInSlot(FIRST_MODULE + i).isEmpty()) return say(player, "gantry.headinajar.slots_busy");
+                if (mecha == null) return noMecha(player);
+                if (!mecha.isOwnedBy(player)) return say(player, "not_yours");
+                if (frame != null) return say(player, "slots_busy");
+                for (int i = 0; i < MODULE_SLOTS; i++) if (!items.getStackInSlot(FIRST_MODULE + i).isEmpty()) return say(player, "slots_busy");
                 ItemStack frameStack = new ItemStack(ModRegistry.frameItem(mecha.frame()));
                 com.coolfreeze23.headinajar.item.MechaFrameItem.setGenes(frameStack, mecha.getData(ModRegistry.GENES));
                 items.setStackInSlot(SLOT_FRAME, frameStack);
@@ -156,14 +170,18 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
             }
             case AssemblyGantryMenu.REPAIR -> {
                 MechaEntity mecha = onPad();
-                if (mecha == null) return say(player, "gantry.headinajar.pad_empty");
+                if (mecha == null) return noMecha(player);
+                if (!mecha.isOwnedBy(player)) return say(player, "not_yours");
                 ItemStack plating = items.getStackInSlot(SLOT_PLATING);
                 while (!plating.isEmpty() && mecha.getHealth() < mecha.getMaxHealth()) {
                     plating.shrink(1);
                     // smiths on staff make each plate go a third further
                     mecha.heal(20 / (1 - 0.25f * com.coolfreeze23.headinajar.block.HeadJobs.staff(level, worldPosition, "armorer", "weaponsmith", "toolsmith")));
                 }
-                mecha.setBattery(mecha.battery() + Math.min(energy.getEnergyStored(), mecha.batteryCapacity() - mecha.battery()));
+                // the charge moves from the Gantry into the battery: what the mecha gains, the Gantry loses
+                int moved = Math.max(0, Math.min(energy.getEnergyStored(), mecha.batteryCapacity() - mecha.battery()));
+                mecha.setBattery(mecha.battery() + moved);
+                energy.set(energy.getEnergyStored() - moved);
                 level.playSound(null, worldPosition, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.6f, 1.4f);
                 return true;
             }
@@ -174,7 +192,8 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
             }
             case AssemblyGantryMenu.MINUS, AssemblyGantryMenu.PLUS -> {
                 ItemStack stack = items.getStackInSlot(FIRST_MODULE + selected);
-                if (!(stack.getItem() instanceof MechaModuleItem module) || module.type().slider == null) return false;
+                if (!(stack.getItem() instanceof MechaModuleItem module)) return say(player, "slot_empty");
+                if (module.type().slider == null) return say(player, "no_slider", stack.getHoverName());
                 MechaModuleItem.setSlider(stack, MechaModuleItem.slider(stack) + (id == AssemblyGantryMenu.PLUS ? 10 : -10));
                 setChanged();
                 return true;
@@ -195,9 +214,9 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
         return false;
     }
 
-    private boolean say(ServerPlayer player, String key) {
-        player.displayClientMessage(Component.translatable(key), true);
-        return false;
+    /** A refusal from the Gantry (drawn over its screen, where the action bar can't be seen). */
+    private boolean say(ServerPlayer player, String reason, Object... args) {
+        return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "gantry." + reason, args);
     }
 
     @Override

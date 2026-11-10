@@ -166,7 +166,7 @@ public final class Network {
     }
 
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("2");
+        var registrar = event.registrar("3");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
         registrar.playToServer(JarAction.TYPE, JarAction.CODEC, Network::onAction);
         registrar.playToClient(HostSync.TYPE, HostSync.CODEC, (msg, ctx) -> {
@@ -199,19 +199,7 @@ public final class Network {
             com.coolfreeze23.headinajar.genetics.GeneArchive.clientLibrary = lib;
         });
         registrar.playToServer(SocketInput.TYPE, SocketInput.CODEC, (msg, ctx) -> {
-            if (!(ctx.player() instanceof ServerPlayer player) || com.coolfreeze23.headinajar.form.FormActions.state(player).form() != com.coolfreeze23.headinajar.form.Form.SOCKET) return;
-            if (msg.action() == 2) {
-                com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.unplug(player);
-                return;
-            }
-            if (!(player.level().getBlockEntity(player.blockPosition().below()) instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity socket)
-                    || !player.getUUID().equals(socket.occupant())) return;
-            var face = net.minecraft.core.Direction.from3DDataValue(Math.floorMod(msg.face(), 6));
-            if (msg.action() == 0) socket.setOutput(face, msg.level());
-            else if (msg.action() == 1) {
-                socket.pulse(face);
-                com.coolfreeze23.headinajar.Advance.grant(player, "socket_pulse");
-            }
+            if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.input(player, msg.action(), msg.face(), msg.level());
         });
         registrar.playToClient(SocketStatus.TYPE, SocketStatus.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.SocketClient.status = msg.values());
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);
@@ -219,6 +207,7 @@ public final class Network {
             if (ctx.player() instanceof ServerPlayer player) arms(player, msg.held());
         });
         registrar.playToClient(Refused.TYPE, Refused.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.ClientRefusals.show(msg.line()));
+        com.coolfreeze23.headinajar.host.HostFiles.register(registrar);
         registrar.playToServer(RefuseRequest.TYPE, RefuseRequest.CODEC, (msg, ctx) -> {
             if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.feedback.Refusals.fromClient(player, msg.reason(), msg.target());
         });
@@ -265,6 +254,11 @@ public final class Network {
                 }
             } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR) {
                 FormActions.jarToLinked(player);
+            } else if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
+                // in the cockpit the swap key opens the Cargo Hold
+                mecha.openCargo(player);
+            } else if (state.form() == com.coolfreeze23.headinajar.form.Form.HOSTED) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.host.HostEvents.GET_DOWN);
             }
             return;
         }
@@ -290,6 +284,12 @@ public final class Network {
                 else com.coolfreeze23.headinajar.mecha.MechaSystems.nextUtility(mecha);
                 return;
             }
+            // nothing on the utility key: the jar's own Telekinesis still answers R from the cockpit
+            if (which == 1 || state.heldEntity() < 0 && !state.has(com.coolfreeze23.headinajar.module.ModuleType.TELEKINESIS)) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mecha), "mecha.no_utility",
+                        net.minecraft.network.chat.Component.translatable("block.headinajar.assembly_gantry"));
+                return;
+            }
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
             if (msg.action() == Action.EJECT) {
@@ -297,7 +297,10 @@ public final class Network {
                 return;
             }
             if (msg.action() == Action.JET) {
-                com.coolfreeze23.headinajar.mecha.MechaLogic.jet(mecha);
+                String refused = com.coolfreeze23.headinajar.mecha.MechaLogic.jetRefusal(mecha);
+                if (refused != null) com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mecha), refused,
+                        net.minecraft.network.chat.Component.translatable("block.headinajar.assembly_gantry"));
+                else com.coolfreeze23.headinajar.mecha.MechaLogic.jet(mecha);
                 return;
             }
         }

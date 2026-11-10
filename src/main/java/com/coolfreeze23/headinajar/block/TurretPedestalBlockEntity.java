@@ -54,11 +54,17 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     private final Buffer energy = new Buffer(40_000, 2_000, 0, this::setChanged);
     private final ItemStackHandler items = new ItemStackHandler(1) {
         @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return HeadJobs.type(stack) != null;
+        }
+
+        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
             if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     };
+    private final HeadInfo.Cache info = new HeadInfo.Cache();
     private UUID owner;
     private int cooldown, lockTicks, lockedId = -1;
     /** Client: where the head looks. */
@@ -79,6 +85,11 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
 
     public ItemStack head() {
         return items.getStackInSlot(0);
+    }
+
+    /** What the head is (cached until the slot changes). */
+    public HeadInfo headInfo() {
+        return info.get(head());
     }
 
     public void setOwner(UUID owner) {
@@ -112,7 +123,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
-        EntityType<?> type = HeadJobs.type(t.head());
+        EntityType<?> type = t.headInfo().type();
         if (type == null || t.energy.getEnergyStored() < FE_PER_TICK) return;
         t.energy.set(t.energy.getEnergyStored() - FE_PER_TICK);
         if (t.cooldown > 0) {
@@ -223,9 +234,16 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     /** Use: fit a jarred head, or take it out with an empty hand. */
     @Override
     public void use(ServerPlayer player, ItemStack held) {
+        var refuser = com.coolfreeze23.headinajar.feedback.Refuser.at(this);
         if (head().isEmpty()) {
-            if (HeadJobs.type(held) == null) {
-                player.displayClientMessage(Component.translatable("turret.headinajar.needs_head"), true);
+            EntityType<?> type = HeadJobs.type(held);
+            if (type == null) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.needs_head", Component.translatable("item.headinajar.jarred_head"));
+                return;
+            }
+            // a head with nothing to fire (a pig, a cow) would sit there drawing power: say so instead
+            if (!HeadJobs.turretJob(type)) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.no_job", type.getDescription());
                 return;
             }
             items.setStackInSlot(0, held.split(1));
@@ -233,7 +251,21 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             level.playSound(null, worldPosition, SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.BLOCKS, 1, 1.2f);
         } else if (held.isEmpty()) {
             com.coolfreeze23.headinajar.form.FormActions.give(player, items.extractItem(0, 1, false));
+        } else {
+            EntityType<?> type = headInfo().type();
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.occupied", type == null ? head().getHoverName() : type.getDescription());
         }
+    }
+
+    /** Client, 20 times a second: the head turns toward the nearest hostile it can see (a guess; the server picks the real target). */
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
+        t.yawO = t.yaw;
+        if (t.head().isEmpty()) return;
+        var c = pos.getCenter();
+        LivingEntity near = level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(RANGE), e -> e instanceof Enemy && e.isAlive()).stream()
+                .min(Comparator.comparingDouble(e -> e.distanceToSqr(c))).orElse(null);
+        float want = near == null ? t.yaw + 0.5f : (float) (Math.atan2(near.getZ() - c.z, near.getX() - c.x) * (180 / Math.PI)) - 90;
+        t.yaw = net.minecraft.util.Mth.wrapDegrees(t.yaw + net.minecraft.util.Mth.wrapDegrees(want - t.yaw) * 0.3f);
     }
 
     @Override
@@ -247,7 +279,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
     }
@@ -255,7 +287,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Items", items.serializeNBT(registries));
+        tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
         return tag;
     }

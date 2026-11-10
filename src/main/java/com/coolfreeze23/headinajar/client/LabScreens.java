@@ -78,7 +78,16 @@ public final class LabScreens {
         }
 
         private void call(int base) {
-            if (menu.slots.get(0).getItem().isEmpty()) return;
+            var stack = menu.slots.get(0).getItem();
+            // decided here, so said here (the server never hears of a half-called strand)
+            if (stack.isEmpty()) {
+                ClientRefusals.local(com.coolfreeze23.headinajar.feedback.Refusals.line("lab.sequencer.empty", Component.translatable("item.headinajar.dna_fraction")));
+                return;
+            }
+            if (GeneticsItems.species(stack) == null) {
+                ClientRefusals.local(com.coolfreeze23.headinajar.feedback.Refusals.line("lab.sequencer.unreadable"));
+                return;
+            }
             calls.add(base);
             if (calls.size() == LabMachines.Sequencer.BASES) {
                 int[] c = calls.stream().mapToInt(Integer::intValue).toArray();
@@ -156,7 +165,11 @@ public final class LabScreens {
 
         private void cycle(int slot, int dir) {
             List<Gene> usable = usable();
-            if (usable.isEmpty()) return;
+            if (usable.isEmpty()) {
+                ClientRefusals.local(com.coolfreeze23.headinajar.feedback.Refusals.line("lab.splicer.empty_library",
+                        Component.translatable("block.headinajar.dna_sequencer")));
+                return;
+            }
             Gene now = at(slot);
             // the cycle includes "empty" at position -1
             int index = now == null ? -1 : usable.indexOf(now);

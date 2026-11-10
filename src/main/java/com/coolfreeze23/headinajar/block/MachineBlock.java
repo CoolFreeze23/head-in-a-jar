@@ -93,12 +93,42 @@ public class MachineBlock<T extends BlockEntity> extends BaseEntityBlock {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hit.getDirection()) != null
-                && FluidUtil.interactWithFluidHandler(player, hand, level, pos, hit.getDirection())) {
+        var tank = level.getCapability(Capabilities.FluidHandler.BLOCK, pos, hit.getDirection());
+        if (tank == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (FluidUtil.interactWithFluidHandler(player, hand, level, pos, hit.getDirection())) return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        // a Saline Bottle pours its 250 mB into a tank that takes saline (the Body Printer)
+        if (stack.is(com.coolfreeze23.headinajar.registry.ModRegistry.SALINE_BOTTLE.get())) {
+            var bottle = new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), BOTTLE_MB);
+            if (tank.fill(bottle, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE) == BOTTLE_MB) {
+                if (!level.isClientSide) {
+                    tank.fill(bottle, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                    if (!player.getAbilities().instabuild) {
+                        stack.shrink(1);
+                        com.coolfreeze23.headinajar.form.FormActions.give((ServerPlayer) player, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
+                    }
+                    level.playSound(null, pos, net.minecraft.sounds.SoundEvents.BOTTLE_EMPTY, net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        }
+        // a bucket or bottle of something this tank doesn't take: say so instead of opening the menu
+        var held = FluidUtil.getFluidContained(stack);
+        if (held.isPresent() && !held.get().isEmpty() || stack.is(com.coolfreeze23.headinajar.registry.ModRegistry.SALINE_BOTTLE.get())) {
+            if (!level.isClientSide) {
+                var fluid = held.isPresent() && !held.get().isEmpty() ? held.get()
+                        : new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), BOTTLE_MB);
+                boolean takes = false;
+                for (int i = 0; i < tank.getTanks(); i++) takes |= tank.isFluidValid(i, fluid);
+                com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at(level.getBlockEntity(pos)),
+                        takes ? "machine.tank_full" : "machine.wrong_fluid", fluid.getHoverName(), getName());
+            }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
+
+    /** What a Saline Bottle holds. */
+    public static final int BOTTLE_MB = 250;
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
@@ -114,6 +144,7 @@ public class MachineBlock<T extends BlockEntity> extends BaseEntityBlock {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof HasItems machine) {
             IItemHandler items = machine.items();
             for (int i = 0; i < items.getSlots(); i++) Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(i));
+            for (ItemStack stack : machine.consumed()) Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
         }
         super.onRemove(state, level, pos, newState, moved);
     }

@@ -24,6 +24,8 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     private UUID owner;
     private String ownerName = "";
     private ItemStack goggles = ItemStack.EMPTY;
+    /** The docked head is in a Compact Jar, so it comes out as one even when its owner is offline. */
+    private boolean compact;
     private final Buffer energy = new Buffer(50_000, 2_000, 0, this::setChanged);
     private final net.neoforged.neoforge.fluids.capability.templates.FluidTank saline =
             new net.neoforged.neoforge.fluids.capability.templates.FluidTank(4000, f -> f.getFluid().isSame(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get())) {
@@ -93,10 +95,16 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         changed();
     }
 
+    public void setCompact(boolean compact) {
+        this.compact = compact;
+        setChanged();
+    }
+
     public void clear() {
         owner = null;
         ownerName = "";
         goggles = ItemStack.EMPTY;
+        compact = false;
         changed();
     }
 
@@ -139,11 +147,19 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     /** The Cradle is being broken: its head is set down where it stood. */
     public void ejectHead() {
         if (owner == null || !(level instanceof ServerLevel server)) return;
+        // only a head the registry still has here: one its owner already swapped into is not left behind as a ghost
+        HeadRegistry.Head record = HeadRegistry.get(server.getServer()).head(owner);
+        if (record == null || record.where() != HeadRegistry.Where.CRADLE || !record.spot().dimension().equals(server.dimension())
+                || !BlockPos.containing(record.spot().pos()).equals(worldPosition)) {
+            owner = null;
+            return;
+        }
         HeadJarEntity head = new HeadJarEntity(ModRegistry.HEAD_JAR.get(), server);
         Vec3 at = Vec3.atBottomCenterOf(worldPosition);
         head.moveTo(at.x, at.y, at.z, 0, 0);
         head.setOwner(owner, ownerName);
         head.setGoggles(goggles);
+        head.setCompact(compact);
         if (server.getServer().getPlayerList().getPlayer(owner) instanceof net.minecraft.server.level.ServerPlayer online) {
             head.setCompact(com.coolfreeze23.headinajar.form.FormActions.state(online).compact());
         }
@@ -161,6 +177,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
             tag.putUUID("Owner", owner);
             tag.putString("OwnerName", ownerName);
             tag.put("Goggles", goggles.saveOptional(registries));
+            if (compact) tag.putBoolean("Compact", true);
         }
     }
 
@@ -172,6 +189,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         if (tag.contains("Saline")) saline.readFromNBT(registries, tag.getCompound("Saline"));
         ownerName = tag.getString("OwnerName");
         goggles = ItemStack.parseOptional(registries, tag.getCompound("Goggles"));
+        compact = tag.getBoolean("Compact");
     }
 
     @Override

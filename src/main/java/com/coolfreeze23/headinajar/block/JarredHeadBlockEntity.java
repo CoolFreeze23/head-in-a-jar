@@ -28,20 +28,29 @@ public class JarredHeadBlockEntity extends BlockEntity {
     private CompoundTag entity = new CompoundTag();
     private long lastRestock;
     private Villager trader;
+    /** {@link #type} parsed once (it is drawn every frame). */
+    private String parsed;
+    private EntityType<?> parsedType;
 
     public JarredHeadBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.JARRED_HEAD_BE.get(), pos, state);
     }
 
+    /** From the item being placed: the head, and when its trades last restocked (so breaking and re-placing doesn't restock). */
     public void load(CompoundTag tag) {
         type = tag.getString("Type");
         entity = tag.getCompound("Entity");
+        if (tag.contains("LastRestock")) lastRestock = tag.getLong("LastRestock");
         setChanged();
     }
 
     public EntityType<?> entityType() {
-        ResourceLocation id = ResourceLocation.tryParse(type);
-        return id == null ? null : BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(null);
+        if (!type.equals(parsed)) {
+            parsed = type;
+            ResourceLocation id = ResourceLocation.tryParse(type);
+            parsedType = id == null ? null : BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(null);
+        }
+        return parsedType;
     }
 
     public ItemStack toItem() {
@@ -49,8 +58,30 @@ public class JarredHeadBlockEntity extends BlockEntity {
         CompoundTag tag = new CompoundTag();
         tag.putString("Type", type);
         tag.put("Entity", entity.copy());
+        if (lastRestock != 0) tag.putLong("LastRestock", lastRestock);
         CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         return stack;
+    }
+
+    /** Someone other than {@code player} is trading with this head now. */
+    public boolean busy(ServerPlayer player) {
+        return trader != null && trader.getTradingPlayer() != null && trader.getTradingPlayer() != player;
+    }
+
+    /**
+     * Ends any trade now and keeps what it changed (uses, experience) in the head's record. The block is about to go
+     * (broken, blown up, carried off), so the trade screen is closed rather than left working on a stand-in.
+     */
+    public void settle() {
+        if (trader == null) return;
+        var trading = trader.getTradingPlayer();
+        trader.setTradingPlayer(null);
+        if (trading instanceof ServerPlayer player && player.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu) player.closeContainer();
+        CompoundTag tag = new CompoundTag();
+        trader.saveWithoutId(tag);
+        entity = tag;
+        trader = null;
+        setChanged();
     }
 
     /** Opens trading for a jarred villager. Returns false for other heads, or while someone else is trading. */
