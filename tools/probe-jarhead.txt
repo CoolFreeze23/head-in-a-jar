@@ -1,0 +1,34 @@
+# Which placed jarred heads can be drawn: one at a time in view, a report line and a shot after each, so a crash
+# names the last head shown.
+@world flat
+@observe 10
+wait 40
+/kill @e[type=!minecraft:player]
+/tp @s 0.5 -60 -2.5 0 20
+wait 20
+report HEAD zombie
+/setblock 0 -60 0 minecraft:air
+/setblock 0 -60 0 headinajar:jarred_head[facing=north]{Type:"minecraft:zombie",Entity:{}}
+wait 20
+shot probe_zombie
+report HEAD skeleton
+/setblock 0 -60 0 minecraft:air
+/setblock 0 -60 0 headinajar:jarred_head[facing=north]{Type:"minecraft:skeleton",Entity:{}}
+wait 20
+shot probe_skeleton
+report HEAD pig
+/setblock 0 -60 0 minecraft:air
+/setblock 0 -60 0 headinajar:jarred_head[facing=north]{Type:"minecraft:pig",Entity:{}}
+wait 20
+shot probe_pig
+report HEAD villager-nodata
+/setblock 0 -60 0 minecraft:air
+/setblock 0 -60 0 headinajar:jarred_head[facing=north]{Type:"minecraft:villager",Entity:{}}
+wait 20
+shot probe_villager_nodata
+report HEAD villager-librarian
+/setblock 0 -60 0 minecraft:air
+/setblock 0 -60 0 headinajar:jarred_head[facing=north]{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}}
+wait 20
+shot probe_villager_librarian
+report HEAD done

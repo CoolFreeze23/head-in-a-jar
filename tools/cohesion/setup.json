@@ -253,7 +253,12 @@
     "/setblock {T+0,0,1} minecraft:stone",
     "/setblock {T} headinajar:safety_placard[facing=north]"
    ],
-   "aim": "block"
+   "aim": [
+    0.5,
+    0.5,
+    0.9
+   ],
+   "aim_check": "block:T"
   },
   "fluid headinajar:cranial_saline (in world)": {
    "steps": [
@@ -450,6 +455,8 @@
     "wait 5",
     "bystander form linked",
     "wait 5",
+    "# a player who has just joined cannot be hurt for 60 ticks",
+    "wait 65",
     "/damage Bystander 1000 minecraft:generic",
     "wait 20"
    ],
@@ -457,7 +464,8 @@
     0.5,
     0.5,
     0.5
-   ]
+   ],
+   "aim_check": "entity:headinajar:headless_body"
   },
   "another player": {
    "bystander": true,
@@ -982,6 +990,36 @@
    "post": [
     "press escape"
    ]
+  },
+  "boss minecraft:ender_dragon": {
+   "distance": 5,
+   "steps": [
+    "/summon minecraft:ender_dragon {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    1.5,
+    0.5
+   ],
+   "mob": "minecraft:ender_dragon"
+  },
+  "block headinajar:jarred_head (zombie)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (villager)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (mob)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ],
+   "aim": "block"
   }
  },
  "setups": {
@@ -1639,6 +1677,9 @@
   },
   "P263": {
    "approx": "the sawn pig only"
+  },
+  "P095": {
+   "aim_check": "any"
   }
  },
  "items_tokens": {

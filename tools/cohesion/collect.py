@@ -140,6 +140,8 @@ def parse_report(path):
                 e = re.search(r"expect (\S+)", rest)
                 if e:
                     cur["expect"] = e.group(1)
+                e = re.search(r" aim (\S+)", rest.split(" | ")[0])
+                cur["aim"] = e.group(1) if e else ""
                 pairs[pid] = cur
             elif cur and cur["id"] == pid and what == "act":
                 cur["phase"], cur["act"] = "act", rest
@@ -166,7 +168,7 @@ def parse_report(path):
             cur["reset"] = line
             cur["phase"] = "reset"
         elif line.startswith("inspect "):
-            (cur["post"] if cur["phase"] == "after" else cur["pre"]).append(line)
+            (cur["post"] if cur["phase"] in ("act", "after") else cur["pre"]).append(line)
         elif cur["phase"] == "setup":
             cur["setup_lines"].append(line)
     return pairs, loose, meta
@@ -196,6 +198,62 @@ def form_of(riding_line):
     return m.group(1) if m else ""
 
 
+VOLATILE = re.compile(r"\b(Energy|Progress|OpTick|Wear|LastRestock|Timer|Cooldown|Tick\w*):[^,}\]]*")
+
+
+def block_change(rec):
+    """The target block's saved data before and after the click, if it changed (ticking counters left out)."""
+    pre = [x for x in rec["pre"] if x.startswith("inspect block ")]
+    post = [x for x in rec["post"] if x.startswith("inspect block ")]
+    if not pre or not post:
+        return ""
+    a, b = (VOLATILE.sub("", x.split(" -> ", 1)[1]) for x in (pre[-1], post[-1]))
+    if a == b:
+        return ""
+    return f"{a[:120]} -> {b[:160]}"
+
+
+def me_change(rec):
+    """The player's own state (vehicle, form, carried head, modules, goggles, collar, inventory) before and after the
+    click, if it changed."""
+    pre = [x for x in rec["pre"] if x.startswith("inspect me -> ")]
+    post = [x for x in rec["post"] if x.startswith("inspect me -> ")]
+    if not pre or not post:
+        return ""
+
+    def fields(line):
+        parts = [p.strip() for p in line.split(" -> ", 1)[1].split(", ")]
+        return [p for p in parts if re.match(r"(vehicle|form|carrying head|modules|goggles|collar|inventory)", p)]
+
+    diff = [f"{x} -> {y}" for x, y in zip(fields(pre[-1]), fields(post[-1])) if x != y]
+    return "; ".join(diff)[:200]
+
+
+def aim_problem(rec):
+    """Why the crosshair was not on the intended target when the click was made, or '' if it was (or not checked)."""
+    want = rec.get("aim", "")
+    seen = next((x for x in rec["pre"] if x.startswith("inspect aim -> ")), None)
+    if not want or want == "any" or seen is None:
+        return ""
+    got = seen[len("inspect aim -> "):]
+    if want == "miss":
+        return "" if got == "miss" else f"crosshair on {got}, not the air"
+    if want.startswith("block:"):
+        x, y, z = (int(v) for v in want[6:].split(","))
+        m = re.match(r"block (\S+) at (-?\d+) (-?\d+) (-?\d+)", got)
+        # the block itself, or its upper half for a two-block-tall one; never the ground under it
+        if m and int(m.group(2)) == x and int(m.group(4)) == z and int(m.group(3)) - y in (0, 1):
+            return ""
+        return f"crosshair on {got}, not the block at {x} {y} {z}"
+    if want.startswith("entity"):
+        if not got.startswith("entity "):
+            return f"crosshair on {got}, not the entity"
+        need = want.split(":", 1)[1] if ":" in want else ""
+        if need and need not in got:
+            return f"crosshair on {got}, not {need}"
+    return ""
+
+
 def judge(pid, rec, pats, log_errors):
     """Observed class, text, lang key, the action's record line and notes."""
     notes = []
@@ -214,7 +272,26 @@ def judge(pid, rec, pats, log_errors):
     cls = classify(inp["shown"])
     texts = messages(inp["shown"])
     keys = [match_key(t, pats) for t in texts]
+    changed = block_change(rec)
+    mine = me_change(rec)
+    if mine:
+        if cls in ("feedback", "refuses"):
+            notes.append("the player's own state changed: " + mine)
+            cls = "works"
+        elif cls == "nothing":
+            notes.append("the player's own state changed although the client showed nothing: " + mine)
+    if changed:
+        if cls in ("feedback", "refuses"):
+            notes.append("the target block's data changed: " + changed)
+            cls = "works"
+        elif cls == "nothing":
+            notes.append("the target block's data changed although the client showed nothing: " + changed)
     if rec["expect"] and pre_form and pre_form != rec["expect"]:
+        cls = "unreached"
+    gui = re.match(r"(widget|at) ", rec.get("act", ""))
+    miss = "" if gui else aim_problem(rec)
+    if miss:
+        notes.append("aim: " + miss)
         cls = "unreached"
     click = cls
     if errs:
@@ -258,6 +335,11 @@ def compare(pred, pred_key, cls, obs_key):
     want = PRED.get(pred)
     if want is None:
         return "review"
+    if pred_key and obs_key and cls in ("works", "refuses"):
+        # the predicted message itself was shown: a status line predicted as "works" is the same answer
+        wanted = [key_pattern(k.strip()) for k in re.split(r"[;,]", pred_key) if k.strip()]
+        if any(w.fullmatch(o) for w in wanted for o in obs_key.split()):
+            return "match"
     if cls != want:
         return "MISMATCH"
     if want == "refuses" and pred_key and obs_key:

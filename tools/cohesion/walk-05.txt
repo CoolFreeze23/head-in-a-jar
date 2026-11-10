@@ -19,925 +19,30 @@ wait 40
 /setworldspawn 0 -60 -130
 /forceload add -96 -112 96 112
 wait 40
+/kill @e[type=!minecraft:player]
+wait 5
 report WALK walk-05 40 pairs
 
-# ---- P165: headinajar:jarred_head | BODY | block headinajar:turret_pedestal | already holding a head
-report PAIR P165 begin spot -72 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:turret_pedestal | already holding a head
-/say PAIR P165
+# ---- P191: headinajar:relay_goggles | LINKED+head | block headinajar:life_support_cradle (own head docked)
+report PAIR P191 begin spot -72 -96 expect LINKED aim block:-72,-60,-94 | headinajar:relay_goggles | LINKED+head | block headinajar:life_support_cradle (own head docked)
+/say PAIR P191
+/kill @e[type=minecraft:slime]
 /tp @s -71.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/setblock -72 -60 -94 headinajar:turret_pedestal
-headblock -72 -60 -94 minecraft:skeleton
+/setblock -72 -60 -94 headinajar:life_support_cradle
 /clear @s
 wait 5
-/tp @s -71.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:skeleton",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P165
-inspect me
-report PAIR P165 act key use
-key use
-wait 12
-shot cw-P165
-wait 17
-inspect me
-inspect block -72 -60 -94
-report PAIR P165 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill -78 -60 -102 -60 -48 -84 minecraft:air
-/fill -78 -61 -102 -60 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P165
-
-# ---- P166: headinajar:jarred_head | BODY | block headinajar:employee_mount | empty, jarred villager
-report PAIR P166 begin spot -48 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:employee_mount | empty, jarred villager
-/say PAIR P166
-/tp @s -47.5 -60 -95.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -48 -60 -94 headinajar:employee_mount
-/clear @s
-wait 5
-/tp @s -47.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P166
-inspect me
-report PAIR P166 act key use
-key use
-wait 12
-shot cw-P166
-wait 17
-inspect me
-inspect block -48 -60 -94
-report PAIR P166 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill -54 -60 -102 -36 -48 -84 minecraft:air
-/fill -54 -61 -102 -36 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P166
-
-# ---- P167: headinajar:jarred_head | BODY | block headinajar:employee_mount | empty, jarred zombie
-report PAIR P167 begin spot -24 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:employee_mount | empty, jarred zombie
-/say PAIR P167
-/tp @s -23.5 -60 -95.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -24 -60 -94 headinajar:employee_mount
-/clear @s
-wait 5
-/tp @s -23.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P167
-inspect me
-report PAIR P167 act key use
-key use
-wait 12
-shot cw-P167
-wait 17
-inspect me
-inspect block -24 -60 -94
-report PAIR P167 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill -30 -60 -102 -12 -48 -84 minecraft:air
-/fill -30 -61 -102 -12 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P167
-
-# ---- P168: headinajar:jarred_head | BODY | block headinajar:employee_mount | already staffed
-report PAIR P168 begin spot 0 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:employee_mount | already staffed
-/say PAIR P168
-/tp @s 0.5 -60 -95.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock 0 -60 -94 headinajar:employee_mount
-headblock 0 -60 -94 minecraft:villager
-/clear @s
-wait 5
-/tp @s 0.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P168
-inspect me
-report PAIR P168 act key use
-key use
-wait 12
-shot cw-P168
-wait 17
-inspect me
-inspect block 0 -60 -94
-report PAIR P168 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill -6 -60 -102 12 -48 -84 minecraft:air
-/fill -6 -61 -102 12 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P168
-
-# ---- P169: headinajar:jarred_head | BODY | block headinajar:neural_socket | empty socket, jarred zombie / villager / enderman
-report PAIR P169 begin spot 24 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:neural_socket | empty socket, jarred zombie / villager / enderman
-/say PAIR P169
-/tp @s 24.5 -60 -95.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock 24 -60 -94 headinajar:neural_socket
-/clear @s
-wait 5
-/tp @s 24.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P169
-inspect me
-report PAIR P169 act key use
-key use
-wait 12
-shot cw-P169
-wait 17
-inspect me
-inspect block 24 -60 -94
-report PAIR P169 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=18,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill 18 -60 -102 36 -48 -84 minecraft:air
-/fill 18 -61 -102 36 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P169
-
-# ---- P170: headinajar:jarred_head | BODY | block headinajar:neural_socket | empty socket, jarred skeleton
-report PAIR P170 begin spot 48 -96 expect BODY | headinajar:jarred_head | BODY | block headinajar:neural_socket | empty socket, jarred skeleton
-/say PAIR P170
-/tp @s 48.5 -60 -95.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock 48 -60 -94 headinajar:neural_socket
-/clear @s
-wait 5
-/tp @s 48.5 -60 -95.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:skeleton",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P170
-inspect me
-report PAIR P170 act key use
-key use
-wait 12
-shot cw-P170
-wait 17
-inspect me
-inspect block 48 -60 -94
-report PAIR P170 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=-102,dx=18,dy=14,dz=18]
-/fill 42 -60 -102 60 -48 -84 minecraft:air
-/fill 42 -61 -102 60 -61 -84 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=-102,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P170
-
-# ---- P171: headinajar:jarred_head | BODY | block headinajar:neural_socket | socket already holding a head
-report PAIR P171 begin spot -72 -72 expect BODY | headinajar:jarred_head | BODY | block headinajar:neural_socket | socket already holding a head
-/say PAIR P171
-/tp @s -71.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -72 -60 -70 headinajar:neural_socket
-headblock -72 -60 -70 minecraft:zombie
-/clear @s
-wait 5
-/tp @s -71.5 -60 -71.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P171
-inspect me
-report PAIR P171 act key use
-key use
-wait 12
-shot cw-P171
-wait 17
-inspect me
-inspect block -72 -60 -70
-report PAIR P171 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill -78 -60 -78 -60 -48 -60 minecraft:air
-/fill -78 -61 -78 -60 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P171
-
-# ---- P172: headinajar:jarred_head | BODY | block headinajar:cerebral_array | array placed
-report PAIR P172 begin spot -48 -72 expect BODY | headinajar:jarred_head | BODY | block headinajar:cerebral_array | array placed
-/say PAIR P172
-/tp @s -47.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -48 -60 -70 headinajar:cerebral_array
-/clear @s
-wait 5
-/tp @s -47.5 -60 -71.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P172
-inspect me
-report PAIR P172 act key use
-key use
-wait 12
-shot cw-P172
-wait 17
-inspect me
-inspect block -48 -60 -70
-report PAIR P172 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill -54 -60 -78 -36 -48 -60 minecraft:air
-/fill -54 -61 -78 -36 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P172
-
-# ---- P173: headinajar:jarred_head | BODY | block headinajar:jarred_head | a jarred head already placed
-report PAIR P173 begin spot -24 -72 expect BODY | headinajar:jarred_head | BODY | block headinajar:jarred_head | a jarred head already placed
-/say PAIR P173
-/tp @s -23.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -24 -60 -70 headinajar:jarred_head
-/setblock -24 -60 -70 headinajar:jarred_head[facing=north]{Type:"minecraft:zombie",Entity:{}}
-/clear @s
-wait 5
-/tp @s -23.5 -60 -71.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P173
-inspect me
-report PAIR P173 act key use
-key use
-wait 12
-shot cw-P173
-wait 17
-inspect me
-inspect block -24 -60 -70
-report PAIR P173 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill -30 -60 -78 -12 -48 -60 minecraft:air
-/fill -30 -61 -78 -12 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P173
-
-# ---- P174: headinajar:jarred_head | BODY | block headinajar:life_support_cradle | empty cradle
-report PAIR P174 begin spot 0 -72 expect BODY | headinajar:jarred_head | BODY | block headinajar:life_support_cradle | empty cradle
-/say PAIR P174
-/tp @s 0.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock 0 -60 -70 headinajar:life_support_cradle
-/clear @s
-wait 5
-/tp @s 0.5 -60 -71.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P174
-inspect me
-report PAIR P174 act key use
-key use
-wait 12
-shot cw-P174
-wait 17
-inspect me
-inspect block 0 -60 -70
-report PAIR P174 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill -6 -60 -78 12 -48 -60 minecraft:air
-/fill -6 -61 -78 12 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P174
-
-# ---- P175: headinajar:jarred_head | BODY | ground (any free block face)
-report PAIR P175 begin spot 24 -72 expect BODY | headinajar:jarred_head | BODY | ground (any free block face)
-/say PAIR P175
-/tp @s 24.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 24.5 -60 -71.5 0 39.9
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P175
-inspect me
-report PAIR P175 act key use
-key use
-wait 12
-shot cw-P175
-wait 17
-inspect me
-report PAIR P175 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=18,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill 18 -60 -78 36 -48 -60 minecraft:air
-/fill 18 -61 -78 36 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P175
-
-# ---- P176: headinajar:jarred_head | BODY | host (a headless pig host) | sawn pig
-report PAIR P176 begin spot 48 -72 expect BODY | headinajar:jarred_head | BODY | host (a headless pig host) | sawn pig
-/say PAIR P176
-/tp @s 48.5 -60 -71.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-hostify minecraft:pig 48 -60 -70
-wait 5
-/data merge entity @e[type=minecraft:pig,x=48.5,y=-60,z=-69.5,distance=..1.5,limit=1] {NoAI:1b}
-/clear @s
-wait 5
-/tp @s 48.5 -60 -71.5 0 30.3
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:pig",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P176
-inspect me
-report PAIR P176 act key use
-key use
-wait 12
-shot cw-P176
-wait 17
-inspect me
-report PAIR P176 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=-78,dx=18,dy=14,dz=18]
-/fill 42 -60 -78 60 -48 -60 minecraft:air
-/fill 42 -61 -78 60 -61 -60 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=-78,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P176
-
-# ---- P177: headinajar:jarred_head | BODY | block headinajar:body_printer | printer placed
-report PAIR P177 begin spot -72 -48 expect BODY | headinajar:jarred_head | BODY | block headinajar:body_printer | printer placed
-/say PAIR P177
-/tp @s -71.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -72 -60 -46 headinajar:body_printer
-/clear @s
-wait 5
-/tp @s -71.5 -60 -47.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:"minecraft:zombie",Entity:{}}]
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P177
-inspect me
-report PAIR P177 act key use
-key use
-wait 12
-shot cw-P177
-wait 17
-inspect me
-inspect block -72 -60 -46
-report PAIR P177 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill -78 -60 -54 -60 -48 -36 minecraft:air
-/fill -78 -61 -54 -60 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P177
-
-# ---- P178: minecraft:zombie_head | BODY | block headinajar:turret_pedestal | empty turret
-report PAIR P178 begin spot -48 -48 expect BODY | minecraft:zombie_head | BODY | block headinajar:turret_pedestal | empty turret
-/say PAIR P178
-/tp @s -47.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -48 -60 -46 headinajar:turret_pedestal
-/clear @s
-wait 5
-/tp @s -47.5 -60 -47.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with minecraft:zombie_head
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P178
-inspect me
-report PAIR P178 act key use
-key use
-wait 12
-shot cw-P178
-wait 17
-inspect me
-inspect block -48 -60 -46
-report PAIR P178 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill -54 -60 -54 -36 -48 -36 minecraft:air
-/fill -54 -61 -54 -36 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P178
-
-# ---- P179: minecraft:zombie_head | BODY | block headinajar:neural_socket | empty socket
-report PAIR P179 begin spot -24 -48 expect BODY | minecraft:zombie_head | BODY | block headinajar:neural_socket | empty socket
-/say PAIR P179
-/tp @s -23.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -24 -60 -46 headinajar:neural_socket
-/clear @s
-wait 5
-/tp @s -23.5 -60 -47.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with minecraft:zombie_head
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P179
-inspect me
-report PAIR P179 act key use
-key use
-wait 12
-shot cw-P179
-wait 17
-inspect me
-inspect block -24 -60 -46
-report PAIR P179 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill -30 -60 -54 -12 -48 -36 minecraft:air
-/fill -30 -61 -54 -12 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P179
-
-# ---- P180: minecraft:dragon_head | BODY | block headinajar:cerebral_array (slot) | Board Room Core in slot 10
-report PAIR P180 begin spot 0 -48 expect BODY | minecraft:dragon_head | BODY | block headinajar:cerebral_array (slot) | Board Room Core in slot 10
-/say PAIR P180
-/tp @s 0.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock 0 -60 -46 headinajar:cerebral_array
-/data merge block 0 -60 -46 {Items:{Items:[{Slot:9,id:"headinajar:board_room_core",count:1}]}}
-/clear @s
-wait 5
-/tp @s 0.5 -60 -47.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with minecraft:dragon_head
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P180
-inspect me
-report PAIR P180 act key use
-key use
-wait 12
-shot cw-P180
-wait 17
-inspect me
-inspect block 0 -60 -46
-report PAIR P180 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill -6 -60 -54 12 -48 -36 minecraft:air
-/fill -6 -61 -54 12 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P180
-
-# ---- P181: headinajar:lunk_chassis | BODY | ground
-report PAIR P181 begin spot 24 -48 expect BODY | headinajar:lunk_chassis | BODY | ground
-/say PAIR P181
-/tp @s 24.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 24.5 -60 -47.5 0 39.9
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:lunk_chassis
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P181
-inspect me
-report PAIR P181 act key use
-key use
-wait 12
-shot cw-P181
-wait 17
-inspect me
-report PAIR P181 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=18,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill 18 -60 -54 36 -48 -36 minecraft:air
-/fill 18 -61 -54 36 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P181
-
-# ---- P182: headinajar:rover_chassis | BODY | ground
-report PAIR P182 begin spot 48 -48 expect BODY | headinajar:rover_chassis | BODY | ground
-/say PAIR P182
-/tp @s 48.5 -60 -47.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 48.5 -60 -47.5 0 39.9
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:rover_chassis
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P182
-inspect me
-report PAIR P182 act key use
-key use
-wait 12
-shot cw-P182
-wait 17
-inspect me
-report PAIR P182 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill 42 -60 -54 60 -48 -36 minecraft:air
-/fill 42 -61 -54 60 -61 -36 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=-54,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P182
-
-# ---- P183: headinajar:spider_walker_chassis | BODY | ground
-report PAIR P183 begin spot -72 -24 expect BODY | headinajar:spider_walker_chassis | BODY | ground
-/say PAIR P183
-/tp @s -71.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s -71.5 -60 -23.5 0 39.9
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:spider_walker_chassis
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P183
-inspect me
-report PAIR P183 act key use
-key use
-wait 12
-shot cw-P183
-wait 17
-inspect me
-report PAIR P183 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill -78 -60 -30 -60 -48 -12 minecraft:air
-/fill -78 -61 -30 -60 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P183
-
-# ---- P184: headinajar:lunk_chassis | BODY | shell headinajar:lunk (placed) | trying to fold it back
-report PAIR P184 begin spot -48 -24 expect BODY | headinajar:lunk_chassis | BODY | shell headinajar:lunk (placed) | trying to fold it back
-/say PAIR P184
-/tp @s -47.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/summon headinajar:lunk -47.5 -60 -21.5 {NoAI:1b,Rotation:[180f,0f]}
-/clear @s
-wait 5
-/tp @s -47.5 -60 -23.5 0 27
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:lunk_chassis
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P184
-inspect me
-report PAIR P184 act key use
-key use
-wait 12
-shot cw-P184
-wait 17
-inspect me
-report PAIR P184 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill -54 -60 -30 -36 -48 -12 minecraft:air
-/fill -54 -61 -30 -36 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P184
-
-# ---- P185: headinajar:life_support_jar | BODY | the air (yourself) | whole
-report PAIR P185 begin spot -24 -24 expect BODY | headinajar:life_support_jar | BODY | the air (yourself) | whole
-/say PAIR P185
-/tp @s -23.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s -23.5 -60 -23.5 0 -60
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:life_support_jar
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P185
-inspect me
-report PAIR P185 act key use
-key use
-wait 12
-shot cw-P185
-wait 17
-inspect me
-report PAIR P185 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill -30 -60 -30 -12 -48 -12 minecraft:air
-/fill -30 -61 -30 -12 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P185
-
-# ---- P186: headinajar:compact_life_support_jar | BODY | the air (yourself) | whole
-report PAIR P186 begin spot 0 -24 expect BODY | headinajar:compact_life_support_jar | BODY | the air (yourself) | whole
-/say PAIR P186
-/tp @s 0.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 0.5 -60 -23.5 0 -60
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:compact_life_support_jar
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P186
-inspect me
-report PAIR P186 act key use
-key use
-wait 12
-shot cw-P186
-wait 17
-inspect me
-report PAIR P186 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill -6 -60 -30 12 -48 -12 minecraft:air
-/fill -6 -61 -30 12 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P186
-
-# ---- P187: headinajar:reinforced_life_support_jar | BODY | the air (yourself) | whole
-report PAIR P187 begin spot 24 -24 expect BODY | headinajar:reinforced_life_support_jar | BODY | the air (yourself) | whole
-/say PAIR P187
-/tp @s 24.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 24.5 -60 -23.5 0 -60
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:reinforced_life_support_jar
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P187
-inspect me
-report PAIR P187 act key use
-key use
-wait 12
-shot cw-P187
-wait 17
-inspect me
-report PAIR P187 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=18,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill 18 -60 -30 36 -48 -12 minecraft:air
-/fill 18 -61 -30 36 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P187
-
-# ---- P188: headinajar:executive_life_support_jar | BODY | the air (yourself) | whole
-report PAIR P188 begin spot 48 -24 expect BODY | headinajar:executive_life_support_jar | BODY | the air (yourself) | whole
-/say PAIR P188
-/tp @s 48.5 -60 -23.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s 48.5 -60 -23.5 0 -60
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:executive_life_support_jar
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P188
-inspect me
-report PAIR P188 act key use
-key use
-wait 12
-shot cw-P188
-wait 17
-inspect me
-report PAIR P188 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=-30,dx=18,dy=14,dz=18]
-/fill 42 -60 -30 60 -48 -12 minecraft:air
-/fill 42 -61 -30 60 -61 -12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=-30,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P188
-
-# ---- P189: headinajar:life_support_jar | BODY | block headinajar:separation_chair | placed
-report PAIR P189 begin spot -72 0 expect BODY | headinajar:life_support_jar | BODY | block headinajar:separation_chair | placed
-/say PAIR P189
-/tp @s -71.5 -60 0.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -72 -60 2 headinajar:separation_chair
-/clear @s
-wait 5
-/tp @s -71.5 -60 0.5 0 29.2
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:life_support_jar
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P189
-inspect me
-report PAIR P189 act key use
-key use
-wait 12
-shot cw-P189
-wait 17
-inspect me
-inspect block -72 -60 2
-report PAIR P189 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill -78 -60 -6 -60 -48 12 minecraft:air
-/fill -78 -61 -6 -60 -61 12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=-6,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P189
-
-# ---- P190: headinajar:relay_goggles | LINKED | entity headinajar:head_jar (own) | your placed head (any tier, incl. quantum_goggles)
-report PAIR P190 begin spot -48 0 expect LINKED | headinajar:relay_goggles | LINKED | entity headinajar:head_jar (own) | your placed head (any tier, incl. quantum_goggles)
-/say PAIR P190
-/tp @s -47.5 -60 0.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/clear @s
-wait 5
-/tp @s -47.5 -60 1 0 0
+/tp @s -68.5 -60 -95.5 -90 0
 separate
 wait 5
-/tp @s -47.5 -60 0.5 0 24.7
-wait 10
-/item replace entity @s weapon.mainhand with headinajar:relay_goggles
-/item replace entity @s weapon.offhand with minecraft:air
-wait 10
-riding PRE-P190
-inspect me
-report PAIR P190 act key use
-key use
-wait 12
-shot cw-P190
-wait 17
-inspect me
-report PAIR P190 end
-/kill @s
-wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill -54 -60 -6 -36 -48 12 minecraft:air
-/fill -54 -61 -6 -36 -61 12 minecraft:grass_block
-wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=-6,dx=18,dy=14,dz=18]
-/clear @s
-riding RESET-P190
-
-# ---- P191: headinajar:relay_goggles | LINKED+head | block headinajar:life_support_cradle (own head docked)
-report PAIR P191 begin spot -24 0 expect LINKED | headinajar:relay_goggles | LINKED+head | block headinajar:life_support_cradle (own head docked)
-/say PAIR P191
-/tp @s -23.5 -60 0.5 0 0
-/effect give @s minecraft:resistance 999 4 true
-/effect give @s minecraft:saturation 999 0 true
-wait 5
-/setblock -24 -60 2 headinajar:life_support_cradle
-/clear @s
-wait 5
-/tp @s -20.5 -60 0.5 -90 0
-separate
-wait 5
-/give @s headinajar:head_satchel
+/item replace entity @s inventory.0 with headinajar:head_satchel
 pickup
 wait 5
-/tp @s -23.5 -60 0.5 0 22.3
+/tp @s -71.5 -60 -95.5 0 22.3
+wait 3
+lookpos -71.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -947,40 +52,44 @@ wait 33
 wait 10
 riding PRE-P191
 inspect me
+inspect aim
+inspect block -72 -60 -94
 report PAIR P191 act key use
 key use
 wait 12
 shot cw-P191
 wait 17
 inspect me
-inspect block -24 -60 2
+inspect block -72 -60 -94
 report PAIR P191 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill -30 -60 -6 -12 -48 12 minecraft:air
-/fill -30 -61 -6 -12 -61 12 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill -78 -60 -102 -60 -48 -84 minecraft:air
+/fill -78 -61 -102 -60 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-6,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-78,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P191
 
 # ---- P192: headinajar:relay_goggles | BODY | the air (yourself) | whole
-report PAIR P192 begin spot 0 0 expect BODY | headinajar:relay_goggles | BODY | the air (yourself) | whole
+report PAIR P192 begin spot -48 -96 expect BODY aim miss | headinajar:relay_goggles | BODY | the air (yourself) | whole
 /say PAIR P192
-/tp @s 0.5 -60 0.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 0.5 -60 0.5 0 -60
+/tp @s -47.5 -60 -95.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:relay_goggles
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P192
 inspect me
+inspect aim
 report PAIR P192 act key use
 key use
 wait 12
@@ -990,37 +99,41 @@ inspect me
 report PAIR P192 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill -6 -60 -6 12 -48 12 minecraft:air
-/fill -6 -61 -6 12 -61 12 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill -54 -60 -102 -36 -48 -84 minecraft:air
+/fill -54 -61 -102 -36 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=-6,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-54,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P192
 
 # ---- P193: headinajar:relay_goggles | LINKED | entity headinajar:head_jar (another player's)
-report PAIR P193 begin spot 24 0 expect LINKED | headinajar:relay_goggles | LINKED | entity headinajar:head_jar (another player's)
+report PAIR P193 begin spot -24 -96 expect LINKED aim entity | headinajar:relay_goggles | LINKED | entity headinajar:head_jar (another player's)
 /say PAIR P193
-/tp @s 24.5 -60 0.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-bystander spawn 24 -60 4 180
+bystander spawn -24 -60 -92 180
 wait 5
 bystander form linked
 wait 10
 /clear @s
 wait 5
-/tp @s 27.5 -60 0.5 -90 0
+/tp @s -20.5 -60 -95.5 -90 0
 separate
 wait 5
-/tp @s 24.5 -60 0.5 0 20.2
+/tp @s -23.5 -60 -95.5 0 20.2
+wait 3
+lookpos -23.5 -59.6 -93
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:relay_goggles
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P193
 inspect me
+inspect aim
 report PAIR P193 act key use
 key use
 wait 12
@@ -1033,30 +146,32 @@ wait 15
 /headoffice restore Bystander
 wait 3
 bystander remove
-/kill @e[type=!minecraft:player,x=18,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill 18 -60 -6 36 -48 12 minecraft:air
-/fill 18 -61 -6 36 -61 12 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill -30 -60 -102 -12 -48 -84 minecraft:air
+/fill -30 -61 -102 -12 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=-6,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P193
 
 # ---- P194: headinajar:collar_cam | BODY | the air (yourself) | whole or LINKED
-report PAIR P194 begin spot 48 0 expect BODY | headinajar:collar_cam | BODY | the air (yourself) | whole or LINKED
+report PAIR P194 begin spot 0 -96 expect BODY aim miss | headinajar:collar_cam | BODY | the air (yourself) | whole or LINKED
 /say PAIR P194
-/tp @s 48.5 -60 0.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 48.5 -60 0.5 0 -60
+/tp @s 0.5 -60 -95.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_cam
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P194
 inspect me
+inspect aim
 report PAIR P194 act key use
 key use
 wait 12
@@ -1066,33 +181,37 @@ inspect me
 report PAIR P194 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=-6,dx=18,dy=14,dz=18]
-/fill 42 -60 -6 60 -48 12 minecraft:air
-/fill 42 -61 -6 60 -61 12 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill -6 -60 -102 12 -48 -84 minecraft:air
+/fill -6 -61 -102 12 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=-6,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-6,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P194
 
 # ---- P195: headinajar:collar_cam | JAR (no arm) | entity headinajar:headless_body (own, no collar) | body from /headoffice detach or a crooked collar you want to replace
-report PAIR P195 begin spot -72 24 expect JAR | headinajar:collar_cam | JAR (no arm) | entity headinajar:headless_body (own, no collar) | body from /headoffice detach or a crooked collar you want to replace
+report PAIR P195 begin spot 24 -96 expect JAR aim entity | headinajar:collar_cam | JAR (no arm) | entity headinajar:headless_body (own, no collar) | body from /headoffice detach or a crooked collar you want to replace
 /say PAIR P195
-/tp @s -71.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -71.5 -60 26.5 0 0
+/tp @s 24.5 -60 -93.5 0 0
 jar
 wait 5
-/tp @s -71.5 -60 24.5 0 -5.7
+/tp @s 24.5 -60 -95.5 0 -5.7
+wait 3
+lookpos 24.5 -59.3 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_cam
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P195
 inspect me
+inspect aim
 report PAIR P195 act key use
 key use
 wait 12
@@ -1102,30 +221,32 @@ inspect me
 report PAIR P195 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill -78 -60 18 -60 -48 36 minecraft:air
-/fill -78 -61 18 -60 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=18,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill 18 -60 -102 36 -48 -84 minecraft:air
+/fill 18 -61 -102 36 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=18,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P195
 
 # ---- P196: headinajar:collar_wide_lens (any collar_* upgrade) | offhand headinajar:collar_cam | BODY | the air (yourself) | Collar Cam in the other hand
-report PAIR P196 begin spot -48 24 expect BODY | headinajar:collar_wide_lens (any collar_* upgrade) | offhand headinajar:collar_cam | BODY | the air (yourself) | Collar Cam in the other hand
+report PAIR P196 begin spot 48 -96 expect BODY aim miss | headinajar:collar_wide_lens (any collar_* upgrade) | offhand headinajar:collar_cam | BODY | the air (yourself) | Collar Cam in the other hand
 /say PAIR P196
-/tp @s -47.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 -95.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -47.5 -60 24.5 0 -60
+/tp @s 48.5 -60 -95.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_wide_lens
 /item replace entity @s weapon.offhand with headinajar:collar_cam
 wait 10
 riding PRE-P196
 inspect me
+inspect aim
 report PAIR P196 act key use
 key use
 wait 12
@@ -1135,33 +256,35 @@ inspect me
 report PAIR P196 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill -54 -60 18 -36 -48 36 minecraft:air
-/fill -54 -61 18 -36 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=42,y=-62,z=-102,dx=18,dy=14,dz=18]
+/fill 42 -60 -102 60 -48 -84 minecraft:air
+/fill 42 -61 -102 60 -61 -84 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=42,y=-62,z=-102,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P196
 
 # ---- P197: headinajar:collar_wide_lens (any collar_* upgrade) | LINKED | the air (yourself) | collar on your neck
-report PAIR P197 begin spot -24 24 expect LINKED | headinajar:collar_wide_lens (any collar_* upgrade) | LINKED | the air (yourself) | collar on your neck
+report PAIR P197 begin spot -72 -72 expect LINKED aim miss | headinajar:collar_wide_lens (any collar_* upgrade) | LINKED | the air (yourself) | collar on your neck
 /say PAIR P197
-/tp @s -23.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -20.5 -60 24.5 -90 0
+/tp @s -68.5 -60 -71.5 -90 0
 separate
 wait 5
-/tp @s -23.5 -60 24.5 0 -60
+/tp @s -71.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_wide_lens
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P197
 inspect me
+inspect aim
 report PAIR P197 act key use
 key use
 wait 12
@@ -1171,30 +294,32 @@ inspect me
 report PAIR P197 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill -30 -60 18 -12 -48 36 minecraft:air
-/fill -30 -61 18 -12 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill -78 -60 -78 -60 -48 -60 minecraft:air
+/fill -78 -61 -78 -60 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-78,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P197
 
 # ---- P198: headinajar:collar_wide_lens (any collar_* upgrade) | BODY | the air (yourself) | no collar anywhere
-report PAIR P198 begin spot 0 24 expect BODY | headinajar:collar_wide_lens (any collar_* upgrade) | BODY | the air (yourself) | no collar anywhere
+report PAIR P198 begin spot -48 -72 expect BODY aim miss | headinajar:collar_wide_lens (any collar_* upgrade) | BODY | the air (yourself) | no collar anywhere
 /say PAIR P198
-/tp @s 0.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 0.5 -60 24.5 0 -60
+/tp @s -47.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_wide_lens
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P198
 inspect me
+inspect aim
 report PAIR P198 act key use
 key use
 wait 12
@@ -1204,33 +329,35 @@ inspect me
 report PAIR P198 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-6,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill -6 -60 18 12 -48 36 minecraft:air
-/fill -6 -61 18 12 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill -54 -60 -78 -36 -48 -60 minecraft:air
+/fill -54 -61 -78 -36 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-6,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-54,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P198
 
 # ---- P199: headinajar:collar_wide_lens (any collar_* upgrade) | JAR (no arm) | the air (yourself) | collar is on your body
-report PAIR P199 begin spot 24 24 expect JAR | headinajar:collar_wide_lens (any collar_* upgrade) | JAR (no arm) | the air (yourself) | collar is on your body
+report PAIR P199 begin spot -24 -72 expect JAR aim miss | headinajar:collar_wide_lens (any collar_* upgrade) | JAR (no arm) | the air (yourself) | collar is on your body
 /say PAIR P199
-/tp @s 24.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 27.5 -60 24.5 0 0
+/tp @s -20.5 -60 -71.5 0 0
 jar
 wait 5
-/tp @s 24.5 -60 24.5 0 -60
+/tp @s -23.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:collar_wide_lens
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P199
 inspect me
+inspect aim
 report PAIR P199 act key use
 key use
 wait 12
@@ -1240,30 +367,31 @@ inspect me
 report PAIR P199 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=18,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill 18 -60 18 36 -48 36 minecraft:air
-/fill 18 -61 18 36 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill -30 -60 -78 -12 -48 -60 minecraft:air
+/fill -30 -61 -78 -12 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=18,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P199
 
 # ---- P200: headinajar:head_satchel | sneak | LINKED+head | the air (yourself) | carrying your head
-report PAIR P200 begin spot 48 24 expect LINKED | headinajar:head_satchel | sneak | LINKED+head | the air (yourself) | carrying your head
+report PAIR P200 begin spot 0 -72 expect LINKED aim miss | headinajar:head_satchel | sneak | LINKED+head | the air (yourself) | carrying your head
 /say PAIR P200
-/tp @s 48.5 -60 24.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 51.5 -60 24.5 -90 0
+/tp @s 3.5 -60 -71.5 -90 0
 separate
 wait 5
-/give @s headinajar:head_satchel
+/item replace entity @s inventory.0 with headinajar:head_satchel
 pickup
 wait 5
-/tp @s 48.5 -60 24.5 0 -60
+/tp @s 0.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:head_satchel
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1272,6 +400,7 @@ riding PRE-P200
 inspect me
 sneak down
 wait 33
+inspect aim
 report PAIR P200 act key use
 key use
 wait 12
@@ -1282,36 +411,38 @@ report PAIR P200 end
 sneak up
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
-/fill 42 -60 18 60 -48 36 minecraft:air
-/fill 42 -61 18 60 -61 36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill -6 -60 -78 12 -48 -60 minecraft:air
+/fill -6 -61 -78 12 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-6,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P200
 
 # ---- P201: headinajar:head_satchel | LINKED+head | the air (yourself) | carrying your head, not sneaking
-report PAIR P201 begin spot -72 48 expect LINKED | headinajar:head_satchel | LINKED+head | the air (yourself) | carrying your head, not sneaking
+report PAIR P201 begin spot 24 -72 expect LINKED aim miss | headinajar:head_satchel | LINKED+head | the air (yourself) | carrying your head, not sneaking
 /say PAIR P201
-/tp @s -71.5 -60 48.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -68.5 -60 48.5 -90 0
+/tp @s 27.5 -60 -71.5 -90 0
 separate
 wait 5
-/give @s headinajar:head_satchel
+/item replace entity @s inventory.0 with headinajar:head_satchel
 pickup
 wait 5
-/tp @s -71.5 -60 48.5 0 -60
+/tp @s 24.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:head_satchel
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P201
 inspect me
+inspect aim
 report PAIR P201 act key use
 key use
 wait 12
@@ -1321,30 +452,32 @@ inspect me
 report PAIR P201 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
-/fill -78 -60 42 -60 -48 60 minecraft:air
-/fill -78 -61 42 -60 -61 60 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=18,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill 18 -60 -78 36 -48 -60 minecraft:air
+/fill 18 -61 -78 36 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=18,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P201
 
 # ---- P202: headinajar:head_satchel | BODY | the air (yourself) | whole
-report PAIR P202 begin spot -48 48 expect BODY | headinajar:head_satchel | BODY | the air (yourself) | whole
+report PAIR P202 begin spot 48 -72 expect BODY aim miss | headinajar:head_satchel | BODY | the air (yourself) | whole
 /say PAIR P202
-/tp @s -47.5 -60 48.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 -71.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -47.5 -60 48.5 0 -60
+/tp @s 48.5 -60 -71.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:head_satchel
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P202
 inspect me
+inspect aim
 report PAIR P202 act key use
 key use
 wait 12
@@ -1354,34 +487,36 @@ inspect me
 report PAIR P202 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
-/fill -54 -60 42 -36 -48 60 minecraft:air
-/fill -54 -61 42 -36 -61 60 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=42,y=-62,z=-78,dx=18,dy=14,dz=18]
+/fill 42 -60 -78 60 -48 -60 minecraft:air
+/fill 42 -61 -78 60 -61 -60 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=42,y=-62,z=-78,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P202
 
 # ---- P203: headinajar:saline_bottle | JAR (with arm) | the air (yourself) | saline below max
-report PAIR P203 begin spot -24 48 expect JAR | headinajar:saline_bottle | JAR (with arm) | the air (yourself) | saline below max
+report PAIR P203 begin spot -72 -48 expect JAR aim miss | headinajar:saline_bottle | JAR (with arm) | the air (yourself) | saline below max
 /say PAIR P203
-/tp @s -23.5 -60 48.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 -47.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s -20.5 -60 48.5 0 0
+/tp @s -68.5 -60 -47.5 0 0
 jar
 fit manipulator_arm
 wait 5
-/tp @s -23.5 -60 48.5 0 -60
+/tp @s -71.5 -60 -47.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:saline_bottle
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P203
 inspect me
+inspect aim
 report PAIR P203 act key use
 key use
 wait 12
@@ -1391,30 +526,32 @@ inspect me
 report PAIR P203 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
-/fill -30 -60 42 -12 -48 60 minecraft:air
-/fill -30 -61 42 -12 -61 60 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill -78 -60 -54 -60 -48 -36 minecraft:air
+/fill -78 -61 -54 -60 -61 -36 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-78,y=-62,z=-54,dx=18,dy=14,dz=18]
 /clear @s
 riding RESET-P203
 
 # ---- P204: headinajar:saline_bottle | BODY | the air (yourself) | whole
-report PAIR P204 begin spot 0 48 expect BODY | headinajar:saline_bottle | BODY | the air (yourself) | whole
+report PAIR P204 begin spot -48 -48 expect BODY aim miss | headinajar:saline_bottle | BODY | the air (yourself) | whole
 /say PAIR P204
-/tp @s 0.5 -60 48.5 0 0
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 -47.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /clear @s
 wait 5
-/tp @s 0.5 -60 48.5 0 -60
+/tp @s -47.5 -60 -47.5 0 -60
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:saline_bottle
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
 riding PRE-P204
 inspect me
+inspect aim
 report PAIR P204 act key use
 key use
 wait 12
@@ -1424,12 +561,1061 @@ inspect me
 report PAIR P204 end
 /kill @s
 wait 15
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill -54 -60 -54 -36 -48 -36 minecraft:air
+/fill -54 -61 -54 -36 -61 -36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-54,y=-62,z=-54,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P204
+
+# ---- P205: headinajar:saline_bottle | LINKED | entity headinajar:head_jar (own) | saline below max
+report PAIR P205 begin spot -24 -48 expect LINKED aim entity | headinajar:saline_bottle | LINKED | entity headinajar:head_jar (own) | saline below max
+/say PAIR P205
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 -47.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s -23.5 -60 -47 0 0
+separate
+wait 5
+/tp @s -23.5 -60 -47.5 0 24.7
+wait 3
+lookpos -23.5 -59.6 -45.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P205
+inspect me
+inspect aim
+report PAIR P205 act key use
+key use
+wait 12
+shot cw-P205
+wait 17
+inspect me
+report PAIR P205 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill -30 -60 -54 -12 -48 -36 minecraft:air
+/fill -30 -61 -54 -12 -61 -36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P205
+
+# ---- P206: headinajar:saline_bottle | LINKED | entity headinajar:head_jar (own) | saline already full, satchel in inventory
+report PAIR P206 begin spot 0 -48 expect LINKED aim entity | headinajar:saline_bottle | LINKED | entity headinajar:head_jar (own) | saline already full, satchel in inventory
+/say PAIR P206
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 -47.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s 0.5 -60 -47 0 0
+separate
+wait 5
+/item replace entity @s inventory.0 with headinajar:head_satchel
+/tp @s 0.5 -60 -47.5 0 24.7
+wait 3
+lookpos 0.5 -59.6 -45.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P206
+inspect me
+inspect aim
+report PAIR P206 act key use
+key use
+wait 12
+shot cw-P206
+wait 17
+inspect me
+report PAIR P206 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill -6 -60 -54 12 -48 -36 minecraft:air
+/fill -6 -61 -54 12 -61 -36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-6,y=-62,z=-54,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P206
+
+# ---- P207: headinajar:saline_bottle | BODY | block headinajar:life_support_cradle | tank has 250 mB of room
+report PAIR P207 begin spot 24 -48 expect BODY aim block:24,-60,-46 | headinajar:saline_bottle | BODY | block headinajar:life_support_cradle | tank has 250 mB of room
+/say PAIR P207
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 -47.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/setblock 24 -60 -46 headinajar:life_support_cradle
+/data merge block 24 -60 -46 {Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3750}}}
+/clear @s
+wait 5
+/tp @s 24.5 -60 -47.5 0 29.2
+wait 3
+lookpos 24.5 -59.85 -45.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P207
+inspect me
+inspect aim
+inspect block 24 -60 -46
+report PAIR P207 act key use
+key use
+wait 12
+shot cw-P207
+wait 17
+inspect me
+inspect block 24 -60 -46
+report PAIR P207 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=18,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill 18 -60 -54 36 -48 -36 minecraft:air
+/fill 18 -61 -54 36 -61 -36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=18,y=-62,z=-54,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P207
+
+# ---- P208: headinajar:saline_bottle | BODY | block headinajar:life_support_cradle | tank full (4000 mB)
+report PAIR P208 begin spot 48 -48 expect BODY aim block:48,-60,-46 | headinajar:saline_bottle | BODY | block headinajar:life_support_cradle | tank full (4000 mB)
+/say PAIR P208
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 -47.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/setblock 48 -60 -46 headinajar:life_support_cradle
+/data merge block 48 -60 -46 {Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+/clear @s
+wait 5
+/tp @s 48.5 -60 -47.5 0 29.2
+wait 3
+lookpos 48.5 -59.85 -45.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P208
+inspect me
+inspect aim
+inspect block 48 -60 -46
+report PAIR P208 act key use
+key use
+wait 12
+shot cw-P208
+wait 17
+inspect me
+inspect block 48 -60 -46
+report PAIR P208 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=42,y=-62,z=-54,dx=18,dy=14,dz=18]
+/fill 42 -60 -54 60 -48 -36 minecraft:air
+/fill 42 -61 -54 60 -61 -36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=42,y=-62,z=-54,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P208
+
+# ---- P209: headinajar:saline_bottle | BODY | block headinajar:body_printer | printer needs saline
+report PAIR P209 begin spot -72 -24 expect BODY aim block:-72,-60,-22 | headinajar:saline_bottle | BODY | block headinajar:body_printer | printer needs saline
+/say PAIR P209
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/setblock -72 -60 -22 headinajar:body_printer
+/data merge block -72 -60 -22 {Energy:200000,Items:{Items:[{Slot:0,id:"minecraft:rotten_flesh",count:16},{Slot:1,id:"minecraft:bone_block",count:8},{Slot:2,id:"minecraft:redstone_block",count:4},{Slot:3,id:"minecraft:slime_ball",count:8}]}}
+/clear @s
+wait 5
+/tp @s -71.5 -60 -23.5 0 29.2
+wait 3
+lookpos -71.5 -59.85 -21.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P209
+inspect me
+inspect aim
+inspect block -72 -60 -22
+report PAIR P209 act key use
+key use
+wait 12
+shot cw-P209
+wait 17
+inspect me
+inspect block -72 -60 -22
+report PAIR P209 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill -78 -60 -30 -60 -48 -12 minecraft:air
+/fill -78 -61 -30 -60 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-78,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P209
+
+# ---- P210: headinajar:saline_bottle | BODY | block headinajar:saline_mixer
+report PAIR P210 begin spot -48 -24 expect BODY aim block:-48,-60,-22 | headinajar:saline_bottle | BODY | block headinajar:saline_mixer
+/say PAIR P210
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/setblock -48 -60 -22 headinajar:saline_mixer
+/clear @s
+wait 5
+/tp @s -47.5 -60 -23.5 0 29.2
+wait 3
+lookpos -47.5 -59.85 -21.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P210
+inspect me
+inspect aim
+inspect block -48 -60 -22
+report PAIR P210 act key use
+key use
+wait 12
+shot cw-P210
+wait 17
+inspect me
+inspect block -48 -60 -22
+report PAIR P210 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill -54 -60 -30 -36 -48 -12 minecraft:air
+/fill -54 -61 -30 -36 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-54,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P210
+
+# ---- P213: headinajar:saline_bottle | BODY | another player (JAR form) | friend low on saline
+report PAIR P213 begin spot -24 -24 expect BODY aim entity | headinajar:saline_bottle | BODY | another player (JAR form) | friend low on saline
+/say PAIR P213
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+bystander spawn -24 -60 -21 180
+wait 5
+bystander form jar
+wait 5
+bystander tp -24 -60 -22 180
+/clear @s
+wait 5
+/tp @s -23.5 -60 -23.5 0 31.4
+wait 3
+lookpos -23.5 -59.6 -21.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P213
+inspect me
+inspect aim
+report PAIR P213 act key use
+key use
+wait 12
+shot cw-P213
+wait 17
+inspect me
+report PAIR P213 end
+/kill @s
+wait 15
+/headoffice restore Bystander
+wait 3
+bystander remove
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill -30 -60 -30 -12 -48 -12 minecraft:air
+/fill -30 -61 -30 -12 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P213
+
+# ---- P214: headinajar:saline_bottle | BODY | entity headinajar:head_jar (another player's) | friend drying out
+report PAIR P214 begin spot 0 -24 expect BODY aim entity | headinajar:saline_bottle | BODY | entity headinajar:head_jar (another player's) | friend drying out
+/say PAIR P214
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+bystander spawn 0 -60 -20 180
+wait 5
+bystander form linked
+wait 10
+/clear @s
+wait 5
+/tp @s 0.5 -60 -23.5 0 26
+wait 3
+lookpos 0.5 -59.6 -21
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P214
+inspect me
+inspect aim
+report PAIR P214 act key use
+key use
+wait 12
+shot cw-P214
+wait 17
+inspect me
+report PAIR P214 end
+/kill @s
+wait 15
+/headoffice restore Bystander
+wait 3
+bystander remove
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill -6 -60 -30 12 -48 -12 minecraft:air
+/fill -6 -61 -30 12 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-6,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P214
+
+# ---- P215: headinajar:saline_bottle | BODY | block headinajar:separation_chair
+report PAIR P215 begin spot 24 -24 expect BODY aim block:24,-60,-22 | headinajar:saline_bottle | BODY | block headinajar:separation_chair
+/say PAIR P215
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/setblock 24 -60 -22 headinajar:separation_chair
+/clear @s
+wait 5
+/tp @s 24.5 -60 -23.5 0 29.2
+wait 3
+lookpos 24.5 -59.85 -21.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:saline_bottle
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P215
+inspect me
+inspect aim
+inspect block 24 -60 -22
+report PAIR P215 act key use
+key use
+wait 12
+shot cw-P215
+wait 17
+inspect me
+inspect block 24 -60 -22
+report PAIR P215 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=18,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill 18 -60 -30 36 -48 -12 minecraft:air
+/fill 18 -61 -30 36 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=18,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P215
+
+# ---- P216: headinajar:glass_patch | JAR (with arm) | the air (yourself) | integrity below max
+report PAIR P216 begin spot 48 -24 expect JAR aim miss | headinajar:glass_patch | JAR (with arm) | the air (yourself) | integrity below max
+/say PAIR P216
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 -23.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s 51.5 -60 -23.5 0 0
+jar
+fit manipulator_arm
+wait 5
+/tp @s 48.5 -60 -23.5 0 -60
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:glass_patch
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P216
+inspect me
+inspect aim
+report PAIR P216 act key use
+key use
+wait 12
+shot cw-P216
+wait 17
+inspect me
+report PAIR P216 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=42,y=-62,z=-30,dx=18,dy=14,dz=18]
+/fill 42 -60 -30 60 -48 -12 minecraft:air
+/fill 42 -61 -30 60 -61 -12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=42,y=-62,z=-30,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P216
+
+# ---- P217: headinajar:glass_patch | LINKED | entity headinajar:head_jar (own) | integrity below max
+report PAIR P217 begin spot -72 0 expect LINKED aim entity | headinajar:glass_patch | LINKED | entity headinajar:head_jar (own) | integrity below max
+/say PAIR P217
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s -71.5 -60 1 0 0
+separate
+wait 5
+/tp @s -71.5 -60 0.5 0 24.7
+wait 3
+lookpos -71.5 -59.6 2.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:glass_patch
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P217
+inspect me
+inspect aim
+report PAIR P217 act key use
+key use
+wait 12
+shot cw-P217
+wait 17
+inspect me
+report PAIR P217 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill -78 -60 -6 -60 -48 12 minecraft:air
+/fill -78 -61 -6 -60 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-78,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P217
+
+# ---- P220: headinajar:glass_patch | BODY | entity headinajar:head_jar (another player's) | cracked friend
+report PAIR P220 begin spot -48 0 expect BODY aim entity | headinajar:glass_patch | BODY | entity headinajar:head_jar (another player's) | cracked friend
+/say PAIR P220
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+bystander spawn -48 -60 4 180
+wait 5
+bystander form linked
+wait 10
+/clear @s
+wait 5
+/tp @s -47.5 -60 0.5 0 26
+wait 3
+lookpos -47.5 -59.6 3
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:glass_patch
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P220
+inspect me
+inspect aim
+report PAIR P220 act key use
+key use
+wait 12
+shot cw-P220
+wait 17
+inspect me
+report PAIR P220 end
+/kill @s
+wait 15
+/headoffice restore Bystander
+wait 3
+bystander remove
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill -54 -60 -6 -36 -48 12 minecraft:air
+/fill -54 -61 -6 -36 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-54,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P220
+
+# ---- P221: headinajar:glass_patch | BODY | another player (JAR form) | cracked friend
+report PAIR P221 begin spot -24 0 expect BODY aim entity | headinajar:glass_patch | BODY | another player (JAR form) | cracked friend
+/say PAIR P221
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+bystander spawn -24 -60 3 180
+wait 5
+bystander form jar
+wait 5
+bystander tp -24 -60 2 180
+/clear @s
+wait 5
+/tp @s -23.5 -60 0.5 0 31.4
+wait 3
+lookpos -23.5 -59.6 2.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:glass_patch
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P221
+inspect me
+inspect aim
+report PAIR P221 act key use
+key use
+wait 12
+shot cw-P221
+wait 17
+inspect me
+report PAIR P221 end
+/kill @s
+wait 15
+/headoffice restore Bystander
+wait 3
+bystander remove
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill -30 -60 -6 -12 -48 12 minecraft:air
+/fill -30 -61 -6 -12 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P221
+
+# ---- P222: headinajar:embalming_fluid | BODY | host (mob made host) | freshness below 100
+report PAIR P222 begin spot 0 0 expect BODY aim entity | headinajar:embalming_fluid | BODY | host (mob made host) | freshness below 100
+/say PAIR P222
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+hostify minecraft:pig 0 -60 2
+wait 5
+/data merge entity @e[type=minecraft:pig,x=0.5,y=-60,z=2.5,distance=..1.5,limit=1] {NoAI:1b}
+/clear @s
+wait 5
+/data merge entity @e[type=minecraft:pig,x=0.5,y=-60,z=2.5,distance=..1.5,limit=1] {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:60f,sync:0f}}}
+/tp @s 0.5 -60 0.5 0 30.3
+wait 3
+lookpos 0.5 -59.55 2.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P222
+inspect me
+inspect aim
+report PAIR P222 act key use
+key use
+wait 12
+shot cw-P222
+wait 17
+inspect me
+report PAIR P222 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill -6 -60 -6 12 -48 12 minecraft:air
+/fill -6 -61 -6 12 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-6,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P222
+
+# ---- P223: headinajar:embalming_fluid | BODY | shell or mecha
+report PAIR P223 begin spot 24 0 expect BODY aim entity | headinajar:embalming_fluid | BODY | shell or mecha
+/say PAIR P223
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon headinajar:lunk 24.5 -60 2.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s 24.5 -60 0.5 0 27
+wait 3
+lookpos 24.5 -59.4 2.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P223
+inspect me
+inspect aim
+report PAIR P223 act key use
+key use
+wait 12
+shot cw-P223
+wait 17
+inspect me
+report PAIR P223 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=18,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill 18 -60 -6 36 -48 12 minecraft:air
+/fill 18 -61 -6 36 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=18,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P223
+
+# ---- P224: headinajar:embalming_fluid | JAR (no arm) | entity headinajar:headless_body (own) | your idle body
+report PAIR P224 begin spot 48 0 expect JAR aim entity | headinajar:embalming_fluid | JAR (no arm) | entity headinajar:headless_body (own) | your idle body
+/say PAIR P224
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 0.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s 48.5 -60 2.5 0 0
+jar
+wait 5
+/tp @s 48.5 -60 0.5 0 -5.7
+wait 3
+lookpos 48.5 -59.3 2.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P224
+inspect me
+inspect aim
+report PAIR P224 act key use
+key use
+wait 12
+shot cw-P224
+wait 17
+inspect me
+report PAIR P224 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=42,y=-62,z=-6,dx=18,dy=14,dz=18]
+/fill 42 -60 -6 60 -48 12 minecraft:air
+/fill 42 -61 -6 60 -61 12 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=42,y=-62,z=-6,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P224
+
+# ---- P225: headinajar:embalming_fluid | JAR (no arm) | entity headinajar:headless_body (own corpse)
+report PAIR P225 begin spot -72 24 expect JAR aim entity | headinajar:embalming_fluid | JAR (no arm) | entity headinajar:headless_body (own corpse)
+/say PAIR P225
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s -71.5 -60 26.5 -90 0
+separate
+wait 5
+/effect clear @s minecraft:resistance
+/damage @s 1000 minecraft:generic
+wait 20
+/effect give @s minecraft:resistance 999 4 true
+/tp @s -71.5 -60 24.5 0 0
+wait 3
+lookpos -71.5 -59.5 26.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P225
+inspect me
+inspect aim
+report PAIR P225 act key use
+key use
+wait 12
+shot cw-P225
+wait 17
+inspect me
+report PAIR P225 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill -78 -60 18 -60 -48 36 minecraft:air
+/fill -78 -61 18 -60 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-78,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P225
+
+# ---- P226: headinajar:embalming_fluid | BODY | vanilla mob minecraft:pig (not a host)
+report PAIR P226 begin spot -48 24 expect BODY aim entity:minecraft:pig | headinajar:embalming_fluid | BODY | vanilla mob minecraft:pig (not a host)
+/say PAIR P226
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon minecraft:pig -47.5 -60 26.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s -47.5 -60 24.5 0 30.3
+wait 3
+lookpos -47.5 -59.55 26.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P226
+inspect me
+inspect aim
+report PAIR P226 act key use
+key use
+wait 12
+shot cw-P226
+wait 17
+inspect me
+report PAIR P226 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill -54 -60 18 -36 -48 36 minecraft:air
+/fill -54 -61 18 -36 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-54,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P226
+
+# ---- P227: headinajar:embalming_fluid | BODY | the air (yourself)
+report PAIR P227 begin spot -24 24 expect BODY aim miss | headinajar:embalming_fluid | BODY | the air (yourself)
+/say PAIR P227
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/clear @s
+wait 5
+/tp @s -23.5 -60 24.5 0 -60
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:embalming_fluid
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P227
+inspect me
+inspect aim
+report PAIR P227 act key use
+key use
+wait 12
+shot cw-P227
+wait 17
+inspect me
+report PAIR P227 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill -30 -60 18 -12 -48 36 minecraft:air
+/fill -30 -61 18 -12 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-30,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P227
+
+# ---- P228: headinajar:neural_lace | BODY | host (mob made host) | sync below 50%
+report PAIR P228 begin spot 0 24 expect BODY aim entity | headinajar:neural_lace | BODY | host (mob made host) | sync below 50%
+/say PAIR P228
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+hostify minecraft:pig 0 -60 26
+wait 5
+/data merge entity @e[type=minecraft:pig,x=0.5,y=-60,z=26.5,distance=..1.5,limit=1] {NoAI:1b}
+/clear @s
+wait 5
+/data merge entity @e[type=minecraft:pig,x=0.5,y=-60,z=26.5,distance=..1.5,limit=1] {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:100f,sync:20f}}}
+/tp @s 0.5 -60 24.5 0 30.3
+wait 3
+lookpos 0.5 -59.55 26.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:neural_lace
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P228
+inspect me
+inspect aim
+report PAIR P228 act key use
+key use
+wait 12
+shot cw-P228
+wait 17
+inspect me
+report PAIR P228 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-6,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill -6 -60 18 12 -48 36 minecraft:air
+/fill -6 -61 18 12 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-6,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P228
+
+# ---- P229: headinajar:neural_lace | BODY | host (mob made host) | sync 50% or more
+report PAIR P229 begin spot 24 24 expect BODY aim entity | headinajar:neural_lace | BODY | host (mob made host) | sync 50% or more
+/say PAIR P229
+/kill @e[type=minecraft:slime]
+/tp @s 24.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+hostify minecraft:pig 24 -60 26
+wait 5
+/data merge entity @e[type=minecraft:pig,x=24.5,y=-60,z=26.5,distance=..1.5,limit=1] {NoAI:1b}
+/clear @s
+wait 5
+/data merge entity @e[type=minecraft:pig,x=24.5,y=-60,z=26.5,distance=..1.5,limit=1] {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:100f,sync:80f}}}
+/tp @s 24.5 -60 24.5 0 30.3
+wait 3
+lookpos 24.5 -59.55 26.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:neural_lace
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P229
+inspect me
+inspect aim
+report PAIR P229 act key use
+key use
+wait 12
+shot cw-P229
+wait 17
+inspect me
+report PAIR P229 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=18,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill 18 -60 18 36 -48 36 minecraft:air
+/fill 18 -61 18 36 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=18,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P229
+
+# ---- P230: headinajar:neural_lace | BODY | shell
+report PAIR P230 begin spot 48 24 expect BODY aim entity | headinajar:neural_lace | BODY | shell
+/say PAIR P230
+/kill @e[type=minecraft:slime]
+/tp @s 48.5 -60 24.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon headinajar:lunk 48.5 -60 26.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s 48.5 -60 24.5 0 27
+wait 3
+lookpos 48.5 -59.4 26.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:neural_lace
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P230
+inspect me
+inspect aim
+report PAIR P230 act key use
+key use
+wait 12
+shot cw-P230
+wait 17
+inspect me
+report PAIR P230 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
+/fill 42 -60 18 60 -48 36 minecraft:air
+/fill 42 -61 18 60 -61 36 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P230
+
+# ---- P231: headinajar:neural_lace | BODY | vanilla mob (not a host)
+report PAIR P231 begin spot -72 48 expect BODY aim entity | headinajar:neural_lace | BODY | vanilla mob (not a host)
+/say PAIR P231
+/kill @e[type=minecraft:slime]
+/tp @s -71.5 -60 48.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon minecraft:pig -71.5 -60 50.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s -71.5 -60 48.5 0 30.3
+wait 3
+lookpos -71.5 -59.55 50.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:neural_lace
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P231
+inspect me
+inspect aim
+report PAIR P231 act key use
+key use
+wait 12
+shot cw-P231
+wait 17
+inspect me
+report PAIR P231 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
+/fill -78 -60 42 -60 -48 60 minecraft:air
+/fill -78 -61 42 -60 -61 60 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P231
+
+# ---- P232: headinajar:syringe | BODY | vanilla mob minecraft:pig | healthy
+report PAIR P232 begin spot -48 48 expect BODY aim entity:minecraft:pig | headinajar:syringe | BODY | vanilla mob minecraft:pig | healthy
+/say PAIR P232
+/kill @e[type=minecraft:slime]
+/tp @s -47.5 -60 48.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon minecraft:pig -47.5 -60 50.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s -47.5 -60 48.5 0 30.3
+wait 3
+lookpos -47.5 -59.55 50.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:syringe
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P232
+inspect me
+inspect aim
+report PAIR P232 act key use
+key use
+wait 12
+shot cw-P232
+wait 17
+inspect me
+report PAIR P232 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
+/fill -54 -60 42 -36 -48 60 minecraft:air
+/fill -54 -61 42 -36 -61 60 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P232
+
+# ---- P233: headinajar:syringe | BODY | vanilla mob minecraft:villager | healthy
+report PAIR P233 begin spot -24 48 expect BODY aim entity:minecraft:villager | headinajar:syringe | BODY | vanilla mob minecraft:villager | healthy
+/say PAIR P233
+/kill @e[type=minecraft:slime]
+/tp @s -23.5 -60 48.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon minecraft:villager -23.5 -60 50.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s -23.5 -60 48.5 0 19.8
+wait 3
+lookpos -23.5 -59.1 50.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:syringe
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P233
+inspect me
+inspect aim
+report PAIR P233 act key use
+key use
+wait 12
+shot cw-P233
+wait 17
+inspect me
+report PAIR P233 end
+/kill @s
+wait 15
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
+/fill -30 -60 42 -12 -48 60 minecraft:air
+/fill -30 -61 42 -12 -61 60 minecraft:grass_block
+wait 3
+/kill @e[type=minecraft:item,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
+/clear @s
+riding RESET-P233
+
+# ---- P234: headinajar:syringe | BODY | vanilla mob minecraft:skeleton
+report PAIR P234 begin spot 0 48 expect BODY aim entity:minecraft:skeleton | headinajar:syringe | BODY | vanilla mob minecraft:skeleton
+/say PAIR P234
+/kill @e[type=minecraft:slime]
+/tp @s 0.5 -60 48.5 0 0
+/effect give @s minecraft:resistance 999 4 true
+/effect give @s minecraft:saturation 999 0 true
+wait 5
+/summon minecraft:skeleton 0.5 -60 50.5 {NoAI:1b,Rotation:[180f,0f]}
+/clear @s
+wait 5
+/tp @s 0.5 -60 48.5 0 19.8
+wait 3
+lookpos 0.5 -59.1 50.5
+wait 10
+/item replace entity @s weapon.mainhand with headinajar:syringe
+/item replace entity @s weapon.offhand with minecraft:air
+wait 10
+riding PRE-P234
+inspect me
+inspect aim
+report PAIR P234 act key use
+key use
+wait 12
+shot cw-P234
+wait 17
+inspect me
+report PAIR P234 end
+/kill @s
+wait 15
 /kill @e[type=!minecraft:player,x=-6,y=-62,z=42,dx=18,dy=14,dz=18]
 /fill -6 -60 42 12 -48 60 minecraft:air
 /fill -6 -61 42 12 -61 60 minecraft:grass_block
 wait 3
 /kill @e[type=minecraft:item,x=-6,y=-62,z=42,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P204
+riding RESET-P234
 
 report WALK walk-05 done

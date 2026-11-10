@@ -208,6 +208,20 @@ def item_token(item, spec):
 
 # --------------------------------------------------------------------------- writing one pair
 
+def aim_point(r, spot):
+    """The point the crosshair should be on (None for the air)."""
+    aim = r.get("aim", "block")
+    tx, ty, tz = spot.block("T")
+    if aim == "air":
+        return None
+    if aim == "ground":
+        return (tx + 0.5, ty - 0.05, tz + 0.5)
+    if aim == "block":
+        # low on the block: a dock, a socket or a gantry's base is lower than half a block, and a jar's eye is at 0.5
+        return (tx + 0.5, ty + 0.15, tz + 0.5)
+    return (tx + aim[0], ty + aim[1], tz + aim[2])
+
+
 def aim_pitch(r, spot, eye):
     aim = r.get("aim", "block")
     sx, sy, sz = spot.block("S")
@@ -223,6 +237,23 @@ def aim_pitch(r, spot, eye):
         point = (tx + aim[0], ty + aim[1], tz + aim[2])
     dist = math.hypot(point[0] - px, point[2] - pz)
     return math.degrees(math.atan2((sy + eye) - point[1], dist))
+
+
+def aim_expect(r, spot):
+    """What the crosshair should be on when the click is made: block:X,Y,Z, entity[:ID], miss, or any."""
+    aim = r.get("aim", "block")
+    tx, ty, tz = spot.block("T")
+    if r.get("aim_check") == "block:T":
+        return f"block:{tx},{ty},{tz}"
+    if r.get("aim_check"):
+        return r["aim_check"]
+    if aim == "air":
+        return "miss"
+    if aim == "block":
+        return f"block:{tx},{ty},{tz}"
+    if aim == "ground":
+        return f"block:{tx},{ty - 1},{tz}"
+    return "entity" + (":" + r["mob"] if r.get("mob") else "")
 
 
 def hold_for(item, spec):
@@ -265,22 +296,38 @@ def pair_lines(r, index, spec, shots=True):
                                     r.get("form_name", ""), row["target"], row["setup"]) if x)
     label = label.replace("\t", " ")
     out = [f"# ---- {pid}: {label}"]
-    out.append(f"report PAIR {pid} begin spot {spot.x} {spot.z} expect {r.get('check', 'BODY')} | {label}")
+    out.append(f"report PAIR {pid} begin spot {spot.x} {spot.z} expect {r.get('check', 'BODY')} aim {aim_expect(r, spot)} | {label}")
     out.append(f"/say PAIR {pid}")
+    out.append("/kill @e[type=minecraft:slime]")
     out.append(E("/tp @s {SC} 0 0"))
     out.append("/effect give @s minecraft:resistance 999 4 true")
     out.append("/effect give @s minecraft:saturation 999 0 true")
     out.append("wait 5")
-    out += [E(x) for x in r.get("steps", [])]
+    steps = list(r.get("steps", []))
+    tset = [i for i, x in enumerate(steps) if x.startswith("/setblock {T} ")]
+    for i in tset[:-1]:
+        steps[i] = None
+    out += [E(x) for x in steps if x is not None]
     out.append("/clear @s")
     out.append("wait 5")
     out += [E(x) for x in r.get("form_steps", [])]
     out += [E(x) for x in r.get("late", [])]
+    given = 0
+    for i, x in enumerate(out):
+        m = re.match(r"/give @s (\S+)(?: (\d+))?$", x)
+        if m:
+            out[i] = f"/item replace entity @s inventory.{given} with {m.group(1)}" + (f" {m.group(2)}" if m.group(2) else "")
+            given += 1
     fixed = r.get("riding") or r.get("fixed")
     if fixed:
         out.append(f"look 0 {fmt(round(pitch, 1))}")
     else:
         out.append(E("/tp @s {SC} 0 " + fmt(round(pitch, 1))))
+    point = aim_point(r, spot)
+    if point:
+        # the computed pitch above assumes an eye height; lookpos aims from the real eye (riding, sneaking, jar)
+        out.append("wait 3")
+        out.append("lookpos " + " ".join(fmt(round(v, 2)) for v in point))
     out.append("wait 10")
     pre = [E(x) for x in r.get("pre", [])]
     if pre:
@@ -295,6 +342,12 @@ def pair_lines(r, index, spec, shots=True):
     if r["sneak"]:
         out.append("sneak down")
         out.append(f"wait {OBSERVE + 3}")
+        if point:
+            out.append("lookpos " + " ".join(fmt(round(v, 2)) for v in point))
+            out.append("wait 2")
+    out.append("inspect aim")
+    if r.get("aim", "block") == "block":
+        out.append(E("inspect block {T}"))
     out.append(f"report PAIR {pid} act {action_line}")
     out.append(action_line)
     out.append("wait 12")
@@ -359,6 +412,8 @@ wait 40
 /setworldspawn 0 -60 -130
 /forceload add -96 -112 96 112
 wait 40
+/kill @e[type=!minecraft:player]
+wait 5
 report WALK {name} {count} pairs
 """
 
@@ -431,7 +486,8 @@ VERBS = {
     "report": r"^report .+$",
     "riding": r"^riding \S+$",
     "look": rf"^look {F} {F}$",
-    "inspect": rf"^inspect (?:me|block {XYZ}|near \S+(?: {F})?)$",
+    "lookpos": rf"^lookpos {F} {F} {F}$",
+    "inspect": rf"^inspect (?:me|aim|block {XYZ}|near \S+(?: {F})?)$",
     "widget": r'^widget (?:"[^"]+"|#\d+|\S+)(?: (?:left|right|middle|shift|double|hold \d+))*$',
     "at": rf"^at (?:rel )?{F} {F}(?: (?:left|right|middle|shift|double|hold \d+))*$",
     "jar": r"^jar$", "separate": r"^separate$", "swap": r"^swap$", "pickup": r"^pickup$", "mount": r"^mount$",
@@ -564,6 +620,22 @@ def lint_files(paths):
 
 # --------------------------------------------------------------------------- main
 
+HEAD_GUARD_NOTE = ("the scene draws a jarred head before the click, and drawing any jarred head crashes the client "
+                   "(Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed")
+
+
+def head_risk(r, spec):
+    """'scene' if the set-up shows a jarred head (placed, racked, on a turret, mount or socket), 'item' if one is in a hand, else ''."""
+    lines = pair_lines(r, 0, spec, False)
+    act = next(i for i, x in enumerate(lines) if x.startswith(f"report PAIR {r['id']} act"))
+    for x in lines[:act]:
+        if re.match(r"(headblock|jarhead) ", x) or (x.startswith("/setblock") and "jarred_head" in x and re.search(r'Type:"[a-z]', x)):
+            return "scene"
+    if "jarred_head" in r["item"] or "jarred_head" in (r["offhand"] or ""):
+        return "item"
+    return ""
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pairs", default=os.path.join(HERE, "pairs.tsv"))
@@ -571,6 +643,8 @@ def main():
     ap.add_argument("--out", default=HERE)
     ap.add_argument("--only", help="comma-separated pair ids: write walk-only.txt with just these")
     ap.add_argument("--no-shots", action="store_true", help="no screenshot per pair")
+    ap.add_argument("--no-head-guard", action="store_true",
+                    help="walk every pair in the normal batches, also those whose scene draws a jarred head (use once drawing one no longer crashes the client)")
     ap.add_argument("--lint", action="store_true", help="lint the walk-*.txt files in --out (after generating)")
     ap.add_argument("--lint-only", action="store_true", help="lint existing files, do not regenerate")
     ap.add_argument("--list", action="store_true", help="print how each pair resolves")
@@ -581,7 +655,17 @@ def main():
     spec = load_spec(a.spec)
     rows = read_pairs(a.pairs)
     resolved = [resolve(r, spec) for r in rows]
-    ok = [r for r in resolved if "unreachable" not in r]
+    heads = []
+    if not a.no_head_guard:
+        for r in resolved:
+            if "unreachable" in r:
+                continue
+            risk = head_risk(r, spec)
+            if risk == "scene":
+                r["unreachable"] = HEAD_GUARD_NOTE
+            elif risk == "item":
+                heads.append(r)
+    ok = [r for r in resolved if "unreachable" not in r and r not in heads]
     bad = [r for r in resolved if "unreachable" in r]
     if a.list:
         for r in resolved:
@@ -622,6 +706,12 @@ def main():
             blocks = [pair_lines(r, i, spec, not a.no_shots) for i, r in enumerate(batch)]
             path = os.path.join(a.out, name + ".txt")
             write_script(path, name, blocks)
+            written.append(path)
+        # a jarred head in the hand may be placed or racked by the click, and drawing it crashes the client: one pair per run
+        for r in heads:
+            name = f"walk-h-{r['id']}"
+            path = os.path.join(a.out, name + ".txt")
+            write_script(path, name, [pair_lines(r, 0, spec, not a.no_shots)])
             written.append(path)
     write_index(os.path.join(a.out, "walk-index.tsv"), resolved, written)
     summary = []

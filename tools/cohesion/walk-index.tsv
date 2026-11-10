@@ -22,7 +22,7 @@ P020	walk-01@-48,-24	BODY	use	walked as BODY; the bare-jar case is a separate ro
 P021	walk-01@-24,-24	BODY	use	walked as BODY; the bare-jar case is a separate row	
 P022	walk-01@0,-24	BODY	use		
 P023	walk-01@24,-24	JAR	use		
-P024	walk-00@48,-72 walk-01@48,-24	BODY	widget "Print"		
+P024	walk-00@24,-72 walk-01@48,-24	BODY	widget "Print"		
 P025	walk-01@-72,0	JAR	widget "Print"		
 P026	walk-01@-48,0	BODY	widget "Inject"		
 P027	walk-01@-24,0	JAR	widget "Inject"		
@@ -34,372 +34,372 @@ P032	walk-01@-48,24	BODY	use
 P033	walk-01@-24,24	BODY	use		
 P034	walk-01@0,24	JAR	use	relay_mast only	
 P035	walk-01@24,24	BODY	use	walked as BODY	
-P036	walk-00@48,-96 walk-01@48,24	BODY	use		
-P037	walk-01@-72,48	BODY	use		
-P038	walk-01@-48,48	JAR	use		
-P039	walk-01@-24,48	BODY	use		
-P040	walk-01@0,48	BODY	use		
-P041	walk-02@-72,-96	BODY	use	the host is stored by a real empty-hand click first (the P039 click)	
+P036					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P037					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P038					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P039	walk-01@48,24	BODY	use		
+P040	walk-01@-72,48	BODY	use		
+P041	walk-01@-48,48	BODY	use	the host is stored by a real empty-hand click first (the P039 click)	
 P042					contradictory: a BODY-form player has no separate Headless Body of their own; walk it as a LINKED or JAR (with arm) row instead
-P043	walk-02@-48,-96	JAR	use		
-P044	walk-02@-24,-96	BODY	use	walked as BODY; a plain Blood Sample written into slot 0	
-P045	walk-02@0,-96	BODY	use	walked as BODY	
-P046	walk-02@24,-96	BODY	use	walked as BODY	
-P047	walk-02@48,-96	BODY	use	walked as BODY	
-P048	walk-02@-72,-72	BODY	use	walked as BODY	
-P049	walk-02@-48,-72	BODY	use	walked as BODY	
-P050	walk-02@-24,-72	JAR	use		
-P051	walk-02@0,-72	JAR	use		
-P052	walk-02@24,-72	BODY	use		
-P053	walk-02@48,-72	BODY	use		
-P054	walk-02@-72,-48	BODY	use	the stand-in jar plugs in by a real use packet	
-P055	walk-02@-48,-48	BODY	use		
-P056	walk-02@-24,-48	BODY	use	a click through a saline source block onto the ground under it; BODY form, a saline source block in front	
-P057	walk-02@0,-48	LINKED	use		
-P058	walk-02@24,-48	LINKED	use		
-P059	walk-02@48,-48	BODY	use	walked as BODY	
-P060	walk-02@-72,-24	LINKED	attack		
-P061	walk-02@-48,-24	BODY	attack		
-P062	walk-02@-24,-24	JAR	use		
+P043	walk-01@-24,48	JAR	use		
+P044	walk-01@0,48	BODY	use	walked as BODY; a plain Blood Sample written into slot 0	
+P045	walk-02@-72,-96	BODY	use	walked as BODY	
+P046					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P047	walk-02@-48,-96	BODY	use	walked as BODY	
+P048					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P049					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P050	walk-02@-24,-96	JAR	use		
+P051					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P052	walk-02@0,-96	BODY	use		
+P053					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P054	walk-02@24,-96	BODY	use	the stand-in jar plugs in by a real use packet	
+P055	walk-02@48,-96	BODY	use		
+P056	walk-02@-72,-72	BODY	use	a click through a saline source block onto the ground under it; BODY form, a saline source block in front	
+P057	walk-02@-48,-72	LINKED	use		
+P058	walk-02@-24,-72	LINKED	use		
+P059	walk-02@0,-72	BODY	use	walked as BODY	
+P060	walk-02@24,-72	LINKED	attack		
+P061	walk-02@48,-72	BODY	attack		
+P062	walk-02@-72,-48	JAR	use		
 P063					no verb sets neuro-link quality; needs e.g. 'quality N', or a head moved beyond goggle range in a force-loaded far chunk
-P064	walk-02@0,-24	JAR	use		
-P065	walk-02@24,-24	JAR	use		
-P066	walk-02@48,-24	HOSTED	use	host seat height estimated	
-P067	walk-02@-72,0	SOCKET	use		
-P068	walk-02@-48,0	BODY	use	walked as BODY	
-P069	walk-02@-24,0	BODY	use		
-P070	walk-02@0,0	BODY	use		
-P071	walk-02@24,0	BODY	attack	the stand-in player's body	
-P072	walk-00@-24,-96 walk-02@48,0	BODY	use		
-P073	walk-00@-48,-72 walk-02@-72,24	JAR	use		
-P074	walk-02@-48,24	JAR	use	the stand-in jar climbs on by a real use packet	
-P075	walk-02@-24,24	LINKED	use		
-P076	walk-02@0,24	LINKED	use		
-P077	walk-02@24,24	HOSTED	use	host seat height estimated	
+P064	walk-02@-48,-48	JAR	use		
+P065	walk-02@-24,-48	JAR	use		
+P066	walk-02@0,-48	HOSTED	use	host seat height estimated	
+P067	walk-02@24,-48	SOCKET	use		
+P068	walk-02@48,-48	BODY	use	walked as BODY	
+P069	walk-02@-72,-24	BODY	use		
+P070	walk-02@-48,-24	BODY	use		
+P071	walk-02@-24,-24	BODY	attack	the stand-in player's body	
+P072	walk-00@-24,-96 walk-02@0,-24	BODY	use		
+P073	walk-00@-72,-72 walk-02@24,-24	JAR	use		
+P074	walk-02@48,-24	JAR	use	the stand-in jar climbs on by a real use packet	
+P075	walk-02@-72,0	LINKED	use		
+P076	walk-02@-48,0	LINKED	use		
+P077	walk-02@-24,0	HOSTED	use	host seat height estimated	
 P078					needs the Brazil Legends mod in the dev client (no SMOKE_MODS group carries it)
-P079	walk-02@48,24	BODY	use	the Lunk only	
-P080	walk-00@-24,-72 walk-02@-72,48	BODY	use		
-P081	walk-02@-48,48	BODY	use	the Lunk only	
-P082	walk-02@-24,48	JAR	use		
-P083	walk-02@0,48	BODY	use		
-P084	walk-03@-72,-96	BODY	use		
-P085	walk-03@-48,-96	BODY	use	the stand-in player climbs in by a real use packet as a jar	
-P086	walk-03@-24,-96	BODY	use	the stand-in player climbs in by a real use packet as a jar; Wheelhouse with Hydraulic Legs (legs may not suit a wheeled frame)	
-P087	walk-00@24,-96 walk-03@0,-96	JAR	use		
-P088	walk-03@24,-96	JAR	use		
-P089	walk-03@48,-96	JAR	use	the stand-in player climbs in by a real use packet as a jar	
-P090	walk-03@-72,-72	JAR	use		
-P091	walk-03@-48,-72	BODY	use		
-P092	walk-00@-72,-72 walk-03@-24,-72	BODY	use	friend in BODY form	
-P093	walk-03@0,-72	JAR	attack	a stone block	
-P094	walk-03@24,-72	HOSTED	attack	host seat height estimated	
-P095	walk-03@48,-72	HOSTED	attack	host seat height estimated	
-P096	walk-03@-72,-48	PILOT	use	right click on a stone column (tall, so the estimated cockpit height still hits it); cockpit height estimated	
+P079	walk-02@0,0	BODY	use	the Lunk only	
+P080	walk-00@-48,-72 walk-02@24,0	BODY	use		
+P081	walk-02@48,0	BODY	use	the Lunk only	
+P082	walk-02@-72,24	JAR	use		
+P083	walk-02@-48,24	BODY	use		
+P084	walk-02@-24,24	BODY	use		
+P085	walk-02@0,24	BODY	use	the stand-in player climbs in by a real use packet as a jar	
+P086	walk-02@24,24	BODY	use	the stand-in player climbs in by a real use packet as a jar; Wheelhouse with Hydraulic Legs (legs may not suit a wheeled frame)	
+P087	walk-00@24,-96 walk-02@48,24	JAR	use		
+P088	walk-02@-72,48	JAR	use		
+P089	walk-02@-48,48	JAR	use	the stand-in player climbs in by a real use packet as a jar	
+P090	walk-02@-24,48	JAR	use		
+P091	walk-02@0,48	BODY	use		
+P092	walk-00@48,-96 walk-03@-72,-96	BODY	use	friend in BODY form	
+P093	walk-03@-48,-96	JAR	attack	a stone block	
+P094	walk-03@-24,-96	HOSTED	attack	host seat height estimated	
+P095	walk-03@0,-96	HOSTED	attack	host seat height estimated	
+P096	walk-03@24,-96	PILOT	use	right click on a stone column (tall, so the estimated cockpit height still hits it); cockpit height estimated	
 P097					no verb sets neuro-link quality; needs e.g. 'quality N', or a head moved beyond goggle range in a force-loaded far chunk
-P098	walk-03@-48,-48	JAR	use		
-P099	walk-00@-48,-96 walk-03@-24,-48	BODY	use		
-P100	walk-03@0,-48	BODY	use		
-P101	walk-00@0,-72 walk-03@24,-48	BODY	use		
-P102	walk-03@48,-48	BODY	use		
-P103	walk-03@-72,-24	BODY	use		
-P104	walk-03@-48,-24	BODY	use		
-P105	walk-03@-24,-24	BODY	use		
-P106	walk-03@0,-24	BODY	use	a summoned Wither with NoAI (no spawn invulnerability phase)	
-P107	walk-03@24,-24	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
-P108	walk-03@48,-24	BODY	use	Health set to 2 at summon (iron golem: 20)	
-P109	walk-03@-72,0	BODY	use	Health set to 2 at summon (iron golem: 20)	
-P110	walk-03@-48,0	BODY	use	Health set to 2 at summon (iron golem: 20)	
-P111	walk-03@-24,0	BODY	use		
-P112	walk-00@0,-96 walk-03@0,0	BODY	use		
-P113	walk-03@24,0	BODY	use		
-P114	walk-03@48,0	BODY	use	Health set to 2 at summon (iron golem: 20)	
-P115	walk-03@-72,24	BODY	use	the stand-in player's body	
-P116	walk-03@-48,24	BODY	use		
-P117	walk-03@-24,24	BODY	use		
-P118	walk-03@0,24	BODY	use		
-P119	walk-03@24,24	BODY	use		
-P120	walk-03@48,24	JAR	use	Health set to 2 at summon (iron golem: 20)	
-P121	walk-03@-72,48	JAR	use	Health set to 2 at summon (iron golem: 20)	
-P122	walk-03@-48,48	BODY	use		
-P123	walk-03@-24,48	LINKED	use		
-P124	walk-03@0,48	LINKED	use		
-P125	walk-04@-72,-96	JAR	use		
-P126	walk-04@-48,-96	JAR	use		
-P127	walk-04@-24,-96	JAR	use		
-P128	walk-00@24,-72 walk-04@0,-96	LINKED	use		
-P129	walk-04@24,-96	LINKED	use		
-P130	walk-04@48,-96	BODY	use		
-P131	walk-04@-72,-72	JAR	use		
-P132	walk-04@-48,-72	BODY	use		
-P133	walk-04@-24,-72	BODY	use	the friend picks up its head by a real use packet; LINKED body is 1.45 tall	
-P134	walk-04@0,-72	HOSTED	use	host seat height estimated	
-P135	walk-04@24,-72	BODY	use		
-P136	walk-04@48,-72	BODY	use		
-P137	walk-04@-72,-48	BODY	use	only the first sneak-click is walked	
-P138	walk-04@-48,-48	BODY	use		
-P139	walk-04@-24,-48	BODY	use		
-P140	walk-04@0,-48	BODY	use		
-P141	walk-04@24,-48	BODY	use		
-P142	walk-04@48,-48	BODY	use		
-P143	walk-04@-72,-24	BODY	use		
-P144	walk-04@-48,-24	BODY	use		
-P145	walk-04@-24,-24	BODY	use		
-P146	walk-04@0,-24	BODY	use		
-P147	walk-04@24,-24	BODY	use		
-P148	walk-04@48,-24	BODY	use		
-P149	walk-04@-72,0	BODY	use		
-P150	walk-04@-48,0	BODY	use		
-P151	walk-04@-24,0	BODY	use		
-P152	walk-04@0,0	BODY	use		
-P153	walk-04@24,0	BODY	use		
-P154	walk-04@48,0	BODY	use		
-P155	walk-04@-72,24	BODY	use		
-P156	walk-04@-48,24	BODY	use		
-P157	walk-04@-24,24	BODY	use		
-P158	walk-04@0,24	BODY	use		
-P159	walk-04@24,24	BODY	use		
-P160	walk-04@48,24	BODY	use		
-P161	walk-04@-72,48	BODY	use	the Saline Mixer stands in for every machine	
-P162	walk-04@-48,48	BODY	use	the Lunk only	
-P163	walk-04@-24,48	BODY	use		
-P164	walk-04@0,48	BODY	use		
-P165	walk-05@-72,-96	BODY	use		
-P166	walk-05@-48,-96	BODY	use		
-P167	walk-05@-24,-96	BODY	use		
-P168	walk-05@0,-96	BODY	use		
-P169	walk-05@24,-96	BODY	use	zombie only	
-P170	walk-05@48,-96	BODY	use		
-P171	walk-05@-72,-72	BODY	use		
-P172	walk-05@-48,-72	BODY	use		
-P173	walk-05@-24,-72	BODY	use		
-P174	walk-05@0,-72	BODY	use		
-P175	walk-05@24,-72	BODY	use		
-P176	walk-05@48,-72	BODY	use		
-P177	walk-05@-72,-48	BODY	use		
-P178	walk-05@-48,-48	BODY	use		
-P179	walk-05@-24,-48	BODY	use		
-P180	walk-05@0,-48	BODY	use		
-P181	walk-05@24,-48	BODY	use		
-P182	walk-05@48,-48	BODY	use		
-P183	walk-05@-72,-24	BODY	use		
-P184	walk-05@-48,-24	BODY	use		
-P185	walk-05@-24,-24	BODY	use		
-P186	walk-05@0,-24	BODY	use		
-P187	walk-05@24,-24	BODY	use		
-P188	walk-05@48,-24	BODY	use		
-P189	walk-05@-72,0	BODY	use		
-P190	walk-05@-48,0	LINKED	use		
-P191	walk-05@-24,0	LINKED	use	the head is docked by a real empty-hand click first (the P010 click); if P010 fails this row is not reached	
-P192	walk-05@0,0	BODY	use		
-P193	walk-05@24,0	LINKED	use		
-P194	walk-05@48,0	BODY	use		
-P195	walk-05@-72,24	JAR	use	the /headoffice-detach case (plain body, no collar)	
-P196	walk-05@-48,24	BODY	use		
-P197	walk-05@-24,24	LINKED	use		
-P198	walk-05@0,24	BODY	use		
-P199	walk-05@24,24	JAR	use		
-P200	walk-05@48,24	LINKED	use		
-P201	walk-05@-72,48	LINKED	use		
-P202	walk-05@-48,48	BODY	use		
-P203	walk-05@-24,48	JAR	use	saline is NOT lowered (no verb sets jar saline; JarState lives in player attachments /data cannot edit)	
-P204	walk-05@0,48	BODY	use		
-P205	walk-06@-72,-96	LINKED	use	saline is NOT lowered (no verb sets jar saline; JarState lives in player attachments /data cannot edit)	
-P206	walk-06@-48,-96	LINKED	use		
-P207	walk-06@-24,-96	BODY	use		
-P208	walk-06@0,-96	BODY	use		
-P209	walk-06@24,-96	BODY	use		
-P210	walk-06@48,-96	BODY	use		
-P211	walk-06@-72,-72	BODY	use		
-P212	walk-06@-48,-72	BODY	use		
-P213	walk-06@-24,-72	BODY	use	the friend's saline is NOT lowered (no verb)	
-P214	walk-06@0,-72	BODY	use	the friend's saline is NOT lowered (no verb)	
-P215	walk-06@24,-72	BODY	use		
-P216	walk-06@48,-72	JAR	use	integrity is NOT lowered (no verb sets Jar Integrity)	
-P217	walk-06@-72,-48	LINKED	use	integrity is NOT lowered (no verb sets Jar Integrity)	
-P218	walk-06@-48,-48	BODY	use		
-P219	walk-06@-24,-48	BODY	use		
-P220	walk-06@0,-48	BODY	use	the friend's integrity is NOT lowered (no verb)	
-P221	walk-06@24,-48	BODY	use	the friend's integrity is NOT lowered (no verb)	
-P222	walk-06@48,-48	BODY	use		
-P223	walk-06@-72,-24	BODY	use	the Lunk only	
-P224	walk-06@-48,-24	JAR	use		
-P225	walk-06@-24,-24	JAR	use		
-P226	walk-06@0,-24	BODY	use		
-P227	walk-06@24,-24	BODY	use		
-P228	walk-06@48,-24	BODY	use	host data rewritten by /data merge on the server; the client copy is not resynced	
-P229	walk-06@-72,0	BODY	use	host data rewritten by /data merge on the server; the client copy is not resynced	
-P230	walk-06@-48,0	BODY	use	the Lunk	
-P231	walk-06@-24,0	BODY	use		
-P232	walk-06@0,0	BODY	use		
-P233	walk-06@24,0	BODY	use		
-P234	walk-06@48,0	BODY	use		
-P235	walk-06@-72,24	BODY	use		
-P236	walk-06@-48,24	BODY	use		
-P237	walk-06@-24,24	BODY	use		
-P238	walk-06@0,24	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
-P239	walk-06@24,24	BODY	use		
-P240	walk-06@48,24	BODY	use		
-P241	walk-06@-72,48	BODY	use		
-P242	walk-06@-48,48	BODY	use		
-P243	walk-06@-24,48	BODY	use		
-P244	walk-06@0,48	BODY	use		
-P245	walk-07@-72,-96	BODY	use		
-P246	walk-07@-48,-96	BODY	use		
-P247	walk-07@-24,-96	BODY	use		
-P248	walk-07@0,-96	BODY	use	the stand-in player's body	
-P249	walk-07@24,-96	BODY	use		
-P250	walk-07@48,-96	JAR	use		
-P251	walk-07@-72,-72	BODY	use		
-P252	walk-07@-48,-72	BODY	use		
-P253	walk-07@-24,-72	BODY	use		
-P254	walk-07@0,-72	BODY	use		
-P255	walk-07@24,-72	JAR	use		
-P256	walk-07@48,-72	BODY	use		
-P257	walk-07@-72,-48	BODY	use		
-P258	walk-07@-48,-48	BODY	use		
+P098	walk-03@48,-96	JAR	use		
+P099	walk-00@-48,-96 walk-03@-72,-72	BODY	use		
+P100	walk-03@-48,-72	BODY	use		
+P101	walk-00@-24,-72 walk-03@-24,-72	BODY	use		
+P102	walk-03@0,-72	BODY	use		
+P103	walk-03@24,-72	BODY	use		
+P104	walk-03@48,-72	BODY	use		
+P105	walk-03@-72,-48	BODY	use		
+P106	walk-03@-48,-48	BODY	use	a summoned Wither with NoAI (no spawn invulnerability phase)	
+P107	walk-03@-24,-48	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
+P108	walk-03@0,-48	BODY	use	Health set to 2 at summon (iron golem: 20)	
+P109	walk-03@24,-48	BODY	use	Health set to 2 at summon (iron golem: 20)	
+P110	walk-03@48,-48	BODY	use	Health set to 2 at summon (iron golem: 20)	
+P111	walk-03@-72,-24	BODY	use		
+P112	walk-00@0,-96 walk-03@-48,-24	BODY	use		
+P113	walk-03@-24,-24	BODY	use		
+P114	walk-03@0,-24	BODY	use	Health set to 2 at summon (iron golem: 20)	
+P115	walk-03@24,-24	BODY	use	the stand-in player's body	
+P116	walk-03@48,-24	BODY	use		
+P117	walk-03@-72,0	BODY	use		
+P118	walk-03@-48,0	BODY	use		
+P119	walk-03@-24,0	BODY	use		
+P120	walk-03@0,0	JAR	use	Health set to 2 at summon (iron golem: 20)	
+P121	walk-03@24,0	JAR	use	Health set to 2 at summon (iron golem: 20)	
+P122	walk-03@48,0	BODY	use		
+P123	walk-03@-72,24	LINKED	use		
+P124	walk-03@-48,24	LINKED	use		
+P125	walk-03@-24,24	JAR	use		
+P126	walk-03@0,24	JAR	use		
+P127	walk-03@24,24	JAR	use		
+P128	walk-00@0,-72 walk-03@48,24	LINKED	use		
+P129	walk-03@-72,48	LINKED	use		
+P130	walk-03@-48,48	BODY	use		
+P131	walk-03@-24,48	JAR	use		
+P132	walk-03@0,48	BODY	use		
+P133	walk-04@-72,-96	BODY	use	the friend picks up its head by a real use packet; LINKED body is 1.45 tall	
+P134	walk-04@-48,-96	HOSTED	use	host seat height estimated	
+P135	walk-04@-24,-96	BODY	use		
+P136	walk-04@0,-96	BODY	use		
+P137	walk-04@24,-96	BODY	use	only the first sneak-click is walked	
+P138	walk-04@48,-96	BODY	use		
+P139	walk-04@-72,-72	BODY	use		
+P140	walk-04@-48,-72	BODY	use		
+P141	walk-04@-24,-72	BODY	use		
+P142	walk-04@0,-72	BODY	use		
+P143	walk-04@24,-72	BODY	use		
+P144	walk-04@48,-72	BODY	use		
+P145	walk-04@-72,-48	BODY	use		
+P146	walk-04@-48,-48	BODY	use		
+P147	walk-04@-24,-48	BODY	use		
+P148	walk-04@0,-48	BODY	use		
+P149	walk-04@24,-48	BODY	use		
+P150	walk-04@48,-48	BODY	use		
+P151	walk-04@-72,-24	BODY	use		
+P152	walk-04@-48,-24	BODY	use		
+P153	walk-04@-24,-24	BODY	use		
+P154	walk-04@0,-24	BODY	use		
+P155	walk-04@24,-24	BODY	use		
+P156	walk-04@48,-24	BODY	use		
+P157					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P158					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P159	walk-04@-72,0	BODY	use		
+P160					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P161	walk-04@-48,0	BODY	use	the Saline Mixer stands in for every machine	
+P162	walk-04@-24,0	BODY	use	the Lunk only	
+P163	walk-h-P163@-72,-96	BODY	use		
+P164	walk-h-P164@-72,-96	BODY	use		
+P165					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P166	walk-h-P166@-72,-96	BODY	use		
+P167	walk-h-P167@-72,-96	BODY	use		
+P168					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P169	walk-h-P169@-72,-96	BODY	use	zombie only	
+P170	walk-h-P170@-72,-96	BODY	use		
+P171					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P172	walk-h-P172@-72,-96	BODY	use		
+P173					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P174	walk-h-P174@-72,-96	BODY	use		
+P175	walk-h-P175@-72,-96	BODY	use		
+P176	walk-h-P176@-72,-96	BODY	use		
+P177	walk-h-P177@-72,-96	BODY	use		
+P178	walk-04@0,0	BODY	use		
+P179	walk-04@24,0	BODY	use		
+P180	walk-04@48,0	BODY	use		
+P181	walk-04@-72,24	BODY	use		
+P182	walk-04@-48,24	BODY	use		
+P183	walk-04@-24,24	BODY	use		
+P184	walk-04@0,24	BODY	use		
+P185	walk-04@24,24	BODY	use		
+P186	walk-04@48,24	BODY	use		
+P187	walk-04@-72,48	BODY	use		
+P188	walk-04@-48,48	BODY	use		
+P189	walk-04@-24,48	BODY	use		
+P190	walk-04@0,48	LINKED	use		
+P191	walk-05@-72,-96	LINKED	use	the head is docked by a real empty-hand click first (the P010 click); if P010 fails this row is not reached	
+P192	walk-05@-48,-96	BODY	use		
+P193	walk-05@-24,-96	LINKED	use		
+P194	walk-05@0,-96	BODY	use		
+P195	walk-05@24,-96	JAR	use	the /headoffice-detach case (plain body, no collar)	
+P196	walk-05@48,-96	BODY	use		
+P197	walk-05@-72,-72	LINKED	use		
+P198	walk-05@-48,-72	BODY	use		
+P199	walk-05@-24,-72	JAR	use		
+P200	walk-05@0,-72	LINKED	use		
+P201	walk-05@24,-72	LINKED	use		
+P202	walk-05@48,-72	BODY	use		
+P203	walk-05@-72,-48	JAR	use	saline is NOT lowered (no verb sets jar saline; JarState lives in player attachments /data cannot edit)	
+P204	walk-05@-48,-48	BODY	use		
+P205	walk-05@-24,-48	LINKED	use	saline is NOT lowered (no verb sets jar saline; JarState lives in player attachments /data cannot edit)	
+P206	walk-05@0,-48	LINKED	use		
+P207	walk-05@24,-48	BODY	use		
+P208	walk-05@48,-48	BODY	use		
+P209	walk-05@-72,-24	BODY	use		
+P210	walk-05@-48,-24	BODY	use		
+P211					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P212					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P213	walk-05@-24,-24	BODY	use	the friend's saline is NOT lowered (no verb)	
+P214	walk-05@0,-24	BODY	use	the friend's saline is NOT lowered (no verb)	
+P215	walk-05@24,-24	BODY	use		
+P216	walk-05@48,-24	JAR	use	integrity is NOT lowered (no verb sets Jar Integrity)	
+P217	walk-05@-72,0	LINKED	use	integrity is NOT lowered (no verb sets Jar Integrity)	
+P218					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P219					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P220	walk-05@-48,0	BODY	use	the friend's integrity is NOT lowered (no verb)	
+P221	walk-05@-24,0	BODY	use	the friend's integrity is NOT lowered (no verb)	
+P222	walk-05@0,0	BODY	use		
+P223	walk-05@24,0	BODY	use	the Lunk only	
+P224	walk-05@48,0	JAR	use		
+P225	walk-05@-72,24	JAR	use		
+P226	walk-05@-48,24	BODY	use		
+P227	walk-05@-24,24	BODY	use		
+P228	walk-05@0,24	BODY	use	host data rewritten by /data merge on the server; the client copy is not resynced	
+P229	walk-05@24,24	BODY	use	host data rewritten by /data merge on the server; the client copy is not resynced	
+P230	walk-05@48,24	BODY	use	the Lunk	
+P231	walk-05@-72,48	BODY	use		
+P232	walk-05@-48,48	BODY	use		
+P233	walk-05@-24,48	BODY	use		
+P234	walk-05@0,48	BODY	use		
+P235	walk-06@-72,-96	BODY	use		
+P236	walk-06@-48,-96	BODY	use		
+P237	walk-06@-24,-96	BODY	use		
+P238	walk-06@0,-96	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
+P239	walk-06@24,-96	BODY	use		
+P240	walk-06@48,-96	BODY	use		
+P241	walk-06@-72,-72	BODY	use		
+P242	walk-06@-48,-72	BODY	use		
+P243	walk-06@-24,-72	BODY	use		
+P244	walk-06@0,-72	BODY	use		
+P245	walk-06@24,-72	BODY	use		
+P246	walk-06@48,-72	BODY	use		
+P247	walk-06@-72,-48	BODY	use		
+P248	walk-06@-48,-48	BODY	use	the stand-in player's body	
+P249	walk-06@-24,-48	BODY	use		
+P250	walk-06@0,-48	JAR	use		
+P251	walk-06@24,-48	BODY	use		
+P252	walk-06@48,-48	BODY	use		
+P253	walk-06@-72,-24	BODY	use		
+P254	walk-06@-48,-24	BODY	use		
+P255	walk-06@-24,-24	JAR	use		
+P256	walk-06@0,-24	BODY	use		
+P257	walk-06@24,-24	BODY	use		
+P258	walk-06@48,-24	BODY	use		
 P259					contradictory: a BODY-form player has no separate idle body of their own (row says own idle body, form BODY); walk it as JAR (with arm) instead
-P260	walk-07@-24,-48	BODY	use		
-P261	walk-07@0,-48	BODY	use		
-P262	walk-07@24,-48	JAR	use		
-P263	walk-07@48,-48	BODY	use	the sawn pig only	
-P264	walk-07@-72,-24	BODY	use		
-P265	walk-07@-48,-24	BODY	use		
-P266	walk-07@-24,-24	BODY	use		
-P267	walk-07@0,-24	BODY	use		
-P268	walk-07@24,-24	BODY	use		
+P260	walk-06@-72,0	BODY	use		
+P261	walk-06@-48,0	BODY	use		
+P262	walk-06@-24,0	JAR	use		
+P263	walk-06@0,0	BODY	use	the sawn pig only	
+P264	walk-06@24,0	BODY	use		
+P265	walk-06@48,0	BODY	use		
+P266	walk-06@-72,24	BODY	use		
+P267					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+P268	walk-06@-48,24	BODY	use		
 P269					no verb puts a collar upgrade (Shielded Housing) on the stand-in player's Collar Cam; needs e.g. 'bystander collar UPGRADE'
-P270	walk-07@48,-24	JAR	use		
-P271	walk-07@-72,0	BODY	use		
-P272	walk-07@-48,0	BODY	use		
-P273	walk-07@-24,0	BODY	use		
-P274	walk-07@0,0	BODY	use	the stand-in player is the patient	
-P275	walk-07@24,0	BODY	use		
-P276	walk-07@48,0	BODY	use		
-P277	walk-07@-72,24	BODY	use		
-P278	walk-07@-48,24	BODY	use		
-P279	walk-07@-24,24	JAR	use		
-P280	walk-07@0,24	BODY	use		
-P281	walk-07@24,24	BODY	use		
-P282	walk-07@48,24	BODY	use		
-P283	walk-07@-72,48	BODY	use	the sawn pig only	
-P284	walk-07@-48,48	BODY	use		
-P285	walk-07@-24,48	BODY	use		
-P286	walk-07@0,48	BODY	use		
-P287	walk-08@-72,-96	BODY	use		
-P288	walk-08@-48,-96	BODY	use		
-P289	walk-08@-24,-96	BODY	use		
-P290	walk-08@0,-96	BODY	use		
-P291	walk-08@24,-96	BODY	use		
-P292	walk-08@48,-96	BODY	use		
-P293	walk-08@-72,-72	BODY	use		
-P294	walk-08@-48,-72	BODY	use		
-P295	walk-08@-24,-72	BODY	use		
-P296	walk-08@0,-72	BODY	use		
-P297	walk-08@24,-72	BODY	use		
-P298	walk-08@48,-72	BODY	use		
-P299	walk-08@-72,-48	BODY	use		
-P300	walk-08@-48,-48	BODY	use		
-P301	walk-08@-24,-48	BODY	use		
-P302	walk-08@0,-48	BODY	use	Centrifuge only	
-P303	walk-08@24,-48	BODY	use	Charging Dock only	
-P304	walk-08@48,-48	JAR	use		
-P305	walk-08@-72,-24	HOSTED	use	a stone block; host seat height estimated	
-P306	walk-08@-48,-24	SOCKET	use	a stone block stands in for anything	
-P307	walk-08@-24,-24	JAR	use		
-P308	walk-08@0,-24	JAR	use	Gene Wash stands in for every usable item	
-N001	walk-08@24,-24	LINKED	use		
-N002	walk-08@48,-24	JAR	use		
-N003	walk-08@-72,0	BODY	use		
-N004	walk-08@-48,0	BODY	use		
-N005	walk-08@-24,0	BODY	use	a plain Blood Sample written into slot 0	
-N006	walk-08@0,0	LINKED	use		
-N007	walk-08@24,0	BODY	use		
-N008	walk-08@48,0	JAR	use		
-N009	walk-08@-72,24	BODY	use		
-N010	walk-08@-48,24	BODY	use		
-N011	walk-08@-24,24	BODY	use		
-N012	walk-08@0,24	JAR	use		
-N013	walk-08@24,24	BODY	use		
-N014	walk-08@48,24	BODY	use		
-N015	walk-08@-72,48	BODY	use		
-N016	walk-08@-48,48	BODY	use		
-N017	walk-08@-24,48	BODY	use		
-N018	walk-08@0,48	BODY	use		
-N019	walk-09@-72,-96	BODY	use		
-N020	walk-09@-48,-96	BODY	use		
-N021	walk-09@-24,-96	BODY	use		
-N022	walk-09@0,-96	LINKED	use		
-N023	walk-09@24,-96	BODY	use		
-N024	walk-09@48,-96	BODY	use		
-N025	walk-09@-72,-72	BODY	use		
-N026	walk-09@-48,-72	BODY	use		
-N027	walk-09@-24,-72	JAR	use		
-N028	walk-09@0,-72	LINKED	use		
-N029	walk-09@24,-72	BODY	use		
-N030	walk-09@48,-72	BODY	use		
-N031	walk-09@-72,-48	BODY	use		
-N032	walk-09@-48,-48	BODY	use		
-N033	walk-09@-24,-48	BODY	use		
-N034	walk-09@0,-48	LINKED	use		
-N035	walk-09@24,-48	BODY	use		
-N036	walk-09@48,-48	BODY	use		
-N037	walk-09@-72,-24	BODY	use		
-N038	walk-09@-48,-24	BODY	use	the friend has NO genes (the genes verb works on the real player only)	
-N039	walk-09@-24,-24	JAR	use	genes given to the player before the head comes off; they move to the body	
-N040	walk-09@0,-24	LINKED	use		
-N041	walk-09@24,-24	BODY	use		
-N042	walk-09@48,-24	BODY	use		
-N043	walk-09@-72,0	BODY	use		
-N044	walk-09@-48,0	BODY	use		
-N045	walk-09@-24,0	BODY	use	friend in BODY form	
-N046	walk-09@0,0	JAR	use	a plain body with no collar; no verb makes a crooked collar	
-N047	walk-09@24,0	LINKED	use		
-N048	walk-09@48,0	BODY	use		
-N049	walk-09@-72,24	BODY	use		
-N050	walk-09@-48,24	BODY	use		
-N051	walk-09@-24,24	JAR	use		
-N052	walk-09@0,24	LINKED	use		
+P270	walk-06@-24,24	JAR	use		
+P271	walk-06@0,24	BODY	use		
+P272	walk-06@24,24	BODY	use		
+P273	walk-06@48,24	BODY	use		
+P274	walk-06@-72,48	BODY	use	the stand-in player is the patient	
+P275	walk-06@-48,48	BODY	use		
+P276	walk-06@-24,48	BODY	use		
+P277	walk-06@0,48	BODY	use		
+P278	walk-07@-72,-96	BODY	use		
+P279	walk-07@-48,-96	JAR	use		
+P280	walk-07@-24,-96	BODY	use		
+P281	walk-07@0,-96	BODY	use		
+P282	walk-07@24,-96	BODY	use		
+P283	walk-07@48,-96	BODY	use	the sawn pig only	
+P284	walk-07@-72,-72	BODY	use		
+P285	walk-07@-48,-72	BODY	use		
+P286	walk-07@-24,-72	BODY	use		
+P287	walk-07@0,-72	BODY	use		
+P288	walk-07@24,-72	BODY	use		
+P289	walk-07@48,-72	BODY	use		
+P290	walk-07@-72,-48	BODY	use		
+P291	walk-07@-48,-48	BODY	use		
+P292	walk-07@-24,-48	BODY	use		
+P293	walk-07@0,-48	BODY	use		
+P294	walk-07@24,-48	BODY	use		
+P295	walk-07@48,-48	BODY	use		
+P296	walk-07@-72,-24	BODY	use		
+P297	walk-07@-48,-24	BODY	use		
+P298	walk-07@-24,-24	BODY	use		
+P299	walk-07@0,-24	BODY	use		
+P300	walk-07@24,-24	BODY	use		
+P301	walk-07@48,-24	BODY	use		
+P302	walk-07@-72,0	BODY	use	Centrifuge only	
+P303	walk-07@-48,0	BODY	use	Charging Dock only	
+P304	walk-07@-24,0	JAR	use		
+P305	walk-07@0,0	HOSTED	use	a stone block; host seat height estimated	
+P306	walk-07@24,0	SOCKET	use	a stone block stands in for anything	
+P307	walk-07@48,0	JAR	use		
+P308	walk-07@-72,24	JAR	use	Gene Wash stands in for every usable item	
+N001	walk-07@-48,24	LINKED	use		
+N002	walk-07@-24,24	JAR	use		
+N003	walk-07@0,24	BODY	use		
+N004					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N005	walk-07@24,24	BODY	use	a plain Blood Sample written into slot 0	
+N006	walk-07@48,24	LINKED	use		
+N007					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N008	walk-07@-72,48	JAR	use		
+N009	walk-07@-48,48	BODY	use		
+N010	walk-07@-24,48	BODY	use		
+N011	walk-07@0,48	BODY	use		
+N012	walk-08@-72,-96	JAR	use		
+N013	walk-08@-48,-96	BODY	use		
+N014	walk-08@-24,-96	BODY	use		
+N015	walk-08@0,-96	BODY	use		
+N016	walk-08@24,-96	BODY	use		
+N017	walk-08@48,-96	BODY	use		
+N018	walk-08@-72,-72	BODY	use		
+N019					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N020	walk-08@-48,-72	BODY	use		
+N021	walk-08@-24,-72	BODY	use		
+N022	walk-08@0,-72	LINKED	use		
+N023					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N024	walk-08@24,-72	BODY	use		
+N025	walk-08@48,-72	BODY	use		
+N026	walk-08@-72,-48	BODY	use		
+N027	walk-08@-48,-48	JAR	use		
+N028	walk-08@-24,-48	LINKED	use		
+N029	walk-08@0,-48	BODY	use		
+N030	walk-08@24,-48	BODY	use		
+N031	walk-08@48,-48	BODY	use		
+N032					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N033	walk-08@-72,-24	BODY	use		
+N034	walk-08@-48,-24	LINKED	use		
+N035	walk-08@-24,-24	BODY	use		
+N036					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N037	walk-08@0,-24	BODY	use		
+N038	walk-08@24,-24	BODY	use	the friend has NO genes (the genes verb works on the real player only)	
+N039	walk-08@48,-24	JAR	use	genes given to the player before the head comes off; they move to the body	
+N040	walk-08@-72,0	LINKED	use		
+N041	walk-08@-48,0	BODY	use		
+N042					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N043	walk-08@-24,0	BODY	use		
+N044	walk-08@0,0	BODY	use		
+N045	walk-08@24,0	BODY	use	friend in BODY form	
+N046	walk-08@48,0	JAR	use	a plain body with no collar; no verb makes a crooked collar	
+N047	walk-08@-72,24	LINKED	use		
+N048	walk-08@-48,24	BODY	use		
+N049	walk-08@-24,24	BODY	use		
+N050					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N051	walk-h-N051@-72,-96	JAR	use		
+N052	walk-h-N052@-72,-96	LINKED	use		
 N053					the Shoulder Mount mecha module does not exist (cohesion idea 30, not registered)
-N054	walk-09@24,24	JAR	use		
-N055	walk-09@48,24	BODY	use		
-N056	walk-09@-72,48	BODY	use		
-N057	walk-09@-48,48	BODY	use		
-N058	walk-09@-24,48	BODY	use		
-N059	walk-09@0,48	BODY	use		
-N060	walk-10@-72,-96	BODY	use		
-N061	walk-10@-48,-96	BODY	use		
-N062	walk-10@-24,-96	BODY	use		
-N063	walk-10@0,-96	BODY	use		
-N064	walk-10@24,-96	BODY	use		
-N065	walk-10@48,-96	BODY	use		
-N066	walk-10@-72,-72	BODY	use		
-N067	walk-10@-48,-72	BODY	use	a plain Leyden Jar item; the shell's charge is not lowered	
-N068	walk-10@-24,-72	BODY	use	a plain Leyden Jar item; no charge is set on the item	
-N069	walk-10@0,-72	BODY	use	a plain Leyden Jar item; no charge is set on the item	
-N070	walk-10@24,-72	BODY	attack	the mecha is stored by a real empty-hand click first	
-N071	walk-10@48,-72	BODY	use		
+N054	walk-08@0,24	JAR	use		
+N055	walk-08@24,24	BODY	use		
+N056	walk-08@48,24	BODY	use		
+N057	walk-08@-72,48	BODY	use		
+N058					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N059	walk-08@-48,48	BODY	use		
+N060	walk-08@-24,48	BODY	use		
+N061	walk-08@0,48	BODY	use		
+N062	walk-09@-72,-96	BODY	use		
+N063	walk-09@-48,-96	BODY	use		
+N064					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N065					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N066					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N067	walk-09@-24,-96	BODY	use	a plain Leyden Jar item; the shell's charge is not lowered	
+N068	walk-09@0,-96	BODY	use	a plain Leyden Jar item; no charge is set on the item	
+N069	walk-09@24,-96	BODY	use	a plain Leyden Jar item; no charge is set on the item	
+N070	walk-09@48,-96	BODY	attack	the mecha is stored by a real empty-hand click first	
+N071	walk-09@-72,-72	BODY	use		
 N072					needs the Carry On mod in the dev client (not copied into libs-smoke)
 N073					needs the Carry On mod in the dev client (not copied into libs-smoke)
 N074					needs the Carry On mod in the dev client (not copied into libs-smoke)
-N075	walk-10@-72,-48	JAR	use		
-N076	walk-10@-48,-48	JAR	use		
-N077	walk-10@-24,-48	BODY	use		
-N078	walk-10@0,-48	LINKED	use		
-N079	walk-10@24,-48	BODY	use		
-N080	walk-10@48,-48	LINKED	use	tamed with no owner set	
-N081	walk-10@-72,-24	JAR	use	tamed with no owner set	
-N082	walk-10@-48,-24	LINKED	use		
-N083	walk-10@-24,-24	BODY	use		
-N084	walk-10@0,-24	JAR	use		
-N085	walk-10@24,-24	LINKED	use		
-N086	walk-10@48,-24	BODY	use		
-N087	walk-10@-72,0	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
-N088	walk-10@-48,0	BODY	use		
-N089	walk-10@-24,0	BODY	use		
-N090	walk-10@0,0	BODY	use		
-N091	walk-10@24,0	BODY	use		
-N092	walk-10@48,0	BODY	use		
-N093	walk-10@-72,24	BODY	use		
-N094	walk-10@-48,24	BODY	use		
-N095	walk-10@-24,24	JAR	use		
-N096	walk-10@0,24	JAR	use	the stand-in player climbs in by a real use packet as a jar	
+N075	walk-09@-48,-72	JAR	use		
+N076	walk-09@-24,-72	JAR	use		
+N077	walk-h-N077@-72,-96	BODY	use		
+N078	walk-09@0,-72	LINKED	use		
+N079	walk-h-N079@-72,-96	BODY	use		
+N080	walk-09@24,-72	LINKED	use	tamed with no owner set	
+N081	walk-09@48,-72	JAR	use	tamed with no owner set	
+N082	walk-09@-72,-48	LINKED	use		
+N083					the scene draws a jarred head before the click, and drawing any jarred head crashes the client (Pose stack not empty: JarRenderer.drawWith pops one pose more than it pushes); walk with --no-head-guard once fixed
+N084	walk-09@-48,-48	JAR	use		
+N085	walk-09@-24,-48	LINKED	use		
+N086	walk-09@0,-48	BODY	use		
+N087	walk-09@24,-48	BODY	use	a summoned Ender Dragon in the overworld; its parts make the aim approximate	
+N088	walk-09@48,-48	BODY	use		
+N089	walk-09@-72,-24	BODY	use		
+N090	walk-09@-48,-24	BODY	use		
+N091	walk-09@-24,-24	BODY	use		
+N092	walk-09@0,-24	BODY	use		
+N093	walk-09@24,-24	BODY	use		
+N094	walk-09@48,-24	BODY	use		
+N095	walk-09@-72,0	JAR	use		
+N096	walk-09@-48,0	JAR	use	the stand-in player climbs in by a real use packet as a jar	
