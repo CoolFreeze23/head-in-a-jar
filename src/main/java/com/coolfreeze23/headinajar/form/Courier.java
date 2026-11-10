@@ -20,8 +20,9 @@ import java.util.Set;
 /**
  * The Noggin & Sons Courier: the safety net for a head stranded away from its body. From the jar menu (or
  * /headoffice courier) a jar books a delivery; 30 seconds later the body (or its corpse) is set down beside the head,
- * from anywhere, even another dimension or an unloaded chunk. The fee is a fifth of the jar's charge, refunded when the
- * body can't be found or the booking lapses.
+ * from anywhere, even another dimension or an unloaded chunk. The fee is a fifth of a full basic jar (20 kFE), or all the
+ * charge there is when the jar has less: the Courier never refuses a rescue. It is refunded when the body can't be found
+ * or the booking lapses.
  */
 public final class Courier {
     public static final int DELIVERY_TICKS = 600;
@@ -69,10 +70,15 @@ public final class Courier {
         String result = book(player);
         String reason = result.substring("courier.headinajar.".length());
         switch (reason) {
-            case "booked" -> Network.refused(player, Component.translatable(result));
+            case "booked" -> Network.refused(player, booked(player));
             case "no_body" -> Refusals.deny(player, "courier.no_body", Component.translatable("block.headinajar.body_printer"));
             default -> Refusals.deny(player, "courier." + reason);
         }
+    }
+
+    /** The confirmation of a booking, with the fee it took (all there was, when the jar had less than the fee). */
+    public static Component booked(ServerPlayer player) {
+        return Component.translatable("courier.headinajar.booked_fee", String.format(java.util.Locale.ROOT, "%,d", player.getPersistentData().getInt(FEE)));
     }
 
     /** Loads the body's chunk for the delivery: its entities load a moment after the chunk does. */

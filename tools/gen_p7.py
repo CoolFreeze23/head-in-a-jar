@@ -97,8 +97,8 @@ GENES = {
 
 # key: (event or None for the root, parent, icon, frame, en title, en description, pt title, pt description)
 ADVANCEMENTS = {
-    'root': (None, None, 'headinajar:surgical_steel_ingot', 'task', 'Orientation Day', 'Make your first Surgical Steel',
-             'Dia de Integração', 'Faça seu primeiro Aço Cirúrgico'),
+    'root': (None, None, 'headinajar:surgical_steel_ingot', 'task', 'Orientation Day', 'Smelt a Surgical Steel Blend (iron ingot, bone meal and coal) into Surgical Steel',
+             'Dia de Integração', 'Funda uma Mistura de Aço Cirúrgico (lingote de ferro, farinha de osso e carvão) em Aço Cirúrgico'),
     'signed': ('signed', 'root', 'headinajar:separation_chair', 'task', 'Signed in Triplicate', 'Sign Form 27-B in the Separation Chair',
                'Assinado em Três Vias', 'Assine o Formulário 27-B na Cadeira de Separação'),
     'separated': ('separated', 'signed', 'headinajar:life_support_jar', 'task', 'Head Start', 'Lose your head, on purpose',
@@ -161,10 +161,10 @@ HANDBOOK = {
 ENTRIES = [
     ('separation', 'getting_home', 'headinajar:wheels', 'Getting Home',
      ['Walk too far and the link breaks: you wake up in your head. A jar with the $(item)Wheels$() module drives at half walking speed: press $(k:key.headinajar.drive). Without wheels the same key tips the jar on its side so it can roll, very, very slowly.',
-      'Stranded anyway? Press $(l)Courier$() in the jar menu. A Noggin & Sons courier delivers your body to your head in 30 seconds, from anywhere, for a fifth of your charge. Then press $(k:key.headinajar.swap).'],
+      'Stranded anyway? Press $(l)Courier$() in the jar menu. A Noggin & Sons courier delivers your body to your head in 30 seconds, from anywhere, for 20 kFE of charge (or all you have, if less). Then press $(k:key.headinajar.swap).'],
      'Voltando para Casa',
      ['Ande longe demais e a conexão cai: você acorda na sua cabeça. Um pote com o módulo $(item)Rodinhas$() anda à metade da velocidade de caminhada: aperte $(k:key.headinajar.drive). Sem rodinhas, a mesma tecla tomba o pote de lado para ele rolar, bem, bem devagar.',
-      'Sem saída mesmo assim? Aperte $(l)Entregador$() no menu do pote. Um entregador da Noggin & Filhos leva seu corpo até sua cabeça em 30 segundos, de qualquer lugar, por um quinto da sua carga. Depois aperte $(k:key.headinajar.swap).']),
+      'Sem saída mesmo assim? Aperte $(l)Entregador$() no menu do pote. Um entregador da Noggin & Filhos leva seu corpo até sua cabeça em 30 segundos, de qualquer lugar, por 20 kFE de carga (ou toda a que houver, se for menos). Depois aperte $(k:key.headinajar.swap).']),
     ('hosting', 'the_saw', 'headinajar:surgical_saw', 'The Surgical Saw',
      ['Weaken a creature below a quarter of its health and use the $(item)Surgical Saw$() on it: its head comes off and its body stays up, ready for a jar. With an empty $(item)Life Support Jar$() in your off hand you keep the $(l)head$() instead.',
       'As a jar, use a host to climb on. It moves where you look, its own abilities answer $(k:key.headinajar.ability) and $(k:key.headinajar.secondary), and it slowly rots unless you embalm it. Sync grows the longer you pilot it.'],
@@ -215,8 +215,8 @@ LANG7 = [
      'Você tomba o pote. Role, bem devagar. Aperte V de novo para se endireitar.'),
     ('message.headinajar.upright', 'Upright again', 'De pé de novo'),
     ('gui.headinajar.courier', 'Courier', 'Entregador'),
-    ('gui.headinajar.courier.tooltip', 'Stranded? A Noggin & Sons courier brings your body to your head in 30 seconds, from anywhere. Fee: a fifth of your charge.',
-     'Sem saída? Um entregador da Noggin & Filhos traz seu corpo até sua cabeça em 30 segundos, de qualquer lugar. Taxa: um quinto da sua carga.'),
+    ('gui.headinajar.courier.tooltip', 'Stranded? A Noggin & Sons courier brings your body to your head in 30 seconds, from anywhere. Fee: 20 kFE of charge, or all you have if less.',
+     'Sem saída? Um entregador da Noggin & Filhos traz seu corpo até sua cabeça em 30 segundos, de qualquer lugar. Taxa: 20 kFE de carga, ou toda a que houver se for menos.'),
     ('courier.headinajar.booked', 'Courier booked: your body arrives in 30 seconds', 'Entregador chamado: seu corpo chega em 30 segundos'),
     ('courier.headinajar.eta', 'Courier: %s seconds', 'Entregador: %s segundos'),
     ('courier.headinajar.delivered', 'Delivery for you: one body, slightly used. Press Swap to get back in.',

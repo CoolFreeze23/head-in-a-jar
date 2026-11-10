@@ -55,7 +55,7 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
             int y = topPos + JarMenu.MODULE_Y;
             graphics.blit(BACKGROUND, x - 1, y - 1, 176, 0, 18, 18);
         }
-        float fraction = state.charge() / (float) JarState.maxCharge();
+        float fraction = state.charge() / (float) state.chargeCapacity();
         ChargeHud.drawBar(graphics, leftPos + 80, topPos + 61, 62, fraction);
     }
 
@@ -64,13 +64,21 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
         graphics.drawString(font, Component.translatable("gui.headinajar.modules"), JarMenu.MODULE_X, 18, 0x404040, false);
         JarState state = menu.state();
-        graphics.drawString(font, Component.translatable("gui.headinajar.charge", Math.round(100f * state.charge() / JarState.maxCharge())), 80, 50, 0x404040, false);
+        graphics.drawString(font, Component.translatable("gui.headinajar.charge", Math.round(100f * state.charge() / state.chargeCapacity())), 80, 50, 0x404040, false);
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+        // the empty feed slot says what it takes and what each is worth
+        if (hoveredSlot != null && hoveredSlot.index == JarState.MAX_SLOTS && !hoveredSlot.hasItem() && menu.getCarried().isEmpty()) {
+            graphics.renderComponentTooltip(font, java.util.List.of(Component.translatable("gui.headinajar.feed.title"),
+                    Component.translatable("gui.headinajar.feed.redstone", String.format(java.util.Locale.ROOT, "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE))),
+                            String.format(java.util.Locale.ROOT, "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE_BLOCK)))).withStyle(net.minecraft.ChatFormatting.GRAY),
+                    Component.translatable("gui.headinajar.feed.saline").withStyle(net.minecraft.ChatFormatting.GRAY)), mouseX, mouseY);
+            return;
+        }
         renderTooltip(graphics, mouseX, mouseY);
     }
 }
