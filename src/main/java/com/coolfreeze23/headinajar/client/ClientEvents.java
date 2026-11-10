@@ -140,7 +140,8 @@ public final class ClientEvents {
             // packet loss: a click doesn't arrive
             event.setCanceled(true);
             event.setSwingHand(false);
-            player.displayClientMessage(Component.translatable("hud.headinajar.packet_loss").withStyle(ChatFormatting.RED), true);
+            // shown on the link bar at once; the first few times a line says why, and what makes the link stronger
+            LinkHud.packetLost(player, state);
             return;
         }
         if (!state.form().isJarred()) return;
