@@ -208,6 +208,7 @@ public final class Network {
         });
         registrar.playToClient(Refused.TYPE, Refused.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.ClientRefusals.show(msg.line()));
         com.coolfreeze23.headinajar.host.HostFiles.register(registrar);
+        com.coolfreeze23.headinajar.fx.Fx.register(registrar);
         registrar.playToServer(RefuseRequest.TYPE, RefuseRequest.CODEC, (msg, ctx) -> {
             if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.feedback.Refusals.fromClient(player, msg.reason(), msg.target());
         });

@@ -175,6 +175,20 @@ final class Bystander {
                 player.setYHeadRot(player.getYRot());
                 return "bystander look";
             }
+            case "fit" -> {
+                // fit MODULE,...: jar modules in the stand-in's jar (for Telekinesis seen from outside)
+                String[] names = a[2].split(",");
+                var state = FormActions.state(player);
+                for (int i = 0; i < names.length; i++) {
+                    state.setModule(i, new ItemStack(ModRegistry.module(com.coolfreeze23.headinajar.module.ModuleType.valueOf(names[i].trim().toUpperCase(Locale.ROOT)))));
+                }
+                com.coolfreeze23.headinajar.network.Network.sync(player);
+                return "bystander fit " + a[2];
+            }
+            case "charge" -> {
+                FormActions.state(player).setCharge(Integer.parseInt(a[2]));
+                return "bystander charge " + a[2];
+            }
             case "gamemode" -> {
                 player.setGameMode(GameType.byName(a[2]));
                 return "bystander gamemode " + player.gameMode.getGameModeForPlayer();

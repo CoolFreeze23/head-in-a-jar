@@ -67,7 +67,10 @@ public final class HeadWorkRenderers {
 
         @Override
         public AABB getRenderBoundingBox(TurretPedestalBlockEntity t) {
-            return above(t.getBlockPos());
+            // a guardian head's lock beam reaches its target: the box covers it so culling never cuts the head mid-lock
+            // (the beam itself is drawn in the effect kit's pass, culled by its own box)
+            var target = t.lockId() >= 0 && t.getLevel() != null ? t.getLevel().getEntity(t.lockId()) : null;
+            return target == null ? above(t.getBlockPos()) : above(t.getBlockPos()).minmax(target.getBoundingBox());
         }
     }
 

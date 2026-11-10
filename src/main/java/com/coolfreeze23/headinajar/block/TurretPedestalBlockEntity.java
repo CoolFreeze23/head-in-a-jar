@@ -69,6 +69,9 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     private int cooldown, lockTicks, lockedId = -1;
     /** Client: where the head looks. */
     public float yaw, yawO;
+    /** A guardian head's lock: the target and the game time it began (synced on change; -1 when none). */
+    private int syncedLock = -1;
+    private long lockStart;
 
     public TurretPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.TURRET_BE.get(), pos, state);
@@ -124,7 +127,10 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
         EntityType<?> type = t.headInfo().type();
-        if (type == null || t.energy.getEnergyStored() < FE_PER_TICK) return;
+        if (type == null || t.energy.getEnergyStored() < FE_PER_TICK) {
+            t.showLock(-1);
+            return;
+        }
         t.energy.set(t.energy.getEnergyStored() - FE_PER_TICK);
         if (t.cooldown > 0) {
             t.cooldown--;
@@ -133,6 +139,8 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         LivingEntity target = t.findTarget();
         if (target == null) {
             t.lockTicks = 0;
+            t.lockedId = -1;
+            t.showLock(-1);
             return;
         }
         t.fire((ServerLevel) level, type, target);
@@ -169,15 +177,15 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 lockedId = target.getId();
                 lockTicks = 0;
             }
-            for (int i = 1; i < 10; i++) {
-                Vec3 p = from.add(dir.scale(i / 10.0));
-                level.sendParticles(ParticleTypes.BUBBLE, p.x, p.y, p.z, 1, 0, 0, 0, 0);
-            }
+            // the beam is drawn by every watching client from the synced lock: no particle packets
+            if (lockTicks == 0) showLock(lockedId);
             if (++lockTicks >= 40) {
                 target.hurt(level.damageSources().magic(), 6);
                 level.playSound(null, worldPosition, SoundEvents.GUARDIAN_ATTACK, SoundSource.BLOCKS, 1, 1);
+                com.coolfreeze23.headinajar.fx.Fx.send(level, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.TURRET_SHOT, to, null, -1, target.getId(), 0));
                 lockTicks = 0;
                 cooldown = rate(20);
+                showLock(-1);
             }
         } else if (type == EntityType.CREEPER) {
             if (target.distanceToSqr(from) > 9) return;
@@ -211,6 +219,36 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             cooldown = 20;
         }
         setChanged();
+    }
+
+    /** Tells watchers a lock began (target id) or ended (-1); sent only when it changes. */
+    private void showLock(int id) {
+        if (id == syncedLock || level == null || level.isClientSide) return;
+        syncedLock = id;
+        lockStart = level.getGameTime();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    /** Client: the locked target's id, or -1. */
+    public int lockId() {
+        return syncedLock;
+    }
+
+    /** Client: when the current lock began. */
+    public long lockStart() {
+        return lockStart;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && level.isClientSide) com.coolfreeze23.headinajar.client.fx.BlockBeams.loaded(this);
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && level.isClientSide) com.coolfreeze23.headinajar.client.fx.BlockBeams.unloaded(this);
     }
 
     /** Skeleton turrets take arrows from a container under (or beside) the pedestal. */
@@ -282,6 +320,11 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         MachineItems.load(items, tag.getCompound("Items"), registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
+        // only the update tag carries the lock; a saved turret starts without one
+        if (tag.contains("Lock")) {
+            syncedLock = tag.getInt("Lock");
+            lockStart = tag.getLong("LockStart");
+        }
     }
 
     @Override
@@ -289,6 +332,8 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         CompoundTag tag = new CompoundTag();
         tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
+        tag.putInt("Lock", syncedLock);
+        tag.putLong("LockStart", lockStart);
         return tag;
     }
 

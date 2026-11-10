@@ -138,6 +138,7 @@ import gen_p11_mecha; gen_p11_mecha.run(EN, PT, write, shaped)
 import gen_p12_machines; gen_p12_machines.run(EN, PT, write, shaped)  # machines, genetics, heads at work
 import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
+import gen_p14_effects; gen_p14_effects.run(EN, PT, write, shaped)  # the effect kit, Telekinesis, swap, laser, arcs
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

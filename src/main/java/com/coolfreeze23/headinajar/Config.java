@@ -92,6 +92,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue HANDSHAKE = C
             .comment("Play the Neural Handshake timing game when first mounting a host (off: a flat +5% sync).")
             .define("handshake", true);
+    public static final ModConfigSpec.IntValue SCREEN_SHAKE = C
+            .comment("How much the mod's effects may move the camera (shake, kicks, field-of-view pulls), in percent. The photosensitive option turns them all off.")
+            .defineInRange("screenShake", 100, 0, 100);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

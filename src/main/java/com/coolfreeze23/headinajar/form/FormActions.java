@@ -114,7 +114,10 @@ public final class FormActions {
         HeadlessBody body = leaveBody(player, false);
         registry.setBody(player.getUUID(), new HeadRegistry.Body(body.getUUID(), HeadRegistry.Spot.of(body), false));
         state.setBody(body.getUUID());
+        net.minecraft.server.level.ServerLevel bodyLevel = player.serverLevel();
+        Vec3 collar = body.position().add(0, LINKED_COLLAR, 0);
         becomeHead(player, state, head);
+        swapSeen(bodyLevel, collar, player.serverLevel(), player.getEyePosition(), body.getId(), player.getId(), -1);
         return true;
     }
 
@@ -179,7 +182,26 @@ public final class FormActions {
         }
         player.refreshDimensions();
         Network.sync(player);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.6f, 1.6f);
+        // body to head: the static wipe sweeps down (its click lands mid-wipe, 5 ticks in)
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.FxSounds.SWAP_DOWN.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+    }
+
+    /** Where a standing body's collar is, above its feet. */
+    private static final double LINKED_COLLAR = 1.3;
+
+    /**
+     * What a bystander sees of a swap: one memo near where the mind leaves (a mote from {@code from} to {@code to}, or
+     * straight up and away when the other end is over 32 blocks off or in another world), and one near where it arrives
+     * when that is far. {@code leftBehind} powers down, {@code entered} shakes awake; {@code dir} 1 head to body, -1 back.
+     */
+    private static void swapSeen(net.minecraft.server.level.ServerLevel fromLevel, Vec3 from, net.minecraft.server.level.ServerLevel toLevel, Vec3 to,
+                                 int leftBehind, int entered, int dir) {
+        boolean far = fromLevel != toLevel || from.distanceTo(to) > 32;
+        com.coolfreeze23.headinajar.fx.Fx.send(fromLevel, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.SWAP, from, to,
+                leftBehind, far ? -1 : entered, far ? 0 : dir));
+        if (far) {
+            com.coolfreeze23.headinajar.fx.Fx.send(toLevel, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.SWAP, to, to, -1, entered, 2));
+        }
     }
 
     /**
@@ -212,6 +234,8 @@ public final class FormActions {
         else placeHead(player, player.serverLevel(), player.position(), player.getYRot());
 
         Vec3 to = body.spot().pos();
+        net.minecraft.server.level.ServerLevel fromLevel = player.serverLevel();
+        Vec3 goggles = player.getEyePosition();
         // still a jar while it travels, so the link reaches a body in another dimension (an Entangled Pair)
         player.teleportTo(level, to.x, to.y, to.z, player.getYRot(), player.getXRot());
         state.setForm(Form.LINKED);
@@ -219,7 +243,10 @@ public final class FormActions {
         Network.sync(player);
         // the body entity steps into the player when it next ticks (its chunk may still be loading)
         if (level.getEntity(body.entity()) instanceof HeadlessBody entity) absorbBody(player, entity);
-        level.playSound(null, to.x, to.y, to.z, com.coolfreeze23.headinajar.registry.ModSounds.LINK_RESTORED.get(), SoundSource.PLAYERS, 0.8f, 1);
+        // head to body: the static wipe sweeps up, heard where the head was left and where the body wakes
+        fromLevel.playSound(null, goggles.x, goggles.y, goggles.z, com.coolfreeze23.headinajar.fx.FxSounds.SWAP_UP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, to.x, to.y, to.z, com.coolfreeze23.headinajar.fx.FxSounds.SWAP_UP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        swapSeen(fromLevel, goggles, level, to.add(0, LINKED_COLLAR, 0), -1, player.getId(), 1);
         return true;
     }
 

@@ -82,6 +82,7 @@ public class SmokeClient {
             NeoForge.EVENT_BUS.addListener(this::onTick);
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
             NeoForge.EVENT_BUS.addListener(frames::onFrame);
+            NeoForge.EVENT_BUS.register(Perf.class);
         }
     }
 
@@ -94,6 +95,7 @@ public class SmokeClient {
 
     private void onTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
+        Perf.tick();
         try {
             tick(mc);
         } catch (Exception e) {
@@ -228,6 +230,14 @@ public class SmokeClient {
                             + " model=" + (mc.getEntityRenderDispatcher().getRenderer(e) instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> r ? r.getModel().getClass().getSimpleName() : "-"));
                 }
             }
+            case "perf" -> {
+                // perf NAME TICKS: frame times over TICKS ticks (mean, median, p99); the script carries on
+                String[] args = parts[1].split(" ");
+                Perf.start(args[0], Integer.parseInt(args[1]), report::add);
+            }
+            case "fxstate" -> report.add("fxstate " + (parts.length > 1 ? parts[1] : "") + " -> tethers " + com.coolfreeze23.headinajar.client.fx.TetherFx.live()
+                    + ", loops " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + ", memos " + java.util.Arrays.toString(com.coolfreeze23.headinajar.client.fx.FxManager.HANDLED)
+                    + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "report" -> report.add(parts[1]);
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its

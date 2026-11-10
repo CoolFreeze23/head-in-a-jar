@@ -76,6 +76,9 @@ public final class PowerBlockEntities {
     public static class TeslaNode extends Powered {
         public static final int RANGE = 16;
         private BlockPos target;
+        /** Power moved over the link in the last 10 ticks; synced on change, so watchers draw the arc's bead. */
+        private boolean flowing;
+        private long lastFlow = -100;
 
         public TeslaNode(BlockPos pos, BlockState state) {
             super(ModRegistry.TESLA_BE.get(), pos, state, 10_000, 2_000);
@@ -88,9 +91,52 @@ public final class PowerBlockEntities {
         public void link(BlockPos target) {
             this.target = target;
             setChanged();
+            if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+
+        /** Client: power is moving over this node's link now. */
+        public boolean flowing() {
+            return flowing;
+        }
+
+        /** Client: the node at the other end is loaded here too, so the arc has both ends. */
+        public boolean linkedOnClient() {
+            return target != null && level != null && level.getBlockEntity(target) instanceof TeslaNode;
+        }
+
+        private void setFlowing(boolean now) {
+            if (now == flowing) return;
+            flowing = now;
+            if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+
+        @Override
+        public void onLoad() {
+            super.onLoad();
+            if (level != null && level.isClientSide) com.coolfreeze23.headinajar.client.fx.BlockBeams.loaded(this);
+        }
+
+        @Override
+        public void setRemoved() {
+            super.setRemoved();
+            if (level != null && level.isClientSide) com.coolfreeze23.headinajar.client.fx.BlockBeams.unloaded(this);
+        }
+
+        @Override
+        public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+            CompoundTag tag = new CompoundTag();
+            if (target != null) tag.putLong("Target", target.asLong());
+            tag.putBoolean("Flowing", flowing);
+            return tag;
+        }
+
+        @Override
+        public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+            return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
         }
 
         public static void tick(Level level, BlockPos pos, BlockState state, TeslaNode node) {
+            if (level.getGameTime() - node.lastFlow >= 10) node.setFlowing(false);
             if (node.target == null) {
                 push(level, pos, node.energy, 2_000, TeslaNode.class);
                 return;
@@ -102,17 +148,9 @@ public final class PowerBlockEntities {
             if (arriving <= 0) return;
             node.energy.set(node.energy.getEnergyStored() - arriving * 100 / 95);
             other.energy.set(other.energy.getEnergyStored() + arriving);
-            if (level.getGameTime() % 20 == 0 && level instanceof ServerLevel server) arc(server, pos, node.target);
-        }
-
-        private static void arc(ServerLevel level, BlockPos from, BlockPos to) {
-            Vec3 a = Vec3.atCenterOf(from).add(0, 0.4, 0), b = Vec3.atCenterOf(to).add(0, 0.4, 0);
-            int steps = (int) Math.max(4, a.distanceTo(b) * 2);
-            var r = level.random;
-            for (int i = 0; i <= steps; i++) {
-                Vec3 p = a.lerp(b, i / (double) steps);
-                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, p.x + r.nextGaussian() * 0.08, p.y + r.nextGaussian() * 0.08, p.z + r.nextGaussian() * 0.08, 1, 0, 0, 0, 0);
-            }
+            // the arc is drawn by every watching client from the link and this flag: no particle packets
+            node.lastFlow = level.getGameTime();
+            node.setFlowing(true);
         }
 
         @Override
@@ -125,6 +163,7 @@ public final class PowerBlockEntities {
         protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
             super.loadAdditional(tag, registries);
             target = tag.contains("Target") ? BlockPos.of(tag.getLong("Target")) : null;
+            flowing = tag.getBoolean("Flowing");
         }
     }
 
