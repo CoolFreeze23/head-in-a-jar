@@ -551,7 +551,7 @@ public class MachineRepairGameTests {
         h.succeed();
     }
 
-    // --- 9. the owner's pack ---------------------------------------------------------------------------------
+    // --- 9. living with other mods -----------------------------------------------------------------------------------
 
     @GameTest(template = "platform")
     public static void carryModsAreKeptOff(GameTestHelper h) {
