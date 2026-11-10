@@ -31,7 +31,8 @@ import java.util.List;
 
 /**
  * The Assembly Gantry: put a frame and modules in, press Assemble (10 kFE) and the mecha stands on the pad above.
- * Disassemble pulls a mecha on the pad back into the slots for editing; Repair spends Mecha Plating (20 HP each).
+ * Disassemble pulls a mecha on the pad back into the slots for editing; Repair spends Mecha Plating (20 HP each). A
+ * mecha standing on the pad charges from the Gantry's buffer.
  */
 public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvider, HasItems {
     public static final int SLOT_FRAME = 0, SLOT_PLATING = 1, FIRST_MODULE = 2, MODULE_SLOTS = MechaFrame.maxSlots();
@@ -105,6 +106,21 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
         return list.isEmpty() ? null : list.get(0);
     }
 
+    /** FE a tick the Gantry moves from its own buffer into a mecha standing on its pad (its intake rate). */
+    public static final int PAD_CHARGE = 5_000;
+
+    /** Every tick: a mecha on the pad, piloted or parked, charges from the Gantry's buffer; what it gains the Gantry loses. */
+    public static void serverTick(net.minecraft.world.level.Level level, BlockPos pos, BlockState state, AssemblyGantryBlockEntity gantry) {
+        if (gantry.energy.getEnergyStored() <= 0) return;
+        List<MechaEntity> list = level.getEntitiesOfClass(MechaEntity.class, new AABB(pos.above()).inflate(1, 2, 1), MechaEntity::isAlive);
+        if (list.isEmpty()) return;
+        MechaEntity mecha = list.get(0);
+        int moved = Math.max(0, Math.min(Math.min(PAD_CHARGE, gantry.energy.getEnergyStored()), mecha.batteryCapacity() - mecha.battery()));
+        if (moved <= 0) return;
+        mecha.setBattery(mecha.battery() + moved);
+        gantry.energy.set(gantry.energy.getEnergyStored() - moved);
+    }
+
     /** Whether a mecha with someone aboard stands on the pad (it can't be worked on until they get out). */
     private boolean padOccupied() {
         return level != null && !level.getEntitiesOfClass(MechaEntity.class, new AABB(worldPosition.above()).inflate(1, 2, 1), MechaEntity::isVehicle).isEmpty();
@@ -134,10 +150,10 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 mecha.setModules(modules);
                 com.coolfreeze23.headinajar.item.MechaFrameItem.genes(items.getStackInSlot(SLOT_FRAME)).ifPresent(g -> mecha.getData(ModRegistry.GENES).copyFrom(g));
                 mecha.setOwner(player.getUUID());
-                // the new battery holds what the Gantry gives it after the assembly (up to a quarter of the battery), and
-                // the Gantry is left with the rest
+                // the new battery holds what the Gantry has left after the assembly (as much as it takes), and the Gantry
+                // keeps the rest; the pad goes on charging it from there
                 int left = energy.getEnergyStored() - ASSEMBLE_COST;
-                int given = Math.max(0, Math.min(left, mecha.batteryCapacity() / 4));
+                int given = Math.max(0, Math.min(left, mecha.batteryCapacity()));
                 mecha.setBattery(given);
                 mecha.moveTo(worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, player.getYRot() + 180, 0);
                 mecha.setYBodyRot(player.getYRot() + 180);
@@ -161,7 +177,8 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 com.coolfreeze23.headinajar.item.MechaFrameItem.setGenes(frameStack, mecha.getData(ModRegistry.GENES));
                 items.setStackInSlot(SLOT_FRAME, frameStack);
                 for (int i = 0; i < mecha.modules().size(); i++) items.setStackInSlot(FIRST_MODULE + i, mecha.modules().get(i).copy());
-                energy.set(energy.getEnergyStored() + mecha.battery() / 10);
+                // the battery's charge comes back into the Gantry, as much as it has room for
+                energy.set(energy.getEnergyStored() + mecha.battery());
                 for (int i = 0; i < mecha.cargo().getContainerSize(); i++) net.minecraft.world.Containers.dropItemStack(level,
                         worldPosition.getX(), worldPosition.getY() + 1, worldPosition.getZ(), mecha.cargo().removeItemNoUpdate(i));
                 mecha.discard();
@@ -178,7 +195,8 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                     // smiths on staff make each plate go a third further
                     mecha.heal(20 / (1 - 0.25f * com.coolfreeze23.headinajar.block.HeadJobs.staff(level, worldPosition, "armorer", "weaponsmith", "toolsmith")));
                 }
-                // the charge moves from the Gantry into the battery: what the mecha gains, the Gantry loses
+                // the pad charges a mecha standing on it all the time; Repair also tops it up at once, honestly:
+                // the charge moves from the Gantry into the battery, what the mecha gains, the Gantry loses
                 int moved = Math.max(0, Math.min(energy.getEnergyStored(), mecha.batteryCapacity() - mecha.battery()));
                 mecha.setBattery(mecha.battery() + moved);
                 energy.set(energy.getEnergyStored() - moved);

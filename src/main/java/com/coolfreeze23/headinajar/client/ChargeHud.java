@@ -19,7 +19,7 @@ public final class ChargeHud {
         int y = graphics.guiHeight() - mc.gui.rightHeight + 2;
         int width = 81;
         int left = right - width;
-        float fraction = state.charge() / (float) JarState.maxCharge();
+        float fraction = state.charge() / (float) state.chargeCapacity();
         drawBar(graphics, left, y, width, fraction);
         mc.gui.rightHeight += 10;
         // saline (teal) and Jar Integrity (glass) under the charge

@@ -22,7 +22,7 @@ MODULES = {
                       ['GGG', 'PSP'], dict(G='glass', P='headinajar:mecha_plating', S='white_wool')),
     'radiator_fins': ('Radiator Fins', '+4 HU/t cooling.', 'Aletas de Radiador', '+4 HU/t de resfriamento.',
                       ['III', 'PPP'], dict(I='iron_bars', P='headinajar:mecha_plating')),
-    'battery_rack': ('Battery Rack', '+500 kFE battery.', 'Rack de Baterias', '+500 kFE de bateria.',
+    'battery_rack': ('Battery Rack', '+125 kFE battery.', 'Rack de Baterias', '+125 kFE de bateria.',
                      ['LLL', 'PPP'], dict(L='headinajar:leyden_jar', P='headinajar:mecha_plating')),
     'galvanic_stack': ('Galvanic Stack', 'Makes 10 FE/t, always.', 'Pilha Galvânica Compacta', 'Gera 10 FE/t, sempre.',
                        ['G', 'P'], dict(G='headinajar:galvanic_pile', P='headinajar:mecha_plating')),

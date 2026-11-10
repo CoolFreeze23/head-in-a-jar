@@ -28,7 +28,7 @@ def add(EN, PT, write, shaped):
     shaped('servo', [' P ', 'SWS'], dict(P='piston', S=S, W=W))
     shaped('excision_head', [' B ', 'VLH', ' R '], dict(B='headinajar:surgical_steel_block', V='headinajar:servo', L='headinajar:lens',
                                                        H='shears', R='redstone_block'))
-    shaped('booth_console', ['WPW', 'SCS', ' W '], dict(W=W, P='glass_pane', S=S, C='comparator'))
+    shaped('booth_console', ['WPW', 'SCS', ' W '], dict(W=W, P='glass_pane', S=S, C='repeater'))
     shaped('separation_chair', ['WEW', 'SWS', 'CVL'], dict(W='white_wool', E='headinajar:excision_head', S=S,
                                                            C='headinajar:booth_console', V='headinajar:servo', L='lever'))
     shaped('life_support_cradle', ['G G', 'W W', 'SSS'], dict(G='glass', W=W, S=S))

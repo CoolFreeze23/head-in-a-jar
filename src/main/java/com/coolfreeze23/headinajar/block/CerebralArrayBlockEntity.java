@@ -81,12 +81,22 @@ public class CerebralArrayBlockEntity extends LabMachine {
     /** FE/t right now, before broth: each head's output, +10% at a Board Meeting. */
     public int potential() {
         boolean boardRoom = !items.getStackInSlot(SLOT_CORE).isEmpty();
-        int sum = 0;
+        int sum = 0, working = 0;
+        boolean dragon = false;
         for (int i = 0; i < HEAD_SLOTS; i++) {
             ItemStack head = items.getStackInSlot(i);
-            sum += head.is(Items.DRAGON_HEAD) ? (boardRoom ? 1000 : 0) : HeadJobs.arrayOutput(headInfo(i).type());
+            if (head.isEmpty()) continue;
+            if (head.is(Items.DRAGON_HEAD)) {
+                // one chair at the head of the table: a second Dragon Head sits in and makes nothing
+                if (dragon) continue;
+                dragon = true;
+                sum += boardRoom ? HeadJobs.DRAGON_HEAD : 0;
+            } else {
+                sum += HeadJobs.arrayOutput(headInfo(i).type());
+            }
+            working++;
         }
-        return heads() >= MEETING ? Math.round(sum * 1.1f) : sum;
+        return working >= MEETING ? Math.round(sum * 1.1f) : sum;
     }
 
     public int output() {

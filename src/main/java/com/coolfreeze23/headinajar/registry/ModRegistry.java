@@ -160,7 +160,7 @@ public final class ModRegistry {
     // P4: Mecha Division
     public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity>> ASSEMBLY_GANTRY =
             BLOCKS.register("assembly_gantry", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.GANTRY_BE.get(), com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, null,
+                    () -> ModRegistry.GANTRY_BE.get(), com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::new, com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity::serverTick,
                     Block.box(0, 0, 0, 16, 6, 16)));
 
     // P5: Genetics Department

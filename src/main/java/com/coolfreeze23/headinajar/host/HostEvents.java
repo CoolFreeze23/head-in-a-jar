@@ -41,6 +41,8 @@ import java.util.Map;
 
 /** Host bodies over time: decay, sync, traits, and what happens around them. */
 public final class HostEvents {
+    /** FE a tick a Utility Shell takes from its pilot's jar (on top of the jar's idle drain): a full jar lasts about 17 minutes. */
+    public static final int SHELL_DRAIN = 3;
     private static final ResourceLocation STIFF = HeadInAJar.id("host_stiff");
     private static final ResourceLocation SYNCED = HeadInAJar.id("host_synced");
     private static final String FILE_PREFIX = "host_file_";
@@ -105,7 +107,7 @@ public final class HostEvents {
         attributes(host, def, data, sync);
         if (def != null && sync >= 25) traits(host, def, pilot);
         // a Utility Shell runs on the jar's charge; a mecha has its own battery
-        if (pilot != null && data.shell && !(host instanceof com.coolfreeze23.headinajar.entity.MechaEntity)) FormActions.state(pilot).spend(20);
+        if (pilot != null && data.shell && !(host instanceof com.coolfreeze23.headinajar.entity.MechaEntity)) FormActions.state(pilot).spend(SHELL_DRAIN);
         // a shell's or mecha's host data never changes after it is made: watchers got it when they started tracking
         if (time % 20 == 0 && !data.shell) Network.syncHost(host);
     }

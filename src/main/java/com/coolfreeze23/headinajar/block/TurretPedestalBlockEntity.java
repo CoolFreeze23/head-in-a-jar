@@ -45,12 +45,14 @@ import java.util.Comparator;
 import java.util.UUID;
 
 /**
- * A Turret Pedestal: a jarred mob head in a brass mount does what that mob does best, at range 16, for 10 FE/t.
+ * A Turret Pedestal: a jarred mob head in a brass mount does what that mob does best, at range 16, for 1 FE/t while it watches and 10 FE/t while it has a target.
  * Turrets never target their owner's team, players (unless the server allows PvP turrets), tamed animals, villagers or
  * golems.
  */
 public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder {
-    public static final int RANGE = 16, FE_PER_TICK = 10;
+    public static final int RANGE = 16, FE_PER_TICK = 10, IDLE_FE_PER_TICK = 1;
+    /** Has a target (shooting or reloading): runs at the firing rate. Not saved. */
+    private boolean engaged;
     private final Buffer energy = new Buffer(40_000, 2_000, 0, this::setChanged);
     private final ItemStackHandler items = new ItemStackHandler(1) {
         @Override
@@ -124,8 +126,14 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
         EntityType<?> type = t.headInfo().type();
-        if (type == null || t.energy.getEnergyStored() < FE_PER_TICK) return;
-        t.energy.set(t.energy.getEnergyStored() - FE_PER_TICK);
+        if (type == null) return;
+        // a watching turret ticks over at 1 FE/t; one with a target (shooting, or reloading between shots) runs at 10
+        int cost = t.engaged ? FE_PER_TICK : IDLE_FE_PER_TICK;
+        if (t.energy.getEnergyStored() < cost) {
+            t.engaged = false;
+            return;
+        }
+        t.energy.set(t.energy.getEnergyStored() - cost);
         if (t.cooldown > 0) {
             t.cooldown--;
             return;
@@ -133,7 +141,14 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         LivingEntity target = t.findTarget();
         if (target == null) {
             t.lockTicks = 0;
+            t.engaged = false;
             return;
+        }
+        if (!t.engaged) {
+            // waking up to fire: the rest of this tick's firing power
+            if (t.energy.getEnergyStored() < FE_PER_TICK - IDLE_FE_PER_TICK) return;
+            t.energy.set(t.energy.getEnergyStored() - (FE_PER_TICK - IDLE_FE_PER_TICK));
+            t.engaged = true;
         }
         t.fire((ServerLevel) level, type, target);
     }

@@ -151,7 +151,7 @@ public final class PowerBlockEntities {
         }
 
         public static Station jammer(BlockPos pos, BlockState state) {
-            return new Station(ModRegistry.JAMMER_BE.get(), pos, state, RelayRegistry.Kind.JAMMER, 16, 40);
+            return new Station(ModRegistry.JAMMER_BE.get(), pos, state, RelayRegistry.Kind.JAMMER, 16, 4);
         }
 
         public void setOwner(UUID owner) {

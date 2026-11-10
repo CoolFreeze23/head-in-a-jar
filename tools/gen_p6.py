@@ -30,7 +30,7 @@ MODULES = {
                     'Quatro micromísseis teleguiados (a Ogiva define dano e calor). Não destrói blocos.', ['FFF', 'PCP'], dict(F='firework_rocket', P=P, C=C)),
     'bio_reactor_core': ('Bio-Reactor Core', '60 FE/t from food, Bio-Gel or plasma in the Cargo Hold.', 'Núcleo Biorreator',
                          '60 FE/t de comida, Biogel ou plasma no compartimento de carga.', ['PGP', 'PSP'], dict(P=P, G='headinajar:bio_gel', S='smoker')),
-    'capacitor_bank': ('Capacitor Bank', '+2 MFE battery.', 'Banco de Capacitores', '+2 MFE de bateria.', ['LLL', 'PCP'], dict(L='headinajar:leyden_jar', P=P, C=C)),
+    'capacitor_bank': ('Capacitor Bank', '+500 kFE battery.', 'Banco de Capacitores', '+500 kFE de bateria.', ['LLL', 'PCP'], dict(L='headinajar:leyden_jar', P=P, C=C)),
     'fusion_bottle': ('Fusion Bottle', 'Up to 600 FE/t from Plasma Pellets (Output); hot.', 'Garrafa de Fusão', 'Até 600 FE/t com Pastilhas de Plasma (Saída); esquenta.',
                       ['GNG', 'PBP'], dict(G='tinted_glass', N='nether_star', P=P, B='beacon')),
     'reactive_armour': ('Reactive Armour', '-40% explosion and projectile damage, 6 charges (one back per 30 s).', 'Blindagem Reativa',
@@ -113,9 +113,9 @@ BLOCKS = {
 
 ITEMS = {
     'board_room_core': ('Board Room Core', 'Núcleo da Sala de Reuniões', ['GCG', 'CNC', 'GCG'], dict(G='gold_block', C=C, N='nether_star')),
-    'quantum_knot': ('Quantum Knot', 'Nó Quântico', ['EAE', 'ASA', 'EAE'], dict(E='ender_eye', A='echo_shard', S='headinajar:synapse_chip')),
-    'executive_life_support_jar': ('Executive Life Support Jar', 'Pote de Suporte Vital Executivo', ['SKS', 'GJG'],
-                                   dict(S='shulker_shell', K='headinajar:quantum_knot', G='gold_block', J='headinajar:reinforced_life_support_jar')),
+    'quantum_knot': ('Quantum Knot', 'Nó Quântico', ['EAE', 'MSM', 'EME'], dict(E='ender_eye', A='echo_shard', M='amethyst_shard', S='headinajar:synapse_chip')),
+    'executive_life_support_jar': ('Executive Life Support Jar', 'Pote de Suporte Vital Executivo', ['SCS', 'GJG'],
+                                   dict(S='shulker_shell', C='headinajar:synapse_chip', G='gold_block', J='headinajar:reinforced_life_support_jar')),
     'quantum_goggles': ('Quantum Goggles', 'Óculos Quânticos', ['KGK'], dict(K='headinajar:quantum_knot', G='headinajar:relay_goggles_mk3')),
     'entangled_pair': ('Entangled Pair', 'Par Emaranhado', ['KEK'], dict(K='headinajar:quantum_knot', E='end_crystal')),
     'entangled_shard': ('Entangled Shard', 'Fragmento Emaranhado', None, None),

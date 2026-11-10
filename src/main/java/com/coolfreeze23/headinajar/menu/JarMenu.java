@@ -73,12 +73,12 @@ public class JarMenu extends AbstractContainerMenu {
             return;
         }
         int value = chargeValue(stack);
-        while (value > 0 && !stack.isEmpty() && state.charge() + value <= JarState.maxCharge()) {
+        while (value > 0 && !stack.isEmpty() && state.charge() + value <= state.chargeCapacity()) {
             state.setCharge(state.charge() + value);
             stack.shrink(1);
         }
-        if (!stack.isEmpty() && value > 0 && state.charge() < JarState.maxCharge()) {
-            state.setCharge(JarState.maxCharge());
+        if (!stack.isEmpty() && value > 0 && state.charge() < state.chargeCapacity()) {
+            state.setCharge(state.chargeCapacity());
             stack.shrink(1);
         }
     }

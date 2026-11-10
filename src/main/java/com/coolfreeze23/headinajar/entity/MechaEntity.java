@@ -208,7 +208,7 @@ public class MechaEntity extends PathfinderMob {
     }
 
     public int batteryCapacity() {
-        int cap = frame.battery + (has(MechaModule.BATTERY_RACK) ? 500_000 : 0) + (has(MechaModule.CAPACITOR_BANK) ? 2_000_000 : 0);
+        int cap = frame.battery + (has(MechaModule.BATTERY_RACK) ? 125_000 : 0) + (has(MechaModule.CAPACITOR_BANK) ? 500_000 : 0);
         return has(MechaModule.BIO_INTEGRATION_PORT) ? cap * 4 / 5 : cap;
     }
 

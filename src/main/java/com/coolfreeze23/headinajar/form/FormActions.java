@@ -57,7 +57,7 @@ public final class FormActions {
         state.setForm(Form.LINKED);
         state.setSlots(jar.getItem() instanceof LifeSupportJarItem j ? j.slots() : 3);
         state.setCompact(jar.getItem() instanceof LifeSupportJarItem j && j.compact());
-        state.setCharge(JarState.maxCharge());
+        state.setCharge(state.chargeCapacity());
         state.fillJar();
         state.setGoggles(goggles.copyWithCount(1));
         state.setCollar(collar.copyWithCount(1));
@@ -535,7 +535,7 @@ public final class FormActions {
         HeadlessBody body = leaveBody(player, false);
         state.setForm(Form.JAR);
         state.setSlots(slots);
-        state.setCharge(JarState.maxCharge());
+        state.setCharge(state.chargeCapacity());
         state.fillJar();
         state.setBody(body.getUUID());
         registry(player).setBody(player.getUUID(), new HeadRegistry.Body(body.getUUID(), HeadRegistry.Spot.of(body), false));

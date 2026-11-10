@@ -70,7 +70,7 @@ public class ChargingDockBlock extends BaseEntityBlock {
     public static void charge(Player player, JarState state) {
         Entity dock = under(player);
         if (dock == null) return;
-        int room = JarState.maxCharge() - state.charge();
+        int room = state.chargeCapacity() - state.charge();
         int moved = Math.min(Math.min(RATE, room), dock.energy.getEnergyStored());
         if (moved > 0) {
             dock.energy.set(dock.energy.getEnergyStored() - moved);
