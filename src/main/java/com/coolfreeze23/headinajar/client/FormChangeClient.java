@@ -28,6 +28,9 @@ import java.util.List;
 public final class FormChangeClient {
     private static Form lastForm;
     private static Entity lastVehicle;
+    /** The way-out line for the body just boarded, and how many more ticks it is put back over vanilla's hint. */
+    private static Component boardLine;
+    private static int boardTicks;
     /** Movement keys still physically held since the last change of form. */
     private static final List<KeyMapping> HELD = new ArrayList<>();
 
@@ -50,7 +53,13 @@ public final class FormChangeClient {
         Entity vehicle = mc.player.getVehicle();
         if (vehicle != lastVehicle) {
             lastVehicle = vehicle;
-            if (vehicle != null) boarded(mc, vehicle);
+            boardLine = vehicle == null ? null : boarded(vehicle);
+            boardTicks = boardLine == null ? 0 : 10;
+        }
+        // vanilla's hint can land after this tick's (its passengers packet may come in a later frame): keep ours on top
+        if (boardTicks > 0) {
+            boardTicks--;
+            mc.gui.setOverlayMessage(boardLine, false);
         }
     }
 
@@ -93,17 +102,12 @@ public final class FormChangeClient {
 
     /**
      * Vanilla says "press sneak to dismount" for any vehicle; a mecha is left by holding sneak with the jar menu key, and a
-     * host or shell by sneaking. This runs after the passengers packet that set vanilla's line, so it replaces it.
+     * host or shell by sneaking. Put up for the first half second aboard, it stays over vanilla's line.
      */
-    private static void boarded(Minecraft mc, Entity vehicle) {
-        Component line;
+    private static Component boarded(Entity vehicle) {
         if (vehicle instanceof MechaEntity) {
-            line = Component.translatable("hud.headinajar.board.mecha", Component.keybind("key.sneak"), Component.keybind(ClientSetup.JAR_MENU.getName()));
-        } else if (Hosts.isHost(vehicle)) {
-            line = Component.translatable("hud.headinajar.board.host", Component.keybind("key.sneak"));
-        } else {
-            return;
+            return Component.translatable("hud.headinajar.board.mecha", Component.keybind("key.sneak"), Component.keybind(ClientSetup.JAR_MENU.getName()));
         }
-        mc.gui.setOverlayMessage(line, false);
+        return Hosts.isHost(vehicle) ? Component.translatable("hud.headinajar.board.host", Component.keybind("key.sneak")) : null;
     }
 }
