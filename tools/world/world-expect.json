@@ -1,0 +1,3544 @@
+[
+ {
+  "id": "A01",
+  "kind": "block",
+  "what": "headinajar:surgical_steel_block",
+  "at": [
+   2,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:surgical_steel_block"
+  ],
+  "note": "plain block"
+ },
+ {
+  "id": "A02",
+  "kind": "block",
+  "what": "headinajar:charging_dock",
+  "at": [
+   5,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:charging_dock",
+   "Energy:20000"
+  ],
+  "note": "20 kFE"
+ },
+ {
+  "id": "A03",
+  "kind": "block",
+  "what": "headinajar:galvanic_pile",
+  "at": [
+   8,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:galvanic_pile"
+  ],
+  "note": "20 kFE"
+ },
+ {
+  "id": "A04",
+  "kind": "block",
+  "what": "headinajar:leyden_jar",
+  "at": [
+   11,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:leyden_jar",
+   "Energy:"
+  ],
+  "note": "250 kFE, feeds the Tesla pair"
+ },
+ {
+  "id": "A05",
+  "kind": "block",
+  "what": "headinajar:tesla_node (sender)",
+  "at": [
+   14,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:tesla_node",
+   "Target:4672924422084L"
+  ],
+  "note": "linked to A06"
+ },
+ {
+  "id": "A06",
+  "kind": "block",
+  "what": "headinajar:tesla_node (receiver)",
+  "at": [
+   17,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:tesla_node"
+  ],
+  "note": "receives from A05"
+ },
+ {
+  "id": "A07",
+  "kind": "block",
+  "what": "headinajar:relay_mast",
+  "at": [
+   20,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:relay_mast",
+   "Energy:"
+  ],
+  "note": "100 kFE"
+ },
+ {
+  "id": "A08",
+  "kind": "block",
+  "what": "headinajar:relay_mast_mk2",
+  "at": [
+   23,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:relay_mast_mk2",
+   "Energy:"
+  ],
+  "note": "100 kFE"
+ },
+ {
+  "id": "A09",
+  "kind": "block",
+  "what": "headinajar:signal_jammer",
+  "at": [
+   26,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:signal_jammer",
+   "Energy:"
+  ],
+  "note": "100 kFE"
+ },
+ {
+  "id": "A10",
+  "kind": "block",
+  "what": "headinajar:leech_jar",
+  "at": [
+   29,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:leech_jar"
+  ],
+  "note": ""
+ },
+ {
+  "id": "A11",
+  "kind": "block",
+  "what": "headinajar:cranial_saline (fluid source)",
+  "at": [
+   32,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:cranial_saline"
+  ],
+  "note": "source block in a glass basin"
+ },
+ {
+  "id": "A12",
+  "kind": "block",
+  "what": "headinajar:nutrient_broth (fluid source)",
+  "at": [
+   36,
+   -60,
+   0
+  ],
+  "has": [
+   "headinajar:nutrient_broth"
+  ],
+  "note": "source block in a glass basin"
+ },
+ {
+  "id": "B01",
+  "kind": "block",
+  "what": "headinajar:separation_chair",
+  "at": [
+   2,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:separation_chair",
+   "life_support_jar",
+   "relay_goggles",
+   "collar_cam",
+   "saline_bottle"
+  ],
+  "note": "stocked: jar, goggles, collar, 4 saline, 50 kFE"
+ },
+ {
+  "id": "B02",
+  "kind": "block",
+  "what": "headinajar:life_support_cradle",
+  "at": [
+   6,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:life_support_cradle",
+   "Owner",
+   "OwnerName:\"Dev\""
+  ],
+  "note": "the player's own head docked (set at the end of the build)"
+ },
+ {
+  "id": "B03",
+  "kind": "block",
+  "what": "headinajar:body_locker",
+  "at": [
+   10,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:body_locker",
+   "Stored:",
+   "minecraft:cow"
+  ],
+  "note": "holding a cow host"
+ },
+ {
+  "id": "B04",
+  "kind": "block",
+  "what": "headinajar:assembly_gantry",
+  "at": [
+   15,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:assembly_gantry",
+   "bulwark_frame",
+   "mecha_plating",
+   "mecha_drill"
+  ],
+  "note": "Bulwark frame, 12 plating, nine modules, 100 kFE"
+ },
+ {
+  "id": "B05",
+  "kind": "block",
+  "what": "headinajar:saline_mixer",
+  "at": [
+   21,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:saline_mixer"
+  ],
+  "note": "50 kFE, an empty Employee Mount on top (B06; the staffed one is D01)"
+ },
+ {
+  "id": "B06",
+  "kind": "block",
+  "what": "headinajar:employee_mount (empty)",
+  "at": [
+   21,
+   -59,
+   8
+  ],
+  "has": [
+   "headinajar:employee_mount"
+  ],
+  "note": "empty (a staffed one would crash the client in view)"
+ },
+ {
+  "id": "B07",
+  "kind": "block",
+  "what": "headinajar:body_printer",
+  "at": [
+   25,
+   -60,
+   8
+  ],
+  "has": [
+   "headinajar:body_printer"
+  ],
+  "note": "50 kFE"
+ },
+ {
+  "id": "C01",
+  "kind": "block",
+  "what": "headinajar:centrifuge",
+  "at": [
+   2,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:centrifuge",
+   "blood_sample"
+  ],
+  "note": "a cave spider blood sample, full energy"
+ },
+ {
+  "id": "C02",
+  "kind": "block",
+  "what": "headinajar:dna_sequencer",
+  "at": [
+   5,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:dna_sequencer",
+   "dna_fraction"
+  ],
+  "note": "a DNA fraction, full energy"
+ },
+ {
+  "id": "C03",
+  "kind": "block",
+  "what": "headinajar:gene_splicer",
+  "at": [
+   8,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:gene_splicer",
+   "amethyst_shard"
+  ],
+  "note": "two genes picked, shard, gel, bottles"
+ },
+ {
+  "id": "C04",
+  "kind": "block",
+  "what": "headinajar:injection_rig",
+  "at": [
+   11,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:injection_rig",
+   "serum_cassette"
+  ],
+  "note": "a Cat Eyes cassette"
+ },
+ {
+  "id": "C05",
+  "kind": "block",
+  "what": "headinajar:cerebral_array (empty)",
+  "at": [
+   15,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:cerebral_array"
+  ],
+  "note": "empty; the stocked one is D02"
+ },
+ {
+  "id": "C06",
+  "kind": "block",
+  "what": "headinajar:turret_pedestal (empty)",
+  "at": [
+   20,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:turret_pedestal"
+  ],
+  "note": "empty; the stocked one is D03"
+ },
+ {
+  "id": "C07",
+  "kind": "block",
+  "what": "headinajar:neural_socket (empty)",
+  "at": [
+   24,
+   -60,
+   16
+  ],
+  "has": [
+   "headinajar:neural_socket"
+  ],
+  "note": "empty; the stocked one is D04"
+ },
+ {
+  "id": "D01",
+  "kind": "block",
+  "what": "headinajar:employee_mount (staffed)",
+  "at": [
+   300,
+   -59,
+   24
+  ],
+  "has": [
+   "headinajar:employee_mount",
+   "villager"
+  ],
+  "note": "a librarian villager head, on a Saline Mixer"
+ },
+ {
+  "id": "D02",
+  "kind": "block",
+  "what": "headinajar:cerebral_array (stocked)",
+  "at": [
+   304,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:cerebral_array",
+   "board_room_core",
+   "jarred_head"
+  ],
+  "note": "nine heads, Board Room Core, broth"
+ },
+ {
+  "id": "D03",
+  "kind": "block",
+  "what": "headinajar:turret_pedestal (stocked)",
+  "at": [
+   308,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:turret_pedestal",
+   "jarred_head"
+  ],
+  "note": "a skeleton head, arrows in the chest under it"
+ },
+ {
+  "id": "D04",
+  "kind": "block",
+  "what": "headinajar:neural_socket (stocked)",
+  "at": [
+   312,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:neural_socket",
+   "jarred_head"
+  ],
+  "note": "a zombie head"
+ },
+ {
+  "id": "D05",
+  "kind": "block",
+  "what": "headinajar:jarred_head (villager)",
+  "at": [
+   316,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:villager"
+  ],
+  "note": "a jarred villager head"
+ },
+ {
+  "id": "D06",
+  "kind": "block",
+  "what": "headinajar:jarred_head (zombie)",
+  "at": [
+   319,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:zombie"
+  ],
+  "note": "a jarred zombie head"
+ },
+ {
+  "id": "D07",
+  "kind": "block",
+  "what": "headinajar:jarred_head (pig)",
+  "at": [
+   322,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:pig"
+  ],
+  "note": "a jarred pig head"
+ },
+ {
+  "id": "D08",
+  "kind": "block",
+  "what": "headinajar:jarred_head (creeper)",
+  "at": [
+   325,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:creeper"
+  ],
+  "note": "a jarred creeper head"
+ },
+ {
+  "id": "D09",
+  "kind": "block",
+  "what": "headinajar:jarred_head (skeleton)",
+  "at": [
+   328,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:skeleton"
+  ],
+  "note": "a jarred skeleton head"
+ },
+ {
+  "id": "D10",
+  "kind": "block",
+  "what": "headinajar:jarred_head (cow)",
+  "at": [
+   331,
+   -60,
+   24
+  ],
+  "has": [
+   "headinajar:jarred_head",
+   "minecraft:cow"
+  ],
+  "note": "a jarred cow head"
+ },
+ {
+  "id": "E01",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 0",
+  "at": [
+   2,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=0"
+  ],
+  "note": "notice 0"
+ },
+ {
+  "id": "E02",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 1",
+  "at": [
+   4,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=1"
+  ],
+  "note": "notice 1"
+ },
+ {
+  "id": "E03",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 2",
+  "at": [
+   6,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=2"
+  ],
+  "note": "notice 2"
+ },
+ {
+  "id": "E04",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 3",
+  "at": [
+   8,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=3"
+  ],
+  "note": "notice 3"
+ },
+ {
+  "id": "E05",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 4",
+  "at": [
+   10,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=4"
+  ],
+  "note": "notice 4"
+ },
+ {
+  "id": "E06",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 5",
+  "at": [
+   12,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=5"
+  ],
+  "note": "notice 5"
+ },
+ {
+  "id": "E07",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 6",
+  "at": [
+   14,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=6"
+  ],
+  "note": "notice 6"
+ },
+ {
+  "id": "E08",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 7",
+  "at": [
+   16,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=7"
+  ],
+  "note": "notice 7"
+ },
+ {
+  "id": "E09",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 8",
+  "at": [
+   18,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=8"
+  ],
+  "note": "notice 8"
+ },
+ {
+  "id": "E10",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 9",
+  "at": [
+   20,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=9"
+  ],
+  "note": "notice 9"
+ },
+ {
+  "id": "E11",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 10",
+  "at": [
+   22,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=10"
+  ],
+  "note": "notice 10"
+ },
+ {
+  "id": "E12",
+  "kind": "block",
+  "what": "headinajar:safety_placard notice 11",
+  "at": [
+   24,
+   -59,
+   32
+  ],
+  "has": [
+   "headinajar:safety_placard",
+   "notice=11"
+  ],
+  "note": "notice 11"
+ },
+ {
+  "id": "F01",
+  "kind": "entity",
+  "what": "headinajar:hopper mecha",
+  "at": [
+   3.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:hopper",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: hydraulic_legs, jump_jets, galvanic_stack, armor_plating, drill, night_optics"
+ },
+ {
+  "id": "F02",
+  "kind": "entity",
+  "what": "headinajar:bulwark mecha",
+  "at": [
+   9.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:bulwark",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: hydraulic_legs, cargo_hold, galvanic_stack, armor_plating, drill, hydraulic_fist, target_lock"
+ },
+ {
+  "id": "F03",
+  "kind": "entity",
+  "what": "headinajar:chimera mecha",
+  "at": [
+   15.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:chimera",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: hydraulic_legs, jump_jets, galvanic_stack, armor_plating, chainsaw, bio_scanner"
+ },
+ {
+  "id": "F04",
+  "kind": "entity",
+  "what": "headinajar:wheelhouse mecha",
+  "at": [
+   21.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:wheelhouse",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: cargo_hold, battery_rack, galvanic_stack, armor_plating, drill, ore_scanner"
+ },
+ {
+  "id": "F05",
+  "kind": "entity",
+  "what": "headinajar:skitter mecha",
+  "at": [
+   27.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:skitter",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: arachnid_legs, cargo_hold, galvanic_stack, armor_plating, drill, thermal_imaging"
+ },
+ {
+  "id": "F06",
+  "kind": "entity",
+  "what": "headinajar:colossus mecha",
+  "at": [
+   33.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:colossus",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: hydraulic_legs, missile_pod, cargo_hold, galvanic_stack, armor_plating, tesla_coil, drill, hydraulic_fist, target_lock, night_optics"
+ },
+ {
+  "id": "F07",
+  "kind": "entity",
+  "what": "headinajar:kite mecha",
+  "at": [
+   39.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:kite",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: rocket_pack, galvanic_stack, armor_plating, grapple_hook, night_optics"
+ },
+ {
+  "id": "F08",
+  "kind": "entity",
+  "what": "headinajar:executive mecha",
+  "at": [
+   45.5,
+   -60,
+   40.5
+  ],
+  "has": [
+   "headinajar:executive",
+   "mecha_galvanic_stack"
+  ],
+  "note": "fitted: hydraulic_legs, passenger_pod, fusion_bottle, energy_shield, plasma_lance, thermal_imaging"
+ },
+ {
+  "id": "G01",
+  "kind": "entity",
+  "what": "headinajar:lunk shell",
+  "at": [
+   2.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:lunk"
+  ],
+  "note": "empty shell"
+ },
+ {
+  "id": "G02",
+  "kind": "entity",
+  "what": "headinajar:rover shell",
+  "at": [
+   6.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:rover"
+  ],
+  "note": "empty shell"
+ },
+ {
+  "id": "G03",
+  "kind": "entity",
+  "what": "headinajar:spider_walker shell",
+  "at": [
+   10.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:spider_walker"
+  ],
+  "note": "empty shell"
+ },
+ {
+  "id": "G04",
+  "kind": "entity",
+  "what": "minecraft:pig host",
+  "at": [
+   14.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "minecraft:pig",
+   "headinajar:host"
+  ],
+  "note": "a sawn host, NoAI"
+ },
+ {
+  "id": "G05",
+  "kind": "entity",
+  "what": "minecraft:sheep host",
+  "at": [
+   17.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "minecraft:sheep",
+   "headinajar:host"
+  ],
+  "note": "a sawn host, NoAI"
+ },
+ {
+  "id": "G06",
+  "kind": "entity",
+  "what": "minecraft:villager host",
+  "at": [
+   20.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "minecraft:villager",
+   "headinajar:host"
+  ],
+  "note": "a sawn host, NoAI"
+ },
+ {
+  "id": "G07",
+  "kind": "entity",
+  "what": "minecraft:wolf host",
+  "at": [
+   23.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "minecraft:wolf",
+   "headinajar:host"
+  ],
+  "note": "a sawn host, NoAI"
+ },
+ {
+  "id": "G08",
+  "kind": "entity",
+  "what": "headinajar:headless_body",
+  "at": [
+   27.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:headless_body",
+   "Corpse:0b"
+  ],
+  "note": "an unowned headless body"
+ },
+ {
+  "id": "G09",
+  "kind": "entity",
+  "what": "headinajar:headless_body corpse",
+  "at": [
+   30.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:headless_body",
+   "Corpse:1b",
+   "minecraft:diamond",
+   "headinajar:surgical_saw"
+  ],
+  "note": "a corpse holding 3 diamonds, a saw and 7 bread"
+ },
+ {
+  "id": "G10",
+  "kind": "entity",
+  "what": "headinajar:head_jar (wide)",
+  "at": [
+   33.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:head_jar",
+   "Compact:0b"
+  ],
+  "note": "an unowned placed head jar, wide"
+ },
+ {
+  "id": "G11",
+  "kind": "entity",
+  "what": "headinajar:head_jar (compact)",
+  "at": [
+   36.5,
+   -60,
+   56.5
+  ],
+  "has": [
+   "headinajar:head_jar",
+   "Compact:1b"
+  ],
+  "note": "an unowned placed head jar, Compact"
+ },
+ {
+  "id": "H001",
+  "kind": "entity",
+  "what": "item frame holding headinajar:life_support_jar",
+  "at": [
+   2.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:life_support_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H002",
+  "kind": "entity",
+  "what": "item frame holding headinajar:reinforced_life_support_jar",
+  "at": [
+   3.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:reinforced_life_support_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H003",
+  "kind": "entity",
+  "what": "item frame holding headinajar:hop_springs",
+  "at": [
+   4.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:hop_springs\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H004",
+  "kind": "entity",
+  "what": "item frame holding headinajar:propeller",
+  "at": [
+   5.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:propeller\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H005",
+  "kind": "entity",
+  "what": "item frame holding headinajar:manipulator_arm",
+  "at": [
+   6.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:manipulator_arm\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H006",
+  "kind": "entity",
+  "what": "item frame holding headinajar:telekinesis",
+  "at": [
+   7.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:telekinesis\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H007",
+  "kind": "entity",
+  "what": "item frame holding headinajar:drill_bit",
+  "at": [
+   8.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:drill_bit\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H008",
+  "kind": "entity",
+  "what": "item frame holding headinajar:armor_plating",
+  "at": [
+   9.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:armor_plating\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H009",
+  "kind": "entity",
+  "what": "item frame holding headinajar:heat_shield",
+  "at": [
+   10.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:heat_shield\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H010",
+  "kind": "entity",
+  "what": "item frame holding headinajar:night_lens",
+  "at": [
+   11.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:night_lens\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H011",
+  "kind": "entity",
+  "what": "item frame holding headinajar:magnet",
+  "at": [
+   12.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:magnet\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H012",
+  "kind": "entity",
+  "what": "item frame holding headinajar:water_jet",
+  "at": [
+   13.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:water_jet\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H013",
+  "kind": "entity",
+  "what": "item frame holding headinajar:surgical_steel_blend",
+  "at": [
+   14.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:surgical_steel_blend\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H014",
+  "kind": "entity",
+  "what": "item frame holding headinajar:surgical_steel_ingot",
+  "at": [
+   15.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:surgical_steel_ingot\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H015",
+  "kind": "entity",
+  "what": "item frame holding headinajar:neuro_copper_wire",
+  "at": [
+   16.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:neuro_copper_wire\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H016",
+  "kind": "entity",
+  "what": "item frame holding headinajar:lens",
+  "at": [
+   17.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:lens\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H017",
+  "kind": "entity",
+  "what": "item frame holding headinajar:servo",
+  "at": [
+   18.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:servo\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H018",
+  "kind": "entity",
+  "what": "item frame holding headinajar:excision_head",
+  "at": [
+   19.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:excision_head\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H019",
+  "kind": "entity",
+  "what": "item frame holding headinajar:booth_console",
+  "at": [
+   20.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:booth_console\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H020",
+  "kind": "entity",
+  "what": "item frame holding headinajar:replacement_blade",
+  "at": [
+   21.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:replacement_blade\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H021",
+  "kind": "entity",
+  "what": "item frame holding headinajar:saline_bottle",
+  "at": [
+   22.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:saline_bottle\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H022",
+  "kind": "entity",
+  "what": "item frame holding headinajar:relay_goggles",
+  "at": [
+   23.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:relay_goggles\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H023",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_cam",
+  "at": [
+   24.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_cam\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H024",
+  "kind": "entity",
+  "what": "item frame holding headinajar:head_satchel",
+  "at": [
+   25.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:head_satchel\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H025",
+  "kind": "entity",
+  "what": "item frame holding headinajar:suture_kit",
+  "at": [
+   26.5,
+   -53.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:suture_kit\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H026",
+  "kind": "entity",
+  "what": "item frame holding headinajar:cranial_saline_bucket",
+  "at": [
+   2.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:cranial_saline_bucket\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H027",
+  "kind": "entity",
+  "what": "item frame holding headinajar:glass_patch",
+  "at": [
+   3.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:glass_patch\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H028",
+  "kind": "entity",
+  "what": "item frame holding headinajar:synapse_chip",
+  "at": [
+   4.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:synapse_chip\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H029",
+  "kind": "entity",
+  "what": "item frame holding headinajar:surgical_wrench",
+  "at": [
+   5.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:surgical_wrench\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H030",
+  "kind": "entity",
+  "what": "item frame holding headinajar:relay_goggles_mk2",
+  "at": [
+   6.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:relay_goggles_mk2\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H031",
+  "kind": "entity",
+  "what": "item frame holding headinajar:relay_goggles_mk3",
+  "at": [
+   7.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:relay_goggles_mk3\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H032",
+  "kind": "entity",
+  "what": "item frame holding headinajar:suction_cups",
+  "at": [
+   8.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:suction_cups\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H033",
+  "kind": "entity",
+  "what": "item frame holding headinajar:spider_legs",
+  "at": [
+   9.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:spider_legs\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H034",
+  "kind": "entity",
+  "what": "item frame holding headinajar:speaker_grille",
+  "at": [
+   10.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:speaker_grille\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H035",
+  "kind": "entity",
+  "what": "item frame holding headinajar:saline_recycler",
+  "at": [
+   11.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:saline_recycler\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H036",
+  "kind": "entity",
+  "what": "item frame holding headinajar:shock_lid",
+  "at": [
+   12.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:shock_lid\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H037",
+  "kind": "entity",
+  "what": "item frame holding headinajar:self_righting_gyro",
+  "at": [
+   13.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:self_righting_gyro\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H038",
+  "kind": "entity",
+  "what": "item frame holding headinajar:hub_antenna",
+  "at": [
+   14.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:hub_antenna\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H039",
+  "kind": "entity",
+  "what": "item frame holding headinajar:life_sign_monitor",
+  "at": [
+   15.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:life_sign_monitor\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H040",
+  "kind": "entity",
+  "what": "item frame holding headinajar:hat_mount",
+  "at": [
+   16.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:hat_mount\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H041",
+  "kind": "entity",
+  "what": "item frame holding headinajar:surgical_saw",
+  "at": [
+   17.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:surgical_saw\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H042",
+  "kind": "entity",
+  "what": "item frame holding headinajar:embalming_fluid",
+  "at": [
+   18.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:embalming_fluid\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H043",
+  "kind": "entity",
+  "what": "item frame holding headinajar:neural_lace",
+  "at": [
+   19.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:neural_lace\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H044",
+  "kind": "entity",
+  "what": "item frame holding headinajar:jarred_head",
+  "at": [
+   20.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:jarred_head\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H045",
+  "kind": "entity",
+  "what": "item frame holding headinajar:lunk_chassis",
+  "at": [
+   21.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:lunk_chassis\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H046",
+  "kind": "entity",
+  "what": "item frame holding headinajar:rover_chassis",
+  "at": [
+   22.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:rover_chassis\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H047",
+  "kind": "entity",
+  "what": "item frame holding headinajar:spider_walker_chassis",
+  "at": [
+   23.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:spider_walker_chassis\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H048",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_hydraulic_legs",
+  "at": [
+   24.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_hydraulic_legs\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H049",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_spring_heels",
+  "at": [
+   25.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_spring_heels\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H050",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_anchor_clamps",
+  "at": [
+   26.5,
+   -54.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_anchor_clamps\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H051",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_aqua_fins",
+  "at": [
+   2.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_aqua_fins\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H052",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_jump_jets",
+  "at": [
+   3.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_jump_jets\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H053",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_rocket_pack",
+  "at": [
+   4.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_rocket_pack\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H054",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_glider_wings",
+  "at": [
+   5.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_glider_wings\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H055",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_cargo_hold",
+  "at": [
+   6.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_cargo_hold\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H056",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_passenger_pod",
+  "at": [
+   7.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_passenger_pod\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H057",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_radiator_fins",
+  "at": [
+   8.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_radiator_fins\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H058",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_battery_rack",
+  "at": [
+   9.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_battery_rack\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H059",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_galvanic_stack",
+  "at": [
+   10.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_galvanic_stack\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H060",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_combustion_kernel",
+  "at": [
+   11.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_combustion_kernel\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H061",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_armor_plating",
+  "at": [
+   12.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_armor_plating\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H062",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_thorn_plating",
+  "at": [
+   13.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_thorn_plating\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H063",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_fire_suppression",
+  "at": [
+   14.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_fire_suppression\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H064",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_life_support_recycler",
+  "at": [
+   15.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_life_support_recycler\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H065",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_signal_booster",
+  "at": [
+   16.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_signal_booster\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H066",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_solar_skin",
+  "at": [
+   17.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_solar_skin\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H067",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_coolant_loop",
+  "at": [
+   18.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_coolant_loop\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H068",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_drill",
+  "at": [
+   19.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_drill\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H069",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_chainsaw",
+  "at": [
+   20.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_chainsaw\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H070",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_hydraulic_fist",
+  "at": [
+   21.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_hydraulic_fist\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H071",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_grapple_hook",
+  "at": [
+   22.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_grapple_hook\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H072",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_tractor_beam",
+  "at": [
+   23.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_tractor_beam\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H073",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_rivet_gun",
+  "at": [
+   24.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_rivet_gun\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H074",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_riot_shield",
+  "at": [
+   25.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_riot_shield\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H075",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_night_optics",
+  "at": [
+   26.5,
+   -55.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_night_optics\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H076",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_bio_scanner",
+  "at": [
+   2.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_bio_scanner\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H077",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_plating",
+  "at": [
+   3.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_plating\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H078",
+  "kind": "entity",
+  "what": "item frame holding headinajar:hopper_frame",
+  "at": [
+   4.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:hopper_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H079",
+  "kind": "entity",
+  "what": "item frame holding headinajar:bulwark_frame",
+  "at": [
+   5.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:bulwark_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H080",
+  "kind": "entity",
+  "what": "item frame holding headinajar:syringe",
+  "at": [
+   6.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:syringe\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H081",
+  "kind": "entity",
+  "what": "item frame holding headinajar:precision_syringe",
+  "at": [
+   7.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:precision_syringe\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H082",
+  "kind": "entity",
+  "what": "item frame holding headinajar:leviathan_needle",
+  "at": [
+   8.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:leviathan_needle\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H083",
+  "kind": "entity",
+  "what": "item frame holding headinajar:marrow_drill",
+  "at": [
+   9.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:marrow_drill\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H084",
+  "kind": "entity",
+  "what": "item frame holding headinajar:oil_tap",
+  "at": [
+   10.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:oil_tap\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H085",
+  "kind": "entity",
+  "what": "item frame holding headinajar:ecto_trap",
+  "at": [
+   11.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:ecto_trap\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H086",
+  "kind": "entity",
+  "what": "item frame holding headinajar:blood_sample",
+  "at": [
+   12.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:blood_sample\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H087",
+  "kind": "entity",
+  "what": "item frame holding headinajar:dna_fraction",
+  "at": [
+   13.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:dna_fraction\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H088",
+  "kind": "entity",
+  "what": "item frame holding headinajar:plasma_vial",
+  "at": [
+   14.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:plasma_vial\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H089",
+  "kind": "entity",
+  "what": "item frame holding headinajar:bio_gel",
+  "at": [
+   15.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:bio_gel\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H090",
+  "kind": "entity",
+  "what": "item frame holding headinajar:serum_cassette",
+  "at": [
+   16.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:serum_cassette\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H091",
+  "kind": "entity",
+  "what": "item frame holding headinajar:gene_wash",
+  "at": [
+   17.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:gene_wash\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H092",
+  "kind": "entity",
+  "what": "item frame holding headinajar:chimera_frame",
+  "at": [
+   18.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:chimera_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H093",
+  "kind": "entity",
+  "what": "item frame holding headinajar:wheelhouse_frame",
+  "at": [
+   19.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:wheelhouse_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H094",
+  "kind": "entity",
+  "what": "item frame holding headinajar:skitter_frame",
+  "at": [
+   20.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:skitter_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H095",
+  "kind": "entity",
+  "what": "item frame holding headinajar:colossus_frame",
+  "at": [
+   21.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:colossus_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H096",
+  "kind": "entity",
+  "what": "item frame holding headinajar:kite_frame",
+  "at": [
+   22.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:kite_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H097",
+  "kind": "entity",
+  "what": "item frame holding headinajar:executive_frame",
+  "at": [
+   23.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:executive_frame\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H098",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_sprint_servos",
+  "at": [
+   24.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_sprint_servos\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H099",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_stilts",
+  "at": [
+   25.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_stilts\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H100",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_arachnid_legs",
+  "at": [
+   26.5,
+   -56.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_arachnid_legs\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H101",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_hover_skirt",
+  "at": [
+   2.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_hover_skirt\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H102",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_lava_treads",
+  "at": [
+   3.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_lava_treads\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H103",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_ender_satchel",
+  "at": [
+   4.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_ender_satchel\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H104",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_smoke_mortar",
+  "at": [
+   5.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_smoke_mortar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H105",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_missile_pod",
+  "at": [
+   6.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_missile_pod\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H106",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_bio_reactor_core",
+  "at": [
+   7.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_bio_reactor_core\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H107",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_capacitor_bank",
+  "at": [
+   8.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_capacitor_bank\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H108",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_fusion_bottle",
+  "at": [
+   9.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_fusion_bottle\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H109",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_reactive_armour",
+  "at": [
+   10.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_reactive_armour\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H110",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_energy_shield",
+  "at": [
+   11.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_energy_shield\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H111",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_medical_injector",
+  "at": [
+   12.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_medical_injector\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H112",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_stealth_field",
+  "at": [
+   13.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_stealth_field\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H113",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_tesla_coil",
+  "at": [
+   14.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_tesla_coil\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H114",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_workbench",
+  "at": [
+   15.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_workbench\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H115",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_bio_integration_port",
+  "at": [
+   16.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_bio_integration_port\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H116",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_manipulator_hand",
+  "at": [
+   17.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_manipulator_hand\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H117",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_excavator_scoop",
+  "at": [
+   18.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_excavator_scoop\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H118",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_flamethrower",
+  "at": [
+   19.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_flamethrower\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H119",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_arc_cannon",
+  "at": [
+   20.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_arc_cannon\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H120",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_hemo_syringe",
+  "at": [
+   21.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_hemo_syringe\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H121",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_harvester",
+  "at": [
+   22.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_harvester\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H122",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_welding_torch",
+  "at": [
+   23.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_welding_torch\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H123",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_plasma_lance",
+  "at": [
+   24.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_plasma_lance\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H124",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_thermal_imaging",
+  "at": [
+   25.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_thermal_imaging\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H125",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_ore_scanner",
+  "at": [
+   26.5,
+   -57.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_ore_scanner\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H126",
+  "kind": "entity",
+  "what": "item frame holding headinajar:mecha_target_lock",
+  "at": [
+   2.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:mecha_target_lock\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H127",
+  "kind": "entity",
+  "what": "item frame holding headinajar:plasma_pellet",
+  "at": [
+   3.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:plasma_pellet\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H128",
+  "kind": "entity",
+  "what": "item frame holding headinajar:nutrient_broth_bucket",
+  "at": [
+   4.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:nutrient_broth_bucket\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H129",
+  "kind": "entity",
+  "what": "item frame holding headinajar:wheels",
+  "at": [
+   5.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:wheels\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H130",
+  "kind": "entity",
+  "what": "item frame holding headinajar:cortex_coprocessor",
+  "at": [
+   6.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:cortex_coprocessor\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H131",
+  "kind": "entity",
+  "what": "item frame holding headinajar:lacrimal_laser",
+  "at": [
+   7.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:lacrimal_laser\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H132",
+  "kind": "entity",
+  "what": "item frame holding headinajar:body_recall_beacon",
+  "at": [
+   8.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:body_recall_beacon\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H133",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_wide_lens",
+  "at": [
+   9.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_wide_lens\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H134",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_periscope_stalk",
+  "at": [
+   10.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_periscope_stalk\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H135",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_night_optics",
+  "at": [
+   11.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_night_optics\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H136",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_waterproof_seal",
+  "at": [
+   12.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_waterproof_seal\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H137",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_shielded_housing",
+  "at": [
+   13.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_shielded_housing\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H138",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_antenna_whip",
+  "at": [
+   14.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_antenna_whip\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H139",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_noise_filter",
+  "at": [
+   15.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_noise_filter\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H140",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_thermal_overlay",
+  "at": [
+   16.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_thermal_overlay\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H141",
+  "kind": "entity",
+  "what": "item frame holding headinajar:collar_zoom_optic",
+  "at": [
+   17.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:collar_zoom_optic\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H142",
+  "kind": "entity",
+  "what": "item frame holding headinajar:board_room_core",
+  "at": [
+   18.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:board_room_core\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H143",
+  "kind": "entity",
+  "what": "item frame holding headinajar:quantum_knot",
+  "at": [
+   19.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:quantum_knot\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H144",
+  "kind": "entity",
+  "what": "item frame holding headinajar:executive_life_support_jar",
+  "at": [
+   20.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:executive_life_support_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H145",
+  "kind": "entity",
+  "what": "item frame holding headinajar:quantum_goggles",
+  "at": [
+   21.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:quantum_goggles\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H146",
+  "kind": "entity",
+  "what": "item frame holding headinajar:entangled_pair",
+  "at": [
+   22.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:entangled_pair\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H147",
+  "kind": "entity",
+  "what": "item frame holding headinajar:entangled_shard",
+  "at": [
+   23.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:entangled_shard\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H148",
+  "kind": "entity",
+  "what": "item frame holding headinajar:emp_grenade",
+  "at": [
+   24.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:emp_grenade\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H149",
+  "kind": "entity",
+  "what": "item frame holding headinajar:compact_life_support_jar",
+  "at": [
+   25.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:compact_life_support_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H150",
+  "kind": "entity",
+  "what": "item frame holding headinajar:charging_dock",
+  "at": [
+   26.5,
+   -58.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:charging_dock\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H151",
+  "kind": "entity",
+  "what": "item frame holding headinajar:surgical_steel_block",
+  "at": [
+   2.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:surgical_steel_block\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H152",
+  "kind": "entity",
+  "what": "item frame holding headinajar:separation_chair",
+  "at": [
+   3.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:separation_chair\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H153",
+  "kind": "entity",
+  "what": "item frame holding headinajar:life_support_cradle",
+  "at": [
+   4.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:life_support_cradle\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H154",
+  "kind": "entity",
+  "what": "item frame holding headinajar:galvanic_pile",
+  "at": [
+   5.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:galvanic_pile\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H155",
+  "kind": "entity",
+  "what": "item frame holding headinajar:saline_mixer",
+  "at": [
+   6.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:saline_mixer\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H156",
+  "kind": "entity",
+  "what": "item frame holding headinajar:body_printer",
+  "at": [
+   7.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:body_printer\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H157",
+  "kind": "entity",
+  "what": "item frame holding headinajar:leyden_jar",
+  "at": [
+   8.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:leyden_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H158",
+  "kind": "entity",
+  "what": "item frame holding headinajar:tesla_node",
+  "at": [
+   9.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:tesla_node\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H159",
+  "kind": "entity",
+  "what": "item frame holding headinajar:relay_mast",
+  "at": [
+   10.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:relay_mast\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H160",
+  "kind": "entity",
+  "what": "item frame holding headinajar:relay_mast_mk2",
+  "at": [
+   11.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:relay_mast_mk2\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H161",
+  "kind": "entity",
+  "what": "item frame holding headinajar:signal_jammer",
+  "at": [
+   12.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:signal_jammer\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H162",
+  "kind": "entity",
+  "what": "item frame holding headinajar:safety_placard",
+  "at": [
+   13.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:safety_placard\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H163",
+  "kind": "entity",
+  "what": "item frame holding headinajar:body_locker",
+  "at": [
+   14.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:body_locker\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H164",
+  "kind": "entity",
+  "what": "item frame holding headinajar:assembly_gantry",
+  "at": [
+   15.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:assembly_gantry\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H165",
+  "kind": "entity",
+  "what": "item frame holding headinajar:centrifuge",
+  "at": [
+   16.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:centrifuge\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H166",
+  "kind": "entity",
+  "what": "item frame holding headinajar:dna_sequencer",
+  "at": [
+   17.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:dna_sequencer\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H167",
+  "kind": "entity",
+  "what": "item frame holding headinajar:gene_splicer",
+  "at": [
+   18.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:gene_splicer\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H168",
+  "kind": "entity",
+  "what": "item frame holding headinajar:injection_rig",
+  "at": [
+   19.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:injection_rig\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H169",
+  "kind": "entity",
+  "what": "item frame holding headinajar:leech_jar",
+  "at": [
+   20.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:leech_jar\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H170",
+  "kind": "entity",
+  "what": "item frame holding headinajar:turret_pedestal",
+  "at": [
+   21.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:turret_pedestal\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H171",
+  "kind": "entity",
+  "what": "item frame holding headinajar:employee_mount",
+  "at": [
+   22.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:employee_mount\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H172",
+  "kind": "entity",
+  "what": "item frame holding headinajar:cerebral_array",
+  "at": [
+   23.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:cerebral_array\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H173",
+  "kind": "entity",
+  "what": "item frame holding headinajar:neural_socket",
+  "at": [
+   24.5,
+   -59.5,
+   75.03
+  ],
+  "has": [
+   "headinajar:neural_socket\""
+  ],
+  "note": ""
+ },
+ {
+  "id": "H1C",
+  "kind": "block",
+  "what": "chest 1 of items",
+  "at": [
+   2,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:life_support_jar\"",
+   "headinajar:glass_patch\""
+  ],
+  "note": "life_support_jar .. glass_patch"
+ },
+ {
+  "id": "H2C",
+  "kind": "block",
+  "what": "chest 2 of items",
+  "at": [
+   4,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:synapse_chip\"",
+   "headinajar:mecha_glider_wings\""
+  ],
+  "note": "synapse_chip .. mecha_glider_wings"
+ },
+ {
+  "id": "H3C",
+  "kind": "block",
+  "what": "chest 3 of items",
+  "at": [
+   6,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:mecha_cargo_hold\"",
+   "headinajar:precision_syringe\""
+  ],
+  "note": "mecha_cargo_hold .. precision_syringe"
+ },
+ {
+  "id": "H4C",
+  "kind": "block",
+  "what": "chest 4 of items",
+  "at": [
+   8,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:leviathan_needle\"",
+   "headinajar:mecha_fusion_bottle\""
+  ],
+  "note": "leviathan_needle .. mecha_fusion_bottle"
+ },
+ {
+  "id": "H5C",
+  "kind": "block",
+  "what": "chest 5 of items",
+  "at": [
+   10,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:mecha_reactive_armour\"",
+   "headinajar:collar_night_optics\""
+  ],
+  "note": "mecha_reactive_armour .. collar_night_optics"
+ },
+ {
+  "id": "H6C",
+  "kind": "block",
+  "what": "chest 6 of items",
+  "at": [
+   12,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:collar_waterproof_seal\"",
+   "headinajar:safety_placard\""
+  ],
+  "note": "collar_waterproof_seal .. safety_placard"
+ },
+ {
+  "id": "H7C",
+  "kind": "block",
+  "what": "chest 7 of items",
+  "at": [
+   14,
+   -60,
+   78
+  ],
+  "has": [
+   "headinajar:body_locker\"",
+   "headinajar:neural_socket\""
+  ],
+  "note": "body_locker .. neural_socket"
+ },
+ {
+  "id": "P01",
+  "kind": "me",
+  "what": "the player",
+  "at": [
+   6.5,
+   -60,
+   11.5
+  ],
+  "has": [
+   "form LINKED",
+   "surgical_saw"
+  ],
+  "note": "linked, head docked in the Cradle at 6 -60 8, genes Cat Eyes, Gills, Spider Climb"
+ }
+]

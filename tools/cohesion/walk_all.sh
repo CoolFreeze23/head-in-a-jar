@@ -4,8 +4,8 @@
 # usage: tools/cohesion/walk_all.sh OUTDIR [--previous OLD/cohesion-results.tsv] [BATCH ...]
 #   OUTDIR   where each batch's run (OUTDIR/runs/<batch>) and the results (OUTDIR/results) go; keep it off the project
 #   BATCH    only these batches (e.g. walk-03 walk-h-P170); default every walk-NN and walk-h-* batch but the proof batch
-# Runs through tools/smoke.sh, so SMOKE_MODS, SMOKE_PROFILE and the other variables apply as usual. With GAME_LOCK set,
-# the lock is taken once for the whole walk (the batches run back to back) instead of once per batch.
+# Runs through tools/smoke.sh, so GAME_LOCK, SMOKE_MODS, SMOKE_PROFILE and the other variables apply as usual. With
+# GAME_LOCK set, each batch takes and releases the lock on its own, so other queues get a turn between batches.
 # Extra arguments for the generator: WALK_GEN_ARGS (e.g. --no-head-guard once jarred heads draw without crashing).
 set -u
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
@@ -25,21 +25,16 @@ walk() {
   local start=$(date +%s)
   for b in "${batches[@]}"; do
     echo "=== $b $(date +%T)"
-    GAME_LOCK= bash tools/smoke.sh "tools/cohesion/$b.txt" > "$OUT/runs/$b.out" 2>&1
+    bash tools/smoke.sh "tools/cohesion/$b.txt" > "$OUT/runs/$b.out" 2>&1
     grep -E "client ran|gradle exit|^--- report" "$OUT/runs/$b.out"
     rm -rf "$OUT/runs/$b"
     mkdir -p "$OUT/runs/$b"
     cp -r run-smoke/smoke-out/. "$OUT/runs/$b/" 2>/dev/null
     cp build/smoke.log "$OUT/runs/$b/smoke.log" 2>/dev/null
   done
-  echo "the walk ran $(( ($(date +%s) - start) / 60 )) min (game time, lock already held)"
+  echo "the walk ran $(( ($(date +%s) - start) / 60 )) min of wall time (waits for the lock included)"
 }
-if [ -n "${GAME_LOCK:-}" ]; then
-  . "$GAME_LOCK"
-  with_game_lock walk
-else
-  walk
-fi
+walk
 runs=()
 logs=()
 for b in "${batches[@]}"; do

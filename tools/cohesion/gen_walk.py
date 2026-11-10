@@ -217,7 +217,8 @@ def aim_point(r, spot):
     if aim == "ground":
         return (tx + 0.5, ty - 0.05, tz + 0.5)
     if aim == "block":
-        return (tx + 0.5, ty + 0.5, tz + 0.5)
+        # low on the block: a dock, a socket or a gantry's base is lower than half a block, and a jar's eye is at 0.5
+        return (tx + 0.5, ty + 0.15, tz + 0.5)
     return (tx + aim[0], ty + aim[1], tz + aim[2])
 
 
@@ -343,6 +344,8 @@ def pair_lines(r, index, spec, shots=True):
             out.append("lookpos " + " ".join(fmt(round(v, 2)) for v in point))
             out.append("wait 2")
     out.append("inspect aim")
+    if r.get("aim", "block") == "block":
+        out.append(E("inspect block {T}"))
     out.append(f"report PAIR {pid} act {action_line}")
     out.append(action_line)
     out.append("wait 12")

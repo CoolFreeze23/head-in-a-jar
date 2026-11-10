@@ -153,6 +153,8 @@ final class Bystander {
             ChannelAttributes.setPayloadSetup(connection, ChannelAttributes.getPayloadSetup(realConnection));
             ChannelAttributes.setConnectionType(connection, ChannelAttributes.getConnectionType(realConnection));
             server.getPlayerList().placeNewPlayer(connection, player, cookie);
+            // a whole body every time: its saved data may still hold the form an earlier run left it in (a socket, a host)
+            freshBody(server);
             player.setGameMode(GameType.SURVIVAL);
             float yaw = a.length > 5 ? Float.parseFloat(a[5]) : 0;
             player.teleportTo(level, Double.parseDouble(a[2]) + 0.5, Double.parseDouble(a[3]), Double.parseDouble(a[4]) + 0.5, yaw, 0);
@@ -341,7 +343,19 @@ final class Bystander {
     }
 
     static void remove(MinecraftServer server) {
-        if (present()) server.getPlayerList().remove(player);
+        if (present()) {
+            freshBody(server);
+            server.getPlayerList().remove(player);
+        }
         player = null;
+    }
+
+    /** Puts the stand-in back to a whole body with no head or body left anywhere, so its saved data starts clean. */
+    private static void freshBody(MinecraftServer server) {
+        player.stopRiding();
+        player.setData(ModRegistry.JAR_STATE, new com.coolfreeze23.headinajar.form.JarState());
+        com.coolfreeze23.headinajar.form.HeadRegistry.get(server).clear(player.getUUID());
+        player.refreshDimensions();
+        Network.sync(player);
     }
 }

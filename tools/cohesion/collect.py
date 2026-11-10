@@ -198,6 +198,21 @@ def form_of(riding_line):
     return m.group(1) if m else ""
 
 
+VOLATILE = re.compile(r"\b(Energy|Progress|OpTick|Wear|LastRestock|Timer|Cooldown|Tick\w*):[^,}\]]*")
+
+
+def block_change(rec):
+    """The target block's saved data before and after the click, if it changed (ticking counters left out)."""
+    pre = [x for x in rec["pre"] if x.startswith("inspect block ")]
+    post = [x for x in rec["post"] if x.startswith("inspect block ")]
+    if not pre or not post:
+        return ""
+    a, b = (VOLATILE.sub("", x.split(" -> ", 1)[1]) for x in (pre[-1], post[-1]))
+    if a == b:
+        return ""
+    return f"{a[:120]} -> {b[:160]}"
+
+
 def aim_problem(rec):
     """Why the crosshair was not on the intended target when the click was made, or '' if it was (or not checked)."""
     want = rec.get("aim", "")
@@ -240,9 +255,17 @@ def judge(pid, rec, pats, log_errors):
     cls = classify(inp["shown"])
     texts = messages(inp["shown"])
     keys = [match_key(t, pats) for t in texts]
+    changed = block_change(rec)
+    if changed:
+        if cls in ("feedback", "refuses"):
+            notes.append("the target block's data changed: " + changed)
+            cls = "works"
+        elif cls == "nothing":
+            notes.append("the target block's data changed although the client showed nothing: " + changed)
     if rec["expect"] and pre_form and pre_form != rec["expect"]:
         cls = "unreached"
-    miss = aim_problem(rec)
+    gui = re.match(r"(widget|at) ", rec.get("act", ""))
+    miss = "" if gui else aim_problem(rec)
     if miss:
         notes.append("aim: " + miss)
         cls = "unreached"

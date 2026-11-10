@@ -36,7 +36,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 -95.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 -93.5
+lookpos -71.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -44,6 +44,7 @@ wait 10
 riding PRE-P001
 inspect me
 inspect aim
+inspect block -72 -60 -94
 report PAIR P001 act key use
 key use
 wait 12
@@ -75,7 +76,7 @@ wait 5
 wait 5
 /tp @s -47.5 -60 -95.5 0 21.1
 wait 3
-lookpos -47.5 -59.5 -93.5
+lookpos -47.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -84,9 +85,10 @@ riding PRE-P002
 inspect me
 sneak down
 wait 33
-lookpos -47.5 -59.5 -93.5
+lookpos -47.5 -59.85 -93.5
 wait 2
 inspect aim
+inspect block -48 -60 -94
 report PAIR P002 act key use
 key use
 wait 12
@@ -122,7 +124,7 @@ separate
 wait 5
 /tp @s -23.5 -60 -95.5 0 22.3
 wait 3
-lookpos -23.5 -59.5 -93.5
+lookpos -23.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -130,6 +132,7 @@ wait 10
 riding PRE-P003
 inspect me
 inspect aim
+inspect block -24 -60 -94
 report PAIR P003 act key use
 key use
 wait 12
@@ -161,7 +164,7 @@ wait 5
 wait 5
 /tp @s 0.5 -60 -95.5 0 29.2
 wait 3
-lookpos 0.5 -59.5 -93.5
+lookpos 0.5 -59.85 -93.5
 wait 10
 key use
 wait 33
@@ -171,6 +174,7 @@ wait 10
 riding PRE-P004
 inspect me
 inspect aim
+inspect block 0 -60 -94
 report PAIR P004 act at rel 120 78 hold 50
 at rel 120 78 hold 50
 wait 12
@@ -206,7 +210,7 @@ jar
 wait 5
 /tp @s 24.5 -60 -95.5 0 0
 wait 3
-lookpos 24.5 -59.5 -93.5
+lookpos 24.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -214,6 +218,7 @@ wait 10
 riding PRE-P005
 inspect me
 inspect aim
+inspect block 24 -60 -94
 report PAIR P005 act key use
 key use
 wait 12
@@ -245,7 +250,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 -95.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 -93.5
+lookpos 48.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -253,6 +258,7 @@ wait 10
 riding PRE-P006
 inspect me
 inspect aim
+inspect block 48 -60 -94
 report PAIR P006 act key use
 key use
 wait 12
@@ -285,7 +291,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 -71.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 -69.5
+lookpos -71.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -293,6 +299,7 @@ wait 10
 riding PRE-P007
 inspect me
 inspect aim
+inspect block -72 -60 -70
 report PAIR P007 act key use
 key use
 wait 12
@@ -330,7 +337,7 @@ pickup
 wait 5
 /tp @s -47.5 -60 -71.5 0 22.3
 wait 3
-lookpos -47.5 -59.5 -69.5
+lookpos -47.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -341,6 +348,7 @@ wait 10
 riding PRE-P008
 inspect me
 inspect aim
+inspect block -48 -60 -70
 report PAIR P008 act key use
 key use
 wait 12
@@ -378,7 +386,7 @@ pickup
 wait 5
 /tp @s -23.5 -60 -71.5 0 22.3
 wait 3
-lookpos -23.5 -59.5 -69.5
+lookpos -23.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -391,6 +399,7 @@ wait 10
 riding PRE-P009
 inspect me
 inspect aim
+inspect block -24 -60 -70
 report PAIR P009 act key use
 key use
 wait 12
@@ -428,7 +437,7 @@ pickup
 wait 5
 /tp @s 0.5 -60 -71.5 0 22.3
 wait 3
-lookpos 0.5 -59.5 -69.5
+lookpos 0.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -436,6 +445,7 @@ wait 10
 riding PRE-P010
 inspect me
 inspect aim
+inspect block 0 -60 -70
 report PAIR P010 act key use
 key use
 wait 12
@@ -470,7 +480,7 @@ jar
 wait 5
 /tp @s 24.5 -60 -71.5 0 0
 wait 3
-lookpos 24.5 -59.5 -69.5
+lookpos 24.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -478,6 +488,7 @@ wait 10
 riding PRE-P011
 inspect me
 inspect aim
+inspect block 24 -60 -70
 report PAIR P011 act key use
 key use
 wait 12
@@ -509,7 +520,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 -71.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 -69.5
+lookpos 48.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -517,6 +528,7 @@ wait 10
 riding PRE-P012
 inspect me
 inspect aim
+inspect block 48 -60 -70
 report PAIR P012 act key use
 key use
 wait 12
@@ -548,7 +560,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 -47.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 -45.5
+lookpos -71.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -556,6 +568,7 @@ wait 10
 riding PRE-P013
 inspect me
 inspect aim
+inspect block -72 -60 -46
 report PAIR P013 act key use
 key use
 wait 12
@@ -590,7 +603,7 @@ jar
 wait 5
 /tp @s -47.5 -60 -47.5 0 0
 wait 3
-lookpos -47.5 -59.5 -45.5
+lookpos -47.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -598,6 +611,7 @@ wait 10
 riding PRE-P014
 inspect me
 inspect aim
+inspect block -48 -60 -46
 report PAIR P014 act key use
 key use
 wait 12
@@ -629,7 +643,7 @@ wait 5
 wait 5
 /tp @s -23.5 -60 -47.5 0 29.2
 wait 3
-lookpos -23.5 -59.5 -45.5
+lookpos -23.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -637,6 +651,7 @@ wait 10
 riding PRE-P015
 inspect me
 inspect aim
+inspect block -24 -60 -46
 report PAIR P015 act key use
 key use
 wait 12
@@ -668,7 +683,7 @@ wait 5
 wait 5
 /tp @s 0.5 -60 -47.5 0 29.2
 wait 3
-lookpos 0.5 -59.5 -45.5
+lookpos 0.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -676,6 +691,7 @@ wait 10
 riding PRE-P016
 inspect me
 inspect aim
+inspect block 0 -60 -46
 report PAIR P016 act key use
 key use
 wait 12
@@ -707,7 +723,7 @@ wait 5
 wait 5
 /tp @s 24.5 -60 -47.5 0 29.2
 wait 3
-lookpos 24.5 -59.5 -45.5
+lookpos 24.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -715,6 +731,7 @@ wait 10
 riding PRE-P017
 inspect me
 inspect aim
+inspect block 24 -60 -46
 report PAIR P017 act key use
 key use
 wait 12
@@ -746,7 +763,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 -47.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 -45.5
+lookpos 48.5 -59.85 -45.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -754,6 +771,7 @@ wait 10
 riding PRE-P018
 inspect me
 inspect aim
+inspect block 48 -60 -46
 report PAIR P018 act key use
 key use
 wait 12
@@ -785,7 +803,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 -23.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 -21.5
+lookpos -71.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -793,6 +811,7 @@ wait 10
 riding PRE-P019
 inspect me
 inspect aim
+inspect block -72 -60 -22
 report PAIR P019 act key use
 key use
 wait 12
@@ -824,7 +843,7 @@ wait 5
 wait 5
 /tp @s -47.5 -60 -23.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 -21.5
+lookpos -47.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -832,6 +851,7 @@ wait 10
 riding PRE-P020
 inspect me
 inspect aim
+inspect block -48 -60 -22
 report PAIR P020 act key use
 key use
 wait 12
@@ -863,7 +883,7 @@ wait 5
 wait 5
 /tp @s -23.5 -60 -23.5 0 29.2
 wait 3
-lookpos -23.5 -59.5 -21.5
+lookpos -23.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -871,6 +891,7 @@ wait 10
 riding PRE-P021
 inspect me
 inspect aim
+inspect block -24 -60 -22
 report PAIR P021 act key use
 key use
 wait 12
@@ -902,7 +923,7 @@ wait 5
 wait 5
 /tp @s 0.5 -60 -23.5 0 29.2
 wait 3
-lookpos 0.5 -59.5 -21.5
+lookpos 0.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -910,6 +931,7 @@ wait 10
 riding PRE-P022
 inspect me
 inspect aim
+inspect block 0 -60 -22
 report PAIR P022 act key use
 key use
 wait 12
@@ -944,7 +966,7 @@ jar
 wait 5
 /tp @s 24.5 -60 -23.5 0 0
 wait 3
-lookpos 24.5 -59.5 -21.5
+lookpos 24.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -952,6 +974,7 @@ wait 10
 riding PRE-P023
 inspect me
 inspect aim
+inspect block 24 -60 -22
 report PAIR P023 act key use
 key use
 wait 12
@@ -984,7 +1007,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 -23.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 -21.5
+lookpos 48.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -995,6 +1018,7 @@ wait 10
 riding PRE-P024
 inspect me
 inspect aim
+inspect block 48 -60 -22
 report PAIR P024 act widget "Print"
 widget "Print"
 wait 12
@@ -1030,7 +1054,7 @@ jar
 wait 5
 /tp @s -71.5 -60 0.5 0 0
 wait 3
-lookpos -71.5 -59.5 2.5
+lookpos -71.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -1041,6 +1065,7 @@ wait 10
 riding PRE-P025
 inspect me
 inspect aim
+inspect block -72 -60 2
 report PAIR P025 act widget "Print"
 widget "Print"
 wait 12
@@ -1074,7 +1099,7 @@ wait 5
 lab
 /tp @s -47.5 -60 0.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 2.5
+lookpos -47.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -1085,6 +1110,7 @@ wait 10
 riding PRE-P026
 inspect me
 inspect aim
+inspect block -48 -60 2
 report PAIR P026 act widget "Inject"
 widget "Inject"
 wait 12
@@ -1121,7 +1147,7 @@ wait 5
 lab
 /tp @s -23.5 -60 0.5 0 0
 wait 3
-lookpos -23.5 -59.5 2.5
+lookpos -23.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -1132,6 +1158,7 @@ wait 10
 riding PRE-P027
 inspect me
 inspect aim
+inspect block -24 -60 2
 report PAIR P027 act widget "Inject"
 widget "Inject"
 wait 12
@@ -1167,7 +1194,7 @@ wait 3
 /data merge block 0 -60 2 {Energy:1000}
 /tp @s 0.5 -60 0.5 0 29.2
 wait 3
-lookpos 0.5 -59.5 2.5
+lookpos 0.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -1178,6 +1205,7 @@ wait 10
 riding PRE-P028
 inspect me
 inspect aim
+inspect block 0 -60 2
 report PAIR P028 act widget "Inject"
 widget "Inject"
 wait 12
@@ -1210,7 +1238,7 @@ wait 5
 wait 5
 /tp @s 24.5 -60 0.5 0 29.2
 wait 3
-lookpos 24.5 -59.5 2.5
+lookpos 24.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1218,6 +1246,7 @@ wait 10
 riding PRE-P029
 inspect me
 inspect aim
+inspect block 24 -60 2
 report PAIR P029 act key use
 key use
 wait 12
@@ -1249,7 +1278,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 0.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 2.5
+lookpos 48.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1257,6 +1286,7 @@ wait 10
 riding PRE-P030
 inspect me
 inspect aim
+inspect block 48 -60 2
 report PAIR P030 act key use
 key use
 wait 12
@@ -1288,7 +1318,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 24.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 26.5
+lookpos -71.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1296,6 +1326,7 @@ wait 10
 riding PRE-P031
 inspect me
 inspect aim
+inspect block -72 -60 26
 report PAIR P031 act key use
 key use
 wait 12
@@ -1327,7 +1358,7 @@ wait 5
 wait 5
 /tp @s -47.5 -60 24.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 26.5
+lookpos -47.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1335,6 +1366,7 @@ wait 10
 riding PRE-P032
 inspect me
 inspect aim
+inspect block -48 -60 26
 report PAIR P032 act key use
 key use
 wait 12
@@ -1366,7 +1398,7 @@ wait 5
 wait 5
 /tp @s -23.5 -60 24.5 0 29.2
 wait 3
-lookpos -23.5 -59.5 26.5
+lookpos -23.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1374,6 +1406,7 @@ wait 10
 riding PRE-P033
 inspect me
 inspect aim
+inspect block -24 -60 26
 report PAIR P033 act key use
 key use
 wait 12
@@ -1408,7 +1441,7 @@ jar
 wait 5
 /tp @s 0.5 -60 24.5 0 0
 wait 3
-lookpos 0.5 -59.5 26.5
+lookpos 0.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1416,6 +1449,7 @@ wait 10
 riding PRE-P034
 inspect me
 inspect aim
+inspect block 0 -60 26
 report PAIR P034 act key use
 key use
 wait 12
@@ -1448,7 +1482,7 @@ wait 5
 wait 5
 /tp @s 24.5 -60 24.5 0 29.2
 wait 3
-lookpos 24.5 -59.5 26.5
+lookpos 24.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1456,6 +1490,7 @@ wait 10
 riding PRE-P035
 inspect me
 inspect aim
+inspect block 24 -60 26
 report PAIR P035 act key use
 key use
 wait 12
@@ -1490,7 +1525,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 24.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 26.5
+lookpos 48.5 -59.85 26.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1498,6 +1533,7 @@ wait 10
 riding PRE-P039
 inspect me
 inspect aim
+inspect block 48 -60 26
 report PAIR P039 act key use
 key use
 wait 12
@@ -1529,7 +1565,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 48.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 50.5
+lookpos -71.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1537,6 +1573,7 @@ wait 10
 riding PRE-P040
 inspect me
 inspect aim
+inspect block -72 -60 50
 report PAIR P040 act key use
 key use
 wait 12
@@ -1571,7 +1608,7 @@ wait 5
 wait 5
 /tp @s -47.5 -60 48.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 50.5
+lookpos -47.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -1582,6 +1619,7 @@ wait 10
 riding PRE-P041
 inspect me
 inspect aim
+inspect block -48 -60 50
 report PAIR P041 act key use
 key use
 wait 12
@@ -1616,7 +1654,7 @@ jar
 wait 5
 /tp @s -23.5 -60 48.5 0 0
 wait 3
-lookpos -23.5 -59.5 50.5
+lookpos -23.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1624,6 +1662,7 @@ wait 10
 riding PRE-P043
 inspect me
 inspect aim
+inspect block -24 -60 50
 report PAIR P043 act key use
 key use
 wait 12
@@ -1656,7 +1695,7 @@ wait 5
 wait 5
 /tp @s 0.5 -60 48.5 0 29.2
 wait 3
-lookpos 0.5 -59.5 50.5
+lookpos 0.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -1664,6 +1703,7 @@ wait 10
 riding PRE-P044
 inspect me
 inspect aim
+inspect block 0 -60 50
 report PAIR P044 act key use
 key use
 wait 12

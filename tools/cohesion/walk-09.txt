@@ -75,7 +75,7 @@ wait 5
 wait 5
 /tp @s -47.5 -60 -95.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 -93.5
+lookpos -47.5 -59.85 -93.5
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:mecha_plating
 /item replace entity @s weapon.offhand with minecraft:air
@@ -83,6 +83,7 @@ wait 10
 riding PRE-N061
 inspect me
 inspect aim
+inspect block -48 -60 -94
 report PAIR N061 act key use
 key use
 wait 12
@@ -311,7 +312,7 @@ mecha hopper -46 -60 -70 hydraulic_legs
 wait 5
 /tp @s -47.5 -60 -71.5 0 29.2
 wait 3
-lookpos -47.5 -59.5 -69.5
+lookpos -47.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 key use
@@ -322,6 +323,7 @@ wait 10
 riding PRE-N070
 inspect me
 inspect aim
+inspect block -48 -60 -70
 report PAIR N070 act key attack
 key attack
 wait 12
@@ -394,7 +396,7 @@ jar
 wait 5
 /tp @s 0.5 -60 -71.5 0 0
 wait 3
-lookpos 0.5 -59.5 -69.5
+lookpos 0.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -402,6 +404,7 @@ wait 10
 riding PRE-N075
 inspect me
 inspect aim
+inspect block 0 -60 -70
 report PAIR N075 act key use
 key use
 wait 12
@@ -436,7 +439,7 @@ jar
 wait 5
 /tp @s 24.5 -60 -71.5 0 0
 wait 3
-lookpos 24.5 -59.5 -69.5
+lookpos 24.5 -59.85 -69.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
@@ -444,6 +447,7 @@ wait 10
 riding PRE-N076
 inspect me
 inspect aim
+inspect block 24 -60 -70
 report PAIR N076 act key use
 key use
 wait 12
@@ -834,7 +838,7 @@ wait 5
 wait 5
 /tp @s -23.5 -60 -23.5 0 29.2
 wait 3
-lookpos -23.5 -59.5 -21.5
+lookpos -23.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:dragon_breath
 /item replace entity @s weapon.offhand with minecraft:air
@@ -842,6 +846,7 @@ wait 10
 riding PRE-N089
 inspect me
 inspect aim
+inspect block -24 -60 -22
 report PAIR N089 act key use
 key use
 wait 12
@@ -911,7 +916,7 @@ wait 5
 wait 5
 /tp @s 24.5 -60 -23.5 0 29.2
 wait 3
-lookpos 24.5 -59.5 -21.5
+lookpos 24.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:cooked_beef
 /item replace entity @s weapon.offhand with minecraft:air
@@ -919,6 +924,7 @@ wait 10
 riding PRE-N091
 inspect me
 inspect aim
+inspect block 24 -60 -22
 report PAIR N091 act key use
 key use
 wait 12
@@ -950,7 +956,7 @@ wait 5
 wait 5
 /tp @s 48.5 -60 -23.5 0 29.2
 wait 3
-lookpos 48.5 -59.5 -21.5
+lookpos 48.5 -59.85 -21.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:porkchop
 /item replace entity @s weapon.offhand with minecraft:air
@@ -958,6 +964,7 @@ wait 10
 riding PRE-N092
 inspect me
 inspect aim
+inspect block 48 -60 -22
 report PAIR N092 act key use
 key use
 wait 12
@@ -989,7 +996,7 @@ wait 5
 wait 5
 /tp @s -71.5 -60 0.5 0 29.2
 wait 3
-lookpos -71.5 -59.5 2.5
+lookpos -71.5 -59.85 2.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:spider_eye
 /item replace entity @s weapon.offhand with minecraft:air
@@ -997,6 +1004,7 @@ wait 10
 riding PRE-N093
 inspect me
 inspect aim
+inspect block -72 -60 2
 report PAIR N093 act key use
 key use
 wait 12

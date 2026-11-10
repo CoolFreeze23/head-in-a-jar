@@ -1,7 +1,8 @@
 # Benchmark lab WITHOUT the jarred heads: the same scene as bench-lab.txt with every headblock and jarhead line left
 # out (turrets, arrays, mounts and sockets stand empty, no placed jarred heads), because in the released mod drawing
 # any jarred head crashes the client (Pose stack not empty). This is the scene the baseline numbers were taken on;
-# compare later waves on this file, and on bench-lab.txt once heads draw.
+# compare later waves on this file, and on bench-lab.txt once heads draw. Scenarios A, B and C, three 30 s windows each;
+# the control windows (camera away, packets by type, /debug profile, frames capture) are in bench-lab-noheads-extras.txt.
 # Benchmark lab: 42 machines, 4 mecha, a jar holding a pig with Telekinesis (scene from the performance review, 7.2).
 # Three scenarios, each settled and then timed in 30-second windows by "bench start/stop" (frame times on the render
 # thread, server tick times on the server thread, packets per second, entity count, the debug screen's fps string),
@@ -100,9 +101,13 @@ mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
 # the jar: a glass stand behind the turrets, a pig to lift
 /fill -1 -58 -13 1 -58 -11 minecraft:glass
 /summon pig 0 -60 -7 {NoAI:1b,PersistenceRequired:1b}
-/tp @s 0.5 -57 -11.5 0 37
+# the head comes off at the side, so its headless body does not stand on the stand in front of the pig
+/tp @s 8.5 -60 -14.5 0 0
 wait 10
 jar
+wait 5
+/tp @s 0.5 -57 -11.5 0 37
+wait 10
 fit telekinesis,manipulator_arm,armor_plating
 charge 100000
 /gamemode survival
@@ -112,6 +117,9 @@ lookat pig
 tkgrab
 wait 10
 look 0 15
+# slimes spawn in a flat world on Easy before the game rule takes hold; clear them so the entity count holds still
+/kill @e[type=minecraft:slime]
+/kill @e[type=minecraft:item]
 inspect me
 inspect near all 30
 # ---- scenario A: settle 10 s, then three 30 s windows
@@ -131,31 +139,6 @@ bench stop
 cmdout tick query
 shot bench_A_end
 inspect near all 30
-# control: the same scene with the camera turned away (render cost against tick cost)
-look 180 15
-wait 40
-bench start Aaway
-wait 600
-bench stop
-cmdout tick query
-look 0 15
-wait 20
-# packets by type the server sends a second client watching the scene (the stand-in adds its own tracking cost)
-bystander spawn 3 -60 -10 0
-wait 40
-bystander mark
-bench start Apackets
-wait 600
-bench stop
-bystander packets
-bystander remove
-wait 20
-# time per ticker: /debug writes a profile into the game folder's debug/ (profiling adds its own cost)
-cmdout debug start
-wait 600
-cmdout debug stop
-frames bench_A 100
-wait 110
 # ---- scenario B: the jar pilots the fitted Colossus
 throw
 wait 10
