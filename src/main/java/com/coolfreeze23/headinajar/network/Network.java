@@ -284,12 +284,10 @@ public final class Network {
                 else com.coolfreeze23.headinajar.mecha.MechaSystems.nextUtility(mecha);
                 return;
             }
-            // nothing on the utility key: the jar's own Telekinesis still answers R from the cockpit
-            if (which == 1 || state.heldEntity() < 0 && !state.has(com.coolfreeze23.headinajar.module.ModuleType.TELEKINESIS)) {
-                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mecha), "mecha.no_utility",
-                        net.minecraft.network.chat.Component.translatable("block.headinajar.assembly_gantry"));
-                return;
-            }
+            // nothing on the utility key: in the cockpit the key is the mecha's, never the jar's own Telekinesis
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mecha), "mecha.no_utility",
+                    net.minecraft.network.chat.Component.translatable("block.headinajar.assembly_gantry"));
+            return;
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
             if (msg.action() == Action.EJECT) {

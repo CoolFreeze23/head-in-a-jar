@@ -208,6 +208,8 @@ public final class ClientEvents {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.OPEN_MENU));
             } else if (state.form() == Form.LINKED) {
                 ClientRefusals.deny("jar.menu_linked", null);
+            } else if (state.form() == Form.BODY) {
+                ClientRefusals.deny(com.coolfreeze23.headinajar.form.FormGuards.BODY_JAR_KEY, null);
             }
         }
         while (ClientSetup.ABILITY.consumeClick()) {

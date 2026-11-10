@@ -271,6 +271,8 @@ public final class FormActions {
             return false;
         }
         state.setForm(mecha ? Form.PILOT : Form.HOSTED);
+        // a sneak held to get here (the satchel's set-down) is not a sneak to get off: it has to be pressed again
+        player.setShiftKeyDown(false);
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
         player.refreshDimensions();
         Network.sync(player);
