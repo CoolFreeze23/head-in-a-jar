@@ -63,6 +63,7 @@ public class ClientSetup {
         event.registerEntityRenderer(ModRegistry.MISSILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModRegistry.EMP_GRENADE_ENTITY.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.CRADLE_BE.get(), CradleRenderer::new);
+        event.registerBlockEntityRenderer(ModRegistry.CHAIR_BE.get(), SeparationChairRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.TURRET_BE.get(), HeadWorkRenderers.Turret::new);
         event.registerBlockEntityRenderer(ModRegistry.MOUNT_BE.get(), HeadWorkRenderers.Mount::new);

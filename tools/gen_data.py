@@ -132,6 +132,8 @@ import gen_p8
 gen_p8.run(EN, PT, write, shaped)
 import gen_p9
 gen_p9.run(EN, PT, write, shaped)
+import gen_p13_chair
+gen_p13_chair.run(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

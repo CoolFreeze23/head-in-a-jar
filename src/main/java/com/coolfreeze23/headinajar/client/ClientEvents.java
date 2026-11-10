@@ -37,8 +37,8 @@ public final class ClientEvents {
         if (JarRenderer.isJar(player, state)) {
             event.setCanceled(true);
             JarRenderer.render(player, state, event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight());
-        } else if (state.form() == Form.LINKED) {
-            // a headless body: the Collar Cam layer draws what sits on the neck
+        } else if (state.form() == Form.LINKED || ChairClock.headTaken(player)) {
+            // a headless body: the Collar Cam layer draws what sits on the neck (in the chair, the chair has the head)
             event.getRenderer().getModel().head.visible = false;
             event.getRenderer().getModel().hat.visible = false;
         }

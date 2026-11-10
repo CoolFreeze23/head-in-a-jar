@@ -45,7 +45,7 @@ public final class LinkHud {
         if (barTicks > 0) barTicks--;
     }
 
-    private static boolean photosensitive() {
+    static boolean photosensitive() {
         return Config.CLIENT_SPEC.isLoaded() && Config.PHOTOSENSITIVE.get();
     }
 
@@ -62,7 +62,7 @@ public final class LinkHud {
         if (player == null) return;
         int w = g.guiWidth(), h = g.guiHeight();
         if (player.getVehicle() instanceof SeatEntity seat && seat.chair() != null && seat.chair().running()) {
-            boothView(g, seat.chair(), w, h, delta.getGameTimeDeltaPartialTick(false));
+            boothView(g, seat.chair(), w, h);
             return;
         }
         JarState state = player.getData(ModRegistry.JAR_STATE);
@@ -120,10 +120,10 @@ public final class LinkHud {
         if (state.carryingHead()) g.drawString(mc.font, Component.translatable("hud.headinajar.carried"), x + 140, y + 2, 0x55FF77 | a, false);
     }
 
-    /** What the patient sees during the operation. */
-    private static void boothView(GuiGraphics g, SeparationChairBlockEntity chair, int w, int h, float partial) {
+    /** What the patient sees during the operation, on the chair's own clock (the machine's animation reads it too). */
+    private static void boothView(GuiGraphics g, SeparationChairBlockEntity chair, int w, int h) {
         Minecraft mc = Minecraft.getInstance();
-        float t = chair.opTick() + partial;
+        float t = ChairClock.elapsed(chair);
         if (t < 20) {
             vignette(g, w, h, t / 20f * 0.6f);
         } else if (t < 60) {
@@ -132,7 +132,10 @@ public final class LinkHud {
         } else if (t < 100) {
             g.fill(0, 0, w, h, 0x6E0A2A12);
             vignette(g, w, h, 0.6f);
-            int line = (int) ((t - 60) / 40f * h);
+            // the line follows the scan ring down over the eyes
+            float ring = Mth.clamp((t - com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_START)
+                    / (com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_END - com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_START), 0, 1);
+            int line = (int) (ring * h);
             g.fill(0, line - 1, w, line + 2, 0xC040FF60);
             g.fill(0, line - 6, w, line - 1, 0x3040FF60);
         } else if (t < 120) {

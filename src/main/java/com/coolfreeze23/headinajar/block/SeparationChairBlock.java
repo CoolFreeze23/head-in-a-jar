@@ -40,7 +40,28 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class SeparationChairBlock extends BaseEntityBlock {
     public static final MapCodec<SeparationChairBlock> CODEC = simpleCodec(SeparationChairBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE = Shapes.or(Block.box(1, 0, 1, 15, 9, 15), Block.box(1, 9, 1, 15, 16, 4));
+    /** The seat and the backrest, the chair facing north (the backrest to the south), turned with the chair. */
+    private static final java.util.Map<Direction, VoxelShape> SHAPES = new java.util.EnumMap<>(Direction.class);
+
+    static {
+        double[][] boxes = {{1, 0, 1, 15, 6, 10}, {1, 4, 10, 15, 17, 13}};
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            VoxelShape shape = Shapes.empty();
+            for (double[] b : boxes) shape = Shapes.or(shape, turned(b, facing));
+            SHAPES.put(facing, shape);
+        }
+    }
+
+    /** A box of the north-facing chair (pixels) turned to face {@code facing}. */
+    private static VoxelShape turned(double[] b, Direction facing) {
+        double x1 = b[0], z1 = b[2], x2 = b[3], z2 = b[5];
+        return switch (facing) {
+            case SOUTH -> Block.box(16 - x2, b[1], 16 - z2, 16 - x1, b[4], 16 - z1);
+            case WEST -> Block.box(z1, b[1], 16 - x2, z2, b[4], 16 - x1);
+            case EAST -> Block.box(16 - z2, b[1], x1, 16 - z1, b[4], x2);
+            default -> Block.box(x1, b[1], z1, x2, b[4], z2);
+        };
+    }
 
     public SeparationChairBlock(Properties properties) {
         super(properties);
@@ -69,7 +90,7 @@ public class SeparationChairBlock extends BaseEntityBlock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return SHAPES.get(state.getValue(FACING));
     }
 
     @Override
@@ -89,7 +110,10 @@ public class SeparationChairBlock extends BaseEntityBlock {
         if (!stack.is(ModRegistry.REPLACEMENT_BLADE.get()) || !(level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        if (chair.running()) return ItemInteractionResult.FAIL;
+        if (chair.running()) {
+            if (player instanceof ServerPlayer sp) com.coolfreeze23.headinajar.feedback.Refusals.deny(sp, chair, "chair.blade_busy");
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         if (!level.isClientSide) {
             chair.setWear(0);
             stack.consume(1, player);
@@ -104,7 +128,12 @@ public class SeparationChairBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
-        if (player.isShiftKeyDown() || chair.running() || chair.seated() != null) {
+        if (chair.running()) {
+            // nothing may be taken out or put in until it is over; whoever clicks is told so
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(server, chair, "chair.in_use");
+            return InteractionResult.CONSUME;
+        }
+        if (player.isShiftKeyDown() || chair.seated() != null) {
             server.openMenu(chair, pos);
             return InteractionResult.CONSUME;
         }
@@ -124,9 +153,8 @@ public class SeparationChairBlock extends BaseEntityBlock {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair) {
-            for (int i = 0; i < chair.items().getSlots(); i++) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), chair.items().getStackInSlot(i));
-            }
+            // a chair broken mid-operation gives back the parts in use too
+            chair.dropAll();
         }
         super.onRemove(state, level, pos, newState, moved);
     }

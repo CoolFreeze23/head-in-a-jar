@@ -48,6 +48,34 @@ public class SeatEntity extends Entity {
         }
     }
 
+    /**
+     * The patient sits square in the chair: the body always faces the chair's front, and the head turns no further
+     * than a seated person's would (less once the restraints are on), so the machine's parts meet the patient where
+     * they are drawn.
+     */
+    private void clampRotation(Entity passenger) {
+        SeparationChairBlockEntity chair = chair();
+        float limit = chair != null && chair.running() ? 30 : 70;
+        passenger.setYBodyRot(getYRot());
+        float turn = net.minecraft.util.Mth.wrapDegrees(passenger.getYRot() - getYRot());
+        float clamped = net.minecraft.util.Mth.clamp(turn, -limit, limit);
+        passenger.yRotO += clamped - turn;
+        passenger.setYRot(passenger.getYRot() + clamped - turn);
+        passenger.setYHeadRot(passenger.getYRot());
+        if (passenger instanceof LivingEntity living) living.yBodyRotO = getYRot();
+    }
+
+    @Override
+    public void onPassengerTurned(Entity passenger) {
+        clampRotation(passenger);
+    }
+
+    @Override
+    protected void positionRider(Entity passenger, Entity.MoveFunction move) {
+        super.positionRider(passenger, move);
+        clampRotation(passenger);
+    }
+
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
         return Vec3.ZERO;

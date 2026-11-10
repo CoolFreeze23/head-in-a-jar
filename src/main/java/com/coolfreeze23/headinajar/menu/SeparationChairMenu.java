@@ -35,12 +35,33 @@ public class SeparationChairMenu extends AbstractContainerMenu {
         this.data = data;
         this.pos = chair == null ? BlockPos.ZERO : chair.getBlockPos();
         ItemStackHandler items = chair == null ? new ItemStackHandler(4) : chair.items();
-        for (int i = 0; i < 4; i++) addSlot(new SlotItemHandler(items, i, SLOT_XY[i][0], SLOT_XY[i][1]));
+        for (int i = 0; i < 4; i++) addSlot(new PartSlot(items, i, SLOT_XY[i][0], SLOT_XY[i][1]));
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) addSlot(new net.minecraft.world.inventory.Slot(inventory, col + row * 9 + 9, 8 + col * 18, 98 + row * 18));
         }
         for (int col = 0; col < 9; col++) addSlot(new net.minecraft.world.inventory.Slot(inventory, col, 8 + col * 18, 156));
         addDataSlots(data);
+    }
+
+    /** A part slot: locked from the signature to the end of the operation, so nothing leaves before the cut uses it. */
+    private class PartSlot extends SlotItemHandler {
+        PartSlot(ItemStackHandler items, int index, int x, int y) {
+            super(items, index, x, y);
+        }
+
+        private boolean locked() {
+            return chair != null && chair.running();
+        }
+
+        @Override
+        public boolean mayPickup(Player player) {
+            return !locked() && super.mayPickup(player);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return !locked() && super.mayPlace(stack);
+        }
     }
 
     public SeparationChairBlockEntity chair() {
@@ -76,6 +97,7 @@ public class SeparationChairMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         ItemStack copy = stack.copy();
         if (index < 4) {
+            if (chair != null && chair.running()) return ItemStack.EMPTY;
             if (!moveItemStackTo(stack, 4, slots.size(), true)) return ItemStack.EMPTY;
         } else {
             boolean moved = false;
