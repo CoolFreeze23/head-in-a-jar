@@ -40,6 +40,14 @@ public abstract class HiddenWindowMixin {
         return window;
     }
 
+    /** SMOKE_TIMEOUT_MIN (default 15) minutes. */
+    @Unique
+    private static long hij$timeoutNanos() {
+        String env = System.getenv("SMOKE_TIMEOUT_MIN");
+        long minutes = env != null && env.matches("[0-9]+") ? Long.parseLong(env) : 15;
+        return minutes * 60_000_000_000L;
+    }
+
     @Inject(method = "toggleFullScreen", at = @At("HEAD"), cancellable = true)
     private void hij$stayWindowed(CallbackInfo callback) {
         callback.cancel();
@@ -50,7 +58,7 @@ public abstract class HiddenWindowMixin {
         if (GLFW.glfwGetWindowAttrib(getWindow(), GLFW.GLFW_VISIBLE) != GLFW.GLFW_FALSE) {
             GLFW.glfwHideWindow(getWindow());
         }
-        if (!hij$stopping && System.nanoTime() - hij$started > 900_000_000_000L) {
+        if (!hij$stopping && System.nanoTime() - hij$started > hij$timeoutNanos()) {
             hij$stopping = true;
             com.mojang.logging.LogUtils.getLogger().error("SMOKE: timed out");
             net.minecraft.client.Minecraft.getInstance().stop();

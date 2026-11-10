@@ -2,6 +2,8 @@
   "required": true,
   "package": "com.coolfreeze23.headinajar.smoke.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["HiddenWindowMixin"],
+  "client": ["HiddenWindowMixin", "MouseHandlerAccess", "KeyboardHandlerAccess", "InputConstantsMixin", "SoundObserveMixin",
+    "ParticleObserveMixin", "ClientLevelObserveMixin", "GuiObserveMixin", "ChatObserveMixin", "SwingObserveMixin",
+    "KeyMappingObserveMixin", "ServerGameListenerAccess"],
   "injectors": { "defaultRequire": 1 }
 }

@@ -1,0 +1,43 @@
+# The stand-in second player: placed, given items, sat in a Separation Chair and operated on while the real client watches
+@observe 30
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 -3.5 0 10
+/setblock 0 -60 3 headinajar:separation_chair
+wait 10
+bystander spawn 2 -60 2 90
+wait 20
+bystander state
+shot bystander_placed
+bystander give headinajar:surgical_saw
+bystander hold minecraft:stick
+bystander mark
+bystander swing
+wait 10
+bystander packets animate
+view 0
+bystander mark
+bystander operate 0 -60 3
+wait 10
+shot bystander_operating
+wait 100
+shot bystander_cut
+wait 80
+bystander state
+bystander packets sound|particle|actionbar|payload|chat
+shot bystander_after
+bystander mark
+bystander key ability
+wait 20
+bystander packets payload|sound|particle
+bystander tp 4 -60 4
+bystander form body
+wait 20
+bystander form jar
+wait 20
+bystander state
+shot bystander_jar
+bystander useentity me
+wait 20
+report bystander done

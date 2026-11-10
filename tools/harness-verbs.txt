@@ -1,0 +1,59 @@
+# Harness verbs proof: every real-input verb once, with the observer report after each
+@observe 15
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 0.5 0 0
+/setblock 0 -60 3 minecraft:chest
+/setblock 2 -60 3 minecraft:stone
+/item replace entity @s hotbar.0 with minecraft:stick
+/item replace entity @s hotbar.2 with minecraft:oak_planks 4
+wait 20
+key jump
+wait 20
+sneak hold 15
+wait 5
+hotbar 3
+wait 5
+scroll -1
+wait 5
+scroll 1
+wait 5
+turn 30 0 6
+wait 5
+turn -30 0 1
+wait 5
+look 0 20
+wait 5
+key use
+wait 20
+widgets
+slots
+slot inv:2 shift
+wait 10
+press escape
+wait 10
+look -38 20
+wait 3
+key attack
+wait 20
+key forward down
+sprint hold 10
+key forward up
+wait 10
+key chat
+wait 5
+type hello from the harness
+press enter
+wait 10
+key headinajar.jar_menu
+wait 10
+click right
+wait 10
+key ability
+wait 10
+frames verbs 10
+turn 20 0 10
+wait 15
+shot verbs_end
+report verbs done

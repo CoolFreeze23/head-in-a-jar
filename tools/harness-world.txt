@@ -1,0 +1,36 @@
+# A normal survival world on Easy (default terrain, seed 12345), kept between runs as harness_keep; crafting by real clicks
+@world survival
+@keep harness_keep
+@seed 12345
+wait 60
+/time set 6000
+/clear @s
+/give @s minecraft:oak_log 3
+wait 10
+shot world_view
+key inventory
+wait 10
+slots
+craft oak_log
+wait 5
+craft oak_log
+wait 5
+shot world_inventory_crafted
+craft oak_planks,oak_planks/oak_planks,oak_planks
+wait 5
+press escape
+wait 5
+/fill ~-2 ~-1 ~-2 ~3 ~-1 ~2 minecraft:stone
+/fill ~-2 ~ ~-2 ~3 ~3 ~2 minecraft:air
+/setblock ~1 ~ ~ minecraft:crafting_table
+/tp @s ~ ~ ~ -90 35
+wait 10
+key use
+wait 10
+craft oak_planks/oak_planks
+wait 5
+shot world_table_crafted
+press escape
+wait 5
+/data get entity @s Inventory
+report world done

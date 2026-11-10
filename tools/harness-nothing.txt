@@ -1,0 +1,63 @@
+# NOTHING detection on real cases: a chair right-click (should do something), then items used where no handler is expected
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamemode survival
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 15
+/setblock 0 -60 3 headinajar:separation_chair
+chair 0 -60 3
+wait 20
+# 1. right-click the Separation Chair with an empty hand (expected: sit down, chair screen opens)
+look 0 25
+wait 3
+shot nothing_chair_aim
+key use
+wait 25
+shot nothing_chair_open
+widgets
+# 2. hold the Sign button (74,70 to 168,86 from the screen corner) for 50 ticks, by real mouse
+at rel 120 78 hold 50
+wait 20
+shot nothing_chair_after_sign
+press escape
+wait 10
+sneak
+wait 20
+riding after-chair
+# 3. Syringe on a mecha
+/tp @s 10.5 -60 0.5 0 10
+mecha hopper 10 -60 3 hydraulic_legs
+/item replace entity @s weapon.mainhand with headinajar:syringe
+wait 20
+look 0 5
+wait 3
+shot nothing_syringe_mecha
+key use
+wait 25
+# 4. Suture Kit on a cow
+/tp @s 20.5 -60 0.5 0 20
+/summon minecraft:cow 20.5 -60 2.5 {NoAI:1b,Rotation:[180f,0f]}
+/item replace entity @s weapon.mainhand with headinajar:suture_kit
+wait 20
+shot nothing_suture_cow
+key use
+wait 25
+# 5. Surgical Saw on a shell (Lunk), right and left click
+/tp @s 30.5 -60 0.5 0 15
+/summon headinajar:lunk 30.5 -60 2.5 {NoAI:1b,Rotation:[180f,0f]}
+/item replace entity @s weapon.mainhand with headinajar:surgical_saw
+wait 20
+shot nothing_saw_shell
+key use
+wait 25
+key attack
+wait 25
+# 6. a plain right-click on grass with a stick (nothing expected from vanilla either)
+/tp @s 40.5 -60 0.5 0 60
+/item replace entity @s weapon.mainhand with minecraft:stick
+wait 10
+key use
+wait 25
+report nothing done

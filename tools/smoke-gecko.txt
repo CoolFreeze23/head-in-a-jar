@@ -1,0 +1,19 @@
+# GeckoLib probe: an animated block entity from the smoke source set, captured at several ticks
+wait 60
+/time set 6000
+/tp @s 0.5 -60 3.5 180 20
+/setblock 0 -60 0 headinajar:gecko_probe
+wait 40
+hud off
+shot gecko_t0
+wait 5
+shot gecko_t5
+wait 3
+shot gecko_t13
+wait 4
+shot gecko_t22
+wait 7
+shot gecko_t34
+burst gecko_burst 10
+wait 2
+report gecko done

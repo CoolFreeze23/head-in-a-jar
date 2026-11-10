@@ -1,0 +1,27 @@
+# Pack mod groups: does the client start, and what a chair, a jar and a mecha look like in each view
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/tp @s 0.5 -60 -3.5 0 15
+/setblock 0 -60 2 headinajar:separation_chair
+/setblock 3 -60 2 headinajar:gecko_probe
+mecha hopper -3 -60 3 hydraulic_legs
+wait 40
+hud off
+shot pack_first
+view 1
+wait 10
+shot pack_third
+key togglePerspective
+wait 10
+shot pack_f5_next
+key togglePerspective
+wait 10
+shot pack_f5_next2
+view 0
+hud on
+turn 40 0 10
+frames pack 20
+wait 25
+report pack done

@@ -27,5 +27,12 @@ versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 
+[[dependencies.${mod_id}]]
+modId="geckolib"
+type="required"
+versionRange="${geckolib_version_range}"
+ordering="NONE"
+side="BOTH"
+
 [[mixins]]
 config="headinajar.mixins.json"

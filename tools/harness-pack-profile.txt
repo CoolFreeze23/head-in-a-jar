@@ -1,0 +1,42 @@
+# Pack profile: R is both the ability key and sprint; as a jar with Telekinesis, as a body walking; attack and use by binding
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamemode survival
+/tp @s 0.5 -60 0.5 0 10
+/setblock 0 -60 3 headinajar:separation_chair
+/setblock 3 -60 3 headinajar:gecko_probe
+wait 20
+# as a body, walking: R
+key forward down
+wait 5
+key ability
+wait 20
+key forward up
+wait 10
+# as a jar with Telekinesis
+jar
+fit telekinesis
+charge 2000
+wait 20
+key ability
+wait 25
+key menu
+wait 20
+press escape
+wait 10
+# attack and use by binding (right and left buttons in his settings)
+/tp @s 0.5 -60 0.5 0 20
+key togglePerspective
+wait 10
+shot pack_view
+key togglePerspective
+wait 10
+shot pack_view2
+key togglePerspective
+wait 10
+frames pack 20
+turn 30 0 15
+wait 20
+report pack done

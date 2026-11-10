@@ -12,6 +12,17 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+repositories {
+    // GeckoLib's own Maven repository (from its installation page)
+    maven {
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup('software.bernie.geckolib')
+        }
+    }
+}
+
 sourceSets {
     main {
         resources.srcDir 'src/generated/resources'
@@ -71,9 +82,14 @@ neoForge {
         smokeClient {
             client()
             sourceSet = sourceSets.smoke
-            gameDirectory = project.file('run-smoke')
-            programArguments.addAll('--username', 'Dev', '--width', '1280', '--height', '720', '--fml.mixin.config', 'headinajar.smoke.mixins.json')
+            // SMOKE_GAME_DIR: another game folder (the "pack" settings profile uses run-smoke-pack); the script and the
+            // report stay in run-smoke either way
+            gameDirectory = project.file(System.getenv('SMOKE_GAME_DIR') ?: 'run-smoke')
+            programArguments.addAll('--username', 'Dev', '--width', System.getenv('SMOKE_WIDTH') ?: '1280',
+                    '--height', System.getenv('SMOKE_HEIGHT') ?: '720', '--fml.mixinConfig', 'headinajar.smoke.mixins.json')
             systemProperty 'headinajar.smoke', 'true'
+            systemProperty 'headinajar.smoke.out', project.file('run-smoke/smoke-out').absolutePath
+            systemProperty 'headinajar.smoke.script', project.file('run-smoke/smoke-script.txt').absolutePath
             jvmArgument '-Xmx3G'
         }
         configureEach {
@@ -92,12 +108,22 @@ neoForge {
 
 
 dependencies {
+    // required: animated machines, mecha and shells
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     // optional integrations: compiled against the pack's own JEI, Jade and Curios jars (tools copy them into libs/)
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     // the hidden smoke client also runs them, so their screens and tooltips can be checked
-    smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'])
-    // SMOKE_PACK_MODS=1 also runs the pack's animation mods (libs-smoke/, not committed) for compatibility checks
-    if (System.getenv('SMOKE_PACK_MODS')) smokeRuntimeOnly fileTree(dir: 'libs-smoke', include: ['*.jar'])
+    // (SMOKE_MODS containing "noemf" leaves Entity Model Features and Entity Texture Features out)
+    def smokeMods = (System.getenv('SMOKE_MODS') ?: '').toLowerCase().split('[ ,]+').findAll { it } as Set
+    smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'],
+            exclude: smokeMods.contains('noemf') ? ['entity_model_features*', 'entity_texture_features*'] : [])
+    // SMOKE_PACK_MODS=1 (or SMOKE_MODS=anim) also runs the pack's animation mods (libs-smoke/*.jar, not committed)
+    if (System.getenv('SMOKE_PACK_MODS') || smokeMods.contains('anim')) smokeRuntimeOnly fileTree(dir: 'libs-smoke', include: ['*.jar'])
+    // SMOKE_MODS=sodium,iris,shoulder,camera,culling,...: each group is the folder libs-smoke/<group> (iris brings sodium)
+    if (smokeMods.contains('iris')) smokeMods += 'sodium'
+    smokeMods.findAll { !(it in ['anim', 'noemf']) }.each { group ->
+        smokeRuntimeOnly fileTree(dir: "libs-smoke/${group}", include: ['*.jar'])
+    }
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -112,6 +138,7 @@ tasks.withType(ProcessResources).configureEach {
             mod_version            : mod_version,
             mod_authors            : mod_authors,
             mod_description        : mod_description,
+            geckolib_version_range : geckolib_version_range,
     ]
     inputs.properties replaceProperties
     filesMatching(['META-INF/neoforge.mods.toml']) {

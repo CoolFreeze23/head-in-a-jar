@@ -62,15 +62,26 @@ public class SmokeClient {
 
     private final Deque<String> script = new ArrayDeque<>();
     private final List<String> report = new ArrayList<>();
+    private final Observer observer = new Observer(report);
+    private final Harness harness = new Harness(report, observer);
+    private final Frames frames = new Frames(report);
+    // world directives ("@world survival", "@keep NAME", "@seed N", "@gamemode MODE", "@difficulty LEVEL", "@observe N")
+    private String worldMode = "flat";
+    private String keep;
+    private long seed = 12345L;
+    private GameType gameMode;
+    private Difficulty difficulty;
     private Path dir;
     private int state;
     private int wait = 40;
     private boolean tooltip;
 
-    public SmokeClient() {
+    public SmokeClient(net.neoforged.bus.api.IEventBus modBus) {
         if (Boolean.getBoolean("headinajar.smoke")) {
+            GeckoProbe.register(modBus);
             NeoForge.EVENT_BUS.addListener(this::onTick);
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
+            NeoForge.EVENT_BUS.addListener(frames::onFrame);
         }
     }
 
@@ -97,6 +108,11 @@ public class SmokeClient {
     private int burstFrame;
 
     private void tick(Minecraft mc) throws IOException {
+        if (state == 2) {
+            harness.tick();
+            frames.tick();
+            observer.tick(mc);
+        }
         if (burstLeft > 0) {
             // one frame every other tick (about 10 fps of game time) while a "burst" runs
             if (mc.level != null && mc.level.getGameTime() % 2 == 0) {
@@ -113,7 +129,8 @@ public class SmokeClient {
                     wait = 20;
                     return;
                 }
-                dir = mc.gameDirectory.toPath().resolve("smoke-out");
+                String out = System.getProperty("headinajar.smoke.out");
+                dir = out != null ? Path.of(out) : mc.gameDirectory.toPath().resolve("smoke-out");
                 Files.createDirectories(dir);
                 mc.options.pauseOnLostFocus = false;
                 checkModels(mc);
@@ -121,6 +138,7 @@ public class SmokeClient {
                 if (Files.exists(file)) {
                     script.addAll(Files.readAllLines(file));
                 }
+                directives();
                 createWorld(mc);
                 state = 1;
                 wait = 40;
@@ -131,15 +149,19 @@ public class SmokeClient {
                     return;
                 }
                 mc.options.pauseOnLostFocus = false;
+                Harness.grab();
+                report.add("world " + mc.getSingleplayerServer().getWorldData().getLevelName() + ": " + worldMode
+                        + ", " + mc.gameMode.getPlayerMode().getName() + ", " + mc.level.getDifficulty().getKey()
+                        + ", seed " + mc.getSingleplayerServer().getWorldData().worldGenOptions().seed());
                 state = 2;
                 wait = 60;
             }
             case 2 -> {
                 String line = null;
-                while (!script.isEmpty() && (line == null || line.isBlank() || line.startsWith("#"))) {
+                while (!script.isEmpty() && (line == null || line.isBlank() || line.startsWith("#") || line.startsWith("@"))) {
                     line = script.poll();
                 }
-                if (line == null || line.isBlank() || line.startsWith("#")) {
+                if (line == null || line.isBlank() || line.startsWith("#") || line.startsWith("@")) {
                     finish(mc);
                     return;
                 }
@@ -150,9 +172,37 @@ public class SmokeClient {
         }
     }
 
-    private void run(Minecraft mc, String line) {
+    private void run(Minecraft mc, String line) throws IOException {
+        int harnessWait = harness.run(line, script);
+        if (harnessWait >= 0) {
+            wait = harnessWait;
+            return;
+        }
         String[] parts = line.split(" ", 2);
+        // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
+        if (!java.util.Set.of("wait", "shot", "burst", "report", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
+                "frames", "walk", "rightclick", "bystander").contains(parts[0])) {
+            observer.setup(line);
+        }
         switch (parts[0]) {
+            case "frames" -> {
+                // frames NAME TICKS: every rendered frame for TICKS ticks, into $SMOKE_FRAMES_DIR; the script carries on
+                String[] args = parts[1].split(" ");
+                frames.start(args[0], Integer.parseInt(args[1]));
+                wait = 1;
+            }
+            case "bystander" -> {
+                // bystander VERB ...: the stand-in second player (Bystander.java); its actions are observed like inputs
+                String[] a = line.split("\\s+");
+                if (java.util.Set.of("useblock", "useitem", "useentity", "attack", "sneak", "swing", "button", "key", "chair", "operate", "form", "close").contains(a[1])) {
+                    observer.begin(line, 0, Bystander.position());
+                } else {
+                    observer.setup(line);
+                }
+                var server = mc.getSingleplayerServer();
+                server.execute(() -> report.add(Bystander.run(server, a)));
+                wait = 2;
+            }
             case "wait" -> wait = Integer.parseInt(parts[1]);
             case "shot" -> {
                 Screenshot.grab(dir.toFile(), parts[1] + ".png", mc.getMainRenderTarget(), m -> {
@@ -167,7 +217,10 @@ public class SmokeClient {
                 burstFrame = 0;
                 wait = 1;
             }
-            case "walk" -> mc.options.keyUp.setDown(parts[1].trim().equals("1"));
+            case "walk" -> {
+                if (parts[1].trim().equals("1")) observer.begin(line, 0);
+                mc.options.keyUp.setDown(parts[1].trim().equals("1"));
+            }
             case "hud" -> mc.options.hideGui = !parts[1].equals("on");
             case "clienthosts" -> {
                 for (var e : mc.level.entitiesForRendering()) {
@@ -183,7 +236,10 @@ public class SmokeClient {
                 for (String id : parts[1].split(",")) report.add("seat " + id + " " + seatProbe(mc, id));
             }
             // a real right-click, through the key binding, exactly as a player's mouse does it
-            case "rightclick" -> net.minecraft.client.KeyMapping.click(mc.options.keyUse.getKey());
+            case "rightclick" -> {
+                observer.begin(line, 0);
+                net.minecraft.client.KeyMapping.click(mc.options.keyUse.getKey());
+            }
             case "riding" -> report.add("riding " + parts[1] + " -> " + (mc.player.getVehicle() == null ? "nothing"
                     : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mc.player.getVehicle().getType()))
                     + " form=" + mc.player.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE).form()
@@ -503,12 +559,48 @@ public class SmokeClient {
         }
     }
 
+    /** Reads the "@" lines of the script (world mode, kept world, seed, game mode, difficulty, observe window). */
+    private void directives() {
+        for (String raw : script) {
+            String line = raw.strip();
+            if (!line.startsWith("@")) continue;
+            String[] a = line.substring(1).split("\\s+");
+            switch (a[0]) {
+                case "world" -> worldMode = a[1];
+                case "keep" -> keep = a[1];
+                case "seed" -> seed = Long.parseLong(a[1]);
+                case "gamemode" -> gameMode = GameType.byName(a[1]);
+                case "difficulty" -> difficulty = Difficulty.byName(a[1]);
+                case "observe" -> observer.window = Integer.parseInt(a[1]);
+                default -> {
+                }
+            }
+        }
+        if (WORLD.equals(keep)) {
+            report.add("@keep smoke is not allowed (the default world is deleted every run); using smoke_kept");
+            keep = "smoke_kept";
+        }
+    }
+
     private void createWorld(Minecraft mc) {
-        var settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.PEACEFUL, true, new GameRules(), WorldDataConfiguration.DEFAULT);
-        var options = new WorldOptions(12345L, false, false);
+        String name = keep != null ? keep : WORLD;
+        if (keep != null && mc.getLevelSource().levelExists(keep)) {
+            report.add("kept world " + keep + " opened (its own game mode, difficulty and seed apply)");
+            mc.createWorldOpenFlows().openWorld(keep, () -> {
+                report.add("EXCEPTION could not open kept world " + keep);
+                finish(mc);
+            });
+            return;
+        }
+        boolean survival = worldMode.equals("survival");
+        GameType type = gameMode != null ? gameMode : survival ? GameType.SURVIVAL : GameType.CREATIVE;
+        Difficulty diff = difficulty != null ? difficulty : survival ? Difficulty.EASY : Difficulty.PEACEFUL;
+        var settings = new LevelSettings(name, type, false, diff, true, new GameRules(), WorldDataConfiguration.DEFAULT);
+        var options = new WorldOptions(seed, survival, false);
+        var preset = survival ? WorldPresets.NORMAL : WorldPresets.FLAT;
         Function<net.minecraft.core.RegistryAccess, net.minecraft.world.level.levelgen.WorldDimensions> dimensions =
-                registries -> registries.registryOrThrow(Registries.WORLD_PRESET).getHolderOrThrow(WorldPresets.FLAT).value().createWorldDimensions();
-        mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, options, dimensions, mc.screen);
+                registries -> registries.registryOrThrow(Registries.WORLD_PRESET).getHolderOrThrow(preset).value().createWorldDimensions();
+        mc.createWorldOpenFlows().createFreshLevel(name, settings, options, dimensions, mc.screen);
     }
 
     private void checkModels(Minecraft mc) {
@@ -547,6 +639,18 @@ public class SmokeClient {
     }
 
     private void finish(Minecraft mc) {
+        if (state == 3) return;
+        try {
+            harness.releaseAll();
+            observer.flush(mc);
+            frames.stop();
+            Frames.drain();
+            var server = mc.getSingleplayerServer();
+            if (server != null && Bystander.present()) server.executeBlocking(() -> Bystander.remove(server));
+        } catch (RuntimeException e) {
+            LOGGER.error("SMOKE: finishing", e);
+            report.add("EXCEPTION while finishing " + e);
+        }
         state = 3;
         try {
             Files.write(dir.resolve("report.txt"), report);

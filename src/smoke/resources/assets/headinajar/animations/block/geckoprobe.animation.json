@@ -1,0 +1,18 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.probe.cut": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"arm": {
+					"rotation": {
+						"0.0": {"post": [0, 0, 0], "lerp_mode": "linear"},
+						"0.5": {"post": [0, 0, 70], "lerp_mode": "catmullrom"},
+						"1.0": {"post": [0, 0, 0], "lerp_mode": "linear"}
+					}
+				}
+			}
+		}
+	}
+}
