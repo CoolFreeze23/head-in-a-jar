@@ -1,0 +1,38 @@
+# TEMPLATE (format example, never built). An item on a transparent canvas (.. = clear), with one
+# off-palette colour (#hex), which build and measure flag under R1.
+texture: item/example_vial.png
+size: 16x16
+key:
+  ..  clear
+  b0  brass.0
+  b1  brass.1
+  b2  brass.2
+  b3  brass.3
+  b4  brass.4
+  t0  teal_glass.0
+  t1  teal_glass.1
+  t2  teal_glass.2
+  t3  teal_glass.3
+  t4  teal_glass.4
+  l0  saline.0
+  l1  saline.1
+  l2  saline.2
+  l3  saline.3
+  ww  #ffffff        # one glint pixel, off-palette on purpose
+pixels:
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. b0 b0 b0 b0 .. .. .. .. .. ..
+.. .. .. .. .. b0 b3 b4 b2 b1 b0 .. .. .. .. ..
+.. .. .. .. .. b0 b2 b2 b1 b1 b0 .. .. .. .. ..
+.. .. .. .. .. t0 t3 t4 t3 t2 t0 .. .. .. .. ..
+.. .. .. .. .. t0 t2 t4 t2 t1 t0 .. .. .. .. ..
+.. .. .. .. t0 t3 ww t2 t2 t2 t1 t0 .. .. .. ..
+.. .. .. t0 t3 t4 t2 t2 t2 t2 t2 t1 t0 .. .. ..
+.. .. .. t0 t4 l3 l3 l3 l3 l3 l2 t1 t0 .. .. ..
+.. .. .. t0 t4 l2 l3 l2 l2 l2 l1 l1 t0 .. .. ..
+.. .. .. t0 t3 l2 l2 l2 l2 l1 l1 l0 t0 .. .. ..
+.. .. .. t0 t3 l2 l3 l2 l1 l1 l1 l0 t0 .. .. ..
+.. .. .. t0 t2 l1 l1 l1 l1 l1 l0 l0 t0 .. .. ..
+.. .. .. .. t0 t1 l0 l0 l0 l0 t1 t0 .. .. .. ..
+.. .. .. .. .. t0 t0 t0 t0 t0 t0 .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..

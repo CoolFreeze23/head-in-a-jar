@@ -54,8 +54,30 @@ def outline(im):
                     break
 
 
+# Guard: write only files art/textures/manifest.json lists as legacy and that still hold what was recorded, so a
+# map-compiled or painted texture is never overwritten. draw_p2.py to draw_p6.py save through this function too.
+import hashlib
+import json
+MANIFEST = os.path.join(os.path.dirname(__file__), '..', 'art', 'textures', 'manifest.json')
+if os.path.exists(MANIFEST):
+    with open(MANIFEST, encoding='utf-8') as _fh:
+        LEGACY = {k: v['sha256'] for k, v in json.load(_fh)['textures'].items() if v['source'] == 'legacy'}
+else:
+    LEGACY = {}
+    print('draw_textures: no art/textures/manifest.json, so every texture is skipped')
+
+
 def save(im, *path):
+    rel = '/'.join(path)
     p = os.path.join(ROOT, *path)
+    if rel not in LEGACY:
+        print('draw_textures: skip %s (not legacy in art/textures/manifest.json; use tools/tex/tex.py)' % rel)
+        return
+    if os.path.exists(p):
+        with open(p, 'rb') as fh:
+            if hashlib.sha256(fh.read()).hexdigest() != LEGACY[rel]:
+                print('draw_textures: skip %s (changed since the manifest recorded it; see tools/tex/tex.py adopt)' % rel)
+                return
     os.makedirs(os.path.dirname(p), exist_ok=True)
     im.save(p)
 

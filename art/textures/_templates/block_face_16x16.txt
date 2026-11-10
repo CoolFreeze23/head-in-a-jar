@@ -1,0 +1,39 @@
+# TEMPLATE (format example, never built: files under _templates are ignored). A 16x16 block face with
+# two-character palette aliases. Copy it to art/textures/<folder>/<name>.txt and change texture: to match.
+# Not a style reference: tex.py measure fails it on R3, R11 and R21.
+texture: block/example_casing.png
+size: 16x16
+key:
+  b0  brass.0
+  b1  brass.1
+  b2  brass.2
+  b3  brass.3
+  b4  brass.4
+  b5  brass.5
+  s1  steel.1
+  s2  steel.2
+  s3  steel.3
+  s4  steel.4
+  s5  steel.5
+  r0  rubber.0
+  r1  rubber.1
+  A1  indicator_amber.1
+  A2  indicator_amber.2
+  A3  indicator_amber.3
+pixels:
+b0 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b0
+b2 b4 b5 b5 b5 b4 b5 b5 b5 b5 b4 b5 b5 b4 b3 b0
+b2 b5 s1 s1 s1 s1 s1 s1 s1 s1 s1 s1 s1 s1 b1 b0
+b2 b5 s1 s5 s4 s4 s4 s3 s3 s4 s4 s4 s5 s4 b1 b0
+b2 b4 s1 s4 s2 s3 s3 s3 s4 s4 s3 s3 s4 s2 b1 b0
+b2 b5 s1 s3 s3 s3 s4 s4 s4 s3 s3 s3 s3 s3 b1 b0
+b2 b5 s1 s4 s4 s3 r1 r1 r1 r1 s3 s4 s4 s4 b1 b0
+b2 b4 s1 s3 s3 s3 r1 A1 A2 r0 s3 s3 s3 s3 b1 b0
+b2 b5 s1 s4 s4 s4 r1 A2 A3 r0 s4 s4 s3 s3 b1 b0
+b2 b5 s1 s3 s3 s3 r0 r0 r0 r0 s3 s3 s4 s4 b1 b0
+b2 b4 s1 s4 s4 s3 s3 s3 s4 s4 s4 s3 s3 s3 b1 b0
+b2 b5 s1 s3 s3 s4 s4 s4 s3 s3 s3 s4 s4 s4 b1 b0
+b2 b5 s1 s5 s4 s3 s3 s3 s3 s4 s4 s4 s5 s4 b1 b0
+b2 b4 s1 s4 s2 s4 s4 s3 s3 s3 s3 s3 s4 s2 b1 b0
+b2 b3 b1 b1 b1 b1 b2 b1 b1 b1 b1 b2 b1 b1 b1 b0
+b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0 b0
