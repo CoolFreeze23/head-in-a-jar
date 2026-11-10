@@ -72,6 +72,7 @@ public class SmokeClient {
     private GameType gameMode;
     private Difficulty difficulty;
     private Path dir;
+    private int linesRun;
     private int state;
     private int wait = 40;
     private boolean tooltip;
@@ -166,6 +167,14 @@ public class SmokeClient {
                     return;
                 }
                 run(mc, line.strip());
+                // the report so far, every 10 lines, so a crash part-way keeps what came before it
+                if (++linesRun % 10 == 0 && dir != null) {
+                    try {
+                        Files.write(dir.resolve("report.txt"), report);
+                    } catch (IOException | RuntimeException e) {
+                        LOGGER.error("SMOKE: partial report", e);
+                    }
+                }
             }
             default -> {
             }

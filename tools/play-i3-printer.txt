@@ -1,0 +1,75 @@
+# Attempt 27, the end: the printer stalled at 987/1200 when its 164 kFE ran out (a print needs 200 kFE). From the
+# after-i2 save: my head is back on (sutured into the old corpse), so the body that comes out now is printed for a
+# head that no longer needs one. Then experiments 1 and 20.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+inspect me
+inspect block 106 200 56
+inspect block 105 200 56
+inspect block 107 200 56
+report == feed both printer piles 20 rotten flesh each (real clicks), then wait
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/give @s minecraft:rotten_flesh 20
+/tp @s 105.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+/give @s minecraft:rotten_flesh 20
+/tp @s 107.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+inspect block 105 200 56
+observe 200
+/tick sprint 1500
+wait 180
+observe 20
+inspect block 106 200 56
+inspect near headless_body 20
+inspect me
+/tp @s 106.5 200 52.5 0 20
+wait 5
+shot i3_after_print
+wait 100
+inspect near headless_body 20
+shot i3_after_print_later
+report == exp 1: drink Cranial Saline with the head on (hold use, looking at the sky)
+key inventory
+wait 8
+slot inv:8 shift
+slot item:headinajar:saline_bottle
+slot inv:8
+press escape
+wait 5
+hotbar 9
+look 0 -60
+observe 50
+key use hold 40
+wait 10
+observe 20
+inspect me
+report == exp 20: the empty Life Support Jar onto the helmet slot (inventory screen)
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot 5
+wait 5
+slots
+shot x_jar_helmet
+press escape
+wait 5
+inspect me
+view 1
+wait 5
+shot x_jar_helmet_third
+view 0

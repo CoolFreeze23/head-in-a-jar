@@ -230,9 +230,21 @@ public final class Harness {
         }
         if (spec.startsWith("item:")) {
             String id = spec.substring(5);
+            // item:ID@TEXT: the first stack of ID whose name or data contains TEXT (a jarred head's creature, a sample's species)
+            String text = null;
+            int at = id.indexOf('@');
+            if (at >= 0) {
+                text = id.substring(at + 1).toLowerCase(java.util.Locale.ROOT);
+                id = id.substring(0, at);
+            }
             if (!id.contains(":")) id = "minecraft:" + id;
             for (Slot s : menu.slots) {
-                if (!s.getItem().isEmpty() && BuiltInRegistries.ITEM.getKey(s.getItem().getItem()).toString().equals(id)) return s;
+                if (s.getItem().isEmpty() || !BuiltInRegistries.ITEM.getKey(s.getItem().getItem()).toString().equals(id)) continue;
+                if (text != null) {
+                    String seen = (s.getItem().getHoverName().getString() + " " + s.getItem().getComponents()).toLowerCase(java.util.Locale.ROOT);
+                    if (!seen.contains(text)) continue;
+                }
+                return s;
             }
             return null;
         }

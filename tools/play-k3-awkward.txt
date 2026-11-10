@@ -1,0 +1,166 @@
+# The awkward moments, part 3: the body's chunk unloading, the bystander in a chair, and quitting to the title screen
+# and back in each form. Flat world, survival, Easy. Setup verbs: separate, hostify, mecha.
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+report == K4. chunk unloading: separate, swap into the jar, teleport the jar 400 blocks away, Swap from there, come back
+separate
+wait 40
+key swap
+wait 30
+inspect me
+inspect near headless_body 10
+/tp @s 400.5 -60 400.5
+wait 200
+inspect me
+observe 40
+key swap
+wait 40
+observe 20
+inspect me
+/tp @s 2.5 -60 0.5
+wait 100
+inspect me
+inspect near headless_body 30
+observe 40
+key swap
+wait 40
+observe 20
+inspect me
+report == K1b. the bystander sits in a Separation Chair (stocked by the setup verb), standing right beside it
+/setblock 6 -60 6 headinajar:separation_chair
+wait 5
+inspect block 6 -60 6
+bystander spawn 5 -60 6 90
+wait 10
+bystander mark
+observe 60
+bystander chair 6 -60 6
+wait 60
+observe 20
+bystander state
+bystander packets sound|actionbar|chat
+shot k1_bystander_in_chair
+bystander remove
+report == K5. quit to the title screen and come back, while linked
+inspect me
+press escape
+wait 10
+widgets
+widget "Save and Quit to Title"
+wait 120
+widgets
+widget "Singleplayer"
+wait 60
+widgets
+at 320 66
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+inspect near headless_body 10
+inspect near head_jar 10
+shot k5_back_linked
+report == K5b. as the jar
+key swap
+wait 30
+inspect me
+press escape
+wait 10
+widget "Save and Quit to Title"
+wait 120
+widget "Singleplayer"
+wait 60
+at 320 66
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back_jar
+report == K5c. on a host
+hostify minecraft:cow 4 -60 4
+wait 10
+lookat cow
+key use
+wait 20
+inspect me
+press escape
+wait 10
+widget "Save and Quit to Title"
+wait 120
+widget "Singleplayer"
+wait 60
+at 320 66
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back_host
+sneak hold 10
+wait 10
+report == K5d. in a mecha
+mecha hopper -3 -60 3 hydraulic_legs,galvanic_stack,drill
+wait 20
+lookat hopper
+key use
+wait 20
+inspect me
+press escape
+wait 10
+widget "Save and Quit to Title"
+wait 120
+widget "Singleplayer"
+wait 60
+at 320 66
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back_mecha
+key sneak down
+wait 2
+key menu hold 30
+wait 10
+key sneak up
+closegui
+grab
+report == K5e. in a Neural Socket
+/setblock 0 -60 8 headinajar:neural_socket
+/tp @s 0.5 -60 6.5 0 5
+wait 10
+key use
+wait 20
+inspect me
+press escape
+wait 10
+widget "Save and Quit to Title"
+wait 120
+widget "Singleplayer"
+wait 60
+at 320 66
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back_socket
+hotbar 5
+wait 10
+key ability
+wait 20
+key sneak down
+wait 2
+key menu hold 20
+wait 10
+key sneak up
+closegui
+grab
+inspect me

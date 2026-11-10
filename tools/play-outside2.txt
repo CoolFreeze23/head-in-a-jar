@@ -1,0 +1,126 @@
+# The big moments from outside, second take. Flat world, survival, default profile.
+# The bystander is the doer where it can be (it has no client, so it cannot break its own link: there the real client
+# is the doer and the bystander's packet record is what a watching player is sent).
+# Setup verbs: bystander form/fit/charge, gantry (stocks the Gantry), separate, fit, charge.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+report == 1. a mecha: the bystander assembles a Hopper at a stocked Gantry, then boards it as a jar
+/setblock -6 -60 3 headinajar:assembly_gantry
+gantry -6 -60 3 hopper
+bystander spawn -4 -60 1 90
+wait 10
+bystander tp -4 -60 1 90 30
+/tp @s 2.5 -60 -4.5 50 10
+wait 5
+bystander mark
+bystander useblock -6 -60 3
+wait 10
+bystander state
+observe 80
+bystander button 1
+wait 80
+observe 30
+bystander packets sound|particle|actionbar|chat|title|payload
+inspect near hopper 20
+shot o2_mecha_assembled
+bystander close
+bystander form jar
+wait 20
+bystander state
+/execute at @e[type=headinajar:hopper,limit=1] run tp @e[type=player,name=Bystander] ~1.5 ~ ~ 90 20
+wait 5
+bystander state
+bystander mark
+observe 60
+bystander useentity nearest hopper
+wait 60
+observe 30
+bystander state
+bystander packets sound|particle|actionbar|chat|title|payload
+shot o2_mecha_boarded
+view 1
+wait 5
+shot o2_mecha_boarded_third
+view 0
+report the bystander pilots: ability, secondary, eject (Sneak + J payload is eject)
+bystander mark
+bystander key ability
+wait 30
+bystander key eject
+wait 30
+bystander state
+bystander packets sound|particle|actionbar|chat|title|payload
+report == 2. Telekinesis on a cow with its AI on (penned by fences), the bystander's jar lifts and throws it
+/fill 5 -60 -3 7 -60 -1 minecraft:oak_fence
+/setblock 6 -60 -2 minecraft:air
+/summon minecraft:cow 6.5 -60 -1.5
+bystander fit telekinesis,hop_springs
+bystander charge 100000
+bystander tp 6.5 -60 1.5 180 20
+wait 10
+/tp @s 1.5 -60 -6.5 -45 10
+inspect near cow 12
+bystander mark
+observe 40
+bystander key ability
+wait 40
+observe 30
+inspect near cow 12
+shot o2_tk_lifted
+bystander packets sound|particle|actionbar|payload
+bystander mark
+observe 60
+bystander key throw
+wait 60
+observe 30
+inspect near cow 40
+bystander packets sound|particle|actionbar|payload
+shot o2_tk_thrown
+report == 3. Telekinesis from the doer's eyes on an AI cow (real input), with the bystander's record as the watcher's
+bystander tp -3 -60 -3 0 0
+/fill -3 -60 6 -1 -60 8 minecraft:oak_fence
+/setblock -2 -60 7 minecraft:air
+/summon minecraft:cow -1.5 -60 7.5
+separate
+wait 40
+key swap
+wait 30
+fit telekinesis,hop_springs
+charge 100000
+/tp @s -1.5 -60 4.5 0 25
+wait 10
+lookat cow
+inspect near cow 8
+bystander mark
+key ability
+wait 40
+inspect near cow 8
+shot o2_tk_doer_lifted
+key attack
+wait 60
+inspect near cow 40
+bystander packets sound|particle|actionbar|payload
+inspect me
+report == 4. a link break, the real client as the doer (bystander = the watcher's record, standing by the head)
+key swap
+wait 30
+inspect me
+/execute at @e[type=headinajar:head_jar,limit=1] run tp @e[type=player,name=Bystander] ~2 ~ ~ 90 0
+bystander mark
+look 180 0
+observe 400
+key sprint down
+key forward down
+wait 400
+key forward up
+key sprint up
+observe 30
+wait 30
+inspect me
+bystander packets sound|particle|actionbar|chat|title|payload
+shot o2_link_broken

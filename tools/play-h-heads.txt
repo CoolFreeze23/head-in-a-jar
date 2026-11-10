@@ -1,0 +1,749 @@
+# Department H, part 1 (cold read 48-51 prep, exp 30): craft the heads-at-work blocks and jars by real clicks, weaken
+# four mobs with a wooden sword and saw their heads into jars held in the off hand (each kind of empty jar tried).
+# After the G runs (body linked, head carried). Part 2 (H2, attempts 48-51) follows in the same file. Mobs summoned with NoAI to stand still (setup), at night-proof spots.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+report == the head sits inside the host's box (the jar got off there in G5): hop the jar 3 blocks north, swap back, pick it up
+key swap
+wait 30
+look 180 0
+key forward hold 12
+wait 10
+key swap
+wait 30
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+hotbar 9
+key use
+wait 20
+inspect me
+report == the inventory is full (36 slots): what the lab left over goes (cleared by command; a player would drop it)
+/clear @s minecraft:beef
+/clear @s minecraft:leather
+/clear @s minecraft:stone_sword
+/clear @s minecraft:smooth_stone
+/clear @s minecraft:glass_bottle
+/clear @s minecraft:bucket
+/clear @s headinajar:gene_wash
+/clear @s headinajar:blood_sample
+/clear @s headinajar:bio_gel
+/clear @s headinajar:plasma_vial
+/clear @s headinajar:syringe
+/clear @s headinajar:serum_cassette
+/clear @s headinajar:dna_fraction
+inspect me
+report == materials (vanilla, by command)
+/give @s minecraft:iron_ingot 26
+/give @s minecraft:bone_meal 24
+/give @s minecraft:coal 24
+/give @s minecraft:coal_block 1
+/give @s minecraft:copper_ingot 18
+/give @s minecraft:rotten_flesh 1
+/give @s minecraft:redstone 16
+/give @s minecraft:glass 10
+/give @s minecraft:slime_ball 5
+/give @s minecraft:quartz 8
+/give @s minecraft:gold_ingot 10
+/give @s minecraft:lapis_lazuli 4
+/give @s minecraft:hopper 1
+/give @s minecraft:dispenser 1
+/give @s minecraft:netherite_scrap 1
+/give @s minecraft:tinted_glass 2
+/give @s minecraft:obsidian 1
+/give @s minecraft:wooden_sword 1
+/give @s minecraft:water_bucket 1
+/give @s minecraft:beetroot_soup 1
+/give @s minecraft:mushroom_stew 1
+/give @s minecraft:sugar 1
+inspect me
+report == 24 steel blends, smelted (a coal block as fuel)
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft iron_ingot,bone_meal,coal x24
+press escape
+wait 5
+/tp @s 102.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:surgical_steel_blend
+slot 0
+slot item:coal_block
+slot 1
+press escape
+wait 5
+/tick sprint 5000
+wait 600
+/time set 1000
+key use
+wait 10
+slot 2 shift
+press escape
+wait 5
+inspect me
+report == crafting: wire, chips, servos, five Life Support Jars, a Compact Jar, a Reinforced Jar, Employee Mount, Turret Pedestal, Cerebral Array, Neural Socket, Nutrient Broth
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft copper_ingot,redstone,copper_ingot x3
+craft quartz,headinajar:neuro_copper_wire,quartz/gold_ingot,lapis_lazuli,gold_ingot x4
+craft _,copper_ingot,_/glass,slime_ball,glass/headinajar:surgical_steel_ingot,redstone,headinajar:surgical_steel_ingot x5
+craft copper_ingot,headinajar:neuro_copper_wire,copper_ingot/copper_ingot,rotten_flesh,copper_ingot/copper_ingot,headinajar:neuro_copper_wire,copper_ingot
+craft headinajar:surgical_steel_ingot,_,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,iron_ingot,headinajar:surgical_steel_ingot/_,iron_ingot,_
+craft gold_ingot,hopper,gold_ingot/headinajar:surgical_steel_ingot,dispenser,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,redstone,headinajar:surgical_steel_ingot
+craft headinajar:neuro_copper_wire,headinajar:synapse_chip,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,headinajar:life_support_jar,headinajar:surgical_steel_ingot/headinajar:neuro_copper_wire,headinajar:synapse_chip,headinajar:neuro_copper_wire
+craft redstone,headinajar:synapse_chip,redstone/headinajar:neuro_copper_wire,headinajar:surgical_steel_ingot,headinajar:neuro_copper_wire/redstone,headinajar:synapse_chip,redstone
+craft water_bucket,beetroot_soup/mushroom_stew,sugar
+wait 5
+shot h1_crafted
+press escape
+wait 5
+inspect me
+report == the mobs: a librarian villager, a skeleton and a zombie (helmets against the sun), a blaze; NoAI, each in a pen
+/fill 70 200 44 86 202 50 minecraft:air
+/summon minecraft:villager 72.5 200 46.5 {NoAI:1b,PersistenceRequired:1b,VillagerData:{profession:"minecraft:librarian",level:2,type:"minecraft:plains"},Rotation:[0f,0f]}
+/summon minecraft:skeleton 76.5 200 46.5 {NoAI:1b,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",count:1}]}
+/summon minecraft:zombie 80.5 200 46.5 {NoAI:1b,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",count:1}]}
+/summon minecraft:blaze 84.5 200 46.5 {NoAI:1b,PersistenceRequired:1b}
+/fill 70 200 48 86 202 48 minecraft:stone
+wait 10
+report == weapon and saw to the hotbar, jars ready
+key inventory
+wait 8
+slot item:wooden_sword
+slot inv:0
+press escape
+wait 5
+inspect me
+wait 5
+report == villager: wooden sword x5, then the saw with a life_support_jar in the off hand
+hotbar 1
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+key attack
+wait 15
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+key attack
+wait 15
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+key attack
+wait 15
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+key attack
+wait 15
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+key attack
+wait 15
+inspect near villager 4
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot inv:40
+press escape
+wait 5
+hotbar 2
+/tp @s 72.5 200 44.5 0 10
+wait 2
+lookat villager
+observe 40
+key use
+wait 40
+observe 20
+inspect near villager 6
+inspect me
+report == skeleton: wooden sword x5, then the saw with a life_support_jar in the off hand
+hotbar 1
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+key attack
+wait 15
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+key attack
+wait 15
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+key attack
+wait 15
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+key attack
+wait 15
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+key attack
+wait 15
+inspect near skeleton 4
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot inv:40
+press escape
+wait 5
+hotbar 2
+/tp @s 76.5 200 44.5 0 10
+wait 2
+lookat skeleton
+observe 40
+key use
+wait 40
+observe 20
+inspect near skeleton 6
+inspect me
+report == zombie: wooden sword x5, then the saw with a life_support_jar in the off hand
+hotbar 1
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+key attack
+wait 15
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+key attack
+wait 15
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+key attack
+wait 15
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+key attack
+wait 15
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+key attack
+wait 15
+inspect near zombie 4
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot inv:40
+press escape
+wait 5
+hotbar 2
+/tp @s 80.5 200 44.5 0 10
+wait 2
+lookat zombie
+observe 40
+key use
+wait 40
+observe 20
+inspect near zombie 6
+inspect me
+report == blaze: wooden sword x5, then the saw with a life_support_jar in the off hand
+hotbar 1
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+key attack
+wait 15
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+key attack
+wait 15
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+key attack
+wait 15
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+key attack
+wait 15
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+key attack
+wait 15
+inspect near blaze 4
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot inv:40
+press escape
+wait 5
+hotbar 2
+/tp @s 84.5 200 44.5 0 10
+wait 2
+lookat blaze
+observe 40
+key use
+wait 40
+observe 20
+inspect near blaze 6
+inspect me
+report == exp: a second Life Support Jar on a fresh full-health villager (the saw refuses?), and the saw with an empty off hand on a weak one is department D's
+shot h1_after_jarring
+key inventory
+wait 8
+tooltip on
+shot h1_inventory
+press escape
+inspect me
+report == H2. heads at work. Clear a strip of the yard (setup) at x 104-122, z 50-58
+/fill 104 200 49 122 204 58 minecraft:air
+/give @s minecraft:chest 2
+/give @s minecraft:arrow 32
+/give @s minecraft:emerald 8
+/give @s minecraft:redstone_lamp 1
+/give @s minecraft:paper 24
+report == 49: the Turret Pedestal, a pile west, a chest of arrows east; the jarred skeleton fitted; a zombie stands 5 blocks off (NoAI: in try 4 a walking zombie broke my carried jar and killed me)
+key inventory
+wait 8
+slot item:headinajar:turret_pedestal
+slot inv:0
+slot item:headinajar:galvanic_pile
+slot inv:1
+slot item:chest
+slot inv:2
+slot item:headinajar:jarred_head@skeleton
+slot inv:3
+slot item:arrow
+slot inv:4
+press escape
+wait 5
+hotbar 1
+/tp @s 110.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+hotbar 2
+/tp @s 109.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+hotbar 3
+/tp @s 111.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+/give @s minecraft:rotten_flesh 10
+hotbar 1
+/tp @s 109.5 200 50.5 0 30
+wait 5
+key use
+wait 10
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 111.5 200 50.5 0 30
+wait 5
+key use
+wait 10
+slot item:arrow
+slot 0
+press escape
+wait 5
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 110.5 200 50.5 0 30
+wait 5
+observe 30
+key use
+wait 30
+hotbar 4
+key use
+wait 30
+observe 20
+inspect block 110 200 52
+inspect block 109 200 52
+shot h2_turret_skeleton
+/tick sprint 400
+wait 60
+/time set 1000
+/summon minecraft:zombie 110.5 200 57.5 {NoAI:1b,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",count:1}]}
+/tp @s 110.5 200 49.5 0 15
+observe 120
+hotbar 5
+wait 120
+observe 20
+inspect near zombie 16
+shot h2_turret_firing
+wait 100
+inspect near zombie 16
+inspect near arrow 16
+inspect block 111 200 52
+inspect me
+report the blaze head instead (empty hand takes the skeleton out)
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 110.5 200 50.5 0 30
+wait 5
+key use
+wait 20
+key inventory
+wait 8
+slot item:headinajar:jarred_head@blaze
+slot inv:4
+press escape
+wait 5
+hotbar 5
+key use
+wait 20
+inspect block 110 200 52
+/kill @e[type=minecraft:zombie,distance=..30]
+/summon minecraft:zombie 110.5 200 57.5 {NoAI:1b,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",count:1}]}
+/tp @s 110.5 200 49.5 0 15
+observe 120
+hotbar 6
+wait 120
+observe 20
+inspect near zombie 16
+shot h2_turret_blaze
+wait 100
+inspect near zombie 16
+inspect me
+report == 50: the Cerebral Array, the jarred zombie inside, Nutrient Broth poured in
+key inventory
+wait 8
+slot item:headinajar:cerebral_array
+slot inv:0
+slot item:headinajar:nutrient_broth_bucket
+slot inv:1
+press escape
+wait 5
+hotbar 1
+/tp @s 114.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 114.5 200 50.5 0 30
+wait 5
+key use
+wait 10
+shot h2_array_empty
+slots
+slot item:headinajar:jarred_head@zombie
+slot 0
+wait 5
+press escape
+wait 5
+hotbar 2
+observe 30
+key use
+wait 30
+observe 20
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 10
+shot h2_array_running
+press escape
+wait 5
+/tick sprint 600
+wait 80
+/time set 1000
+inspect block 114 200 52
+report the jarred villager... is on the mount; the array runs on one zombie
+report == 51a: the Neural Socket with a mob head (the zombie, out of the Array), a redstone lamp on its east side
+key use
+wait 10
+slot 0 shift
+press escape
+wait 5
+key inventory
+wait 8
+slot item:headinajar:neural_socket
+slot inv:0
+slot item:redstone_lamp
+slot inv:1
+slot item:headinajar:jarred_head@zombie
+slot inv:2
+press escape
+wait 5
+hotbar 1
+/tp @s 118.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+hotbar 2
+/tp @s 119.5 200 50.5 0 39
+wait 5
+key use
+wait 10
+hotbar 3
+/tp @s 118.5 200 50.5 0 30
+wait 5
+observe 30
+key use
+wait 30
+observe 20
+inspect block 118 200 52
+inspect block 119 200 52
+wait 7
+inspect block 119 200 52
+wait 7
+inspect block 119 200 52
+shot h2_socket_zombie
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 10
+inspect block 118 200 52
+report == 51b: my own jar plugged in: head down beside the socket, swap, right-click the socket
+hotbar 4
+key inventory
+wait 8
+slot item:headinajar:head_satchel
+slot inv:3
+press escape
+wait 5
+/tp @s 117.5 200 50.5 0 10
+look 0 60
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+key swap
+wait 30
+inspect me
+/tp @s 118.5 200 50.8 0 5
+wait 5
+observe 30
+key use
+wait 30
+observe 20
+inspect me
+shot h2_socket_plugged
+report keys: 5 (level), R (pulse), scroll (face), G
+hotbar 5
+wait 10
+inspect block 119 200 52
+inspect block 118 200 52
+key ability
+wait 2
+inspect block 119 200 52
+wait 10
+scroll -1
+wait 10
+shot h2_socket_scrolled
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+wait 10
+inspect block 118 200 52
+key secondary
+wait 20
+closegui
+grab
+report unplug: Sneak + Jar menu
+key sneak down
+wait 2
+key menu hold 20
+wait 10
+key sneak up
+closegui
+grab
+wait 10
+inspect me
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 20
+inspect me
+report == 48b: the Employee Mount against the DNA Sequencer's east side, the jarred librarian hung on it, a chest of emeralds touching it
+key inventory
+wait 8
+slot item:headinajar:employee_mount
+slot inv:0
+slot item:headinajar:jarred_head@villager
+slot inv:1
+slot item:chest
+slot inv:2
+press escape
+wait 5
+hotbar 1
+/tp @s 95.5 200 37.5 0 39
+wait 5
+key use
+wait 20
+inspect block 95 200 39
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 95.5 200 37.5 0 30
+wait 3
+observe 30
+key use
+wait 30
+hotbar 2
+key use
+wait 30
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 30
+observe 20
+inspect block 95 200 39
+shot h2_mount_staffed
+hotbar 3
+/tp @s 96.5 200 37.5 0 39
+wait 5
+key use
+wait 10
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 96.5 200 37.5 0 30
+wait 3
+key use
+wait 10
+slot item:emerald
+slot 0
+press escape
+wait 5
+/tp @s 95.5 200 37.5 0 30
+wait 3
+key use
+wait 30
+report a day passes (24000 ticks) with the emeralds there
+/tick sprint 24000
+wait 400
+/time set 1000
+key use
+wait 30
+inspect block 95 200 39
+inspect block 96 200 39
+report take the jarred librarian down again (sneak + empty hand on the mount)
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 95.5 200 37.5 0 30
+wait 5
+key sneak down
+wait 2
+key use
+wait 20
+key sneak up
+wait 5
+inspect block 95 200 39
+inspect me
+report == 48a (last: in an earlier try placing the jarred villager crashed the game): trade with a jarred villager: place the jarred librarian on the floor, right-click it
+key inventory
+wait 8
+slot item:headinajar:jarred_head@villager
+slot inv:0
+press escape
+wait 5
+hotbar 1
+/tp @s 106.5 200 50.5 0 39
+wait 5
+key use
+wait 20
+inspect block 106 200 52
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 106.5 200 50.5 0 29
+wait 5
+observe 30
+key use
+wait 30
+observe 20
+shot h2_jarred_villager_trade
+widgets
+widget #0
+wait 10
+shot h2_trade_selected
+slots
+slot 2 shift
+wait 10
+press escape
+wait 5
+inspect me
+report take the head back: break the block (hold attack)
+key attack hold 30
+wait 20
+inspect block 106 200 52
+inspect near item 4
+wait 20
+inspect me

@@ -1,0 +1,107 @@
+# The awkward moments, part 2: a lit nether portal with the head left behind, the jar through the portal, the body's
+# chunk unloading, the bystander sitting in a chair beside it, quit to title and back. Flat world, survival, Easy.
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+report == K3. a nether portal: obsidian by command, lit by real input (flint and steel at the inside of the frame)
+/fill 20 -60 0 20 -56 3 minecraft:obsidian
+/fill 20 -59 1 20 -57 2 minecraft:air
+/give @s minecraft:flint_and_steel 1
+/tp @s 18.5 -60 1.5 -90 20
+wait 5
+hotbar 1
+observe 30
+key use
+wait 30
+observe 20
+inspect block 20 -59 1
+shot k3_portal
+report the head is set down 1.5 blocks west of me (separate, facing west), then the linked body walks into the portal
+/tp @s 14.5 -60 1.5 90 0
+wait 5
+separate
+wait 40
+inspect me
+inspect near head_jar 6
+/tp @s 18.5 -60 1.5 -90 0
+wait 5
+observe 160
+key forward hold 30
+wait 140
+observe 20
+inspect me
+shot k3_body_at_portal
+report == K3b. the jar goes through: swap into the head, hop into the portal (the body stays in the overworld)
+/tp @s 17.5 -60 1.5 -90 0
+wait 5
+key swap
+wait 30
+inspect me
+/tp @s 20.5 -59 1.5 -90 0
+observe 160
+wait 160
+observe 20
+inspect me
+shot k3_jar_through
+wait 60
+inspect me
+report the jar presses Swap from the other dimension
+observe 40
+key swap
+wait 40
+observe 20
+inspect me
+report back to the overworld (into the portal the game built over there)
+/execute in minecraft:the_nether run tp @s ~ ~ ~
+wait 200
+inspect me
+report == K4. chunk unloading: as the jar, go 400 blocks away (teleport), wait, come back; Swap from afar and from near
+/tp @s 400.5 -60 400.5
+wait 100
+inspect me
+observe 40
+key swap
+wait 40
+observe 20
+inspect me
+/tp @s 16.5 -60 3.5
+wait 60
+inspect me
+inspect near headless_body 30
+key swap
+wait 30
+inspect me
+report == K1b. the bystander sits in a Separation Chair next to it (stocked by the setup verb)
+/setblock 10 -60 6 headinajar:separation_chair
+bystander spawn 9 -60 6 90
+wait 10
+bystander mark
+observe 60
+bystander chair 10 -60 6
+wait 60
+observe 20
+bystander state
+bystander packets sound|actionbar|chat
+shot k1_bystander_in_chair
+bystander tp 12 -60 9 0 0
+report == K5. quit to the title screen while linked and come back (Escape, Save and Quit, Singleplayer, the world, Play)
+press escape
+wait 10
+widgets
+widget "Save and Quit to Title"
+wait 100
+widgets
+widget "Singleplayer"
+wait 40
+widgets
+at 320 52
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back

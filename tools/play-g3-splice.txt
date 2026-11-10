@@ -1,0 +1,320 @@
+# Department G, part 3 (cold read 43-47): the plain Syringe, calling bases, splicing, the Rig, what a gene does, Gene Wash.
+# After play-g2-blood.txt (13 fractions auto-read: 6 spider, 6 enderman, 1 more; 13 plasma vials).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+inspect me
+report == materials (vanilla, by command)
+/give @s minecraft:slime_ball 4
+/give @s minecraft:milk_bucket 1
+/give @s minecraft:iron_nugget 1
+/give @s minecraft:glass 3
+/give @s minecraft:amethyst_shard 1
+/give @s minecraft:glass_bottle 4
+/give @s minecraft:iron_block 1
+/give @s minecraft:nether_wart_block 1
+/give @s minecraft:piston 3
+report == crafting: a plain Syringe, Bio-Gel x3 (6), Gene Wash (2), and the Chimera Frame (lens, 3 servos, Collar Cam, 2 plating)
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft iron_nugget/glass/headinajar:surgical_steel_ingot
+craft headinajar:plasma_vial,slime_ball,headinajar:plasma_vial x3
+craft _,milk_bucket,_/headinajar:plasma_vial,glass_bottle,headinajar:plasma_vial
+craft glass,amethyst_shard,glass
+craft _,piston,_/headinajar:surgical_steel_ingot,headinajar:neuro_copper_wire,headinajar:surgical_steel_ingot x3
+craft _,headinajar:lens,_/headinajar:neuro_copper_wire,headinajar:servo,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,iron_block,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft headinajar:bio_gel,headinajar:collar_cam,headinajar:bio_gel/headinajar:mecha_plating,nether_wart_block,headinajar:mecha_plating/headinajar:servo,_,headinajar:servo
+wait 5
+shot g3_crafted
+press escape
+wait 5
+inspect me
+report == attempt 43 with the plain Syringe: cow, skeleton, spider, the Lunk (aimed close), each once
+key inventory
+wait 8
+slot item:headinajar:syringe
+slot inv:2
+press escape
+wait 5
+hotbar 3
+/tp @s 91.5 200 29.5 0 10
+wait 3
+lookat cow
+key use
+wait 20
+/tp @s 94.5 200 29.5 0 10
+wait 3
+lookat skeleton
+key use
+wait 20
+/tp @s 97.5 200 29.5 0 10
+wait 3
+lookat spider
+key use
+wait 20
+inspect near spider 4
+/execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run tp @s ~ ~ ~-1.8 0 10
+wait 5
+lookat lunk 1
+key use
+wait 20
+inspect near all 4
+inspect me
+report == spin the two new samples
+/tp @s 90.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:blood_sample
+slot 0
+/tick sprint 170
+wait 30
+slot 1 shift
+slot 2 shift
+slot item:headinajar:blood_sample
+slot 0
+/tick sprint 170
+wait 30
+slot 1 shift
+slot 2 shift
+slots
+press escape
+wait 5
+report == attempt 45b: call the bases yourself. Auto was left on in G2: switch it off first, then put a fraction in
+/tp @s 94.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+inspect block 94 200 39
+widget "Auto"
+wait 5
+inspect block 94 200 39
+slot item:headinajar:dna_fraction
+slot 0
+wait 10
+shot g3_strand_before_call
+inspect block 94 200 39
+report the strand on screen (Seed 343845 gives CGCTGGGAAGGA; checked against g3_strand_before_call.png afterwards), typed on the keyboard
+observe 30
+press c
+press g
+press c
+press t
+press g
+press g
+press g
+press a
+press a
+press g
+press g
+press a
+wait 30
+observe 20
+shot g3_after_call
+inspect block 94 200 39
+report the second fraction: called blind with the A button twelve times
+slot item:headinajar:dna_fraction
+slot 0
+wait 10
+shot g3_strand2
+observe 30
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+widget "A"
+wait 30
+observe 20
+shot g3_after_blind
+press escape
+wait 5
+report == attempt 46: the Gene Splicer
+/tp @s 98.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+shot g3_splicer_open
+widget "Splice"
+wait 20
+widget #1
+wait 10
+shot g3_splicer_gene1
+report row 2: > (the next gene is the one row 1 already has)
+widget #3
+wait 10
+widget #3
+wait 10
+shot g3_splicer_row2_right
+report row 2: <
+widget #2
+wait 10
+shot g3_splicer_two_genes
+widget "Splice"
+wait 20
+report clear row 2 (>), load the gel, bottle and a slime ball catalyst
+widget #3
+wait 10
+slot item:headinajar:bio_gel
+slot 1 right
+slot item:glass_bottle
+slot 2 right
+slot item:slime_ball
+slot 0 right
+wait 5
+shot g3_splicer_loaded
+slots
+press escape
+wait 3
+key use
+wait 10
+slots
+press escape
+wait 3
+key use
+wait 10
+observe 60
+widget "Splice"
+wait 40
+observe 20
+shot g3_splicing
+/tick sprint 1250
+wait 150
+shot g3_spliced
+slots
+slot 3 shift
+wait 5
+inspect me
+report second serum: Ender Blink alone (row 1 >)
+widget #1
+wait 10
+slot item:headinajar:bio_gel
+slot 1 right
+slot item:glass_bottle
+slot 2 right
+shot g3_splicer_ender
+widget "Splice"
+wait 20
+/tick sprint 1250
+wait 150
+slot 3 shift
+report third serum: Ender Blink + Spider Climb (row 2 <), for the Chimera
+widget #2
+wait 10
+widget #2
+wait 10
+slot item:headinajar:bio_gel
+slot 1 right
+slot item:glass_bottle
+slot 2 right
+shot g3_splicer_both
+widget "Splice"
+wait 20
+/tick sprint 1250
+wait 150
+slot 3 shift
+slots
+inspect block 98 200 39
+press escape
+wait 5
+key inventory
+wait 8
+tooltip on
+shot g3_cassettes
+press escape
+inspect me
+report == the control: walk into a wall before any gene
+/fill 94 200 46 100 206 46 minecraft:stone
+/tp @s 97.5 200 44.5 0 0
+wait 5
+key forward hold 40
+wait 5
+inspect me
+report == attempt 47: the Injection Rig. Ender Blink first (load 4: too heavy for a body?), then Spider Climb
+/tp @s 102.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+slots
+slot item:headinajar:serum_cassette
+slot 0
+wait 5
+shot g3_rig_loaded
+observe 40
+widget "Inject"
+wait 40
+observe 20
+slots
+slot 0 shift
+slot item:headinajar:serum_cassette
+slot 0
+wait 5
+observe 40
+widget "Inject"
+wait 40
+observe 20
+slots
+slot 0 shift
+slot item:headinajar:serum_cassette
+slot 0
+wait 5
+observe 40
+widget "Inject"
+wait 40
+observe 20
+shot g3_rig_after
+slots
+press escape
+wait 5
+inspect me
+shot g3_hud_after_inject
+report == what the gene does: walk into the wall again; then the active-gene keys
+/tp @s 97.5 200 44.5 0 0
+wait 5
+key forward hold 40
+wait 5
+inspect me
+shot g3_climbing
+wait 40
+inspect me
+key ability
+wait 20
+key secondary
+wait 20
+closegui
+grab
+report == Gene Wash: drink it (hold use)
+key inventory
+wait 8
+slot item:headinajar:gene_wash
+slot inv:3
+press escape
+wait 5
+hotbar 4
+observe 50
+key use hold 45
+wait 10
+observe 20
+inspect me
+/tp @s 97.5 200 44.5 0 0
+wait 5
+key forward hold 40
+wait 5
+inspect me
+inspect block 90 200 39
+inspect block 94 200 39
+inspect block 98 200 39
+inspect block 102 200 39

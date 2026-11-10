@@ -1,0 +1,187 @@
+# Department G, part 5: hand injection into a host and a Chimera, then riding both. After play-g4-inject.txt went
+# sideways (the carried head mounted the host instead of the serum going in). State: body linked at 83.5 200 17.3, the
+# head on the floor inside the Hopper's box, the host cow at 91.5 200 31.5, two Ender Blink cassettes.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+inspect me
+inspect near head_jar 30
+report == drop the smooth stone the mecha's Telekinesis put in my inventory, so the last hotbar slot is empty
+hotbar 9
+key drop
+wait 10
+report == attempt 47 by hand, host: as the body NOT carrying the head, the cassette in hand, right-click the host
+key inventory
+wait 8
+slot item:headinajar:serum_cassette
+slot inv:2
+press escape
+wait 5
+hotbar 3
+/tp @s 91.5 200 29.5 0 10
+wait 5
+lookat cow
+observe 40
+key use
+wait 40
+observe 20
+inspect me
+inspect near cow 4
+report == the Chimera: as the body, open the Gantry, frame into the top-left slot, Assemble
+/tp @s 81.5 200 7.5 0 39
+wait 5
+key use
+wait 15
+slot item:headinajar:chimera_frame
+slot 0
+wait 5
+shot g5_gantry_chimera
+observe 60
+widget "Assemble"
+wait 60
+observe 20
+shot g5_chimera_assembled
+slots
+press escape
+wait 5
+inspect near chimera 12
+report == the second cassette by hand: the Hopper (no Gene Ports), then the Chimera
+key inventory
+wait 8
+slot item:headinajar:serum_cassette
+slot inv:2
+press escape
+wait 5
+hotbar 3
+/execute at @e[type=headinajar:hopper,limit=1] run tp @s ~-2.5 ~ ~ -90 10
+wait 5
+lookat hopper
+observe 30
+key use
+wait 30
+observe 20
+/tp @s 79.5 200 6.5 0 10
+wait 5
+lookat chimera
+observe 30
+key use
+wait 30
+observe 20
+inspect me
+inspect near chimera 12
+report == fetch the head: swap into it, hop west out of the Hopper's box, swap back, pick it up with an empty hand
+key swap
+wait 30
+look 90 0
+key forward hold 12
+wait 10
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+hotbar 9
+key use
+wait 20
+inspect me
+report == ride the host: set the head down beside it, swap, right-click it, R and G
+/tp @s 91.5 200 29.5 0 10
+wait 5
+hotbar 4
+look 90 60
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+inspect near head_jar 6
+key swap
+wait 30
+lookat cow
+key use
+wait 20
+inspect me
+shot g5_host_hud
+observe 40
+key ability
+wait 40
+inspect me
+key secondary
+wait 30
+observe 20
+closegui
+grab
+inspect near cow 30
+sneak hold 10
+wait 10
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+hotbar 9
+key use
+wait 20
+inspect me
+report == ride the Chimera: head down beside it, swap, right-click it, R, Sneak+R, G, then out
+/tp @s 80.5 200 7.5 0 10
+wait 5
+hotbar 4
+look 0 60
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+key swap
+wait 30
+lookat chimera
+key use
+wait 20
+inspect me
+shot g5_in_chimera
+view 1
+wait 5
+shot g5_in_chimera_third
+view 0
+observe 40
+key ability
+wait 40
+inspect me
+key sneak down
+wait 2
+key ability
+wait 40
+key sneak up
+wait 5
+inspect me
+key secondary
+wait 30
+observe 20
+closegui
+grab
+shot g5_chimera_after
+key sneak down
+wait 2
+key menu hold 30
+wait 10
+key sneak up
+closegui
+grab
+wait 10
+inspect me
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+hotbar 9
+key use
+wait 20
+inspect me
