@@ -64,14 +64,14 @@ MODULES = {
             C('flange', [-3, -1, -1], [3, 2, 0], 'dsteel', 'mount'),          # a step where it meets the socket
             C('manifold', [-4, -2, -3], [4, 3, -1], 'dsteel', 'mount'),
             C('lamp_rail', [-3.5, 3, -3], [3.5, 4, -1], 'brass', 'mount'),
-            C('pod_top_0', [-5, 3, -6], [-1, 6, -2], 'enamel', 'nozzle_0'),
-            C('pod_groove_0', [-4, 2, -5], [-2, 3, -3], 'dsteel', 'nozzle_0'),
-            C('pod_low_0', [-5, -2, -6], [-1, 2, -2], 'enamel', 'nozzle_0'),
+            C('pod_top_0', [-5, 4, -6], [-1, 7, -2], 'enamel', 'nozzle_0'),
+            C('pod_band_0', [-4, 1, -5], [-2, 4, -3], 'dsteel', 'nozzle_0'),     # a 3 px recessed band
+            C('pod_low_0', [-5, -2, -6], [-1, 1, -2], 'enamel', 'nozzle_0'),
             C('ring_0', [-5.5, -3, -6.5], [-0.5, -2, -1.5], 'brass', 'nozzle_0'),
             C('bell_0', [-5, -6, -6], [-1, -3, -2], 'steel', 'nozzle_0'),       # heat-stained steel
-            C('pod_top_1', [1, 3, -6], [5, 6, -2], 'enamel', 'nozzle_1'),
-            C('pod_groove_1', [2, 2, -5], [4, 3, -3], 'dsteel', 'nozzle_1'),
-            C('pod_low_1', [1, -2, -6], [5, 2, -2], 'enamel', 'nozzle_1'),
+            C('pod_top_1', [1, 4, -6], [5, 7, -2], 'enamel', 'nozzle_1'),
+            C('pod_band_1', [2, 1, -5], [4, 4, -3], 'dsteel', 'nozzle_1'),
+            C('pod_low_1', [1, -2, -6], [5, 1, -2], 'enamel', 'nozzle_1'),
             C('ring_1', [0.5, -3, -6.5], [5.5, -2, -1.5], 'brass', 'nozzle_1'),
             C('bell_1', [1, -6, -6], [5, -3, -2], 'steel', 'nozzle_1'),
             C('pilot_lit_0', [-2.5, 4, -2], [-1.5, 5, -1], 'lamp_a', 'pilot_0'),

@@ -105,7 +105,7 @@ def bones():
         ('lamp_r', [5, 24, 10.5], 'torso', None),
         ('vent_l', [-11.5, 25, 4], 'torso', None),
         ('vent_r', [11.5, 25, 4], 'torso', None),
-        ('socket_back', [0, 21, 10], 'torso', [0, 180, 0]),
+        ('socket_back', [0, 15, 15], 'torso', [0, 180, 0]),
         ('socket_torso_0', [-5.5, 21, -10], 'torso', None),
         ('socket_torso_1', [5.5, 21, -10], 'torso', None),
     ]
@@ -143,6 +143,11 @@ def cubes():
         C('arch_r', [3, 19, -7], [10, 20, 7], 'dsteel', 'torso'),
         C('keel_neck', [-2, 15, -5], [2, 16, 5], 'dsteel', 'torso'),
         C('keel', [-4, 13, -6], [4, 15, 6], 'dsteel', 'torso'),
+        C('rail_side_l', [-12, 18, -1], [-10, 20, 9], 'dsteel', 'torso'),
+        C('rail_side_r', [10, 18, -1], [12, 20, 9], 'dsteel', 'torso'),
+        C('beam_f', [-10, 17, -11], [10, 18, -9], 'dsteel', 'torso'),
+        C('beam_b', [-12, 17, 9], [12, 18, 11], 'dsteel', 'torso'),
+        C('tow_bracket', [-3, 13, 9], [3, 17, 15], 'dsteel', 'torso'),
         # the jar's seat, the collar's dark base (the shadow line under the brass lip) and the brass collar
         C('seat', [-6, 25.4, -6], [6, 26.4, 6], 'dsteel', 'torso'),
         C('collar_base_f', [-8.5, 25.5, -8.5], [8.5, 26.5, -7.5], 'dsteel', 'torso'),
@@ -167,17 +172,27 @@ def cubes():
         # back: a framed panel. A two-pixel lamp bar on top with the tail lamps sunk in its gaps, one-pixel side and
         # bottom rims, a recessed field holding the brass number plate (the back module mounts on this field)
         C('lampbar_l', [-8, 23, 10], [-6, 25, 12], 'enamel', 'torso'),
-        C('lampbar_c', [-4, 23, 10], [4, 25, 12], 'enamel', 'torso'),
+        C('number_plate', [-4, 23, 10], [4, 25, 12], 'brass', 'torso'),
         C('lampbar_r', [6, 23, 10], [8, 25, 12], 'enamel', 'torso'),
         C('rim_bl', [-8, 18, 10], [-6, 23, 11], 'enamel', 'torso'),
         C('rim_br', [6, 18, 10], [8, 23, 11], 'enamel', 'torso'),
         C('rim_bb', [-6, 18, 10], [6, 19, 11], 'enamel', 'torso'),
-        C('number_plate', [-3, 19.5, 10], [3, 21.5, 11], 'brass', 'torso'),
+        C('hatch', [-3, 19.5, 10], [3, 21.5, 11], 'enamel', 'torso'),
+        C('hatch_handle', [-1, 20, 11], [1, 21, 12], 'brass', 'torso'),
         C('lens_l', [-6, 23, 10], [-4, 25, 11], 'lens', 'torso'),
         C('lens_r', [4, 23, 10], [6, 25, 11], 'lens', 'torso'),
         C('lamp_l_lit', [-6, 23, 10], [-4, 25, 11], 'lamp_a', 'lamp_l', inflate=0.25),
         C('lamp_r_lit', [4, 23, 10], [6, 25, 11], 'lamp_a', 'lamp_r', inflate=0.25),
-        # flanks: a rubber vent mouth a pixel proud, covered by a striped flap with two real louvre slats
+        # flanks: a framed panel ahead of the vent (a 4 x 4 field one pixel deep inside a one-pixel rim, two wide at
+        # its front), then a rubber vent mouth a pixel proud, covered by a striped flap with two real louvre slats
+        C('flank_rim_t_l', [-11, 25, -8], [-10, 26, 0], 'enamel', 'torso'),
+        C('flank_rim_b_l', [-11, 20, -8], [-10, 21, 0], 'enamel', 'torso'),
+        C('flank_rim_f_l', [-11, 21, -8], [-10, 25, -6], 'enamel', 'torso'),
+        C('flank_rim_k_l', [-11, 21, -2], [-10, 25, 0], 'enamel', 'torso'),
+        C('flank_rim_t_r', [10, 25, -8], [11, 26, 0], 'enamel', 'torso'),
+        C('flank_rim_b_r', [10, 20, -8], [11, 21, 0], 'enamel', 'torso'),
+        C('flank_rim_f_r', [10, 21, -8], [11, 25, -6], 'enamel', 'torso'),
+        C('flank_rim_k_r', [10, 21, -2], [11, 25, 0], 'enamel', 'torso'),
         C('grille_l', [-11, 20, 1], [-10, 25, 7], 'rubber', 'torso'),
         C('grille_r', [10, 20, 1], [11, 25, 7], 'rubber', 'torso'),
         C('vent_flap_l', [-12, 20, 1], [-11, 25, 7], 'yellow', 'vent_l'),
@@ -187,7 +202,7 @@ def cubes():
         C('louvre_1_r', [12, 21, 1], [13, 22, 7], 'yellow', 'vent_r'),
         C('louvre_2_r', [12, 23, 1], [13, 24, 7], 'yellow', 'vent_r'),
         # chin sensor: the lens sunk a pixel inside a two-pixel rim (the look bone)
-        C('sensor_neck', [-2, 15, -11.5], [2, 18, -9.5], 'brass', 'sensor'),
+        C('sensor_neck', [-2, 15, -11.5], [2, 19, -9.5], 'brass', 'sensor'),
         C('sensor_head', [-3, 12, -14], [3, 17, -10], 'enamel', 'sensor'),
         C('sensor_rim_t', [-3, 16, -16], [3, 17, -14], 'enamel', 'sensor'),
         C('sensor_rim_b', [-3, 12, -16], [3, 13, -14], 'enamel', 'sensor'),
@@ -204,6 +219,7 @@ def cubes():
         C('rail_l', [-9, L, -7.5], [-7, L + 2, 8.5], 'brass', 'restraint'),
         C('rail_r', [7, L, -7.5], [9, L + 2, 8.5], 'brass', 'restraint'),
         C('crossbar', [-9.5, L, -9.5], [9.5, L + 2, -7.5], 'brass', 'restraint'),
+        C('backbar', [-7, L, 7], [7, L + 2, 9], 'brass', 'restraint'),
         C('hook_l', [-9.5, L - 3, -9.5], [-7.5, L, -7.5], 'brass', 'restraint'),
         C('hook_r', [7.5, L - 3, -9.5], [9.5, L, -7.5], 'brass', 'restraint'),
         C('knuckle_l', [-10.5, 27.5, 8.5], [-7.5, 30.5, 11.5], 'steel', 'restraint'),
