@@ -92,6 +92,7 @@ public final class FormActions {
 
     private static void dock(ServerPlayer player, LifeSupportCradleBlockEntity cradle) {
         cradle.dock(player.getUUID(), player.getGameProfile().getName(), state(player).goggles());
+        cradle.setCompact(state(player).compact());
         BlockPos pos = cradle.getBlockPos();
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.CRADLE,
                 new HeadRegistry.Spot(cradle.getLevel().dimension(), Vec3.atBottomCenterOf(pos)), null));
@@ -148,20 +149,34 @@ public final class FormActions {
     /** Moves the player into their head: onto its Cradle, to its Head Jar, or right here if they carried it. */
     private static void becomeHead(ServerPlayer player, JarState state, HeadRegistry.Head head) {
         HeadRegistry registry = registry(player);
-        if (!state.carryingHead() && head != null && head.where() != HeadRegistry.Where.CARRIED) {
-            ServerLevel level = player.server.getLevel(head.spot().dimension());
-            if (level != null) {
-                Vec3 to = head.where() == HeadRegistry.Where.CRADLE ? head.spot().pos().add(0, 0.5, 0) : head.spot().pos();
-                player.teleportTo(level, to.x, to.y, to.z, player.getYRot(), player.getXRot());
+        ServerLevel headLevel = head == null ? null : player.server.getLevel(head.spot().dimension());
+        Vec3 to = null;
+        if (!state.carryingHead() && head != null && head.where() != HeadRegistry.Where.CARRIED && headLevel != null) {
+            Vec3 spot = head.where() == HeadRegistry.Where.CRADLE ? head.spot().pos().add(0, 0.5, 0) : head.spot().pos();
+            // a record below the world is a head that is gone: never teleport anyone into the void
+            if (spot.y >= headLevel.getMinBuildHeight()) to = spot;
+        }
+        registry.setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
+        // the player is the head now: it leaves its Cradle or the floor at once, so a swap straight back finds the
+        // Cradle free and nothing is left standing in the world meanwhile
+        if (head != null && headLevel != null) {
+            if (head.where() == HeadRegistry.Where.CRADLE && headLevel.getBlockEntity(BlockPos.containing(head.spot().pos())) instanceof LifeSupportCradleBlockEntity cradle
+                    && player.getUUID().equals(cradle.owner())) {
+                cradle.clear();
+            } else if (head.where() == HeadRegistry.Where.ENTITY && head.entity() != null && headLevel.getEntity(head.entity()) instanceof HeadJarEntity placed) {
+                placed.discard();
             }
         }
-        // a docked or placed head notices it is gone the next time it ticks
-        registry.setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
         state.setCarryingHead(false);
+        // a jar may pass any portal, so the form changes first and a head in another dimension is reached
         state.setForm(Form.JAR);
         state.setDeadLinkTicks(0);
         player.setSprinting(false);
         player.stopRiding();
+        if (to != null) {
+            player.teleportTo(headLevel, to.x, to.y, to.z, player.getYRot(), player.getXRot());
+            registry.setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
+        }
         player.refreshDimensions();
         Network.sync(player);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.6f, 1.6f);
@@ -182,6 +197,13 @@ public final class FormActions {
         if (state.collar().isEmpty()) {
             return Refusals.deny(player, "swap.no_collar", Component.translatable("item.headinajar.collar_cam"), Component.translatable("item.headinajar.suture_kit"));
         }
+        ServerLevel level = player.server.getLevel(body.spot().dimension());
+        if (level == null || body.spot().pos().y < level.getMinBuildHeight()) {
+            // the body went where no one comes back from: forget it rather than follow it
+            registry.setBody(player.getUUID(), null);
+            state.setBody(null);
+            return Refusals.deny(player, "swap.no_body", Component.translatable("block.headinajar.body_printer"));
+        }
         int quality = NeuroLink.quality(player, state, body.spot());
         if (quality <= NeuroLink.QUALITY_TO_LINK) return Refusals.deny(player, "swap.weak_signal", quality, Component.translatable("block.headinajar.relay_mast"));
         Telekinesis.release(player, state);
@@ -189,11 +211,11 @@ public final class FormActions {
         if (cradle != null && cradle.isEmpty()) dock(player, cradle);
         else placeHead(player, player.serverLevel(), player.position(), player.getYRot());
 
-        ServerLevel level = player.server.getLevel(body.spot().dimension());
         Vec3 to = body.spot().pos();
+        // still a jar while it travels, so the link reaches a body in another dimension (an Entangled Pair)
+        player.teleportTo(level, to.x, to.y, to.z, player.getYRot(), player.getXRot());
         state.setForm(Form.LINKED);
         player.refreshDimensions();
-        player.teleportTo(level, to.x, to.y, to.z, player.getYRot(), player.getXRot());
         Network.sync(player);
         // the body entity steps into the player when it next ticks (its chunk may still be loading)
         if (level.getEntity(body.entity()) instanceof HeadlessBody entity) absorbBody(player, entity);
@@ -276,9 +298,9 @@ public final class FormActions {
     public static boolean pickUpHead(ServerPlayer player, HeadJarEntity head) {
         JarState state = state(player);
         if (state.form() != Form.LINKED || !player.getUUID().equals(head.ownerId()) || !hasSatchel(player)) return false;
-        head.discard();
         state.setCarryingHead(true);
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.CARRIED, HeadRegistry.Spot.of(player), null));
+        head.discard();
         Network.sync(player);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1, 1);
         return true;
@@ -312,6 +334,8 @@ public final class FormActions {
         if (state.form() != Form.LINKED || !state.carryingHead()) return false;
         state.setCarryingHead(false);
         Vec3 at = player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(0.8));
+        // facing a wall, the head goes down at the feet instead of inside the wall
+        if (!player.level().noCollision(net.minecraft.world.phys.AABB.ofSize(at.add(0, 0.5, 0), 0.86, 0.95, 0.86))) at = player.position();
         placeHead(player, player.serverLevel(), at, player.getYRot() + 180);
         Network.sync(player);
         return true;
@@ -331,6 +355,14 @@ public final class FormActions {
         return true;
     }
 
+    /** Where each linked body last stood on firm ground. Not saved. */
+    private static final java.util.Map<UUID, HeadRegistry.Spot> GROUND = new java.util.HashMap<>();
+
+    /** Called every tick for a LINKED player. */
+    public static void noteGround(ServerPlayer player) {
+        if (player.onGround() && player.getY() > player.level().getMinBuildHeight()) GROUND.put(player.getUUID(), HeadRegistry.Spot.of(player));
+    }
+
     public static boolean hasSatchel(Player player) {
         return player.getInventory().contains(new ItemStack(ModRegistry.HEAD_SATCHEL.get()))
                 || com.coolfreeze23.headinajar.compat.Compat.wearsCurio(player, ModRegistry.HEAD_SATCHEL.get());
@@ -343,9 +375,21 @@ public final class FormActions {
      * (per config) and the player wakes up in their head with full health.
      */
     public static boolean bodyDied(ServerPlayer player) {
+        return bodyDied(player, false);
+    }
+
+    /** As {@link #bodyDied(ServerPlayer)}; a body that fell out of the world leaves its corpse where it last stood. */
+    public static boolean bodyDied(ServerPlayer player, boolean fellOut) {
         JarState state = state(player);
         if (state.form() != Form.LINKED) return false;
         HeadRegistry.Head head = registry(player).head(player.getUUID());
+        if (fellOut) {
+            HeadRegistry.Spot ground = GROUND.get(player.getUUID());
+            if (ground == null || !ground.dimension().equals(player.level().dimension())) ground = head != null && head.where() != HeadRegistry.Where.CARRIED ? head.spot() : null;
+            ServerLevel groundLevel = ground == null ? null : player.server.getLevel(ground.dimension());
+            if (groundLevel != null) player.teleportTo(groundLevel, ground.pos().x, ground.pos().y, ground.pos().z, player.getYRot(), player.getXRot());
+            player.setDeltaMovement(Vec3.ZERO);
+        }
         String rule = Config.get(Config.LINK_LOSS_INVENTORY, "corpse");
         HeadlessBody corpse = leaveBody(player, false);
         switch (rule) {
@@ -365,7 +409,7 @@ public final class FormActions {
         player.setAirSupply(player.getMaxAirSupply());
         player.fallDistance = 0;
         becomeHead(player, state, head);
-        player.displayClientMessage(Component.translatable("message.headinajar.body_died"), false);
+        player.displayClientMessage(Component.translatable("message.headinajar.body_died", Component.translatable("item.headinajar.suture_kit")), false);
         return true;
     }
 

@@ -163,7 +163,8 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
         ServerPlayer owner = level.getServer().getPlayerList().getPlayer(client);
         if (owner != null) {
             var state = FormActions.state(owner);
-            if (state.form() == Form.JAR) state.setBody(body.getUUID());
+            // whatever carries the head now (a host, a mecha, a socket), the new body is the one to go back to
+            if (state.form().isJarred()) state.setBody(body.getUUID());
             owner.displayClientMessage(Component.translatable("message.headinajar.printed"), false);
         }
         level.playSound(null, worldPosition, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.8f, 0.5f);

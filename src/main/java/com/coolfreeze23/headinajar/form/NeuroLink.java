@@ -128,18 +128,21 @@ public final class NeuroLink {
             if (head == null || head.where() == HeadRegistry.Where.PLAYER || head.where() == HeadRegistry.Where.CARRIED) {
                 // nothing to link to: a broken record; leave the player whole rather than stranded
                 state.setLink(0, -1);
+                state.setHeadAt(JarState.HEAD_UNKNOWN);
                 return;
             }
+            state.setHeadAt(head.where() == HeadRegistry.Where.CRADLE ? JarState.HEAD_DOCKED : JarState.HEAD_PLACED);
             boolean otherWorld = !head.spot().dimension().equals(player.level().dimension());
             int q = quality(player, state, head.spot());
             state.setLink(q, otherWorld ? -1 : (float) player.position().distanceTo(head.spot().pos()));
-            if (otherWorld) {
-                breakLink(player, Component.translatable("message.headinajar.link_lost.dimension"));
+            // an Entangled Pair carries the link between dimensions; anything else loses it
+            if (otherWorld && !com.coolfreeze23.headinajar.item.QuantumItems.linked(state)) {
+                breakLink(player, Component.translatable("message.headinajar.link_lost.dimension", Component.translatable("item.headinajar.entangled_pair")));
                 return;
             }
             state.setDeadLinkTicks(q == 0 ? state.deadLinkTicks() + 10 : 0);
             if (state.deadLinkTicks() >= DEAD_LINK_GRACE) {
-                breakLink(player, Component.translatable("message.headinajar.link_lost"));
+                breakLink(player, Component.translatable("message.headinajar.link_lost", Component.keybind("key.headinajar.jar_menu")));
             }
         } else if (state.form() == Form.JAR) {
             HeadRegistry.Body body = registry.body(player.getUUID());
