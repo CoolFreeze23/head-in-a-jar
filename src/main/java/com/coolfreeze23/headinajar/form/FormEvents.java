@@ -105,7 +105,7 @@ public final class FormEvents {
         player.getFoodData().setExhaustion(0);
         int idle = Config.IDLE_DRAIN.get();
         if (idle > 0) state.spend(idle);
-        if (state.has(ModuleType.PROPELLER) && player.getAbilities().flying) state.spend(100);
+        if (state.has(ModuleType.PROPELLER) && player.getAbilities().flying) state.spend(25);
         if (state.has(ModuleType.HEAT_SHIELD) && (player.isOnFire() || player.isInLava())) {
             player.clearFire();
             state.spend(100);
@@ -158,7 +158,17 @@ public final class FormEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         // the mod's machines are built for heads: a jar can work them without an arm
-        if (event.getLevel().getBlockState(event.getPos()).is(HEAD_OPERABLE)) return;
+        // (the block answers; what is held is not used on it, and sneaking past the block to use the held item is an item use)
+        Player clicker = event.getEntity();
+        if (event.getLevel().getBlockState(event.getPos()).is(HEAD_OPERABLE)) {
+            if (!lockedOut(clicker)) return;
+            if (!(clicker.isSecondaryUseActive() && (!clicker.getMainHandItem().isEmpty() || !clicker.getOffhandItem().isEmpty()))) {
+                event.setUseItem(TriState.FALSE);
+                return;
+            }
+            lockout(clicker, event, () -> Nudge.USE);
+            return;
+        }
         lockout(event.getEntity(), event, () -> Nudge.forBlock(event.getLevel(), event.getPos(), event.getHitVec().getLocation(), false));
     }
 

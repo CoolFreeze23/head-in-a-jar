@@ -104,7 +104,9 @@ public class SeparationChairBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
-        if (player.isShiftKeyDown() || chair.running() || chair.seated() != null) {
+        // a jar can't sit in the chair, but it may read the chair's panel
+        boolean jar = player.getData(ModRegistry.JAR_STATE).form() == com.coolfreeze23.headinajar.form.Form.JAR;
+        if (player.isShiftKeyDown() || chair.running() || chair.seated() != null || jar) {
             server.openMenu(chair, pos);
             return InteractionResult.CONSUME;
         }

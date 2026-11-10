@@ -29,7 +29,9 @@ public final class Network {
     }
 
     public enum Action {
-        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY, EJECT, JET, DRIVE
+        OPEN_MENU, ABILITY, THROW, LET_GO, SWAP, SECONDARY, EJECT, JET, DRIVE,
+        /** The ability key, pressed where it is bound to the same key as sprint (handled as ABILITY). */
+        ABILITY_SHARED
     }
 
     /** Client to server: a key the jarred player pressed. */
@@ -244,6 +246,10 @@ public final class Network {
     /** A key the jarred player pressed (the JarAction payload's handler). */
     public static void action(ServerPlayer player, JarAction msg) {
         JarState state = player.getData(ModRegistry.JAR_STATE);
+        if (msg.action() == Action.ABILITY_SHARED) {
+            com.coolfreeze23.headinajar.form.SharedKey.pressed(player);
+            msg = new JarAction(Action.ABILITY);
+        }
         if (msg.action() == Action.SWAP) {
             // body to head at any signal (if allowed), head to body only on a good signal
             if (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED) {
