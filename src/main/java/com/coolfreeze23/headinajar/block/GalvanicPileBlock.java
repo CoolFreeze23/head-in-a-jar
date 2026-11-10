@@ -86,6 +86,10 @@ public class GalvanicPileBlock extends BaseEntityBlock {
                 ItemStack there = pile.fuel().getStackInSlot(0);
                 com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at(pile), "pile.full", there.getHoverName());
             } else {
+                int fed = stack.getCount() - left.getCount();
+                // how much went in and what it is worth: the pile shows no gauge of its own
+                player.displayClientMessage(Component.translatable("message.headinajar.pile_fed", fed, stack.getHoverName(),
+                        fed * GalvanicPileBlockEntity.fuelValue(stack), pile.fuelLeft()), true);
                 stack.setCount(left.getCount());
                 level.playSound(null, pos, SoundEvents.SLIME_SQUISH_SMALL, SoundSource.BLOCKS, 1, 1);
             }
@@ -96,8 +100,13 @@ public class GalvanicPileBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof GalvanicPileBlockEntity pile) {
-            player.displayClientMessage(Component.translatable("message.headinajar.pile_status", pile.energy().getEnergyStored(),
-                    GalvanicPileBlockEntity.CAPACITY, pile.fuel().getStackInSlot(0).getCount()), true);
+            // what it holds, what its fuel is still worth, and where the power goes (an empty buffer while burning is normal)
+            ItemStack fuel = pile.fuel().getStackInSlot(0);
+            player.displayClientMessage(fuel.isEmpty() && pile.burning() <= 0
+                    ? Component.translatable("message.headinajar.pile_status_empty", pile.energy().getEnergyStored(), GalvanicPileBlockEntity.CAPACITY,
+                            net.minecraft.world.item.Items.ROTTEN_FLESH.getDescription(), net.minecraft.world.item.Items.SPIDER_EYE.getDescription())
+                    : Component.translatable("message.headinajar.pile_status_burning", pile.energy().getEnergyStored(), GalvanicPileBlockEntity.CAPACITY,
+                            fuel.getCount(), pile.fuelLeft()), true);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }

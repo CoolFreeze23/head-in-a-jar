@@ -95,6 +95,20 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         changed();
     }
 
+    /**
+     * Says what this Cradle lacks to keep a docked head topped up (no power, no saline) and what feeds it; says nothing
+     * when it has both. Returns whether it lacked anything.
+     */
+    public boolean tellWhatIsMissing(net.minecraft.server.level.ServerPlayer player) {
+        boolean power = energy.getEnergyStored() > 0, wet = saline.getFluidAmount() > 0;
+        if (power && wet) return false;
+        String reason = !power && !wet ? "cradle.starved" : !power ? "cradle.unpowered" : "cradle.dry";
+        com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), reason,
+                net.minecraft.network.chat.Component.translatable("block.headinajar.galvanic_pile"),
+                net.minecraft.network.chat.Component.translatable("item.headinajar.saline_bottle"));
+        return true;
+    }
+
     public void setCompact(boolean compact) {
         this.compact = compact;
         setChanged();

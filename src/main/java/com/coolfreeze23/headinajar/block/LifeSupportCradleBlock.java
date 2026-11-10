@@ -96,6 +96,7 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         ServerPlayer server = (ServerPlayer) player;
         Component satchel = Component.translatable("item.headinajar.head_satchel");
+        boolean wasEmpty = cradle.isEmpty();
         if (cradle.isEmpty()) {
             if (FormActions.state(server).form() == com.coolfreeze23.headinajar.form.Form.JAR) {
                 // a jar climbs in: sitting in the Cradle, a swap leaves the head docked here
@@ -110,6 +111,9 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
         if (cradle.isEmpty() || !player.getUUID().equals(cradle.owner())) {
             player.displayClientMessage(Component.translatable("message.headinajar.cradle_status", cradle.energy().getEnergyStored(), cradle.saline().getFluidAmount()), false);
         }
+        // a Cradle holding someone's head and short of power or saline says what it lacks and what feeds it (its owner
+        // heard it when the head was docked)
+        if (!wasEmpty && !cradle.isEmpty() && !player.getUUID().equals(cradle.owner())) cradle.tellWhatIsMissing(server);
         return InteractionResult.CONSUME;
     }
 

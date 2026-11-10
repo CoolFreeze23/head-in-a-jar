@@ -38,7 +38,7 @@ public final class Telekinesis {
     public static void toggle(ServerPlayer player, JarState state) {
         if (state.heldEntity() >= 0) {
             release(player, state);
-        } else if (state.has(ModuleType.TELEKINESIS)) {
+        } else if (state.form() == com.coolfreeze23.headinajar.form.Form.JAR && state.has(ModuleType.TELEKINESIS)) {
             grab(player, state);
         }
     }
@@ -103,7 +103,9 @@ public final class Telekinesis {
         if (state.heldEntity() < 0) return;
         Entity held = player.level().getEntity(state.heldEntity());
         double range = Config.TELEKINESIS_RANGE.get() + 8;
-        if (held == null || !held.isAlive() || !state.has(ModuleType.TELEKINESIS) || held.distanceToSqr(player) > range * range) {
+        // Telekinesis is the bare jar's: on a host, in a cockpit or in a socket the hold ends
+        if (held == null || !held.isAlive() || state.form() != com.coolfreeze23.headinajar.form.Form.JAR || !state.has(ModuleType.TELEKINESIS)
+                || held.distanceToSqr(player) > range * range) {
             release(player, state);
             return;
         }

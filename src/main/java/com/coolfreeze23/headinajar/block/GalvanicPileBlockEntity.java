@@ -2,7 +2,6 @@ package com.coolfreeze23.headinajar.block;
 
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +9,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -58,6 +56,12 @@ public class GalvanicPileBlockEntity extends BlockEntity {
         return burning;
     }
 
+    /** FE the pile will still make from what it holds: what is burning now and the fuel waiting. */
+    public int fuelLeft() {
+        ItemStack stack = fuel.getStackInSlot(0);
+        return burning + stack.getCount() * fuelValue(stack);
+    }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, GalvanicPileBlockEntity pile) {
         if (pile.burning <= 0 && pile.energy.getEnergyStored() < CAPACITY) {
             ItemStack stack = pile.fuel.getStackInSlot(0);
@@ -77,15 +81,9 @@ public class GalvanicPileBlockEntity extends BlockEntity {
         pushEnergy(level, pos, pile.energy);
     }
 
-    /** Gives energy to the machines on every side. */
+    /** Shares energy among the machines on every side that can take it (not first come, first served). */
     public static void pushEnergy(Level level, BlockPos pos, Buffer energy) {
-        for (Direction dir : Direction.values()) {
-            if (energy.getEnergyStored() <= 0) return;
-            var target = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(dir), dir.getOpposite());
-            if (target == null || !target.canReceive()) continue;
-            int sent = target.receiveEnergy(Math.min(PUSH, energy.getEnergyStored()), false);
-            if (sent > 0) energy.set(energy.getEnergyStored() - sent);
-        }
+        PowerBlockEntities.share(level, pos, energy, PUSH);
     }
 
     @Override

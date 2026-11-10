@@ -29,8 +29,36 @@ public final class LinkHud {
     private static int lastQuality = 100;
     private static int barTicks;
 
+    /** Ticks left of the link bar's "lost" flash, after a click the weak link dropped. */
+    private static int lossTicks;
+    /** How many dropped clicks this session were explained in a line; after a few the flash says it alone. */
+    private static int lossExplained;
+    public static final int LOSS_EXPLAINED_TIMES = 3;
+
+    /**
+     * A click the weak link dropped: the link bar flashes it at once, and the first few times a line says the link is weak
+     * and what makes it stronger.
+     */
+    public static void packetLost(Player player, JarState state) {
+        lossTicks = 20;
+        barTicks = Math.max(barTicks, 40);
+        if (lossExplained < LOSS_EXPLAINED_TIMES) {
+            lossExplained++;
+            player.displayClientMessage(Component.translatable("hud.headinajar.packet_loss.why", state.quality(),
+                    Component.translatable("item.headinajar.head_satchel"), Component.translatable("block.headinajar.relay_mast")), true);
+        } else {
+            player.displayClientMessage(Component.translatable("hud.headinajar.packet_loss").withStyle(ChatFormatting.RED), true);
+        }
+    }
+
+    /** Whether the link bar is flashing a dropped click (for the HUD and tests). */
+    public static boolean flashingLoss() {
+        return lossTicks > 0;
+    }
+
     /** Called every client tick. */
     public static void tick(Player player) {
+        if (lossTicks > 0) lossTicks--;
         JarState state = player.getData(ModRegistry.JAR_STATE);
         if (state.form() != lastForm) {
             if (lastForm.isDecapitated() || state.form().isDecapitated()) wipeTicks = 10;
@@ -121,6 +149,16 @@ public final class LinkHud {
         Component text = Component.translatable("hud.headinajar.bar", q, ping, Component.translatable(label), dist);
         g.drawString(mc.font, text, x + 28, y + 2, 0xE0FFFFFF & 0xFFFFFF | a, false);
         if (state.carryingHead()) g.drawString(mc.font, Component.translatable("hud.headinajar.carried"), x + 140, y + 2, 0x55FF77 | a, false);
+        if (lossTicks > 0) {
+            // a dropped click: the bar's frame goes red and says so, under the bar
+            int red = ((lossTicks / 3) % 2 == 0 ? 0xFF4040 : 0xB02020) | a;
+            g.fill(x, y, x + 180, y + 1, red);
+            g.fill(x, y + 11, x + 180, y + 12, red);
+            g.fill(x, y, x + 1, y + 12, red);
+            g.fill(x + 179, y, x + 180, y + 12, red);
+            Component lost = Component.translatable("hud.headinajar.packet_lost").withStyle(ChatFormatting.BOLD);
+            g.drawCenteredString(mc.font, lost, w / 2, y + 14, 0xFF5050);
+        }
     }
 
     /**

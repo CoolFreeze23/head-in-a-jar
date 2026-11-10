@@ -54,6 +54,8 @@ public class ClientSetup {
         NeoForge.EVENT_BUS.register(ClientEvents.class);
         NeoForge.EVENT_BUS.register(SocketClient.class);
         NeoForge.EVENT_BUS.register(ClientRefusals.class);
+        NeoForge.EVENT_BUS.register(FormChangeClient.class);
+        NeoForge.EVENT_BUS.register(BlockTooltips.class);
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
     }
 

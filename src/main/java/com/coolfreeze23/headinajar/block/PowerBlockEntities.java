@@ -22,17 +22,49 @@ public final class PowerBlockEntities {
     private PowerBlockEntities() {
     }
 
-    /** Gives energy to neighbours that are not of the excluded kind. */
+    /**
+     * Shares energy among the neighbours that are not of the excluded kind and can take some, at most {@code max} each:
+     * an even share each, and what a full one leaves is offered to the rest. The first in line changes every tick, so
+     * a remainder too small to split doesn't always go the same way.
+     */
     static void push(Level level, BlockPos pos, Buffer energy, int max, Class<?> exclude) {
+        if (energy.getEnergyStored() <= 0) return;
+        java.util.List<net.neoforged.neoforge.energy.IEnergyStorage> takers = new java.util.ArrayList<>(6);
         for (Direction dir : Direction.values()) {
-            if (energy.getEnergyStored() <= 0) return;
             BlockPos at = pos.relative(dir);
             if (exclude != null && exclude.isInstance(level.getBlockEntity(at))) continue;
             var target = level.getCapability(Capabilities.EnergyStorage.BLOCK, at, dir.getOpposite());
-            if (target == null || !target.canReceive()) continue;
-            int sent = target.receiveEnergy(Math.min(max, energy.getEnergyStored()), false);
-            if (sent > 0) energy.set(energy.getEnergyStored() - sent);
+            if (target != null && target.canReceive() && target.receiveEnergy(1, true) > 0) takers.add(target);
         }
+        if (takers.isEmpty()) return;
+        java.util.Collections.rotate(takers, (int) (level.getGameTime() % takers.size()));
+        int[] given = new int[takers.size()];
+        boolean[] full = new boolean[takers.size()];
+        int open = takers.size();
+        while (open > 0 && energy.getEnergyStored() > 0) {
+            int share = Math.max(1, energy.getEnergyStored() / open);
+            boolean moved = false;
+            for (int i = 0; i < takers.size() && energy.getEnergyStored() > 0; i++) {
+                if (full[i]) continue;
+                int offer = Math.min(Math.min(share, max - given[i]), energy.getEnergyStored());
+                int sent = offer > 0 ? takers.get(i).receiveEnergy(offer, false) : 0;
+                if (sent > 0) {
+                    energy.set(energy.getEnergyStored() - sent);
+                    given[i] += sent;
+                    moved = true;
+                }
+                if (sent < offer || given[i] >= max) {
+                    full[i] = true;
+                    open--;
+                }
+            }
+            if (!moved) return;
+        }
+    }
+
+    /** {@link #push} for any block's buffer: the Galvanic Pile and the Cerebral Array share their output the same way. */
+    public static void share(Level level, BlockPos pos, Buffer energy, int max) {
+        push(level, pos, energy, max, null);
     }
 
     /** Base: a block entity with an FE buffer that is saved and has a capability. */

@@ -145,6 +145,9 @@ public class HeadJarEntity extends Entity {
             return;
         }
         registry.moveHead(ownerId(), getUUID(), HeadRegistry.Spot.of(this));
+        // set down on a Charging Dock, the head charges like a jar standing on it
+        ServerPlayer owner = owner();
+        if (owner != null) com.coolfreeze23.headinajar.block.ChargingDockBlock.chargeHead(this, owner, 10);
     }
 
     @Override
