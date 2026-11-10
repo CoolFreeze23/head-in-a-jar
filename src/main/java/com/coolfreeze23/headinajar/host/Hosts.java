@@ -27,9 +27,11 @@ public final class Hosts {
     public static final TagKey<net.minecraft.world.entity.EntityType<?>> NOT_A_HOST =
             TagKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, HeadInAJar.id("not_a_host"));
 
-    /** Server: full definitions. Client: neck offsets only (sent on login and reload). */
+    /** Server: the definitions loaded from the data files. */
     private static Map<ResourceLocation, HostDefinition> definitions = Map.of();
     private static Map<ResourceLocation, Vec3> clientNecks = Map.of();
+    /** Client: the server's definitions (sent on login and reload), so the client that steers a host knows how it moves. */
+    private static Map<ResourceLocation, HostDefinition> clientDefinitions = Map.of();
 
     public static HostData data(Entity entity) {
         return entity.getData(ModRegistry.HOST_DATA);
@@ -39,8 +41,22 @@ public final class Hosts {
         return entity instanceof Mob && entity.hasData(ModRegistry.HOST_DATA) && entity.getData(ModRegistry.HOST_DATA).host;
     }
 
+    /** The creature's data file, on either side (a client reads the copy the server sent). */
     public static HostDefinition definition(Entity entity) {
-        return definitions.get(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        // single player shares the server's map until the copy arrives; a dedicated client has only the copy
+        if (entity.level().isClientSide && !clientDefinitions.isEmpty()) return clientDefinitions.get(id);
+        return definitions.get(id);
+    }
+
+    public static void setClientDefinitions(Map<ResourceLocation, HostDefinition> defs) {
+        clientDefinitions = Map.copyOf(defs);
+    }
+
+    /** A creature that never had a head (the Headless Mule): a jar climbs on without the saw. */
+    public static boolean headless(Entity entity) {
+        HostDefinition def = entity instanceof Mob ? definition(entity) : null;
+        return def != null && def.has("headless");
     }
 
     public static Map<ResourceLocation, HostDefinition> definitions() {

@@ -148,6 +148,13 @@ public final class ModRegistry {
                     if (!level.isClientSide && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity locker) locker.use(player);
                     return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
                 }
+
+                @Override
+                protected void onRemove(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos,
+                                        net.minecraft.world.level.block.state.BlockState newState, boolean moved) {
+                    if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity locker) locker.releaseOnBreak();
+                    super.onRemove(state, level, pos, newState, moved);
+                }
             });
 
     // P4: Mecha Division

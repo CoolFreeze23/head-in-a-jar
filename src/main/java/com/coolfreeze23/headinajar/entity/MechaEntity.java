@@ -110,30 +110,60 @@ public class MechaEntity extends PathfinderMob {
         entityData.set(MODULES, tag);
     }
 
+    /** The synced module tag as last decoded, and what it says (worked out once per change, both sides). */
+    private CompoundTag decodedTag;
+    private MechaModule[] decoded = new MechaModule[0];
+    private int[] decodedSliders = new int[0];
+    private final java.util.EnumSet<MechaModule> fitted = java.util.EnumSet.noneOf(MechaModule.class);
+    private int modulesMass;
+
+    private void decode() {
+        CompoundTag tag = entityData.get(MODULES);
+        if (tag == decodedTag) return;
+        int n = frame.totalSlots();
+        MechaModule[] mods = new MechaModule[n];
+        int[] sliders = new int[n];
+        fitted.clear();
+        int mass = 0;
+        for (int i = 0; i < n; i++) {
+            String name = tag.getString("m" + i);
+            if (!name.isEmpty()) {
+                try {
+                    mods[i] = MechaModule.valueOf(name);
+                    fitted.add(mods[i]);
+                    mass += mods[i].mass;
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            sliders[i] = tag.contains("s" + i) ? tag.getInt("s" + i) : 50;
+        }
+        decoded = mods;
+        decodedSliders = sliders;
+        modulesMass = mass;
+        decodedTag = tag;
+    }
+
     /** The module type in a flat slot (client and server). */
     public MechaModule moduleAt(int index) {
-        String name = entityData.get(MODULES).getString("m" + index);
-        if (name.isEmpty()) return null;
-        try {
-            return MechaModule.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        decode();
+        return index >= 0 && index < decoded.length ? decoded[index] : null;
     }
 
     public int sliderAt(int index) {
-        CompoundTag tag = entityData.get(MODULES);
-        return tag.contains("s" + index) ? tag.getInt("s" + index) : 50;
+        decode();
+        return index >= 0 && index < decodedSliders.length ? decodedSliders[index] : 50;
     }
 
     public boolean has(MechaModule module) {
-        for (int i = 0; i < frame.totalSlots(); i++) if (moduleAt(i) == module) return true;
-        return false;
+        decode();
+        return fitted.contains(module);
     }
 
     /** Index of the first slot holding this module, or -1. */
     public int indexOf(MechaModule module) {
-        for (int i = 0; i < frame.totalSlots(); i++) if (moduleAt(i) == module) return i;
+        decode();
+        if (!fitted.contains(module)) return -1;
+        for (int i = 0; i < decoded.length; i++) if (decoded[i] == module) return i;
         return -1;
     }
 
@@ -154,6 +184,21 @@ public class MechaEntity extends PathfinderMob {
 
     public SimpleContainer cargo() {
         return cargo;
+    }
+
+    /**
+     * Opens the Cargo Hold: for the owner (or someone they trust) at a parked mecha, or the pilot from the cockpit. The
+     * screen closes when the mecha is stored, leaves or is destroyed.
+     */
+    public boolean openCargo(net.minecraft.server.level.ServerPlayer player) {
+        var gantry = net.minecraft.network.chat.Component.translatable("block.headinajar.assembly_gantry");
+        var hold = net.minecraft.network.chat.Component.translatable(com.coolfreeze23.headinajar.registry.ModRegistry.mechaModule(MechaModule.CARGO_HOLD).getDescriptionId());
+        var source = com.coolfreeze23.headinajar.feedback.Refuser.at(this);
+        if (!isOwnedBy(player)) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, source, "mecha.not_yours");
+        if (!has(MechaModule.CARGO_HOLD)) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, source, "mecha.no_cargo", hold, gantry);
+        player.openMenu(new net.minecraft.world.SimpleMenuProvider((id, inv, p) -> net.minecraft.world.inventory.ChestMenu.threeRows(id, inv, new EntityCargo(cargo, this)), hold));
+        playSound(net.minecraft.sounds.SoundEvents.IRON_TRAPDOOR_OPEN, 0.8f, 0.8f);
+        return true;
     }
 
     // --- power, heat, weight ------------------------------------------------------------------------
@@ -210,11 +255,8 @@ public class MechaEntity extends PathfinderMob {
     }
 
     public int mass() {
-        int mass = frame.dryMass;
-        for (int i = 0; i < frame.totalSlots(); i++) {
-            MechaModule m = moduleAt(i);
-            if (m != null) mass += m.mass;
-        }
+        decode();
+        int mass = frame.dryMass + modulesMass;
         for (int i = 0; i < cargo.getContainerSize(); i++) if (!cargo.getItem(i).isEmpty()) mass += 1;
         return mass;
     }
@@ -273,6 +315,12 @@ public class MechaEntity extends PathfinderMob {
     @Override
     public boolean canUsePortal(boolean allowPassengers) {
         return frame.height < 4 && super.canUsePortal(allowPassengers);
+    }
+
+    /** A frame has no lungs (and Aqua Fins invite it into the water). */
+    @Override
+    public boolean canDrownInFluidType(net.neoforged.neoforge.fluids.FluidType type) {
+        return false;
     }
 
     @Override

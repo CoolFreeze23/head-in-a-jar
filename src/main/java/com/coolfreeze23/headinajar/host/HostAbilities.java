@@ -1,5 +1,7 @@
 package com.coolfreeze23.headinajar.host;
 
+import com.coolfreeze23.headinajar.feedback.Refusals;
+import com.coolfreeze23.headinajar.feedback.Refuser;
 import com.coolfreeze23.headinajar.form.FormActions;
 import com.coolfreeze23.headinajar.form.JarState;
 import com.coolfreeze23.headinajar.module.ModuleType;
@@ -31,36 +33,35 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /** The things a jar can make its host do: the primary (R) at 50% sync and the secondary (G) at 75%. */
 public final class HostAbilities {
-    /** Cobwebs from Web Shot, and when they melt. */
-    private static final Map<BlockPos, Long> WEBS = new HashMap<>();
+    private static final String NO_TARGET = "host.no_target";
 
     private HostAbilities() {
     }
 
-    /** Fires the host's primary or secondary ability if it is unlocked and off cooldown. */
+    /** Fires the host's primary or secondary ability if it is unlocked and off cooldown; says why not otherwise. */
     public static boolean use(ServerPlayer pilot, Mob host, boolean secondary) {
         HostDefinition def = Hosts.definition(host);
         HostData data = Hosts.data(host);
-        if (def == null) return false;
-        var ability = secondary ? def.secondary() : def.primary();
-        if (ability.isEmpty()) return false;
+        var ability = def == null ? java.util.Optional.<HostDefinition.Ability>empty() : secondary ? def.secondary() : def.primary();
+        if (ability.isEmpty()) return Refusals.deny(pilot, Refuser.at(host), "host.no_ability", host.getDisplayName());
         int need = secondary ? 75 : 50;
         if (data.effectiveSync() < need) {
             pilot.displayClientMessage(Component.translatable("message.headinajar.sync_locked", need), true);
             return false;
         }
-        if ((secondary ? data.secondaryCooldown : data.primaryCooldown) > 0) return false;
-        boolean fired = fire(pilot, host, ability.get());
-        if (fired) {
-            if (secondary) data.secondaryCooldown = ability.get().cooldown();
-            else data.primaryCooldown = ability.get().cooldown();
+        // a Utility Shell runs on the jar's charge: a flat jar can't drive it, nor make it do tricks
+        if (data.shell && !(host instanceof com.coolfreeze23.headinajar.entity.MechaEntity) && FormActions.state(pilot).charge() <= 0) {
+            return Refusals.deny(pilot, Refuser.at(host), "host.shell_flat", Component.translatable("block.headinajar.charging_dock"));
         }
-        return fired;
+        if ((secondary ? data.secondaryCooldown : data.primaryCooldown) > 0) return Refusals.deny(pilot, Refuser.at(host), "host.cooling");
+        String refused = fire(pilot, host, ability.get());
+        if (refused != null) return Refusals.deny(pilot, Refuser.at(host), refused);
+        if (secondary) data.secondaryCooldown = ability.get().cooldown();
+        else data.primaryCooldown = ability.get().cooldown();
+        return true;
     }
 
     private static Entity target(ServerPlayer pilot, double range) {
@@ -76,18 +77,19 @@ public final class HostAbilities {
         return pilot.level().clip(new ClipContext(eye, eye.add(pilot.getLookAngle().scale(range)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, pilot));
     }
 
-    static boolean fire(ServerPlayer pilot, Mob host, HostDefinition.Ability a) {
+    /** Fires an ability. Returns null when it fired, else the refusal reason (nothing to aim at, no room for a web). */
+    static String fire(ServerPlayer pilot, Mob host, HostDefinition.Ability a) {
         ServerLevel level = pilot.serverLevel();
         Vec3 look = pilot.getLookAngle();
         double range = a.param("range", 16);
         switch (a.type()) {
             case "teleport" -> {
                 BlockHitResult hit = block(pilot, range);
-                if (hit.getType() != HitResult.Type.BLOCK) return false;
+                if (hit.getType() != HitResult.Type.BLOCK) return NO_TARGET;
                 BlockPos to = hit.getBlockPos().relative(hit.getDirection());
                 host.teleportTo(to.getX() + 0.5, to.getY(), to.getZ() + 0.5);
                 level.playSound(null, host.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1, 1);
-                return true;
+                return null;
             }
             case "explode" -> {
                 JarState state = FormActions.state(pilot);
@@ -95,7 +97,7 @@ public final class HostAbilities {
                 level.explode(host, host.getX(), host.getY(), host.getZ(), (float) a.param("power", 3), Level.ExplosionInteraction.NONE);
                 host.kill();
                 if (!state.has(ModuleType.SHOCK_LID)) state.setIntegrity(state.integrity() / 2);
-                return true;
+                return null;
             }
             case "fireball" -> {
                 int count = (int) a.param("count", 3);
@@ -106,7 +108,7 @@ public final class HostAbilities {
                     level.addFreshEntity(ball);
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.HOSTILE, 1, 1);
-                return true;
+                return null;
             }
             case "arrows" -> {
                 int count = (int) a.param("count", 3);
@@ -118,15 +120,18 @@ public final class HostAbilities {
                     level.addFreshEntity(arrow);
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.SKELETON_SHOOT, SoundSource.HOSTILE, 1, 1);
-                return true;
+                return null;
             }
             case "web" -> {
                 Entity t = target(pilot, range);
-                BlockPos at = t != null ? t.blockPosition() : block(pilot, range).getBlockPos().above();
-                if (!level.getBlockState(at).canBeReplaced()) return false;
+                BlockHitResult hit = t == null ? block(pilot, range) : null;
+                if (t == null && hit.getType() != HitResult.Type.BLOCK) return NO_TARGET;
+                BlockPos at = t != null ? t.blockPosition() : hit.getBlockPos().relative(hit.getDirection());
+                // a web only fills air: never water, lava or a plant, which would be gone when it melts
+                if (!level.getBlockState(at).isAir() || !level.mayInteract(pilot, at)) return "host.web_blocked";
                 level.setBlockAndUpdate(at, Blocks.COBWEB.defaultBlockState());
-                WEBS.put(at.immutable(), level.getGameTime() + 200);
-                return true;
+                WebShots.get(level).add(at, level.getGameTime() + 200);
+                return null;
             }
             case "charge", "pounce" -> {
                 Vec3 push = look.multiply(1, 0, 1).normalize().scale(a.param("speed", 1.4));
@@ -135,19 +140,19 @@ public final class HostAbilities {
                 float damage = (float) a.param("damage", 6);
                 for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().expandTowards(push.scale(2)).inflate(0.5),
                         e -> e != host && e != pilot)) {
-                    e.hurt(level.damageSources().mobAttack(host), damage);
+                    e.hurt(HostEvents.byPilot(host, pilot, net.minecraft.world.damagesource.DamageTypes.MOB_ATTACK), damage);
                     e.knockback(a.param("knockback", 1.5), -push.x, -push.z);
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.RAVAGER_ATTACK, SoundSource.HOSTILE, 1, 1.2f);
-                return true;
+                return null;
             }
             case "toss" -> {
                 Entity t = target(pilot, a.param("range", 4));
-                if (t == null) return false;
+                if (t == null) return NO_TARGET;
                 t.setDeltaMovement(t.getDeltaMovement().add(0, a.param("power", 1.2), 0));
                 t.hurtMarked = true;
                 level.playSound(null, host.blockPosition(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 1, 1);
-                return true;
+                return null;
             }
             case "roar" -> {
                 double r = a.param("radius", 6);
@@ -157,12 +162,12 @@ public final class HostAbilities {
                     e.knockback(0.8, host.getX() - e.getX(), host.getZ() - e.getZ());
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 1.5f, 1);
-                return true;
+                return null;
             }
             case "lay_egg" -> {
                 level.addFreshEntity(new ItemEntity(level, host.getX(), host.getY(), host.getZ(), new ItemStack(Items.EGG)));
                 level.playSound(null, host.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1, 1);
-                return true;
+                return null;
             }
             case "ink" -> {
                 for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(6), e -> e != host && e != pilot)) {
@@ -170,18 +175,18 @@ public final class HostAbilities {
                 }
                 level.sendParticles(ParticleTypes.SQUID_INK, host.getX(), host.getY() + 0.5, host.getZ(), 40, 1, 0.5, 1, 0.05);
                 level.playSound(null, host.blockPosition(), SoundEvents.SQUID_SQUIRT, SoundSource.NEUTRAL, 1, 1);
-                return true;
+                return null;
             }
             case "wind_charge" -> {
                 WindCharge charge = new WindCharge(level, pilot.getEyePosition().x + look.x, pilot.getEyePosition().y + look.y, pilot.getEyePosition().z + look.z, look);
                 charge.setOwner(host);
                 charge.shoot(look.x, look.y, look.z, 1.5f, 1f);
                 level.addFreshEntity(charge);
-                return true;
+                return null;
             }
             case "sonic_boom" -> {
                 Entity t = target(pilot, a.param("range", 15));
-                if (!(t instanceof LivingEntity victim)) return false;
+                if (!(t instanceof LivingEntity victim)) return NO_TARGET;
                 victim.hurt(level.damageSources().sonicBoom(host), (float) a.param("damage", 10));
                 Vec3 from = host.position().add(0, 1.6, 0), dir = victim.getEyePosition().subtract(from);
                 for (int i = 1; i < (int) dir.length(); i++) {
@@ -189,7 +194,7 @@ public final class HostAbilities {
                     level.sendParticles(ParticleTypes.SONIC_BOOM, p.x, p.y, p.z, 1, 0, 0, 0, 0);
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
-                return true;
+                return null;
             }
             case "potion" -> {
                 var potion = new net.minecraft.world.entity.projectile.ThrownPotion(level, host);
@@ -197,48 +202,42 @@ public final class HostAbilities {
                 potion.setPos(pilot.getEyePosition().add(look));
                 potion.shoot(look.x, look.y + 0.1, look.z, 0.9f, 2f);
                 level.addFreshEntity(potion);
-                return true;
+                return null;
             }
             case "groan" -> {
                 Entity t = target(pilot, 16);
-                if (!(t instanceof LivingEntity victim)) return false;
+                if (!(t instanceof LivingEntity victim)) return NO_TARGET;
                 for (Mob ally : level.getEntitiesOfClass(Mob.class, host.getBoundingBox().inflate(16), m -> m.getType() == host.getType() && m != host && !Hosts.isHost(m))) {
                     ally.setTarget(victim);
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.ZOMBIE_AMBIENT, SoundSource.HOSTILE, 1.5f, 0.6f);
-                return true;
+                return null;
             }
             case "echolocation" -> {
                 for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(16), e -> e != host && e != pilot)) {
                     e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
                 }
                 level.playSound(null, host.blockPosition(), SoundEvents.BAT_AMBIENT, SoundSource.NEUTRAL, 1.5f, 0.5f);
-                return true;
+                return null;
             }
             case "hover" -> {
                 host.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (int) a.param("duration", 30), 0));
                 host.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) a.param("duration", 30) + 60, 0));
-                return true;
+                return null;
             }
             case "sprint" -> {
                 host.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) a.param("duration", 100), (int) a.param("amplifier", 2)));
                 level.playSound(null, host.blockPosition(), SoundEvents.HORSE_GALLOP, SoundSource.NEUTRAL, 1, 1);
-                return true;
+                return null;
             }
             default -> {
-                return false;
+                return "host.no_ability";
             }
         }
     }
 
-    /** Melts Web Shot cobwebs after 10 seconds. */
+    /** Melts Web Shot cobwebs after 10 seconds (checked once a second, in the dimension they were shot in). */
     public static void tickWebs(ServerLevel level) {
-        if (WEBS.isEmpty()) return;
-        long now = level.getGameTime();
-        WEBS.entrySet().removeIf(e -> {
-            if (e.getValue() > now) return false;
-            if (level.getBlockState(e.getKey()).is(Blocks.COBWEB)) level.removeBlock(e.getKey(), false);
-            return true;
-        });
+        WebShots.get(level).tick(level);
     }
 }

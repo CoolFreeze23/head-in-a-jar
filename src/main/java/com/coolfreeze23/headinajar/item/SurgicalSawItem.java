@@ -56,11 +56,17 @@ public class SurgicalSawItem extends Item {
         stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
         ItemStack offhand = player.getOffhandItem();
-        if (offhand.is(ModRegistry.LIFE_SUPPORT_JAR.get())) {
-            // keep the head: it goes into the jar, the body falls
-            offhand.shrink(1);
-            com.coolfreeze23.headinajar.form.FormActions.give(server, JarredHeadItem.of(mob));
+        if (offhand.getItem() instanceof LifeSupportJarItem) {
+            // keep the head: it goes into the jar (any empty one), the body falls. The head is taken as it was before
+            // the cut, and handed over only if the cut really killed (a totem, a claim or Resistance can stop it).
+            ItemStack head = JarredHeadItem.of(mob);
             mob.hurt(mob.damageSources().playerAttack(player), Float.MAX_VALUE);
+            if (!mob.isDeadOrDying()) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(server, com.coolfreeze23.headinajar.feedback.Refuser.at(mob), "saw.survived", mob.getDisplayName());
+                return InteractionResult.CONSUME;
+            }
+            offhand.consume(1, player);
+            com.coolfreeze23.headinajar.form.FormActions.give(server, head);
             return InteractionResult.CONSUME;
         }
         HostData data = Hosts.data(mob);

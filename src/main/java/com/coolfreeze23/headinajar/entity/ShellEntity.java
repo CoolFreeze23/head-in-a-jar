@@ -65,7 +65,7 @@ public class ShellEntity extends PathfinderMob {
             player.displayClientMessage(Component.translatable("message.headinajar.no_cargo"), true);
             return;
         }
-        player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ChestMenu(MenuType.GENERIC_9x1, id, inv, cargo, 1), getDisplayName()));
+        player.openMenu(new SimpleMenuProvider((id, inv, p) -> new ChestMenu(MenuType.GENERIC_9x1, id, inv, new EntityCargo(cargo, this), 1), getDisplayName()));
     }
 
     private net.minecraft.world.item.Item chassis() {
@@ -82,6 +82,12 @@ public class ShellEntity extends PathfinderMob {
         spawnAtLocation(new ItemStack(ModRegistry.SERVO.get(), 2));
         spawnAtLocation(new ItemStack(ModRegistry.SURGICAL_STEEL_INGOT.get(), 3));
         Containers.dropContents(level, blockPosition(), cargo);
+    }
+
+    /** A shell has no lungs. */
+    @Override
+    public boolean canDrownInFluidType(net.neoforged.neoforge.fluids.FluidType type) {
+        return false;
     }
 
     @Override

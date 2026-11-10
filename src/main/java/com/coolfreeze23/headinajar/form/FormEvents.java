@@ -59,6 +59,8 @@ public final class FormEvents {
 
     /** A jar with no Manipulator Arm can't touch the world. */
     public static boolean lockedOut(Player player) {
+        // a mecha's Manipulator Hand acts for its pilot
+        if (com.coolfreeze23.headinajar.mecha.MechaArms.acting(player)) return false;
         JarState state = state(player);
         return state.form() == Form.JAR && !state.has(ModuleType.MANIPULATOR_ARM)
                 || state.form() == Form.SOCKET || state.form() == Form.HOSTED || state.form() == Form.PILOT;
@@ -355,12 +357,17 @@ public final class FormEvents {
 
     private static final java.util.Map<java.util.UUID, Integer> PORTAL_TOLD = new java.util.HashMap<>();
 
-    /** A mecha pilot only leaves by ejecting (hold sneak + J); sneaking is for the Anchor Clamps. */
+    /**
+     * A mecha pilot doesn't leave by sneaking (sneaking is for the Anchor Clamps; ejecting is hold sneak + J). Anything
+     * else that takes a pilot out (a teleport, spectator mode, a dimension change) is let through, and the pilot is a jar
+     * again on the next tick.
+     */
     @SubscribeEvent
     public static void mechaDismount(EntityMountEvent event) {
         if (event.isDismounting() && !event.getLevel().isClientSide() && event.getEntityBeingMounted() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha
                 && mecha.isAlive() && !mecha.ejecting && event.getEntityMounting() == mecha.getFirstPassenger()
-                && event.getEntityMounting() instanceof Player p && state(p).form() == Form.PILOT && p.isAlive()) {
+                && event.getEntityMounting() instanceof Player p && state(p).form() == Form.PILOT && p.isAlive()
+                && p.isShiftKeyDown() && !p.isSpectator()) {
             event.setCanceled(true);
         }
     }

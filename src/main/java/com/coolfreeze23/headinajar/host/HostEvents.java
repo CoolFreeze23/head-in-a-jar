@@ -9,6 +9,7 @@ import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,6 +56,7 @@ public final class HostEvents {
     @SubscribeEvent
     public static void datapackSync(OnDatapackSyncEvent event) {
         event.getRelevantPlayers().forEach(Network::sendNecks);
+        event.getRelevantPlayers().forEach(HostFiles::send);
     }
 
     @SubscribeEvent
@@ -64,7 +66,7 @@ public final class HostEvents {
 
     @SubscribeEvent
     public static void levelTick(LevelTickEvent.Post event) {
-        if (event.getLevel() instanceof ServerLevel level) HostAbilities.tickWebs(level);
+        if (event.getLevel() instanceof ServerLevel level && level.getGameTime() % 20 == 0) HostAbilities.tickWebs(level);
     }
 
     @SubscribeEvent
@@ -102,16 +104,22 @@ public final class HostEvents {
         float sync = data.effectiveSync();
         attributes(host, def, data, sync);
         if (def != null && sync >= 25) traits(host, def, pilot);
-        if (pilot != null && data.shell) FormActions.state(pilot).spend(20);
-        if (time % 20 == 0) Network.syncHost(host);
+        // a Utility Shell runs on the jar's charge; a mecha has its own battery
+        if (pilot != null && data.shell && !(host instanceof com.coolfreeze23.headinajar.entity.MechaEntity)) FormActions.state(pilot).spend(20);
+        // a shell's or mecha's host data never changes after it is made: watchers got it when they started tracking
+        if (time % 20 == 0 && !data.shell) Network.syncHost(host);
     }
 
     private static void attributes(Mob host, HostDefinition def, HostData data, float sync) {
         float slow = data.shell ? 0 : data.freshness < 25 ? -0.3f : data.freshness < 50 ? -0.15f : 0;
         set(host, Attributes.MOVEMENT_SPEED, STIFF, slow, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         float bonus = sync >= 100 ? 0.1f : 0;
-        set(host, Attributes.MAX_HEALTH, SYNCED, bonus, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-        set(host, Attributes.ATTACK_DAMAGE, SYNCED, bonus, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        // the synced bonus is saved with the body, so a reload doesn't clamp its health to the unbonused maximum;
+        // a body at full health stays at full health when the bonus arrives (a brand-new mecha)
+        boolean full = host.getHealth() >= host.getMaxHealth();
+        setSaved(host, Attributes.MAX_HEALTH, SYNCED, bonus, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        if (full && host.getHealth() < host.getMaxHealth()) host.setHealth(host.getMaxHealth());
+        setSaved(host, Attributes.ATTACK_DAMAGE, SYNCED, bonus, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         if (def == null) return;
         for (Map.Entry<String, Double> e : def.attributes().entrySet()) {
             ResourceLocation id = ResourceLocation.tryParse(e.getKey());
@@ -129,6 +137,18 @@ public final class HostEvents {
         } else {
             AttributeModifier existing = inst.getModifier(id);
             if (existing == null || existing.amount() != amount) inst.addOrUpdateTransientModifier(new AttributeModifier(id, amount, op));
+        }
+    }
+
+    /** As {@link #set}, but the modifier is saved with the entity. */
+    private static void setSaved(LivingEntity e, Holder<Attribute> attribute, ResourceLocation id, double amount, AttributeModifier.Operation op) {
+        AttributeInstance inst = e.getAttribute(attribute);
+        if (inst == null) return;
+        if (amount == 0) {
+            if (inst.hasModifier(id)) inst.removeModifier(id);
+        } else {
+            AttributeModifier existing = inst.getModifier(id);
+            if (existing == null || existing.amount() != amount) inst.addOrReplacePermanentModifier(new AttributeModifier(id, amount, op));
         }
     }
 
@@ -180,7 +200,7 @@ public final class HostEvents {
     /** The saw acts before the mob's own use (a villager would otherwise open its trades). */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void saw(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
-        if (!event.getItemStack().is(ModRegistry.SURGICAL_SAW.get()) || !(event.getTarget() instanceof Mob mob)) return;
+        if (!event.getItemStack().is(ModRegistry.SURGICAL_SAW.get()) || !(whole(event.getTarget()) instanceof Mob mob)) return;
         event.setCanceled(true);
         if (event.getEntity() instanceof ServerPlayer player) {
             event.setCancellationResult(com.coolfreeze23.headinajar.item.SurgicalSawItem.saw(player, event.getItemStack(), mob, event.getHand()));
@@ -189,7 +209,59 @@ public final class HostEvents {
         }
     }
 
-    /** A hosted jar attacks with its host. */
+    /** The creature a click landed on: a part of a multipart creature (the Ender Dragon's wings and neck) is the creature. */
+    public static Entity whole(Entity target) {
+        return target instanceof net.neoforged.neoforge.entity.PartEntity<?> part && part.getParent() != null ? part.getParent() : target;
+    }
+
+    /** A syringe on part of the Ender Dragon samples the dragon (the gene code itself only sees whole creatures). */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void samplePart(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof net.neoforged.neoforge.entity.PartEntity<?>) || !(whole(event.getTarget()) instanceof LivingEntity whole)
+                || !(event.getItemStack().getItem() instanceof com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem syringe)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(event.getEntity() instanceof ServerPlayer player ? syringe.draw(player, event.getItemStack(), whole, event.getHand())
+                : net.minecraft.world.InteractionResult.SUCCESS);
+    }
+
+    /** A jar riding a host has no hands of its own: it is told so, for its own body and for another host too. */
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void hostedUse(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        Player player = event.getEntity();
+        if (FormActions.state(player).form() != Form.HOSTED || event.getTarget() == player.getVehicle()) return;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.CONSUME);
+        if (!(player instanceof ServerPlayer sp)) return;
+        if (event.getTarget() instanceof com.coolfreeze23.headinajar.entity.HeadlessBody body && sp.getUUID().equals(body.ownerId())) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(sp, OWN_BODY);
+        } else {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(sp, Hosts.isHost(event.getTarget()) ? SECOND_HOST : NO_HANDS);
+        }
+    }
+
+    /** Embalming Fluid and Neural Lace are for host bodies: on a creature with its head on, the player is told so. */
+    @SubscribeEvent
+    public static void notAHost(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
+        var stack = event.getItemStack();
+        if (!(stack.is(ModRegistry.EMBALMING_FLUID.get()) || stack.is(ModRegistry.NEURAL_LACE.get())) || !(whole(event.getTarget()) instanceof Mob mob) || Hosts.isHost(mob)) return;
+        event.setCanceled(true);
+        event.setCancellationResult(net.minecraft.world.InteractionResult.CONSUME);
+        if (event.getEntity() instanceof ServerPlayer player) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mob), "host.not_a_host",
+                    stack.getHoverName(), Component.translatable(ModRegistry.SURGICAL_SAW.get().getDescriptionId()));
+        }
+    }
+
+    /** Reasons the client asks for: it cancels a hosted jar's clicks itself, before the server hears of them. */
+    public static final String NO_HANDS = "host.no_hands", SECOND_HOST = "host.second_host", OWN_BODY = "host.own_body", GET_DOWN = "host.get_down";
+
+    static {
+        for (String reason : new String[]{NO_HANDS, SECOND_HOST, GET_DOWN}) {
+            com.coolfreeze23.headinajar.feedback.Refusals.allowFromClient(reason, com.coolfreeze23.headinajar.feedback.Refusals.Cue.PLAIN);
+        }
+    }
+
+    /** A hosted jar attacks with its host; the blow is the pilot's, so PvP rules, claims and kill credit apply. */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void attack(AttackEntityEvent event) {
         Player player = event.getEntity();
@@ -200,8 +272,46 @@ public final class HostEvents {
         double reach = host.getBbWidth() * 0.5 + 2.5;
         if (event.getTarget().distanceTo(host) <= reach) {
             host.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
-            if (host.getAttribute(Attributes.ATTACK_DAMAGE) != null) host.doHurtTarget(event.getTarget());
-            else event.getTarget().hurt(host.damageSources().mobAttack(host), 2);
+            hit(host, player, event.getTarget());
+        } else if (player instanceof ServerPlayer sp) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(sp, com.coolfreeze23.headinajar.feedback.Refuser.at(host), "host.out_of_reach");
         }
+    }
+
+    /** The host's own blow (its attack damage and knockback), dealt by the host on its pilot's behalf. */
+    public static boolean hit(Mob host, Player pilot, Entity target) {
+        double damage = host.getAttribute(Attributes.ATTACK_DAMAGE) != null ? host.getAttributeValue(Attributes.ATTACK_DAMAGE) : 2;
+        boolean hurt = target.hurt(byPilot(host, pilot, DamageTypes.MOB_ATTACK), (float) damage);
+        if (hurt) {
+            double knock = host.getAttribute(Attributes.ATTACK_KNOCKBACK) != null ? host.getAttributeValue(Attributes.ATTACK_KNOCKBACK) : 0;
+            if (knock > 0 && target instanceof LivingEntity living) {
+                living.knockback(knock * 0.5, Math.sin(host.getYRot() * ((float) Math.PI / 180f)), -Math.cos(host.getYRot() * ((float) Math.PI / 180f)));
+            }
+            host.setLastHurtMob(target);
+        }
+        return hurt;
+    }
+
+    /** Damage dealt by a body (a host, a mecha) and credited to the jar driving it. */
+    public static net.minecraft.world.damagesource.DamageSource byPilot(Entity body, Player pilot,
+                                                                        net.minecraft.resources.ResourceKey<net.minecraft.world.damagesource.DamageType> type) {
+        // the direct entity is the body, the one who caused it the pilot
+        return body.damageSources().source(type, body, pilot);
+    }
+
+    /** Vanilla's conversions (a drowning zombie, a skeleton in powder snow, lightning) would give a host its head back. */
+    @SubscribeEvent
+    public static void conversion(net.neoforged.neoforge.event.entity.living.LivingConversionEvent.Pre event) {
+        if (!Hosts.isHost(event.getEntity())) return;
+        event.setCanceled(true);
+        // the zombie and skeleton timers would ask again every tick
+        event.setConversionTimer(600);
+    }
+
+    /** Someone riding along in a mecha is set down when they log out, so the mecha stays in the world for its owner. */
+    @SubscribeEvent
+    public static void loggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        Player player = event.getEntity();
+        if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity && FormActions.state(player).form() != Form.PILOT) player.stopRiding();
     }
 }
