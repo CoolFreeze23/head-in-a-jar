@@ -21,9 +21,7 @@ import java.util.List;
 public class SeparationChairScreen extends AbstractContainerScreen<SeparationChairMenu> {
     private static final ResourceLocation BACKGROUND = HeadInAJar.id("textures/gui/separation_chair.png");
     private static final int SIGN_X = 74, SIGN_Y = 70, SIGN_W = 94, SIGN_H = 16;
-    private static final int HOLD_TICKS = 40;
-    private int held;
-    private boolean sent;
+    private final SignHold hold = new SignHold();
 
     public SeparationChairScreen(SeparationChairMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -51,17 +49,41 @@ public class SeparationChairScreen extends AbstractContainerScreen<SeparationCha
     }
 
     @Override
+    public boolean mouseClicked(double mx, double my, int button) {
+        // the screen's own press, so any mouse button works whatever the attack and use keys are bound to
+        if (!overSign(mx, my)) return super.mouseClicked(mx, my, button);
+        if (canSign()) hold.press(button);
+        else if (menu.opTick() < 0) ClientRefusals.local(whyNot());
+        return true;
+    }
+
+    @Override
+    public boolean mouseReleased(double mx, double my, int button) {
+        if (hold.release(button)) return true;
+        return super.mouseReleased(mx, my, button);
+    }
+
+    /** What stops the signature, in DOLORES's words. */
+    private Component whyNot() {
+        if (!menu.viewerSeated(minecraft.player)) return Component.translatable("gui.headinajar.chair.sit");
+        List<String> missing = missing();
+        return Component.translatable("dolores.headinajar.refuse." + (missing.isEmpty() ? "already" : missing.get(0)));
+    }
+
+    @Override
     protected void containerTick() {
         super.containerTick();
         double mx = minecraft.mouseHandler.xpos() * width / minecraft.getWindow().getScreenWidth();
         double my = minecraft.mouseHandler.ypos() * height / minecraft.getWindow().getScreenHeight();
-        boolean holding = canSign() && minecraft.mouseHandler.isLeftPressed() && overSign(mx, my);
-        held = holding ? held + 1 : 0;
-        if (held >= HOLD_TICKS && !sent) {
-            sent = true;
+        if (hold.tick(overSign(mx, my), canSign())) {
             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, SeparationChairMenu.BUTTON_SIGN);
         }
-        if (!holding) sent = false;
+    }
+
+    @Override
+    public void removed() {
+        hold.reset();
+        super.removed();
     }
 
     @Override
@@ -77,7 +99,7 @@ public class SeparationChairScreen extends AbstractContainerScreen<SeparationCha
         boolean ok = canSign();
         g.fill(x, y, x + SIGN_W, y + SIGN_H, ok ? 0xFF6E5A3A : 0xFF5A5A5A);
         g.fill(x + 1, y + 1, x + SIGN_W - 1, y + SIGN_H - 1, ok ? 0xFFEDE3C8 : 0xFFB0B0B0);
-        if (held > 0) g.fill(x + 1, y + 1, x + 1 + (SIGN_W - 2) * Math.min(held, HOLD_TICKS) / HOLD_TICKS, y + SIGN_H - 1, 0xFF8FD08F);
+        if (hold.held() > 0) g.fill(x + 1, y + 1, x + 1 + (SIGN_W - 2) * hold.held() / SignHold.HOLD_TICKS, y + SIGN_H - 1, 0xFF8FD08F);
     }
 
     @Override
@@ -102,7 +124,7 @@ public class SeparationChairScreen extends AbstractContainerScreen<SeparationCha
         int wear = menu.wear();
         g.drawString(font, Component.translatable("gui.headinajar.chair.wear", wear), 74, 61, wear > 80 ? 0x9A2020 : 0x404040, false);
         Component sign = menu.viewerSeated(minecraft.player)
-                ? Component.translatable(held > 0 ? "gui.headinajar.chair.signing" : "gui.headinajar.chair.sign")
+                ? Component.translatable(hold.held() > 0 ? "gui.headinajar.chair.signing" : "gui.headinajar.chair.sign")
                 : Component.translatable("gui.headinajar.chair.sit");
         g.drawCenteredString(font, sign, SIGN_X + SIGN_W / 2, SIGN_Y + 4, 0x3A2A10);
     }

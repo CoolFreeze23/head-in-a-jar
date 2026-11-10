@@ -11,7 +11,6 @@ import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,7 +230,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
             case 120 -> {
                 sound(SoundEvents.SHEEP_SHEAR, 1.2f, 0.5f);
                 sound(SoundEvents.PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
-                server.sendParticles(new DustParticleOptions(new Vector3f(0.6f, 0.05f, 0.05f), 1.2f), c.x, c.y + 1.4, c.z, 12, 0.2, 0.1, 0.2, 0);
+                com.coolfreeze23.headinajar.feedback.Sanitary.puff(server, c.x, c.y + 1.4, c.z);
             }
             case 140 -> {
                 sound(SoundEvents.BOTTLE_FILL, 1, 0.7f);

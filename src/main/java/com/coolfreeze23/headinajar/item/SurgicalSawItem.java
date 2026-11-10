@@ -5,7 +5,6 @@ import com.coolfreeze23.headinajar.host.Hosts;
 import com.coolfreeze23.headinajar.network.Network;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class SurgicalSawItem extends Item {
         }
         ServerLevel level = server.serverLevel();
         level.playSound(null, mob.getX(), mob.getY(), mob.getZ(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.2f, 0.5f);
-        level.sendParticles(new DustParticleOptions(new Vector3f(0.6f, 0.05f, 0.05f), 1.2f), mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ(), 15, 0.2, 0.1, 0.2, 0);
+        com.coolfreeze23.headinajar.feedback.Sanitary.puff(level, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ());
         stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
         ItemStack offhand = player.getOffhandItem();
