@@ -303,6 +303,13 @@ public class MechaEntity extends PathfinderMob {
         return getPassengers().size() < 1 + frame.seats() + (has(MechaModule.PASSENGER_POD) ? 1 : 0);
     }
 
+    /** The jar gets out clear of the frame's box: inside it, a click on the jar or on its head would reach the mecha. */
+    @Override
+    public Vec3 getDismountLocationForPassenger(net.minecraft.world.entity.LivingEntity passenger) {
+        Vec3 clear = ShellEntity.clearOf(this, passenger);
+        return clear != null ? clear : super.getDismountLocationForPassenger(passenger);
+    }
+
     /** Passengers (Passenger Pod, the Wheelhouse's seats) sit behind the cockpit, side by side. */
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {

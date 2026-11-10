@@ -98,6 +98,39 @@ public class ShellEntity extends PathfinderMob {
         pilot.displayClientMessage(Component.translatable("message.headinajar.shell_crash", getDisplayName()), true);
     }
 
+    /**
+     * Where a jar getting out of a wide body stands: just clear of its box, behind it or to a side (in front last),
+     * on ground if there is any, so a click on the jar, or on what it leaves there, reaches it and not the body.
+     */
+    public static Vec3 clearOf(net.minecraft.world.entity.Entity vehicle, net.minecraft.world.entity.LivingEntity passenger) {
+        var level = vehicle.level();
+        // sized as the plain jar it is about to be (a pilot is player-sized in the cockpit)
+        var box = passenger instanceof net.minecraft.world.entity.player.Player player && player.hasData(ModRegistry.JAR_STATE)
+                && player.getData(ModRegistry.JAR_STATE).form().isJarred()
+                ? (player.getData(ModRegistry.JAR_STATE).compact() ? com.coolfreeze23.headinajar.form.FormEvents.COMPACT_SIZE
+                        : com.coolfreeze23.headinajar.form.FormEvents.JAR_SIZE).makeBoundingBox(Vec3.ZERO)
+                : passenger.getBoundingBox().move(passenger.position().reverse());
+        double reach = vehicle.getBbWidth() / 2 + box.getXsize() / 2 + 0.1;
+        // square to the box (whose sides are the world's axes), the side nearest behind the body first
+        var facing = net.minecraft.core.Direction.fromYRot(vehicle.getYRot());
+        Vec3 fallback = null;
+        for (var dir : new net.minecraft.core.Direction[]{facing.getOpposite(), facing.getClockWise(), facing.getCounterClockWise(), facing}) {
+            Vec3 at = new Vec3(vehicle.getX() + dir.getStepX() * reach, vehicle.getY(), vehicle.getZ() + dir.getStepZ() * reach);
+            if (!level.noCollision(passenger, box.move(at))) continue;
+            boolean ground = !level.noCollision(passenger, box.move(at).move(0, -1.1, 0).setMaxY(at.y));
+            if (ground) return at;
+            if (fallback == null) fallback = at;
+        }
+        return fallback;
+    }
+
+    /** A jar getting out stands beside the shell, not inside its box (where it would board it again at its next click). */
+    @Override
+    public Vec3 getDismountLocationForPassenger(net.minecraft.world.entity.LivingEntity passenger) {
+        Vec3 clear = clearOf(this, passenger);
+        return clear != null ? clear : super.getDismountLocationForPassenger(passenger);
+    }
+
     public void openCargo(ServerPlayer player) {
         if (kind != Kind.ROVER) {
             player.displayClientMessage(Component.translatable("message.headinajar.no_cargo"), true);
