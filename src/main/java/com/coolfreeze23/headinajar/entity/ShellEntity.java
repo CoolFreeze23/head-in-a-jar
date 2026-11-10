@@ -70,17 +70,24 @@ public class ShellEntity extends PathfinderMob {
     public static final double CRASH_SPEED = 0.3;
     private Vec3 lastPos;
     private double lastSpeed;
+    private Vec3 lastMove = Vec3.ZERO;
     private int crashCooldown;
 
     @Override
     public void tick() {
         super.tick();
         if (level().isClientSide) return;
-        // a rider moves the shell from their client, so its speed is read between ticks, not inside one
-        double speed = lastPos == null ? 0 : position().subtract(lastPos).horizontalDistance();
+        // a rider moves the shell from their client (the client stops it at the wall, so the server never sees it
+        // collide): its speed is read between ticks, and a crash is a fast shell stopped with a solid block just ahead
+        Vec3 moved = lastPos == null ? Vec3.ZERO : position().subtract(lastPos).multiply(1, 0, 1);
+        double speed = moved.length();
         if (crashCooldown > 0) crashCooldown--;
-        if (horizontalCollision && Math.max(speed, lastSpeed) >= CRASH_SPEED && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot) crash(pilot);
+        if (lastSpeed >= CRASH_SPEED && speed < lastSpeed * 0.5 && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot
+                && (horizontalCollision || !level().noCollision(this, getBoundingBox().move(lastMove.normalize().scale(0.25))))) {
+            crash(pilot);
+        }
         lastSpeed = speed;
+        if (speed > 1e-3) lastMove = moved;
         lastPos = position();
     }
 
