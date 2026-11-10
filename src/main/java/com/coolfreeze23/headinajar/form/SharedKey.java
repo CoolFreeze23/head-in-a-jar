@@ -42,7 +42,7 @@ public final class SharedKey {
         kept.putBoolean(TOLD, true);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, kept);
         player.sendSystemMessage(Component.translatable("message.headinajar.shared_key", Component.keybind("key.headinajar.ability"),
-                Component.translatable("key.sprint"), Component.translatable("options.controls")).withStyle(ChatFormatting.GRAY));
+                Component.translatable("key.sprint"), Component.translatable("controls.title")).withStyle(ChatFormatting.GRAY));
         return true;
     }
 }

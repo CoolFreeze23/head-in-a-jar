@@ -68,14 +68,19 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
         graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
     }
 
+    /** The reader's own number format (5,000 in English, 5.000 in Portuguese). */
+    private java.util.Locale locale() {
+        return java.util.Locale.forLanguageTag(minecraft.getLanguageManager().getSelected().replace('_', '-'));
+    }
+
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         // the empty feed slot says what it takes and what each is worth
         if (hoveredSlot != null && hoveredSlot.index == JarState.MAX_SLOTS && !hoveredSlot.hasItem() && menu.getCarried().isEmpty()) {
             graphics.renderComponentTooltip(font, java.util.List.of(Component.translatable("gui.headinajar.feed.title"),
-                    Component.translatable("gui.headinajar.feed.redstone", String.format(java.util.Locale.ROOT, "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE))),
-                            String.format(java.util.Locale.ROOT, "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE_BLOCK)))).withStyle(net.minecraft.ChatFormatting.GRAY),
+                    Component.translatable("gui.headinajar.feed.redstone", String.format(locale(), "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE))),
+                            String.format(locale(), "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE_BLOCK)))).withStyle(net.minecraft.ChatFormatting.GRAY),
                     Component.translatable("gui.headinajar.feed.saline").withStyle(net.minecraft.ChatFormatting.GRAY)), mouseX, mouseY);
             return;
         }
