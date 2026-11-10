@@ -26,6 +26,8 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
     private ItemStack goggles = ItemStack.EMPTY;
     /** The docked head is in a Compact Jar, so it comes out as one even when its owner is offline. */
     private boolean compact;
+    /** A botched cut piped its head here upside down; it rights itself at this game time (0: upright). */
+    private long upsideDownUntil;
     private final Buffer energy = new Buffer(50_000, 2_000, 0, this::setChanged);
     private final net.neoforged.neoforge.fluids.capability.templates.FluidTank saline =
             new net.neoforged.neoforge.fluids.capability.templates.FluidTank(4000, f -> f.getFluid().isSame(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get())) {
@@ -114,11 +116,22 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    /** The docked head floats upside down for this many ticks (a botched cut), as it would at the chair's outlet. */
+    public void setUpsideDown(int ticks) {
+        upsideDownUntil = level == null || ticks <= 0 ? 0 : level.getGameTime() + ticks;
+        changed();
+    }
+
+    public boolean upsideDown() {
+        return owner != null && level != null && level.getGameTime() < upsideDownUntil;
+    }
+
     public void clear() {
         owner = null;
         ownerName = "";
         goggles = ItemStack.EMPTY;
         compact = false;
+        upsideDownUntil = 0;
         changed();
     }
 
@@ -174,6 +187,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         head.setOwner(owner, ownerName);
         head.setGoggles(goggles);
         head.setCompact(compact);
+        if (upsideDown()) head.setUpsideDown((int) (upsideDownUntil - server.getGameTime()));
         if (server.getServer().getPlayerList().getPlayer(owner) instanceof net.minecraft.server.level.ServerPlayer online) {
             head.setCompact(com.coolfreeze23.headinajar.form.FormActions.state(online).compact());
         }
@@ -192,6 +206,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
             tag.putString("OwnerName", ownerName);
             tag.put("Goggles", goggles.saveOptional(registries));
             if (compact) tag.putBoolean("Compact", true);
+            if (upsideDownUntil > 0) tag.putLong("UpsideDownUntil", upsideDownUntil);
         }
     }
 
@@ -204,6 +219,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         ownerName = tag.getString("OwnerName");
         goggles = ItemStack.parseOptional(registries, tag.getCompound("Goggles"));
         compact = tag.getBoolean("Compact");
+        upsideDownUntil = tag.getLong("UpsideDownUntil");
     }
 
     @Override

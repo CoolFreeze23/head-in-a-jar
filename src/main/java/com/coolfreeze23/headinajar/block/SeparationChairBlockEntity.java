@@ -625,6 +625,9 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
                 // a botched cut leaves the head upside down for as long as the patient's view is rolled
                 if (botch) jar.setUpsideDown(FormActions.state(player).rollTicks() > 0 ? FormActions.state(player).rollTicks() : 600);
             }
+        } else if (botch) {
+            // piped to a Cradle, a botched head floats upside down there just the same, for as long as the view is rolled
+            cradle.setUpsideDown(600);
         }
         com.coolfreeze23.headinajar.Advance.grant(player, "separated");
         if (botch) com.coolfreeze23.headinajar.Advance.grant(player, "botched");
@@ -634,7 +637,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
             say(player, "oopsie");
             sound(com.coolfreeze23.headinajar.registry.ModSounds.BOOTH_OOPSIE.get(), 1, 1);
         } else {
-            say(player, "done");
+            // the head went to the Cradle, not the outlet: she says where it is (text only; her recorded line names the outlet)
+            say(player, docked ? "done_cradle" : "done");
         }
         if (docked) {
             // piped away to the Cradle
@@ -650,7 +654,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         botched = false;
         finishAt = level.getGameTime();
         // her closing words come once the chime (or the botch's sting) is over
-        afterLine = botch ? "oopsie" : "done";
+        afterLine = botch ? "oopsie" : docked ? null : "done";
         handoff = docked ? HANDOFF_CRADLE : HANDOFF_ENTITY;
         jarKind = kindOf(items.getStackInSlot(SLOT_JAR));
         changed();
