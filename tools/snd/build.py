@@ -17,13 +17,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from nsynth import finish, export, rng, steps  # noqa: E402
-import recipes_feedback, recipes_jar, recipes_chair  # noqa: E402
+import recipes_feedback, recipes_jar, recipes_chair, recipes_fx  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 SOUNDS_DIR = os.path.join(ROOT, 'src', 'main', 'resources', 'assets', 'headinajar', 'sounds')
 EVENTS_JSON = os.path.join(HERE, 'events.json')
 
-ALL = recipes_feedback.SOUNDS + recipes_jar.SOUNDS + recipes_chair.SOUNDS
+ALL = recipes_feedback.SOUNDS + recipes_jar.SOUNDS + recipes_chair.SOUNDS + recipes_fx.SOUNDS
 
 
 def seed(sid, take):

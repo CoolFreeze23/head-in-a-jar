@@ -1,0 +1,18 @@
+# puff frame 5: 7 px: lumps spreading and thinning, alpha 60-120
+texture: particle/puff_5.png
+size: 8x8
+key:
+  .  clear
+  q  enamel.4 @120
+  p  enamel.4 @90
+  n  enamel.4 @60
+  k  enamel.3 @120
+pixels:
+p p . . . . . .
+p q n . . . . .
+. . . . . . . .
+. . . . . n k n
+. . . . . . k n
+n . . . . . . .
+k n . . n n . .
+. n . . . n . .

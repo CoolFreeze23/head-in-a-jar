@@ -944,6 +944,223 @@
       },
       "needs_patient_muffled_version": false,
       "how_to_play": "Server at t 233: the barrier lifts 233-239 and stops upright on 239."
+    },
+    {
+      "id": "headinajar:fx.tk.grab",
+      "files": [
+        "headinajar:fx/tk_grab_1",
+        "headinajar:fx/tk_grab_2",
+        "headinajar:fx/tk_grab_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "servo (telekinesis grab) (M max target -27.0)",
+      "hit_ms": 2,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Telekinesis takes hold",
+        "pt_br": "Telecinese agarra"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, on the grab tick, at the held thing. The relay click (the hit) is at 2 ms; the whine is gone by about 0.42 s, so start fx.tk.hold on the same tick (it fades in by the chase). Replaces beacon.activate at pitch 2."
+    },
+    {
+      "id": "headinajar:fx.tk.hold",
+      "files": [
+        "headinajar:fx/tk_hold_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 10,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "hum (loop, at full) (M max target -28.0)",
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Telekinesis hums",
+        "pt_br": "Telecinese zumbe"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client loop at the held thing while it is held. Pitch 0.75-1.25 and volume chased from the held mass (heavier: lower and labouring); the wobble is the code's, by pitch (the file has none). Base volume 1.0 = -28 at full. Loop file: no fades in it. A client tickable instance created once, started at volume 0 and stopped at 0.01 by the 0.2-per-tick chase; a fixed per-instance pitch offset x0.97-1.03."
+    },
+    {
+      "id": "headinajar:fx.tk.throw",
+      "files": [
+        "headinajar:fx/tk_throw_1",
+        "headinajar:fx/tk_throw_2",
+        "headinajar:fx/tk_throw_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "hiss (air burst) (M max target -24.0)",
+      "hit_ms": 2,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Telekinesis throws",
+        "pt_br": "Telecinese arremessa"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, on the throw tick, at the thrown thing (stop fx.tk.hold on the same tick). The whine starts at 2 ms. Replaces illusioner.cast_spell. Vanilla impact sounds follow when it lands."
+    },
+    {
+      "id": "headinajar:fx.tk.set_down",
+      "files": [
+        "headinajar:fx/tk_set_down_1",
+        "headinajar:fx/tk_set_down_2",
+        "headinajar:fx/tk_set_down_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "blip (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Telekinesis lets go",
+        "pt_br": "Telecinese solta"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, when the player releases the held thing gently (R again), at the thing; stop fx.tk.hold on the same tick."
+    },
+    {
+      "id": "headinajar:fx.tk.fizzle",
+      "files": [
+        "headinajar:fx/tk_fizzle_1",
+        "headinajar:fx/tk_fizzle_2",
+        "headinajar:fx/tk_fizzle_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "servo (failed grab) (M max target -27.0)",
+      "hit_ms": 2,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Telekinesis fizzles",
+        "pt_br": "Telecinese pifa"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, on a grab that fails (a block entity, too heavy, protected, nothing in sight), at the jar. Then the mod's own refusal (feedback.refused) separately, as it already does; this file is not a refusal and carries no bell."
+    },
+    {
+      "id": "headinajar:fx.swap.up",
+      "files": [
+        "headinajar:fx/swap_up_1",
+        "headinajar:fx/swap_up_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "servo (static wipe) (M max target -27.0)",
+      "hit_ms": 250,
+      "contact_offset_ticks": 5,
+      "subtitle": {
+        "en_us": "Mind leaves the jar",
+        "pt_br": "Mente sai do pote"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Head to body. The relay click (the swap) is at 250 ms = 5 ticks: start the sound 5 ticks before the swap happens (or swap 5 ticks after starting it). Fixed pitch so the click stays on the tick; the two takes give the variety. Played to the swapping player and at the body."
+    },
+    {
+      "id": "headinajar:fx.swap.down",
+      "files": [
+        "headinajar:fx/swap_down_1",
+        "headinajar:fx/swap_down_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "PLAYERS",
+      "loudness_class": "servo (static wipe) (M max target -27.0)",
+      "hit_ms": 250,
+      "contact_offset_ticks": 5,
+      "subtitle": {
+        "en_us": "Mind returns to jar",
+        "pt_br": "Mente volta ao pote"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Body to head: the same wipe sweeping down, ending in a small bubble pip at 470 ms. Click (the swap) at 250 ms = 5 ticks: start it 5 ticks before the swap. Fixed pitch."
+    },
+    {
+      "id": "headinajar:fx.laser.fire",
+      "files": [
+        "headinajar:fx/laser_fire_1",
+        "headinajar:fx/laser_fire_2",
+        "headinajar:fx/laser_fire_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 24,
+      "fixed_range": true,
+      "category": "PLAYERS",
+      "loudness_class": "beam fire (M max target -24.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Lacrimal Laser fires",
+        "pt_br": "Laser Lacrimal dispara"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, on the fire tick, at the jar. The beam starts at once (3 ms) and the file covers the 6-tick beam (0.38 s) plus the drip at 0.40 s. Register fixed-range 24 (a weapon, heard across a room)."
+    },
+    {
+      "id": "headinajar:fx.tesla.arc",
+      "files": [
+        "headinajar:fx/tesla_arc_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "arc crackle (loop) (M max target -31.0)",
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla Node arcs",
+        "pt_br": "Nó de Tesla faísca"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client loop at the midpoint of the arc between two linked Tesla Nodes while the arc is drawn, attenuation 16. Volume 1.0. Loop file: no fades in it. A client tickable instance created once, started at volume 0 and stopped at 0.01 by the 0.2-per-tick chase; a fixed per-instance pitch offset x0.97-1.03."
     }
   ]
 }
