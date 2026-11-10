@@ -160,7 +160,8 @@ public final class ClientEvents {
         // without arms a jar can still reach for its own body, a body it can climb into (a host, a shell, a mecha) and the
         // machines built for heads
         boolean reachable = event.isUseItem() && (mc.hitResult instanceof EntityHitResult hit
-                && (hit.getEntity() instanceof HeadlessBody || com.coolfreeze23.headinajar.host.Hosts.isHost(hit.getEntity()) && state.form() == Form.JAR)
+                && (hit.getEntity() instanceof HeadlessBody || (com.coolfreeze23.headinajar.host.Hosts.isHost(hit.getEntity())
+                        || com.coolfreeze23.headinajar.host.Hosts.headless(hit.getEntity())) && state.form() == Form.JAR)
                 || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
         if (!reachable) {
             event.setCanceled(true);
@@ -169,6 +170,11 @@ public final class ClientEvents {
             if (state.form() == Form.JAR) {
                 ClientRefusals.deny(com.coolfreeze23.headinajar.feedback.Nudge.reason(mc.level, mc.hitResult, event.isAttack()),
                         mc.hitResult instanceof EntityHitResult hit ? hit.getEntity() : null);
+            } else if (state.form() == Form.HOSTED && event.isUseItem()) {
+                // riding a host: no hands, and one body at a time
+                var target = mc.hitResult instanceof EntityHitResult hit ? hit.getEntity() : null;
+                ClientRefusals.deny(target != null && target != player.getVehicle() && com.coolfreeze23.headinajar.host.Hosts.isHost(target)
+                        ? com.coolfreeze23.headinajar.host.HostEvents.SECOND_HOST : com.coolfreeze23.headinajar.host.HostEvents.NO_HANDS, target);
             }
         }
     }
@@ -216,9 +222,13 @@ public final class ClientEvents {
         PilotClient.tick();
         while (ClientSetup.DRIVE.consumeClick()) {
             if (state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.DRIVE));
+            else if (state.form() == Form.HOSTED || state.form() == Form.PILOT) ClientRefusals.deny(com.coolfreeze23.headinajar.host.HostEvents.GET_DOWN, null);
         }
         while (ClientSetup.SWAP.consumeClick()) {
-            if (state.form() == Form.LINKED || state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
+            // in a mecha's cockpit the swap key opens the Cargo Hold; on a host it is refused out loud
+            if (state.form() == Form.LINKED || state.form() == Form.JAR || state.form() == Form.PILOT || state.form() == Form.HOSTED) {
+                PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
+            }
         }
         LinkHud.tick(mc.player);
     }

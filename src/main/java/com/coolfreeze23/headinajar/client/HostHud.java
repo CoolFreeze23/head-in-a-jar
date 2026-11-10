@@ -39,9 +39,18 @@ public final class HostHud {
         ChargeHud.drawBar(g, x, y, 80, sync / 100f, 0xFFB47AE8, 0xFF7A3CB0);
         g.drawString(mc.font, Component.translatable("hud.headinajar.sync", Math.round(sync)), x + 84, y - 1, 0xC0C0C0);
         y += 11;
+        // only the abilities this body really has (its data file, as the server sent it)
+        var def = Hosts.definition(vehicle);
+        boolean primary = def != null && def.primary().isPresent(), secondary = def != null && def.secondary().isPresent();
         String r = sync >= 50 ? "hud.headinajar.primary_ready" : "hud.headinajar.primary_locked";
         String gk = sync >= 75 ? "hud.headinajar.secondary_ready" : "hud.headinajar.secondary_locked";
-        g.drawString(mc.font, Component.translatable(r, Component.keybind(ClientSetup.ABILITY.getName())), x, y, sync >= 50 ? 0x55FF77 : 0x808080);
-        g.drawString(mc.font, Component.translatable(gk, Component.keybind(ClientSetup.SECONDARY.getName())), x + 70, y, sync >= 75 ? 0x55FF77 : 0x808080);
+        if (primary) g.drawString(mc.font, Component.translatable(r, Component.keybind(ClientSetup.ABILITY.getName())), x, y, sync >= 50 ? 0x55FF77 : 0x808080);
+        if (secondary) g.drawString(mc.font, Component.translatable(gk, Component.keybind(ClientSetup.SECONDARY.getName())), x + 70, y, sync >= 75 ? 0x55FF77 : 0x808080);
+        if (!primary && !secondary) g.drawString(mc.font, Component.translatable("hud.headinajar.no_abilities"), x, y, 0x808080);
+        // a Utility Shell runs on the jar's charge: a flat jar can't move it
+        if (data.shell && mc.player.getData(ModRegistry.JAR_STATE).charge() <= 0) {
+            g.drawString(mc.font, Component.translatable("hud.headinajar.shell_flat", Component.translatable("block.headinajar.charging_dock"))
+                    .withStyle(net.minecraft.ChatFormatting.YELLOW), x, y + 10, 0xFFFFFF);
+        }
     }
 }
