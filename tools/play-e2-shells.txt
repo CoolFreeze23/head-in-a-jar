@@ -1,8 +1,8 @@
-# Department E, part 2 (attempt 36): craft the Lunk, place the three shells, board each one as the jar, move, get out.
+# Play-through part E, part 2 (attempt 36): craft the Lunk, place the three shells, board each one as the jar, move, get out.
 # After play-e-shells.txt: body LINKED at 100.5 200 -29.5; head docked in the Cradle at 114 (charge full);
 # inventory has the Rover (slot 33), Spider Walker (8), a Collar Cam (6), 2 servos (35), 4 iron blocks (18).
 @world survival
-@keep playtest
+@keep playthrough
 @observe 20
 wait 60
 /time set 1000
@@ -99,7 +99,7 @@ key attack
 wait 25
 inspect near cow 8
 shot e2_lunk_punch
-report get out of the Lunk: the cold reader's guess first (Sneak + Jar menu), then plain Sneak
+report get out of the Lunk: a new player's first guess (Sneak + Jar menu), then plain Sneak
 key sneak down
 wait 2
 key menu

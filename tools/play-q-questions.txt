@@ -1,4 +1,4 @@
-# The first operator's open questions, each by a short real-input check (flat world, survival, Easy).
+# Open questions from the earlier play-through, each by a short real-input check (flat world, survival, Easy).
 # Setup verbs used to build the scene, named in each section: separate, fit, charge (they are not under test).
 @world flat
 @gamemode survival
@@ -37,7 +37,7 @@ shot q1a_after
 slots
 press escape
 wait 5
-report == Q1b: the jar aims at the corpse's feet (as journey 26a may have), right-click
+report == Q1b: the jar aims at the corpse's feet, right-click
 lookat headless_body 0.2
 key use
 wait 20

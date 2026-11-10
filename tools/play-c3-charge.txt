@@ -1,10 +1,10 @@
-# Playtest department C, part 3 (cold read attempts 22-25, 28): charge, Telekinesis, range, getting home, head back on.
+# Play-through part C, part 3: charge, Telekinesis, range, getting home, head back on.
 # Starts from the save after play-c2-modules.txt: body LINKED at 100.5 200 -29.5, jar on the floor there; inventory:
 # 5 satchel, 6 Charging Dock, 7 Telekinesis, 8 Cradle; hop springs and wheels fitted.
 # Found in earlier tries (reports c3, c3b, c3c): the pile beside the chair pushes west first and the chair takes all of
 # its 20 FE/t, so a dock on its east side never got any; so this script builds a second pile with its own dock and Cradle.
 @world survival
-@keep playtest
+@keep playthrough
 @observe 20
 wait 60
 /time set 1000

@@ -307,99 +307,99 @@ P305	any item		no	HOSTED	any block not in head_operable, any entity but your own
 P306	any item		no	SOCKET	anything	plugged into a Neural Socket	nothing	locked out; keys drive the socket instead		form/FormEvents.java:51-55	
 P307	any item		no	JAR (no arm)	any block in #headinajar:head_operable	e.g. galvanic_pile with rotten flesh	works	the block handles it as for a body (pile takes the fuel)		form/FormEvents.java:143-146; client/ClientEvents.java:164	
 P308	any item		no	JAR (no arm)	the air	any usable item (Gene Wash, EMP grenade, Entangled Pair, collar upgrades)	nothing	item use cancelled; nothing says a Manipulator Arm is needed		form/FormEvents.java:153-155; client/ClientEvents.java:162-168	Y
-N001	headinajar:syringe		no	LINKED	the air (yourself)	head placed or docked elsewhere	unpredicted	proposal: draws your own blood sample, 1 damage (BODY/LINKED); check what happens today		_process/brainstorm/cohesion.md:54	
-N002	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own corpse)	body died	unpredicted	proposal: sample from your own corpse carries your genes (P248 says it does not); check whether the corpse inventory opens instead		_process/brainstorm/cohesion.md:54	
-N003	headinajar:syringe		no	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed	unpredicted	proposal: refuse with a line ("glass is not a vein"); today expected silent		_process/brainstorm/cohesion.md:54	
-N004	headinajar:syringe		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer (description line or nothing)		_process/brainstorm/cohesion.md:54	
-N005	headinajar:syringe		no	BODY	block headinajar:leech_jar	leech jar with samples	unpredicted	proposal: empties the Leech Jar into your inventory, as the empty hand does (P044)		_process/brainstorm/cohesion.md:54	
-N006	headinajar:serum_cassette		no	LINKED	entity headinajar:head_jar (own)	filled serum, your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead (as other items do, P128)		_process/brainstorm/cohesion.md:55	
-N007	headinajar:serum_cassette		no	BODY	block headinajar:jarred_head	filled serum, jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:55	
-N008	headinajar:saline_bottle		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line (bodies take no saline); check today's answer		_process/brainstorm/cohesion.md:56	
-N009	headinajar:saline_bottle		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +10 freshness; today expected host status only		_process/brainstorm/cohesion.md:56	
-N010	headinajar:saline_bottle		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse ("shells run dry"); today expected host status		_process/brainstorm/cohesion.md:56	
-N011	headinajar:saline_bottle		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:56	
-N012	headinajar:glass_patch		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:57	
-N013	headinajar:glass_patch		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:57	
-N014	headinajar:glass_patch		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 4 HP; today expected host status only		_process/brainstorm/cohesion.md:57	
-N015	headinajar:glass_patch		no	BODY	mecha headinajar:hopper	damaged mecha	unpredicted	proposal: refuse and point at Mecha Plating; today expected mecha status		_process/brainstorm/cohesion.md:57	
-N016	headinajar:glass_patch		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:57	
-N017	headinajar:suture_kit		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:58	
-N018	headinajar:suture_kit		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:58	
-N019	headinajar:suture_kit		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:58	
-N020	headinajar:suture_kit		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	proposal: refuse with a line; today expected you sit down		_process/brainstorm/cohesion.md:58	
-N021	headinajar:embalming_fluid		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:59	
-N022	headinajar:embalming_fluid		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead		_process/brainstorm/cohesion.md:59	
-N023	headinajar:embalming_fluid		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 8): preserves the head as a trophy and gives the jar back; check today's answer		_process/brainstorm/cohesion.md:59	
-N024	headinajar:embalming_fluid		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:59	
-N025	headinajar:nutrient_broth_bucket		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse; today expected vanilla bucket behaviour (places a broth source where you look)		_process/brainstorm/cohesion.md:60	
-N026	headinajar:nutrient_broth_bucket		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:60	
-N027	headinajar:nutrient_broth_bucket		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer (may place fluid)		_process/brainstorm/cohesion.md:60	
-N028	headinajar:nutrient_broth_bucket		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up or places fluid		_process/brainstorm/cohesion.md:60	
-N029	headinajar:nutrient_broth_bucket		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal (idea 6): +50 freshness; today expected host status only		_process/brainstorm/cohesion.md:60	
-N030	headinajar:nutrient_broth_bucket		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:60	
-N031	headinajar:nutrient_broth_bucket		no	BODY	mecha headinajar:hopper	own, Bio-Reactor Core fitted	unpredicted	proposal: fuels the Bio-Reactor; today expected mecha status only		_process/brainstorm/cohesion.md:60	
-N032	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:60	
-N033	headinajar:neural_lace		no	BODY	another player	friend in BODY form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:61	
-N034	headinajar:neural_lace		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:61	
-N035	headinajar:neural_lace		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:61	
-N036	headinajar:neural_lace		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:61	
-N037	headinajar:neural_lace		no	BODY	block headinajar:injection_rig	machine placed	unpredicted	proposal (idea 36): at the Rig it raises your own gene load to 6; today expected the menu opens		_process/brainstorm/cohesion.md:61	
-N038	headinajar:gene_wash		no	BODY	another player	friend with genes	unpredicted	proposal: refuse with a line; check whether you drink it yourself instead		_process/brainstorm/cohesion.md:62	
-N039	headinajar:gene_wash		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, body has genes	unpredicted	proposal: washes the idle body; check today's answer		_process/brainstorm/cohesion.md:62	
-N040	headinajar:gene_wash		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:62	
-N041	headinajar:gene_wash		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: washes the shell; today expected host status		_process/brainstorm/cohesion.md:62	
-N042	headinajar:gene_wash		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:62	
-N043	headinajar:gene_wash		no	BODY	block headinajar:gene_splicer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:62	
-N044	headinajar:surgical_wrench		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:63	
-N045	headinajar:surgical_wrench		no	BODY	another player	friend in any form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:63	
-N046	headinajar:surgical_wrench		no	JAR (with arm)	entity headinajar:headless_body (own)	body with a crooked Collar Cam	unpredicted	proposal: straightens a crooked collar; check today's answer		_process/brainstorm/cohesion.md:63	
-N047	headinajar:surgical_wrench		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:63	
-N048	headinajar:surgical_wrench		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: host status (as today)		_process/brainstorm/cohesion.md:63	
-N049	headinajar:surgical_wrench		yes	BODY	shell headinajar:lunk	placed	unpredicted	proposal (idea 20): folds the shell back into its chassis; today expected host status		_process/brainstorm/cohesion.md:63	
-N050	headinajar:surgical_wrench		yes	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: picks the jarred head block up; check today's answer (may do nothing)		_process/brainstorm/cohesion.md:63	
-N051	headinajar:jarred_head		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, jarred pig head in hand	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:64	
-N052	headinajar:jarred_head		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:64	
-N053	headinajar:jarred_head		no	BODY	mecha headinajar:hopper	own, Shoulder Mount fitted (idea 30)	unpredicted	proposal: fits the head on a Shoulder Mount; today expected mecha status		_process/brainstorm/cohesion.md:64	
-N054	headinajar:emp_grenade		no	JAR (with arm)	the air (throw) near your own headless body	body standing within 8 blocks of the hit	unpredicted	proposal: standing body stunned 3 s, corpse untouched; note the throwing jar may halve its own charge		_process/brainstorm/cohesion.md:65	
-N055	headinajar:emp_grenade		no	BODY	the air (throw) near a placed head jar	friend's head placed, within 8 blocks of the hit	unpredicted	proposal: placed head charge halved; today expected nothing (P268)		_process/brainstorm/cohesion.md:65	
-N056	headinajar:emp_grenade		no	BODY	the air (throw) near a host	sawn pig within 8 blocks of the hit	unpredicted	proposal: host stunned 3 s; today expected nothing		_process/brainstorm/cohesion.md:65	
-N057	headinajar:emp_grenade		no	BODY	the air (throw) near a shell	Lunk within 8 blocks of the hit	unpredicted	proposal: shell battery halved; today expected nothing		_process/brainstorm/cohesion.md:65	
-N058	headinajar:emp_grenade		no	BODY	the air (throw) near a jarred_head block	jarred zombie head placed within 8 blocks	unpredicted	proposal: heads stunned 10 s; today expected nothing		_process/brainstorm/cohesion.md:65	
-N059	headinajar:emp_grenade		no	BODY	the air (throw) near a signal_jammer	powered jammer within 8 blocks of the hit	unpredicted	proposal (idea 29): station drained 50% or offline 30 s; today expected nothing		_process/brainstorm/cohesion.md:65	
-N060	headinajar:mecha_plating		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 10 HP; today expected host status		_process/brainstorm/cohesion.md:66	
-N061	headinajar:mecha_plating		no	BODY	block headinajar:assembly_gantry	gantry placed	unpredicted	opens the gantry menu (Repair button there), as today		_process/brainstorm/cohesion.md:66	
-N062	headinajar:bio_gel		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +25 freshness; today expected host status only		_process/brainstorm/cohesion.md:67	
-N063	headinajar:collar_cam		no	BODY	host (mob made host)	laced host (Neural Lace applied)	unpredicted	proposal (idea 24): fits a collar so the laced host is a remote body; today expected host status		_process/brainstorm/cohesion.md:68	
-N064	headinajar:collar_cam		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 35): CCTV camera on the head; check today's answer		_process/brainstorm/cohesion.md:68	
-N065	headinajar:collar_cam		no	BODY	block headinajar:turret_pedestal	turret holding a head	unpredicted	proposal: CCTV; today expected nothing (as P157)		_process/brainstorm/cohesion.md:68	
-N066	headinajar:collar_cam		no	BODY	block headinajar:employee_mount	mount with a villager	unpredicted	proposal: CCTV; today expected staff status		_process/brainstorm/cohesion.md:68	
-N067	headinajar:leyden_jar		no	BODY	shell headinajar:lunk	charged Leyden Jar item, shell battery low	unpredicted	proposal: charges the shell; today expected host status		_process/brainstorm/cohesion.md:69	
-N068	headinajar:leyden_jar		no	BODY	mecha headinajar:hopper	charged Leyden Jar item, battery low	unpredicted	proposal: charges the mecha; today expected mecha status		_process/brainstorm/cohesion.md:69	
-N069	headinajar:leyden_jar		no	BODY	ground	charged Leyden Jar item	unpredicted	places the block and keeps its charge (as today)		_process/brainstorm/cohesion.md:69	
-N070	(empty)		no	BODY	block headinajar:body_locker, left click	locker holding a mecha (stored first with an empty-hand click, mecha within 3 blocks)	unpredicted	break the locker; check whether the stored mecha is lost		_process/review/glitches-hosts-mecha.md:481	
-N071	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:zombie	wearing an iron helmet, below 25% health	unpredicted	zombie becomes a host; then look whether the helmet floats where the head was (also try a mob with a Hats-mod hat)		_process/review/pack.md:423	
-N072	(empty)		yes	BODY	entity headinajar:headless_body (another player's)	friend separated, Carry On installed	unpredicted	check whether Carry On picks the body up, and what that does to the owner		_process/review/pack.md:424	
-N073	(empty)		yes	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed, Carry On installed	unpredicted	check whether Carry On picks the placed head jar up		_process/review/pack.md:424	
-N074	(empty)		yes	BODY	block headinajar:saline_mixer	machine placed, Carry On installed	unpredicted	check whether Carry On lifts the machine with its contents, or the menu opens		_process/review/pack.md:424	
-N075	(empty)		no	JAR (no arm)	block minecraft:chest	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		_process/review/text.md:674	
-N076	(empty)		no	JAR (no arm)	block minecraft:crafting_table	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		_process/review/text.md:674	
-N077	headinajar:jarred_head		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	put a mob's jarred head in the chair instead of an empty jar; expected you sit down, then check whether the menu jar slot takes it		_process/playtest/cold-read.md:238	
-N078	headinajar:surgical_saw		no	LINKED	vanilla mob minecraft:cow (not a host)	below 25% health	unpredicted	saw a cow with your own head already off; expected the cow becomes a host		_process/playtest/cold-read.md:240	
-N079	headinajar:jarred_head		no	BODY	shell headinajar:rover	jarred villager head, rover placed	unpredicted	put a jarred villager on a Rover; expected host status only (no way to mount a head)		_process/playtest/cold-read.md:243	
-N080	(empty)		no	LINKED	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse while headless (there is an advancement); also with the Periscope Stalk collar upgrade, check the view height		_process/playtest/cold-read.md:244	
-N081	(empty)		no	JAR (no arm)	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse as the jar; expected nothing (not a host)		_process/playtest/cold-read.md:245	
-N082	headinajar:signal_jammer		no	LINKED	ground	next to your placed head	unpredicted	place a Signal Jammer near your own head, then watch link quality		_process/playtest/cold-read.md:262	
-N083	headinajar:emp_grenade		no	BODY	the air (throw) near a cerebral_array	array running with heads, within 8 blocks of the hit	unpredicted	EMP at a Cerebral Array; expected nothing (the pulse touches only players, mechas and turrets)		_process/playtest/cold-read.md:264	
-N084	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	syringe on your own headless body; expected a sample with no genes (as P248) or nothing		_process/playtest/cold-read.md:271	
-N085	headinajar:syringe		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	syringe on your own head; check whether it picks the head up instead		_process/playtest/cold-read.md:271	
-N086	headinajar:syringe		no	BODY	shell headinajar:lunk	placed	unpredicted	syringe on a Lunk; expected host status (the click never reaches the syringe, as P242)		_process/playtest/cold-read.md:272	
-N087	headinajar:leviathan_needle		no	BODY	boss minecraft:ender_dragon		unpredicted	expected nothing: the click lands on a dragon part (as P238)		_process/playtest/cold-read.md:273	
-N088	headinajar:leviathan_needle		no	BODY	boss minecraft:wither		unpredicted	expected a sample drawn		_process/playtest/cold-read.md:273	
-N089	minecraft:dragon_breath		no	BODY	block headinajar:centrifuge	machine placed	unpredicted	put dragon's breath in the Centrifuge; expected the menu opens (the bottle is not inserted by the click)		_process/playtest/cold-read.md:274	
-N090	headinajar:serum_cassette		no	BODY	shell headinajar:rover	filled serum	unpredicted	serum into a Rover (are robots hosts?); expected host status, not injected (as P252)		_process/playtest/cold-read.md:278	
-N091	minecraft:cooked_beef		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed steak to the pile; compare with rotten flesh (P281)		_process/playtest/cold-read.md:280	
-N092	minecraft:porkchop		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a raw porkchop to the pile; expected into the fuel slot		_process/playtest/cold-read.md:280	
-N093	minecraft:spider_eye		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a spider eye to the pile; expected into the fuel slot		_process/playtest/cold-read.md:280	
-N094	headinajar:neural_lace		no	BODY	the air (yourself)	whole	unpredicted	put the Neural Lace on your own body; expected nothing (hosts only)		_process/playtest/cold-read.md:282	
-N095	headinajar:neural_lace		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	Neural Lace on your own headless body; expected nothing		_process/playtest/cold-read.md:282	
-N096	(empty)		no	JAR (no arm)	mecha (occupied, Passenger Pod)	a pilot inside, Passenger Pod fitted	unpredicted	a friend who is a jar boards the Passenger Pod; check whether a jar can ride as passenger		_process/playtest/cold-read.md:290	
+N001	headinajar:syringe		no	LINKED	the air (yourself)	head placed or docked elsewhere	unpredicted	proposal: draws your own blood sample, 1 damage (BODY/LINKED); check what happens today		(added row)	
+N002	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own corpse)	body died	unpredicted	proposal: sample from your own corpse carries your genes (P248 says it does not); check whether the corpse inventory opens instead		(added row)	
+N003	headinajar:syringe		no	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed	unpredicted	proposal: refuse with a line ("glass is not a vein"); today expected silent		(added row)	
+N004	headinajar:syringe		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer (description line or nothing)		(added row)	
+N005	headinajar:syringe		no	BODY	block headinajar:leech_jar	leech jar with samples	unpredicted	proposal: empties the Leech Jar into your inventory, as the empty hand does (P044)		(added row)	
+N006	headinajar:serum_cassette		no	LINKED	entity headinajar:head_jar (own)	filled serum, your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead (as other items do, P128)		(added row)	
+N007	headinajar:serum_cassette		no	BODY	block headinajar:jarred_head	filled serum, jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N008	headinajar:saline_bottle		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line (bodies take no saline); check today's answer		(added row)	
+N009	headinajar:saline_bottle		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +10 freshness; today expected host status only		(added row)	
+N010	headinajar:saline_bottle		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse ("shells run dry"); today expected host status		(added row)	
+N011	headinajar:saline_bottle		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		(added row)	
+N012	headinajar:glass_patch		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N013	headinajar:glass_patch		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: refuse with a line; today expected host status		(added row)	
+N014	headinajar:glass_patch		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 4 HP; today expected host status only		(added row)	
+N015	headinajar:glass_patch		no	BODY	mecha headinajar:hopper	damaged mecha	unpredicted	proposal: refuse and point at Mecha Plating; today expected mecha status		(added row)	
+N016	headinajar:glass_patch		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		(added row)	
+N017	headinajar:suture_kit		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		(added row)	
+N018	headinajar:suture_kit		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		(added row)	
+N019	headinajar:suture_kit		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N020	headinajar:suture_kit		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	proposal: refuse with a line; today expected you sit down		(added row)	
+N021	headinajar:embalming_fluid		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; today expected nothing		(added row)	
+N022	headinajar:embalming_fluid		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead		(added row)	
+N023	headinajar:embalming_fluid		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 8): preserves the head as a trophy and gives the jar back; check today's answer		(added row)	
+N024	headinajar:embalming_fluid		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		(added row)	
+N025	headinajar:nutrient_broth_bucket		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse; today expected vanilla bucket behaviour (places a broth source where you look)		(added row)	
+N026	headinajar:nutrient_broth_bucket		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N027	headinajar:nutrient_broth_bucket		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer (may place fluid)		(added row)	
+N028	headinajar:nutrient_broth_bucket		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up or places fluid		(added row)	
+N029	headinajar:nutrient_broth_bucket		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal (idea 6): +50 freshness; today expected host status only		(added row)	
+N030	headinajar:nutrient_broth_bucket		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		(added row)	
+N031	headinajar:nutrient_broth_bucket		no	BODY	mecha headinajar:hopper	own, Bio-Reactor Core fitted	unpredicted	proposal: fuels the Bio-Reactor; today expected mecha status only		(added row)	
+N032	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N033	headinajar:neural_lace		no	BODY	another player	friend in BODY form	unpredicted	proposal: refuse with a line; today expected nothing		(added row)	
+N034	headinajar:neural_lace		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		(added row)	
+N035	headinajar:neural_lace		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		(added row)	
+N036	headinajar:neural_lace		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N037	headinajar:neural_lace		no	BODY	block headinajar:injection_rig	machine placed	unpredicted	proposal (idea 36): at the Rig it raises your own gene load to 6; today expected the menu opens		(added row)	
+N038	headinajar:gene_wash		no	BODY	another player	friend with genes	unpredicted	proposal: refuse with a line; check whether you drink it yourself instead		(added row)	
+N039	headinajar:gene_wash		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, body has genes	unpredicted	proposal: washes the idle body; check today's answer		(added row)	
+N040	headinajar:gene_wash		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		(added row)	
+N041	headinajar:gene_wash		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: washes the shell; today expected host status		(added row)	
+N042	headinajar:gene_wash		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N043	headinajar:gene_wash		no	BODY	block headinajar:gene_splicer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		(added row)	
+N044	headinajar:surgical_wrench		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse with a line; today expected nothing		(added row)	
+N045	headinajar:surgical_wrench		no	BODY	another player	friend in any form	unpredicted	proposal: refuse with a line; today expected nothing		(added row)	
+N046	headinajar:surgical_wrench		no	JAR (with arm)	entity headinajar:headless_body (own)	body with a crooked Collar Cam	unpredicted	proposal: straightens a crooked collar; check today's answer		(added row)	
+N047	headinajar:surgical_wrench		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		(added row)	
+N048	headinajar:surgical_wrench		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: host status (as today)		(added row)	
+N049	headinajar:surgical_wrench		yes	BODY	shell headinajar:lunk	placed	unpredicted	proposal (idea 20): folds the shell back into its chassis; today expected host status		(added row)	
+N050	headinajar:surgical_wrench		yes	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: picks the jarred head block up; check today's answer (may do nothing)		(added row)	
+N051	headinajar:jarred_head		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, jarred pig head in hand	unpredicted	proposal: refuse with a line; check today's answer		(added row)	
+N052	headinajar:jarred_head		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		(added row)	
+N053	headinajar:jarred_head		no	BODY	mecha headinajar:hopper	own, Shoulder Mount fitted (idea 30)	unpredicted	proposal: fits the head on a Shoulder Mount; today expected mecha status		(added row)	
+N054	headinajar:emp_grenade		no	JAR (with arm)	the air (throw) near your own headless body	body standing within 8 blocks of the hit	unpredicted	proposal: standing body stunned 3 s, corpse untouched; note the throwing jar may halve its own charge		(added row)	
+N055	headinajar:emp_grenade		no	BODY	the air (throw) near a placed head jar	friend's head placed, within 8 blocks of the hit	unpredicted	proposal: placed head charge halved; today expected nothing (P268)		(added row)	
+N056	headinajar:emp_grenade		no	BODY	the air (throw) near a host	sawn pig within 8 blocks of the hit	unpredicted	proposal: host stunned 3 s; today expected nothing		(added row)	
+N057	headinajar:emp_grenade		no	BODY	the air (throw) near a shell	Lunk within 8 blocks of the hit	unpredicted	proposal: shell battery halved; today expected nothing		(added row)	
+N058	headinajar:emp_grenade		no	BODY	the air (throw) near a jarred_head block	jarred zombie head placed within 8 blocks	unpredicted	proposal: heads stunned 10 s; today expected nothing		(added row)	
+N059	headinajar:emp_grenade		no	BODY	the air (throw) near a signal_jammer	powered jammer within 8 blocks of the hit	unpredicted	proposal (idea 29): station drained 50% or offline 30 s; today expected nothing		(added row)	
+N060	headinajar:mecha_plating		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 10 HP; today expected host status		(added row)	
+N061	headinajar:mecha_plating		no	BODY	block headinajar:assembly_gantry	gantry placed	unpredicted	opens the gantry menu (Repair button there), as today		(added row)	
+N062	headinajar:bio_gel		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +25 freshness; today expected host status only		(added row)	
+N063	headinajar:collar_cam		no	BODY	host (mob made host)	laced host (Neural Lace applied)	unpredicted	proposal (idea 24): fits a collar so the laced host is a remote body; today expected host status		(added row)	
+N064	headinajar:collar_cam		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 35): CCTV camera on the head; check today's answer		(added row)	
+N065	headinajar:collar_cam		no	BODY	block headinajar:turret_pedestal	turret holding a head	unpredicted	proposal: CCTV; today expected nothing (as P157)		(added row)	
+N066	headinajar:collar_cam		no	BODY	block headinajar:employee_mount	mount with a villager	unpredicted	proposal: CCTV; today expected staff status		(added row)	
+N067	headinajar:leyden_jar		no	BODY	shell headinajar:lunk	charged Leyden Jar item, shell battery low	unpredicted	proposal: charges the shell; today expected host status		(added row)	
+N068	headinajar:leyden_jar		no	BODY	mecha headinajar:hopper	charged Leyden Jar item, battery low	unpredicted	proposal: charges the mecha; today expected mecha status		(added row)	
+N069	headinajar:leyden_jar		no	BODY	ground	charged Leyden Jar item	unpredicted	places the block and keeps its charge (as today)		(added row)	
+N070	(empty)		no	BODY	block headinajar:body_locker, left click	locker holding a mecha (stored first with an empty-hand click, mecha within 3 blocks)	unpredicted	break the locker; check whether the stored mecha is lost		(added row)	
+N071	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:zombie	wearing an iron helmet, below 25% health	unpredicted	zombie becomes a host; then look whether the helmet floats where the head was (also try a mob with a Hats-mod hat)		(added row)	
+N072	(empty)		yes	BODY	entity headinajar:headless_body (another player's)	friend separated, Carry On installed	unpredicted	check whether Carry On picks the body up, and what that does to the owner		(added row)	
+N073	(empty)		yes	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed, Carry On installed	unpredicted	check whether Carry On picks the placed head jar up		(added row)	
+N074	(empty)		yes	BODY	block headinajar:saline_mixer	machine placed, Carry On installed	unpredicted	check whether Carry On lifts the machine with its contents, or the menu opens		(added row)	
+N075	(empty)		no	JAR (no arm)	block minecraft:chest	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		(added row)	
+N076	(empty)		no	JAR (no arm)	block minecraft:crafting_table	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		(added row)	
+N077	headinajar:jarred_head		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	put a mob's jarred head in the chair instead of an empty jar; expected you sit down, then check whether the menu jar slot takes it		(added row)	
+N078	headinajar:surgical_saw		no	LINKED	vanilla mob minecraft:cow (not a host)	below 25% health	unpredicted	saw a cow with your own head already off; expected the cow becomes a host		(added row)	
+N079	headinajar:jarred_head		no	BODY	shell headinajar:rover	jarred villager head, rover placed	unpredicted	put a jarred villager on a Rover; expected host status only (no way to mount a head)		(added row)	
+N080	(empty)		no	LINKED	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse while headless (there is an advancement); also with the Periscope Stalk collar upgrade, check the view height		(added row)	
+N081	(empty)		no	JAR (no arm)	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse as the jar; expected nothing (not a host)		(added row)	
+N082	headinajar:signal_jammer		no	LINKED	ground	next to your placed head	unpredicted	place a Signal Jammer near your own head, then watch link quality		(added row)	
+N083	headinajar:emp_grenade		no	BODY	the air (throw) near a cerebral_array	array running with heads, within 8 blocks of the hit	unpredicted	EMP at a Cerebral Array; expected nothing (the pulse touches only players, mechas and turrets)		(added row)	
+N084	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	syringe on your own headless body; expected a sample with no genes (as P248) or nothing		(added row)	
+N085	headinajar:syringe		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	syringe on your own head; check whether it picks the head up instead		(added row)	
+N086	headinajar:syringe		no	BODY	shell headinajar:lunk	placed	unpredicted	syringe on a Lunk; expected host status (the click never reaches the syringe, as P242)		(added row)	
+N087	headinajar:leviathan_needle		no	BODY	boss minecraft:ender_dragon		unpredicted	expected nothing: the click lands on a dragon part (as P238)		(added row)	
+N088	headinajar:leviathan_needle		no	BODY	boss minecraft:wither		unpredicted	expected a sample drawn		(added row)	
+N089	minecraft:dragon_breath		no	BODY	block headinajar:centrifuge	machine placed	unpredicted	put dragon's breath in the Centrifuge; expected the menu opens (the bottle is not inserted by the click)		(added row)	
+N090	headinajar:serum_cassette		no	BODY	shell headinajar:rover	filled serum	unpredicted	serum into a Rover (are robots hosts?); expected host status, not injected (as P252)		(added row)	
+N091	minecraft:cooked_beef		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed steak to the pile; compare with rotten flesh (P281)		(added row)	
+N092	minecraft:porkchop		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a raw porkchop to the pile; expected into the fuel slot		(added row)	
+N093	minecraft:spider_eye		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a spider eye to the pile; expected into the fuel slot		(added row)	
+N094	headinajar:neural_lace		no	BODY	the air (yourself)	whole	unpredicted	put the Neural Lace on your own body; expected nothing (hosts only)		(added row)	
+N095	headinajar:neural_lace		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	Neural Lace on your own headless body; expected nothing		(added row)	
+N096	(empty)		no	JAR (no arm)	mecha (occupied, Passenger Pod)	a pilot inside, Passenger Pod fitted	unpredicted	a friend who is a jar boards the Passenger Pod; check whether a jar can ride as passenger		(added row)	

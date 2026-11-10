@@ -1,7 +1,7 @@
-# Department F, part 4 (attempts 40-42): board the Hopper standing on the Gantry, walk it, use the drill arm, get out.
+# Play-through part F, part 4 (attempts 40-42): board the Hopper standing on the Gantry, walk it, use the drill arm, get out.
 # State before: the jar in the yard near 114.7 200 5.5 beside the Spider Walker (see report-f4-try1.txt).
 @world survival
-@keep playtest
+@keep playthrough
 @observe 20
 wait 60
 /time set 1000
@@ -45,7 +45,7 @@ wait 25
 closegui
 grab
 shot f4_hud
-report == get out: hold Sneak + Jar menu (as the cold reader read), then plain Sneak
+report == get out: hold Sneak + Jar menu (a new player's first guess), then plain Sneak
 key sneak down
 wait 2
 key menu hold 30

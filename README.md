@@ -9,12 +9,48 @@ splice genes from the creatures you sample, and put other people's heads to work
 
 ![The operation](docs/images/operation.gif)
 
-Fully playable in **English** and **Brazilian Portuguese** (every line of text, the handbook and the advancements).
+Fully playable in **English** and **Brazilian Portuguese** (every line of text, the handbook, the advancements and
+DOLORES's voice).
+
+## Requirements
+
+- Minecraft **1.21.1** with **NeoForge 21.1.200** or newer.
+- **GeckoLib 4.9.3 or newer for 1.21.1** (required: the Separation Chair is animated with it).
+- Everything else is optional (see [Other mods](#other-mods)).
+
+## What's new in 0.2.0
+
+- **A new Separation Chair.** Rebuilt and fully animated: the barrier comes down, the hood scans you, the blade swings,
+  and a claw carries your head over into the jar waiting on the chair's tray, then hands it to you. Everyone nearby sees
+  the same operation at the same moment, even if they walk up halfway through. The chair needs a little room to its left
+  and in front for the tray and the hood, and says so if something is in the way.
+- **DOLORES speaks.** The chair's attendant talks you through the operation out loud, in English or Brazilian
+  Portuguese (whichever language your game is in); the patient hears her muffled. Her volume is the **Voice/Speech** slider in
+  Music & Sounds, and `doloresVoice` in the client config turns her off (the lines still show on screen).
+- **Every click answers.** Things that used to do nothing when clicked now say why not and what to do instead, in one
+  short line: a bare jar at a chest, the jar menu key with your head still on, a chair already in use, a Cradle with no
+  power, and many more. A bare jar can now work every Noggin & Sons block with a menu or a status, while vanilla blocks
+  still need a Manipulator Arm.
+- **The handbook on your first day.** Every player is handed the Employee Handbook when they first join (players in
+  existing worlds get theirs at their next login). A book and a Surgical Steel Blend make a new copy; without Patchouli
+  it is a written book.
+- **The power numbers, on one scale.** Mecha batteries are a quarter of their old size, and a mecha parked on the
+  Assembly Gantry charges from it; Reinforced and Executive jars hold more charge than a basic one; shells, the
+  Propeller, the Signal Jammer and idle turrets drain far less; only one Dragon Head counts in a Cerebral Array. Older
+  saves load: a mecha charged above its new battery size starts full.
+- **The jar crash is fixed.** Placed jarred heads, and turrets, mounts, Arrays and sockets holding a head, no longer
+  crash the game when they come into view.
+- **And more:** the Charging Dock charges a jar standing on it or a head set down on it; a Rover drives at a Rover's
+  pace and a crash costs one knock, not the whole jar; held keys no longer carry over when your link breaks; getting out
+  of a mecha or a shell puts you beside it; a weak link shows the clicks it drops; the Galvanic Pile, the Gantry, the
+  Dock and the Cradle explain themselves in their tooltips; a key shared by Sprint and the ability is explained once.
 
 ---
 
 ## Contents
 
+- [Requirements](#requirements)
+- [What's new in 0.2.0](#whats-new-in-020)
 - [Tutorial: your first week at Head Office](#tutorial-your-first-week-at-head-office)
 - [Getting your head off](#getting-your-head-off)
 - [Life support](#life-support)
@@ -33,8 +69,8 @@ Fully playable in **English** and **Brazilian Portuguese** (every line of text, 
 
 ## Tutorial: your first week at Head Office
 
-A walkthrough from a fresh world to driving a mecha. The handbook in-game (a Patchouli book in the Head in a Jar creative
-tab) and JEI cover the same ground; every recipe here shows up in JEI.
+A walkthrough from a fresh world to driving a mecha. The Employee Handbook you are handed on your first day and JEI
+cover the same ground; every recipe here shows up in JEI.
 
 ### Day 1: Surgical Steel and parts
 
@@ -52,8 +88,8 @@ Almost everything is made from **Surgical Steel**.
 
 ### Day 2: power and saline
 
-- **Power.** Build a **Galvanic Pile** (copper and wire around rotten flesh). Feed it raw meat or fish and it makes 20 FE/t,
-  pushed into every machine it touches. Later: Leyden Jars to store FE, Tesla Nodes to send it without wires.
+- **Power.** Build a **Galvanic Pile** (copper and wire around rotten flesh). Feed it rotten flesh, spider eyes, raw meat
+  or fish and it makes 20 FE/t, shared among every machine it touches. Later: Leyden Jars to store FE, Tesla Nodes to send it without wires.
 - **Cranial Saline** keeps a head alive. Craft a **Saline Bottle** by hand (a water bottle + sugar + kelp + redstone) or
   build a **Saline Mixer** for bulk. You need **four** bottles for the operation and a few spares.
 
@@ -70,13 +106,14 @@ Almost everything is made from **Surgical Steel**.
 ### Day 4: the operation
 
 1. Craft the **Excision Head** and **Booth Console**, then the **Separation Chair**.
-2. Place the chair with your Galvanic Pile touching it and let it charge to **40 kFE** (a fed pile takes under two minutes).
+2. Place the chair with your Galvanic Pile touching it and let it charge to **40 kFE** (ten rotten flesh). Leave the
+   space to its left and in front clear: the jar's tray slides out to the left and the hood swings over the front.
 3. Open the chair and load the jar, the goggles, the Collar Cam and the four saline bottles.
 4. Sit down, open the console and **hold Sign**. You can still get up until the cut; after that DOLORES finishes the job.
    A worn blade can botch it; a Replacement Blade fixes that.
 
-You wake up standing in your own headless body, seeing through the Collar Cam. Your head sits in its jar in front of the
-chair. The bar at the top of the screen is your **link quality**.
+You wake up standing in your own headless body, seeing through the Collar Cam. Your head sits in its jar on the chair's
+tray, at your left. The bar at the top of the screen is your **link quality**.
 
 ### Day 5: living with it
 
@@ -120,12 +157,14 @@ your own head. **Let Go** in the jar menu is the last resort: you die and respaw
 
 ## Getting your head off
 
-![Chair and Cradle](docs/images/chair.png)
+![The Separation Chair with a jar on its tray](docs/images/chair.png)
 
 - **The Separation Chair** (DOLORES). Load it with a Life Support Jar, Relay Goggles, a Collar Cam and four bottles of
-  Cranial Saline, give it 40 kFE, sit down and hold **Sign** on Form 27-B. You watch the whole operation from the chair: the
-  clamps, the anaesthetic, the scan, the cut, and the feed coming back online. A worn blade can botch the cut and leave your
-  Collar Cam crooked; Replacement Blades fix that.
+  Cranial Saline, give it 40 kFE, sit down and hold **Sign** on Form 27-B. DOLORES talks you through it while you watch
+  from the chair: the barrier, the anaesthetic, the scan, the cut, and the feed coming back online, while everyone else
+  watches the claw carry your head over into the jar on the tray. Once you have signed, the parts are locked in until it
+  is over. A worn blade can botch the cut: your head lands upside down for a while and your Collar Cam sits crooked;
+  Replacement Blades fix that.
 - **Two jars.** The **Life Support Jar** is roomy: your life-size head turns right round inside it. The **Compact Jar** is
   head-sized: your head faces its front and the whole jar turns with you, like a head on a neck, so it sits on a host
   like a head instead of a fish tank. Both have three module slots; put either one on its own in a crafting grid to swap it
@@ -314,8 +353,10 @@ All optional. Nothing changes if a mod is missing.
   book with the opening chapters, in the reader's own language.
 - **25 advancements**, among them Signed in Triplicate, Have You Tried Turning It Off and On Again, Headless Horseman,
   Mula-sem-cabeça, Splice of Life, Board Meeting and Chairman of the Board.
-- **Original sounds** for the blade, the botched cut, the link, the mecha's boot jingle, splicing, mutations, the Board
-  murmuring and staff complaining.
+- **Original sounds** for every move of the Separation Chair, the blade, the botched cut, the link, the mecha's boot
+  jingle, splicing, mutations, the Board murmuring and staff complaining.
+- **DOLORES's voice**, in English and Brazilian Portuguese, follows your game's language. Turn her down with the Voice/Speech
+  slider, or off with `doloresVoice` in the client config.
 
 ![The handbook](docs/images/handbook.png)
 

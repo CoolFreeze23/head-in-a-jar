@@ -11,7 +11,8 @@ import sys
 from PIL import Image, ImageDraw
 
 SCR = os.path.dirname(os.path.abspath(__file__))
-BBM = r'C:/Users/alvin/AppData/Local/Programs/blockbench-mcp/node_modules'
+# the blockbench-mcp install's node_modules folder (set BLOCKBENCH_MCP_MODULES)
+BBM = os.environ['BLOCKBENCH_MCP_MODULES'].replace(os.sep, '/')
 
 out, model, cols, size = sys.argv[1], os.path.abspath(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
 specs = sys.argv[5:]
@@ -47,7 +48,7 @@ for i, sp in enumerate(specs):
 rq = os.path.join(SCR, 'req.json')
 json.dump(reqs, open(rq, 'w'))
 env = dict(os.environ)
-env['PATH'] = BBM + '/bun/bin;' + r'C:/Users/alvin/AppData/Local/Programs/node-v24.21.0-win-x64;' + env['PATH']
+env['PATH'] = BBM + '/bun/bin;' + env.get('NODE_HOME', '') + ';' + env['PATH']
 r = subprocess.run([BBM + '/bun/bin/bun.exe', 'run', os.path.join(SCR, 'render_many.ts'), rq], env=env,
                    capture_output=True, text=True)
 print(r.stdout[-2000:], r.stderr[-2000:])

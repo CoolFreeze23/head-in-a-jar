@@ -1,7 +1,7 @@
 # Attempts 27 (Body Printer) and 28 (head back on), and attempt 26 in the kept world with the open corpse question.
 # Starts from the after-g5 save (head inside the host's box: recovered first, as in play-h-heads.txt). Body killed by /damage (setup: the body has to die somehow).
 @world survival
-@keep playtest
+@keep playthrough
 @observe 20
 wait 60
 /time set 1000
@@ -339,7 +339,7 @@ report get into it: Swap
 key swap
 wait 30
 inspect me
-report == attempt 28: head back on. First the printed body opens its old corpse (the things inside), then the cold reader's guesses
+report == attempt 28: head back on. First the printed body opens its old corpse (the things inside), then a new player's guesses
 /execute at @e[type=headinajar:headless_body,limit=1,sort=furthest] run tp @s ~-1.5 ~ ~ -90 0
 inspect near headless_body 20
 wait 10
@@ -407,7 +407,7 @@ view 1
 wait 5
 shot i_head_on_third
 view 0
-report == experiments with the head back on (cold read section 5)
+report == experiments with the head back on
 /give @s minecraft:cooked_beef 2
 /give @s minecraft:porkchop 2
 /give @s minecraft:spider_eye 2

@@ -508,6 +508,12 @@ public class PlaythroughRepairGameTests {
         h.assertValueEqual(Refusals.lastDelivered(p), "mecha.no_utility", "ability in a cockpit with no utility");
         h.assertTrue(state(p).heldEntity() < 0, "the jar's Telekinesis answered from the cockpit");
         h.assertTrue(state(p).charge() >= charge - 100, "the jar spent charge on a lift from the cockpit");
+        // the same key bound with sprint: still the mecha's refusal, and no "the key does both" notice for a key that does neither
+        key(p, Network.Action.ABILITY_SHARED);
+        h.assertValueEqual(Refusals.lastDelivered(p), "mecha.no_utility", "shared ability key in a cockpit with no utility");
+        h.assertTrue(state(p).heldEntity() < 0, "the shared key lifted something from the cockpit");
+        h.assertFalse(p.getPersistentData().getCompound(net.minecraft.world.entity.player.Player.PERSISTED_NBT_TAG).getBoolean(com.coolfreeze23.headinajar.form.SharedKey.TOLD),
+                "the shared-key notice was sent for a Telekinesis the cockpit never uses");
         done(h, p);
     }
 

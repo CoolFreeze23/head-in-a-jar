@@ -1,8 +1,8 @@
-# Department H, part 1 (cold read 48-51 prep, exp 30): craft the heads-at-work blocks and jars by real clicks, weaken
+# Play-through part H, part 1: craft the heads-at-work blocks and jars by real clicks, weaken
 # four mobs with a wooden sword and saw their heads into jars held in the off hand (each kind of empty jar tried).
 # After the G runs (body linked, head carried). Mobs summoned with NoAI to stand still (setup), at night-proof spots.
 @world survival
-@keep playtest
+@keep playthrough
 @observe 20
 wait 60
 /time set 1000
@@ -264,7 +264,7 @@ wait 40
 observe 20
 inspect near blaze 6
 inspect me
-report == exp: a second Life Support Jar on a fresh full-health villager (the saw refuses?), and the saw with an empty off hand on a weak one is department D's
+report == exp: a second Life Support Jar on a fresh full-health villager (the saw refuses?), and the saw with an empty off hand on a weak one is part D's
 shot h1_after_jarring
 key inventory
 wait 8
