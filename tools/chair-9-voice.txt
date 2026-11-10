@@ -1,0 +1,36 @@
+# Separation Chair sounds and DOLORES's voice, as the client starts them (the log's CHAIRSOUND lines): a bystander as
+# the patient watched from six blocks, then the real player as the patient, with a bystander clicking the busy chair.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/tp @s 4.7 -58.6 4.7 135 18
+hud off
+bystander spawn 0 -60 -2 0
+wait 20
+report A bystander patient
+bystander operate 0 -60 0
+wait 300
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 2 -60 -2 0 0
+wait 20
+report B real player patient
+/tp @s 0.5 -60 2.5 180 30
+chair 0 -60 0
+key use
+wait 10
+press escape
+view 0
+look 180 0
+sign 0 -60 0
+wait 40
+bystander useblock 0 -60 0
+wait 10
+bystander useblock 0 -60 0
+wait 260
+report voice done

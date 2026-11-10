@@ -83,9 +83,17 @@ public final class ChairVoiceClient {
     }
 
     /** The chair's own sounds that should sit under her voice play quieter while she speaks. */
+    /** The dev client logs every chair and voice sound it starts, with the game time (the record a muted run leaves). */
+    private static final boolean LOG = Boolean.getBoolean("headinajar.smoke");
+
     @SubscribeEvent
     public static void duck(PlaySoundEvent event) {
         SoundInstance sound = event.getSound();
+        if (sound != null && LOG && Minecraft.getInstance().level != null && sound.getLocation().getNamespace().equals(HeadInAJar.MOD_ID)
+                && (sound.getLocation().getPath().startsWith("chair.") || sound.getLocation().getPath().startsWith("dolores."))) {
+            boolean ducked = !SPEAKING.isEmpty() && DoloresVoice.DUCK.contains(sound.getLocation().getPath()) && speakingNear(sound.getX(), sound.getY(), sound.getZ());
+            HeadInAJar.LOGGER.info("CHAIRSOUND {} {} {}{}", Minecraft.getInstance().level.getGameTime(), sound.getLocation(), sound.getSource().getName(), ducked ? " ducked" : "");
+        }
         if (sound == null || SPEAKING.isEmpty()) return;
         ResourceLocation id = sound.getLocation();
         if (!id.getNamespace().equals(HeadInAJar.MOD_ID) || !DoloresVoice.DUCK.contains(id.getPath())) return;
