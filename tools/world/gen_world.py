@@ -301,7 +301,8 @@ def viewpoints():
 
 
 def shots(prefix):
-    lines = ["hud off"]
+    # slimes that spawned in the flat world's first seconds wander into the pictures
+    lines = ["/kill @e[type=minecraft:slime]", "hud off"]
     for name, x, zz in viewpoints():
         lines += [f"/tp @s {x + 0.5:.1f} -57.5 {zz + 0.5:.1f} 180 22", "wait 30", f"shot {prefix}{name}"]
     lines += ["hud on"]

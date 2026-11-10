@@ -14,7 +14,10 @@
 #   C: the player linked (head in a jar on the ground, body standing), no Telekinesis (3 windows).
 # Run: bash tools/smoke.sh tools/bench-lab.txt   (SMOKE_MODS / SMOKE_PROFILE / SMOKE_SHADER for the other configurations)
 @world flat
-@difficulty easy
+# Peaceful: on Easy the flat world fills with slimes in its first seconds, and their random despawning made the entity
+# count and the tick time fall through the whole run. Without heads the turrets have nothing to shoot anyway, so the
+# husk targets of bench-lab.txt are left out.
+@difficulty peaceful
 @observe 20
 wait 60
 fpscap 260 vsync 0
@@ -29,10 +32,6 @@ fpscap 260 vsync 0
 /gamerule doImmediateRespawn true
 /gamerule keepInventory true
 /kill @e[type=!player]
-# targets: three tough husks the turrets can shoot all session
-/summon husk -2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
-/summon husk 0 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
-/summon husk 2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
 # z=4: 8 turrets (4 skeleton with arrow chests under them, 2 guardian, 2 blaze)
 /setblock -8 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
 /setblock -6 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
@@ -99,14 +98,16 @@ mecha bulwark -9 -60 0 hydraulic_legs,galvanic_stack,armor_plating,drill,hydraul
 mecha skitter 9 -60 0 galvanic_stack,armor_plating,drill
 mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
 # the jar: a glass stand behind the turrets, a pig to lift
-/fill -1 -58 -13 1 -58 -11 minecraft:glass
+# the stand ends just in front of the jar, so the look down at the pig does not pass through the glass (Telekinesis
+# would lift the stand's own glass block instead of the pig)
+/fill -1 -58 -14 1 -58 -12 minecraft:glass
 /summon pig 0 -60 -7 {NoAI:1b,PersistenceRequired:1b}
 # the head comes off at the side, so its headless body does not stand on the stand in front of the pig
 /tp @s 8.5 -60 -14.5 0 0
 wait 10
 jar
 wait 5
-/tp @s 0.5 -57 -11.5 0 37
+/tp @s 0.5 -57 -11.2 0 37
 wait 10
 fit telekinesis,manipulator_arm,armor_plating
 charge 100000

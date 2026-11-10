@@ -168,7 +168,7 @@ def parse_report(path):
             cur["reset"] = line
             cur["phase"] = "reset"
         elif line.startswith("inspect "):
-            (cur["post"] if cur["phase"] == "after" else cur["pre"]).append(line)
+            (cur["post"] if cur["phase"] in ("act", "after") else cur["pre"]).append(line)
         elif cur["phase"] == "setup":
             cur["setup_lines"].append(line)
     return pairs, loose, meta
@@ -213,6 +213,22 @@ def block_change(rec):
     return f"{a[:120]} -> {b[:160]}"
 
 
+def me_change(rec):
+    """The player's own state (vehicle, form, carried head, modules, goggles, collar, inventory) before and after the
+    click, if it changed."""
+    pre = [x for x in rec["pre"] if x.startswith("inspect me -> ")]
+    post = [x for x in rec["post"] if x.startswith("inspect me -> ")]
+    if not pre or not post:
+        return ""
+
+    def fields(line):
+        parts = [p.strip() for p in line.split(" -> ", 1)[1].split(", ")]
+        return [p for p in parts if re.match(r"(vehicle|form|carrying head|modules|goggles|collar|inventory)", p)]
+
+    diff = [f"{x} -> {y}" for x, y in zip(fields(pre[-1]), fields(post[-1])) if x != y]
+    return "; ".join(diff)[:200]
+
+
 def aim_problem(rec):
     """Why the crosshair was not on the intended target when the click was made, or '' if it was (or not checked)."""
     want = rec.get("aim", "")
@@ -225,7 +241,8 @@ def aim_problem(rec):
     if want.startswith("block:"):
         x, y, z = (int(v) for v in want[6:].split(","))
         m = re.match(r"block (\S+) at (-?\d+) (-?\d+) (-?\d+)", got)
-        if m and int(m.group(2)) == x and int(m.group(4)) == z and abs(int(m.group(3)) - y) <= 1:
+        # the block itself, or its upper half for a two-block-tall one; never the ground under it
+        if m and int(m.group(2)) == x and int(m.group(4)) == z and int(m.group(3)) - y in (0, 1):
             return ""
         return f"crosshair on {got}, not the block at {x} {y} {z}"
     if want.startswith("entity"):
@@ -256,6 +273,13 @@ def judge(pid, rec, pats, log_errors):
     texts = messages(inp["shown"])
     keys = [match_key(t, pats) for t in texts]
     changed = block_change(rec)
+    mine = me_change(rec)
+    if mine:
+        if cls in ("feedback", "refuses"):
+            notes.append("the player's own state changed: " + mine)
+            cls = "works"
+        elif cls == "nothing":
+            notes.append("the player's own state changed although the client showed nothing: " + mine)
     if changed:
         if cls in ("feedback", "refuses"):
             notes.append("the target block's data changed: " + changed)

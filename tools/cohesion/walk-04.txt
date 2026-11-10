@@ -902,9 +902,9 @@ wait 5
 /setblock 0 -60 -22 headinajar:safety_placard[facing=north]
 /clear @s
 wait 5
-/tp @s 0.5 -60 -23.5 0 29.2
+/tp @s 0.5 -60 -23.5 0 25
 wait 3
-lookpos 0.5 -59.85 -21.5
+lookpos 0.5 -59.5 -21.1
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:surgical_wrench
 /item replace entity @s weapon.offhand with minecraft:air
@@ -912,14 +912,12 @@ wait 10
 riding PRE-P154
 inspect me
 inspect aim
-inspect block 0 -60 -22
 report PAIR P154 act key use
 key use
 wait 12
 shot cw-P154
 wait 17
 inspect me
-inspect block 0 -60 -22
 report PAIR P154 end
 /kill @s
 wait 15

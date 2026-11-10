@@ -116,14 +116,16 @@ mecha bulwark -9 -60 0 hydraulic_legs,galvanic_stack,armor_plating,drill,hydraul
 mecha skitter 9 -60 0 galvanic_stack,armor_plating,drill
 mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
 # the jar: a glass stand behind the turrets, a pig to lift
-/fill -1 -58 -13 1 -58 -11 minecraft:glass
+# the stand ends just in front of the jar, so the look down at the pig does not pass through the glass (Telekinesis
+# would lift the stand's own glass block instead of the pig)
+/fill -1 -58 -14 1 -58 -12 minecraft:glass
 /summon pig 0 -60 -7 {NoAI:1b,PersistenceRequired:1b}
 # the head comes off at the side, so its headless body does not stand on the stand in front of the pig
 /tp @s 8.5 -60 -14.5 0 0
 wait 10
 jar
 wait 5
-/tp @s 0.5 -57 -11.5 0 37
+/tp @s 0.5 -57 -11.2 0 37
 wait 10
 fit telekinesis,manipulator_arm,armor_plating
 charge 100000

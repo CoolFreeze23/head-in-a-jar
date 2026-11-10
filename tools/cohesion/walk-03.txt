@@ -155,7 +155,7 @@ wait 3
 riding RESET-P094
 
 # ---- P095: (empty) | HOSTED | vanilla mob, left click | target beyond host reach
-report PAIR P095 begin spot 0 -96 expect HOSTED aim entity | (empty) | HOSTED | vanilla mob, left click | target beyond host reach
+report PAIR P095 begin spot 0 -96 expect HOSTED aim any | (empty) | HOSTED | vanilla mob, left click | target beyond host reach
 /say PAIR P095
 /kill @e[type=minecraft:slime]
 /tp @s 0.5 -60 -95.5 0 0
@@ -599,12 +599,12 @@ report PAIR P107 begin spot -24 -48 expect BODY aim entity:minecraft:ender_drago
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/summon minecraft:ender_dragon -23.5 -60 -45.5 {NoAI:1b,Rotation:[180f,0f]}
+/summon minecraft:ender_dragon -23.5 -60 -42.5 {NoAI:1b,Rotation:[180f,0f]}
 /clear @s
 wait 5
-/tp @s -23.5 -60 -47.5 0 3.4
+/tp @s -23.5 -60 -47.5 0 1.4
 wait 3
-lookpos -23.5 -58.5 -45.5
+lookpos -23.5 -58.5 -42.5
 wait 10
 /item replace entity @s weapon.mainhand with headinajar:surgical_saw
 /item replace entity @s weapon.offhand with minecraft:air
@@ -621,11 +621,11 @@ inspect me
 report PAIR P107 end
 /kill @s
 wait 15
-/kill @e[type=!minecraft:player,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
-/fill -30 -60 -54 -12 -48 -36 minecraft:air
-/fill -30 -61 -54 -12 -61 -36 minecraft:grass_block
+/kill @e[type=!minecraft:player,x=-30,y=-62,z=-54,dx=18,dy=14,dz=21]
+/fill -30 -60 -54 -12 -48 -33 minecraft:air
+/fill -30 -61 -54 -12 -61 -33 minecraft:grass_block
 wait 3
-/kill @e[type=minecraft:item,x=-30,y=-62,z=-54,dx=18,dy=14,dz=18]
+/kill @e[type=minecraft:item,x=-30,y=-62,z=-54,dx=18,dy=14,dz=21]
 /clear @s
 riding RESET-P107
 

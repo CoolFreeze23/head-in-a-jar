@@ -784,7 +784,7 @@ wait 3
 riding RESET-P068
 
 # ---- P069: (empty) | BODY | entity headinajar:headless_body (another player's corpse) | owner trusts you (/headoffice trust)
-report PAIR P069 begin spot -72 -24 expect BODY aim entity | (empty) | BODY | entity headinajar:headless_body (another player's corpse) | owner trusts you (/headoffice trust)
+report PAIR P069 begin spot -72 -24 expect BODY aim entity:headinajar:headless_body | (empty) | BODY | entity headinajar:headless_body (another player's corpse) | owner trusts you (/headoffice trust)
 /say PAIR P069
 /kill @e[type=minecraft:slime]
 /tp @s -71.5 -60 -23.5 0 0
@@ -795,6 +795,8 @@ bystander spawn -72 -60 -22 0
 wait 5
 bystander form linked
 wait 5
+# a player who has just joined cannot be hurt for 60 ticks
+wait 65
 /damage Bystander 1000 minecraft:generic
 wait 20
 /clear @s
@@ -831,7 +833,7 @@ wait 3
 riding RESET-P069
 
 # ---- P070: (empty) | BODY | entity headinajar:headless_body (another player's corpse) | not trusted
-report PAIR P070 begin spot -48 -24 expect BODY aim entity | (empty) | BODY | entity headinajar:headless_body (another player's corpse) | not trusted
+report PAIR P070 begin spot -48 -24 expect BODY aim entity:headinajar:headless_body | (empty) | BODY | entity headinajar:headless_body (another player's corpse) | not trusted
 /say PAIR P070
 /kill @e[type=minecraft:slime]
 /tp @s -47.5 -60 -23.5 0 0
@@ -842,6 +844,8 @@ bystander spawn -48 -60 -22 0
 wait 5
 bystander form linked
 wait 5
+# a player who has just joined cannot be hurt for 60 ticks
+wait 65
 /damage Bystander 1000 minecraft:generic
 wait 20
 /clear @s

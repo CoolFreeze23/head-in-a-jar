@@ -241,10 +241,12 @@ def aim_pitch(r, spot, eye):
 
 def aim_expect(r, spot):
     """What the crosshair should be on when the click is made: block:X,Y,Z, entity[:ID], miss, or any."""
-    if r.get("aim_check"):
-        return r["aim_check"]
     aim = r.get("aim", "block")
     tx, ty, tz = spot.block("T")
+    if r.get("aim_check") == "block:T":
+        return f"block:{tx},{ty},{tz}"
+    if r.get("aim_check"):
+        return r["aim_check"]
     if aim == "air":
         return "miss"
     if aim == "block":
