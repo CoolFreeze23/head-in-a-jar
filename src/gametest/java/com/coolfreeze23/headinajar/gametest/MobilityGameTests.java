@@ -105,14 +105,23 @@ public class MobilityGameTests {
         h.assertTrue(Courier.book(p).equals("courier.headinajar.already_here"), "booked a courier for a body right here");
         Vec3 far = p.position().add(40, 0, 0);
         p.teleportTo(far.x, far.y, far.z);
-        int before = FormActions.state(p).charge();
-        h.assertTrue(Courier.book(p).equals("courier.headinajar.booked"), "could not book");
-        h.assertTrue(before - FormActions.state(p).charge() == JarState.maxCharge() / 5, "wrong fee");
-        h.assertTrue(Courier.book(p).equals("courier.headinajar.on_its_way"), "booked twice");
-        h.assertTrue(Courier.deliver(p), "not delivered");
-        HeadlessBody arrived = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(4)).stream().findFirst().orElse(null);
-        h.assertTrue(arrived != null && arrived.getUUID().equals(body.getUUID()), "the body is not beside the head");
-        h.assertTrue(arrived.position().distanceTo(p.position()) < Courier.NEARBY, "delivered too far away");
-        done(h, p);
+        // a real player keeps the chunks round it loaded; a test player is never ticked, so hold its new chunk the same way
+        var chunk = new net.minecraft.world.level.ChunkPos(BlockPos.containing(far));
+        h.getLevel().setChunkForced(chunk.x, chunk.z, true);
+        h.runAfterDelay(20, () -> {
+            try {
+                int before = FormActions.state(p).charge();
+                h.assertTrue(Courier.book(p).equals("courier.headinajar.booked"), "could not book");
+                h.assertTrue(before - FormActions.state(p).charge() == JarState.maxCharge() / 5, "wrong fee");
+                h.assertTrue(Courier.book(p).equals("courier.headinajar.on_its_way"), "booked twice");
+                h.assertTrue(Courier.deliver(p), "not delivered");
+                HeadlessBody arrived = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(4)).stream().findFirst().orElse(null);
+                h.assertTrue(arrived != null && arrived.getUUID().equals(body.getUUID()), "the body is not beside the head");
+                h.assertTrue(arrived.position().distanceTo(p.position()) < Courier.NEARBY, "delivered too far away");
+            } finally {
+                h.getLevel().setChunkForced(chunk.x, chunk.z, false);
+            }
+            done(h, p);
+        });
     }
 }
