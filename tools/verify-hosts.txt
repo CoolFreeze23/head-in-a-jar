@@ -1,0 +1,142 @@
+# Instruments on hosts and on a Chimera by clicks, the saw with each jar type, and a HOSTED player's refusals
+#. Default profile and SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+hostify pig 0 -60 3
+report == H1 syringe, lead, saddle, carrot on a pig host as a whole player
+/item replace entity @s hotbar.0 with headinajar:syringe
+/item replace entity @s hotbar.1 with minecraft:lead
+/item replace entity @s hotbar.2 with minecraft:saddle
+/item replace entity @s hotbar.3 with minecraft:carrot 4
+/item replace entity @s hotbar.4 with headinajar:serum_cassette[custom_data={Serum:{genes:[{gene:"cat_eyes",potency:1.0f}],stability:90}}]
+hotbar 1
+lookat pig
+key use
+inspect me
+/tp @e[type=pig] 0.5 -60 2.5
+wait 3
+lookat pig
+hotbar 2
+key use
+inspect near pig 5
+shot host_leashed
+/tp @e[type=pig] 0.5 -60 2.5
+wait 3
+lookat pig
+hotbar 3
+key use
+hotbar 4
+key use
+key use hold 40
+inspect me
+report == H2 empty hand: the lead comes off; again: the status line
+/tp @e[type=pig] 0.5 -60 2.5
+wait 3
+lookat pig
+hotbar 9
+key use
+inspect near pig 5
+key use
+report == H3 a serum on the pig host by a click
+/tp @e[type=pig] 0.5 -60 2.5
+wait 3
+lookat pig
+hotbar 5
+key use
+inspect me
+report == H4 serum and syringe on a Chimera by clicks
+mecha CHIMERA 6 -60 0 hydraulic_legs
+/item replace entity @s hotbar.4 with headinajar:serum_cassette[custom_data={Serum:{genes:[{gene:"cat_eyes",potency:1.0f}],stability:90}}]
+/item replace entity @s hotbar.0 with headinajar:syringe
+/tp @s 3.5 -60 0.5 -90 0
+wait 5
+lookat chimera
+hotbar 5
+key use
+inspect me
+hotbar 1
+key use
+inspect me
+report == H5 the saw with each jar type in the off hand on a weakened cow
+/kill @e[type=headinajar:chimera]
+/summon minecraft:cow 3.5 -60 4.5 {NoAI:1b,Health:1f}
+/summon minecraft:cow 6.5 -60 4.5 {NoAI:1b,Health:1f}
+/summon minecraft:cow 9.5 -60 4.5 {NoAI:1b,Health:1f}
+/summon minecraft:cow 12.5 -60 4.5 {NoAI:1b,Health:1f}
+/summon minecraft:cow 15.5 -60 4.5 {NoAI:1b}
+/item replace entity @s hotbar.5 with headinajar:surgical_saw
+hotbar 6
+/item replace entity @s weapon.offhand with headinajar:life_support_jar
+/tp @s 3.5 -60 2.5 0 0
+wait 5
+lookat cow
+key use
+inspect me
+/item replace entity @s weapon.offhand with headinajar:compact_life_support_jar
+/tp @s 6.5 -60 2.5 0 0
+wait 5
+lookat cow
+key use
+inspect me
+/item replace entity @s weapon.offhand with headinajar:reinforced_life_support_jar
+/tp @s 9.5 -60 2.5 0 0
+wait 5
+lookat cow
+key use
+inspect me
+/item replace entity @s weapon.offhand with headinajar:executive_life_support_jar
+/tp @s 12.5 -60 2.5 0 0
+wait 5
+lookat cow
+observe 40
+view 2
+key use
+frames saw_cut 30
+wait 35
+view 0
+observe 30
+inspect me
+/tp @s 15.5 -60 2.5 0 0
+wait 5
+lookat cow
+key use
+inspect near cow 4
+report == H6 HOSTED on a cow host: HUD, ability, use at a block, at another host, drive and swap
+/kill @e[type=minecraft:cow]
+/kill @e[type=minecraft:item]
+/tp @s 0.5 -60 -6.5 0 0
+hostify cow 0 -60 -3
+hostify pig 2 -60 -3
+/item replace entity @s weapon.offhand with minecraft:air
+/tp @s -6.5 -60 -9.5
+jar
+wait 10
+/tp @s 0.5 -60 -5.5 0 0
+wait 5
+lookat cow
+key use
+wait 10
+riding H6
+shot cow_hud
+report (the neural handshake takes the ability key for three rounds; then the body's own answer)
+wait 160
+key ability
+wait 15
+look 0 60
+key use
+wait 15
+lookat pig
+key use
+wait 15
+key drive
+wait 15
+key swap
+wait 15
+screen none
+inspect me

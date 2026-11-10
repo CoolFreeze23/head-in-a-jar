@@ -1,0 +1,111 @@
+# Ridden hosts fly, climb, fall slowly or don't jump, steered by the client from its own copy of the host files
+# (in single player). A joining second player is sent the files (the payload a dedicated server's
+# client gets at login). Default profile.
+@world flat
+@gamemode creative
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+hostcopy
+bystander spawn 6 -60 -6
+wait 10
+bystander packets host_files
+/tp @s 0.5 -60 0.5 0 0
+hostify ghast 0 -58 5
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 0.5 0 0
+wait 5
+lookat ghast
+key use
+sync 100
+# the neural handshake holds the body still for its three rounds
+wait 160
+riding G1
+inspect me
+key jump hold 40
+inspect me
+sneak hold 20
+inspect me
+sneak hold 5
+wait 20
+/kill @e[type=ghast]
+body
+wait 10
+hostify spider 0 -60 8
+/setblock 0 -60 10 minecraft:stone
+/setblock 0 -59 10 minecraft:stone
+/setblock 0 -58 10 minecraft:stone
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 5.5 0 0
+wait 5
+lookat spider
+key use
+sync 100
+# the neural handshake holds the body still for its three rounds
+wait 160
+look 0 0
+inspect me
+key forward hold 40
+inspect me
+sneak hold 5
+wait 20
+/kill @e[type=spider]
+body
+wait 10
+hostify blaze 0 -60 14
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 11.5 0 0
+wait 5
+lookat blaze
+key use
+sync 100
+# the neural handshake holds the body still for its three rounds
+wait 160
+inspect me
+jump hold 30
+inspect me
+wait 40
+inspect me
+wait 60
+inspect me
+sneak hold 5
+wait 20
+/kill @e[type=blaze]
+body
+wait 10
+hostify iron_golem 0 -60 20
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 17.5 0 0
+wait 5
+lookat iron_golem
+key use
+sync 100
+# the neural handshake holds the body still for its three rounds
+wait 160
+inspect me
+key jump hold 10
+inspect me
+sneak hold 5
+wait 20
+body
+wait 10
+hostify cow 0 -60 26
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 23.5 0 0
+wait 5
+lookat cow
+key use
+wait 10
+shot cow_hud
+hostcopy

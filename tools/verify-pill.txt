@@ -1,0 +1,76 @@
+# The head pill on the link HUD, the link overlay at low signal, and the Cradle race.
+# Default profile and SMOKE_PROFILE=pack (GUI scale 3); also GUI scale 4 and Portuguese.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+report == P1 separate, walk 10 blocks away from the placed head, look at the pill
+separate
+wait 10
+look 180 0
+key forward hold 50
+inspect me
+shot pill
+guiscale 4
+wait 5
+shot pill_gs4
+lang pt_br
+wait 10
+shot pill_pt_gs4
+guiscale 3
+wait 5
+shot pill_pt_gs3
+lang en_us
+wait 10
+guiscale 2
+wait 5
+report == P2 low signal: static and scanlines
+/tp @s 0.5 -60 -42.5 180 0
+wait 40
+inspect me
+frames static 40
+wait 45
+shot static
+report == P3 the Cradle race: head docked by the chair's operation, swap twice within 10 ticks
+/tp @s 0.5 -60 0.5 0 0
+wait 5
+swap
+wait 10
+body
+wait 10
+inspect me
+/setblock 0 -60 20 headinajar:separation_chair
+/setblock 2 -60 20 headinajar:life_support_cradle
+/data merge block 2 -60 20 {Energy:20000}
+chair 0 -60 20
+/tp @s 0.5 -60 17.5 0 25
+wait 5
+look 0 25
+key use
+wait 25
+observe 260
+at rel 121 78 hold 50
+observe 30
+wait 260
+inspect me
+inspect block 2 -60 20
+/headoffice status
+shot pill_docked
+lang pt_br
+wait 10
+shot pill_docked_pt
+lang en_us
+wait 10
+key swap
+wait 4
+key swap
+wait 30
+shot cradle_after
+inspect me
+inspect block 2 -60 20
+/headoffice status
+inspect near head_jar 30

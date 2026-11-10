@@ -180,7 +180,7 @@ public class SmokeClient {
         }
         String[] parts = line.split(" ", 2);
         // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
-        if (!java.util.Set.of("wait", "shot", "burst", "report", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
+        if (!java.util.Set.of("wait", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
                 "frames", "walk", "rightclick", "bystander").contains(parts[0])) {
             observer.setup(line);
         }
@@ -228,7 +228,34 @@ public class SmokeClient {
                             + " model=" + (mc.getEntityRenderDispatcher().getRenderer(e) instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> r ? r.getModel().getClass().getSimpleName() : "-"));
                 }
             }
+            case "hostcopy" -> {
+                // hostcopy: the client's own copy of the host files (what a client of a dedicated server steers by)
+                try {
+                    var f = com.coolfreeze23.headinajar.host.Hosts.class.getDeclaredField("clientDefinitions");
+                    f.setAccessible(true);
+                    var copy = (java.util.Map<?, ?>) f.get(null);
+                    var ghast = copy.get(net.minecraft.resources.ResourceLocation.parse("minecraft:ghast"));
+                    report.add("hostcopy -> " + copy.size() + " files on the client" + (ghast instanceof com.coolfreeze23.headinajar.host.HostDefinition d
+                            ? ", ghast flight " + d.has("flight") : ", no ghast"));
+                } catch (ReflectiveOperationException e) {
+                    report.add("hostcopy -> " + e);
+                }
+            }
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
+            case "guiscale" -> {
+                // guiscale N: the GUI scale option (0 = auto), applied at once as the options screen does
+                mc.options.guiScale().set(Integer.parseInt(parts[1].trim()));
+                mc.resizeDisplay();
+                report.add("guiscale " + parts[1].trim() + " -> " + mc.getWindow().getGuiScaledWidth() + "x" + mc.getWindow().getGuiScaledHeight());
+            }
+            case "lang" -> {
+                // lang CODE: switch the game's language (en_us, pt_br, ...) and reload the translations only
+                mc.options.languageCode = parts[1].trim();
+                mc.getLanguageManager().setSelected(parts[1].trim());
+                mc.getLanguageManager().onResourceManagerReload(mc.getResourceManager());
+                report.add("lang -> " + mc.getLanguageManager().getSelected());
+                wait = 5;
+            }
             case "report" -> report.add(parts[1]);
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its
             // feet (facing +Z): where the head was (centre x/z, lowest y) and the top of the body under a jar placed there
@@ -260,6 +287,104 @@ public class SmokeClient {
                 String[] a = parts[1].split(" ");
                 mc.player.setYRot(Float.parseFloat(a[0]));
                 mc.player.setXRot(Float.parseFloat(a[1]));
+            }
+            case "inspect" -> {
+                // inspect block X Y Z | inspect me | inspect near TYPE R: reads the server's world into the report; changes nothing
+                var server = mc.getSingleplayerServer();
+                var uuid = mc.player.getUUID();
+                String[] a = parts[1].trim().split(" +");
+                server.execute(() -> {
+                    var player = server.getPlayerList().getPlayer(uuid);
+                    var level = player.serverLevel();
+                    switch (a[0]) {
+                        case "block" -> {
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[1]), Integer.parseInt(a[2]), Integer.parseInt(a[3]));
+                            var be = level.getBlockEntity(pos);
+                            String nbt = be == null ? "-" : be.saveWithoutMetadata(level.registryAccess()).toString();
+                            if (nbt.length() > 1500) nbt = nbt.substring(0, 1500) + "...";
+                            report.add("inspect block " + a[1] + " " + a[2] + " " + a[3] + " -> " + level.getBlockState(pos) + " " + nbt);
+                        }
+                        case "me" -> {
+                            var st = FormActions.state(player);
+                            StringBuilder sb = new StringBuilder("inspect me -> ");
+                            sb.append(String.format(java.util.Locale.ROOT, "pos %.1f %.1f %.1f, health %.1f, food %d, ", player.getX(), player.getY(), player.getZ(), player.getHealth(), player.getFoodData().getFoodLevel()));
+                            sb.append("vehicle ").append(player.getVehicle() == null ? "-" : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(player.getVehicle().getType()));
+                            sb.append(", form ").append(st.form()).append(st.compact() ? " (compact)" : "");
+                            sb.append(", charge ").append(st.charge()).append("/").append(com.coolfreeze23.headinajar.form.JarState.maxCharge());
+                            sb.append(", saline ").append(st.saline()).append("/").append(st.maxSaline());
+                            sb.append(", integrity ").append(st.integrity()).append("/").append(st.maxIntegrity());
+                            sb.append(", link ").append(st.quality()).append("% ").append(String.format(java.util.Locale.ROOT, "%.1f", st.headDistance())).append("m");
+                            sb.append(", carrying head ").append(st.carryingHead());
+                            sb.append(", modules [");
+                            for (int i = 0; i < st.slots(); i++) sb.append(i == 0 ? "" : ",").append(Harness.stackName(st.module(i)));
+                            sb.append("], goggles ").append(Harness.stackName(st.goggles())).append(", collar ").append(Harness.stackName(st.collar()));
+                            sb.append(", inventory:");
+                            var inv = player.getInventory();
+                            for (int i = 0; i < inv.getContainerSize(); i++) {
+                                var it = inv.getItem(i);
+                                if (!it.isEmpty()) sb.append(" ").append(i).append("=").append(Harness.stackName(it).replace("minecraft:", "")).append("x").append(it.getCount());
+                            }
+                            report.add(sb.toString());
+                        }
+                        case "near" -> {
+                            double r = a.length > 2 ? Double.parseDouble(a[2]) : 16;
+                            StringBuilder sb = new StringBuilder("inspect near " + a[1] + " -> ");
+                            int n = 0;
+                            for (var e : level.getEntities(player, player.getBoundingBox().inflate(r))) {
+                                String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString();
+                                if (!a[1].equals("all") && !id.contains(a[1])) continue;
+                                sb.append(String.format(java.util.Locale.ROOT, "%s %s at %.1f %.1f %.1f", n++ == 0 ? "" : ";", id, e.getX(), e.getY(), e.getZ()));
+                                if (e instanceof net.minecraft.world.entity.LivingEntity le) sb.append(String.format(java.util.Locale.ROOT, " hp %.1f/%.1f", le.getHealth(), le.getMaxHealth()));
+                                if (e.hasCustomName()) sb.append(" \"").append(e.getCustomName().getString()).append("\"");
+                                if (e.getVehicle() != null) sb.append(" riding ").append(e.getVehicle().getType().toShortString());
+                                if (e instanceof com.coolfreeze23.headinajar.entity.MechaEntity me) sb.append(" battery ").append(me.battery());
+                                if (e instanceof net.minecraft.world.entity.Mob mob && mob.isLeashed()) sb.append(" leashed");
+                                if (e.isNoGravity()) sb.append(" NoGravity");
+                                if (e.onGround()) sb.append(" on ground");
+                                if (e instanceof net.minecraft.world.entity.item.ItemEntity ie) sb.append(" item ").append(Harness.stackName(ie.getItem())).append("x").append(ie.getItem().getCount());
+                            }
+                            report.add(sb.append(n == 0 ? "none" : "").toString());
+                        }
+                        case "blocks" -> {
+                            // inspect blocks ID X1 Y1 Z1 X2 Y2 Z2: where in the box the block ID is (at most 20 listed)
+                            var from = new net.minecraft.core.BlockPos(Integer.parseInt(a[2]), Integer.parseInt(a[3]), Integer.parseInt(a[4]));
+                            var to = new net.minecraft.core.BlockPos(Integer.parseInt(a[5]), Integer.parseInt(a[6]), Integer.parseInt(a[7]));
+                            StringBuilder sb = new StringBuilder("inspect blocks " + a[1] + " -> ");
+                            int n = 0;
+                            for (var pos : net.minecraft.core.BlockPos.betweenClosed(from, to)) {
+                                if (!BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock()).toString().contains(a[1])) continue;
+                                if (n++ < 20) sb.append(n == 1 ? "" : "; ").append(pos.toShortString());
+                            }
+                            report.add(sb.append(n == 0 ? "none" : " (" + n + " in all)").toString());
+                        }
+                        default -> report.add("inspect " + a[0] + " -> unknown (block X Y Z, blocks ID box, me, near TYPE R)");
+                    }
+                });
+                wait = 2;
+            }
+            case "lookat" -> {
+                // lookat TYPE [DY]: turn the view (setup, like look) to the nearest entity whose type id contains TYPE,
+                // aiming at its middle (or DY blocks above its feet)
+                String[] a = parts[1].trim().split(" +");
+                net.minecraft.world.entity.Entity best = null;
+                for (var e : mc.level.entitiesForRendering()) {
+                    if (e == mc.player || e == mc.player.getVehicle()) continue;
+                    if (!BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString().contains(a[0])) continue;
+                    if (best == null || e.distanceToSqr(mc.player) < best.distanceToSqr(mc.player)) best = e;
+                }
+                if (best == null) {
+                    report.add("lookat " + a[0] + " -> none in sight");
+                } else {
+                    var eye = mc.player.getEyePosition();
+                    double ty = best.getY() + (a.length > 1 ? Double.parseDouble(a[1]) : best.getBbHeight() / 2);
+                    double dx = best.getX() - eye.x, dy = ty - eye.y, dz = best.getZ() - eye.z;
+                    float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
+                    float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
+                    mc.player.setYRot(yaw);
+                    mc.player.setXRot(pitch);
+                    report.add(String.format(java.util.Locale.ROOT, "lookat %s -> %s at %.1f blocks, yaw %.0f pitch %.0f", a[0],
+                            BuiltInRegistries.ENTITY_TYPE.getKey(best.getType()), Math.sqrt(dx * dx + dy * dy + dz * dz), yaw, pitch));
+                }
             }
             case "book" -> {
                 if (mc.screen instanceof AbstractFurnaceScreen<?> furnace) {

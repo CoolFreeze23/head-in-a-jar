@@ -1,0 +1,79 @@
+# Genes by real input: flight from Draconic Wings ends with a Gene Wash drunk by a held click; Glow Cells leave no light
+# behind (walking, dying); Spider Climb survives a change of dimension. Default profile.
+# The genes are set up with the `genes` verb (the Rig refuses a full-strength Draconic Wings serum as too heavy, seen).
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+/setblock 0 -60 2 headinajar:injection_rig
+/data merge block 0 -60 2 {Energy:100000}
+/give @s headinajar:serum_cassette[custom_data={Serum:{genes:[{gene:"spider_climb",potency:1.0f}],stability:100}}]
+report == G0 a serum injected at the Rig by its button
+look 0 30
+key use
+wait 10
+slot item:headinajar:serum_cassette shift
+wait 5
+widget "Inject"
+wait 10
+press escape
+wait 10
+inspect me
+report == G1 Draconic Wings: fly
+/tp @s -4.5 -60 -4.5 180 0
+genes me draconic_wings
+wait 10
+jump
+wait 3
+jump
+wait 3
+jump hold 20
+inspect me
+shot flying
+report == G2 drink a Gene Wash while flying: flight stops, the line
+/item replace entity @s hotbar.8 with headinajar:gene_wash
+hotbar 9
+key use hold 40
+wait 60
+inspect me
+shot after_wash
+report == G3 Glow Cells: walk, the light does not stay behind; die, respawn, none at the death spot
+/tp @s 0.5 -60 -6.5 180 0
+genes me glow_cells
+wait 20
+inspect blocks minecraft:light -3 -61 -9 3 -57 -4
+key forward hold 30
+wait 10
+inspect me
+inspect blocks minecraft:light -6 -61 -20 6 -55 2
+/kill @s
+wait 30
+widget "Respawn"
+wait 40
+inspect me
+report (light blocks left anywhere near the walk and the death spot)
+inspect blocks minecraft:light -6 -61 -20 6 -55 2
+report == G4 Spider Climb: climb a wall here, change dimension, climb a wall there
+genes me spider_climb
+/effect give @s minecraft:resistance 999 4 true
+/fill 10 -60 5 14 -50 5 minecraft:stone
+/tp @s 12.5 -60 3.5 0 0
+wait 10
+key forward hold 30
+inspect me
+/effect give @s minecraft:slow_falling 60 0 true
+/execute in minecraft:the_nether run tp @s 12.5 101 3.5 0 0
+wait 40
+/execute in minecraft:the_nether run fill 9 99 0 15 99 5 minecraft:stone
+/execute in minecraft:the_nether run fill 9 100 0 15 105 4 minecraft:air
+/execute in minecraft:the_nether run fill 10 100 5 14 110 5 minecraft:stone
+/execute in minecraft:the_nether run tp @s 12.5 100 3.5 0 0
+/effect clear @s minecraft:slow_falling
+wait 20
+inspect me
+key forward hold 30
+inspect me

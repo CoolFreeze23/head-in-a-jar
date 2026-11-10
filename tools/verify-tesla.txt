@@ -1,0 +1,53 @@
+# The Surgical Wrench links two Tesla Nodes by clicks. Default profile and SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 0.5 -90 20
+/setblock 3 -60 0 headinajar:tesla_node
+/setblock 0 -60 3 headinajar:tesla_node
+/give @s headinajar:surgical_wrench
+hotbar 1
+report == E1 first node: sending node chosen
+look -90 20
+key use
+shot wrench_first
+wait 20
+report == E2 second node: linked
+look 0 20
+key use
+shot wrench_linked
+inspect block 3 -60 0
+wait 20
+report == E3 the same node twice (second node again: chosen, then itself)
+key use
+wait 20
+key use
+shot wrench_same_node
+wait 20
+report == E4 sneak on the sender: unlinked, again: sends nowhere
+sneak down
+look -90 20
+key use
+wait 20
+key use
+sneak up
+inspect block 3 -60 0
+report == E5 relink and power the sender: arcs
+look -90 20
+key use
+wait 20
+look 0 20
+key use
+wait 5
+/data merge block 3 -60 0 {Energy:10000}
+look -45 10
+observe 60
+frames tesla_arcs 40
+wait 45
+observe 20
+shot tesla_arcs
+inspect block 3 -60 0
+inspect block 0 -60 3

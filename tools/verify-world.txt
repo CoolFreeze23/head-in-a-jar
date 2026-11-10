@@ -1,0 +1,94 @@
+# In the world: a linked body at a portal without its head, the Neural Socket letting go when broken
+# (block 12), and hoppers under and over a machine (block 13). Default profile; the socket and portal lines also
+# under SMOKE_PROFILE=pack (they name keys).
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+report == L1 linked, head left behind, standing in a lit nether portal for 10 s: the line about every 3 s
+/fill 4 -60 -1 4 -56 2 minecraft:obsidian
+/fill 4 -59 0 4 -57 1 minecraft:nether_portal[axis=z]
+/tp @s 0.5 -60 0.5 -90 0
+separate
+wait 10
+/tp @s 4.5 -59 0.5 -90 0
+observe 30
+report (in the portal: 200 ticks held still)
+key sneak hold 200
+shot portal_line
+inspect me
+shot portal_line
+/tp @s 0.5 -60 0.5 -90 0
+wait 5
+swap
+wait 10
+body
+wait 10
+inspect me
+report == K1 a bare jar plugs into a Neural Socket by a click; the socket is broken: it lets go
+/setblock 0 -60 -4 headinajar:neural_socket
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 -1.5 180 10
+wait 5
+key use
+wait 10
+inspect me
+shot socket_plugged
+/setblock 0 -60 -4 minecraft:air destroy
+wait 3
+shot socket_broken
+report (socket broken)
+wait 30
+inspect me
+key forward hold 20
+inspect me
+report == K2 plugged again, sneak + jar menu unplugs
+/setblock 0 -60 -4 headinajar:neural_socket
+/tp @s 0.5 -60 -1.5 180 10
+wait 5
+key use
+wait 10
+inspect me
+key sneak down
+key menu
+key sneak up
+wait 10
+inspect me
+report == Q1 hoppers: one over a Centrifuge feeds its input; one under takes only outputs
+/tp @s -6.5 -60 2.5 0 0
+body
+wait 10
+/setblock 10 -61 0 minecraft:hopper
+/setblock 10 -60 0 headinajar:centrifuge
+/setblock 10 -59 0 minecraft:hopper[facing=down]
+/summon minecraft:cow 8.5 -60 3.5 {NoAI:1b}
+/item replace entity @s hotbar.0 with headinajar:syringe
+/tp @s 8.5 -60 1.5 0 0
+hotbar 1
+wait 5
+lookat cow
+key use
+wait 5
+inspect me
+/tp @s 10.5 -60 2.5 180 0
+wait 5
+look 180 -5
+key use
+wait 10
+slots
+slot item:headinajar:blood_sample shift
+wait 5
+press escape
+wait 60
+inspect block 10 -59 0
+inspect block 10 -60 0
+inspect block 10 -61 0
+/data merge block 10 -60 0 {Energy:100000}
+wait 400
+inspect block 10 -60 0
+inspect block 10 -61 0

@@ -1,0 +1,69 @@
+# Bare jar reach and the Swap refusals through real input. Default profile and
+# SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 20
+/setblock 2 -60 0 headinajar:charging_dock
+/setblock -2 -60 0 headinajar:charging_dock
+/data merge block -2 -60 0 {Energy:20000}
+/setblock 0 -60 3 headinajar:life_support_cradle
+# the body stays where the head comes off: take it off out of the way
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 0.5 0 20
+wait 10
+report == W1 swap as a jar with no Collar Cam
+key swap
+shot swap_no_collar
+# a pack may bind Curios to the same key as Swap: close whatever else that key opened
+wait 5
+screen none
+report == R1 an empty Charging Dock (east), then a stocked one (west)
+look -90 10
+key use
+shot dock_empty
+look 90 10
+key use
+report == R2 an empty Cradle (south): the jar hops onto its pad
+look 0 10
+key use
+wait 10
+inspect me
+report == R3 a boat: boards, rows
+/tp @s 0.5 -60 -3.5 180 0
+/summon minecraft:boat 0.5 -60 -6.5
+wait 10
+lookat boat
+key use
+riding R1
+key forward hold 40
+riding R1-after
+inspect near boat 12
+sneak hold 5
+wait 20
+report == W2 linked, body dead, swap: the corpse line
+/tp @s 0.5 -60 0.5 0 20
+body
+wait 10
+separate
+wait 10
+inspect me
+/effect clear @s
+/damage @s 1000 minecraft:generic
+wait 40
+inspect me
+key swap
+shot swap_corpse
+wait 5
+screen none
+report == W3 Telekinesis key as a jar with the module and no charge
+fit telekinesis
+charge 0
+key ability
+inspect me

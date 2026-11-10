@@ -1,0 +1,120 @@
+# The Separation Chair's Sign button through real mouse input. Default profile
+# and SMOKE_PROFILE=pack. Chair at 0 -60 3; the Sign button's centre is rel 121 78 (SIGN_X 74 + 47, SIGN_Y 70 + 8).
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 25
+/setblock 0 -60 3 headinajar:separation_chair
+/setblock 4 -60 3 headinajar:separation_chair
+chair 0 -60 3
+wait 20
+report == S0 an unstocked chair: sit, press Sign: DOLORES's refusal over the panel
+/tp @s 4.5 -60 0.5 0 25
+wait 3
+look 0 25
+key use
+wait 25
+at rel 121 78
+wait 2
+shot sign_refusal_unstocked
+wait 10
+at rel 121 78 hold 50
+shot sign_refusal_unstocked_hold
+press escape
+wait 5
+sneak hold 5
+wait 20
+riding S0-end
+/tp @s 0.5 -60 0.5 0 25
+wait 5
+report == S6 (hover after a held use) use held 6 ticks on the chair, then hover Sign 60 ticks: must not sign
+look 0 25
+wait 3
+observe 100
+key use hold 6
+wait 25
+mouse rel 121 78
+wait 60
+observe 20
+riding S6-end
+press escape
+wait 5
+sneak hold 5
+wait 20
+/tp @s 0.5 -60 0.5 0 25
+wait 3
+look 0 25
+key use
+wait 25
+report == B1 short hold: must not sign
+at rel 121 78 hold 20
+wait 10
+riding B1-end
+report == B2 hover only: must not sign
+mouse rel 121 78
+wait 50
+riding B2-end
+report == B3 press, slide off after 30 ticks: must not sign
+at rel 121 78 down
+wait 30
+mouse rel 20 20
+wait 20
+at rel 121 78 up
+riding B3-end
+report == B3b press, close the screen with escape after 20 ticks, still holding: must not sign
+at rel 121 78 down
+wait 20
+press escape
+wait 30
+click left up
+riding B3b-end
+report (seated with the screen closed: does use reopen it?)
+key use
+wait 25
+screen none
+wait 3
+sneak hold 5
+wait 20
+/tp @s 0.5 -60 0.5 0 25
+wait 3
+look 0 25
+key use
+wait 25
+report == B4 the real hold, left button: signs after about 40 ticks
+observe 260
+at rel 121 78 hold 50
+wait 10
+shot sign_after_hold
+observe 20
+wait 60
+view 2
+frames cut 80
+wait 100
+view 0
+wait 100
+riding B4-end
+inspect me
+report == B5 the same with the right button, after putting the head back on
+swap
+wait 10
+body
+wait 20
+inspect me
+chair 0 -60 3
+/tp @s 0.5 -60 0.5 0 25
+wait 5
+look 0 25
+key use
+wait 25
+observe 260
+at rel 121 78 right hold 50
+wait 10
+shot sign_after_right_hold
+observe 20
+wait 240
+riding B5-end
+inspect me

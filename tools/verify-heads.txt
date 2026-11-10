@@ -1,0 +1,43 @@
+# Jarred heads in the world: a placed Jarred Head (villager, zombie), a Turret Pedestal, an Employee Mount, a Cerebral
+# Array and a Neural Socket with heads, looked at; then entities and the hand drawn after them. Any render-state error
+# shows in the log (pose stack, NoSuchElementException) or as things drawn out of place.
+@world flat
+@gamemode creative
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 -4.5 0 10
+/summon minecraft:cow 6.5 -60 4.5 {NoAI:1b}
+/summon minecraft:armor_stand -5.5 -60 4.5 {ShowArms:1b}
+/give @s minecraft:diamond_sword
+report == J0 the scene before any jarred head: cow, armour stand, the hand
+shot heads_before
+report == J1 one placed Jarred Head (villager)
+jarhead villager -3 -60 3
+wait 20
+shot heads_villager
+report == J2 a jarred zombie
+jarhead zombie -1 -60 3
+wait 20
+shot heads_zombie
+report == J3 a Turret Pedestal, an Employee Mount, a Cerebral Array, a Neural Socket with heads
+/setblock 1 -60 3 headinajar:turret_pedestal
+headblock 1 -60 3 skeleton
+/setblock 3 -60 3 headinajar:employee_mount
+headblock 3 -60 3 villager
+/setblock 5 -60 3 headinajar:cerebral_array
+headblock 5 -60 3 villager,zombie,villager
+/setblock 7 -60 3 headinajar:neural_socket
+headblock 7 -60 3 zombie
+wait 20
+shot heads_all
+look 0 0
+wait 10
+shot heads_all_level
+view 1
+wait 10
+shot heads_all_third
+view 0
+report (still running?)
+wait 20
