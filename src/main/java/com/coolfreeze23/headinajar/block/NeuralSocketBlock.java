@@ -13,6 +13,12 @@ public class NeuralSocketBlock extends HeadHolderBlock<NeuralSocketBlockEntity> 
     }
 
     @Override
+    protected void onRemove(BlockState state, net.minecraft.world.level.Level level, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof NeuralSocketBlockEntity socket) socket.removed();
+        super.onRemove(state, level, pos, newState, moved);
+    }
+
+    @Override
     protected boolean isSignalSource(BlockState state) {
         return true;
     }

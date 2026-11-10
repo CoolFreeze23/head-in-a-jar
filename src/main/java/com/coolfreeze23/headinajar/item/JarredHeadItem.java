@@ -46,7 +46,8 @@ public class JarredHeadItem extends Item {
     public static EntityType<?> type(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return null;
-        ResourceLocation id = ResourceLocation.tryParse(data.copyTag().getString("Type"));
+        // read in place: the stored mob is never copied just to learn what it was
+        ResourceLocation id = ResourceLocation.tryParse(data.getUnsafe().getString("Type"));
         return id == null ? null : BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(null);
     }
 
@@ -64,7 +65,13 @@ public class JarredHeadItem extends Item {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         BlockState state = ModRegistry.JARRED_HEAD_BLOCK.get().defaultBlockState()
                 .setValue(com.coolfreeze23.headinajar.block.JarredHeadBlock.FACING, context.getHorizontalDirection().getOpposite());
+        // placed as any block is, so claim and protection mods can say no
+        var snapshot = net.neoforged.neoforge.common.util.BlockSnapshot.create(level.dimension(), level, pos);
         level.setBlockAndUpdate(pos, state);
+        if (net.neoforged.neoforge.event.EventHooks.onBlockPlace(context.getPlayer(), snapshot, context.getClickedFace())) {
+            snapshot.restore(3);
+            return InteractionResult.FAIL;
+        }
         if (level.getBlockEntity(pos) instanceof JarredHeadBlockEntity head) {
             CustomData data = context.getItemInHand().get(DataComponents.CUSTOM_DATA);
             if (data != null) head.load(data.copyTag());

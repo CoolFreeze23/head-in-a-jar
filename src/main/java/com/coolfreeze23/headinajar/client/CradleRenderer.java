@@ -21,4 +21,10 @@ public class CradleRenderer implements BlockEntityRenderer<LifeSupportCradleBloc
         JarRenderer.drawStill(pose, buffers, light, JarRenderer.skin(cradle.owner()), age, !cradle.goggles().isEmpty());
         pose.popPose();
     }
+
+    /** The jar rises above the cradle's block; cull by the space it is drawn in. */
+    @Override
+    public net.minecraft.world.phys.AABB getRenderBoundingBox(LifeSupportCradleBlockEntity cradle) {
+        return new net.minecraft.world.phys.AABB(cradle.getBlockPos()).expandTowards(0, 0.6, 0);
+    }
 }
