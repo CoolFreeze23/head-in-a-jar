@@ -133,10 +133,10 @@ B("/tp @s 12.5 -60 22.5 180 20", "wait 20")
 for n, (x, bid) in enumerate(((2, "centrifuge"), (5, "dna_sequencer"), (8, "gene_splicer"), (11, "injection_rig"))):
     B(f"/setblock {x} {Y} {z} headinajar:{bid}[facing=south]")
 B("/tp @s 6.5 -60 18.5 180 20", "wait 5", "lab", "/tp @s 12.5 -60 22.5 180 20")
-thing("C01", "block", "headinajar:centrifuge", 2, Y, z, ["headinajar:centrifuge", "blood_sample"], "a cave spider blood sample, full energy", ["Centrifuge"])
-thing("C02", "block", "headinajar:dna_sequencer", 5, Y, z, ["headinajar:dna_sequencer", "dna_fraction"], "a DNA fraction, full energy", ["DNA", "Sequencer"])
-thing("C03", "block", "headinajar:gene_splicer", 8, Y, z, ["headinajar:gene_splicer", "amethyst_shard"], "two genes picked, shard, gel, bottles", ["Gene", "Splicer"])
-thing("C04", "block", "headinajar:injection_rig", 11, Y, z, ["headinajar:injection_rig", "serum_cassette"], "a Cat Eyes cassette", ["Injection", "Rig"])
+thing("C01", "block", "headinajar:centrifuge", 2, Y, z, ["headinajar:centrifuge", "Items:"], "a cave spider blood sample, full energy (it processes it: later reads show its products)", ["Centrifuge"])
+thing("C02", "block", "headinajar:dna_sequencer", 5, Y, z, ["headinajar:dna_sequencer", "Items:"], "a DNA fraction, full energy (processed over time)", ["DNA", "Sequencer"])
+thing("C03", "block", "headinajar:gene_splicer", 8, Y, z, ["headinajar:gene_splicer", "Items:"], "two genes picked, shard, gel, bottles", ["Gene", "Splicer"])
+thing("C04", "block", "headinajar:injection_rig", 11, Y, z, ["headinajar:injection_rig", "Items:"], "a Cat Eyes cassette", ["Injection", "Rig"])
 B(f"/setblock 15 {Y} {z} headinajar:cerebral_array[facing=south]")
 thing("C05", "block", "headinajar:cerebral_array (empty)", 15, Y, z, ["headinajar:cerebral_array"], "empty; the stocked one is D02", ["Cerebral Array", "(empty)"])
 B(f"/setblock 20 {Y} {z} headinajar:turret_pedestal[facing=south]")
@@ -165,7 +165,7 @@ B(f"/setblock {FX} {Y} {z} headinajar:saline_mixer[facing=south]{{Energy:50000}}
 thing("D01", "block", "headinajar:employee_mount (staffed)", FX, Y + 1, z, ["headinajar:employee_mount", "villager"], "a librarian villager head, on a Saline Mixer", ["Employee", "Mount", "staffed"])
 B(f"/setblock {FX + 4} {Y} {z} headinajar:cerebral_array[facing=south]", "wait 2",
   f"headblock {FX + 4} {Y} {z} villager,zombie,skeleton,creeper,pig,cow,sheep,chicken,spider")
-thing("D02", "block", "headinajar:cerebral_array (stocked)", FX + 4, Y, z, ["headinajar:cerebral_array", "board_room_core", "jarred_head"],
+thing("D02", "block", "headinajar:cerebral_array (stocked)", FX + 4, Y, z, ["headinajar:cerebral_array", "jarred_head", "Broth:"],
       "nine heads, Board Room Core, broth", ["Cerebral Array", "9 heads"])
 B(f"/setblock {FX + 8} {Y - 1} {z} minecraft:chest{{Items:[{{Slot:0b,id:\"minecraft:arrow\",count:64}}]}}",
   f"/setblock {FX + 8} {Y} {z} headinajar:turret_pedestal[facing=south]", "wait 2", f"headblock {FX + 8} {Y} {z} skeleton")
@@ -209,7 +209,7 @@ frames = {
 for n, (frame, mods) in enumerate(frames.items()):
     x = 3 + 6 * n
     B(f"mecha {frame} {x} {Y} {z} {mods}", "wait 2")
-    thing(f"F{n + 1:02d}", "entity", f"headinajar:{frame} mecha", x + 0.5, Y, z + 0.5, [f"headinajar:{frame}", "mecha_galvanic_stack"],
+    thing(f"F{n + 1:02d}", "entity", f"headinajar:{frame} mecha", x + 0.5, Y, z + 0.5, [f"headinajar:{frame}", "id:\"headinajar:mecha_"],
           f"fitted: {mods.replace(',', ', ')}", None, check_type=f"headinajar:{frame}", radius=2)
     sign(x, z + 4, frame.capitalize(), "mecha")
 
@@ -260,7 +260,7 @@ for n, iid in enumerate(every):
     expect.append({"id": f"H{n + 1:03d}", "kind": "entity", "what": f"item frame holding headinajar:{iid}", "at": [x + 0.5, yy + 0.5, WALL_Z + 1.03],
                    "has": [f"headinajar:{iid}\""], "note": ""})
     check.append(f"report CHECK H{n + 1:03d}")
-    check.append(f"inspect entity item_frame {x}.5 {yy}.5 {WALL_Z + 1.03:.2f} 0.45")
+    check.append(f"inspect entity item_frame {x + 0.5} {yy + 0.5} {WALL_Z + 1.03:.2f} 0.45")
 layout.append(f"| H001-H{len(every):03d} | item frames holding every item ({len(every)}: {len(items)} items, {len(every) - len(items)} block items) "
               f"| wall x 2-{cols + 1}, y {Y}-{Y + height - 1}, z {WALL_Z + 1} (on the wall's south face), left to right, top row first, in lang-file order | fixed, invulnerable |")
 # and the same in chests, 27 per chest
