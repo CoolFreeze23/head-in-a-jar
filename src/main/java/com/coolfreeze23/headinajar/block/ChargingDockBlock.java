@@ -46,6 +46,18 @@ public class ChargingDockBlock extends BaseEntityBlock {
         return new Entity(pos, state);
     }
 
+    /** A click, in any form: what it holds and how it is used. */
+    @Override
+    protected net.minecraft.world.InteractionResult useWithoutItem(BlockState state, net.minecraft.world.level.Level level, BlockPos pos, Player player,
+                                                                  net.minecraft.world.phys.BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof Entity dock)) return net.minecraft.world.InteractionResult.PASS;
+        if (level.isClientSide) return net.minecraft.world.InteractionResult.SUCCESS;
+        int stored = dock.energy.getEnergyStored();
+        player.displayClientMessage(net.minecraft.network.chat.Component.translatable(stored > 0 ? "message.headinajar.dock_status" : "message.headinajar.dock_empty",
+                stored, dock.energy.getMaxEnergyStored(), net.minecraft.network.chat.Component.translatable("block.headinajar.galvanic_pile")), true);
+        return net.minecraft.world.InteractionResult.CONSUME;
+    }
+
     /** The dock the player stands on, if any. */
     public static Entity under(Player player) {
         BlockPos pos = player.blockPosition();

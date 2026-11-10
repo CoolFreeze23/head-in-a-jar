@@ -1,5 +1,6 @@
 package com.coolfreeze23.headinajar.item;
 
+import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.form.Form;
 import com.coolfreeze23.headinajar.form.FormActions;
 import net.minecraft.ChatFormatting;
@@ -27,7 +28,13 @@ public class HeadSatchelItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!player.isShiftKeyDown() || FormActions.state(player).form() != Form.LINKED || !FormActions.state(player).carryingHead()) {
+        var state = FormActions.state(player);
+        if (!player.isShiftKeyDown() || state.form() != Form.LINKED || !state.carryingHead()) {
+            if (player instanceof ServerPlayer server) {
+                String why = state.form() == Form.LINKED ? (state.carryingHead() ? "satchel.sneak" : "satchel.empty")
+                        : state.form().isDecapitated() ? "satchel.jar" : "satchel.whole";
+                Refusals.deny(server, why, net.minecraft.network.chat.Component.keybind("key.sneak"));
+            }
             return InteractionResultHolder.pass(stack);
         }
         if (player instanceof ServerPlayer server) FormActions.setDownHead(server);
