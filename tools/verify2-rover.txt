@@ -1,0 +1,35 @@
+# The Rover (second repair pass), real input. Default profile.
+# R1 its speed over 20 ticks of forward; R2 into a wall at speed: one knock, a clang and a line; R3 pushing on against
+# the wall costs nothing more.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/fill -4 -60 34 4 -57 34 minecraft:stone
+/summon headinajar:rover 0.5 -60 0.5
+/tp @s -10.5 -60 -10.5
+jar
+wait 10
+/tp @s 0.5 -60 -1.5 0 20
+wait 10
+lookat rover
+key use
+riding R
+look 0 0
+wait 10
+inspect me
+report == R1 forward 20 ticks
+key forward hold 20
+inspect me
+report == R2 on into the wall (z 34)
+observe 40
+key forward hold 70
+observe 30
+inspect me
+shot r2_after_crash
+report == R3 pushing on against it
+key forward hold 60
+inspect me
+riding R3

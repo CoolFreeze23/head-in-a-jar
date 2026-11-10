@@ -1,0 +1,108 @@
+# Forms after a change (second repair pass), real input. Default profile and SMOKE_PROFILE=pack.
+# F5 a sneak held to get on a host is not a sneak to get off; F1 walking keys held through a link break don't move the
+# jar; F2 the boarding hint names the way out; F4 a teleport off a host; F3 Telekinesis ends on boarding and the
+# ability key in a cockpit is the mecha's.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+report == F5 carrying the head, sneak-use the satchel at a host: on the host, and still on it while the sneak is held
+/tp @s 60.5 -60 60.5 0 0
+/give @s headinajar:head_satchel
+wait 5
+separate
+wait 10
+lookat head_jar
+key use
+wait 10
+inspect me
+hostify pig 60 -60 62
+wait 5
+lookat pig
+hotbar 1
+key sneak down
+key use
+wait 30
+inspect me
+riding F5-held
+key sneak up
+wait 10
+riding F5-released
+sneak tap
+wait 20
+riding F5-sneaked
+body
+wait 10
+inspect me
+report == F1 walk away from the head with forward and sprint held until the link breaks (the playtest's c3 hazard)
+/tp @s 0.5 -60 0.5 -90 0
+wait 5
+separate
+fit hop_springs,wheels
+charge 60000
+/tp @s 0.5 -60 0.5 90 0
+wait 10
+inspect near head_jar 4
+key sprint down
+key forward down
+wait 420
+inspect me
+shot f1_after_break
+report (still holding forward: the jar must stay put)
+wait 40
+inspect me
+key forward up
+key sprint up
+wait 5
+report (forward pressed again: the jar hops)
+key forward hold 30
+inspect me
+report == F2 the boarding hint: a mecha and a host
+/tp @s 20.5 -60 20.5 0 0
+mecha HOPPER 20 -60 23 hydraulic_legs
+wait 10
+lookat hopper
+key use
+shot f2_mecha_hint
+riding F2
+wait 40
+key sneak down
+key jar_menu hold 25
+key sneak up
+wait 10
+screen none
+riding F2-out
+hostify cow 26 -60 20
+wait 5
+/tp @s 24.5 -60 20.5 -90 0
+lookat cow
+key use
+shot f2_host_hint
+riding F2-cow
+report == F4 a teleport off the host
+/tp @s 30.5 -60 30.5
+wait 5
+inspect me
+riding F4
+report == F3 Telekinesis lifted, then boarding: the hold ends; the ability key in the cockpit
+fit telekinesis,hop_springs
+charge 60000
+/tp @s 40.5 -60 40.5 180 35
+wait 10
+key ability
+wait 10
+inspect near held_block 6
+mecha HOPPER 40 -60 43 hydraulic_legs
+wait 10
+lookat hopper
+key use
+wait 20
+inspect near held_block 8
+riding F3
+look 0 60
+key ability
+wait 20
+inspect me

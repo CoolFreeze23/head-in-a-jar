@@ -70,17 +70,24 @@ public class ShellEntity extends PathfinderMob {
     public static final double CRASH_SPEED = 0.3;
     private Vec3 lastPos;
     private double lastSpeed;
+    private Vec3 lastMove = Vec3.ZERO;
     private int crashCooldown;
 
     @Override
     public void tick() {
         super.tick();
         if (level().isClientSide) return;
-        // a rider moves the shell from their client, so its speed is read between ticks, not inside one
-        double speed = lastPos == null ? 0 : position().subtract(lastPos).horizontalDistance();
+        // a rider moves the shell from their client (the client stops it at the wall, so the server never sees it
+        // collide): its speed is read between ticks, and a crash is a fast shell stopped with a solid block just ahead
+        Vec3 moved = lastPos == null ? Vec3.ZERO : position().subtract(lastPos).multiply(1, 0, 1);
+        double speed = moved.length();
         if (crashCooldown > 0) crashCooldown--;
-        if (horizontalCollision && Math.max(speed, lastSpeed) >= CRASH_SPEED && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot) crash(pilot);
+        if (lastSpeed >= CRASH_SPEED && speed < lastSpeed * 0.5 && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot
+                && (horizontalCollision || !level().noCollision(this, getBoundingBox().move(lastMove.normalize().scale(0.25))))) {
+            crash(pilot);
+        }
         lastSpeed = speed;
+        if (speed > 1e-3) lastMove = moved;
         lastPos = position();
     }
 
@@ -96,6 +103,39 @@ public class ShellEntity extends PathfinderMob {
             server.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, front.x, front.y, front.z, 8, 0.2, 0.2, 0.2, 0.1);
         }
         pilot.displayClientMessage(Component.translatable("message.headinajar.shell_crash", getDisplayName()), true);
+    }
+
+    /**
+     * Where a jar getting out of a wide body stands: just clear of its box, behind it or to a side (in front last),
+     * on ground if there is any, so a click on the jar, or on what it leaves there, reaches it and not the body.
+     */
+    public static Vec3 clearOf(net.minecraft.world.entity.Entity vehicle, net.minecraft.world.entity.LivingEntity passenger) {
+        var level = vehicle.level();
+        // sized as the plain jar it is about to be (a pilot is player-sized in the cockpit)
+        var box = passenger instanceof net.minecraft.world.entity.player.Player player && player.hasData(ModRegistry.JAR_STATE)
+                && player.getData(ModRegistry.JAR_STATE).form().isJarred()
+                ? (player.getData(ModRegistry.JAR_STATE).compact() ? com.coolfreeze23.headinajar.form.FormEvents.COMPACT_SIZE
+                        : com.coolfreeze23.headinajar.form.FormEvents.JAR_SIZE).makeBoundingBox(Vec3.ZERO)
+                : passenger.getBoundingBox().move(passenger.position().reverse());
+        double reach = vehicle.getBbWidth() / 2 + box.getXsize() / 2 + 0.1;
+        // square to the box (whose sides are the world's axes), the side nearest behind the body first
+        var facing = net.minecraft.core.Direction.fromYRot(vehicle.getYRot());
+        Vec3 fallback = null;
+        for (var dir : new net.minecraft.core.Direction[]{facing.getOpposite(), facing.getClockWise(), facing.getCounterClockWise(), facing}) {
+            Vec3 at = new Vec3(vehicle.getX() + dir.getStepX() * reach, vehicle.getY(), vehicle.getZ() + dir.getStepZ() * reach);
+            if (!level.noCollision(passenger, box.move(at))) continue;
+            boolean ground = !level.noCollision(passenger, box.move(at).move(0, -1.1, 0).setMaxY(at.y));
+            if (ground) return at;
+            if (fallback == null) fallback = at;
+        }
+        return fallback;
+    }
+
+    /** A jar getting out stands beside the shell, not inside its box (where it would board it again at its next click). */
+    @Override
+    public Vec3 getDismountLocationForPassenger(net.minecraft.world.entity.LivingEntity passenger) {
+        Vec3 clear = clearOf(this, passenger);
+        return clear != null ? clear : super.getDismountLocationForPassenger(passenger);
     }
 
     public void openCargo(ServerPlayer player) {

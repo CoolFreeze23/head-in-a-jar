@@ -1,0 +1,115 @@
+# Power and charging (second repair pass), real input. Default profile and SMOKE_PROFILE=pack.
+# P1 a pile between a hungry Leyden Jar and a Charging Dock shares, and says what went in; P2 a jar with Hop Springs
+# hops onto a stocked dock and charges, told so, with sparks; P3 a carried head set down on a dock stands on the plate
+# and charges; P4 an unpowered Cradle says what it lacks; P5 the tooltips.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+report == P1 a pile feeding a Leyden Jar (west) and a Charging Dock (east)
+/setblock 0 -60 5 headinajar:galvanic_pile
+/setblock -1 -60 5 headinajar:leyden_jar
+/setblock 1 -60 5 headinajar:charging_dock
+/tp @s 0.5 -60 3.5 0 35
+/give @s minecraft:rotten_flesh 12
+wait 5
+hotbar 1
+key use
+wait 10
+report (empty hand: the status)
+hotbar 9
+key use
+/tick sprint 400
+wait 60
+inspect block -1 -60 5
+inspect block 1 -60 5
+key use
+report == P2 a jar with Hop Springs hops onto a stocked dock and charges
+/setblock 10 -60 5 headinajar:charging_dock
+/data merge block 10 -60 5 {Energy:20000}
+/tp @s 30.5 -60 30.5
+jar
+wait 5
+fit hop_springs
+charge 20000
+/tp @s 10.5 -60 3.2 0 20
+wait 10
+key forward hold 4
+wait 15
+inspect me
+key forward hold 4
+wait 15
+inspect me
+observe 60
+key forward hold 3
+wait 40
+observe 30
+inspect me
+shot p2_on_dock
+wait 60
+inspect me
+inspect block 10 -60 5
+report == P3 a carried head set down on a dock (sneak-use the satchel, looking at it), then the head charges
+/setblock 20 -60 5 headinajar:charging_dock
+/data merge block 20 -60 5 {Energy:20000}
+/tp @s 40.5 -60 40.5
+body
+wait 5
+/tp @s 50.5 -60 50.5 0 0
+/give @s headinajar:head_satchel
+wait 5
+separate
+wait 10
+lookat head_jar
+key use
+wait 10
+charge 30000
+/tp @s 20.5 -60 3.6 0 40
+wait 10
+report (the satchel in hand)
+hotbar 3
+key sneak down
+key use
+key sneak up
+wait 10
+inspect near head_jar 4
+shot p3_head_on_dock
+wait 130
+inspect me
+report == P4 the head into an unpowered Cradle by a click
+/setblock 30 -60 5 headinajar:life_support_cradle
+/tp @s 20.5 -60 3.6 0 40
+wait 5
+lookat head_jar
+key use
+wait 10
+/tp @s 30.5 -60 3.6 0 40
+wait 5
+hotbar 9
+key use
+wait 20
+inspect me
+inspect block 30 -60 5
+report == P5 the tooltips: Galvanic Pile, Assembly Gantry, Charging Dock, Cradle
+/give @s headinajar:galvanic_pile
+/give @s headinajar:assembly_gantry
+/give @s headinajar:charging_dock
+/give @s headinajar:life_support_cradle
+wait 5
+tooltip on
+hotbar 4
+wait 5
+shot p5_tip_pile
+hotbar 5
+wait 5
+shot p5_tip_gantry
+hotbar 6
+wait 5
+shot p5_tip_dock
+hotbar 7
+wait 5
+shot p5_tip_cradle
+tooltip off

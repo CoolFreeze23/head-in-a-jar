@@ -1,0 +1,81 @@
+# A body dies with your things on it (second repair pass), real input. Default profile.
+# C1 the linked body dies carrying a Suture Kit and 59 iron: you wake in your head; C2 Swap into the corpse is refused
+# with what to do; C3 the jar menu's Courier brings the corpse; a click on it as the jar sews the head back on with the
+# kit from its effects; C4 the same death, then Let go and respawn: the owner's click opens the corpse; C5 the fresh
+# body stands beside its corpse for 20 seconds: nothing hurts it.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 0.5 0 0
+/give @s headinajar:suture_kit
+/give @s minecraft:iron_ingot 59
+wait 5
+separate
+wait 5
+inspect near head_jar 4
+/tp @s 0.5 -60 25.5 0 0
+wait 20
+report == C1 the body dies (as a zombie or a fall would kill it)
+/damage @s 1000 minecraft:generic
+wait 10
+inspect me
+inspect near headless_body 40
+report == C2 swap into the corpse
+key swap
+wait 10
+report == C3 the jar menu's Courier, then 32 seconds
+key menu
+wait 10
+widget "Courier"
+wait 10
+press escape
+wait 640
+inspect me
+inspect near headless_body 8
+lookat headless_body
+wait 3
+shot c3_corpse_delivered
+key use
+wait 20
+inspect me
+report == C4 the same death, then Let go
+/tp @s 30.5 -60 0.5 0 0
+wait 5
+separate
+wait 5
+/tp @s 30.5 -60 10.5 0 0
+wait 5
+/damage @s 1000 minecraft:generic
+wait 20
+inspect me
+key menu
+wait 10
+widget "Let go"
+wait 10
+observe 60
+widget "Yes"
+wait 60
+observe 30
+widget "Respawn"
+wait 40
+grab
+inspect me
+/execute at @e[type=headinajar:headless_body,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 20
+wait 10
+lookat headless_body
+key use
+wait 20
+slots
+shot c4_corpse_open
+closegui
+grab
+report == C5 beside the corpse, 20 seconds
+inspect me
+wait 200
+inspect me
+wait 200
+inspect me
+inspect near all 24

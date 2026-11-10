@@ -114,6 +114,9 @@ public final class FormActions {
         if (head == null && !state.carryingHead()) return false;
 
         HeadlessBody body = leaveBody(player, false);
+        // what the body was going through stays with the body: a burning body burns on, the jar wakes up cool
+        body.setRemainingFireTicks(player.getRemainingFireTicks());
+        body.fallDistance = player.fallDistance;
         registry.setBody(player.getUUID(), new HeadRegistry.Body(body.getUUID(), HeadRegistry.Spot.of(body), false));
         state.setBody(body.getUUID());
         becomeHead(player, state, head);
@@ -174,6 +177,8 @@ public final class FormActions {
         state.setForm(Form.JAR);
         state.setDeadLinkTicks(0);
         player.setSprinting(false);
+        player.clearFire();
+        player.fallDistance = 0;
         player.stopRiding();
         if (to != null) {
             player.teleportTo(headLevel, to.x, to.y, to.z, player.getYRot(), player.getXRot());

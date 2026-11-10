@@ -1,0 +1,55 @@
+# A weak link drops clicks (second repair pass), real input. Default profile and SMOKE_PROFILE=pack.
+# L1 at about 12% link quality, sixteen right-clicks placing stone: each dropped one flashes on the link bar; the first
+# three say why and what helps, later ones the short line.
+@world flat
+@gamemode survival
+@observe 12
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 -90 0
+wait 5
+separate
+wait 5
+inspect near head_jar 4
+/tp @s -43.0 -60 0.5 90 35
+/give @s minecraft:stone 64
+wait 40
+inspect me
+hotbar 1
+key use
+wait 6
+shot l1_click_1
+key use
+wait 6
+key use
+wait 6
+shot l1_click_3
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+key use
+wait 6
+inspect me
