@@ -203,9 +203,8 @@
         "en_us": "Barrier motor whirs",
         "pt_br": "Motor da cancela zune"
       },
-      "animator_keys": "replaces key 2 (chair.servo) and the server's piston.extend at 0",
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 0 (the barrier's 3-tick wind-up 0-3; motor start). Replaces piston.extend at 0; remove the chair.servo key at 2."
+      "how_to_play": "Server at t 0: the barrier lifts 0-3 (the motor move) and holds 3-5."
     },
     {
       "id": "headinajar:chair.barrier_drop",
@@ -233,7 +232,7 @@
         "pt_br": "Cancela desce"
       },
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 3: the valve opens in the hold (3-5), the stroke accelerates 5-13 into contact and lets go there; chair.barrier_latch supplies the hit at 13. Narrow pitch range: the end must stay on 13."
+      "how_to_play": "Server at t 3: the valve opens in the hold, the stroke accelerates 5-13 into contact and lets go there; chair.barrier_latch is the hit at 13."
     },
     {
       "id": "headinajar:chair.barrier_latch",
@@ -261,7 +260,7 @@
         "pt_br": "Cancela trava"
       },
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 11: two ratchet teeth as the tip rides over the pawl, the strike lands at 100 ms on the contact tick 13. Replaces iron_trapdoor.close at 13."
+      "how_to_play": "Server at t 11: two ratchet teeth, the strike at 100 ms on the contact tick 13."
     },
     {
       "id": "headinajar:chair.barrier_settle",
@@ -286,14 +285,14 @@
       ],
       "subtitle": null,
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 17: the bounce falls back onto the latch, strike at 100 ms on t 19. Replaces the second trapdoor close at 19. No subtitle (part of the same clamping)."
+      "how_to_play": "Server at t 17: the bounce falls back onto the latch, strike at 100 ms on t 19. No subtitle (part of the clamping)."
     },
     {
-      "id": "headinajar:chair.servo_horn",
+      "id": "headinajar:chair.hood_nod",
       "files": [
-        "headinajar:chair/servo_horn_1",
-        "headinajar:chair/servo_horn_2",
-        "headinajar:chair/servo_horn_3"
+        "headinajar:chair/hood_nod_1",
+        "headinajar:chair/hood_nod_2",
+        "headinajar:chair/hood_nod_3"
       ],
       "volume": 1.0,
       "pitch": [
@@ -304,10 +303,10 @@
       "fixed_range": false,
       "category": "BLOCKS",
       "pitch_per_play": [
-        1.0,
+        0.857,
         1.2
       ],
-      "loudness_class": "servo (M max target -27.0)",
+      "loudness_class": "servo (small move) (M max target -27.0)",
       "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
@@ -315,12 +314,12 @@
         56
       ],
       "subtitle": {
-        "en_us": "Gas horn swings",
-        "pt_br": "Corneta de gás gira"
+        "en_us": "Dome nods",
+        "pt_br": "Cúpula acena"
       },
-      "animator_keys": "key 21: change chair.servo_tick to chair.servo_horn; add a key 56 chair.servo_horn|1.0|1.2",
-      "needs_patient_muffled_version": true,
-      "how_to_play": "Key 21 at pitch 1.0 (the horn stands up 21-27) and key 56 at pitch 1.2 (it folds 56-61: pitch 1.2 makes the 6-tick file last 5 ticks)."
+      "clip_keys": "key 21: change chair.servo_tick to chair.hood_nod|1.0|0.857; add key 56 chair.hood_nod|1.0|1.2",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Key 21 at pitch 0.857 (the 6-tick file lasts 7: the dome nods toward the face 21-28) and key 56 at 1.2 (5 ticks: it nods back 56-61). A soft stop, not a clunk. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.gas_hiss",
@@ -348,7 +347,7 @@
         "pt_br": "Anestésico chia"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Server at t 30 at the gas locator. Its last little puff lands 1.34-1.46 s in (t 57-59), after the hiss has died and the third beep (the joke): do not cut it short. Replaces fire.extinguish."
+      "how_to_play": "Server at t 30 at the gas locator under the dome. Its last little puff lands 1.34-1.42 s in (t 57-58), after the hiss has died and after the third beep: do not cut it short."
     },
     {
       "id": "headinajar:chair.beep",
@@ -382,9 +381,8 @@
         "en_us": "DOLORES counts down",
         "pt_br": "DOLORES faz a contagem"
       },
-      "animator_keys": "keys 40, 47, 54: pitch 1.0, 0.8909, 0.7937 instead of 1.2, 1.0, 0.8; key 94 (chair.bip): change to chair.beep|1.0|1.1892",
       "needs_patient_muffled_version": true,
-      "how_to_play": "Keys 40, 47, 54 at pitch 1.0, 0.8909, 0.7937 (E5, D5, C5) and the confirmation bip at 94 at 1.1892 (G5). No random pitch. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Keys 40, 47, 54 at pitch 1.0, 0.8909, 0.7937 (E5, D5, C5) and the confirmation bip at 94 at 1.1892 (G5). No random pitch. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.servo_tick",
@@ -409,12 +407,12 @@
         68,
         74,
         80,
-        86
+        86,
+        212
       ],
       "subtitle": null,
-      "animator_keys": "keys 68-86 (chair.scan_tick): change to chair.servo_tick|0.6|1.3; idle key 52 and aftercare key 11 already name it (volume 0.5)",
       "needs_patient_muffled_version": true,
-      "how_to_play": "The scan ticks (keys 68, 74, 80, 86) at volume 0.6, pitch 1.3; idle (52) and aftercare (11) at volume 0.5 (idle life, about -37). No subtitle: small life."
+      "how_to_play": "The scan ticks (keys 68, 74, 80, 86) at volume 0.6, pitch 1.3; the lid leaning out (212), idle (52) at volume 0.5. No subtitle: small life."
     },
     {
       "id": "headinajar:chair.scan_chirp",
@@ -439,9 +437,9 @@
         "en_us": "Scanner chirps",
         "pt_br": "Scanner apita"
       },
-      "animator_keys": "remove key 64 (chair.servo): the chirp covers the ring's start",
+      "clip_keys": "remove key 64 (chair.servo): the chirp covers the ring's start",
       "needs_patient_muffled_version": true,
-      "how_to_play": "Server at t 60, replacing beacon.activate. 14 ticks long. The scan loop (hum x1.5, 1 Hz sweep) is not in this batch."
+      "how_to_play": "Server at t 60. 14 ticks long. The scan loop is not made yet."
     },
     {
       "id": "headinajar:chair.latch",
@@ -468,7 +466,7 @@
         "pt_br": "Algo trava"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 100 (the point of no return, with consume()). Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 100 (the point of no return). Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.whine_rise",
@@ -496,14 +494,14 @@
         "pt_br": "Lâmina toma impulso"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 104, fixed pitch 1.0 (a pitch below 1 would stretch it past 114). Silent from 500 ms (t 114): 114-120 must be silent, so stop every chair loop by 114 too. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 104, fixed pitch 1.0. Silent from 500 ms (t 114): 114-120 is silent on purpose, apart from the curtain settling. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
-      "id": "headinajar:chair.placard",
+      "id": "headinajar:chair.curtain",
       "files": [
-        "headinajar:chair/placard_1",
-        "headinajar:chair/placard_2",
-        "headinajar:chair/placard_3"
+        "headinajar:chair/curtain_1",
+        "headinajar:chair/curtain_2",
+        "headinajar:chair/curtain_3"
       ],
       "volume": 1.0,
       "pitch": [
@@ -513,20 +511,20 @@
       "attenuation": 16,
       "fixed_range": false,
       "category": "BLOCKS",
-      "loudness_class": "servo (light plate and rattle) (M max target -27.5)",
-      "hit_ms": 4,
+      "loudness_class": "servo (cloth and rings) (M max target -27.0)",
+      "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        110,
+        107,
         222
       ],
       "subtitle": {
-        "en_us": "Privacy placard flips up",
-        "pt_br": "Placa de privacidade sobe"
+        "en_us": "Curtain: privacy, please",
+        "pt_br": "Cortina de privacidade sobe"
       },
-      "animator_keys": "key 110 already names it; add a key at the encore's arrival (about 222)",
+      "clip_keys": "key 112 (chair.placard): move to 107 and rename chair.curtain; key 222 (chair.placard): rename chair.curtain",
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 110: the placard reaches upright at 4 ms, two rattles as it settles. Also at the encore (it comes up again about 222). Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Keys at the start of each whip up: 107 (up 107-112, settles 114) and 222 (up 222-227, settles 229). The rings bunch at the rail's end at 250 ms. Replaces chair.placard. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.cut",
@@ -553,7 +551,32 @@
         "pt_br": "Lâmina separa"
       },
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 120, the contact tick, to everyone except the patient (the patient hears total silence for 1 s: no muffled version, nothing). Register fixed-range 24. Replaces booth_cut and sheep.shear."
+      "how_to_play": "Server at t 120, the contact tick, to everyone except the patient (the patient hears total silence). Register fixed-range 24."
+    },
+    {
+      "id": "headinajar:chair.plonk",
+      "files": [
+        "headinajar:chair/plonk_1",
+        "headinajar:chair/plonk_2",
+        "headinajar:chair/plonk_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (soft knock) (M max target -29.0)",
+      "hit_ms": 150,
+      "contact_offset_ticks": 3,
+      "chair_ticks": [
+        125
+      ],
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Key 122 (the top of the hop): the landing knock is at 150 ms, on t 125. No subtitle (part of the cut). Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.ding",
@@ -583,9 +606,39 @@
         "en_us": "DOLORES dings politely",
         "pt_br": "DOLORES toca a campainha"
       },
-      "animator_keys": "key 230: pitch 1.2599 instead of 1.3 (a major third up, the motif's E)",
       "needs_patient_muffled_version": false,
-      "how_to_play": "Key 128 at pitch 1.0, to everyone (the patient is in the silent second: exclude them if the client silence is built); key 230 (lamp green) at 1.2599. No random pitch. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 128 at pitch 1.0; key 230 (lamp green) at 1.2599. No random pitch. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.saline_glug",
+      "vanilla_files": [
+        "minecraft:item/bottle/fill1",
+        "minecraft:item/bottle/fill2",
+        "minecraft:item/bottle/fill3",
+        "minecraft:item/bottle/fill4"
+      ],
+      "vanilla_note": "Reference these vanilla sound files by name in sounds.json (nothing is shipped); they follow the player's resource pack.",
+      "volume": 1.0,
+      "pitch": [
+        0.8,
+        0.9
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glug (M max target -24.0)",
+      "contact_offset_ticks": 0,
+      "chair_ticks": [
+        140,
+        199,
+        205
+      ],
+      "subtitle": {
+        "en_us": "Saline glugs",
+        "pt_br": "Soro gorgoleja"
+      },
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Vanilla bottle-fill recordings referenced by name in sounds.json. Server at t 140, 199, 205, pitch 0.80-0.90."
     },
     {
       "id": "headinajar:chair.lid_pop",
@@ -612,38 +665,7 @@
         "pt_br": "Tampa do pote abre"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 141: the suction pop at 3 ms, the hinge creaks as it flips, the lid lands open at 350 ms (t 148). Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
-    },
-    {
-      "id": "headinajar:chair.saline_glug",
-      "vanilla_files": [
-        "minecraft:item/bottle/fill1",
-        "minecraft:item/bottle/fill2",
-        "minecraft:item/bottle/fill3",
-        "minecraft:item/bottle/fill4"
-      ],
-      "vanilla_note": "Reference these vanilla sound files by name in sounds.json (nothing is shipped); they follow the player's resource pack.",
-      "volume": 1.0,
-      "pitch": [
-        0.8,
-        0.9
-      ],
-      "attenuation": 16,
-      "fixed_range": false,
-      "category": "BLOCKS",
-      "loudness_class": "glug (M max target -24.0)",
-      "contact_offset_ticks": 0,
-      "chair_ticks": [
-        140,
-        198,
-        204
-      ],
-      "subtitle": {
-        "en_us": "Saline glugs",
-        "pt_br": "Soro gorgoleja"
-      },
-      "needs_patient_muffled_version": true,
-      "how_to_play": "Vanilla bottle-fill recordings referenced by name in sounds.json (a pour is turbulence, which synthesis does badly). Server at t 140, 198, 204 at the pour locator, pitch 0.80-0.90 (a bigger vessel than a bottle). Replaces the plain item.bottle.fill calls."
+      "how_to_play": "Key 141: the suction pop at 3 ms, the hinge creaks as it flips, the lid lands open at 350 ms (t 148). Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.clamp",
@@ -667,11 +689,11 @@
         148
       ],
       "subtitle": {
-        "en_us": "Pincer grips",
-        "pt_br": "Pinça segura"
+        "en_us": "Jaws grip",
+        "pt_br": "Garras seguram"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 148: the jaw meets the forehead at 4 ms; the solenoid locks 60 ms later. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 148: the jaws meet the temples at 4 ms; the solenoid locks 60 ms later. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.hydraulic",
@@ -688,26 +710,48 @@
       "attenuation": 16,
       "fixed_range": false,
       "category": "BLOCKS",
-      "pitch_per_play": [
-        1.0,
-        1.0,
-        1.1429
-      ],
       "loudness_class": "servo (hydraulic stroke) (M max target -27.0)",
       "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
         152,
-        181,
-        206
+        184
       ],
       "subtitle": {
-        "en_us": "Hood hydraulics hiss",
-        "pt_br": "Hidráulica do capô chia"
+        "en_us": "Mast hydraulics hiss",
+        "pt_br": "Hidráulica do mastro chia"
       },
-      "animator_keys": "keys 152, 181, 206 already name it: pitch 1.0, 1.0 (not 0.9), 1.1429 (not 1.1)",
       "needs_patient_muffled_version": true,
-      "how_to_play": "Keys 152 (hood lifts 152-160), 181 (lowers 181-189) at pitch 1.0 and 206 (rises 206-213) at 1.1429 so the 8-tick stroke lasts 7; the soft stop lands on the move's last tick. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Keys 152 (the rail telescopes up 8 px: arrives 161, settles 163) and 184 (lowers 13 px: arrives 193, settles 195), pitch 1.0: the stop is at 450 ms, the settle knock at 550 ms. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.hydraulic_short",
+      "files": [
+        "headinajar:chair/hydraulic_short_1",
+        "headinajar:chair/hydraulic_short_2",
+        "headinajar:chair/hydraulic_short_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (hydraulic stroke) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "chair_ticks": [
+        204
+      ],
+      "subtitle": {
+        "en_us": "Mast hydraulics hiss",
+        "pt_br": "Hidráulica do mastro chia"
+      },
+      "clip_keys": "key 204: change chair.hydraulic|0.5|1.1429 to chair.hydraulic_short|1.0|1.0",
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Key 204: the rail rises (arrives 211, settles 213). Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.servo",
@@ -718,8 +762,8 @@
       ],
       "volume": 1.0,
       "pitch": [
-        0.97,
-        1.03
+        0.98,
+        1.02
       ],
       "attenuation": 16,
       "fixed_range": false,
@@ -728,16 +772,44 @@
       "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        166,
-        217
+        166
       ],
       "subtitle": {
-        "en_us": "Hood swings",
-        "pt_br": "Capô gira"
+        "en_us": "Dome swings",
+        "pt_br": "Cúpula gira"
       },
-      "animator_keys": "key 166: pitch 1.0 (not 0.9); add a key 217 chair.servo|1.0|1.0 (the swing home); keys 2, 64, 219 move to other events (see their entries)",
+      "clip_keys": "key 166: pitch 1.0",
       "needs_patient_muffled_version": true,
-      "how_to_play": "Keys 166 (swing to the jar, 166-177) and 217 (swing home, 217-228): the stop clunk lands on 177 and 228. Pitch 0.97-1.03 keeps the clunk within a third of a tick. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 166: the small wind-back bump (166-168), the 180-degree swing to the jar (168-180, stop clunk on 180), the settle tick at 183. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.servo_home",
+      "files": [
+        "headinajar:chair/servo_home_1",
+        "headinajar:chair/servo_home_2",
+        "headinajar:chair/servo_home_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.98,
+        1.02
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "chair_ticks": [
+        218
+      ],
+      "subtitle": {
+        "en_us": "Dome swings",
+        "pt_br": "Cúpula gira"
+      },
+      "clip_keys": "key 218: change chair.servo to chair.servo_home|1.0|1.0",
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Key 218: the swing home (218-229, stop clunk on 229), the settle tick at 233. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.plop",
@@ -758,20 +830,20 @@
       "loudness_class": "glass clink class (small liquid event) (M max target -27.0)",
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        197
+        198
       ],
       "subtitle": {
         "en_us": "Head plops in",
         "pt_br": "Cabeça cai no soro"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Vanilla bubble-pop recordings by name, pitched down to one big bubble, at key 197 when the head drops into the jar. Key volume 1.0."
+      "how_to_play": "Vanilla bubble-pop recordings by name, pitched down to one big bubble, at key 198 when the head drops into the saline."
     },
     {
-      "id": "headinajar:chair.antenna",
+      "id": "headinajar:chair.handshake",
       "files": [
-        "headinajar:chair/antenna_1",
-        "headinajar:chair/antenna_2"
+        "headinajar:chair/handshake_1",
+        "headinajar:chair/handshake_2"
       ],
       "volume": 1.0,
       "pitch": [
@@ -781,85 +853,18 @@
       "attenuation": 16,
       "fixed_range": false,
       "category": "BLOCKS",
-      "loudness_class": "servo (small, with static) (M max target -28.0)",
+      "loudness_class": "servo (static) (M max target -28.0)",
       "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
         214
       ],
       "subtitle": {
-        "en_us": "Antenna extends",
-        "pt_br": "Antena se estende"
-      },
-      "animator_keys": "remove key 219 (chair.servo): this file covers the rise",
-      "needs_patient_muffled_version": true,
-      "how_to_play": "Server at t 214, replacing beacon.power_select."
-    },
-    {
-      "id": "headinajar:chair.ratchet",
-      "files": [
-        "headinajar:chair/ratchet_1",
-        "headinajar:chair/ratchet_2",
-        "headinajar:chair/ratchet_3"
-      ],
-      "volume": 1.0,
-      "pitch": [
-        1.0,
-        1.0
-      ],
-      "attenuation": 16,
-      "fixed_range": false,
-      "category": "BLOCKS",
-      "pitch_per_play": [
-        1.0,
-        1.03,
-        1.06
-      ],
-      "loudness_class": "ratchet (whole) (M max target -27.0)",
-      "hit_ms": 4,
-      "contact_offset_ticks": 0,
-      "chair_ticks": [
-        220,
-        224,
-        228
-      ],
-      "subtitle": {
-        "en_us": "Wrench ratchets",
-        "pt_br": "Chave aperta o parafuso"
+        "en_us": "Neural link handshakes",
+        "pt_br": "Conexão neural se inicia"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Server at t 220, 224, 228 at pitch 1.0, 1.03, 1.06 (tension rising), a different take each time. Replaces chain.place."
-    },
-    {
-      "id": "headinajar:chair.spark",
-      "files": [
-        "headinajar:chair/spark_1",
-        "headinajar:chair/spark_2",
-        "headinajar:chair/spark_3"
-      ],
-      "volume": 1.0,
-      "pitch": [
-        0.94,
-        1.06
-      ],
-      "attenuation": 16,
-      "fixed_range": false,
-      "category": "BLOCKS",
-      "loudness_class": "hiss (arc crackle) (M max target -24.5)",
-      "hit_ms": 4,
-      "contact_offset_ticks": 0,
-      "chair_ticks": [
-        222,
-        229,
-        236
-      ],
-      "subtitle": {
-        "en_us": "Antenna sparks",
-        "pt_br": "Antena solta faíscas"
-      },
-      "animator_keys": "add sound keys chair.spark|1.0|1.0 at 222, 229, 236 beside the electric_spark particle keys",
-      "needs_patient_muffled_version": true,
-      "how_to_play": "Keys 222, 229, 236 at the spark locator, with the particles. Random take and pitch."
+      "how_to_play": "Server at t 214 (from the dome's cap). Replaces chair.antenna."
     },
     {
       "id": "headinajar:chair.clink",
@@ -880,14 +885,79 @@
       "hit_ms": 4,
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        227
+        215
       ],
       "subtitle": {
         "en_us": "Jar lid clinks shut",
         "pt_br": "Tampa do pote fecha"
       },
       "needs_patient_muffled_version": true,
-      "how_to_play": "Key 227: the lid slams onto the jar. Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 215: the lid slams onto the jar. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.spark",
+      "files": [
+        "headinajar:chair/spark_1",
+        "headinajar:chair/spark_2",
+        "headinajar:chair/spark_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (arc crackle) (M max target -24.5)",
+      "hit_ms": 4,
+      "contact_offset_ticks": 0,
+      "chair_ticks": [
+        221,
+        228,
+        235
+      ],
+      "subtitle": {
+        "en_us": "Dome sparks",
+        "pt_br": "Cúpula solta faíscas"
+      },
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Keys 221, 228, 235 at the spark locator on the dome cap, with the particles. Random take and pitch."
+    },
+    {
+      "id": "headinajar:chair.ratchet",
+      "files": [
+        "headinajar:chair/ratchet_1",
+        "headinajar:chair/ratchet_2",
+        "headinajar:chair/ratchet_3"
+      ],
+      "volume": 0.7,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.03,
+        1.06
+      ],
+      "loudness_class": "ratchet (one click; the run of three about -27) (M max target -28.2)",
+      "hit_ms": 4,
+      "contact_offset_ticks": 0,
+      "chair_ticks": [
+        228,
+        230,
+        232
+      ],
+      "subtitle": {
+        "en_us": "Wrench ratchets",
+        "pt_br": "Chave aperta o parafuso"
+      },
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Server at t 228, 230, 232 at pitch 1.0, 1.03, 1.06, a different take each time, at volume 0.7: three clicks inside one 400 ms window add up (the run measures -23.8 at volume 1, -26.9 at 0.7, the whole-ratchet class). Each click is under 0.1 s and the gaps fall to -55 dB, so the three stay distinct at 100 ms apart."
     },
     {
       "id": "headinajar:chair.unlatch",
@@ -908,14 +978,14 @@
       "hit_ms": 50,
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        232
+        234
       ],
       "subtitle": {
         "en_us": "Barrier unlatches",
         "pt_br": "Cancela destrava"
       },
       "needs_patient_muffled_version": false,
-      "how_to_play": "Key 232: the latch vents at once and lets go at 50 ms (t 233) as the barrier starts to lift. Also the abort (with chair.barrier_lift). Keyframe volume 1.0 (the file carries the loudness; the 0.2-0.6 key volumes in chair_anim.py would put it 4-14 dB under its class)."
+      "how_to_play": "Key 234: the latch vents at once and lets go at 50 ms (t 235). Also the abort (with chair.barrier_lift). Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
       "id": "headinajar:chair.barrier_lift",
@@ -936,14 +1006,225 @@
       "hit_ms": 3,
       "contact_offset_ticks": 0,
       "chair_ticks": [
-        233
+        236
       ],
       "subtitle": {
         "en_us": "Barrier rises",
         "pt_br": "Cancela sobe"
       },
       "needs_patient_muffled_version": false,
-      "how_to_play": "Server at t 233: the barrier lifts 233-239 and stops upright on 239."
+      "how_to_play": "Server at t 236: the barrier lifts 236-240 and stops on 240 (it overshoots; aftercare settles it)."
+    },
+    {
+      "id": "headinajar:chair.tap",
+      "files": [
+        "headinajar:chair/tap_1",
+        "headinajar:chair/tap_2",
+        "headinajar:chair/tap_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (idle life) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"ready\", keys 8 and 16: the waiting barrier taps toward the patient. Attenuation 8, no subtitle (idle life). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.drawer_out",
+      "files": [
+        "headinajar:chair/drawer_out_1",
+        "headinajar:chair/drawer_out_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (slide) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jar tray slides out",
+        "pt_br": "Bandeja do pote desliza"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"tray_out\", key 1: the slide runs 2-11 decelerating; chair.drawer_stop at key 11. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.drawer_in",
+      "files": [
+        "headinajar:chair/drawer_in_1",
+        "headinajar:chair/drawer_in_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (slide) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jar tray slides in",
+        "pt_br": "Bandeja do pote recolhe"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"tray_in\", key 1: the slide runs 2-12; chair.drawer_stop at key 12. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.drawer_stop",
+      "files": [
+        "headinajar:chair/drawer_stop_1",
+        "headinajar:chair/drawer_stop_2",
+        "headinajar:chair/drawer_stop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (soft stop) (M max target -29.0)",
+      "hit_ms": 4,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clips \"tray_out\" key 11 and \"tray_in\" key 12. No subtitle (part of the slide). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.servo_hiccup",
+      "files": [
+        "headinajar:chair/servo_hiccup_1",
+        "headinajar:chair/servo_hiccup_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (gear skip) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Dome hiccups",
+        "pt_br": "Cúpula engasga"
+      },
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Clip \"botch\", key 174: the swing catches and holds two ticks. It plays over the swing's own chair.servo (key 166). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.oopsie_squeak",
+      "files": [
+        "headinajar:chair/oopsie_squeak_1",
+        "headinajar:chair/oopsie_squeak_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (rubber squeak) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jaws squeak",
+        "pt_br": "Garras rangem"
+      },
+      "needs_patient_muffled_version": true,
+      "how_to_play": "Clip \"botch\", key 177: the head turns over between the rubber jaws. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.deflate",
+      "files": [
+        "headinajar:chair/deflate_1",
+        "headinajar:chair/deflate_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (pneumatic release) (M max target -24.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Chair deflates",
+        "pt_br": "Cadeira esvazia"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"abort\", key 4: everything springs back to rest. Plays with chair.unlatch and chair.barrier_lift (server). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.hiss",
+      "files": [
+        "headinajar:chair/vent_hiss_1",
+        "headinajar:chair/vent_hiss_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (vents) (M max target -25.0)",
+      "hit_ms": 50,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Vents puff",
+        "pt_br": "Respiros sopram"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"aftercare\", key 1: the puffs land at 50 and 100 ms with the clouds at keys 2 and 3. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:chair.bow_chime",
+      "files": [
+        "headinajar:chair/bow_chime_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "done chime (soft) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "DOLORES bows",
+        "pt_br": "DOLORES faz uma reverência"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Clip \"aftercare\", key 14: the dome's bow. No random pitch. Keyframe volume 1.0 (the file carries the loudness)."
     }
   ]
 }

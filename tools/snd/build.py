@@ -1,13 +1,16 @@
 """Rebuild every Head in a Jar sound made by the recipes in this folder, and the events.json hand-off.
 
-    python tools/snd/build.py                 # all sounds and events.json
-    python tools/snd/build.py chair.cut ...   # only these events (events.json is still rewritten in full)
+    python tools/snd/build.py                    # every sound, then events.json
+    python tools/snd/build.py chair.cut ...      # only these events (events.json is still rewritten in full)
+    python tools/snd/build.py --family chair     # only the events whose id starts with chair.
+    python tools/snd/build.py --help             # this text; builds nothing
 
 Each take is made from its recipe with seed = 1000 x take + crc32(event id) % 1000, finished to its loudness class
 and encoded bit-exact, so a rebuild gives the same bytes. Files go under
 src/main/resources/assets/headinajar/sounds/<family>/<name>_<take>.ogg. The nine older files in that folder belong to
 tools/make_sounds.py and are never touched here.
 """
+import argparse
 import json
 import os
 import sys
@@ -69,8 +72,8 @@ def event_entry(s):
     if s.get('ticks'):
         e['chair_ticks'] = s['ticks']
     e['subtitle'] = {'en_us': s['subtitle_en'], 'pt_br': s['subtitle_pt']} if s.get('subtitle_en') else None
-    if s.get('anim_key'):
-        e['animator_keys'] = s['anim_key']
+    if s.get('clip_key'):
+        e['clip_keys'] = s['clip_key']
     e['needs_patient_muffled_version'] = s.get('muffled', False)
     e['how_to_play'] = s['play']
     return e
@@ -100,22 +103,54 @@ def write_events():
             subtitle='en_us at most 24 characters, pt_br at most 30; null = compound layer, no subtitle.',
             needs_patient_muffled_version='true: the patient in the chair should hear a muffled version (a later job); until it exists, send the patient the same file.'),
         events=events)
-    with open(EVENTS_JSON, 'w', encoding='utf-8', newline='\n') as fh:
-        json.dump(doc, fh, indent=2, ensure_ascii=False)
-        fh.write('\n')
+    text = json.dumps(doc, indent=2, ensure_ascii=False) + '\n'
+    check_text(text)
+    with open(EVENTS_JSON, 'wb') as fh:
+        fh.write(text.encode('utf-8'))  # real UTF-8, no BOM: read it with encoding='utf-8', not the system code page
+    with open(EVENTS_JSON, 'rb') as fh:
+        assert json.loads(fh.read().decode('utf-8')) == doc, 'events.json does not read back as written'
     print('wrote', os.path.relpath(EVENTS_JSON, ROOT), len(events), 'events')
 
 
-def main(argv):
-    only = set(argv)
+# Text that went through a wrong decode (UTF-8 bytes read as Latin-1 or Windows-1252) shows these.
+MOJIBAKE = ('Ã', 'Â', 'â€', '�')
+
+
+def check_text(text):
+    """Fail on mojibake (double-encoded UTF-8) anywhere in the hand-off."""
+    for bad in MOJIBAKE:
+        if bad in text:
+            i = text.index(bad)
+            raise SystemExit(f'mojibake {bad!r} near: {text[max(0, i - 40):i + 20]!r}')
+
+
+def check_recipes():
     ids = [s['id'] for s in ALL]
     assert len(ids) == len(set(ids)), 'duplicate event id'
     for s in ALL:
         if s.get('subtitle_en'):
             assert len(s['subtitle_en']) <= 24 and len(s['subtitle_pt']) <= 30, (s['id'], 'subtitle too long')
+            check_text(s['subtitle_en'] + s['subtitle_pt'])
+
+
+def main(argv):
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('ids', nargs='*', help='event ids to build (default: all)')
+    ap.add_argument('--family', help='build only the events whose id starts with FAMILY. (for example chair)')
+    a = ap.parse_args(argv)
+    check_recipes()
+    known = {s['id'] for s in ALL}
+    for i in a.ids:
+        if i not in known:
+            raise SystemExit(f'unknown event id: {i}')
     for s in ALL:
-        if s.get('fn') and (not only or s['id'] in only):
-            build_one(s)
+        if not s.get('fn'):
+            continue
+        if a.ids and s['id'] not in a.ids:
+            continue
+        if a.family and not s['id'].startswith(a.family + '.'):
+            continue
+        build_one(s)
     write_events()
 
 

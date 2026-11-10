@@ -22,7 +22,8 @@ public final class ChairTimeline {
     public static final int CUT = 120;
     public static final int GLUG_LID = 140;
     public static final int[] GLUG_POUR = {199, 205};
-    public static final int ANTENNA = 214;
+    /** The neural link's handshake: static from the dome's cap. */
+    public static final int HANDSHAKE = 214;
     public static final int[] RATCHET = {228, 230, 232};
     public static final int BARRIER_LIFT = 236;
 

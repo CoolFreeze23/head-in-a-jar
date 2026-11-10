@@ -92,6 +92,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue HANDSHAKE = C
             .comment("Play the Neural Handshake timing game when first mounting a host (off: a flat +5% sync).")
             .define("handshake", true);
+    public static final ModConfigSpec.BooleanValue DOLORES_VOICE = C
+            .comment("DOLORES, the Separation Chair, speaks her lines aloud (off: her lines are shown as text only).")
+            .define("doloresVoice", true);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

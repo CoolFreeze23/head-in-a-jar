@@ -44,7 +44,7 @@ def lamp(on_ticks):
 
 # ------------------------------------------------------------------------------------------------------------------
 # Lamps: each lamp is a dark lens (static) under a lit cap (lamp_* bone). The caps are toggled with step scale keys
-# (0 = hidden, 1 = shown) purely as visibility; the integrator may instead hide the bone from the same table.
+# (0 = hidden, 1 = shown) purely as visibility; the renderer may instead hide the bone from the same table.
 # ------------------------------------------------------------------------------------------------------------------
 LAMPS_GREEN = {'lamp_green': {'scale': lamp([(0, 1)])}, 'lamp_amber': {'scale': lamp([(0, 0)])},
                'lamp_red': {'scale': lamp([(0, 0)])}}
@@ -67,7 +67,7 @@ IDLE = {
         'scan_plane': {'scale': lamp([(0, 0)])},
     }, **LAMPS_GREEN),
     'effects': [
-        (52, 'sound', 'headinajar:chair.servo_tick|0.25|1.4', None),
+        (52, 'sound', 'headinajar:chair.servo_tick|0.5|1.4', None),
     ],
 }
 
@@ -89,8 +89,8 @@ READY = {
         'scan_plane': {'scale': lamp([(0, 0)])},
     },
     'effects': [
-        (8, 'sound', 'headinajar:chair.tap|0.3|1.0', None),
-        (16, 'sound', 'headinajar:chair.tap|0.3|1.1', None),
+        (8, 'sound', 'headinajar:chair.tap|1.0|1.0', None),
+        (16, 'sound', 'headinajar:chair.tap|1.0|1.0', None),
     ],
 }
 
@@ -102,15 +102,15 @@ TRAY_OUT = {
     'length': 14, 'loop': 'hold',
     'bones': {'jar_tray': {'position': [k(0, R()), k(2, R(x=0.5), 'easeOutQuad'), k(11, R(x=-18.4), 'easeOutCubic'),
                                         k(14, R(x=-18), 'easeInOutSine')]}},
-    'effects': [(1, 'sound', 'headinajar:chair.drawer_out|0.5|1.0', None),
-                (11, 'sound', 'headinajar:chair.drawer_stop|0.4|1.0', None)],
+    'effects': [(1, 'sound', 'headinajar:chair.drawer_out|1.0|1.0', None),
+                (11, 'sound', 'headinajar:chair.drawer_stop|1.0|1.0', None)],
 }
 TRAY_IN = {
     'length': 14, 'loop': 'hold',
     'bones': {'jar_tray': {'position': [k(0, R(x=-18)), k(2, R(x=-18.5), 'easeOutQuad'),
                                         k(12, R(x=0.3), 'easeInOutCubic'), k(14, R(), 'easeInOutSine')]}},
-    'effects': [(1, 'sound', 'headinajar:chair.drawer_in|0.5|1.0', None),
-                (12, 'sound', 'headinajar:chair.drawer_stop|0.4|0.9', None)],
+    'effects': [(1, 'sound', 'headinajar:chair.drawer_in|1.0|1.0', None),
+                (12, 'sound', 'headinajar:chair.drawer_stop|1.0|1.0', None)],
 }
 
 
@@ -192,39 +192,38 @@ def operation(botch=False):
         'lamp_red': {'scale': lamp([(0, 0), (96, 1), (230, 0)])},
     }
     effects = [
-        (2, 'sound', 'headinajar:chair.servo|0.5|1.0', None),
-        (21, 'sound', 'headinajar:chair.servo_tick|0.3|1.2', None),
-        (40, 'sound', 'headinajar:chair.beep|0.5|1.2', None),
-        (47, 'sound', 'headinajar:chair.beep|0.5|1.0', None),
-        (54, 'sound', 'headinajar:chair.beep|0.5|0.8', None),
-        (64, 'sound', 'headinajar:chair.servo|0.3|1.3', None),
-        (68, 'sound', 'headinajar:chair.scan_tick|0.2|1.0', None),
-        (74, 'sound', 'headinajar:chair.scan_tick|0.2|1.0', None),
-        (80, 'sound', 'headinajar:chair.scan_tick|0.2|1.0', None),
-        (86, 'sound', 'headinajar:chair.scan_tick|0.2|1.0', None),
-        (94, 'sound', 'headinajar:chair.bip|0.4|1.0', None),
-        (100, 'sound', 'headinajar:chair.latch|0.5|1.0', None),
-        (104, 'sound', 'headinajar:chair.whine_rise|0.5|1.0', None),
-        (112, 'sound', 'headinajar:chair.curtain|0.5|1.0', None),
-        (122, 'sound', 'headinajar:chair.plonk|0.3|1.2', None),
-        (128, 'sound', 'headinajar:chair.ding|0.5|1.0', None),
-        (141, 'sound', 'headinajar:chair.lid_pop|0.4|1.0', None),
-        (148, 'sound', 'headinajar:chair.clamp|0.5|1.0', None),
-        (152, 'sound', 'headinajar:chair.hydraulic|0.5|1.1', None),
-        (166, 'sound', 'headinajar:chair.servo|0.5|0.9', None),
-        (184, 'sound', 'headinajar:chair.hydraulic|0.5|0.9', None),
-        (198, 'sound', 'headinajar:chair.plop|0.6|1.0', None),
+        (21, 'sound', 'headinajar:chair.hood_nod|1.0|0.857', None),
+        (40, 'sound', 'headinajar:chair.beep|1.0|1.0', None),
+        (47, 'sound', 'headinajar:chair.beep|1.0|0.8909', None),
+        (54, 'sound', 'headinajar:chair.beep|1.0|0.7937', None),
+        (56, 'sound', 'headinajar:chair.hood_nod|1.0|1.2', None),
+        (68, 'sound', 'headinajar:chair.servo_tick|0.6|1.3', None),
+        (74, 'sound', 'headinajar:chair.servo_tick|0.6|1.3', None),
+        (80, 'sound', 'headinajar:chair.servo_tick|0.6|1.3', None),
+        (86, 'sound', 'headinajar:chair.servo_tick|0.6|1.3', None),
+        (94, 'sound', 'headinajar:chair.beep|1.0|1.1892', None),
+        (100, 'sound', 'headinajar:chair.latch|1.0|1.0', None),
+        (104, 'sound', 'headinajar:chair.whine_rise|1.0|1.0', None),
+        (107, 'sound', 'headinajar:chair.curtain|1.0|1.0', None),
+        (122, 'sound', 'headinajar:chair.plonk|1.0|1.0', None),
+        (128, 'sound', 'headinajar:chair.ding|1.0|1.0', None),
+        (141, 'sound', 'headinajar:chair.lid_pop|1.0|1.0', None),
+        (148, 'sound', 'headinajar:chair.clamp|1.0|1.0', None),
+        (152, 'sound', 'headinajar:chair.hydraulic|1.0|1.0', None),
+        (166, 'sound', 'headinajar:chair.servo|1.0|1.0', None),
+        (184, 'sound', 'headinajar:chair.hydraulic|1.0|1.0', None),
+        (198, 'sound', 'headinajar:chair.plop|1.0|1.0', None),
         (199, 'particle', 'falling_water', 'pour'),
         (200, 'timeline', 'fx:bubbles:jar_anchor:4', None),
-        (204, 'sound', 'headinajar:chair.hydraulic|0.5|1.1', None),
-        (212, 'sound', 'headinajar:chair.servo_tick|0.3|1.0', None),
-        (215, 'sound', 'headinajar:chair.clink|0.5|1.0', None),
-        (218, 'sound', 'headinajar:chair.servo|0.4|1.2', None),
+        (204, 'sound', 'headinajar:chair.hydraulic_short|1.0|1.0', None),
+        (212, 'sound', 'headinajar:chair.servo_tick|0.5|1.0', None),
+        (215, 'sound', 'headinajar:chair.clink|1.0|1.0', None),
+        (218, 'sound', 'headinajar:chair.servo_home|1.0|1.0', None),
         (221, 'particle', 'electric_spark', 'spark'),
-        (222, 'sound', 'headinajar:chair.curtain|0.4|1.1', None),
+        (222, 'sound', 'headinajar:chair.curtain|1.0|1.0', None),
         (228, 'particle', 'electric_spark', 'spark'),
-        (230, 'sound', 'headinajar:chair.ding|0.5|1.3', None),
-        (234, 'sound', 'headinajar:chair.unlatch|0.5|1.0', None),
+        (230, 'sound', 'headinajar:chair.ding|1.0|1.2599', None),
+        (234, 'sound', 'headinajar:chair.unlatch|1.0|1.0', None),
         (235, 'particle', 'electric_spark', 'spark'),
     ]
     if botch:
@@ -239,8 +238,8 @@ def operation(botch=False):
             k(0, R()), k(174, R()), k(176, R(x=-30), 'easeInQuad'), k(177, R(x=-24), 'easeOutQuad'),
             k(181, R(x=-180), 'easeInOutCubic'), k(183, R(x=-172), 'easeOutQuad'), k(186, R(x=-180), 'easeInOutSine')]
         effects = effects + [
-            (174, 'sound', 'headinajar:chair.servo_hiccup|0.6|0.8', None),
-            (177, 'sound', 'headinajar:chair.oopsie_squeak|0.5|1.0', None),
+            (174, 'sound', 'headinajar:chair.servo_hiccup|1.0|1.0', None),
+            (177, 'sound', 'headinajar:chair.oopsie_squeak|1.0|1.0', None),
         ]
     return {'length': 240, 'loop': 'hold', 'bones': bones, 'effects': sorted(effects)}
 
@@ -263,7 +262,7 @@ ABORT = {
         'scan_plane': {'scale': lamp([(0, 0)])},
     },
     'effects': [
-        (4, 'sound', 'headinajar:chair.deflate|0.5|1.0', None),
+        (4, 'sound', 'headinajar:chair.deflate|1.0|1.0', None),
     ],
 }
 
@@ -280,10 +279,10 @@ AFTERCARE = {
         'scan_plane': {'scale': lamp([(0, 0)])},
     }, **LAMPS_GREEN),
     'effects': [
-        (1, 'sound', 'headinajar:chair.hiss|0.5|1.0', None),
+        (1, 'sound', 'headinajar:chair.hiss|1.0|1.0', None),
         (2, 'particle', 'cloud', 'vent_l'),
         (3, 'particle', 'cloud', 'vent_r'),
-        (14, 'sound', 'headinajar:chair.bow_chime|0.4|1.0', None),
+        (14, 'sound', 'headinajar:chair.bow_chime|1.0|1.0', None),
     ],
 }
 

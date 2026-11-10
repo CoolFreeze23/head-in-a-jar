@@ -13,7 +13,7 @@ name in `sounds.json`, so it ships nothing and follows the player's resource pac
 | `recipes_feedback.py` | The feedback family: refused, done, warning, danger. |
 | `recipes_jar.py` | The bare jar: tink, glug. |
 | `recipes_chair.py` | The Separation Chair's operation, keyed to its animation. |
-| `build.py` | Rebuilds every file and `events.json` from the recipes. |
+| `build.py` | Rebuilds every file and `events.json` from the recipes; writes `events.json` as UTF-8 (no BOM) and refuses to write it if any text shows mojibake. Read it with `encoding='utf-8'`. |
 | `measure.py` | Checks every file against its loudness class and its named vanilla reference; draws spectrogram pairs. |
 | `events.json` | Generated hand-off: each event's files, volume, pitch range, attenuation, category, timing and subtitles. |
 
@@ -23,7 +23,9 @@ Needs Python 3 with numpy and scipy, and ffmpeg (with libvorbis) on the PATH; `m
 
 ```
 python tools/snd/build.py                     # every sound, then events.json
-python tools/snd/build.py chair.cut           # one event
+python tools/snd/build.py chair.cut           # one event (events.json is always rewritten in full)
+python tools/snd/build.py --family chair      # one family
+python tools/snd/build.py --help              # usage; builds nothing
 python tools/snd/measure.py --refs DIR [--spectro]
 ```
 

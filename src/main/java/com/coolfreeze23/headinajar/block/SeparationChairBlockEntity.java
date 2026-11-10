@@ -370,10 +370,12 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         List<String> missing = missing();
         if (!missing.isEmpty()) {
             player.displayClientMessage(Component.translatable("dolores.headinajar.refuse." + missing.get(0)), true);
+            voiceRefusal(DoloresVoice.lineFor("dolores.headinajar.refuse." + missing.get(0)));
             return false;
         }
         if (FormActions.state(player).form().isDecapitated()) {
             player.displayClientMessage(Component.translatable("dolores.headinajar.refuse.already"), true);
+            voiceRefusal("refuse_already");
             return false;
         }
         BlockPos blocked = blockedAt(level, worldPosition, facing());
@@ -389,6 +391,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         player.closeContainer();
         changed();
         say(player, "start");
+        voice("start", DoloresVoice.BOTH);
         com.coolfreeze23.headinajar.Advance.grant(player, "signed");
         return true;
     }
@@ -402,16 +405,40 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         return "gui.headinajar.chair.space." + which;
     }
 
+    /** DOLORES's line as text on the patient's action bar (whether she also says it aloud is decided separately). */
     private void say(ServerPlayer player, String line) {
         player.displayClientMessage(Component.translatable("dolores.headinajar." + line).withStyle(net.minecraft.ChatFormatting.AQUA), true);
-        voice(player, line);
     }
 
-    /**
-     * VOICE LINE HOOK: DOLORES says the line "dolores.headinajar.{line}" to the patient here (start, gas, scan, cut,
-     * jar, done, oopsie, abort, already). Nothing is played yet.
-     */
-    private void voice(ServerPlayer player, String line) {
+    /** DOLORES says a line aloud from this chair, in every language (or only the given one). */
+    private void voice(String line, String lang) {
+        if (level instanceof ServerLevel server) DoloresVoice.say(server, worldPosition, line, lang);
+    }
+
+    // refusals aloud: one line per chair per few seconds, and the same one at most once per sitting
+    private long lastRefusalVoice = Long.MIN_VALUE / 2;
+    private final java.util.Set<String> saidThisSitting = new java.util.HashSet<>();
+    private UUID sitter;
+
+    /** Says a refusal or blade line aloud, unless she spoke one just now or already said this one to this sitter. */
+    public void voiceRefusal(String line) {
+        if (line == null || level == null) return;
+        ServerPlayer seated = seated();
+        UUID now = seated == null ? null : seated.getUUID();
+        if (!java.util.Objects.equals(now, sitter)) {
+            sitter = now;
+            saidThisSitting.clear();
+        }
+        long time = level.getGameTime();
+        if (time - lastRefusalVoice < DoloresVoice.REFUSAL_GAP || !saidThisSitting.add(line)) return;
+        lastRefusalVoice = time;
+        voice(line, DoloresVoice.BOTH);
+    }
+
+    /** A refusal at the chair (Refusals.deny): she says it too. */
+    @Override
+    public void showRefusal(ServerPlayer player, String reason) {
+        voiceRefusal(DoloresVoice.lineFor("refusal.headinajar." + reason));
     }
 
     /** A sound from the chair, heard by everyone in range. */
@@ -421,8 +448,12 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
 
     /** A chair sound event at volume 1, its pitch drawn from its range around {@code pitch}. */
     private void chair(net.neoforged.neoforge.registries.DeferredHolder<SoundEvent, SoundEvent> event, float pitch, Vec3 at, Player except) {
+        chair(event, 1, pitch, at, except);
+    }
+
+    private void chair(net.neoforged.neoforge.registries.DeferredHolder<SoundEvent, SoundEvent> event, float volume, float pitch, Vec3 at, Player except) {
         SoundEvent e = forPatient(event.get());
-        level.playSound(except, at.x, at.y, at.z, e, SoundSource.BLOCKS, 1, ChairSounds.pitch(event.getId().getPath(), pitch, level.random));
+        level.playSound(except, at.x, at.y, at.z, e, SoundSource.BLOCKS, volume, ChairSounds.pitch(event.getId().getPath(), pitch, level.random));
     }
 
     /**
@@ -435,6 +466,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, SeparationChairBlockEntity chair) {
         if (chair.onTray != null && level.getGameTime() % 5 == 0) chair.watchTray();
+        if (chair.afterLine != null) chair.afterLine(level.getGameTime());
         if (!chair.running()) return;
         ServerPlayer player = chair.seated();
         if (player == null || !player.getUUID().equals(chair.patient)) {
@@ -458,6 +490,11 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         Vec3 c = Vec3.atCenterOf(worldPosition);
         Vec3 jar = world(JAR_ANCHOR.add(0, 12, 0));
         if (opTick == ChairTimeline.CURTAIN_UP) say(player, "privacy");
+        // her voice, at each language's own ticks (each client plays only its own)
+        for (String lang : new String[]{DoloresVoice.EN, DoloresVoice.PT}) {
+            String line = DoloresVoice.operationLine(lang, opTick);
+            if (line != null) voice(line, lang);
+        }
         switch (opTick) {
             case ChairTimeline.MOTOR -> chair(ChairSounds.SERVO_BARRIER, 1, c, null);
             case ChairTimeline.BARRIER_DROP -> chair(ChairSounds.BARRIER_DROP, 1, c, null);
@@ -490,7 +527,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
                 chair(ChairSounds.SALINE_GLUG, 1, jar, null);
                 say(player, "jar");
             }
-            case ChairTimeline.ANTENNA -> chair(ChairSounds.ANTENNA, 1, c, null);
+            case ChairTimeline.HANDSHAKE -> chair(ChairSounds.HANDSHAKE, 1, c, null);
             case ChairTimeline.BARRIER_LIFT -> chair(ChairSounds.BARRIER_LIFT, 1, c, null);
             default -> {
             }
@@ -498,7 +535,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         for (int t : ChairTimeline.GLUG_POUR) if (opTick == t) chair(ChairSounds.SALINE_GLUG, 1, jar, null);
         for (int i = 0; i < ChairTimeline.RATCHET.length; i++) {
             if (opTick == ChairTimeline.RATCHET[i]) {
-                chair(ChairSounds.RATCHET, 1 + 0.03f * i, world(NECK), null);
+                // three clicks two ticks apart: played quieter so the run sits at a whole ratchet's loudness
+                chair(ChairSounds.RATCHET, 0.7f, 1 + 0.03f * i, world(NECK), null);
                 if (i == 0) {
                     Vec3 neck = world(NECK);
                     server.sendParticles(ParticleTypes.SMOKE, neck.x, neck.y, neck.z, 2, 0.08, 0.03, 0.08, 0.005);
@@ -610,6 +648,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         inJar = inGoggles = inCollar = ItemStack.EMPTY;
         botched = false;
         finishAt = level.getGameTime();
+        // her closing words come once the chime (or the botch's sting) is over
+        afterLine = botch ? "oopsie" : "done";
         handoff = docked ? HANDOFF_CRADLE : HANDOFF_ENTITY;
         jarKind = kindOf(items.getStackInSlot(SLOT_JAR));
         changed();
@@ -640,6 +680,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         chair(ChairSounds.UNLATCH, 1, c, null);
         chair(ChairSounds.BARRIER_LIFT, 1, c, null);
         if (player != null) say(player, why);
+        if ("abort".equals(why)) voice("abort", DoloresVoice.BOTH);
         changed();
     }
 
@@ -654,6 +695,20 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
             jar.setNoGravity(false);
             onTray = null;
         }
+    }
+
+    /** The line she says after the operation, still to come. */
+    private String afterLine;
+
+    private void afterLine(long now) {
+        boolean botch = "oopsie".equals(afterLine);
+        boolean pending = false;
+        for (String lang : new String[]{DoloresVoice.EN, DoloresVoice.PT}) {
+            long at = finishAt + DoloresVoice.afterDelay(lang, botch);
+            if (now == at) voice(afterLine, lang);
+            else if (now < at) pending = true;
+        }
+        if (!pending) afterLine = null;
     }
 
     /** The chair is being destroyed: whatever is in use comes out with the rest, so nothing is lost. */

@@ -119,6 +119,7 @@ public class SeparationChairBlock extends BaseEntityBlock {
             stack.consume(1, player);
             level.playSound(null, pos, SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 1, 1.2f);
             player.displayClientMessage(Component.translatable("dolores.headinajar.new_blade"), true);
+            chair.voiceRefusal("new_blade");
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }

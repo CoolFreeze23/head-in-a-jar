@@ -423,4 +423,76 @@ public class ChairGameTests {
             done(h, p, other);
         });
     }
+
+    /** The lines this chair has sent: [game time, line, language or ""]. */
+    private static java.util.List<String[]> said(GameTestHelper h) {
+        String pos = h.absolutePos(CHAIR).toShortString();
+        java.util.List<String[]> out = new java.util.ArrayList<>();
+        for (String e : com.coolfreeze23.headinajar.block.DoloresVoice.HISTORY) {
+            if (!e.contains(" " + pos + " ")) continue;
+            String[] p = e.replace(" " + pos + " ", " ").split(" ");
+            out.add(new String[]{p[0], p[1], p.length > 2 ? p[2] : ""});
+        }
+        return out;
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 320)
+    public static void doloresSpeaksOnScheduleAndNeverOverTheCut(GameTestHelper h) {
+        ServerPlayer p = player(h, CHAIR);
+        SeparationChairBlockEntity chair = chair(h, Direction.NORTH);
+        sit(h, p, Direction.NORTH);
+        h.assertTrue(pressSign(chair, p), "not started");
+        long start = h.getLevel().getGameTime();
+        h.runAfterDelay(300, () -> {
+            var lines = said(h);
+            h.assertTrue(!lines.isEmpty() && lines.get(0)[1].equals("start"), "no greeting");
+            for (String lang : new String[]{"en", "pt"}) {
+                var schedule = com.coolfreeze23.headinajar.block.DoloresVoice.operation(lang);
+                h.assertTrue(!schedule.isEmpty(), "no schedule for " + lang);
+                int previousEnd = com.coolfreeze23.headinajar.block.DoloresVoice.LINES.get("start").ticks(lang);
+                for (var e : schedule.entrySet()) {
+                    int from = e.getKey(), to = from + com.coolfreeze23.headinajar.block.DoloresVoice.LINES.get(e.getValue()).ticks(lang);
+                    h.assertTrue(from >= previousEnd, lang + " " + e.getValue() + " starts at " + from + " over the line before (ends " + previousEnd + ")");
+                    h.assertTrue(to <= 114 || from >= 120, lang + " " + e.getValue() + " plays over the silence before the cut");
+                    if (e.getValue().equals("scan")) h.assertTrue(to <= 100, lang + " scan runs into the latch");
+                    previousEnd = to;
+                    boolean sent = false;
+                    for (String[] l : lines) {
+                        sent |= l[1].equals(e.getValue()) && l[2].equals(lang) && Math.abs(Long.parseLong(l[0]) - start - from) <= 1; // the sign lands between two of the chair's ticks
+                    }
+                    h.assertTrue(sent, lang + " " + e.getValue() + " not sent at " + from);
+                }
+            }
+            for (String[] l : lines) {
+                h.assertFalse(l[1].equals("cut") || l[1].equals("privacy"), "the " + l[1] + " line was voiced");
+            }
+            h.assertTrue(lines.stream().anyMatch(l -> l[1].equals("done")), "no closing line: " + lines.size());
+            done(h, p);
+        });
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 200)
+    public static void refusalsAreVoicedOncePerSitting(GameTestHelper h) {
+        ServerPlayer p = player(h, CHAIR);
+        SeparationChairBlockEntity chair = chair(h, Direction.NORTH);
+        chair.energy().set(0);
+        sit(h, p, Direction.NORTH);
+        h.assertFalse(pressSign(chair, p), "started without power");
+        h.assertFalse(pressSign(chair, p), "started without power");
+        h.assertTrue(said(h).size() == 1 && said(h).get(0)[1].equals("refuse_power"), "voiced " + said(h).size() + " times at once");
+        h.runAfterDelay(70, () -> {
+            pressSign(chair, p);
+            h.assertTrue(said(h).size() == 1, "the same refusal voiced twice in one sitting");
+            chair.energy().set(50_000);
+            chair.items().setStackInSlot(SeparationChairBlockEntity.SLOT_COLLAR, ItemStack.EMPTY);
+            pressSign(chair, p);
+            h.assertTrue(said(h).size() == 2 && said(h).get(1)[1].equals("refuse_collar"), "a new refusal after the gap not voiced");
+            chair.items().setStackInSlot(SeparationChairBlockEntity.SLOT_GOGGLES, ItemStack.EMPTY);
+            chair.items().setStackInSlot(SeparationChairBlockEntity.SLOT_COLLAR, new ItemStack(ModRegistry.COLLAR_CAM.get()));
+            pressSign(chair, p);
+            h.assertTrue(said(h).size() == 2, "voiced again within the gap");
+            p.stopRiding();
+            done(h, p);
+        });
+    }
 }

@@ -1,0 +1,153 @@
+{
+  "lines": {
+    "start": {
+      "muffled": false,
+      "en": 24,
+      "pt": 33
+    },
+    "gas": {
+      "muffled": true,
+      "en": 28,
+      "pt": 39
+    },
+    "scan": {
+      "muffled": true,
+      "en": 31,
+      "pt": 30
+    },
+    "cut": {
+      "muffled": true,
+      "en": 24,
+      "pt": 28
+    },
+    "privacy": {
+      "muffled": true,
+      "en": 38,
+      "pt": 56
+    },
+    "jar": {
+      "muffled": true,
+      "en": 37,
+      "pt": 50
+    },
+    "done": {
+      "muffled": false,
+      "en": 77,
+      "pt": 82
+    },
+    "oopsie": {
+      "muffled": false,
+      "en": 23,
+      "pt": 32
+    },
+    "abort": {
+      "muffled": false,
+      "en": 75,
+      "pt": 93
+    },
+    "new_blade": {
+      "muffled": false,
+      "en": 49,
+      "pt": 52
+    },
+    "refuse_power": {
+      "muffled": false,
+      "en": 68,
+      "pt": 71
+    },
+    "refuse_jar": {
+      "muffled": false,
+      "en": 68,
+      "pt": 90
+    },
+    "refuse_goggles": {
+      "muffled": false,
+      "en": 62,
+      "pt": 80
+    },
+    "refuse_collar": {
+      "muffled": false,
+      "en": 61,
+      "pt": 90
+    },
+    "refuse_saline": {
+      "muffled": false,
+      "en": 82,
+      "pt": 96
+    },
+    "refuse_already": {
+      "muffled": false,
+      "en": 51,
+      "pt": 74
+    },
+    "chair_blocked": {
+      "muffled": false,
+      "en": 40,
+      "pt": 48
+    },
+    "chair_in_use": {
+      "muffled": false,
+      "en": 74,
+      "pt": 70
+    },
+    "chair_tray_blocked": {
+      "muffled": false,
+      "en": 41,
+      "pt": 46
+    },
+    "chair_no_break": {
+      "muffled": false,
+      "en": 71,
+      "pt": 68
+    },
+    "chair_blade_busy": {
+      "muffled": false,
+      "en": 68,
+      "pt": 67
+    }
+  },
+  "schedule": {
+    "en": {
+      "operation": {
+        "24": "gas",
+        "60": "scan",
+        "168": "jar"
+      },
+      "done_delay": 24,
+      "oopsie_delay": 34,
+      "notes": []
+    },
+    "pt": {
+      "operation": {
+        "33": "gas",
+        "155": "jar"
+      },
+      "done_delay": 24,
+      "oopsie_delay": 34,
+      "notes": [
+        "scan stays text: it would end at 102, after the latch at 100"
+      ]
+    }
+  },
+  "duck_db": -6,
+  "duck": [
+    "chair.servo_barrier",
+    "chair.barrier_drop",
+    "chair.hood_nod",
+    "chair.gas_hiss",
+    "chair.servo_tick",
+    "chair.scan_chirp",
+    "chair.hydraulic",
+    "chair.hydraulic_short",
+    "chair.servo",
+    "chair.servo_home",
+    "chair.saline_glug",
+    "chair.spark",
+    "chair.drawer_out",
+    "chair.drawer_in",
+    "chair.drawer_stop",
+    "chair.handshake",
+    "chair.whine_rise",
+    "chair.tap"
+  ]
+}

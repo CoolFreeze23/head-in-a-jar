@@ -6,8 +6,9 @@ file turns it into what the game loads, so a new revision of the model drops in 
 - the group `static` becomes the baked block model (models/block/separation_chair.json), drawn by the chunk renderer;
 - every other group except `standin_*` becomes the GeckoLib geometry (geo/block/separation_chair.geo.json), drawn
   by the chair's block entity renderer;
-- the clips become animations/block/separation_chair.animation.json through tools/bb_export_anim.py, with the sound
-  keys patched to the registered chair sound events (EFFECT_PATCHES below);
+- the clips become animations/block/separation_chair.animation.json through tools/bb_export_anim.py (the clips' sound
+  keys name the registered chair events: change them in chair_anim.py, never in the exported file);
+- sounds.json gets the chair's events from tools/snd/events.json and DOLORES's lines from tools/voice/lines.json;
 - textures/block/separation_chair.png (shared by both models) is the painted sheet; the placeholder only stands in
   while there is none.
 """
@@ -48,96 +49,69 @@ DOLORES = {
 }
 
 # --- sounds ----------------------------------------------------------------------------------------------------------
-# From the sound hand-off (tools/snd/events.json of the sound batch): files, attenuation and subtitles. Volume and
-# pitch ranges per play are in the code (block/ChairSounds.java). The files are in sounds/chair/.
-# name: (files, attenuation, subtitle en, subtitle pt); subtitle None = no subtitle (small life, or part of another)
-CHAIR_SOUNDS = {
-    'servo_barrier': (3, 16, 'Barrier motor whirs', 'Motor da cancela zune'),
-    'barrier_drop': (3, 16, 'Barrier lowers', 'Cancela desce'),
-    'barrier_latch': (3, 16, 'Barrier clamps shut', 'Cancela trava'),
-    'barrier_settle': (3, 16, None, None),
-    'servo_horn': (3, 16, 'Gas horn swings', 'Corneta de gás gira'),
-    'gas_hiss': (3, 16, 'Anaesthetic hisses', 'Anestésico chia'),
-    'beep': (1, 16, 'DOLORES counts down', 'DOLORES faz a contagem'),
-    'servo_tick': (4, 16, None, None),
-    'scan_chirp': (1, 16, 'Scanner chirps', 'Scanner apita'),
-    'latch': (2, 16, 'Something latches', 'Algo trava'),
-    'whine_rise': (3, 16, 'Blade winds up', 'Lâmina toma impulso'),
-    'placard': (3, 16, 'Curtain: privacy, please', 'Cortina: privacidade, por favor'),
-    'cut': (2, 24, 'Blade separates', 'Lâmina separa'),
-    'ding': (1, 16, 'DOLORES dings politely', 'DOLORES toca a campainha'),
-    'lid_pop': (2, 16, 'Jar lid pops open', 'Tampa do pote abre'),
-    'saline_glug': ([f'minecraft:item/bottle/fill{i}' for i in (1, 2, 3, 4)], 16, 'Saline glugs', 'Soro gorgoleja'),
-    'clamp': (3, 16, 'Pincer grips', 'Pinça segura'),
-    'hydraulic': (3, 16, 'Hood hydraulics hiss', 'Hidráulica do capô chia'),
-    'servo': (3, 16, 'Hood swings', 'Capô gira'),
-    'plop': ([f'minecraft:block/bubble_column/bubble{i}' for i in (1, 2, 3)], 12, 'Head plops in', 'Cabeça cai no soro'),
-    'antenna': (2, 16, 'Antenna extends', 'Antena se estende'),
-    'ratchet': (3, 16, 'Wrench ratchets', 'Chave aperta o parafuso'),
-    'spark': (3, 16, 'Antenna sparks', 'Antena solta faíscas'),
-    'clink': (3, 16, 'Jar lid clinks shut', 'Tampa do pote fecha'),
-    'unlatch': (3, 16, 'Barrier unlatches', 'Cancela destrava'),
-    'barrier_lift': (3, 16, 'Barrier rises', 'Cancela sobe'),
-}
-
-# --- keyframe sound patches -----------------------------------------------------------------------------------------
-# The clips name some sounds the sound batch renamed, merged or moved to the server. Until chair_anim.py uses the
-# registered names, the exported keys are corrected here: tick -> new effect string, or None to drop the key.
-# Volumes are 1.0: the files carry their loudness.
-OP_PATCH = {
-    2: None,                                            # the server plays chair.servo_barrier at 0
-    21: 'headinajar:chair.servo_tick|0.5|1.5',          # the hood nods toward the face (the gas horn is gone)
-    40: 'headinajar:chair.beep|1.0|1.0', 47: 'headinajar:chair.beep|1.0|0.8909', 54: 'headinajar:chair.beep|1.0|0.7937',
-    64: None,                                           # the scan chirp (server, 60) covers the ring's start
-    68: 'headinajar:chair.servo_tick|0.6|1.3', 74: 'headinajar:chair.servo_tick|0.6|1.3',
-    80: 'headinajar:chair.servo_tick|0.6|1.3', 86: 'headinajar:chair.servo_tick|0.6|1.3',
-    94: 'headinajar:chair.beep|1.0|1.1892',
-    100: 'headinajar:chair.latch|1.0|1.0', 104: 'headinajar:chair.whine_rise|1.0|1.0',
-    112: 'headinajar:chair.placard|1.0|1.0',            # the curtain whips up (the placard file)
-    128: 'headinajar:chair.ding|1.0|1.0', 141: 'headinajar:chair.lid_pop|1.0|1.0', 148: 'headinajar:chair.clamp|1.0|1.0',
-    152: 'headinajar:chair.hydraulic|1.0|1.0', 166: 'headinajar:chair.servo|1.0|1.0',
-    184: 'headinajar:chair.hydraulic|1.0|1.0', 198: 'headinajar:chair.plop|1.0|1.0',
-    204: 'headinajar:chair.hydraulic|1.0|1.1429', 212: 'headinajar:chair.servo_tick|0.5|1.0',
-    215: 'headinajar:chair.clink|1.0|1.0', 218: 'headinajar:chair.servo|1.0|1.0',
-    222: 'headinajar:chair.placard|1.0|1.0', 230: 'headinajar:chair.ding|1.0|1.2599',
-    234: 'headinajar:chair.unlatch|1.0|1.0',
-}
-OP_ADD = {}
-EFFECT_PATCHES = {
-    'operation': (OP_PATCH, OP_ADD),
-    'botch': (OP_PATCH, OP_ADD),
-    'idle': ({52: 'headinajar:chair.servo_tick|0.5|1.4'}, {}),
-}
+# The chair's sound events come from the sound hand-off, tools/snd/events.json (files, attenuation, subtitles); how each
+# is played (volume, pitch range) is in block/ChairSounds.java. DOLORES's spoken lines come from tools/voice/lines.json
+# (one event per line and language, and a muffled event for the lines the patient hears during the operation).
+SND_EVENTS = os.path.join(HERE, 'snd', 'events.json')
+VOICE_LINES = os.path.join(HERE, 'voice', 'lines.json')
 
 
-def _tick(key):
-    return round(float(key) * 20)
+def chair_events():
+    with open(SND_EVENTS, encoding='utf-8') as f:
+        events = json.load(f)['events']
+    return [e for e in events if e['id'].startswith('headinajar:chair.')]
 
 
-def _time(tick):
-    s = repr(round(tick / 20, 4))
-    return s
+def voice_lines():
+    with open(VOICE_LINES, encoding='utf-8') as f:
+        return json.load(f)
 
 
-def patch_effects(anims):
-    for name, (patch, add) in EFFECT_PATCHES.items():
-        anim = anims['animations'].get(name)
-        if anim is None:
-            continue
-        sounds = anim.get('sound_effects', {})
-        out = {}
-        for key, value in sounds.items():
-            t = _tick(key)
-            if t in patch:
-                if patch[t] is None:
-                    continue
-                value = {'effect': patch[t]}
-            out[key] = value
-        taken = {_tick(k) for k in out}
-        for t, effect in add.items():
-            if t not in taken:
-                out[_time(t)] = {'effect': effect}
-        anim['sound_effects'] = dict(sorted(out.items(), key=lambda kv: float(kv[0])))
+# What DOLORES says during the operation, and when (the rulings): the greeting at the signature, the gas line, the scan
+# line (only if it ends before the latch at 100: the silence before the cut is the joke), the jar line during the head's
+# transfer (ending by about 205); the cut and privacy lines are text only. After the operation: the closing line, or
+# "Oopsie." on a botch, at the delays the voice hand-off measured.
+LATCH, JAR_END, TRANSFER_START = 100, 205, 150
+
+
+def voice_schedule(voice):
+    lines = {l['id']: l for l in voice['lines']}
+    out = {}
+    for lang in ('en', 'pt'):
+        ticks = lambda i: lines[i][lang]['heard_ticks']
+        sched, notes = {}, []
+        end = ticks('start')
+        gas = max(lines['gas']['trigger_tick'], end)
+        sched[gas] = 'gas'
+        end = gas + ticks('gas')
+        scan = max(lines['scan']['trigger_tick'], end)
+        if scan + ticks('scan') <= LATCH:
+            sched[scan] = 'scan'
+            end = scan + ticks('scan')
+        else:
+            notes.append('scan stays text: it would end at %d, after the latch at %d' % (scan + ticks('scan'), LATCH))
+        jar = max(TRANSFER_START, end, JAR_END - ticks('jar'))
+        sched[jar] = 'jar'
+        out[lang] = {'operation': {str(t): l for t, l in sorted(sched.items())},
+                     'done_delay': lines['done'][lang]['start_tick'] - 240,
+                     'oopsie_delay': lines['oopsie'][lang]['start_tick'] - 240,
+                     'notes': notes}
+    return out
+
+
+def voice_table(voice):
+    """The table the game reads (assets/headinajar/dolores_voice.json): every line's length per language, which are
+    muffled for the patient, which ducking the chair's own sounds get, and the schedule above."""
+    return {
+        'lines': {l['id']: {'muffled': l['muffled'], 'en': l['en']['heard_ticks'], 'pt': l['pt']['heard_ticks']}
+                  for l in voice['lines']},
+        'schedule': voice_schedule(voice),
+        'duck_db': -6,
+        'duck': ['chair.servo_barrier', 'chair.barrier_drop', 'chair.hood_nod', 'chair.gas_hiss', 'chair.servo_tick',
+                 'chair.scan_chirp', 'chair.hydraulic', 'chair.hydraulic_short', 'chair.servo', 'chair.servo_home',
+                 'chair.saline_glug', 'chair.spark', 'chair.drawer_out', 'chair.drawer_in', 'chair.drawer_stop',
+                 'chair.handshake', 'chair.whine_rise', 'chair.tap'],
+    }
 
 
 # --- geometry --------------------------------------------------------------------------------------------------------
@@ -270,7 +244,6 @@ def animations(geo_path):
             raise SystemExit('bb_export_anim failed:\n' + r.stderr)
         with open(out, encoding='utf-8') as f:
             anims = json.load(f)
-    patch_effects(anims)
     return anims
 
 
@@ -294,16 +267,28 @@ def run(EN, PT, write, shaped):
     if not os.path.exists(tex):
         shutil.copyfile(os.path.join(ART, 'chair_placeholder.png'), tex)
 
-    # sounds.json: gen_p9 wrote it; add the chair's events
+    # sounds.json: gen_p9 wrote it; add the chair's events and DOLORES's lines
     path = os.path.join(RES, 'assets', 'headinajar', 'sounds.json')
     with open(path, encoding='utf-8') as f:
         table = json.load(f)
-    for name, (files, att, en, pt) in CHAIR_SOUNDS.items():
-        if isinstance(files, int):
-            files = [f'headinajar:chair/{name}_{i}' for i in range(1, files + 1)]
-        entry = {'sounds': [{'name': f, 'attenuation_distance': att} for f in files]}
-        if en:
-            entry['subtitle'] = f'subtitles.headinajar.chair.{name}'
-            EN[entry['subtitle']], PT[entry['subtitle']] = en, pt
-        table[f'chair.{name}'] = entry
+    for e in chair_events():
+        name = e['id'].split(':', 1)[1]
+        files = e.get('files') or e.get('vanilla_files')
+        entry = {'sounds': [{'name': f, 'attenuation_distance': e['attenuation']} for f in files]}
+        if e.get('subtitle'):
+            entry['subtitle'] = f'subtitles.headinajar.{name}'
+            EN[entry['subtitle']], PT[entry['subtitle']] = e['subtitle']['en_us'], e['subtitle']['pt_br']
+        table[name] = entry
+    voice = voice_lines()
+    EN['subtitles.headinajar.dolores'], PT['subtitles.headinajar.dolores'] = 'DOLORES speaks', 'DOLORES fala'
+    for line in voice['lines']:
+        for lang in ('en', 'pt'):
+            v = line[lang]
+            for event, sound in ((v['event'], v['sound_id']), (v.get('event_muffled'), v.get('sound_id_muffled'))):
+                if not event:
+                    continue
+                table[event.split(':', 1)[1]] = {
+                    'sounds': [{'name': sound, 'attenuation_distance': voice['range_blocks'], 'stream': voice['stream']}],
+                    'subtitle': 'subtitles.headinajar.dolores'}
     write('assets/headinajar/sounds.json', table)
+    write('assets/headinajar/dolores_voice.json', voice_table(voice))

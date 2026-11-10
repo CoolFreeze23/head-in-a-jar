@@ -22,30 +22,42 @@ public final class ChairSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> BARRIER_DROP = sound("barrier_drop", 0.98f, 1.02f);
     public static final DeferredHolder<SoundEvent, SoundEvent> BARRIER_LATCH = sound("barrier_latch", 0.94f, 1.06f);
     public static final DeferredHolder<SoundEvent, SoundEvent> BARRIER_SETTLE = sound("barrier_settle", 0.94f, 1.06f);
-    public static final DeferredHolder<SoundEvent, SoundEvent> SERVO_HORN = sound("servo_horn", 1, 1);
+    public static final DeferredHolder<SoundEvent, SoundEvent> HOOD_NOD = sound("hood_nod", 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> GAS_HISS = sound("gas_hiss", 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> BEEP = sound("beep", 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> SERVO_TICK = sound("servo_tick", 0.94f, 1.06f);
     public static final DeferredHolder<SoundEvent, SoundEvent> SCAN_CHIRP = sound("scan_chirp", 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> LATCH = sound("latch", 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> WHINE_RISE = sound("whine_rise", 1, 1);
-    public static final DeferredHolder<SoundEvent, SoundEvent> PLACARD = sound("placard", 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> CURTAIN = sound("curtain", 0.95f, 1.05f);
     /** The cut is heard 24 blocks off whatever the volume. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CUT = ModSounds.SOUNDS.register("chair.cut",
             () -> SoundEvent.createFixedRangeEvent(HeadInAJar.id("chair.cut"), 24));
+    public static final DeferredHolder<SoundEvent, SoundEvent> PLONK = sound("plonk", 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> DING = sound("ding", 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> LID_POP = sound("lid_pop", 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> SALINE_GLUG = sound("saline_glug", 0.8f, 0.9f);
     public static final DeferredHolder<SoundEvent, SoundEvent> CLAMP = sound("clamp", 0.94f, 1.06f);
     public static final DeferredHolder<SoundEvent, SoundEvent> HYDRAULIC = sound("hydraulic", 1, 1);
-    public static final DeferredHolder<SoundEvent, SoundEvent> SERVO = sound("servo", 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> HYDRAULIC_SHORT = sound("hydraulic_short", 1, 1);
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERVO = sound("servo", 0.98f, 1.02f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERVO_HOME = sound("servo_home", 0.98f, 1.02f);
     public static final DeferredHolder<SoundEvent, SoundEvent> PLOP = sound("plop", 0.6f, 0.7f);
-    public static final DeferredHolder<SoundEvent, SoundEvent> ANTENNA = sound("antenna", 0.97f, 1.03f);
-    public static final DeferredHolder<SoundEvent, SoundEvent> RATCHET = sound("ratchet", 1, 1);
-    public static final DeferredHolder<SoundEvent, SoundEvent> SPARK = sound("spark", 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> HANDSHAKE = sound("handshake", 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> CLINK = sound("clink", 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPARK = sound("spark", 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> RATCHET = sound("ratchet", 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> UNLATCH = sound("unlatch", 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> BARRIER_LIFT = sound("barrier_lift", 0.98f, 1.02f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> TAP = sound("tap", 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DRAWER_OUT = sound("drawer_out", 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DRAWER_IN = sound("drawer_in", 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DRAWER_STOP = sound("drawer_stop", 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERVO_HICCUP = sound("servo_hiccup", 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> OOPSIE_SQUEAK = sound("oopsie_squeak", 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEFLATE = sound("deflate", 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> HISS = sound("hiss", 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> BOW_CHIME = sound("bow_chime", 1, 1);
 
     static {
         PITCH.put("cut", new float[]{0.95f, 1.05f});
