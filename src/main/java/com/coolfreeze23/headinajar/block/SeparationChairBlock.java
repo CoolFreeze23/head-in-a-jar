@@ -144,6 +144,16 @@ public class SeparationChairBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
+    /** Hitting or mining a chair mid-operation gets an answer; it can't be broken until it is done. */
+    @Override
+    protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair && chair.running()
+                && sp.gameMode.getGameModeForPlayer() != net.minecraft.world.level.GameType.CREATIVE) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(sp, chair, "chair.no_break");
+        }
+        super.attack(state, level, pos, player);
+    }
+
     @Override
     protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof SeparationChairBlockEntity chair && chair.running()) return 0;

@@ -25,7 +25,7 @@ public class HeadJarRenderer extends EntityRenderer<HeadJarEntity> {
         float look = Mth.sin(age * 0.02f) * 25 + Mth.sin(age * 0.007f) * 15;
         int overlay = OverlayTexture.pack(0, entity.hurtTicks() > 0 ? 3 : 10);
         JarRenderer.draw(pose, buffers, light, overlay, JarRenderer.skin(entity.ownerId()), look, Mth.sin(age * 0.013f) * 8, age, true, !entity.goggles().isEmpty(),
-                JarRenderer.shape(entity.compact()));
+                JarRenderer.shape(entity.compact()), entity.upsideDown());
         pose.popPose();
         super.render(entity, yaw, partialTick, pose, buffers, light);
     }

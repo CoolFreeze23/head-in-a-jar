@@ -127,6 +127,12 @@ public final class JarRenderer {
     /** As above, in the given jar. */
     public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
                             float headYaw, float pitch, float age, boolean charged, boolean withGoggles, Shape shape) {
+        draw(pose, buffers, light, overlay, skin, headYaw, pitch, age, charged, withGoggles, shape, false);
+    }
+
+    /** As above; {@code upsideDown} turns the head over about its own centre (a botched cut), nothing else changes. */
+    public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
+                            float headYaw, float pitch, float age, boolean charged, boolean withGoggles, Shape shape, boolean upsideDown) {
         if (jar == null) bake();
         // the head turns as far as the glass lets it; the rest of the turn turns the jar
         float turn = Mth.wrapDegrees(headYaw);
@@ -145,9 +151,10 @@ public final class JarRenderer {
         float yaw = inside * Mth.DEG_TO_RAD;
         float xRot = Mth.clamp(pitch, -shape.nod(), shape.nod()) * Mth.DEG_TO_RAD;
         for (ModelPart part : new ModelPart[]{head, hat, goggles}) {
-            part.y = shape.neck() + bob;
+            // upside down: turned half over about x through the head's centre, so it fills the same space
+            part.y = shape.neck() + bob - (upsideDown ? 8 * HEAD_SCALE : 0);
             part.yRot = yaw;
-            part.xRot = xRot;
+            part.xRot = xRot + (upsideDown ? Mth.PI : 0);
             part.xScale = part.yScale = part.zScale = HEAD_SCALE;
         }
         head.render(pose, buffers.getBuffer(RenderType.entityTranslucent(skin)), light, overlay);

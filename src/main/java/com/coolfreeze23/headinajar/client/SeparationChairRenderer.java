@@ -60,6 +60,21 @@ public class SeparationChairRenderer extends GeoBlockRenderer<SeparationChairBlo
         super.render(chair, partialTick, pose, buffers, light, overlay);
     }
 
+    /**
+     * Where the patient's overlay draws its scan line, 0 (top of the screen) to 1 (bottom): the ring's height against the
+     * eyes as the animation put it this frame (above the eyes high on the screen, level with them in the middle).
+     * Falls back to the clip's timing when the chair has not been drawn.
+     */
+    public static float scanLine(float t) {
+        GeoBone ring = bone("scan_ring"), lift = bone("boom_lift");
+        if (ring == null || lift == null) {
+            return Mth.clamp((t - ChairTimeline.SCAN_RING_START) / (float) (ChairTimeline.SCAN_RING_END - ChairTimeline.SCAN_RING_START), 0, 1);
+        }
+        // ring pivot at rest 27.5 px, eyes at 21.92 px; the ring travels down to about 7 px under its rest
+        float above = 27.5f + ring.getPosY() + lift.getPosY() - 21.92f;
+        return Mth.clamp(0.5f - above / 14f, 0, 1);
+    }
+
     static GeoBone bone(String name) {
         return MODEL.getBone(name).orElse(null);
     }
@@ -79,6 +94,8 @@ public class SeparationChairRenderer extends GeoBlockRenderer<SeparationChairBlo
 
     /** The geo model: tracks the bones the effects need, and keeps the scan sheet out of the patient's own eyes. */
     static class ChairModel extends DefaultedBlockGeoModel<SeparationChairBlockEntity> {
+        /** Bones that pass within a few pixels of the seated patient's eyes. */
+        private static final String[] NEAR_EYES = {"scan_ring", "scan_plane", "claw_jaw_l", "claw_jaw_r"};
         private boolean tracked;
 
         ChairModel() {
@@ -93,8 +110,14 @@ public class SeparationChairRenderer extends GeoBlockRenderer<SeparationChairBlo
             }
             var mc = Minecraft.getInstance();
             boolean ownEyes = mc.player != null && mc.player.getUUID().equals(chair.patient()) && mc.options.getCameraType().isFirstPerson();
-            // a zero-thickness sheet passing through the camera reads as a glitch: the overlay draws the line instead
-            getBone("scan_plane").ifPresent(b -> b.setHidden(ownEyes));
+            // from the patient's own eyes, nothing that passes within a few pixels of the camera is drawn (it would fill
+            // the view): the scan ring and its sheet (the overlay draws the line instead), the claw plate and its jaws
+            for (String name : NEAR_EYES) getBone(name).ifPresent(b -> b.setHidden(ownEyes));
+            // the claw's own cubes only: the head it carries is its child
+            getBone("claw").ifPresent(b -> {
+                b.setHidden(ownEyes);
+                b.setChildrenHidden(false);
+            });
         }
     }
 

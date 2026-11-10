@@ -60,8 +60,21 @@ public class SeparationChairMenu extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
+            if (getSlotIndex() == SeparationChairBlockEntity.SLOT_JAR && chair != null && chair.trayBlocked() != null) return false;
             return !locked() && super.mayPlace(stack);
         }
+    }
+
+    /** A jar placed in the jar slot with the tray's space blocked is refused, and the player is told why. */
+    @Override
+    public void clicked(int slotId, int button, net.minecraft.world.inventory.ClickType type, Player player) {
+        if (chair != null && player instanceof ServerPlayer sp && !chair.running()) {
+            boolean jarIn = slotId == SeparationChairBlockEntity.SLOT_JAR && SeparationChairBlockEntity.validFor(SeparationChairBlockEntity.SLOT_JAR, getCarried())
+                    || type == net.minecraft.world.inventory.ClickType.QUICK_MOVE && slotId >= 4 && slotId < slots.size()
+                    && SeparationChairBlockEntity.validFor(SeparationChairBlockEntity.SLOT_JAR, slots.get(slotId).getItem());
+            if (jarIn && chair.items().getStackInSlot(SeparationChairBlockEntity.SLOT_JAR).isEmpty() && chair.refuseJar(sp)) return;
+        }
+        super.clicked(slotId, button, type, player);
     }
 
     public SeparationChairBlockEntity chair() {

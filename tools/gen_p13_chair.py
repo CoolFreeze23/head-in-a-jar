@@ -32,6 +32,8 @@ REFUSALS = {
                       'A cadeira precisa de espaço. Libere %s.'),
     'chair.in_use': ('Operation in progress. Kindly wait behind the line.',
                      'Operação em andamento. Aguarde atrás da faixa.'),
+    'chair.tray_blocked': ("The jar tray can't come out. Clear %s.", 'A bandeja do pote não sai. Libere %s.'),
+    'chair.no_break': ('Not mid-operation. It comes apart once it is done.', 'Não durante a operação. Ela se desmonta depois.'),
     'chair.blade_busy': ('Not mid-operation. Change the blade afterwards.',
                          'Não durante a operação. Troque a lâmina depois.'),
 }

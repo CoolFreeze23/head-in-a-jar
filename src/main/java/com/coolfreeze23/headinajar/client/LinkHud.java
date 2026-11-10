@@ -168,10 +168,8 @@ public final class LinkHud {
         } else if (t < 100) {
             g.fill(0, 0, w, h, 0x6E0A2A12);
             vignette(g, w, h, 0.6f);
-            // the line follows the scan ring down over the eyes
-            float ring = Mth.clamp((t - com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_START)
-                    / (com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_END - com.coolfreeze23.headinajar.block.ChairTimeline.SCAN_RING_START), 0, 1);
-            int line = (int) (ring * h);
+            // the line is where the scan ring is: read from the ring as the chair's animation placed it this frame
+            int line = (int) (SeparationChairRenderer.scanLine(t) * h);
             g.fill(0, line - 1, w, line + 2, 0xC040FF60);
             g.fill(0, line - 6, w, line - 1, 0x3040FF60);
         } else if (t < 120) {

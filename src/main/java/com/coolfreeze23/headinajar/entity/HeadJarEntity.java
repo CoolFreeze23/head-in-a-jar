@@ -41,6 +41,9 @@ public class HeadJarEntity extends Entity {
     private static final EntityDataAccessor<String> OWNER_NAME = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> GOGGLES = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Boolean> COMPACT = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.BOOLEAN);
+    /** A botched cut put the head in upside down; it rights itself when the patient's view does. */
+    private static final EntityDataAccessor<Boolean> UPSIDE_DOWN = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.BOOLEAN);
+    private int upsideDownTicks;
     public static final float MAX_HEALTH = 10;
     private float health = MAX_HEALTH;
     private int hurtTicks;
@@ -55,6 +58,7 @@ public class HeadJarEntity extends Entity {
         builder.define(OWNER_NAME, "");
         builder.define(GOGGLES, ItemStack.EMPTY);
         builder.define(COMPACT, false);
+        builder.define(UPSIDE_DOWN, false);
     }
 
     public void setOwner(UUID id, String name) {
@@ -91,6 +95,16 @@ public class HeadJarEntity extends Entity {
         return compact() ? com.coolfreeze23.headinajar.form.FormEvents.COMPACT_SIZE : super.getDimensions(pose);
     }
 
+    /** The head floats upside down in the jar (a botched cut), for this many ticks. */
+    public boolean upsideDown() {
+        return entityData.get(UPSIDE_DOWN);
+    }
+
+    public void setUpsideDown(int ticks) {
+        upsideDownTicks = Math.max(0, ticks);
+        entityData.set(UPSIDE_DOWN, upsideDownTicks > 0);
+    }
+
     public ItemStack goggles() {
         return entityData.get(GOGGLES);
     }
@@ -117,6 +131,7 @@ public class HeadJarEntity extends Entity {
     public void tick() {
         super.tick();
         if (hurtTicks > 0) hurtTicks--;
+        if (!level().isClientSide && upsideDownTicks > 0 && --upsideDownTicks == 0) entityData.set(UPSIDE_DOWN, false);
         if (!isNoGravity()) setDeltaMovement(getDeltaMovement().add(0, -0.04, 0));
         move(MoverType.SELF, getDeltaMovement());
         setDeltaMovement(getDeltaMovement().multiply(0.6, 0.98, 0.6));
@@ -268,6 +283,7 @@ public class HeadJarEntity extends Entity {
         setGoggles(ItemStack.parseOptional(registryAccess(), tag.getCompound("Goggles")));
         health = tag.contains("Health") ? tag.getFloat("Health") : MAX_HEALTH;
         setCompact(tag.getBoolean("Compact"));
+        setUpsideDown(tag.getInt("UpsideDownTicks"));
     }
 
     @Override
@@ -277,5 +293,6 @@ public class HeadJarEntity extends Entity {
         tag.put("Goggles", goggles().saveOptional(registryAccess()));
         tag.putFloat("Health", health);
         tag.putBoolean("Compact", compact());
+        if (upsideDownTicks > 0) tag.putInt("UpsideDownTicks", upsideDownTicks);
     }
 }

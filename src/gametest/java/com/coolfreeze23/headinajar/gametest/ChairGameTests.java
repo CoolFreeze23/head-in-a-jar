@@ -354,4 +354,73 @@ public class ChairGameTests {
         }
         h.succeed();
     }
+
+    @GameTest(template = "platform", timeoutTicks = 300)
+    public static void botchedHeadStaysUpsideDownInTheRealJar(GameTestHelper h) {
+        ServerPlayer p = player(h, CHAIR);
+        SeparationChairBlockEntity chair = chair(h, Direction.NORTH);
+        sit(h, p, Direction.NORTH);
+        h.assertTrue(pressSign(chair, p), "not started");
+        h.runAfterDelay(105, () -> {
+            // what /data merge does: the botch decided at the point of no return
+            CompoundTag tag = chair.saveWithFullMetadata(h.getLevel().registryAccess());
+            tag.putBoolean("Botched", true);
+            chair.loadWithComponents(tag, h.getLevel().registryAccess());
+        });
+        h.runAfterDelay(250, () -> {
+            var jars = h.getEntities(ModRegistry.HEAD_JAR.get());
+            h.assertTrue(jars.size() == 1, "jars " + jars.size());
+            HeadJarEntity jar = jars.get(0);
+            h.assertTrue(jar.upsideDown(), "the botched head went into the real jar upright");
+            h.assertTrue(FormActions.state(p).rollTicks() > 0, "no camera roll");
+            // saved and loaded with the jar (an additive key)
+            CompoundTag saved = new CompoundTag();
+            jar.saveWithoutId(saved);
+            h.assertTrue(saved.getInt("UpsideDownTicks") > 0, "not saved");
+            // it rights itself when its time is up, as the patient's view does
+            jar.setUpsideDown(2);
+        });
+        h.runAfterDelay(256, () -> {
+            h.assertFalse(h.getEntities(ModRegistry.HEAD_JAR.get()).get(0).upsideDown(), "still upside down after its time");
+            done(h, p);
+        });
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void loadingAJarWithTheTrayBlockedIsRefused(GameTestHelper h) {
+        ServerPlayer p = player(h, CHAIR.east(2));
+        SeparationChairBlockEntity chair = chair(h, Direction.NORTH);
+        chair.items().setStackInSlot(SeparationChairBlockEntity.SLOT_JAR, ItemStack.EMPTY);
+        // facing north the tray comes out to the west
+        h.setBlock(CHAIR.west(), Blocks.STONE);
+        SeparationChairMenu menu = menu(chair, p);
+        menu.setCarried(new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()));
+        menu.clicked(SeparationChairBlockEntity.SLOT_JAR, 0, ClickType.PICKUP, p);
+        h.assertTrue(chair.items().getStackInSlot(SeparationChairBlockEntity.SLOT_JAR).isEmpty(), "loaded into a blocked tray");
+        h.assertValueEqual(Refusals.lastDelivered(p), "chair.tray_blocked", "click refusal");
+        h.assertTrue(chair.items().insertItem(SeparationChairBlockEntity.SLOT_JAR, new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()), false).getCount() == 1,
+                "a pipe loaded a blocked tray");
+        h.setBlock(CHAIR.west(), Blocks.AIR);
+        menu.clicked(SeparationChairBlockEntity.SLOT_JAR, 0, ClickType.PICKUP, p);
+        h.assertTrue(!chair.items().getStackInSlot(SeparationChairBlockEntity.SLOT_JAR).isEmpty(), "can't load with the space clear");
+        done(h, p);
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void hittingARunningChairIsAnswered(GameTestHelper h) {
+        ServerPlayer p = player(h, CHAIR);
+        ServerPlayer other = player(h, CHAIR.east(1));
+        SeparationChairBlockEntity chair = chair(h, Direction.NORTH);
+        sit(h, p, Direction.NORTH);
+        h.assertTrue(pressSign(chair, p), "not started");
+        h.runAfterDelay(5, () -> {
+            BlockPos abs = h.absolutePos(CHAIR);
+            // what the game's break handler calls on the first hit of a left click (BlockState.attack)
+            h.getLevel().getBlockState(abs).attack(h.getLevel(), abs, other);
+            h.assertValueEqual(Refusals.lastDelivered(other), "chair.no_break", "a hit on a running chair");
+            h.assertTrue(h.getLevel().getBlockState(abs).is(ModRegistry.SEPARATION_CHAIR.get()), "broken mid-operation");
+            p.stopRiding();
+            done(h, p, other);
+        });
+    }
 }

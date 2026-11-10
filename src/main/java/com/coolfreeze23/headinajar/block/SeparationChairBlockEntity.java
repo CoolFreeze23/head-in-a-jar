@@ -93,7 +93,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            return locked() ? stack : super.insertItem(slot, stack, simulate);
+            if (locked() || slot == SLOT_JAR && !internal && trayBlocked() != null) return stack;
+            return super.insertItem(slot, stack, simulate);
         }
 
         @Override
@@ -329,6 +330,29 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         return null;
     }
 
+    /** The blocks the jar tray slides into: the block to the patient's left and the one above it. */
+    public static List<BlockPos> traySpace(BlockPos pos, Direction facing) {
+        BlockPos l = pos.relative(facing.getCounterClockWise());
+        return List.of(l, l.above());
+    }
+
+    /** The first block in the tray's way, or null when a jar can be loaded. */
+    public BlockPos trayBlocked() {
+        if (level == null) return null;
+        for (BlockPos p : traySpace(worldPosition, facing())) {
+            if (!level.getBlockState(p).getCollisionShape(level, p).isEmpty()) return p;
+        }
+        return null;
+    }
+
+    /** A jar can't be loaded with the tray's space blocked: say so to whoever tried. */
+    public boolean refuseJar(ServerPlayer player) {
+        BlockPos blocked = trayBlocked();
+        if (blocked == null) return false;
+        Refusals.deny(player, this, "chair.tray_blocked", Component.translatable(spaceName(blocked)));
+        return true;
+    }
+
     /** The player in the chair, if any. */
     public ServerPlayer seated() {
         if (!(level instanceof ServerLevel server)) return null;
@@ -454,7 +478,7 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
                 // the patient hears nothing at all here: their overlay is black
                 chair(ChairSounds.CUT, 1, world(NECK), player);
                 Vec3 neck = world(NECK);
-                com.coolfreeze23.headinajar.feedback.Sanitary.puff(server, neck.x, neck.y, neck.z);
+                cutPuff(server, neck);
                 // the head is the chair's now: whatever was worn on it comes off with it into the patient's pockets
                 ItemStack helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
                 if (!helmet.isEmpty()) {
@@ -494,6 +518,20 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         }
         opTick++;
         if (opTick % 10 == 0) changed();
+    }
+
+    /**
+     * The cut, seen from outside: a small flat ring of white at the neck seam and one wisp rising, gone in half a
+     * second, so the head's hop and the blade leaving stay visible. Nothing red.
+     */
+    private static void cutPuff(ServerLevel server, Vec3 neck) {
+        for (int i = 0; i < 8; i++) {
+            double a = i * Math.PI / 4;
+            double dx = Math.cos(a), dz = Math.sin(a);
+            server.sendParticles(ParticleTypes.WHITE_SMOKE, neck.x + dx * 0.16, neck.y, neck.z + dz * 0.16, 0, dx, 0.05, dz, 0.035);
+        }
+        server.sendParticles(ParticleTypes.WHITE_SMOKE, neck.x, neck.y + 0.05, neck.z, 0, 0, 1, 0, 0.03);
+        server.sendParticles(ParticleTypes.ELECTRIC_SPARK, neck.x, neck.y, neck.z, 1, 0.02, 0.0, 0.02, 0);
     }
 
     private void consume() {
@@ -545,6 +583,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
                     j -> player.getUUID().equals(j.ownerId()))) {
                 jar.setNoGravity(true);
                 onTray = jar.getUUID();
+                // a botched cut leaves the head upside down for as long as the patient's view is rolled
+                if (botch) jar.setUpsideDown(FormActions.state(player).rollTicks() > 0 ? FormActions.state(player).rollTicks() : 600);
             }
         }
         com.coolfreeze23.headinajar.Advance.grant(player, "separated");
