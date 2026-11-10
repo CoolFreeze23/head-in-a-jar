@@ -16,8 +16,9 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 /**
- * A jar in a Neural Socket: scroll picks a face, number keys set its level (1-9 as 1 to 15, 0 off), R pulses it, G steps to
- * the next face, Sneak + J unplugs. The HUD shows every face's output and input and what the socket reads.
+ * A jar in a Neural Socket: scroll picks a face, number keys set its level (1-9 as 1 to 15, 0 off), the ability key pulses
+ * it, the secondary key steps to the next face, sneak + the jar menu key unplugs. The HUD shows every face's output and
+ * input and what the socket reads.
  */
 public final class SocketClient {
     /** Outputs (6), inputs (6), item count, tank fill, tank capacity; from the server. */
@@ -76,6 +77,6 @@ public final class SocketClient {
             g.drawString(mc.font, Component.translatable("hud.headinajar.socket.items", status.get(12)), x, y + 2, 0xFFA0E0A0);
             if (status.get(14) > 0) g.drawString(mc.font, Component.translatable("hud.headinajar.socket.tank", status.get(13), status.get(14)), x, y + 12, 0xFFA0C0E0);
         }
-        g.drawString(mc.font, Component.translatable("hud.headinajar.socket.keys"), x, y + 26, 0xFF808080);
+        g.drawString(mc.font, Component.translatable("hud.headinajar.socket.keys", ClientSetup.ABILITY.getTranslatedKeyMessage(), ClientSetup.SECONDARY.getTranslatedKeyMessage()), x, y + 26, 0xFF808080);
     }
 }

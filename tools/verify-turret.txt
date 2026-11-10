@@ -1,0 +1,31 @@
+# A Turret Pedestal's head with the pedestal just below the bottom edge of the view: the head stays drawn.
+# Run under the default profile and SMOKE_MODS=sodium,culling.
+@world flat
+@gamemode creative
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/setblock 0 -60 4 headinajar:turret_pedestal
+headblock 0 -60 4 skeleton
+/tp @s 0.5 -60 0.5 0 0
+wait 20
+report == U1 the pedestal in view, then just below the bottom edge with the head in view
+look 0 20
+wait 10
+shot turret_in_view
+look 0 -14
+wait 10
+shot turret_pedestal_below_edge
+look 0 -18
+wait 10
+shot turret_pedestal_below_edge2
+look 0 -22
+wait 10
+shot turret_pedestal_below_edge3
+report == U2 idle spin: a hostile in range, frames to compare turning speed
+/summon minecraft:zombie 6.5 -60 10.5 {NoAI:1b}
+look 0 10
+frames turret_spin 60
+wait 65
+/kill @e[type=zombie]

@@ -69,14 +69,20 @@ public final class ClientRefusals {
         }
         GuiGraphics g = event.getGuiGraphics();
         var screen = event.getScreen();
-        int y = screen instanceof AbstractContainerScreen<?> container ? Math.max(4, container.getGuiTop() - 14) : 8;
-        int w = mc.font.width(shown);
-        int x = (screen.width - w) / 2;
+        // a line wider than the window (a long list of names, Portuguese at a large GUI scale) wraps, growing upwards
+        var lines = mc.font.split(shown, Math.max(40, screen.width - 16));
+        int y = screen instanceof AbstractContainerScreen<?> container ? container.getGuiTop() - 14 - 10 * (lines.size() - 1) : 8;
+        y = Math.max(4, y);
         int alpha = age > SHOWN_TICKS - 10 ? (int) (255 * (SHOWN_TICKS - age) / 10f) : 255;
         g.pose().pushPose();
         g.pose().translate(0, 0, 400);
-        g.fill(x - 3, y - 2, x + w + 3, y + 10, (alpha * 3 / 4) << 24);
-        g.drawString(mc.font, shown, x, y, 0xFFFFFF | Math.max(alpha, 8) << 24);
+        for (var line : lines) {
+            int w = mc.font.width(line);
+            int x = (screen.width - w) / 2;
+            g.fill(x - 3, y - 2, x + w + 3, y + 10, (alpha * 3 / 4) << 24);
+            g.drawString(mc.font, line, x, y, 0xFFFFFF | Math.max(alpha, 8) << 24);
+            y += 10;
+        }
         g.pose().popPose();
     }
 }

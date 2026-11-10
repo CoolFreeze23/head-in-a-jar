@@ -1,0 +1,114 @@
+# Mecha through real input: the Cargo Hold from outside and from the cockpit, empty arm and utility refusals, a flat
+# battery, arms letting go after an eject, the no-legs HUD. Default profile and
+# SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+mecha HOPPER 0 -60 3 hydraulic_legs,cargo_hold,hydraulic_fist
+mecha HOPPER 0 -60 10 hydraulic_legs,drill
+mecha HOPPER 6 -60 3 hydraulic_fist
+wait 10
+report == M1 the Cargo Hold from outside: sneak-use the parked mecha as a whole player
+/give @s minecraft:coal 3
+lookat hopper
+sneak down
+key use
+sneak up
+wait 10
+slots
+shot cargo_outside
+slot item:minecraft:coal shift
+wait 5
+press escape
+wait 5
+report == M2 board as a jar; the HUD names the swap key; the swap key opens the hold
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 1.5 0 0
+wait 5
+lookat hopper
+key use
+wait 20
+riding M2
+shot cargo_hud
+key swap
+wait 10
+slots
+shot cargo_cockpit
+press escape
+wait 5
+report == M3 empty right arm, then ability and secondary with no utility
+key use
+wait 15
+key ability
+wait 15
+key secondary
+wait 15
+screen none
+report == M4 a flat battery: one line for a held attack
+/data merge entity @e[type=headinajar:hopper,limit=1] {Battery:0}
+wait 5
+key attack hold 30
+wait 10
+report == M5 the arms let go on eject: drill held, eject, re-board, no click: the drill must not run
+/data merge entity @e[type=headinajar:hopper,limit=1] {Battery:400000}
+wait 5
+riding M5-before
+key sneak down
+key menu hold 25
+key sneak up
+wait 10
+riding M5-ejected
+/tp @s 0.5 -60 8.5 0 0
+wait 5
+lookat hopper
+key use
+wait 10
+riding M5-drill
+look 0 40
+observe 50
+key attack down
+wait 15
+key sneak down
+key menu hold 25
+key sneak up
+key attack up
+observe 30
+wait 10
+riding M5-ejected2
+/tp @s 0.5 -60 8.5 0 0
+wait 5
+lookat hopper
+key use
+wait 5
+look 0 40
+frames drill_after 40
+observe 45
+wait 2
+report (drill after re-board, no click: no block cracks, no block change)
+wait 45
+observe 30
+inspect block 0 -60 10
+inspect block 0 -61 10
+inspect block 0 -60 11
+report == M6 a Hopper with no legs: HUD line while trying to walk
+key sneak down
+key menu hold 25
+key sneak up
+wait 10
+/tp @s 6.5 -60 1.5 0 0
+wait 5
+lookat hopper
+key use
+wait 10
+key forward down
+wait 10
+shot mecha_no_legs
+key forward up
+inspect me

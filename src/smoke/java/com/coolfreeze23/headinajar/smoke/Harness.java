@@ -442,7 +442,7 @@ public final class Harness {
             case "craft" -> {
                 // craft ROW/ROW/ROW with cells "id,id,_": fills the open crafting grid from the inventory by clicks, then
                 // shift-clicks the result. Expands into slot lines at the front of the script.
-                return craft(a[1], script);
+                return craft(a[1], a.length > 2 && a[2].matches("x[0-9]+") ? Integer.parseInt(a[2].substring(1)) : 1, script);
             }
             case "observe" -> {
                 // observe N: the window, in ticks, an input is watched for
@@ -496,7 +496,7 @@ public final class Harness {
         return 3;
     }
 
-    private int craft(String pattern, Deque<String> script) {
+    private int craft(String pattern, int times, Deque<String> script) {
         Minecraft mc = mc();
         if (!(mc.screen instanceof AbstractContainerScreen<?> c)) {
             report.add("craft -> no container screen");
@@ -536,7 +536,7 @@ public final class Harness {
                 }
                 int src = -1;
                 for (var e : item.entrySet()) {
-                    if (e.getValue().equals(id) && count.get(e.getKey()) > 0) {
+                    if (e.getValue().equals(id) && count.get(e.getKey()) >= times) {
                         src = e.getKey();
                         break;
                     }
@@ -545,16 +545,20 @@ public final class Harness {
                     report.add("craft -> no " + id + " left in the inventory");
                     return 1;
                 }
-                count.merge(src, -1, Integer::sum);
+                if (count.get(src) < times) {
+                    report.add("craft -> only " + count.get(src) + " " + id + " in one stack, need " + times);
+                    return 1;
+                }
+                count.merge(src, -times, Integer::sum);
                 int dst = grid.get(r * width + col);
                 lines.add("slot " + src + " left");
-                lines.add("slot " + dst + " right");
+                for (int t = 0; t < times; t++) lines.add("slot " + dst + " right");
                 lines.add("slot " + src + " left");
             }
         }
         lines.add("slot " + result + " shift");
         for (int i = lines.size() - 1; i >= 0; i--) script.addFirst(lines.get(i));
-        report.add("craft " + pattern + " -> " + lines.size() + " clicks");
+        report.add("craft " + pattern + (times > 1 ? " x" + times : "") + " -> " + lines.size() + " clicks");
         return 1;
     }
 

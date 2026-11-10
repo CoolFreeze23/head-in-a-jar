@@ -1,0 +1,67 @@
+# The bare jar's Nudge and Glug through real input. Run under the default profile and
+# SMOKE_PROFILE=pack. Flat world, survival. A stand-in player at 3 -60 3 listens for what the server sends others.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 0.5 -90 10
+/setblock 2 -60 0 minecraft:chest
+/setblock 0 -60 2 minecraft:crafting_table
+/summon minecraft:cow 0.5 -60 -2.5 {NoAI:1b}
+/summon minecraft:villager -2.5 -60 0.5 {NoAI:1b}
+bystander spawn 3 -60 3
+# the body stays where the head comes off: take it off out of the way
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 0.5 -90 10
+wait 5
+bystander mark
+report == N1 chest: use (container line), then attack (dig line), then attack held 40 ticks (one answer)
+look -90 10
+key use
+shot nudge_chest
+key attack
+wait 30
+key attack hold 40
+wait 30
+bystander packets sound|particle|actionbar|payload
+report == N2 crafting table (a container)
+look 0 10
+key use
+report == N3 cow: use, then attack
+look 180 0
+key use
+key attack
+report == N4 villager: use (no trade screen, head shake)
+look 90 0
+key use
+shot nudge_villager
+report == N5 a plain block (the ground)
+look 45 60
+key use
+report == N6 apple on the ground
+/summon minecraft:item 0.5 -60 -1.5 {Item:{id:"minecraft:apple",count:1},PickupDelay:32767}
+wait 5
+lookat item 0
+key use
+report == N7 ability key (Glug; pack: NOTHING, where the ability key is also sprint) and secondary key (laser line naming the jar menu key)
+look 0 -20
+key ability
+shot glug_ability
+wait 30
+key secondary
+shot glug_secondary
+wait 30
+screen none
+wait 5
+report == N8 the stand-in hears a refusal made 3 blocks away
+bystander mark
+wait 70
+look -90 10
+key use
+wait 30
+bystander packets sound|particle|actionbar
+inspect me

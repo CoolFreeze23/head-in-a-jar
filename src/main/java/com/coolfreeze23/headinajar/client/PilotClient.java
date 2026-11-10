@@ -92,6 +92,7 @@ public final class PilotClient {
         MechaEntity m = mecha();
         if (m == null || mc.options.hideGui) return;
         int x = 8, y = g.guiHeight() - 70;
+        int top = y - 40;
         g.drawString(mc.font, m.getDisplayName(), x, y - 10, 0xFFFFFF);
         var utility = com.coolfreeze23.headinajar.mecha.MechaSystems.selectedUtility(m);
         if (utility != null) {
@@ -119,13 +120,22 @@ public final class PilotClient {
         Component left = arm(m, 0), right = arm(m, 1);
         g.drawString(mc.font, Component.translatable("hud.headinajar.arms", left, right), x, y, 0xA0E0FF);
         y += 10;
-        if (m.vent() > 0) g.drawString(mc.font, Component.translatable("hud.headinajar.venting").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), x, y, 0xFFFFFF);
-        else if (m.battery() <= 0) g.drawString(mc.font, Component.translatable("hud.headinajar.limp").withStyle(ChatFormatting.YELLOW), x, y, 0xFFFFFF);
-        else if (load > 1.25f) g.drawString(mc.font, Component.translatable("hud.headinajar.servos_locked").withStyle(ChatFormatting.RED), x, y, 0xFFFFFF);
+        Component status = null;
+        int statusColor = 0xFFFFFF;
+        if (m.vent() > 0) status = Component.translatable("hud.headinajar.venting").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
+        else if (m.battery() <= 0) status = Component.translatable("hud.headinajar.limp").withStyle(ChatFormatting.YELLOW);
+        else if (load > 1.25f) status = Component.translatable("hud.headinajar.servos_locked").withStyle(ChatFormatting.RED);
         else if (!MechaLogic.canWalk(m) && !MechaLogic.canFly(m) && !(m.isInWater() && m.has(MechaModule.AQUA_FINS))) {
-            g.drawString(mc.font, Component.translatable("hud.headinajar.no_legs", Component.translatable("block.headinajar.assembly_gantry")).withStyle(ChatFormatting.YELLOW), x, y, 0xFFFFFF);
+            status = Component.translatable("hud.headinajar.no_legs", Component.translatable("block.headinajar.assembly_gantry")).withStyle(ChatFormatting.YELLOW);
+        } else if (ejectHold > 0) {
+            status = Component.translatable("hud.headinajar.ejecting", 100 * ejectHold / 20);
+            statusColor = 0xFFD040;
         }
-        else if (ejectHold > 0) g.drawString(mc.font, Component.translatable("hud.headinajar.ejecting", 100 * ejectHold / 20), x, y, 0xFFD040);
+        if (status != null) {
+            // the bottom line would run into the hotbar (a long line, a narrow window, a large GUI scale): it goes on top of the panel
+            boolean fits = x + mc.font.width(status) <= g.guiWidth() / 2 - 95;
+            g.drawString(mc.font, status, x, fits ? y : top, statusColor);
+        }
     }
 
     private static Component arm(MechaEntity m, int side) {

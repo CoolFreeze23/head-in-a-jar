@@ -1,0 +1,163 @@
+# Refusal lines drawn over open screens, in English and Portuguese.
+# Default profile (GUI scale 2) and SMOKE_PROFILE=pack (GUI scale 3). Also the syringe on a cow by a click.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+/setblock 3 -60 0 headinajar:body_printer
+/setblock -3 -60 0 headinajar:gene_splicer
+/data merge block -3 -60 0 {Energy:100000}
+/setblock 0 -60 -3 headinajar:centrifuge
+/setblock 0 -60 8 headinajar:assembly_gantry
+gantry 0 -60 8 HOPPER
+/summon minecraft:cow -1.5 -60 -1.5 {NoAI:1b}
+/give @s headinajar:syringe
+report == X1 a syringe on a cow by a click: a Blood Sample
+hotbar 1
+lookat cow
+key use
+inspect me
+hotbar 9
+report == X2 Body Printer in BODY form, Print: printer.has_head over the panel
+look -90 30
+key use
+wait 10
+widgets
+widget "Print"
+wait 3
+shot screen_printer_has_head_en
+lang pt_br
+wait 15
+widget "Imprimir"
+wait 3
+shot screen_printer_has_head_pt
+lang en_us
+press escape
+wait 5
+report == X3 Gene Splicer, nothing picked, Splice: lab.splicer.no_genes over the panel
+look 90 30
+key use
+wait 10
+widgets
+widget "Splice"
+wait 3
+shot screen_splicer_no_genes_en
+lang pt_br
+wait 15
+widget "Emendar"
+wait 3
+shot screen_splicer_no_genes_pt
+lang en_us
+press escape
+wait 5
+report == X4 Centrifuge with a sample and no power: the stall line top right
+look 180 30
+key use
+wait 10
+slots
+slot item:headinajar:blood_sample shift
+wait 20
+shot screen_centrifuge_no_power_en
+lang pt_br
+wait 15
+shot screen_centrifuge_no_power_pt
+lang en_us
+press escape
+wait 5
+report == X5 the Gantry: no legs, "+" on an empty slot, then a real assembly and its energy
+/tp @s 0.5 -60 6.5 0 45
+wait 5
+look 0 45
+key use
+wait 10
+widgets
+slots
+slot item:headinajar:mecha_hydraulic_legs shift
+wait 5
+inspect block 0 -60 8
+widget "Assemble"
+wait 3
+shot screen_gantry_no_legs_en
+lang pt_br
+wait 15
+widget "Montar"
+wait 3
+shot screen_gantry_no_legs_pt
+lang en_us
+wait 15
+widget "+"
+wait 3
+shot screen_gantry_slot_empty
+slot item:headinajar:mecha_hydraulic_legs shift
+wait 5
+widget "Assemble"
+wait 20
+press escape
+wait 5
+inspect near hopper 6
+inspect block 0 -60 8
+report == X6 someone aboard the mecha on the pad: Take apart says the pad is occupied; then Repair on a flat mecha
+bystander spawn 6 -60 12
+/headoffice trust add Bystander
+bystander form jar
+bystander tp 2 -60 8
+wait 5
+bystander useentity nearest hopper
+wait 10
+bystander state
+look 0 45
+key use
+wait 10
+widget "Take apart"
+wait 3
+shot screen_gantry_pad_occupied_en
+lang pt_br
+wait 15
+widget "Desmontar"
+wait 3
+shot screen_gantry_pad_occupied_pt
+lang en_us
+press escape
+wait 5
+bystander key eject
+wait 10
+bystander remove
+wait 10
+report == X7 Repair on a flat mecha: the battery rises by what the Gantry loses
+/data merge entity @e[type=headinajar:hopper,limit=1] {Battery:0}
+/data merge block 0 -60 8 {Energy:50000}
+wait 5
+inspect near hopper 6
+inspect block 0 -60 8
+look 0 45
+key use
+wait 10
+widget "Repair"
+wait 10
+press escape
+wait 5
+inspect near hopper 6
+inspect block 0 -60 8
+report == X8 a jar beside its own body opens the jar menu and presses Courier: courier.already_here
+/tp @s -6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s -6.5 -60 2.5 180 0
+wait 5
+key jar_menu
+wait 10
+widgets
+widget "Courier"
+wait 3
+shot screen_courier_here_en
+lang pt_br
+wait 15
+widget "Entregador"
+wait 3
+shot screen_courier_here_pt
+lang en_us
+press escape

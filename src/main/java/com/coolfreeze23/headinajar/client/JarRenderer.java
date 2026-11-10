@@ -222,7 +222,7 @@ public final class JarRenderer {
         scaled(pose, WIDE);
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
-        pose.popPose();
+        // one pop for the second scaled(...), one for the push at the top: the caller gets its pose back as it gave it
         pose.popPose();
         pose.popPose();
     }

@@ -1,0 +1,58 @@
+# Telekinesis: hold, let go, and the hold ending by the holder's death and by the holder leaving.
+# Default profile and SMOKE_PROFILE=pack (where the ability key is also sprint, a jar with Telekinesis must still lift).
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 0.5 0 -15
+/summon minecraft:cow 0.5 -60 3.5
+# the body stays where the head comes off: take it off out of the way
+/tp @s -6.5 -60 -6.5
+jar
+wait 10
+/tp @s 0.5 -60 0.5 0 -15
+fit telekinesis
+wait 10
+report == T1 lift, hold, let go
+key ability
+frames tk_hold 60
+wait 10
+/data get entity @e[type=cow,limit=1] NoGravity
+inspect near cow 10
+wait 20
+inspect near cow 10
+shot tk_held
+key ability
+wait 40
+shot tk_dropped
+inspect near cow 10
+report == T2 lift again, the holder dies (a real death): the cow falls
+key ability
+wait 30
+inspect near cow 10
+/kill @s
+wait 40
+inspect near cow 10
+shot tk_after_death
+widgets
+widget "Respawn"
+wait 40
+report == T3 a second player lifts the cow and leaves the game: the cow falls
+/tp @s 0.5 -60 -4.5 0 0
+/tp @e[type=cow] 0.5 -60 3.5
+bystander spawn -3 -60 -3 0
+bystander form jar
+bystander tp 0 -60 0 0 -15
+bystander fit telekinesis
+bystander charge 20000
+wait 10
+bystander key ability
+wait 30
+inspect near cow 12
+shot tk_bystander_held
+bystander remove
+wait 40
+inspect near cow 12
+shot tk_bystander_left

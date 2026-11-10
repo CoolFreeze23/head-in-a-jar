@@ -228,7 +228,8 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         player.refreshDimensions();
         Network.sync(player);
         level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.6f, 1.6f);
-        player.displayClientMessage(Component.translatable("socket.headinajar.plugged"), true);
+        player.displayClientMessage(Component.translatable("socket.headinajar.plugged", Component.keybind("key.headinajar.ability"),
+                Component.keybind("key.sneak"), Component.keybind("key.headinajar.jar_menu")), true);
         setChanged();
         return true;
     }

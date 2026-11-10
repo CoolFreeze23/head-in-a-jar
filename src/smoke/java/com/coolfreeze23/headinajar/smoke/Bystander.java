@@ -278,6 +278,21 @@ final class Bystander {
                 };
                 return "bystander form " + r + " -> form " + form();
             }
+            case "fit" -> {
+                // fit MODULE,MODULE: put jar modules in its jar (setup), charge N: set its jar charge (setup)
+                var state = FormActions.state(player);
+                String[] names = a[2].split(",");
+                for (int i = 0; i < names.length; i++) {
+                    state.setModule(i, new ItemStack(ModRegistry.module(com.coolfreeze23.headinajar.module.ModuleType.valueOf(names[i].trim().toUpperCase(Locale.ROOT)))));
+                }
+                Network.sync(player);
+                return "bystander fit " + a[2];
+            }
+            case "charge" -> {
+                FormActions.state(player).setCharge(Integer.parseInt(a[2]));
+                Network.sync(player);
+                return "bystander charge " + a[2];
+            }
             case "mark" -> {
                 connection.sent.clear();
                 return "bystander mark";
