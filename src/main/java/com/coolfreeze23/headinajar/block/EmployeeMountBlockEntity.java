@@ -84,6 +84,8 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     /** Takes today's emerald from any container touching the mount (never the machine itself). Returns whether it paid. */
     public boolean payroll() {
         if (level == null || head().isEmpty() || paidThrough >= day()) return paidThrough >= day();
+        // a nitwit is never on the payroll (it always counts as unpaid), so it is never charged for it either
+        if ("nitwit".equals(profession())) return false;
         for (Direction d : Direction.values()) {
             BlockPos at = worldPosition.relative(d);
             if (facesInto(at)) continue;
@@ -103,7 +105,8 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     public static void serverTick(Level level, BlockPos pos, BlockState state, EmployeeMountBlockEntity mount) {
         if (mount.head().isEmpty()) return;
         if (level.getGameTime() % 100 == 0) mount.payroll();
-        if (level.getGameTime() % COMPLAINT_TICKS == pos.asLong() % COMPLAINT_TICKS && !mount.paid()) mount.complain();
+        // a block at negative x has a negative long: its slot in the cycle is counted from zero up, like every other block's
+        if (level.getGameTime() % COMPLAINT_TICKS == Math.floorMod(pos.asLong(), (long) COMPLAINT_TICKS) && !mount.paid()) mount.complain();
     }
 
     private void complain() {

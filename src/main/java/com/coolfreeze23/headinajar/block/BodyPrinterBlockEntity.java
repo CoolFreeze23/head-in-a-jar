@@ -82,7 +82,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
                 case 0 -> energy.getEnergyStored() / 10;
                 case 1 -> saline.getFluidAmount();
                 case 2 -> Math.max(0, progress);
-                case 3 -> printing() && energy.getEnergyStored() < ENERGY / TICKS ? com.coolfreeze23.headinajar.menu.MachineMenu.NO_POWER : 0;
+                case 3 -> printing() && progress < TICKS && energy.getEnergyStored() < ENERGY / TICKS ? com.coolfreeze23.headinajar.menu.MachineMenu.NO_POWER : 0;
                 default -> 0;
             };
         }
@@ -130,6 +130,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
     /** The Print button: only a decapitated player can order a body, and only with everything loaded. */
     public boolean start(ServerPlayer player) {
         var refuser = com.coolfreeze23.headinajar.feedback.Refuser.at(this);
+        if (printing() && progress >= TICKS) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.waiting", clientName);
         if (printing()) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.busy", Math.max(0, (TICKS - progress) / 20));
         if (FormActions.state(player).form() != Form.JAR) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.has_head");
         for (int i = 0; i < NEED.length; i++) {
@@ -142,6 +143,11 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
             return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.no_saline", SALINE - saline.getFluidAmount(),
                     Component.translatable("fluid_type.headinajar.cranial_saline"));
         }
+        // as the chair: nothing is taken until the whole print's power is stored, so a print never stalls half done
+        if (energy.getEnergyStored() < ENERGY) {
+            return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.no_power", ENERGY / 1000, energy.getEnergyStored() / 1000,
+                    Component.translatable("block.headinajar.galvanic_pile"));
+        }
         for (int i = 0; i < NEED.length; i++) items.extractItem(i, NEED[i], false);
         saline.drain(SALINE, IFluidHandler.FluidAction.EXECUTE);
         client = player.getUUID();
@@ -153,12 +159,36 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, BodyPrinterBlockEntity printer) {
         if (!printer.printing()) return;
+        // a finished body waits in the vat while its owner has a body on
+        if (printer.progress >= TICKS) {
+            if (level.getGameTime() % 20 == 0) printer.deliver((ServerLevel) level);
+            return;
+        }
         int perTick = ENERGY / TICKS;
         if (printer.energy.getEnergyStored() < perTick) return;
         printer.energy.set(printer.energy.getEnergyStored() - perTick);
         printer.progress++;
         if (printer.progress % 40 == 0) level.playSound(null, pos, SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 0.6f, 0.6f);
-        if (printer.progress >= TICKS) printer.print((ServerLevel) level);
+        if (printer.progress >= TICKS) printer.deliver((ServerLevel) level);
+    }
+
+    /** The owner told that their finished body waits, this time they had one on (not saved: told again after a reload). */
+    private boolean toldWaiting;
+
+    /**
+     * The print is done. A body comes out for a head in a jar (or one away from the game, who takes it on when back as a
+     * jar); for an owner who has their head on again, or is out in another body, it stays in the vat, and they are told
+     * so once, until they are a jar again.
+     */
+    private void deliver(ServerLevel level) {
+        ServerPlayer owner = client == null ? null : level.getServer().getPlayerList().getPlayer(client);
+        if (owner != null && !FormActions.state(owner).form().isJarred()) {
+            if (!toldWaiting) com.coolfreeze23.headinajar.feedback.Warnings.warn(owner, 20, "printer.body_waits", Component.translatable("block.headinajar.body_printer"));
+            toldWaiting = true;
+            return;
+        }
+        toldWaiting = false;
+        print(level);
     }
 
     private void print(ServerLevel level) {

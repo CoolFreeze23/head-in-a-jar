@@ -37,6 +37,17 @@ import java.util.List;
 public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvider, HasItems {
     public static final int SLOT_FRAME = 0, SLOT_PLATING = 1, FIRST_MODULE = 2, MODULE_SLOTS = MechaFrame.maxSlots();
     public static final int ASSEMBLE_COST = 10_000;
+    /**
+     * What automation sees: a hopper may keep the Mecha Plating topped up (from the top and sides); the frame and the
+     * modules are the builder's own, set by hand, and never taken by a pipe.
+     */
+    public static final MachineItems.Role[] ROLES = roles();
+
+    private static MachineItems.Role[] roles() {
+        MachineItems.Role[] roles = MachineItems.all(FIRST_MODULE + MODULE_SLOTS, MachineItems.Role.HAND);
+        roles[SLOT_PLATING] = MachineItems.Role.INPUT;
+        return roles;
+    }
 
     private final Buffer energy = new Buffer(100_000, 5_000, 0, this::setChanged);
     private final ItemStackHandler items = new ItemStackHandler(FIRST_MODULE + MODULE_SLOTS) {

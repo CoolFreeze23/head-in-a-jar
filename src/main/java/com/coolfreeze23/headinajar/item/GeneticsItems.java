@@ -82,9 +82,24 @@ public final class GeneticsItems {
             tooltip.add(Component.translatable("item.headinajar.sample.quality", quality(stack)).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.translatable("blood.headinajar." + BloodType.of(type).name().toLowerCase(java.util.Locale.ROOT)).withStyle(ChatFormatting.DARK_RED));
             List<Gene> genes = Gene.of(BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
-            if (!genes.isEmpty()) {
-                tooltip.add(Component.translatable("item.headinajar.sample.genes", genes.size()).withStyle(ChatFormatting.DARK_GRAY));
+            if (genes.isEmpty()) {
+                tooltip.add(Component.translatable("item.headinajar.sample.no_genes").withStyle(ChatFormatting.DARK_GRAY));
+                return;
             }
+            // which genes, by name, and how many auto-reads of samples this good take each of them to a Draft
+            net.minecraft.network.chat.MutableComponent names = Component.empty();
+            for (int i = 0; i < genes.size(); i++) {
+                if (i > 0) names.append(", ");
+                names.append(Component.translatable("gene.headinajar." + genes.get(i).id()));
+            }
+            tooltip.add(Component.translatable("item.headinajar.sample.carries", names).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable("item.headinajar.sample.reads", readsToDraft(quality(stack), genes.size())).withStyle(ChatFormatting.DARK_GRAY));
+        }
+
+        /** Auto-reads at the Sequencer's own accuracy that take a gene from nothing to a Draft (30%). */
+        public static int readsToDraft(int quality, int genes) {
+            float gain = Genetics.readGain(Math.max(1, quality), com.coolfreeze23.headinajar.block.LabMachines.Sequencer.AUTO_ACCURACY, genes);
+            return gain <= 0 ? 0 : (int) Math.ceil(30 / gain - 1e-4);
         }
     }
 
@@ -123,7 +138,8 @@ public final class GeneticsItems {
                 return InteractionResult.FAIL;
             }
             int quality = quality(target, min + player.getRandom().nextInt(max - min + 1));
-            if (!harmless) target.hurt(player.damageSources().playerAttack(player), 1);
+            // the needle stings, but a sample never costs the specimen its last point of health
+            if (!harmless) target.hurt(player.damageSources().playerAttack(player), Math.min(1, Math.max(0, target.getHealth() - 1)));
             com.coolfreeze23.headinajar.form.FormActions.give(player, sample(ModRegistry.BLOOD_SAMPLE.get(), target.getType(), quality));
             int drawn = player.getPersistentData().getInt("headinajar_samples") + 1;
             player.getPersistentData().putInt("headinajar_samples", drawn);
