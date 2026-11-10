@@ -7,7 +7,7 @@ wait 40
 /gamerule doDaylightCycle false
 /weather clear
 hud off
-# --- the jar's own eyes: the real player is the jar (first person, whatever the camera mods start in)
+# --- the jar's own eyes: the real player is the jar
 /tp @s 0.5 -60 0.5 0 0
 jar
 # the body stays where the head came off: the jar moves 3 blocks east of it
@@ -15,7 +15,7 @@ jar
 fit telekinesis
 charge 100000
 wait 10
-/summon cow 3.5 -60 4.5
+/summon cow 3.5 -60 4.5 {NoAI:1b}
 wait 20
 lookat cow
 view 0
@@ -23,7 +23,7 @@ perf idle_jar_no_tether 40
 wait 45
 frames tk_doer_day 150
 lookat cow
-wait 2
+wait 10
 key ability
 wait 10
 fxstate doer_grab
@@ -40,23 +40,27 @@ fxstate after_doer_throw
 body
 wait 10
 /kill @e[type=cow]
+/kill @e[type=item]
 bystander spawn 10 -60 0 0
 bystander tick on
 wait 10
 bystander form jar
+# the head comes off where the body stands: move the jar out of its own body
+bystander tp 12 -60 0 0 0
 bystander fit telekinesis
 bystander charge 100000
-/summon cow 10.5 -60 4.5
+/summon cow 12.5 -60 4.5 {NoAI:1b}
 wait 30
 bystander look 0 -6
 # 5 blocks, three-quarter, by day
-/tp @s 14.5 -60 6.5 135 12
+/tp @s 16.5 -60 6.5 135 12
 wait 10
 bystander mark
 frames tk_by5_day 170
 wait 3
 bystander key ability
 wait 20
+fxstate by5_holding
 bystander packets
 bystander mark
 wait 20
@@ -85,9 +89,10 @@ bystander key throw
 wait 60
 # 30 blocks, by day
 /kill @e[type=cow]
-/summon cow 10.5 -60 4.5
+/kill @e[type=item]
+/summon cow 12.5 -60 4.5 {NoAI:1b}
 bystander look 0 -6
-/tp @s 38.5 -55 9.5 105 8
+/tp @s 40.5 -55 9.5 105 8
 wait 30
 frames tk_by30_day 150
 wait 3
@@ -110,9 +115,10 @@ wait 60
 # night, 5 and 30
 /time set 18000
 /kill @e[type=cow]
-/summon cow 10.5 -60 4.5
+/kill @e[type=item]
+/summon cow 12.5 -60 4.5 {NoAI:1b}
 bystander look 0 -6
-/tp @s 14.5 -60 6.5 135 12
+/tp @s 16.5 -60 6.5 135 12
 wait 30
 frames tk_by5_night 150
 wait 3

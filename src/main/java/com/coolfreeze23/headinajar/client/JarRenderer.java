@@ -222,7 +222,7 @@ public final class JarRenderer {
         scaled(pose, WIDE);
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
-        pose.popPose();
+        // two pushes above (the flip and the size), two pops: one more popped the caller's pose and crashed the frame
         pose.popPose();
         pose.popPose();
     }

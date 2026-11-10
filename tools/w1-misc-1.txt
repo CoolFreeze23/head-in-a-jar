@@ -37,11 +37,13 @@ bystander spawn 0 -60 10 0
 bystander tick on
 wait 5
 bystander form jar
+# out of its own body, which stays where the head came off
+bystander tp 0 -60 12 0 0
 bystander fit lacrimal_laser
 bystander charge 100000
 /summon pig 0.5 -60 15.5 {NoAI:1b}
 bystander look 0 -4
-/tp @s 4.5 -59 13.5 120 8
+/tp @s 5.5 -59 14 70 8
 wait 20
 bystander mark
 frames laser_by5_day 40

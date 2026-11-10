@@ -95,8 +95,8 @@ public final class SwapFx {
             float time = level.getGameTime() - t.start + f.partialTick();
             Vec3 p = at(t, time);
             float a = t.away ? 1 - Mth.clamp(time / t.length, 0, 1) : 1;
-            Beams.bead(f, p, FxColors.SIGNAL_PALE, 0.16f, a);
-            Beams.bead(f, p, FxColors.SIGNAL_DARK, 0.3f, a * 0.4f);
+            Beams.bead(f, p, FxColors.SIGNAL_PALE, 0.1f, a);
+            Beams.bead(f, p, FxColors.SIGNAL_DARK, 0.22f, a * 0.35f);
         }
     }
 
