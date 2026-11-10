@@ -329,6 +329,7 @@ public class ChairGameTests {
         h.runAfterDelay(5, () -> {
             use(h, other);
             h.assertValueEqual(Refusals.lastDelivered(other), "chair.in_use", "plain click");
+            h.assertFalse(said(h).stream().anyMatch(l -> l[1].equals("chair_in_use")), "a refusal was voiced over the operation");
             h.assertTrue(other.containerMenu == other.inventoryMenu, "the console opened mid-operation");
             other.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModRegistry.REPLACEMENT_BLADE.get()));
             use(h, other);

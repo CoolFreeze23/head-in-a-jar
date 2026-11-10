@@ -72,7 +72,8 @@ public final class ChairKeyframes {
         var player = Minecraft.getInstance().player;
         if (player == null || player.distanceToSqr(at) > SOUND_RANGE * SOUND_RANGE) return;
         // the patient is in the silent second after the cut: the plonk and the ding are for the people watching
-        if ((id.endsWith("chair.ding") || id.endsWith("chair.plonk")) && player.getUUID().equals(chair.patient())) return;
+        if ((id.endsWith("chair.ding") || id.endsWith("chair.plonk")) && player.getUUID().equals(chair.patient())
+                && ChairClock.elapsed(chair) < com.coolfreeze23.headinajar.block.ChairTimeline.BOOT_START) return;
         Map<String, Long> last = LAST.computeIfAbsent(chair, c -> new HashMap<>());
         long now = level.getGameTime();
         Long before = last.get(id);

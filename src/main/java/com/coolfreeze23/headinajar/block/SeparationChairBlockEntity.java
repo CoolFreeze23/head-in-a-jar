@@ -422,7 +422,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
 
     /** Says a refusal or blade line aloud, unless she spoke one just now or already said this one to this sitter. */
     public void voiceRefusal(String line) {
-        if (line == null || level == null) return;
+        // during the operation she speaks only her own lines: a refusal there stays text, so it never cuts one off
+        if (line == null || level == null || running()) return;
         ServerPlayer seated = seated();
         UUID now = seated == null ? null : seated.getUUID();
         if (!java.util.Objects.equals(now, sitter)) {
