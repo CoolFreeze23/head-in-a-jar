@@ -250,9 +250,10 @@ public final class MechaLogic {
             if (aloft == 600) com.coolfreeze23.headinajar.Advance.grant(pilot, "frequent_flyer");
         }
         int net = gain - Math.round(drain);
-        if (pilot == null && gain == 0) {
-            // parked: the same 1 FE a tick as ever, settled once a second, so a parked mecha isn't re-sent to every
-            // watcher every tick
+        if (pilot == null && !m.has(MechaModule.COMBUSTION_KERNEL)) {
+            // parked: the same FE a tick as ever (the 1 FE drain, less what a Galvanic Stack or Solar Skin brings in),
+            // settled once a second, so a parked mecha isn't re-sent to every watcher every tick. A Combustion Kernel
+            // burns its fuel a tick at a time and keeps the old path.
             if (m.tickCount % 20 == 0) m.setBattery(m.battery() + 20 * net);
         } else {
             m.setBattery(m.battery() + net);

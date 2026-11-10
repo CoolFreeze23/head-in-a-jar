@@ -251,17 +251,23 @@ public final class FormActions {
         JarState state = state(player);
         if (!com.coolfreeze23.headinajar.host.Hosts.isHost(host) || !host.isAlive()) return false;
         if (host.isVehicle() && !(host.getFirstPassenger() == null)) return false;
+        boolean mecha = host instanceof com.coolfreeze23.headinajar.entity.MechaEntity;
+        // someone else's mecha is refused before a linked player is put into their head for nothing
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && !m.isOwnedBy(player)) {
+            return Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(m), "mecha.not_yours");
+        }
+        boolean swapped = false;
         if (state.form() == Form.LINKED && state.carryingHead()) {
             if (!linkedToJar(player)) return false;
+            swapped = true;
         }
         if (state.form() != Form.JAR) return false;
-        boolean mecha = host instanceof com.coolfreeze23.headinajar.entity.MechaEntity;
-        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && !m.isOwnedBy(player)) {
-            player.displayClientMessage(Component.translatable("message.headinajar.not_your_mecha"), true);
+        Telekinesis.release(player, state);
+        if (!player.startRiding(host, true)) {
+            // the head is out of the satchel by now: say where the player is, not just that the climb failed
+            if (swapped) Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(host), "host.mount_failed", host.getDisplayName());
             return false;
         }
-        Telekinesis.release(player, state);
-        if (!player.startRiding(host, true)) return false;
         state.setForm(mecha ? Form.PILOT : Form.HOSTED);
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
         player.refreshDimensions();

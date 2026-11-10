@@ -136,6 +136,7 @@ import gen_p10_forms
 gen_p10_forms.run(EN, PT, write, shaped)
 import gen_p11_mecha; gen_p11_mecha.run(EN, PT, write, shaped)
 import gen_p12_machines; gen_p12_machines.run(EN, PT, write, shaped)  # machines, genetics, heads at work
+import gen_p13_followups; gen_p13_followups.run(EN, PT, write, shaped)  # follow-ups seen in the game
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

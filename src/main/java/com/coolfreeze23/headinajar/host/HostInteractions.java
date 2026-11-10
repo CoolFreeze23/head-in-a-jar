@@ -75,7 +75,8 @@ public final class HostInteractions {
         if (jarLike) {
             if (host instanceof MechaEntity mecha && !mecha.isOwnedBy(player)) {
                 Refusals.deny(player, Refuser.at(mecha), "mecha.not_yours");
-            } else if (!FormActions.mountHost(player, host)) {
+            } else if (!FormActions.mountHost(player, host) && (form == Form.JAR || host.isVehicle())) {
+                // a linked player whose climb failed after the swap has been told so by mountHost
                 player.displayClientMessage(Component.translatable("message.headinajar.host_busy"), true);
             }
         } else if (form == Form.BODY || form == Form.LINKED) {
