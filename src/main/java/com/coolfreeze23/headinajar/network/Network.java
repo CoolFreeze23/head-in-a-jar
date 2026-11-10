@@ -199,19 +199,7 @@ public final class Network {
             com.coolfreeze23.headinajar.genetics.GeneArchive.clientLibrary = lib;
         });
         registrar.playToServer(SocketInput.TYPE, SocketInput.CODEC, (msg, ctx) -> {
-            if (!(ctx.player() instanceof ServerPlayer player) || com.coolfreeze23.headinajar.form.FormActions.state(player).form() != com.coolfreeze23.headinajar.form.Form.SOCKET) return;
-            if (msg.action() == 2) {
-                com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.unplug(player);
-                return;
-            }
-            if (!(player.level().getBlockEntity(player.blockPosition().below()) instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity socket)
-                    || !player.getUUID().equals(socket.occupant())) return;
-            var face = net.minecraft.core.Direction.from3DDataValue(Math.floorMod(msg.face(), 6));
-            if (msg.action() == 0) socket.setOutput(face, msg.level());
-            else if (msg.action() == 1) {
-                socket.pulse(face);
-                com.coolfreeze23.headinajar.Advance.grant(player, "socket_pulse");
-            }
+            if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.input(player, msg.action(), msg.face(), msg.level());
         });
         registrar.playToClient(SocketStatus.TYPE, SocketStatus.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.SocketClient.status = msg.values());
         registrar.playBidirectional(Handshake.TYPE, Handshake.CODEC, Network::onHandshake);

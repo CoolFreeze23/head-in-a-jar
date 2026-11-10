@@ -2,7 +2,7 @@ package com.coolfreeze23.headinajar.client;
 
 import com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity;
 import com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity;
-import com.coolfreeze23.headinajar.block.HeadJobs;
+import com.coolfreeze23.headinajar.block.HeadInfo;
 import com.coolfreeze23.headinajar.block.MachineBlock;
 import com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,8 +14,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,7 +24,15 @@ public final class HeadWorkRenderers {
     private HeadWorkRenderers() {
     }
 
-    static void drawHead(ItemStack head, PoseStack pose, MultiBufferSource buffers, int light, float age, float scale) {
+    /**
+     * A head drawn on a holder rises above its block: the box the renderer is culled by (vanilla, Sodium, Entity Culling)
+     * covers the block and one more above it, a little wider for a head that turns.
+     */
+    static AABB above(net.minecraft.core.BlockPos pos) {
+        return new AABB(pos).expandTowards(0, 1, 0).inflate(0.25, 0, 0.25);
+    }
+
+    static void drawHead(ItemStack head, HeadInfo info, PoseStack pose, MultiBufferSource buffers, int light, float age, float scale) {
         if (head.is(Items.DRAGON_HEAD)) {
             pose.pushPose();
             pose.translate(0, 0.25, 0);
@@ -35,11 +41,11 @@ public final class HeadWorkRenderers {
             pose.popPose();
             return;
         }
-        EntityType<?> type = HeadJobs.type(head);
+        EntityType<?> type = info.type();
         if (type == null) return;
         pose.pushPose();
         pose.scale(scale, scale, scale);
-        JarredHeadRenderer.drawJar(type, HeadJobs.entityTag(head), pose, buffers, light, age);
+        JarredHeadRenderer.drawJar(type, info.villagerData(), pose, buffers, light, age);
         pose.popPose();
     }
 
@@ -51,18 +57,17 @@ public final class HeadWorkRenderers {
         public void render(TurretPedestalBlockEntity t, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
             if (t.getLevel() == null || t.head().isEmpty()) return;
             float age = t.getLevel().getGameTime() + partialTick;
-            // turn toward the nearest hostile within range (client-side guess; the server picks the real target)
-            var c = t.getBlockPos().getCenter();
-            LivingEntity near = t.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(t.getBlockPos()).inflate(TurretPedestalBlockEntity.RANGE),
-                    e -> e instanceof Enemy && e.isAlive()).stream().min(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(c))).orElse(null);
-            float want = near == null ? t.yaw + 0.5f : (float) (Mth.atan2(near.getZ() - c.z, near.getX() - c.x) * Mth.RAD_TO_DEG) - 90;
-            t.yawO = t.yaw;
-            t.yaw = t.yaw + Mth.wrapDegrees(want - t.yaw) * 0.1f;
+            // the head is turned on the client tick (TurretPedestalBlockEntity.clientTick); here it is only drawn between ticks
             pose.pushPose();
             pose.translate(0.5, 10 / 16f, 0.5);
-            pose.mulPose(Axis.YP.rotationDegrees(-Mth.lerp(partialTick, t.yawO, t.yaw)));
-            drawHead(t.head(), pose, buffers, light, age, 0.7f);
+            pose.mulPose(Axis.YP.rotationDegrees(-Mth.rotLerp(partialTick, t.yawO, t.yaw)));
+            drawHead(t.head(), t.headInfo(), pose, buffers, light, age, 0.7f);
             pose.popPose();
+        }
+
+        @Override
+        public AABB getRenderBoundingBox(TurretPedestalBlockEntity t) {
+            return above(t.getBlockPos());
         }
     }
 
@@ -76,8 +81,13 @@ public final class HeadWorkRenderers {
             pose.pushPose();
             pose.translate(0.5, 12 / 16f, 0.5);
             pose.mulPose(Axis.YP.rotationDegrees(-m.getBlockState().getValue(MachineBlock.FACING).toYRot()));
-            drawHead(m.head(), pose, buffers, light, m.getLevel().getGameTime() + partialTick, 0.6f);
+            drawHead(m.head(), m.headInfo(), pose, buffers, light, m.getLevel().getGameTime() + partialTick, 0.6f);
             pose.popPose();
+        }
+
+        @Override
+        public AABB getRenderBoundingBox(EmployeeMountBlockEntity m) {
+            return above(m.getBlockPos());
         }
     }
 
@@ -90,8 +100,13 @@ public final class HeadWorkRenderers {
             if (s.getLevel() == null || s.head().isEmpty()) return;
             pose.pushPose();
             pose.translate(0.5, 1, 0.5);
-            drawHead(s.head(), pose, buffers, light, s.getLevel().getGameTime() + partialTick, 0.7f);
+            drawHead(s.head(), s.headInfo(), pose, buffers, light, s.getLevel().getGameTime() + partialTick, 0.7f);
             pose.popPose();
+        }
+
+        @Override
+        public AABB getRenderBoundingBox(com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity s) {
+            return above(s.getBlockPos());
         }
     }
 
@@ -113,10 +128,16 @@ public final class HeadWorkRenderers {
                 if (head.isEmpty()) continue;
                 pose.pushPose();
                 pose.translate((i % 3 - 1) * 0.3, 0.68 - (i / 3) * 0.3, -0.5);
-                drawHead(head, pose, buffers, light, age + i * 7, 0.26f);
+                drawHead(head, a.headInfo(i), pose, buffers, light, age + i * 7, 0.26f);
                 pose.popPose();
             }
             pose.popPose();
+        }
+
+        /** The rack stands proud of the front face. */
+        @Override
+        public AABB getRenderBoundingBox(CerebralArrayBlockEntity a) {
+            return new AABB(a.getBlockPos()).inflate(0.3, 0.1, 0.3);
         }
     }
 }

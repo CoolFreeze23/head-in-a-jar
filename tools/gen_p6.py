@@ -62,12 +62,14 @@ MODULES = {
                       'Segure: repara o mecha que você olha (ou o seu) com Blindagem de Mecha do compartimento.', ['B', 'F', 'V'], dict(B='blaze_rod', F='flint_and_steel', V=V)),
     'plasma_lance': ('Plasma Lance', 'Hold: a 32-block beam, 20 damage a second. Very hot.', 'Lança de Plasma',
                      'Segure: um feixe de 32 blocos, 20 de dano por segundo. Muito quente.', ['EPE', ' V '], dict(E='end_rod', P='headinajar:plasma_pellet', V=V)),
+    # a servo under it, so it doesn't share the Collar Cam's Thermal Overlay recipe
     'thermal_imaging': ('Thermal Imaging', 'Living things within 32 blocks glow.', 'Imagem Térmica', 'Seres vivos a até 32 blocos brilham.',
-                        ['L', 'G'], dict(L='headinajar:lens', G='glow_ink_sac')),
+                        ['L', 'G', 'V'], dict(L='headinajar:lens', G='glow_ink_sac', V=V)),
     'ore_scanner': ('Ore Scanner', 'Ping: marks ores within 8 to 24 blocks for 5 s (Radius).', 'Scanner de Minério',
                     'Pulso: marca minérios a 8 a 24 blocos por 5 s (Raio).', ['L', 'C', 'R'], dict(L='headinajar:lens', C='compass', R='redstone_block')),
+    # redstone under it, so it doesn't share the Bio-Scanner's recipe
     'target_lock': ('Target Lock', 'Your aim drifts onto hostiles near the crosshair.', 'Trava de Mira', 'Sua mira desliza para hostis perto da cruz.',
-                    ['L', 'C'], dict(L='headinajar:lens', C=C)),
+                    ['L', 'C', 'R'], dict(L='headinajar:lens', C=C, R='redstone')),
 }
 
 SLIDERS = {'boost': ('Boost', 'Impulso'), 'altitude': ('Altitude', 'Altitude'), 'warhead': ('Warhead', 'Ogiva'), 'output': ('Output', 'Saída'),

@@ -74,6 +74,10 @@ public class JarredHeadBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof JarredHeadBlockEntity head)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (head.entityType() == net.minecraft.world.entity.EntityType.VILLAGER && head.busy((ServerPlayer) player)) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at(head), "jarred_head.busy");
+            return InteractionResult.CONSUME;
+        }
         if (!head.trade((ServerPlayer) player) && head.entityType() != null) {
             player.displayClientMessage(Component.translatable("message.headinajar.jarred_head", head.entityType().getDescription()), true);
         }
@@ -83,6 +87,8 @@ public class JarredHeadBlock extends BaseEntityBlock {
     @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         if (params.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY) instanceof JarredHeadBlockEntity head) {
+            // broken mid-trade: the trade so far is kept in the head, and the screen closes
+            head.settle();
             return List.of(head.toItem());
         }
         return List.of();

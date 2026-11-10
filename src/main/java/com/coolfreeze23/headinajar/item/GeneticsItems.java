@@ -54,13 +54,13 @@ public final class GeneticsItems {
     public static EntityType<?> species(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return null;
-        ResourceLocation id = ResourceLocation.tryParse(data.copyTag().getString("Species"));
+        ResourceLocation id = ResourceLocation.tryParse(data.getUnsafe().getString("Species"));
         return id == null ? null : BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(null);
     }
 
     public static int quality(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data == null ? 0 : data.copyTag().getInt("Quality");
+        return data == null ? 0 : data.getUnsafe().getInt("Quality");
     }
 
     /** A Blood Sample or DNA Fraction: shows its creature and quality. */
@@ -108,7 +108,10 @@ public final class GeneticsItems {
 
         /** Draws a sample from {@code target}. Returns the result to report. */
         public InteractionResult draw(ServerPlayer player, ItemStack stack, LivingEntity target, InteractionHand hand) {
-            if (target instanceof Player) return InteractionResult.PASS;
+            if (target instanceof Player) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, "gene.syringe_player");
+                return InteractionResult.FAIL;
+            }
             BloodType blood = BloodType.of(target);
             boolean right = kind.bloodless ? blood == kind : !blood.bloodless;
             if (!right) {
@@ -128,6 +131,13 @@ public final class GeneticsItems {
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             player.serverLevel().playSound(null, target.blockPosition(), SoundEvents.BEE_STING, target.getSoundSource(), 0.8f, 1.4f);
             return InteractionResult.CONSUME;
+        }
+
+        /** Used in the air: say what it is for. */
+        @Override
+        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+            if (player instanceof ServerPlayer server) com.coolfreeze23.headinajar.feedback.Refusals.deny(server, "gene.syringe_air");
+            return InteractionResultHolder.fail(player.getItemInHand(hand));
         }
 
         /** A healthy, calm creature gives better blood. */
@@ -172,7 +182,10 @@ public final class GeneticsItems {
             } else if (target instanceof Mob host && Hosts.isHost(host)) {
                 kind = Genetics.Target.HOST;
             } else {
-                return InteractionResult.PASS;
+                // a plain creature, another player or a Headless Body: say where a serum does go
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, "gene.serum_target",
+                        Component.translatable("block.headinajar.injection_rig"), Component.translatable("item.headinajar.surgical_saw"));
+                return InteractionResult.FAIL;
             }
             Genetics.Result result = Genetics.inject(target, serum.get(), kind, player.getRandom());
             report(player, result);
@@ -182,6 +195,16 @@ public final class GeneticsItems {
             com.coolfreeze23.headinajar.form.FormActions.give(player, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
             Network.syncGenes(target);
             return InteractionResult.CONSUME;
+        }
+
+        /** Used in the air: serums are never self-injected by hand. */
+        @Override
+        public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+            ItemStack stack = player.getItemInHand(hand);
+            if (player instanceof ServerPlayer server) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(server, "gene.serum_self", Component.translatable("block.headinajar.injection_rig"));
+            }
+            return net.minecraft.world.InteractionResultHolder.fail(stack);
         }
 
         public static void report(ServerPlayer player, Genetics.Result result) {
@@ -226,20 +249,31 @@ public final class GeneticsItems {
             super(properties);
         }
 
+        /** Only a body can drink: a head in a jar (on a host, in a mecha, in a socket) is refused, and keeps the bottle. */
+        private static boolean drinks(Player player) {
+            Form form = player.getData(ModRegistry.JAR_STATE).form();
+            return form == Form.BODY || form == Form.LINKED;
+        }
+
         @Override
         public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+            if (!drinks(player)) {
+                if (player instanceof ServerPlayer server) com.coolfreeze23.headinajar.feedback.Refusals.deny(server, "gene.wash_jar");
+                return InteractionResultHolder.fail(player.getItemInHand(hand));
+            }
             return ItemUtils.startUsingInstantly(level, player, hand);
         }
 
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
             if (entity instanceof ServerPlayer player) {
-                Form form = player.getData(ModRegistry.JAR_STATE).form();
-                if (form == Form.BODY || form == Form.LINKED) {
-                    Genetics.genes(player).clear();
-                    Network.syncGenes(player);
-                    player.displayClientMessage(Component.translatable("message.headinajar.washed"), true);
+                if (!drinks(player)) {
+                    com.coolfreeze23.headinajar.feedback.Refusals.deny(player, "gene.wash_jar");
+                    return stack;
                 }
+                Genetics.genes(player).clear();
+                Network.syncGenes(player);
+                player.displayClientMessage(Component.translatable("message.headinajar.washed"), true);
                 stack.consume(1, player);
             }
             return stack;

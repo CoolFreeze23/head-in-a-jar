@@ -43,6 +43,9 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
     public static final int SALINE = 2000;
     public static final int TICKS = 1200;
     public static final int ENERGY = 200_000;
+    /** What each slot holds, in order (the recipe {@link #NEED} counts). */
+    private static final net.minecraft.world.item.Item[] MATERIALS = {Items.ROTTEN_FLESH, Items.BONE_BLOCK, Items.REDSTONE_BLOCK, Items.SLIME_BALL};
+    public static final MachineItems.Role[] ROLES = MachineItems.all(4, MachineItems.Role.INPUT);
 
     private final Buffer energy = new Buffer(250_000, 5_000, 0, this::setChanged);
     private final FluidTank saline = new FluidTank(4000, f -> f.getFluid().isSame(ModFluids.SALINE.source.get())) {
@@ -79,6 +82,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
                 case 0 -> energy.getEnergyStored() / 10;
                 case 1 -> saline.getFluidAmount();
                 case 2 -> Math.max(0, progress);
+                case 3 -> printing() && energy.getEnergyStored() < ENERGY / TICKS ? com.coolfreeze23.headinajar.menu.MachineMenu.NO_POWER : 0;
                 default -> 0;
             };
         }
@@ -89,7 +93,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     };
 
@@ -110,26 +114,33 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
         return items;
     }
 
+    /** Mid-print, the materials are already in the vat: breaking the printer gives them back (the saline is lost with the tank). */
+    @Override
+    public java.util.List<ItemStack> consumed() {
+        if (!printing()) return java.util.List.of();
+        java.util.List<ItemStack> out = new java.util.ArrayList<>();
+        for (int i = 0; i < NEED.length; i++) out.add(new ItemStack(MATERIALS[i], NEED[i]));
+        return out;
+    }
+
     public boolean printing() {
         return progress >= 0;
     }
 
     /** The Print button: only a decapitated player can order a body, and only with everything loaded. */
     public boolean start(ServerPlayer player) {
-        if (printing()) return false;
-        if (FormActions.state(player).form() != Form.JAR) {
-            player.displayClientMessage(Component.translatable("message.headinajar.printer_has_head"), true);
-            return false;
-        }
+        var refuser = com.coolfreeze23.headinajar.feedback.Refuser.at(this);
+        if (printing()) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.busy", Math.max(0, (TICKS - progress) / 20));
+        if (FormActions.state(player).form() != Form.JAR) return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.has_head");
         for (int i = 0; i < NEED.length; i++) {
-            if (items.getStackInSlot(i).getCount() < NEED[i]) {
-                player.displayClientMessage(Component.translatable("message.headinajar.printer_missing"), true);
-                return false;
+            int short_ = NEED[i] - items.getStackInSlot(i).getCount();
+            if (short_ > 0) {
+                return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.missing", short_, Component.translatable(MATERIALS[i].getDescriptionId()));
             }
         }
         if (saline.getFluidAmount() < SALINE) {
-            player.displayClientMessage(Component.translatable("message.headinajar.printer_missing"), true);
-            return false;
+            return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "printer.no_saline", SALINE - saline.getFluidAmount(),
+                    Component.translatable("fluid_type.headinajar.cranial_saline"));
         }
         for (int i = 0; i < NEED.length; i++) items.extractItem(i, NEED[i], false);
         saline.drain(SALINE, IFluidHandler.FluidAction.EXECUTE);
@@ -189,7 +200,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         saline.readFromNBT(registries, tag.getCompound("Saline"));
         progress = tag.contains("Progress") ? tag.getInt("Progress") : -1;
         client = tag.hasUUID("Client") ? tag.getUUID("Client") : null;

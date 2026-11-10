@@ -20,6 +20,10 @@ public final class Compat {
 
     /** Client setup: hooks into Entity Model Features' player animations when it is installed. */
     public static void clientSetup() {
-        if (ModList.get() != null && ModList.get().isLoaded("entity_model_features")) EmfCompat.register();
+        try {
+            if (ModList.get() != null && ModList.get().isLoaded("entity_model_features")) EmfCompat.register();
+        } catch (LinkageError e) {
+            com.coolfreeze23.headinajar.HeadInAJar.LOGGER.warn("Entity Model Features hook not loaded: {}", e.toString());
+        }
     }
 }

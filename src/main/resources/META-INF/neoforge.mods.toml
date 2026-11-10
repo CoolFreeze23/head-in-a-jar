@@ -34,5 +34,35 @@ versionRange="${geckolib_version_range}"
 ordering="NONE"
 side="BOTH"
 
+# Optional integrations: none is needed. A version older than the one each hook was written against is refused by the
+# loader with a clear message instead of failing later; newer ones are guarded in code (compat/).
+[[dependencies.${mod_id}]]
+modId="curios"
+type="optional"
+versionRange="[9.0.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="jei"
+type="optional"
+versionRange="[19.0.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="jade"
+type="optional"
+versionRange="[15.0.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="entity_model_features"
+type="optional"
+versionRange="[3.0.0,)"
+ordering="NONE"
+side="CLIENT"
+
 [[mixins]]
 config="headinajar.mixins.json"

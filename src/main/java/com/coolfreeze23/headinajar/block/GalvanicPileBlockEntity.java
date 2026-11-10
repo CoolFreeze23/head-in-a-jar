@@ -100,7 +100,7 @@ public class GalvanicPileBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
-        fuel.deserializeNBT(registries, tag.getCompound("Fuel"));
+        MachineItems.load(fuel, tag.getCompound("Fuel"), registries);
         burning = tag.getInt("Burning");
     }
 }

@@ -51,6 +51,15 @@ public class HeadHolderBlock<T extends BlockEntity & HeadHolderBlock.Holder> ext
         return InteractionResult.PASS;
     }
 
+    /** The turret's head turns on the client's own tick (so its speed doesn't follow the frame rate). */
+    @Override
+    public <E extends BlockEntity> BlockEntityTicker<E> getTicker(Level level, BlockState state, BlockEntityType<E> blockEntityType) {
+        if (level.isClientSide) {
+            return createTickerHelper(blockEntityType, com.coolfreeze23.headinajar.registry.ModRegistry.TURRET_BE.get(), TurretPedestalBlockEntity::clientTick);
+        }
+        return super.getTicker(level, state, blockEntityType);
+    }
+
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);

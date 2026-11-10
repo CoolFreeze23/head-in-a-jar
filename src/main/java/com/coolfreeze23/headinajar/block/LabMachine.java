@@ -26,13 +26,15 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
     protected final Buffer energy;
     protected final ItemStackHandler items;
     protected int progress;
+    /** Why the machine is paused (a {@code MachineMenu} stall code), shown on its screen. */
+    protected int stall;
     protected String owner = "";
     private final LabMenu.Kind kind;
 
     protected final ContainerData data = new ContainerData() {
         @Override
         public int get(int i) {
-            return i == 0 ? energy.getEnergyStored() / 10 : i == 1 ? progress : value(i);
+            return i == 0 ? energy.getEnergyStored() / 10 : i == 1 ? progress : i == kind.data ? stall : value(i);
         }
 
         @Override
@@ -41,7 +43,7 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
 
         @Override
         public int getCount() {
-            return kind.data;
+            return kind.data + 1;
         }
     };
 
@@ -72,6 +74,28 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
     }
 
     protected abstract boolean valid(int slot, ItemStack stack);
+
+    /** What automation may do with each slot (see {@link MachineItems}). */
+    public abstract MachineItems.Role[] roles();
+
+    /** The slots as pipes and hoppers on {@code side} see them. */
+    public net.neoforged.neoforge.items.IItemHandler automation(net.minecraft.core.Direction side) {
+        return MachineItems.sided(items, roles(), side);
+    }
+
+    /** A refusal from this machine (its sound comes from here; the line shows over the open screen). */
+    protected boolean refuse(ServerPlayer player, String reason, Object... args) {
+        return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), reason, args);
+    }
+
+    /** A line for the player at the machine, shown over its screen (the action bar is hidden under an open screen). */
+    protected static void tell(ServerPlayer player, Component line) {
+        Network.refused(player, line);
+    }
+
+    public int stall() {
+        return stall;
+    }
 
     /** A menu button. */
     public boolean button(ServerPlayer player, int id) {
@@ -129,7 +153,7 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         progress = tag.getInt("Progress");
         owner = tag.getString("Owner");
     }

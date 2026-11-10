@@ -81,6 +81,17 @@ public enum Gene {
         return name().toLowerCase(Locale.ROOT);
     }
 
+    /** The gene with this id, or null for an id this version doesn't know (a gene renamed or removed since). */
+    public static Gene byId(String id) {
+        if (id == null || id.isEmpty()) return null;
+        try {
+            return valueOf(id.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            com.coolfreeze23.headinajar.HeadInAJar.LOGGER.warn("Skipping unknown gene '{}'", id);
+            return null;
+        }
+    }
+
     /** Genes a creature carries. */
     public static List<Gene> of(String entityId) {
         return java.util.Arrays.stream(values()).filter(g -> g.sources.contains(entityId)).toList();

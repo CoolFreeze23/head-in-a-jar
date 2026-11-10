@@ -41,12 +41,18 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
     private final int[] pulse = new int[CHANNELS];
     private final ItemStackHandler items = new ItemStackHandler(1) {
         @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return HeadJobs.type(stack) != null;
+        }
+
+        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
             if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     };
     private UUID occupant;
+    private final HeadInfo.Cache info = new HeadInfo.Cache();
 
     public NeuralSocketBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.SOCKET_BE.get(), pos, state);
@@ -63,6 +69,11 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
 
     public UUID occupant() {
         return occupant;
+    }
+
+    /** What the head is (cached until the slot changes). */
+    public HeadInfo headInfo() {
+        return info.get(head());
     }
 
     /** The redstone level on a face (pulses count as 15). */
@@ -123,6 +134,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         if (s.occupant != null) {
             Player p = level.getPlayerByUUID(s.occupant);
             if (!(p instanceof ServerPlayer sp) || FormActions.state(sp).form() != Form.SOCKET || sp.distanceToSqr(Vec3.atCenterOf(pos)) > 4) {
+                // gone (offline, unplugged, moved): a jar that logs back in is unplugged then (see reconcile)
                 s.occupant = null;
                 s.clear();
             } else if (level.getGameTime() % 10 == 0) {
@@ -130,8 +142,12 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
             }
             return;
         }
-        EntityType<?> type = HeadJobs.type(s.head());
-        if (type == null) return;
+        EntityType<?> type = s.headInfo().type();
+        if (type == null || !HeadJobs.socketJob(type)) {
+            // the head came out (by hand or by a hopper), or it has no program: the outputs go quiet
+            if (s.lit()) s.clear();
+            return;
+        }
         long t = level.getGameTime();
         int program;
         if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) program = (t % 20) < 10 ? 15 : 0;
@@ -151,6 +167,12 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         return false;
     }
 
+    /** Whether any face gives a signal. */
+    private boolean lit() {
+        for (int i = 0; i < CHANNELS; i++) if (out[i] != 0 || pulse[i] != 0) return true;
+        return false;
+    }
+
     private void clear() {
         for (int i = 0; i < CHANNELS; i++) {
             out[i] = 0;
@@ -159,22 +181,41 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         changed();
     }
 
-    /** A jar plugs in (JAR form), or a mob head goes in, or an empty hand takes the head back out. */
+    /** A jar plugs in (JAR form), or a mob head goes in, or an empty hand takes the head back out. Anything else says why not. */
     @Override
     public void use(ServerPlayer player, ItemStack held) {
         JarState state = FormActions.state(player);
+        var refuser = com.coolfreeze23.headinajar.feedback.Refuser.at(this);
+        if (occupant != null && !occupant.equals(player.getUUID())) {
+            Player in = level.getPlayerByUUID(occupant);
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "socket.occupied", in == null ? Component.literal("?") : in.getDisplayName());
+            return;
+        }
         if (state.form() == Form.JAR && occupant == null && head().isEmpty()) {
             plugIn(player);
             return;
         }
-        if (head().isEmpty() && HeadJobs.type(held) != null && occupant == null) {
-            items.setStackInSlot(0, held.split(1));
+        if (!head().isEmpty()) {
+            if (held.isEmpty()) {
+                FormActions.give(player, items.extractItem(0, 1, false));
+                clear();
+                return;
+            }
+            EntityType<?> type = headInfo().type();
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "socket.has_head", type == null ? head().getHoverName() : type.getDescription());
             return;
         }
-        if (held.isEmpty() && !head().isEmpty()) {
-            FormActions.give(player, items.extractItem(0, 1, false));
-            clear();
+        EntityType<?> type = HeadJobs.type(held);
+        if (type == null) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "socket.needs_head", Component.translatable("item.headinajar.jarred_head"));
+            return;
         }
+        // only some heads run a program on their own; any other would sit there giving nothing
+        if (!HeadJobs.socketJob(type)) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "socket.no_program", type.getDescription());
+            return;
+        }
+        items.setStackInSlot(0, held.split(1));
     }
 
     public boolean plugIn(ServerPlayer player) {
@@ -192,14 +233,65 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         return true;
     }
 
-    /** Sneak + J (or the socket breaking): back to a plain jar. */
+    /** Sneak + J: back to a plain jar. */
     public static boolean unplug(ServerPlayer player) {
+        return unplug(player, "socket.headinajar.unplugged");
+    }
+
+    /** Back to a plain jar, with a line saying why ({@code line}: a lang key) and the socket's power-down sound. */
+    public static boolean unplug(ServerPlayer player, String line) {
         JarState state = FormActions.state(player);
         if (state.form() != Form.SOCKET) return false;
         state.setForm(Form.JAR);
         player.refreshDimensions();
         Network.sync(player);
+        player.displayClientMessage(Component.translatable(line), true);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 0.6f, 1.6f);
         return true;
+    }
+
+    /** The socket a plugged-in jar sits on, if it still holds that jar. */
+    private static NeuralSocketBlockEntity under(ServerPlayer player) {
+        return player.level().getBlockEntity(player.blockPosition().below()) instanceof NeuralSocketBlockEntity socket
+                && player.getUUID().equals(socket.occupant) ? socket : null;
+    }
+
+    /**
+     * A jar in socket form with no socket under it that holds it (the socket was broken or carried off, or it never
+     * claimed this jar back after a relog) is put back as a plain jar, and told.
+     */
+    public static void reconcile(ServerPlayer player) {
+        if (FormActions.state(player).form() == Form.SOCKET && under(player) == null) unplug(player, "socket.headinajar.lost");
+    }
+
+    /** The SocketInput payload's handler: 0 set a face's level, 1 pulse a face, 2 unplug. */
+    public static void input(ServerPlayer player, int action, int face, int value) {
+        if (FormActions.state(player).form() != Form.SOCKET) return;
+        if (action == 2) {
+            unplug(player);
+            return;
+        }
+        NeuralSocketBlockEntity socket = under(player);
+        if (socket == null) {
+            // the keys would do nothing: say why, and give the jar its controls back
+            unplug(player, "socket.headinajar.lost");
+            return;
+        }
+        var side = Direction.from3DDataValue(Math.floorMod(face, 6));
+        if (action == 0) socket.setOutput(side, value);
+        else if (action == 1) {
+            socket.pulse(side);
+            com.coolfreeze23.headinajar.Advance.grant(player, "socket_pulse");
+        }
+    }
+
+    /** The block is going (broken, blown up, carried off): its jar is unplugged on the spot. */
+    void removed() {
+        if (occupant == null || level == null) return;
+        if (level.getPlayerByUUID(occupant) instanceof ServerPlayer player && FormActions.state(player).form() == Form.SOCKET) {
+            occupant = null;
+            unplug(player, "socket.headinajar.lost");
+        }
     }
 
     @Override
@@ -213,7 +305,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         int[] saved = tag.getIntArray("Out");
         for (int i = 0; i < CHANNELS && i < saved.length; i++) out[i] = saved[i];
         occupant = tag.hasUUID("Occupant") ? tag.getUUID("Occupant") : null;
@@ -222,7 +314,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        tag.put("Items", items.serializeNBT(registries));
+        tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
         return tag;
     }
