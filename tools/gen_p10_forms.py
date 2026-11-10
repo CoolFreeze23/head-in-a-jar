@@ -58,8 +58,8 @@ LINES = [
     # the Charging Dock answers a click: %1$s stored, %2$s capacity, %3$s the Galvanic Pile
     ('message.headinajar.dock_status', 'Charging Dock: %1$s / %2$s FE. Stand your jar on it to charge.',
      'Base de Recarga: %1$s / %2$s FE. Ponha seu pote em cima para carregar.'),
-    ('message.headinajar.dock_empty', 'Charging Dock: empty. Feed it FE from a %3$s or a cable, then stand your jar on it.',
-     'Base de Recarga: vazia. Alimente com FE de uma %3$s ou de um cabo e ponha seu pote em cima.'),
+    ('message.headinajar.dock_empty', 'Charging Dock: empty. Feed it from a %3$s or a cable.',
+     'Base de Recarga: vazia. Alimente com uma %3$s ou um cabo.'),
     ('message.headinajar.cradle_climbed', 'You settle into the Cradle. Swap now and your head stays docked.',
      'Você se acomoda no Berço. Troque agora e sua cabeça fica nele.'),
     # %s is the Suture Kit
