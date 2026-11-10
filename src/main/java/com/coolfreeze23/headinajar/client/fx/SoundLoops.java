@@ -78,7 +78,15 @@ public final class SoundLoops {
             used.add(loop);
             loop.target(g.mean(), audible ? g.volume() : 0, g.pitch());
         }
-        for (Loop l : PLAYING) if (!used.contains(l)) l.target(l.position(), 0, l.pitchTarget);
+        for (Loop l : PLAYING) {
+            if (!used.contains(l)) {
+                l.target(l.position(), 0, l.pitchTarget);
+                // a loop the sound engine never ticks (sound off, no free channel) is let go here instead
+                if (++l.unused > 20) l.end();
+            } else {
+                l.unused = 0;
+            }
+        }
         PLAYING.removeIf(Loop::isStopped);
         WANTED.clear();
     }
@@ -131,6 +139,11 @@ public final class SoundLoops {
         float volumeTarget, pitchTarget;
         Vec3 at;
         boolean started;
+        int unused;
+
+        void end() {
+            stop();
+        }
 
         Loop(SoundEvent sound, SoundSource source, Vec3 at) {
             super(sound, source, SoundInstance.createUnseededRandom());

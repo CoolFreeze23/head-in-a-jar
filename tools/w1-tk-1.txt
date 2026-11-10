@@ -1,0 +1,161 @@
+# Telekinesis films, default profile: a cow grabbed, swung round and thrown, from the jar's own eyes, then from a
+# bystander at 5 and 30 blocks (the stand-in is the jar), by day and at night; then a grab at nothing.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+# --- the jar's own eyes: the real player is the jar
+/tp @s 0.5 -60 0.5 0 0
+jar
+# the body stays where the head came off: the jar moves 3 blocks east of it
+/tp @s 3.5 -60 0.5 0 0
+fit telekinesis
+charge 100000
+wait 10
+/summon cow 3.5 -60 4.5
+wait 20
+lookat cow
+view 0
+perf idle_jar_no_tether 40
+wait 45
+frames tk_doer_day 150
+wait 3
+key ability
+wait 30
+perf doer_holding 40
+turn 70 0 20
+wait 12
+turn -120 -5 30
+wait 10
+key attack
+wait 50
+fxstate after_doer_throw
+# a grab at nothing: the line reaches out, droops and curls back
+look 0 -40
+frames tk_doer_fizzle 30
+wait 2
+key ability
+wait 30
+# --- back to a body; the stand-in is the jar
+body
+wait 10
+/kill @e[type=cow]
+bystander spawn 10 -60 0 0
+bystander tick on
+wait 10
+bystander form jar
+bystander fit telekinesis
+bystander charge 100000
+/summon cow 10.5 -60 4.5
+wait 30
+bystander look 0 -6
+# 5 blocks, three-quarter, by day
+/tp @s 14.5 -60 6.5 135 12
+wait 10
+bystander mark
+frames tk_by5_day 170
+wait 3
+bystander key ability
+wait 20
+bystander packets
+bystander mark
+wait 20
+bystander packets
+bystander look 20 -6
+wait 1
+bystander look 40 -6
+wait 1
+bystander look 55 -6
+wait 1
+bystander look 65 -6
+wait 1
+bystander look 70 -6
+wait 12
+bystander look 50 -6
+wait 1
+bystander look 20 -6
+wait 1
+bystander look -10 -6
+wait 1
+bystander look -30 -6
+wait 1
+bystander look -40 -6
+wait 16
+bystander key throw
+wait 60
+# 30 blocks, by day
+/kill @e[type=cow]
+/summon cow 10.5 -60 4.5
+bystander look 0 -6
+/tp @s 38.5 -55 9.5 105 8
+wait 30
+frames tk_by30_day 150
+wait 3
+bystander key ability
+wait 30
+bystander look 30 -6
+wait 1
+bystander look 55 -6
+wait 1
+bystander look 70 -6
+wait 12
+bystander look 30 -6
+wait 1
+bystander look -10 -6
+wait 1
+bystander look -40 -6
+wait 16
+bystander key throw
+wait 60
+# night, 5 and 30
+/time set 18000
+/kill @e[type=cow]
+/summon cow 10.5 -60 4.5
+bystander look 0 -6
+/tp @s 14.5 -60 6.5 135 12
+wait 30
+frames tk_by5_night 150
+wait 3
+bystander key ability
+wait 30
+bystander look 30 -6
+wait 1
+bystander look 55 -6
+wait 1
+bystander look 70 -6
+wait 12
+bystander look 30 -6
+wait 1
+bystander look -10 -6
+wait 1
+bystander look -40 -6
+wait 16
+bystander key throw
+wait 60
+/kill @e[type=cow]
+/summon cow 10.5 -60 4.5
+bystander look 0 -6
+/tp @s 38.5 -55 9.5 105 8
+wait 30
+frames tk_by30_night 150
+wait 3
+bystander key ability
+wait 30
+bystander look 30 -6
+wait 1
+bystander look 55 -6
+wait 1
+bystander look 70 -6
+wait 12
+bystander look 30 -6
+wait 1
+bystander look -10 -6
+wait 1
+bystander look -40 -6
+wait 16
+bystander key throw
+wait 60
+fxstate end

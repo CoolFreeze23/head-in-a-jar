@@ -83,6 +83,7 @@ public class SmokeClient {
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
             NeoForge.EVENT_BUS.addListener(frames::onFrame);
             NeoForge.EVENT_BUS.register(Perf.class);
+            NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) -> Bystander.serverTick());
         }
     }
 
