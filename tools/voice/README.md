@@ -14,7 +14,7 @@ plays it.
    in words, with no recording of anyone:
    *"A middle-aged woman, prim and very polite, a 1950s hospital switchboard operator, crisp clear diction, calm and
    measured, faintly cheerful, even pace"*, followed by the sentence "Good morning. Noggin and Sons thanks you for your
-   patience. Please remain seated." (seed 27, guidance 2.0, 10 steps; `gen_voxcpm.py`).
+   patience. Please remain seated." (seed 27, guidance 2.0, 10 steps; `design_voice.py`).
 2. **Reference take.** That synthetic take is `dolores_reference.wav` in this folder (48 kHz mono). It is the only
    reference any line uses, in both languages, so DOLORES is one voice in English and Portuguese.
 
