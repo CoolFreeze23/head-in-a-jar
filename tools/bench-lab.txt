@@ -141,8 +141,8 @@ look 0 15
 /kill @e[type=minecraft:item]
 inspect me
 inspect near all 30
-# ---- scenario A: settle 10 s, then three 30 s windows
-wait 200
+# ---- scenario A: settle 30 s (the first windows after building the scene were the noisiest), then three 30 s windows
+wait 600
 shot bench_A_start
 bench start A1
 wait 600
