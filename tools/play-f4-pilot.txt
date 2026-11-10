@@ -1,0 +1,61 @@
+# Department F, part 4 (attempts 40-42): board the Hopper standing on the Gantry, walk it, use the drill arm, get out.
+# State before: the jar in the yard near 114.7 200 5.5 beside the Spider Walker (see report-f4-try1.txt).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/gamerule doMobSpawning false
+report == (state from the tries before: hopping got the jar within 5 blocks, then it stuck and the click did nothing) setup: the jar is teleported 2.5 blocks from the mecha
+/tp @s 81.5 200 12.0 180 0
+wait 10
+report == attempt 40a: as the jar, right-click the mecha
+lookat hopper
+wait 3
+shot f4_jar_facing_mecha
+observe 60
+key use
+wait 60
+observe 20
+inspect me
+shot f4_in_mecha
+view 1
+wait 5
+shot f4_in_mecha_third
+view 0
+report == attempt 41: walk (forward 40 ticks), then the arms: attack and use on a block ahead
+look 0 10
+key forward hold 40
+wait 5
+inspect me
+inspect near hopper 30
+/setblock ~ ~ ~3 minecraft:stone
+look 0 30
+wait 3
+key attack hold 40
+wait 10
+key use
+wait 25
+shot f4_arm
+report == ability and secondary
+key ability
+wait 25
+key secondary
+wait 25
+closegui
+grab
+shot f4_hud
+report == get out: hold Sneak + Jar menu (as the cold reader read), then plain Sneak
+key sneak down
+wait 2
+key menu hold 30
+wait 10
+key sneak up
+wait 10
+inspect me
+closegui
+grab
+sneak hold 30
+wait 10
+inspect me
+inspect near hopper 30

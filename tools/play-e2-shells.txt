@@ -1,0 +1,208 @@
+# Department E, part 2 (attempt 36): craft the Lunk, place the three shells, board each one as the jar, move, get out.
+# After play-e-shells.txt: body LINKED at 100.5 200 -29.5; head docked in the Cradle at 114 (charge full);
+# inventory has the Rover (slot 33), Spider Walker (8), a Collar Cam (6), 2 servos (35), 4 iron blocks (18).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/give @s minecraft:iron_block 1
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft headinajar:servo,iron_block,headinajar:servo/iron_block,headinajar:collar_cam,iron_block/iron_block,_,iron_block
+press escape
+wait 5
+report == move the three shells into the hotbar
+key inventory
+wait 8
+slot item:headinajar:rover_chassis
+slot inv:0
+slot item:headinajar:lunk_chassis
+slot inv:1
+slot item:headinajar:spider_walker_chassis
+slot inv:2
+press escape
+wait 5
+inspect me
+report == attempt 36: place the Rover, the Lunk and the Spider Walker on the floor (as the body)
+report setup: a walled yard south of the work row (x 60-140, z -26 to 60) so fast shells cannot drive off the platform
+/fill 60 199 -26 140 199 60 minecraft:smooth_stone
+/fill 60 200 -26 140 206 60 minecraft:air
+/fill 60 200 61 140 202 61 minecraft:stone_bricks
+/fill 59 200 -26 59 202 61 minecraft:stone_bricks
+/fill 141 200 -26 141 202 61 minecraft:stone_bricks
+/tp @s 100.5 200 -22.5 0 39
+wait 3
+hotbar 1
+wait 2
+key use
+wait 10
+/tp @s 104.5 200 -22.5 0 39
+wait 3
+hotbar 2
+wait 2
+key use
+wait 10
+/tp @s 108.5 200 -22.5 0 39
+wait 3
+hotbar 3
+wait 2
+key use
+wait 10
+inspect near rover 12
+inspect near lunk 12
+inspect near spider_walker 12
+/tp @s 104.5 200 -25.5 0 20
+wait 5
+shot e2_three_shells
+report == fetch the head from the Cradle (empty hand right-click while not carrying)
+/tp @s 114.5 200 -29.5 0 39
+wait 3
+hotbar 4
+wait 2
+key use
+wait 20
+inspect me
+report == the Lunk: set the head down by it, swap, right-click it, walk, punch a cow, get out
+/tp @s 104.5 200 -23.5 0 39
+wait 3
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+hotbar 4
+key swap
+wait 30
+lookat lunk
+wait 3
+observe 40
+key use
+wait 40
+observe 20
+inspect me
+shot e2_in_lunk
+/summon minecraft:cow 104.5 200 -12.5 {NoAI:1b}
+wait 5
+lookat cow
+key forward hold 20
+wait 5
+inspect me
+lookat cow
+key attack
+wait 25
+inspect near cow 8
+shot e2_lunk_punch
+report get out of the Lunk: the cold reader's guess first (Sneak + Jar menu), then plain Sneak
+key sneak down
+wait 2
+key menu
+wait 10
+key sneak up
+wait 10
+closegui
+grab
+inspect me
+sneak
+wait 20
+inspect me
+report == the Spider Walker: back to the body, fetch the head, set it down by the spider, board, walk into a wall
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 35
+wait 5
+lookat head_jar
+hotbar 4
+wait 2
+key use
+wait 20
+inspect me
+/tp @s 108.5 200 -23.5 0 39
+wait 3
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+hotbar 4
+key swap
+wait 30
+lookat spider_walker
+wait 3
+observe 40
+key use
+wait 40
+observe 20
+inspect me
+/fill 113 200 -24 113 204 -14 minecraft:smooth_stone
+look -90 0
+key forward hold 40
+wait 5
+inspect me
+shot e2_spider_wall
+sneak
+wait 20
+inspect me
+report == the Rover: fetch the head, set it down by the Rover, board, drive 20 ticks, get out
+key swap
+wait 30
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 35
+wait 5
+lookat head_jar
+hotbar 4
+wait 2
+key use
+wait 20
+/tp @s 100.5 200 -23.5 0 39
+wait 3
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+hotbar 4
+key swap
+wait 30
+lookat rover
+wait 3
+observe 40
+key use
+wait 40
+observe 20
+inspect me
+shot e2_in_rover
+key forward hold 20
+wait 5
+inspect me
+sneak
+wait 20
+inspect me
+report == the Rover's hold: as the body, sneak-use the Rover
+key swap
+wait 30
+/execute at @e[type=headinajar:rover,limit=1,sort=nearest] run tp @s ~ ~ ~-2.5 0 20
+wait 5
+lookat rover
+hotbar 4
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 5
+shot e2_rover_hold
+closegui
+grab
+inspect me

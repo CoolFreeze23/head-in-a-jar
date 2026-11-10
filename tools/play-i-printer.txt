@@ -1,0 +1,490 @@
+# Attempts 27 (Body Printer) and 28 (head back on), and attempt 26 in the kept world with the open corpse question.
+# Starts from the after-g5 save (head inside the host's box: recovered first, as in play-h-heads.txt). Body killed by /damage (setup: the body has to die somehow).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+report == the head sits inside the host's box (the jar got off there in G5): hop the jar 3 blocks north, swap back, pick it up
+key swap
+wait 30
+look 180 0
+key forward hold 12
+wait 10
+key swap
+wait 30
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+hotbar 9
+key use
+wait 20
+inspect me
+report == the inventory is full (36 slots): what the lab left over goes (cleared by command; a player would drop it)
+/clear @s minecraft:beef
+/clear @s minecraft:leather
+/clear @s minecraft:stone_sword
+/clear @s minecraft:smooth_stone
+/clear @s minecraft:glass_bottle
+/clear @s minecraft:bucket
+/clear @s headinajar:gene_wash
+/clear @s headinajar:blood_sample
+/clear @s headinajar:bio_gel
+/clear @s headinajar:plasma_vial
+/clear @s headinajar:syringe
+/clear @s headinajar:serum_cassette
+/clear @s headinajar:dna_fraction
+inspect me
+report == materials (vanilla, by command)
+/give @s minecraft:iron_ingot 16
+/give @s minecraft:bone_meal 16
+/give @s minecraft:coal 16
+/give @s minecraft:glass 2
+/give @s minecraft:piston 3
+/give @s minecraft:redstone_block 5
+/give @s minecraft:redstone 8
+/give @s minecraft:copper_ingot 22
+/give @s minecraft:bucket 1
+/give @s minecraft:cauldron 1
+/give @s minecraft:rotten_flesh 19
+/give @s minecraft:bone_block 8
+/give @s minecraft:slime_ball 10
+/give @s minecraft:water_bucket 2
+/give @s minecraft:sugar 4
+/give @s minecraft:kelp 4
+/give @s minecraft:string 2
+/give @s minecraft:iron_nugget 2
+/give @s minecraft:potion[potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:crafting_table 1
+report == steel, then Body Printer, Saline Mixer, 3 piles, saline bottles, 2 Suture Kits
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft iron_ingot,bone_meal,coal x16
+press escape
+wait 5
+/tp @s 102.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:surgical_steel_blend
+slot 0
+slot item:coal
+slot 1
+press escape
+wait 5
+/tick sprint 3300
+wait 300
+/time set 1000
+key use
+wait 10
+slot 2 shift
+press escape
+wait 5
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft copper_ingot,redstone,copper_ingot x2
+craft _,piston,_/headinajar:surgical_steel_ingot,headinajar:neuro_copper_wire,headinajar:surgical_steel_ingot x2
+craft headinajar:surgical_steel_ingot,glass,headinajar:surgical_steel_ingot/headinajar:servo,piston,headinajar:servo/headinajar:surgical_steel_ingot,redstone_block,headinajar:surgical_steel_ingot
+craft headinajar:surgical_steel_ingot,bucket,headinajar:surgical_steel_ingot/headinajar:neuro_copper_wire,cauldron,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,redstone,headinajar:surgical_steel_ingot
+craft copper_ingot,headinajar:neuro_copper_wire,copper_ingot/copper_ingot,rotten_flesh,copper_ingot/copper_ingot,headinajar:neuro_copper_wire,copper_ingot x3
+craft potion,sugar/kelp,redstone
+craft string,slime_ball/iron_nugget,headinajar:saline_bottle x2
+wait 5
+shot i_crafted
+press escape
+wait 5
+inspect me
+report == place: Body Printer at 106 200 56 with piles west and east; Saline Mixer at 112 200 56 with a pile west
+key inventory
+wait 8
+slot item:headinajar:body_printer
+slot inv:0
+slot item:headinajar:galvanic_pile
+slot inv:1
+slot item:headinajar:saline_mixer
+slot inv:2
+press escape
+wait 5
+hotbar 1
+/tp @s 106.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+hotbar 2
+/tp @s 105.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+/tp @s 107.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+/tp @s 111.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+hotbar 3
+/tp @s 112.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+report a crafting table by the printer, for later
+key inventory
+wait 8
+slot item:crafting_table
+slot inv:0
+press escape
+wait 5
+hotbar 1
+/tp @s 103.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+inspect block 106 200 56
+inspect block 112 200 56
+report == feed the three piles (25, 25, 5 flesh)
+/give @s minecraft:rotten_flesh 25
+key inventory
+wait 8
+slot item:rotten_flesh
+slot inv:3
+press escape
+wait 5
+hotbar 4
+/tp @s 105.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+/give @s minecraft:rotten_flesh 25
+/tp @s 107.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+/give @s minecraft:rotten_flesh 5
+/tp @s 111.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+report == attempt 27 prep: water into the mixer (two buckets), sugar, kelp, redstone into its slots
+key inventory
+wait 8
+slot item:water_bucket
+slot inv:3
+press escape
+wait 5
+hotbar 4
+/tp @s 112.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+key inventory
+wait 8
+slot item:water_bucket
+slot inv:3
+press escape
+wait 5
+hotbar 4
+key use
+wait 10
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 10
+shot i_mixer
+widgets
+slots
+slot item:sugar
+slot 0
+slot item:kelp
+slot 1
+slot item:redstone
+slot 2
+press escape
+wait 5
+/tick sprint 6000
+wait 600
+/time set 1000
+inspect block 112 200 56
+inspect block 106 200 56
+report == the printer: open it, put in 16 flesh, 8 bone blocks, 4 redstone blocks, 8 slime
+/tp @s 106.5 200 54.5 0 30
+wait 5
+key use
+wait 10
+shot i_printer_empty
+widgets
+slots
+slot item:rotten_flesh
+slot 0
+slot item:bone_block
+slot 1
+slot item:redstone_block
+slot 2
+slot item:slime_ball
+slot 3
+wait 5
+shot i_printer_loaded
+slots
+report Print while I still have a head on the link (I am the linked body)
+observe 30
+widget "Print"
+wait 30
+observe 20
+press escape
+wait 5
+report saline: an empty bucket on the mixer, then the saline bucket on the printer, twice
+key inventory
+wait 8
+slot item:bucket
+slot inv:3
+press escape
+wait 5
+hotbar 4
+/tp @s 112.5 200 54.5 0 30
+wait 5
+observe 30
+key use
+wait 20
+/tp @s 106.5 200 54.5 0 30
+wait 5
+key use
+wait 20
+/tp @s 112.5 200 54.5 0 30
+wait 5
+key use
+wait 20
+/tp @s 106.5 200 54.5 0 30
+wait 5
+key use
+wait 20
+observe 20
+inspect block 106 200 56
+inspect block 112 200 56
+inspect me
+report == attempt 26 here: put the head down, the body is killed (setup), wake in the jar; the open corpse question
+key inventory
+wait 8
+slot item:headinajar:head_satchel
+slot inv:4
+press escape
+wait 5
+hotbar 5
+/tp @s 104.5 200 53.5 -90 10
+look 90 60
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+inspect near head_jar 4
+/tp @s 108.5 200 53.5 90 10
+wait 5
+/damage @s 100 minecraft:mob_attack
+wait 60
+inspect me
+inspect near headless_body 20
+shot i_woke_in_jar
+report as the jar, aim at the corpse's middle and right-click (empty hand)
+/execute at @e[type=headinajar:headless_body,limit=1,sort=nearest] run tp @s ~-1.5 ~ ~ -90 0
+wait 10
+lookat headless_body
+observe 30
+key use
+wait 30
+observe 20
+shot i_jar_corpse_click
+slots
+slot item:headinajar:suture_kit shift
+slot item:headinajar:suture_kit shift
+press escape
+wait 5
+report == attempt 27: as the jar, open the printer and press Print
+/tp @s 106.5 200 54.8 0 5
+wait 5
+key use
+wait 10
+shot i_printer_jar
+observe 40
+widget "Print"
+wait 40
+observe 20
+inspect block 106 200 56
+press escape
+wait 5
+observe 100
+/tick sprint 1300
+wait 200
+observe 20
+inspect block 106 200 56
+inspect near headless_body 20
+inspect me
+shot i_printed
+report get into it: Swap
+key swap
+wait 30
+inspect me
+report == attempt 28: head back on. First the printed body opens its old corpse (the things inside), then the cold reader's guesses
+/execute at @e[type=headinajar:headless_body,limit=1,sort=furthest] run tp @s ~-1.5 ~ ~ -90 0
+inspect near headless_body 20
+wait 10
+lookat headless_body
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+key use
+wait 20
+shot i_body_corpse_click
+slots
+press escape
+wait 5
+inspect me
+report fallback, in case the corpse kept the kits: craft a saline bottle and a Suture Kit at the table by the printer
+/give @s minecraft:string 1
+/give @s minecraft:slime_ball 1
+/give @s minecraft:iron_nugget 1
+/give @s minecraft:potion[potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:sugar 1
+/give @s minecraft:kelp 1
+/give @s minecraft:redstone 1
+/tp @s 103.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+craft potion,sugar/kelp,redstone
+craft string,slime_ball/iron_nugget,headinajar:saline_bottle
+press escape
+wait 5
+inspect me
+report 28a: the placed head, right-clicked holding the Suture Kit (not carried)
+key inventory
+wait 8
+slot item:headinajar:suture_kit
+slot inv:5
+press escape
+wait 5
+hotbar 6
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+observe 30
+key use
+wait 30
+observe 20
+inspect me
+report 28b: carry the head (empty hand), then hold use with the Suture Kit
+hotbar 9
+lookat head_jar
+key use
+wait 20
+inspect me
+hotbar 6
+observe 80
+key use hold 60
+wait 20
+observe 20
+inspect me
+shot i_head_on
+view 1
+wait 5
+shot i_head_on_third
+view 0
+report == experiments with the head back on (cold read section 5)
+/give @s minecraft:cooked_beef 2
+/give @s minecraft:porkchop 2
+/give @s minecraft:spider_eye 2
+/give @s minecraft:dragon_breath 1
+report exp 45: the lab's Centrifuge pile with steak, raw porkchop, spider eye (empty-hand status before and after each)
+key inventory
+wait 8
+slot inv:8 shift
+slot item:cooked_beef
+slot inv:8
+press escape
+wait 5
+hotbar 9
+/tp @s 89.5 200 37.5 0 30
+wait 5
+observe 20
+key use
+wait 20
+key inventory
+wait 8
+slot item:porkchop
+slot inv:8
+press escape
+wait 5
+key use
+wait 20
+key inventory
+wait 8
+slot item:spider_eye
+slot inv:8
+press escape
+wait 5
+key use
+wait 20
+inspect block 89 200 39
+report exp 39: dragon's breath in the Centrifuge
+key inventory
+wait 8
+slot item:dragon_breath
+slot inv:8
+press escape
+wait 5
+/tp @s 90.5 200 37.5 0 39
+wait 5
+key use
+wait 10
+slot item:dragon_breath
+slot 0
+/tick sprint 170
+wait 30
+slots
+shot x_dragon_breath
+slot 1 shift
+slot 2 shift
+press escape
+wait 5
+report exp 1: drink Cranial Saline with the head on (hold use)
+key inventory
+wait 8
+slot item:headinajar:saline_bottle
+slot inv:8
+press escape
+wait 5
+hotbar 9
+observe 50
+key use hold 40
+wait 10
+observe 20
+inspect me
+report exp 20: put an empty Life Support Jar on as a helmet (inventory: the jar onto the helmet slot)
+key inventory
+wait 8
+slot item:headinajar:life_support_jar
+slot 5
+wait 5
+slots
+shot x_jar_helmet
+press escape
+wait 5
+inspect me

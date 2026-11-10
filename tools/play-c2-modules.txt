@@ -1,0 +1,100 @@
+# Playtest department C, part 2 (cold read attempts 21, 23 prep): fit Hop Springs and Wheels in the Jar menu, move,
+# try a crafting table as the jar, then swap to the body and craft the Telekinesis Module, a Life Support Cradle and a
+# Charging Dock. Starts after play-c-life.txt: the jar (form JAR) at 106.5 200 -29.7, the body at 106.5 200 -30.5.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+inspect me
+report == attempt 21: fit Hop Springs and Wheels by clicking them into the module slots
+key menu
+wait 10
+slot item:headinajar:hop_springs
+slot 0
+slot item:headinajar:wheels
+slot 1
+wait 5
+shot c2_menu_fitted
+press escape
+wait 5
+inspect me
+report == walk with Hop Springs (turn to face north, hold forward 30 ticks)
+turn 180 0 5
+wait 3
+key forward hold 30
+wait 5
+inspect me
+report == Drive key: wheels down, forward 30 ticks, wheels up
+key drive
+wait 10
+key forward hold 30
+wait 5
+shot c2_wheels
+inspect me
+key drive
+wait 10
+report == experiment: as the jar, right-click the crafting table
+/tp @s 100.5 200 -29.5 0 39
+wait 5
+key use
+wait 10
+shot c2_jar_crafting_table
+inspect me
+closegui
+grab
+wait 3
+report == swap back to the body to craft (the body is at 106.5 200 -30.5)
+key swap
+wait 30
+inspect me
+/give @s minecraft:amethyst_shard 4
+/give @s minecraft:ender_pearl 3
+/give @s minecraft:copper_ingot 5
+/give @s minecraft:redstone 2
+/give @s minecraft:glass 2
+/give @s minecraft:iron_ingot 5
+/give @s minecraft:bone_meal 5
+/give @s minecraft:coal 6
+/give @s minecraft:redstone_block 1
+/give @s minecraft:rotten_flesh 4
+report == craft blends, smelt 5 steel, then the Telekinesis Module, wire, Cradle and Charging Dock
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft iron_ingot,bone_meal,coal x5
+craft copper_ingot,redstone,copper_ingot
+craft amethyst_shard,ender_pearl,amethyst_shard/ender_pearl,copper_ingot,ender_pearl/amethyst_shard,redstone,amethyst_shard
+press escape
+wait 5
+/tp @s 102.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:surgical_steel_blend
+slot 0
+slot item:coal
+slot 1
+press escape
+wait 5
+/tick sprint 1100
+wait 200
+/time set 1000
+key use
+wait 10
+slot 2 shift
+press escape
+wait 5
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft glass,_,glass/headinajar:neuro_copper_wire,_,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft copper_ingot,headinajar:neuro_copper_wire,copper_ingot/headinajar:surgical_steel_ingot,redstone_block,headinajar:surgical_steel_ingot
+wait 5
+shot c2_crafted
+press escape
+wait 5
+inspect me

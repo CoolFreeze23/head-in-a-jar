@@ -1,0 +1,102 @@
+# Playtest department C: life with your head off (cold read attempts 17-21), by real input. Starts from the kept world
+# after play-b-chair.txt: the body (LINKED) stands at 106.5 200 -28.4, the head jar is on the same spot, satchel in slot 5.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/give @s minecraft:potion[minecraft:potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:potion[minecraft:potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:sugar 2
+/give @s minecraft:kelp 2
+/give @s minecraft:redstone 2
+/give @s minecraft:piston 1
+/give @s minecraft:iron_ingot 2
+/give @s minecraft:copper_ingot 2
+/give @s minecraft:slime_ball 1
+/give @s minecraft:iron_nugget 2
+/give @s minecraft:black_dye 2
+inspect me
+report == attempt 17: pick up the head: Head Satchel in the inventory, empty hand, right-click the head
+/tp @s 106.5 200 -30.5 0 30
+wait 5
+hotbar 1
+shot c_head_on_floor
+key use
+wait 20
+shot c_after_pickup
+inspect me
+inspect near head_jar 6
+report == attempt 17 (set down) a: sneak and right-click the floor with an empty hand
+look 0 39
+wait 2
+key sneak down
+wait 2
+key use
+wait 20
+key sneak up
+wait 5
+inspect me
+inspect near head_jar 6
+report == attempt 17 (set down) b: sneak and right-click holding the satchel
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 20
+key sneak up
+wait 5
+inspect me
+inspect near head_jar 6
+shot c_head_set_down
+report == craft two more bottles of saline, Hop Springs and Wheels at the crafting table
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft potion,sugar/kelp,redstone
+craft potion,sugar/kelp,redstone
+craft _,piston,_/iron_ingot,copper_ingot,iron_ingot/_,slime_ball,_
+craft iron_nugget,_,iron_nugget/black_dye,copper_ingot,black_dye
+wait 5
+press escape
+wait 5
+inspect me
+report == attempt 18: right-click the placed head holding Cranial Saline (as the body)
+/tp @s 106.5 200 -30.5 0 39
+wait 3
+key inventory
+wait 8
+slot item:headinajar:saline_bottle
+slot inv:1
+press escape
+wait 5
+hotbar 2
+wait 2
+key use
+wait 20
+inspect me
+report == attempt 19: press Swap
+hotbar 1
+wait 2
+key swap
+wait 40
+shot c_after_swap
+inspect me
+report == attempt 21 (no module): press Drive (V) to tip over, then again to sit up
+key drive
+wait 30
+shot c_tipped
+inspect me
+key drive
+wait 20
+report == attempt 20: press the Jar menu key
+key menu
+wait 15
+shot c_jar_menu
+widgets
+slots
+press escape
+wait 5

@@ -1,0 +1,83 @@
+# Department D, part 3 (attempts 31-34). After play-d2-host.txt: the body at 104.5 200 -27.0, the head jar on the floor
+# near the host cow (104.5 200 -24.5); hotbar 7 body locker, 9 embalming fluid; lace in slot 35; jarred cow head slot 9.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+inspect near head_jar 10
+report == attempt 31: swap into the jar, face the host, right-click it
+key swap
+wait 30
+inspect me
+lookat cow
+wait 3
+shot d3_jar_facing_host
+observe 60
+key use
+wait 60
+observe 20
+inspect me
+shot d3_riding_host
+report == the Neural Handshake: press Ability (R) a few times as the ring comes round
+key ability
+wait 10
+key ability
+wait 10
+key ability
+wait 20
+shot d3_after_handshake
+report == attempt 32: Secondary, then walk where you look
+key secondary
+wait 25
+closegui
+grab
+look 90 0
+key forward hold 30
+wait 5
+inspect me
+report sync grows the longer you pilot: wait 1,200 ticks riding, then Ability and Secondary again
+/tick sprint 1200
+wait 150
+/time set 1000
+key use
+wait 25
+key ability
+wait 25
+key secondary
+wait 25
+closegui
+grab
+shot d3_host_hud_later
+inspect me
+report == attempt 33: Swap to the body; Embalming Fluid on the host; Neural Lace on the host
+key swap
+wait 30
+inspect me
+lookat cow
+hotbar 9
+wait 2
+key use
+wait 25
+key inventory
+wait 8
+slot inv:35
+slot inv:2
+press escape
+wait 5
+hotbar 3
+wait 2
+lookat cow
+key use
+wait 25
+report == attempt 34: place the Body Locker on the floor in front, right-click it
+look 0 60
+hotbar 7
+wait 2
+key use
+wait 10
+key use
+wait 25
+inspect near cow 6
+shot d3_locker

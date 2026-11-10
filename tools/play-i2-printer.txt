@@ -1,0 +1,222 @@
+# Attempts 27 and 28, second part. Starts from the after-i save: the body died carrying the head (it is now a corpse at
+# 108.5 200 53.5 holding everything), I am the jar; the Body Printer (106 200 56) has its materials and 164 kFE but no
+# saline; the Saline Mixer (112 200 56) has 2000 mB of water and sugar, kelp and redstone, but its pile (111 200 56) is
+# unfed. Everything below is done as the jar, by real input; vanilla materials and moving myself by command.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+inspect me
+inspect near headless_body 30
+/clear @s
+report == as the jar: feed the Mixer's pile with rotten flesh (a jar has no arm: can it?)
+/give @s minecraft:rotten_flesh 8
+hotbar 1
+/tp @s 111.5 200 54.8 0 8
+wait 5
+observe 30
+key use
+wait 30
+observe 20
+inspect block 111 200 56
+report the mixer runs: 600 ticks
+/tick sprint 600
+wait 80
+/time set 1000
+inspect block 112 200 56
+report == saline: an empty bucket on the Mixer, then on the Printer, twice (as the jar)
+/give @s minecraft:bucket 1
+/tp @s 112.5 200 54.8 0 8
+wait 5
+observe 30
+key use
+wait 20
+/tp @s 106.5 200 54.8 0 8
+wait 5
+key use
+wait 20
+/tp @s 112.5 200 54.8 0 8
+wait 5
+key use
+wait 20
+/tp @s 106.5 200 54.8 0 8
+wait 5
+key use
+wait 20
+observe 20
+inspect block 106 200 56
+inspect block 112 200 56
+inspect me
+report == attempt 27: Print, as the jar
+/clear @s
+/tp @s 106.5 200 54.8 0 8
+wait 5
+key use
+wait 10
+shot i2_printer
+observe 60
+widget "Print"
+wait 60
+observe 20
+inspect block 106 200 56
+press escape
+wait 5
+observe 300
+/tick sprint 1300
+wait 200
+observe 20
+inspect block 106 200 56
+inspect near headless_body 30
+inspect me
+view 1
+/tp @s 104.5 200.5 53 -60 10
+wait 10
+shot i2_printed_body
+view 0
+report get into it: Swap
+observe 40
+key swap
+wait 40
+observe 20
+inspect me
+shot i2_in_printed_body
+report == the printed body opens the old corpse and takes the Suture Kits and the satchel out (shift-click)
+/execute at @e[type=headinajar:headless_body,limit=1,sort=nearest] run tp @s ~-1.5 ~ ~ -90 0
+wait 10
+lookat headless_body
+key use
+wait 15
+slots
+slot item:headinajar:suture_kit shift
+slot item:headinajar:head_satchel shift
+wait 5
+shot i2_corpse_open
+press escape
+wait 5
+inspect me
+report == attempt 28a: the head on the floor, right-clicked with a Suture Kit in hand
+key inventory
+wait 8
+slot item:headinajar:suture_kit
+slot inv:5
+press escape
+wait 5
+hotbar 6
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~-2 ~ ~ -90 35
+wait 5
+lookat head_jar
+observe 40
+key use
+wait 30
+observe 20
+inspect me
+report 28b: pick the head up (empty hand), then hold use with the Suture Kit
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+lookat head_jar
+key use
+wait 20
+inspect me
+hotbar 6
+observe 100
+key use hold 70
+wait 20
+observe 20
+inspect me
+shot i2_head_on
+view 1
+wait 5
+shot i2_head_on_third
+view 0
+report == experiments with the head back on
+/give @s minecraft:cooked_beef 2
+/give @s minecraft:porkchop 2
+/give @s minecraft:spider_eye 2
+/give @s minecraft:dragon_breath 1
+report exp 45: the Centrifuge's pile (89 200 39): status, then steak, raw porkchop, spider eye
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+hotbar 9
+/tp @s 89.5 200 37.5 0 30
+wait 5
+key use
+wait 15
+key inventory
+wait 8
+slot item:cooked_beef
+slot inv:8
+press escape
+wait 5
+key use
+wait 20
+key inventory
+wait 8
+slot item:porkchop
+slot inv:8
+press escape
+wait 5
+key use
+wait 20
+key inventory
+wait 8
+slot item:spider_eye
+slot inv:8
+press escape
+wait 5
+key use
+wait 20
+inspect block 89 200 39
+report exp 39: dragon's breath in the Centrifuge
+key inventory
+wait 8
+slot inv:8 shift
+press escape
+wait 5
+/tp @s 90.5 200 37.5 0 39
+wait 5
+hotbar 9
+key use
+wait 10
+slot item:dragon_breath
+slot 0
+/tick sprint 170
+wait 30
+slots
+shot x_dragon_breath
+press escape
+wait 5
+report exp 1: drink Cranial Saline with the head on (hold use)
+/give @s minecraft:potion[potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:sugar 1
+/give @s minecraft:kelp 1
+/give @s minecraft:redstone 1
+/tp @s 103.5 200 54.5 0 39
+wait 5
+key use
+wait 10
+craft potion,sugar/kelp,redstone
+press escape
+wait 5
+key inventory
+wait 8
+slot inv:8 shift
+slot item:headinajar:saline_bottle
+slot inv:8
+press escape
+wait 5
+hotbar 9
+observe 50
+key use hold 40
+wait 10
+observe 20
+inspect me

@@ -1,0 +1,301 @@
+# Department G, part 4: finish the third serum, call the bases with the buttons (cursor off the items), make a host and
+# inject it by hand, assemble a Chimera and inject it, ride both and press the ability keys.
+# After play-g3-splice.txt (Spider Climb injected and washed out; Ender Blink cassette left in the Rig; the third
+# serum stopped at 1129/1200 when the Splicer ran dry).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+/gamerule doMobSpawning false
+inspect me
+report == the Splicer ran out of power at 1129/1200: feed its pile and let it finish
+/give @s minecraft:rotten_flesh 15
+hotbar 2
+key inventory
+wait 8
+slot item:rotten_flesh
+slot inv:1
+press escape
+wait 5
+/tp @s 97.5 200 37.5 0 30
+wait 3
+key use
+wait 10
+/tick sprint 400
+wait 60
+/time set 1000
+inspect block 98 200 39
+/tp @s 98.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+slot 3 shift
+press escape
+wait 5
+/tp @s 102.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+slot 0 shift
+press escape
+wait 5
+report == attempt 45b again: a fraction in, Auto off (it can only be switched with a fraction in), then the bases by the buttons, the cursor kept off the items
+/tp @s 94.5 200 37.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:dna_fraction
+slot 0
+wait 3
+widget "Auto"
+wait 5
+inspect block 94 200 39
+mouse 600 60
+wait 5
+shot g4_strand
+observe 40
+widget "C"
+widget "G"
+widget "C"
+widget "T"
+widget "G"
+widget "G"
+widget "G"
+widget "A"
+widget "A"
+widget "G"
+widget "G"
+widget "A"
+wait 30
+observe 20
+mouse 600 60
+shot g4_after_call
+inspect block 94 200 39
+report the next fraction, the bases typed on the keyboard with the cursor on empty background
+slot item:headinajar:dna_fraction
+slot 0
+wait 5
+mouse 600 60
+wait 3
+shot g4_strand2
+inspect block 94 200 39
+observe 40
+press a
+press c
+press g
+press t
+press a
+press c
+press g
+press t
+press a
+press c
+press g
+press t
+wait 30
+observe 20
+shot g4_after_keys
+inspect block 94 200 39
+press escape
+wait 5
+report == a fresh host: punch the cow (9/10, NoAI) below a quarter, saw it (off hand empty)
+/tp @s 91.5 200 29.5 0 10
+wait 3
+hotbar 2
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+lookat cow
+key attack
+wait 12
+inspect near cow 6
+key inventory
+wait 8
+slot item:headinajar:surgical_saw
+slot inv:1
+slot item:headinajar:serum_cassette
+slot inv:2
+press escape
+wait 5
+hotbar 2
+lookat cow
+key use
+wait 20
+inspect near cow 6
+report == the serum by hand into the host (as the body)
+hotbar 3
+lookat cow
+observe 40
+key use
+wait 30
+observe 20
+inspect near cow 6
+inspect me
+report == ride it: set the head down beside it (sneak-use the satchel), swap, right-click the host, then R and G
+key inventory
+wait 8
+slot item:headinajar:head_satchel
+slot inv:3
+press escape
+wait 5
+hotbar 4
+look 90 60
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+inspect near head_jar 6
+key swap
+wait 30
+inspect me
+lookat cow
+key use
+wait 20
+inspect me
+shot g4_host_genes_hud
+observe 40
+key ability
+wait 40
+key secondary
+wait 30
+observe 20
+closegui
+grab
+inspect me
+inspect near cow 30
+sneak hold 10
+wait 10
+key swap
+wait 30
+inspect me
+report == pick the head back up (empty hand)
+hotbar 9
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~2 ~ ~ 90 35
+wait 5
+lookat head_jar
+key inventory
+wait 8
+slot inv:8
+slot inv:20
+press escape
+wait 5
+hotbar 9
+lookat head_jar
+key use
+wait 20
+inspect me
+report == the Chimera: frame into the Gantry, Assemble
+/tp @s 81.5 200 7.5 0 39
+wait 3
+inspect block 81 200 9
+inspect block 82 200 9
+inspect near all 4
+key use
+wait 15
+slots
+slot item:headinajar:chimera_frame
+slot 0
+wait 5
+shot g4_gantry_chimera
+observe 60
+widget "Assemble"
+wait 60
+observe 20
+shot g4_chimera_assembled
+press escape
+wait 5
+inspect near chimera 12
+report == the third serum by hand into the Chimera (as the body), and the Hopper for comparison
+/tp @s 79.5 200 6.5 0 10
+wait 3
+key inventory
+wait 8
+slot item:headinajar:serum_cassette
+slot inv:2
+press escape
+wait 5
+hotbar 3
+/execute at @e[type=headinajar:hopper,limit=1] run tp @s ~ ~ ~-2.5 0 10
+wait 5
+lookat hopper
+observe 30
+key use
+wait 30
+/tp @s 79.5 200 6.5 0 10
+wait 5
+lookat chimera
+key use
+wait 30
+observe 20
+inspect me
+inspect near chimera 12
+report == board the Chimera: head down, swap, right-click, then R, Sneak+R, G
+look 180 60
+hotbar 4
+key sneak down
+wait 2
+key use
+wait 10
+key sneak up
+wait 10
+key swap
+wait 30
+lookat chimera
+key use
+wait 20
+inspect me
+shot g4_in_chimera
+observe 40
+key ability
+wait 40
+inspect me
+key sneak down
+wait 2
+key ability
+wait 40
+key sneak up
+wait 5
+inspect me
+key secondary
+wait 30
+observe 20
+closegui
+grab
+shot g4_chimera_after
+key sneak down
+wait 2
+key menu hold 30
+wait 10
+key sneak up
+closegui
+grab
+wait 10
+key swap
+wait 30
+inspect me
+hotbar 9
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~2 ~ ~ 90 35
+wait 5
+lookat head_jar
+key use
+wait 20
+inspect me

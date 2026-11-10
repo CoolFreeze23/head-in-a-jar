@@ -1,0 +1,1649 @@
+{
+ "_doc": [
+  "How each form, target and setup string in pairs.tsv becomes script lines. Read by gen_walk.py; see README.md.",
+  "Tokens in lines: {S} the spot block (x y z, where the player stands), {T} the target block 2 ahead (+Z),",
+  "{B} the side block where a form change leaves the body (3 to +X), {X+dx,dy,dz} an offset from S, T or B,",
+  "a C suffix ({SC}, {TC}, {BC}, {TC+0,0,1}) gives the block's bottom centre as decimals,",
+  "{NEAR_T} / {NEAR_S} / {NEAR_B} a selector filter for entities within 1.5 blocks of that centre,",
+  "{SEL} a selector filter for the whole spot, {LONG X+dx,dy,dz} a block position packed as a long (Tesla Node Target).",
+  "Fields: steps (placed before the form change), late (after it), nbt (extra NBT for a generic mob summon),",
+  "aim (block | ground | air | [dx, dy, dz] from the T corner), body_at / head_at (T or B), form_steps (replace the form's",
+  "own steps), item / offhand (replace the row's), action (use | attack | a whole input line), pre (input lines before",
+  "the act marker, e.g. opening a menu), post (after the end marker), bystander (true: the stand-in player is used),",
+  "approx (a note: the set-up is close to, not exactly, what the row describes), unreachable (why it cannot be set up).",
+  "Merge order: form, then target, then setup, then pairs[id]; later lists are appended, later scalars win."
+ ],
+ "eye": {
+  "standing": 1.62,
+  "sneaking": 1.27
+ },
+ "hold": {
+  "headinajar:gene_wash": 40,
+  "headinajar:suture_kit": 70
+ },
+ "items": {
+  "(empty)": "minecraft:air",
+  "any item": "minecraft:stick",
+  "any bucket": "minecraft:bucket"
+ },
+ "entity_aim": {
+  "minecraft:pig": 0.45,
+  "minecraft:cow": 0.7,
+  "minecraft:villager": 0.9,
+  "minecraft:skeleton": 0.9,
+  "minecraft:zombie": 0.9,
+  "minecraft:iron_golem": 1.0,
+  "minecraft:warden": 1.0,
+  "minecraft:wither": 1.2,
+  "minecraft:ender_dragon": 1.5,
+  "minecraft:wolf": 0.4,
+  "minecraft:allay": 0.3,
+  "minecraft:horse": 0.8,
+  "minecraft:armor_stand": 0.9,
+  "headinajar:lunk": 0.6,
+  "headinajar:rover": 0.4,
+  "headinajar:spider_walker": 0.4,
+  "mecha": 0.8,
+  "player": 0.9,
+  "jar": 0.4,
+  "body": 0.7,
+  "head": 0.4
+ },
+ "forms": {
+  "BODY": {
+   "eye": 1.62
+  },
+  "any": {
+   "eye": 1.62,
+   "approx": "walked as BODY"
+  },
+  "any (incl. bare JAR)": {
+   "eye": 1.62,
+   "approx": "walked as BODY; the bare-jar case is a separate row"
+  },
+  "JAR (no arm)": {
+   "eye": 0.5,
+   "check": "JAR",
+   "steps": [
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5"
+   ]
+  },
+  "JAR (with arm)": {
+   "eye": 0.5,
+   "check": "JAR",
+   "steps": [
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "fit manipulator_arm",
+    "wait 5"
+   ]
+  },
+  "LINKED": {
+   "eye": 1.32,
+   "check": "LINKED",
+   "steps": [
+    "/tp @s {HEADFROM}",
+    "separate",
+    "wait 5"
+   ]
+  },
+  "LINKED+head": {
+   "eye": 1.32,
+   "check": "LINKED",
+   "steps": [
+    "/tp @s {HEADFROM}",
+    "separate",
+    "wait 5",
+    "/give @s headinajar:head_satchel",
+    "pickup",
+    "wait 5"
+   ]
+  },
+  "HOSTED": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:pig {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10"
+   ]
+  },
+  "PILOT": {
+   "eye": 2.2,
+   "check": "PILOT",
+   "riding": true,
+   "approx_eye": "cockpit height estimated",
+   "steps": [
+    "mecha hopper {S} hydraulic_legs",
+    "wait 5",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10"
+   ]
+  },
+  "SOCKET": {
+   "eye": 0.5,
+   "check": "SOCKET",
+   "fixed": true,
+   "steps": [
+    "/setblock {S+0,-1,0} headinajar:neural_socket",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "/tp @s {SC} 0 0",
+    "wait 5",
+    "pilotgenes",
+    "wait 5"
+   ]
+  }
+ },
+ "targets": {
+  "the air": {
+   "aim": "air"
+  },
+  "the air (yourself)": {
+   "aim": "air"
+  },
+  "the air (drink)": {
+   "aim": "air"
+  },
+  "ground": {
+   "aim": "ground"
+  },
+  "ground (any free block face)": {
+   "aim": "ground"
+  },
+  "anything": {
+   "steps": [
+    "/setblock {T} minecraft:stone"
+   ],
+   "aim": "block",
+   "approx": "a stone block stands in for anything"
+  },
+  "anything, left click": {
+   "steps": [
+    "/setblock {T} minecraft:stone"
+   ],
+   "aim": "block",
+   "action": "attack",
+   "approx": "a stone block"
+  },
+  "anything, left or right click": {
+   "steps": [
+    "/setblock {T} minecraft:stone",
+    "/setblock {T+0,1,0} minecraft:stone",
+    "/setblock {T+0,2,0} minecraft:stone"
+   ],
+   "aim": "block",
+   "approx": "right click on a stone column (tall, so the estimated cockpit height still hits it)"
+  },
+  "any block not in head_operable, any entity but your own body": {
+   "steps": [
+    "/setblock {T} minecraft:stone"
+   ],
+   "aim": "block",
+   "approx": "a stone block"
+  },
+  "any block in #headinajar:head_operable": {
+   "steps": [
+    "/setblock {T} headinajar:galvanic_pile"
+   ],
+   "aim": "block"
+  },
+  "any mod machine except tesla_node": {
+   "steps": [
+    "/setblock {T} headinajar:saline_mixer"
+   ],
+   "aim": "block",
+   "approx": "the Saline Mixer stands in for every machine"
+  },
+  "block headinajar:centrifuge / dna_sequencer / gene_splicer / injection_rig / assembly_gantry": {
+   "steps": [
+    "/setblock {T} headinajar:centrifuge"
+   ],
+   "aim": "block",
+   "approx": "Centrifuge only"
+  },
+  "block headinajar:charging_dock / galvanic_pile / leyden_jar": {
+   "steps": [
+    "/setblock {T} headinajar:charging_dock"
+   ],
+   "aim": "block",
+   "approx": "Charging Dock only"
+  },
+  "block headinajar:tesla_node, then a second node": {
+   "steps": [
+    "/setblock {T} headinajar:tesla_node",
+    "/setblock {T+4,0,0} headinajar:tesla_node"
+   ],
+   "aim": "block",
+   "approx": "only the first sneak-click is walked"
+  },
+  "block headinajar:cerebral_array (slot)": {
+   "steps": [
+    "/setblock {T} headinajar:cerebral_array"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:life_support_cradle (own head docked)": {
+   "steps": [
+    "/setblock {T} headinajar:life_support_cradle"
+   ],
+   "aim": "block",
+   "form": "LINKED+head",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "approx": "the head is docked by a real empty-hand click first (the P010 click); if P010 fails this row is not reached"
+  },
+  "block headinajar:safety_placard": {
+   "steps": [
+    "/setblock {T+0,0,1} minecraft:stone",
+    "/setblock {T} headinajar:safety_placard[facing=north]"
+   ],
+   "aim": "block"
+  },
+  "fluid headinajar:cranial_saline (in world)": {
+   "steps": [
+    "/setblock {T} headinajar:cranial_saline"
+   ],
+   "aim": "ground",
+   "approx": "a click through a saline source block onto the ground under it"
+  },
+  "block headinajar:body_locker, left click": {
+   "steps": [
+    "/setblock {T} headinajar:body_locker"
+   ],
+   "aim": "block",
+   "action": "attack"
+  },
+  "minecraft:armor_stand": {
+   "steps": [
+    "/summon minecraft:armor_stand {TC} {Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.9,
+    0.5
+   ]
+  },
+  "entity headinajar:head_jar (own)": {
+   "head_at": "T",
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ]
+  },
+  "entity headinajar:head_jar (own), left click": {
+   "head_at": "T",
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ],
+   "action": "attack"
+  },
+  "entity headinajar:head_jar (another player's)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,2} 180",
+    "wait 5",
+    "bystander form linked",
+    "wait 10"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    1.0
+   ]
+  },
+  "entity headinajar:head_jar (another player's), left click": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,2} 180",
+    "wait 5",
+    "bystander form linked",
+    "wait 10"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    1.0
+   ],
+   "action": "attack"
+  },
+  "entity headinajar:headless_body (own)": {
+   "body_at": "T",
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ]
+  },
+  "entity headinajar:headless_body": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T+0,0,4}"
+   ],
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ],
+   "approx": "the stand-in player's body"
+  },
+  "entity headinajar:headless_body (any)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T+0,0,4}"
+   ],
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ],
+   "approx": "the stand-in player's body"
+  },
+  "entity headinajar:headless_body (any), left click": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T+0,0,4}"
+   ],
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ],
+   "action": "attack",
+   "approx": "the stand-in player's body"
+  },
+  "entity headinajar:headless_body (own idle body)": {
+   "body_at": "T",
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ]
+  },
+  "entity headinajar:headless_body (own, no collar)": {
+   "body_at": "T",
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ]
+  },
+  "entity headinajar:headless_body (own, with Collar Cam)": {
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ],
+   "form_steps": [
+    "/tp @s {TC} -90 0",
+    "separate",
+    "wait 5",
+    "swap",
+    "wait 10"
+   ]
+  },
+  "entity headinajar:headless_body (own corpse)": {
+   "aim": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "form_steps": [
+    "/tp @s {TC} -90 0",
+    "separate",
+    "wait 5",
+    "/effect clear @s minecraft:resistance",
+    "/damage @s 1000 minecraft:generic",
+    "wait 20",
+    "/effect give @s minecraft:resistance 999 4 true"
+   ]
+  },
+  "entity headinajar:headless_body (another player's)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T+0,0,4}"
+   ],
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ]
+  },
+  "entity headinajar:headless_body (another player's corpse)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form linked",
+    "wait 5",
+    "/damage Bystander 1000 minecraft:generic",
+    "wait 20"
+   ],
+   "aim": [
+    0.5,
+    0.5,
+    0.5
+   ]
+  },
+  "another player": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 180",
+    "wait 5"
+   ],
+   "aim": [
+    0.5,
+    0.9,
+    0.5
+   ]
+  },
+  "another player (any form)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 180",
+    "wait 5"
+   ],
+   "aim": [
+    0.5,
+    0.9,
+    0.5
+   ],
+   "approx": "friend in BODY form"
+  },
+  "another player (JAR form)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,1} 180",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T} 180"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ]
+  },
+  "another player (LINKED+head)": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T} 0",
+    "wait 5",
+    "bystander form linked",
+    "wait 5",
+    "bystander give headinajar:head_satchel",
+    "bystander useentity nearest headinajar:head_jar",
+    "wait 10",
+    "bystander look 180 0"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ],
+   "approx": "the friend picks up its head by a real use packet; LINKED body is 1.45 tall"
+  },
+  "host (mob made host)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (mob made host, e.g. minecraft:pig)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (sawn pig)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (already sawn)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (a headless pig host)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (a second host)": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "host (sawn pig) / shell": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ],
+   "approx": "the sawn pig only"
+  },
+  "host or mecha": {
+   "steps": [
+    "hostify minecraft:pig {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ],
+   "approx": "the sawn pig only"
+  },
+  "host brazil_legends:headless_mule (never sawn)": {
+   "unreachable": "needs the Brazil Legends mod in the dev client (no SMOKE_MODS group carries it)"
+  },
+  "shell": {
+   "steps": [
+    "/summon headinajar:lunk {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.6,
+    0.5
+   ],
+   "approx": "the Lunk"
+  },
+  "shell or mecha": {
+   "steps": [
+    "/summon headinajar:lunk {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.6,
+    0.5
+   ],
+   "approx": "the Lunk only"
+  },
+  "shell headinajar:lunk / rover / spider_walker": {
+   "steps": [
+    "/summon headinajar:lunk {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.6,
+    0.5
+   ],
+   "approx": "the Lunk only"
+  },
+  "shell headinajar:lunk or spider_walker": {
+   "steps": [
+    "/summon headinajar:lunk {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.6,
+    0.5
+   ],
+   "approx": "the Lunk only"
+  },
+  "shell headinajar:lunk (placed)": {
+   "steps": [
+    "/summon headinajar:lunk {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.6,
+    0.5
+   ]
+  },
+  "mecha (own, empty)": {
+   "steps": [
+    "mecha hopper {T} {MODS}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "mecha (own, empty) e.g. headinajar:hopper": {
+   "steps": [
+    "mecha hopper {T} {MODS}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "mecha (own, damaged)": {
+   "steps": [
+    "mecha hopper {T} {MODS}",
+    "wait 5",
+    "/data merge entity @e[type=headinajar:hopper,{NEAR_T},limit=1] {Health:20f}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "mecha (own) with a Fusion Bottle": {
+   "mods": "hydraulic_legs,fusion_bottle",
+   "steps": [
+    "mecha hopper {T} {MODS}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "mecha (someone else's, empty)": {
+   "steps": [
+    "mecha hopper {T} {MODS}",
+    "wait 5",
+    "/data merge entity @e[type=headinajar:hopper,{NEAR_T},limit=1] {Owner:[I;1,2,3,4]}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "mecha (occupied)": {
+   "bystander": true,
+   "steps": [
+    "mecha hopper {T} {MODS}",
+    "wait 5",
+    "bystander spawn {T+2,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "/data modify entity @e[type=headinajar:hopper,{NEAR_T},limit=1] Owner set from entity Bystander UUID",
+    "bystander useentity nearest headinajar:hopper",
+    "wait 10"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ],
+   "approx": "the stand-in player climbs in by a real use packet as a jar"
+  },
+  "mecha (occupied, Passenger Pod)": {
+   "bystander": true,
+   "mods": "hydraulic_legs,passenger_pod",
+   "steps": [
+    "mecha hopper {T} {MODS}",
+    "wait 5",
+    "bystander spawn {T+2,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "/data modify entity @e[type=headinajar:hopper,{NEAR_T},limit=1] Owner set from entity Bystander UUID",
+    "bystander useentity nearest headinajar:hopper",
+    "wait 10"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ],
+   "approx": "the stand-in player climbs in by a real use packet as a jar"
+  },
+  "mecha (occupied, no pod; Wheelhouse seats)": {
+   "bystander": true,
+   "steps": [
+    "mecha wheelhouse {T} hydraulic_legs",
+    "wait 5",
+    "bystander spawn {T+3,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "/data modify entity @e[type=headinajar:wheelhouse,{NEAR_T},limit=1] Owner set from entity Bystander UUID",
+    "bystander useentity nearest headinajar:wheelhouse",
+    "wait 10"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ],
+   "approx": "the stand-in player climbs in by a real use packet as a jar; Wheelhouse with Hydraulic Legs (legs may not suit a wheeled frame)"
+  },
+  "mecha headinajar:chimera (own)": {
+   "steps": [
+    "mecha chimera {T} {MODS}"
+   ],
+   "aim": [
+    0.5,
+    0.8,
+    0.5
+   ]
+  },
+  "pet minecraft:wolf (your own, tamed)": {
+   "steps": [
+    "/summon minecraft:wolf {TC} {NoAI:1b,Rotation:[180f,0f],{NBT}}",
+    "wait 2",
+    "/data modify entity @e[type=minecraft:wolf,{NEAR_T},limit=1] Owner set from entity @s UUID"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ]
+  },
+  "pet minecraft:wolf (another player's)": {
+   "steps": [
+    "/summon minecraft:wolf {TC} {NoAI:1b,Rotation:[180f,0f],Owner:[I;1,2,3,4],{NBT}}"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ]
+  },
+  "vanilla mob with a name tag": {
+   "steps": [
+    "/summon minecraft:pig {TC} {NoAI:1b,Rotation:[180f,0f],CustomName:'\"Barry\"',{NBT}}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "vanilla mob (not a host)": {
+   "steps": [
+    "/summon minecraft:pig {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ]
+  },
+  "vanilla mob, left click": {
+   "steps": [
+    "/summon minecraft:pig {TC} {NoAI:1b,Rotation:[180f,0f]}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ],
+   "action": "attack"
+  },
+  "vanilla mob minecraft:pig, saw held in OFF hand": {
+   "steps": [
+    "/summon minecraft:pig {TC} {NoAI:1b,Rotation:[180f,0f],Health:2f}"
+   ],
+   "aim": [
+    0.5,
+    0.45,
+    0.5
+   ],
+   "item": "headinajar:life_support_jar",
+   "offhand": "headinajar:surgical_saw"
+  },
+  "the air (throw) near a LINKED player": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,3} 180",
+    "wait 5",
+    "bystander form linked",
+    "wait 5"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a LINKED player with Shielded Housing": {
+   "unreachable": "no verb puts a collar upgrade (Shielded Housing) on the stand-in player's Collar Cam; needs e.g. 'bystander collar UPGRADE'"
+  },
+  "the air (throw) near a jar": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,3} 180",
+    "wait 5",
+    "bystander form jar",
+    "wait 5"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a mecha": {
+   "steps": [
+    "mecha hopper {T+0,0,3} hydraulic_legs"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a turret_pedestal": {
+   "steps": [
+    "/setblock {T+0,0,3} headinajar:turret_pedestal",
+    "headblock {T+0,0,3} minecraft:skeleton"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a life_support_cradle": {
+   "steps": [
+    "/setblock {T+0,0,3} headinajar:life_support_cradle",
+    "/data merge block {T+0,0,3} {Owner:[I;1,2,3,4],OwnerName:\"Absent\"}"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near your own headless body": {
+   "body_at": "T+0,0,3",
+   "aim": "ground"
+  },
+  "the air (throw) near a placed head jar": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+0,0,5} 180",
+    "wait 5",
+    "bystander form linked",
+    "wait 5"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a host": {
+   "steps": [
+    "hostify minecraft:pig {T+0,0,3}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T+0,0,3},limit=1] {NoAI:1b}"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a shell": {
+   "steps": [
+    "/summon headinajar:lunk {TC+0,0,3} {NoAI:1b}"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a jarred_head block": {
+   "steps": [
+    "/setblock {T+0,0,3} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a signal_jammer": {
+   "steps": [
+    "/setblock {T+0,0,3} headinajar:signal_jammer",
+    "/data merge block {T+0,0,3} {Energy:100000}"
+   ],
+   "aim": "ground"
+  },
+  "the air (throw) near a cerebral_array": {
+   "steps": [
+    "/setblock {T+0,0,3} headinajar:cerebral_array",
+    "headblock {T+0,0,3} minecraft:zombie,minecraft:zombie"
+   ],
+   "aim": "ground"
+  },
+  "menu button: Body Printer \"Print\"": {
+   "steps": [
+    "/setblock {T} headinajar:body_printer"
+   ],
+   "aim": "block",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "action": "widget \"Print\"",
+   "post": [
+    "press escape"
+   ]
+  },
+  "menu button: Injection Rig \"Inject\"": {
+   "steps": [
+    "/setblock {T} headinajar:injection_rig"
+   ],
+   "aim": "block",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "action": "widget \"Inject\"",
+   "post": [
+    "press escape"
+   ]
+  }
+ },
+ "setups": {
+  "": {},
+  "placed": {},
+  "machine placed": {},
+  "pile placed": {},
+  "dock placed": {},
+  "printer placed": {},
+  "array placed": {},
+  "gantry placed": {},
+  "shell placed": {},
+  "shell placed (any health)": {},
+  "rover placed": {},
+  "empty shell": {},
+  "empty": {},
+  "whole": {},
+  "whole player": {},
+  "whole or LINKED": {},
+  "any": {},
+  "any health": {},
+  "healthy": {},
+  "healthy cow": {},
+  "healthy villager": {},
+  "full health": {},
+  "own or not": {},
+  "owned by you": {},
+  "assembled at the gantry": {},
+  "bare jar": {},
+  "bare jar, no Manipulator Arm": {},
+  "bare jar standing next to it": {},
+  "chair placed": {},
+  "chair placed, nobody seated": {},
+  "chair idle": {},
+  "empty cradle": {},
+  "bare jar, empty cradle": {},
+  "empty turret": {},
+  "empty mount": {},
+  "empty socket": {},
+  "empty socket, no mob head": {},
+  "head elsewhere": {},
+  "head placed or docked elsewhere": {},
+  "sawn pig": {},
+  "sawn pig, nobody riding": {},
+  "riding a host": {},
+  "riding a host, target within reach": {},
+  "piloting a mecha": {},
+  "plugged into a Neural Socket": {},
+  "your placed head": {},
+  "your placed head (any tier, incl. quantum_goggles)": {},
+  "your idle body": {},
+  "idle body": {},
+  "idle body, owner online": {},
+  "body standing": {},
+  "body died": {},
+  "body died while linked": {},
+  "separated by /headoffice detach": {},
+  "separated in the chair, signal good": {},
+  "friend separated": {},
+  "friend separated, head placed": {},
+  "owner online": {},
+  "friend in BODY form": {},
+  "any form, any health": {},
+  "any body or corpse": {},
+  "carrying your head": {},
+  "carrying your head in a satchel": {},
+  "carrying your head in the satchel": {},
+  "carrying your head, not sneaking": {},
+  "carrying your head, empty cradle": {},
+  "no fluid capability": {},
+  "sneaking skips block use": {},
+  "trying to fold it back": {},
+  "collar on your neck": {},
+  "within 8 blocks of the hit": {},
+  "Lunk within 8 blocks of the hit": {},
+  "sawn pig within 8 blocks of the hit": {},
+  "body standing within 8 blocks of the hit": {},
+  "friend's head placed, within 8 blocks of the hit": {},
+  "jarred zombie head placed within 8 blocks": {},
+  "powered jammer within 8 blocks of the hit": {},
+  "array running with heads, within 8 blocks of the hit": {},
+  "docked head, owner far away": {},
+  "tank takes: saline": {},
+  "tank takes: water in, saline out": {},
+  "tank takes: broth": {},
+  "the oil blood tag lists lunk, rover, spider_walker, hopper, bulwark": {},
+  "printer missing items or saline": {},
+  "a pilot inside": {},
+  "a pilot inside, Passenger Pod fitted": {},
+  "a pilot inside, Wheelhouse frame (2 seats), no pod": {},
+  "other owner, not trusted": {},
+  "filled serum": {},
+  "jar in main hand, saw in off hand, pig below 25%": {},
+  "Collar Cam in the other hand": {},
+  "e.g. galvanic_pile with rotten flesh": {
+   "item": "minecraft:rotten_flesh"
+  },
+  "any usable item (Gene Wash, EMP grenade, Entangled Pair, collar upgrades)": {
+   "item": "headinajar:gene_wash",
+   "approx": "Gene Wash stands in for every usable item"
+  },
+  "no collar anywhere": {},
+  "collar is on your body": {},
+  "below 25%": {
+   "nbt": "Health:2f",
+   "approx": "Health set to 2 at summon (iron golem: 20)"
+  },
+  "below 25% health": {
+   "nbt": "Health:2f"
+  },
+  "below 25% health (same for executive_life_support_jar)": {
+   "nbt": "Health:2f"
+  },
+  "wearing an iron helmet, below 25% health": {
+   "nbt": "Health:2f,ArmorItems:[{},{},{},{id:\"minecraft:iron_helmet\",count:1}]"
+  },
+  "tamed, saddled": {
+   "nbt": "Tame:1b,SaddleItem:{id:\"minecraft:saddle\",count:1}",
+   "approx": "tamed with no owner set"
+  },
+  "player already separated": {},
+  "chair missing power or parts, seated, press Sign": {
+   "pre": [
+    "key use"
+   ],
+   "action": "at rel 120 78 hold 50",
+   "post": [
+    "press escape"
+   ],
+   "approx": "unstocked chair; the Sign button is pressed by a held real click (the harness found this button never signs, see HARNESS.md)"
+  },
+  "operation running": {
+   "bystander": true,
+   "steps": [
+    "chair {T}",
+    "bystander spawn {T+1,0,0} 270",
+    "wait 5",
+    "bystander operate {T}",
+    "wait 60"
+   ],
+   "approx": "the stand-in player is the patient"
+  },
+  "cradle holding another player's head": {
+   "steps": [
+    "/data merge block {T} {Owner:[I;1,2,3,4],OwnerName:\"Absent Colleague\"}"
+   ],
+   "approx": "an offline owner written into the cradle; no head registry entry"
+  },
+  "your own head docked, Head Satchel in inventory": {
+   "form": "LINKED+head",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "approx": "the head is docked by a real empty-hand click first (the P010 click); the satchel stays in the inventory"
+  },
+  "your own head docked, NO satchel": {
+   "form": "LINKED+head",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use",
+    "wait 33",
+    "/clear @s headinajar:head_satchel"
+   ],
+   "approx": "the head is docked by a real empty-hand click first (the P010 click), then the satchel is cleared"
+  },
+  "tank has 250 mB of room": {
+   "steps": [
+    "/data merge block {T} {Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:3750}}}"
+   ]
+  },
+  "tank full (4000 mB)": {
+   "steps": [
+    "/data merge block {T} {Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:4000}}}"
+   ]
+  },
+  "printer loaded": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:2000}},Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8}]}}"
+   ]
+  },
+  "printer needs saline": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8}]}}"
+   ]
+  },
+  "serum in slot": {
+   "late": [
+    "lab"
+   ]
+  },
+  "serum in slot, 5 kFE stored": {
+   "late": [
+    "lab"
+   ]
+  },
+  "serum in slot, under 5 kFE": {
+   "late": [
+    "lab",
+    "wait 3",
+    "/data merge block {T} {Energy:1000}"
+   ]
+  },
+  "placard on a wall": {},
+  "placed jarred VILLAGER head": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}"
+   ]
+  },
+  "jarred villager head placed": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}"
+   ]
+  },
+  "villager head": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}"
+   ]
+  },
+  "placed jarred zombie (non-villager) head": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ]
+  },
+  "jarred zombie head placed": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ]
+  },
+  "filled serum, jarred zombie head placed": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ],
+   "item": "{SERUM}"
+  },
+  "a jarred head already placed": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
+   ],
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "empty locker, a host within 3 blocks": {
+   "steps": [
+    "hostify minecraft:pig {T+2,0,0}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T+2,0,0},limit=1] {NoAI:1b}"
+   ]
+  },
+  "host nearby": {
+   "steps": [
+    "hostify minecraft:pig {T+2,0,0}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T+2,0,0},limit=1] {NoAI:1b}"
+   ]
+  },
+  "empty locker, no host nearby": {},
+  "locker holding a host": {
+   "steps": [
+    "hostify minecraft:pig {T+2,0,0}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T+2,0,0},limit=1] {NoAI:1b}"
+   ],
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "approx": "the host is stored by a real empty-hand click first (the P039 click)"
+  },
+  "locker holding a mecha (stored first with an empty-hand click, mecha within 3 blocks)": {
+   "steps": [
+    "mecha hopper {T+2,0,0} hydraulic_legs"
+   ],
+   "pre": [
+    "/item replace entity @s weapon.mainhand with minecraft:air",
+    "key use"
+   ],
+   "approx": "the mecha is stored by a real empty-hand click first"
+  },
+  "your own Headless Body standing beside it": {
+   "unreachable": "contradictory: a BODY-form player has no separate Headless Body of their own; walk it as a LINKED or JAR (with arm) row instead"
+  },
+  "leech jar with samples": {
+   "steps": [
+    "/data merge block {T} {Items:{Items:[{Slot:0,id:\"headinajar:blood_sample\",count:1}]}}"
+   ],
+   "approx": "a plain Blood Sample written into slot 0"
+  },
+  "turret with a head": {
+   "steps": [
+    "headblock {T} minecraft:skeleton"
+   ]
+  },
+  "turret holding a head": {
+   "steps": [
+    "headblock {T} minecraft:skeleton"
+   ]
+  },
+  "already holding a head": {
+   "steps": [
+    "headblock {T} minecraft:skeleton"
+   ],
+   "item": "{HEAD:minecraft:skeleton}"
+  },
+  "empty, skeleton head": {
+   "item": "{HEAD:minecraft:skeleton}"
+  },
+  "empty, jarred PIG head": {
+   "item": "{HEAD:minecraft:pig}"
+  },
+  "empty, jarred villager": {
+   "item": "{HEAD:minecraft:villager}"
+  },
+  "empty, jarred zombie": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "already staffed": {
+   "steps": [
+    "headblock {T} minecraft:villager"
+   ],
+   "item": "{HEAD:minecraft:villager}"
+  },
+  "mount with a villager": {
+   "steps": [
+    "headblock {T} minecraft:villager"
+   ]
+  },
+  "mount with a villager, both hands empty": {
+   "steps": [
+    "headblock {T} minecraft:villager"
+   ]
+  },
+  "empty socket, jarred zombie / villager / enderman": {
+   "item": "{HEAD:minecraft:zombie}",
+   "approx": "zombie only"
+  },
+  "empty socket, jarred skeleton": {
+   "item": "{HEAD:minecraft:skeleton}"
+  },
+  "socket already holding a head": {
+   "steps": [
+    "headblock {T} minecraft:zombie"
+   ],
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "socket holding a jarred mob head": {
+   "steps": [
+    "headblock {T} minecraft:zombie"
+   ]
+  },
+  "socket holding a mob head": {
+   "steps": [
+    "headblock {T} minecraft:zombie"
+   ]
+  },
+  "another player plugged in": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+1,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander useblock {T}",
+    "wait 10"
+   ],
+   "approx": "the stand-in jar plugs in by a real use packet"
+  },
+  "Board Room Core in slot 10": {
+   "steps": [
+    "/data merge block {T} {Items:{Items:[{Slot:9,id:\"headinajar:board_room_core\",count:1}]}}"
+   ]
+  },
+  "linked node": {
+   "steps": [
+    "/setblock {T+6,0,0} headinajar:tesla_node",
+    "/data merge block {T} {Target:{LONG T+6,0,0}L}"
+   ]
+  },
+  "two unlinked nodes 10 blocks apart": {
+   "steps": [
+    "/setblock {T+10,0,0} headinajar:tesla_node"
+   ]
+  },
+  "try to link by sneaking": {},
+  "your placed head, Head Satchel in inventory": {
+   "late": [
+    "/give @s headinajar:head_satchel"
+   ]
+  },
+  "your placed head, satchel in inventory": {
+   "late": [
+    "/give @s headinajar:head_satchel"
+   ]
+  },
+  "filled serum, your placed head, satchel in inventory": {
+   "late": [
+    "/give @s headinajar:head_satchel"
+   ],
+   "item": "{SERUM}"
+  },
+  "your placed head, no satchel": {},
+  "no satchel": {},
+  "saline already full, satchel in inventory": {
+   "late": [
+    "/give @s headinajar:head_satchel"
+   ]
+  },
+  "saline below max": {
+   "approx": "saline is NOT lowered (no verb sets jar saline; JarState lives in player attachments /data cannot edit)"
+  },
+  "integrity below max": {
+   "approx": "integrity is NOT lowered (no verb sets Jar Integrity)"
+  },
+  "friend low on saline": {
+   "approx": "the friend's saline is NOT lowered (no verb)"
+  },
+  "friend drying out": {
+   "approx": "the friend's saline is NOT lowered (no verb)"
+  },
+  "cracked friend": {
+   "approx": "the friend's integrity is NOT lowered (no verb)"
+  },
+  "friend carrying their head": {},
+  "friend in JAR form": {
+   "steps": [
+    "bystander tp {T+0,0,1} 180",
+    "bystander form jar",
+    "wait 5",
+    "bystander tp {T} 180"
+   ],
+   "aim": [
+    0.5,
+    0.4,
+    0.5
+   ]
+  },
+  "friend in JAR, LINKED or BODY": {
+   "approx": "friend in BODY form"
+  },
+  "friend in any form": {
+   "approx": "friend in BODY form"
+  },
+  "friend with genes": {
+   "approx": "the friend has NO genes (the genes verb works on the real player only)"
+  },
+  "owner trusts you (/headoffice trust)": {
+   "late": [
+    "/execute as Bystander run headoffice trust add @a"
+   ]
+  },
+  "not trusted": {},
+  "signal quality 20 or less": {
+   "unreachable": "no verb sets neuro-link quality; needs e.g. 'quality N', or a head moved beyond goggle range in a force-loaded far chunk"
+  },
+  "link quality under 20": {
+   "unreachable": "no verb sets neuro-link quality; needs e.g. 'quality N', or a head moved beyond goggle range in a force-loaded far chunk"
+  },
+  "body from /headoffice detach or a crooked collar you want to replace": {
+   "approx": "the /headoffice-detach case (plain body, no collar)"
+  },
+  "body with a crooked Collar Cam": {
+   "approx": "a plain body with no collar; no verb makes a crooked collar"
+  },
+  "body standing, body has genes": {
+   "steps": [
+    "genes me spider_climb"
+   ],
+   "approx": "genes given to the player before the head comes off; they move to the body"
+  },
+  "body standing, jarred pig head in hand": {
+   "item": "{HEAD:minecraft:pig}"
+  },
+  "genes on your body": {
+   "late": [
+    "genes me spider_climb"
+   ]
+  },
+  "riding a host beside your body": {},
+  "riding a host next to your standing body": {},
+  "riding host A, click host B": {},
+  "target beyond host reach": {
+   "distance": 4.5
+  },
+  "plugged in, body adjacent": {},
+  "standing in a saline pool as a jar or with a placed head": {
+   "approx": "BODY form, a saline source block in front"
+  },
+  "mecha with a Cargo Hold": {
+   "mods": "hydraulic_legs,cargo_hold"
+  },
+  "filled serum, free Gene Port": {},
+  "no Gene Ports": {},
+  "own, Bio-Reactor Core fitted": {
+   "mods": "hydraulic_legs,bio_reactor_core"
+  },
+  "own, Shoulder Mount fitted (idea 30)": {
+   "unreachable": "the Shoulder Mount mecha module does not exist (cohesion idea 30, not registered)"
+  },
+  "damaged mecha": {
+   "late": [
+    "/data merge entity @e[type=headinajar:hopper,{NEAR_T},limit=1] {Health:20f}"
+   ]
+  },
+  "damaged shell": {
+   "late": [
+    "/data merge entity @e[type=headinajar:lunk,{NEAR_T},limit=1] {Health:20f}"
+   ]
+  },
+  "charged Leyden Jar item": {
+   "approx": "a plain Leyden Jar item; no charge is set on the item"
+  },
+  "charged Leyden Jar item, battery low": {
+   "late": [
+    "/data merge entity @e[type=headinajar:hopper,{NEAR_T},limit=1] {Battery:1000}"
+   ],
+   "approx": "a plain Leyden Jar item; no charge is set on the item"
+  },
+  "charged Leyden Jar item, shell battery low": {
+   "approx": "a plain Leyden Jar item; the shell's charge is not lowered"
+  },
+  "sync below 50%": {
+   "late": [
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{host:1b,freshness:100f,sync:20f}}}"
+   ],
+   "approx": "host data rewritten by /data merge on the server; the client copy is not resynced"
+  },
+  "sync 50% or more": {
+   "late": [
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{host:1b,freshness:100f,sync:80f}}}"
+   ],
+   "approx": "host data rewritten by /data merge on the server; the client copy is not resynced"
+  },
+  "freshness below 100": {
+   "late": [
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{host:1b,freshness:60f,sync:0f}}}"
+   ]
+  },
+  "sawn pig, freshness below 100": {
+   "late": [
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{host:1b,freshness:60f,sync:0f}}}"
+   ]
+  },
+  "laced host (Neural Lace applied)": {
+   "late": [
+    "/data merge entity @e[type=minecraft:pig,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{host:1b,freshness:100f,sync:80f,laced:1b}}}"
+   ]
+  },
+  "another jar already riding it": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+2,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander useentity nearest minecraft:pig",
+    "wait 10"
+   ],
+   "approx": "the stand-in jar climbs on by a real use packet"
+  },
+  "jarred villager head, rover placed": {
+   "item": "{HEAD:minecraft:villager}"
+  },
+  "next to your placed head": {},
+  "machine placed, Carry On installed": {
+   "unreachable": "needs the Carry On mod in the dev client (not copied into libs-smoke)"
+  },
+  "friend separated, Carry On installed": {
+   "unreachable": "needs the Carry On mod in the dev client (not copied into libs-smoke)"
+  },
+  "friend separated, head placed, Carry On installed": {
+   "unreachable": "needs the Carry On mod in the dev client (not copied into libs-smoke)"
+  },
+  "Brazil Legends present": {},
+  "bare jar (also tesla_node, relay_mast_mk2, signal_jammer)": {
+   "approx": "relay_mast only"
+  }
+ },
+ "pairs": {
+  "P094": {
+   "action": "attack"
+  },
+  "P106": {
+   "approx": "a summoned Wither with NoAI (no spawn invulnerability phase)"
+  },
+  "P107": {
+   "approx": "a summoned Ender Dragon in the overworld; its parts make the aim approximate"
+  },
+  "P238": {
+   "approx": "a summoned Ender Dragon in the overworld; its parts make the aim approximate"
+  },
+  "N087": {
+   "approx": "a summoned Ender Dragon in the overworld; its parts make the aim approximate"
+  },
+  "P114": {
+   "nbt_replace": "Health:20f"
+  },
+  "P196": {
+   "offhand": "headinajar:collar_cam"
+  },
+  "P251": {
+   "item": "{SERUM}"
+  },
+  "P252": {
+   "item": "{SERUM}"
+  },
+  "P253": {
+   "item": "{SERUM}"
+  },
+  "P254": {
+   "item": "{SERUM}"
+  },
+  "P255": {
+   "item": "{SERUM}"
+  },
+  "P256": {
+   "item": "{SERUM}"
+  },
+  "P257": {
+   "item": "{SERUM}"
+  },
+  "P258": {
+   "item": "{SERUM}"
+  },
+  "P259": {
+   "unreachable": "contradictory: a BODY-form player has no separate idle body of their own (row says own idle body, form BODY); walk it as JAR (with arm) instead"
+  },
+  "P260": {
+   "item": "{SERUM}"
+  },
+  "N090": {
+   "item": "{SERUM}"
+  },
+  "P163": {
+   "item": "{HEAD:minecraft:skeleton}"
+  },
+  "P172": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "P174": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "P175": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "P176": {
+   "item": "{HEAD:minecraft:pig}"
+  },
+  "P177": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "N052": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "N077": {
+   "item": "{HEAD:minecraft:zombie}"
+  },
+  "P263": {
+   "approx": "the sawn pig only"
+  }
+ },
+ "items_tokens": {
+  "SERUM": "headinajar:serum_cassette[minecraft:custom_data={Serum:{genes:[{gene:\"cat_eyes\",potency:1.0f}],stability:85}}]",
+  "HEAD": "headinajar:jarred_head[minecraft:custom_data={Type:\"{0}\",Entity:{}}]",
+  "HEAD:minecraft:villager": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}]"
+ }
+}

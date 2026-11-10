@@ -1,0 +1,26 @@
+# The corpse keeps my things: how to get them back as the new body? Hit it.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/kill @e[type=minecraft:llama]
+/kill @e[type=minecraft:wandering_trader]
+/tp @s 114.5 200 -22.0 0 20
+wait 30
+inspect me
+/execute at @e[type=headinajar:headless_body,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 20
+wait 5
+lookat headless_body
+key attack
+wait 25
+key attack
+wait 25
+key attack
+wait 25
+inspect near headless_body 6
+inspect near item 8
+shot c4d_corpse_hit
+/tp @s 113.2 200 -22.2 0 20
+wait 40
+inspect me

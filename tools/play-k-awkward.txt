@@ -1,0 +1,177 @@
+# The awkward moments (brief list), as far as one client can do them. Flat world, survival, Easy, mob spawning off.
+# Setup verbs build each scene (separate, fit, charge, hostify, mecha); the moment itself is real input or a vanilla
+# command doing what the world would do (/damage for a hit that kills, /tp for walking far).
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+report == K1. the stand-in player does things to me: hits my placed head, opens my corpse, sits in a chair
+separate
+wait 40
+inspect me
+inspect near head_jar 6
+bystander spawn 3 -60 3 180
+wait 10
+bystander tp 2 -60 1 90 30
+bystander mark
+observe 40
+bystander attack nearest head_jar
+wait 30
+bystander attack nearest head_jar
+wait 30
+observe 20
+inspect me
+bystander packets sound|actionbar|chat
+report the body (me, linked) is killed (setup), then the bystander right-clicks my corpse
+/damage @s 100 minecraft:mob_attack
+wait 40
+inspect me
+inspect near headless_body 10
+/execute at @e[type=headinajar:headless_body,limit=1] run tp @e[type=player,name=Bystander] ~1.2 ~ ~ 90 20
+bystander mark
+observe 40
+bystander useentity nearest headless_body
+wait 30
+observe 20
+bystander state
+bystander packets OpenScreen|sound|actionbar
+bystander close
+report the bystander sits in a Separation Chair (stocked by the setup verb) and signs while I, the jar, watch
+/setblock 6 -60 6 headinajar:separation_chair
+wait 5
+bystander mark
+observe 60
+bystander chair 6 -60 6
+wait 60
+observe 20
+bystander state
+bystander tp 9 -60 9 0 0
+report == K2. dying in each form. As the jar (Let go is journey 26c): the jar takes a killing hit
+inspect me
+/damage @s 100 minecraft:mob_attack
+wait 40
+inspect me
+shot k2_jar_killed
+widgets
+widget "Respawn"
+wait 60
+inspect me
+report as a host rider: separate, swap, ride a host, the host is killed
+/kill @e[type=headinajar:headless_body]
+/kill @e[type=headinajar:head_jar]
+separate
+wait 40
+key swap
+wait 30
+hostify minecraft:cow 2 -60 4
+wait 10
+/tp @s 2.5 -60 2.5 0 20
+lookat cow
+key use
+wait 20
+inspect me
+observe 40
+/damage @e[type=minecraft:cow,limit=1,sort=nearest] 100 minecraft:mob_attack
+wait 40
+observe 20
+inspect me
+report in a mecha: a Hopper (setup verb), boarded, then it is killed
+mecha hopper 6 -60 2 hydraulic_legs,galvanic_stack,drill
+wait 20
+/tp @s 4.5 -60 2.5 -90 20
+lookat hopper
+key use
+wait 20
+inspect me
+observe 60
+/damage @e[type=headinajar:hopper,limit=1] 1000 minecraft:mob_attack
+wait 60
+observe 20
+inspect me
+inspect near hopper 10
+report in a Neural Socket: plug in, then a killing hit
+/setblock 0 -60 8 headinajar:neural_socket
+/tp @s 0.5 -60 6.5 0 5
+wait 10
+key use
+wait 20
+inspect me
+observe 40
+/damage @s 100 minecraft:mob_attack
+wait 40
+observe 20
+inspect me
+shot k2_socket_killed
+widgets
+widget "Respawn"
+wait 60
+inspect me
+report == K3. changing dimension: a nether portal (obsidian by command, lit by real input), the body walks in, the head stays
+/fill 20 -60 0 20 -56 3 minecraft:obsidian
+/fill 20 -59 1 20 -57 2 minecraft:air
+/give @s minecraft:flint_and_steel 1
+/kill @e[type=headinajar:headless_body]
+/kill @e[type=headinajar:head_jar]
+wait 5
+hotbar 1
+/tp @s 18.5 -60 1.5 -90 40
+wait 5
+key inventory
+wait 8
+slot item:flint_and_steel
+slot inv:0
+press escape
+wait 5
+key use
+wait 20
+inspect block 20 -59 1
+separate
+wait 40
+inspect me
+/tp @s 20.5 -59 1.5 -90 0
+observe 120
+wait 120
+observe 20
+inspect me
+shot k3_body_in_nether
+wait 100
+inspect me
+report back through (the portal the game built on the other side)
+/execute in minecraft:the_nether run tp @s ~ ~ ~
+wait 120
+inspect me
+report == K4. chunk unloading: the jar goes 400 blocks away (teleport) and comes back; is the body still there?
+key swap
+wait 30
+inspect me
+inspect near headless_body 20
+/tp @s 400 -60 400
+wait 200
+inspect me
+/tp @s 18.5 -60 4.5
+wait 60
+inspect me
+inspect near headless_body 30
+key swap
+wait 30
+inspect me
+report == K5. quit to the title screen while linked and come back (Escape, Save and Quit, Singleplayer, the world, Play)
+press escape
+wait 10
+widgets
+widget "Save and Quit to Title"
+wait 100
+widgets
+widget "Singleplayer"
+wait 40
+widgets
+at 320 52
+wait 10
+widget "Play Selected World"
+wait 300
+grab
+inspect me
+shot k5_back

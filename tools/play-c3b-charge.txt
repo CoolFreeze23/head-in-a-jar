@@ -1,0 +1,65 @@
+# Department C, part 3b: power the dock and the Cradle from the pile and retry charging (attempt 22a/b/c).
+# After play-c3-charge.txt: head on the floor at 108.5 200 -28.7 in front of the dock, body at 108.5 200 -29.5,
+# charge 20000, rotten flesh x4 in hotbar 3, satchel in hotbar 6.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+inspect me
+report == feed the pile (aim a little higher: the pile is narrower than a block)
+/tp @s 107.5 200 -29.5 0 30
+wait 3
+hotbar 3
+wait 2
+key use
+wait 25
+inspect block 107 200 -28
+report wait 400 ticks
+/tick sprint 400
+wait 60
+/time set 1000
+inspect block 107 200 -28
+inspect block 108 200 -28
+inspect block 109 200 -28
+report == 22c: the head on the floor next to the dock all this time
+inspect me
+report == 22a again: pick the head up, dock it in the Cradle, wait 400
+/tp @s 108.5 200 -30.5 0 50
+wait 3
+hotbar 7
+wait 2
+key use
+wait 15
+inspect me
+/tp @s 109.5 200 -29.5 0 39
+wait 3
+key use
+wait 25
+inspect me
+/tick sprint 400
+wait 60
+/time set 1000
+inspect me
+inspect block 109 200 -28
+report == take the head back from the Cradle; 22b: set it on top of the Charging Dock (aim at its top face)
+key use
+wait 25
+/tp @s 108.5 200 -29.5 0 60
+wait 3
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+inspect near head_jar 4
+/tick sprint 400
+wait 60
+/time set 1000
+inspect me
+inspect block 108 200 -28
+shot c3b_dock_top

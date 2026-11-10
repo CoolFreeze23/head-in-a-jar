@@ -1,0 +1,27 @@
+# Run with SMOKE_PROFILE=pack (a pack's bindings with use on the LEFT button). The chair's Sign button: does opening the chair with
+# a left click leave the left-button flag on, so hovering Sign signs? A: a quick tap of use, then the cursor on Sign; B (only
+# reached if A did not sign): use held 3 ticks, then hover; C: then the real left button held on Sign for 50 ticks.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 25
+/setblock 0 -60 3 headinajar:separation_chair
+chair 0 -60 3
+wait 20
+report == B: use held 3 ticks on the chair, then hover Sign 60 ticks
+look 0 25
+wait 3
+observe 300
+key use hold 3
+wait 25
+mouse rel 121 78
+wait 60
+shot pack_sign_B
+observe 20
+wait 240
+riding B-end
+inspect me

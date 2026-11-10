@@ -1,0 +1,39 @@
+# After Let go: respawn, pick up the dropped modules, goggles and collar, and loot the corpse as the new body.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+widgets
+widget "Respawn"
+wait 40
+grab
+/time set 1000
+inspect me
+inspect near headless_body 60
+/execute at @e[type=headinajar:headless_body,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 20
+wait 10
+lookat headless_body
+wait 3
+shot c4c_corpse
+report == right-click the corpse as the fresh body
+key use
+wait 25
+shot c4c_corpse_use
+inspect me
+closegui
+grab
+report == sneak-right-click it
+key sneak down
+wait 2
+key use
+wait 20
+key sneak up
+inspect me
+closegui
+grab
+report == walk over the dropped items
+/tp @s 114.5 200 -21 0 30
+wait 40
+inspect me
+inspect near item 40
+inspect near headless_body 10

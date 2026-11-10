@@ -1,0 +1,128 @@
+# Playtest department F: the Assembly Gantry and a first mecha (cold read attempts 37-42), by real input.
+# Part 1: materials and crafting (59 steel). Starts after play-e2-shells.txt (body LINKED near 100.5 200 -23).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+report setup: mob spawning off from here on (the night skips are mine; a zombie killed the body on the first try)
+/gamerule doMobSpawning false
+inspect me
+/give @s minecraft:iron_ingot 59
+/give @s minecraft:bone_meal 59
+/give @s minecraft:coal 59
+/give @s minecraft:coal_block 1
+/give @s minecraft:copper_ingot 20
+/give @s minecraft:redstone 4
+/give @s minecraft:glass 2
+/give @s minecraft:amethyst_shard 1
+/give @s minecraft:iron_block 6
+/give @s minecraft:piston 7
+/give @s minecraft:anvil 1
+/give @s minecraft:quartz 2
+/give @s minecraft:gold_ingot 2
+/give @s minecraft:lapis_lazuli 1
+/give @s minecraft:diamond 3
+/give @s minecraft:rotten_flesh 24
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+craft iron_ingot,bone_meal,coal x59
+craft copper_ingot,redstone,copper_ingot x4
+craft glass,amethyst_shard,glass
+press escape
+wait 5
+/tp @s 102.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+slot item:headinajar:surgical_steel_blend
+slot 0
+slot item:coal_block
+slot 1
+press escape
+wait 5
+/tick sprint 12000
+wait 700
+/time set 1000
+key use
+wait 10
+slot 2 shift
+press escape
+wait 5
+inspect me
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+report attempt 37: Mecha Plating x5 crafts (10 plates), Synapse Chip, Assembly Gantry
+craft headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,iron_block,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot x5
+craft quartz,headinajar:neuro_copper_wire,quartz/gold_ingot,lapis_lazuli,gold_ingot
+craft headinajar:neuro_copper_wire,headinajar:synapse_chip,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,anvil,headinajar:surgical_steel_ingot/headinajar:mecha_plating,headinajar:mecha_plating,headinajar:mecha_plating
+report attempt 39: 7 servos, a Collar Cam, the Hopper Frame, Hydraulic Legs, two piles, a Galvanic Stack, a Drill
+craft _,piston,_/headinajar:surgical_steel_ingot,headinajar:neuro_copper_wire,headinajar:surgical_steel_ingot x7
+craft _,headinajar:lens,_/headinajar:neuro_copper_wire,headinajar:servo,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft _,headinajar:collar_cam,_/headinajar:mecha_plating,headinajar:servo,headinajar:mecha_plating/headinajar:servo,_,headinajar:servo
+craft headinajar:servo,_,headinajar:servo/headinajar:mecha_plating,_,headinajar:mecha_plating/headinajar:mecha_plating,_,headinajar:mecha_plating
+craft copper_ingot,headinajar:neuro_copper_wire,copper_ingot/copper_ingot,rotten_flesh,copper_ingot/copper_ingot,headinajar:neuro_copper_wire,copper_ingot x2
+craft headinajar:galvanic_pile/headinajar:mecha_plating
+craft _,diamond,_/diamond,iron_block,diamond/_,headinajar:servo,_
+wait 5
+shot f_crafted
+press escape
+wait 5
+inspect me
+report == carry the head along (the first try placed nothing: 40 m from the head every right-click said "PACKET LOSS")
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 35
+wait 5
+lookat head_jar
+hotbar 5
+wait 2
+key use
+wait 20
+inspect me
+report == attempt 37/38: place the Assembly Gantry in the yard with a Galvanic Pile touching it; feed the pile
+/tp @s 80.5 200 7.5 0 39
+wait 3
+key inventory
+wait 8
+slot item:headinajar:assembly_gantry
+slot inv:0
+slot item:headinajar:galvanic_pile
+slot inv:1
+slot item:rotten_flesh
+slot inv:2
+press escape
+wait 5
+hotbar 1
+wait 2
+key use
+wait 10
+/tp @s 81.5 200 7.5 0 39
+wait 3
+hotbar 2
+wait 2
+key use
+wait 10
+/tp @s 81.5 200 7.5 0 30
+hotbar 3
+wait 2
+key use
+wait 20
+/tick sprint 800
+wait 100
+/time set 1000
+inspect block 80 200 9
+inspect block 81 200 9
+report == attempt 39: open the Gantry (right-click), list what it shows
+/tp @s 80.5 200 7.5 0 39
+wait 3
+key use
+wait 15
+shot f_gantry_gui
+widgets
+slots
+press escape
+wait 5

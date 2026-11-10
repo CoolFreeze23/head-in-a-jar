@@ -1,0 +1,56 @@
+# Open question: does the Secondary key open the Curios screen with the owner's bindings too? Run under SMOKE_PROFILE=pack
+# (and the default profile for comparison). Setup verbs: jar, hostify, mecha (the scene); the keys are real input.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+report == as a plain body (head on)
+key secondary
+wait 20
+closegui
+grab
+report == as a jar
+jar
+wait 20
+key secondary
+wait 20
+closegui
+grab
+report == on a host
+hostify minecraft:cow 2 -60 0
+wait 10
+/tp @s 0.5 -60 0.5 -90 20
+lookat cow
+key use
+wait 20
+inspect me
+key secondary
+wait 20
+shot qp_host_secondary
+closegui
+grab
+key ability
+wait 20
+sneak hold 10
+wait 10
+report == in a mecha
+mecha hopper -3 -60 3 hydraulic_legs,galvanic_stack,drill
+wait 20
+/tp @s -1.5 -60 3.5 90 20
+lookat hopper
+key use
+wait 20
+inspect me
+key secondary
+wait 20
+shot qp_mecha_secondary
+closegui
+grab
+key ability
+wait 20
+key jar_menu
+wait 20
+shot qp_menu
+closegui
