@@ -1,12 +1,14 @@
 """Separation Chair (DOLORES): geometry spec, box-UV packing by material, placeholder texture.
 
-Source of truth for the chair's cubes. Coordinates are Blockbench/GeckoLib block space in pixels: origin at the
-block's bottom centre, x -8..8, z -8..8, y up; the chair faces -Z (north at rest), the patient's right is +X.
+Source of truth for the chair's cubes. Coordinates are
+Blockbench/GeckoLib block space in pixels: origin at the block's bottom centre, x -8..8, z -8..8, y up; the chair faces
+-Z (north at rest), the patient's right is +X.
 
     python art/chair/chair_geo.py            # writes chair_placeholder.png and prints the bbmodel_edit operations
 
-The operations are applied to separation_chair.bbmodel with the Blockbench tool server (bbmodel_edit). Animations are
-written by chair_anim.py. Placeholder colours are flat mid-tones from house palette A (art/palette.json).
+The operations are applied to a freshly created separation_chair.bbmodel with the Blockbench tool server
+(bbmodel_create + bbmodel_edit), and the PNG is added with bbmodel_add_texture. Animations are written by
+chair_anim.py. Placeholder colours are flat mid-tones from house palette A (art/palette.json).
 """
 import json
 import os
@@ -15,109 +17,115 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEX_W, TEX_H = 256, 128
 
-# material -> placeholder mid-tone (palette A) and the texture rows it packs into
+# material -> placeholder mid-tone (palette A)
 MATERIALS = {
     'ivory':  'c6bdaa',   # ivory enamel
     'brass':  'c29954',
     'steel':  '989ea4',   # brushed steel
-    'blade':  'd5d9db',   # brushed steel, the light end of the ramp (the blade edge)
+    'blade':  'd5d9db',   # brushed steel, the light end of the ramp (the blade)
     'rubber': '333137',   # rubber black
     'yellow': 'daa936',   # warning yellow
     'teal':   '5aa6a4',   # teal glass
-    'lamp_g': '8bc987',   # lamp lenses (glowmask later)
+    'curtain': 'aba293',  # privacy curtain (ivory enamel's mid-dark step; the painter makes it fabric)
+    'lens':   '252329',   # lamp lenses when off (rubber's darkest steps)
+    'lamp_g': '8bc987',   # lit lens caps (glowmask later)
     'lamp_a': 'fad85f',
     'lamp_r': 'b5473a',   # steady red, never blinks
     'stand':  'eba688',   # stand-ins only (patient), never exported
-    'standj': '8bc987',   # stand-in jar glass
+    'standj': '8bc987',   # stand-in jar
 }
 
-# bones: name -> (pivot, parent, rest rotation)
+# bones: (name, pivot, parent, rest rotation)
 BONES = [
     ('static', [0, 0, 0], None, None),
     ('barrier', [9, 14, -8], None, None),
     ('privacy_panel', [10, 23, -9], 'barrier', None),
-    ('gas_nozzle', [10, 16, -6.5], 'barrier', None),
-    ('boom_lift', [-10, 28, 0], None, None),
-    ('boom', [-10, 28, 0], 'boom_lift', None),
+    ('boom_lift', [-9, 29, 0], None, None),
+    ('boom', [-9, 29, 0], 'boom_lift', None),
     ('scan_ring', [0, 27.5, 0], 'boom', None),
     ('scan_plane', [0, 27, 0], 'scan_ring', None),
     ('claw', [0, 28, 0], 'boom', None),
-    ('claw_finger_f', [0, 27.5, -2], 'claw', [35, 0, 0]),
-    ('claw_finger_b', [0, 27.5, 2], 'claw', None),
+    ('claw_jaw_l', [-3, 27.5, 0], 'claw', None),
+    ('claw_jaw_r', [3, 27.5, 0], 'claw', None),
     ('head_carry', [0, 22.25, 0], 'claw', None),
     ('blade_arm', [0, 18.5, 6], None, None),
-    ('antenna', [-5.5, 17, 3.5], None, None),
-    ('needle', [-10, 10, 2], None, None),
     ('lamp_green', [9, 6, -10.5], None, None),
     ('lamp_amber', [9, 9, -10.5], None, None),
     ('lamp_red', [9, 12, -10.5], None, None),
     ('head_anchor', [0, 22.25, 0], None, None),
     ('neck_anchor', [0, 18.5, 0], None, None),
-    ('jar_anchor', [-16, 0, -8], None, None),
-    ('jar_lid', [-23.15, 13.2, -8], 'jar_anchor', None),
+    ('jar_tray', [0, 0, 0], None, None),
+    ('jar_anchor', [0, 1, 0], 'jar_tray', None),
+    ('jar_lid', [-7.15, 14.2, 0], 'jar_anchor', None),
     ('standin_patient', [0, 0, 0], None, None),
-    ('standin_jar', [-16, 0, -8], 'jar_anchor', None),
-    ('standin_lid', [-23.15, 13.2, -8], 'jar_lid', None),
+    ('standin_jar', [0, 1, 0], 'jar_anchor', None),
+    ('standin_lid', [-7.15, 14.2, 0], 'jar_lid', None),
     ('standin_head', [0, 22.25, 0], 'head_carry', None),
 ]
 
-# cubes: (name, from, to, material, parent bone, extra) ; extra may hold origin/rotation for stand-ins
+# cubes: (name, from, to, material, parent bone[, extra])
 CUBES = [
     # ---- static: stays in the baked block model ----
-    ('plinth', [-7, 0, -7], [7, 1, 6], 'rubber', 'static'),
-    ('pedestal', [-5, 1, -5], [5, 3, 3], 'steel', 'static'),
+    ('foot_fl', [-7, 0, -7], [-5, 1, -5], 'rubber', 'static'),
+    ('foot_fr', [5, 0, -7], [7, 1, -5], 'rubber', 'static'),
+    ('foot_bl', [-7, 0, 5], [-5, 1, 7], 'rubber', 'static'),
+    ('foot_br', [5, 0, 5], [7, 1, 7], 'rubber', 'static'),
+    ('plinth', [-7, 1, -7], [7, 2, 7], 'steel', 'static'),
+    ('pedestal', [-5, 2, -5], [5, 3, 3], 'steel', 'static'),
     ('seat_trim', [-7, 3, -7], [7, 4, 2], 'brass', 'static'),
     ('seat', [-7, 4, -7], [7, 6, 2], 'rubber', 'static'),
     ('backrest', [-7, 4, 2], [7, 16, 5], 'ivory', 'static'),
     ('backrest_cap', [-7, 16, 2], [7, 17, 5], 'brass', 'static'),
-    ('pad_post', [-1, 17, 7], [1, 20, 8], 'steel', 'static'),
     ('spine', [-1, 12, 5], [1, 17, 8], 'steel', 'static'),
-    ('headrest', [-4, 20, 6], [4, 24, 8], 'rubber', 'static'),
     ('footrest_strut', [-2, 0, -11], [2, 2, -7], 'steel', 'static'),
     ('footrest', [-7, 2, -12], [7, 3, -7], 'rubber', 'static'),
-    ('mast_foot', [-12, 0, -1], [-8, 2, 3], 'steel', 'static'),
-    ('mast', [-11, 2, -1], [-9, 31, 1], 'steel', 'static'),
-    ('mast_cap', [-11, 31, -1], [-9, 32, 1], 'brass', 'static'),
-    ('mast_bracket', [-9, 4, -1], [-7, 6, 1], 'brass', 'static'),
-    ('gauge', [-12, 8, 1], [-8, 12, 2], 'ivory', 'static'),
+    ('mast_foot', [-11, 1, 1], [-7, 2, 4], 'brass', 'static'),
+    ('mast', [-10, 2, 1], [-8, 29, 3], 'steel', 'static'),
+    ('mast_bracket', [-8, 4, 1], [-7, 6, 3], 'brass', 'static'),
     ('post_foot', [7, 0, -10], [11, 1, -6], 'steel', 'static'),
     ('barrier_post', [8, 1, -9], [10, 13, -7], 'yellow', 'static'),
     ('lamp_plate', [8, 4, -10], [10, 14, -9], 'rubber', 'static'),
     ('post_bracket', [7, 4, -7], [8, 6, -5], 'brass', 'static'),
+    ('lens_green', [8, 5, -11], [10, 7, -10], 'lens', 'static'),
+    ('lens_amber', [8, 8, -11], [10, 10, -10], 'lens', 'static'),
+    ('lens_red', [8, 11, -11], [10, 13, -10], 'lens', 'static'),
     # ---- barrier (the level-crossing restraint) ----
     ('barrier_hub', [8, 13, -9], [10, 15, -7], 'steel', 'barrier'),
     ('barrier_arm', [8, 15, -9], [10, 32, -7], 'yellow', 'barrier'),
     ('barrier_pad', [8, 17, -7], [9, 31, -6], 'rubber', 'barrier'),
-    ('privacy_plate', [10, 19, -9], [11, 27, -3], 'ivory', 'privacy_panel'),
-    ('gas_horn', [10, 16, -7], [11, 19, -6], 'brass', 'gas_nozzle'),
-    # ---- boom (mast-mounted arm over the head) ----
-    ('collar', [-12, 27, -2], [-8, 30, 2], 'steel', 'boom'),
-    ('beam', [-8, 28, -1], [7, 30, 1], 'ivory', 'boom'),
-    ('hood', [-5, 30, -4], [5, 31, 4], 'ivory', 'boom'),
-    ('rod_l', [-8, 19, -1], [-7, 28, 1], 'steel', 'boom'),
-    ('rod_r', [7, 19, -1], [8, 28, 1], 'steel', 'boom'),
-    ('pour_spout', [-4, 27, -1], [-2, 28, 1], 'brass', 'boom'),
-    ('ring_f', [-8, 27, -8], [8, 28, -7], 'teal', 'scan_ring'),
-    ('ring_b', [-8, 27, 5], [8, 28, 6], 'teal', 'scan_ring'),
-    ('ring_l', [-8, 27, -7], [-7, 28, 5], 'teal', 'scan_ring'),
-    ('ring_r', [7, 27, -7], [8, 28, 5], 'teal', 'scan_ring'),
-    ('scan_sheet', [-7, 27, -7], [7, 27, 5], 'teal', 'scan_plane'),
-    ('claw_body', [-2, 27, -2], [2, 28, 2], 'steel', 'claw'),
-    ('finger_f_top', [-1, 27, -4], [1, 28, -2], 'yellow', 'claw_finger_f'),
-    ('finger_f_tip', [-1, 23, -5], [1, 28, -4], 'yellow', 'claw_finger_f'),
-    ('finger_b_top', [-1, 27, 2], [1, 28, 4], 'yellow', 'claw_finger_b'),
-    ('finger_b_tip', [-1, 23, 4], [1, 28, 5], 'yellow', 'claw_finger_b'),
+    ('counterweight', [8, 10, -7], [11, 14, -4], 'steel', 'barrier'),
+    ('curtain', [10, 19, -9], [11, 27, -3], 'curtain', 'privacy_panel'),
+    ('curtain_rail', [10, 18, -3], [11, 28, -2], 'brass', 'privacy_panel'),
+    # ---- the hood: a sliding rail behind the mast carries the dryer dome ----
+    ('lift_rail', [-10, 15, -1], [-8, 27, 1], 'steel', 'boom_lift'),
+    ('rail_cap', [-10, 27, -2], [-8, 29, 1], 'brass', 'boom_lift'),
+    ('pivot_pin', [-10, 29, -1], [-8, 31, 1], 'steel', 'boom'),
+    ('beam', [-9, 30, -1], [-6, 32, 1], 'ivory', 'boom'),
+    ('dome', [-6, 28, -6], [6, 31, 6], 'ivory', 'boom'),
+    ('dome_cap', [-4, 31, -4], [4, 32, 4], 'brass', 'boom'),
+    ('rod_l', [-6, 19, 4], [-4, 28, 6], 'steel', 'boom'),
+    ('rod_r', [4, 19, 4], [6, 28, 6], 'steel', 'boom'),
+    ('ring_f', [-7, 27, -6], [7, 28, -5], 'teal', 'scan_ring'),
+    ('ring_b', [-7, 27, 5], [7, 28, 6], 'teal', 'scan_ring'),
+    ('ring_l', [-7, 27, -5], [-6, 28, 5], 'teal', 'scan_ring'),
+    ('ring_r', [6, 27, -5], [7, 28, 5], 'teal', 'scan_ring'),
+    ('scan_sheet', [-6, 27, -5], [6, 27, 5], 'teal', 'scan_plane'),
+    ('claw_plate', [-3, 27, -2], [3, 28, 2], 'steel', 'claw'),
+    ('jaw_l_top', [-5, 27, -1], [-3, 28, 1], 'yellow', 'claw_jaw_l'),
+    ('jaw_l_tip', [-6, 22, -1], [-5, 28, 1], 'yellow', 'claw_jaw_l'),
+    ('jaw_r_top', [3, 27, -1], [5, 28, 1], 'yellow', 'claw_jaw_r'),
+    ('jaw_r_tip', [5, 22, -1], [6, 28, 1], 'yellow', 'claw_jaw_r'),
     # ---- blade (behind the neck) ----
     ('blade_hub', [-1, 17, 5], [1, 20, 7], 'yellow', 'blade_arm'),
     ('blade_shank', [1, 18, 5], [4, 19, 7], 'steel', 'blade_arm'),
-    ('blade', [4, 18, 4], [10, 19, 8], 'blade', 'blade_arm'),
+    ('blade', [4, 18, 3], [12, 19, 9], 'blade', 'blade_arm'),
+    ('blade_spine', [11, 19, 3], [12, 20, 9], 'steel', 'blade_arm'),
     # ---- small things ----
-    ('antenna_rod', [-6, 11, 3], [-5, 17, 4], 'steel', 'antenna'),
-    ('antenna_tip', [-6, 17, 3], [-5, 18, 4], 'brass', 'antenna'),
-    ('needle_bar', [-11, 10, 2], [-9, 12, 3], 'rubber', 'needle'),
-    ('lamp_green_lens', [8, 5, -11], [10, 7, -10], 'lamp_g', 'lamp_green'),
-    ('lamp_amber_lens', [8, 8, -11], [10, 10, -10], 'lamp_a', 'lamp_amber'),
-    ('lamp_red_lens', [8, 11, -11], [10, 13, -10], 'lamp_r', 'lamp_red'),
+    ('lamp_green_lit', [8, 5, -11], [10, 7, -10], 'lamp_g', 'lamp_green', {'inflate': 0.25}),
+    ('lamp_amber_lit', [8, 8, -11], [10, 10, -10], 'lamp_a', 'lamp_amber', {'inflate': 0.25}),
+    ('lamp_red_lit', [8, 11, -11], [10, 13, -10], 'lamp_r', 'lamp_red', {'inflate': 0.25}),
+    # ---- the jar dock tray: slides out from under the chair to the patient's left ----
+    ('tray', [-5, 0, -5], [5, 1, 5], 'rubber', 'jar_tray'),
     # ---- stand-ins (never exported): seated vanilla player and the Life Support Jar (wide) ----
     ('standin_body', [-4, 7, -2], [4, 19, 2], 'stand', 'standin_patient'),
     ('standin_arm_r', [4, 7, -2], [8, 19, 2], 'stand', 'standin_patient', {'origin': [5.6, 16.6, 0], 'rotation': [36, 0, 0]}),
@@ -125,25 +133,24 @@ CUBES = [
     ('standin_leg_r', [0, -4, -2], [4, 8, 2], 'stand', 'standin_patient', {'origin': [1.8, 7.25, 0], 'rotation': [81, -18, 0]}),
     ('standin_leg_l', [-4, -4, -2], [0, 8, 2], 'stand', 'standin_patient', {'origin': [-1.8, 7.25, 0], 'rotation': [81, 18, 0]}),
     ('standin_head_box', [-4, 18, -4], [4, 26, 4], 'stand', 'standin_head'),
-    ('standin_jar_base', [-23, 0, -15], [-9, 1, -1], 'standj', 'standin_jar'),
-    ('standin_jar_glass', [-22, 1, -14], [-10, 13, -2], 'standj', 'standin_jar'),
-    ('standin_jar_lid', [-23, 13, -15], [-9, 14, -1], 'standj', 'standin_lid'),
+    ('standin_jar_base', [-7, 1, -7], [7, 2, 7], 'standj', 'standin_jar'),
+    ('standin_jar_glass', [-6, 2, -6], [6, 14, 6], 'standj', 'standin_jar'),
+    ('standin_jar_lid', [-7, 14, -7], [7, 15, 7], 'standj', 'standin_lid'),
 ]
 
-# locators: name -> (absolute position, parent)
+# locators: (name, absolute rest position, parent)
 LOCATORS = [
-    ('gas', [10.5, 19, -6.5], 'gas_nozzle'),      # tip of the horn when the barrier is down and the horn up (see notes)
+    ('gas', [0, 27, -5], 'boom'),                 # under the dome's front edge
     ('blade_contact', [0, 18.5, 0], 'neck_anchor'),
-    ('pour', [-3, 27, 0], 'boom'),
-    ('spark', [-5.5, 18, 3.5], 'antenna'),
-    ('lamp', [9, 9, -11], None),
+    ('pour', [2, 27, 0], 'boom'),                 # under the dome, over the jar mouth when the hood is at the jar
+    ('spark', [0, 32, 0], 'boom'),                # on the dome cap
+    ('lamp', [9, 9, -11.5], None),
     ('vent_l', [-5, 2, -1], None),
     ('vent_r', [5, 2, -1], None),
 ]
 
-
-# cubes added after the first layout keep a fixed island so the earlier islands never move
-FIXED_UV = {'spine': [0, 100], 'blade': [12, 100]}
+# cubes added after a layout keep a fixed island so the earlier islands never move (none in this version)
+FIXED_UV = {}
 
 
 def size(c):
@@ -157,13 +164,13 @@ def box_uv_wh(c):
 
 def pack():
     """Shelf-pack every cube's box-UV island; islands grouped by material so the painter gets one area per material."""
-    order = ['ivory', 'yellow', 'steel', 'blade', 'brass', 'rubber', 'teal', 'lamp_g', 'lamp_a', 'lamp_r', 'stand', 'standj']
+    order = ['ivory', 'curtain', 'yellow', 'steel', 'blade', 'brass', 'rubber', 'teal', 'lens', 'lamp_g', 'lamp_a',
+             'lamp_r', 'stand', 'standj']
     offsets, regions = {}, {}
     x = y = shelf = 0
     for mat in order:
         items = [c for c in CUBES if c[3] == mat and c[0] not in FIXED_UV]
         items.sort(key=lambda c: -box_uv_wh(c)[1])
-        # each material starts on a new shelf
         top = y
         for c in items:
             w, h = box_uv_wh(c)
@@ -222,16 +229,7 @@ def ops(offsets):
     return out
 
 
-def uv_ops(offsets):
-    return [{'op': 'update_node', 'target': c[0], 'uv_offset': offsets[c[0]]} for c in CUBES]
-
-
 if __name__ == '__main__':
-    if '--uv' in sys.argv:
-        offs, regions = pack()
-        draw(offs)
-        print(json.dumps(uv_ops(offs), separators=(',', ':')))
-        sys.exit(0)
     offs, regions = pack()
     path = draw(offs)
     sys.stderr.write('texture %s; material rows %s\n' % (path, regions))
