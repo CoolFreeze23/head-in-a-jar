@@ -188,6 +188,15 @@ public final class MechaLogic {
         MechaSystems.riddenMovement(m);
     }
 
+    /** Why the Jump Jets won't fire now, or null when they will. */
+    public static String jetRefusal(MechaEntity m) {
+        if (!m.has(MechaModule.JUMP_JETS) || m.onGround()) return null;
+        if (m.vent() > 0) return "mecha.venting";
+        if (m.jetsLeft <= 0) return "mecha.jets_spent";
+        if (m.battery() <= 0) return "mecha.no_power";
+        return null;
+    }
+
     /** Jump Jets: a mid-air burst (the client asks; the server spends). */
     public static boolean jet(MechaEntity m) {
         if (!m.has(MechaModule.JUMP_JETS) || m.onGround() || m.jetsLeft <= 0 || m.vent() > 0) return false;
@@ -222,6 +231,8 @@ public final class MechaLogic {
         }
         if (overloaded(m)) drain *= 1.5f;
         if (pilot == null) drain = 0.5f;
+        // nobody aboard holds a button (an eject, the Golden Parachute or a logout mid-press leaves none held)
+        if (pilot == null) m.armsHeld = 0;
         // power in
         int gain = 0;
         if (m.has(MechaModule.GALVANIC_STACK)) gain += 10;
@@ -238,7 +249,14 @@ public final class MechaLogic {
             m.getPersistentData().putInt("headinajar_aloft", aloft);
             if (aloft == 600) com.coolfreeze23.headinajar.Advance.grant(pilot, "frequent_flyer");
         }
-        m.setBattery(m.battery() + gain - Math.round(drain));
+        int net = gain - Math.round(drain);
+        if (pilot == null && gain == 0) {
+            // parked: the same 1 FE a tick as ever, settled once a second, so a parked mecha isn't re-sent to every
+            // watcher every tick
+            if (m.tickCount % 20 == 0) m.setBattery(m.battery() + 20 * net);
+        } else {
+            m.setBattery(m.battery() + net);
+        }
         MechaSystems.serverTick(m, pilot);
         // Bio-Gel in a Chimera's veins: 1 HP every 5 s while it lasts
         var data = m.getPersistentData();
@@ -387,6 +405,9 @@ public final class MechaLogic {
         m.ejecting = true;
         FormActions.leaveHost(pilot);
         m.ejecting = false;
+        // the buttons held at the moment of the eject are let go: the empty frame doesn't keep firing or shielding
+        m.armsHeld = m.armsBefore = 0;
+        for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) MechaArms.release(m, side);
     }
 
     /** Destroyed: a puff with no block damage, half the modules drop, the rest is scrap. */

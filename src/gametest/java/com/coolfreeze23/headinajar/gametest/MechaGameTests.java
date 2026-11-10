@@ -193,8 +193,11 @@ public class MechaGameTests {
     public static void ejectDropsJar(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);
         MechaEntity m = hopper(h, p, FLOOR, module(MechaModule.HYDRAULIC_LEGS, 50));
+        // sneaking is for the Anchor Clamps: it doesn't get the pilot out (a teleport or spectator mode does)
+        p.setShiftKeyDown(true);
         p.stopRiding();
-        h.assertTrue(p.getVehicle() == m, "a plain dismount left the cockpit");
+        p.setShiftKeyDown(false);
+        h.assertTrue(p.getVehicle() == m, "a sneak dismount left the cockpit");
         MechaLogic.eject(m, p);
         h.assertTrue(p.getVehicle() == null && FormActions.state(p).form() == Form.JAR, "eject failed: " + FormActions.state(p).form());
         done(h, p);
