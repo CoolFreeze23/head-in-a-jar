@@ -321,7 +321,7 @@ public final class MechaLogic {
             JarState state = FormActions.state(pilot);
             if (m.has(MechaModule.LIFE_SUPPORT_RECYCLER) && m.battery() > 0) {
                 state.setSaline(state.maxSaline());
-                state.setCharge(JarState.maxCharge());
+                state.setCharge(state.chargeCapacity());
                 if (m.tickCount % 600 == 0) state.setIntegrity(state.integrity() + 1);
             }
             if (m.has(MechaModule.NIGHT_OPTICS) && m.battery() > 0 && pilot.tickCount % 100 == 0) {

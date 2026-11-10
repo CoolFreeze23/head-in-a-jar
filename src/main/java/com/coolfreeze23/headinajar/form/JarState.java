@@ -309,12 +309,24 @@ public final class JarState {
         return charge;
     }
 
+    /** What a basic Life Support Jar (or a Compact Jar) holds: the config's charge. */
     public static int maxCharge() {
         return Config.SPEC.isLoaded() ? Config.MAX_CHARGE.get() : 100_000;
     }
 
+    /** Charge capacity of this jar, by tier: basic and Compact 1x, Reinforced 2.5x, Executive 5x the base (100k, 250k, 500k). */
+    public int chargeCapacity() {
+        return capacityFor(slots);
+    }
+
+    /** Charge capacity of a jar with this many module slots (its tier). */
+    public static int capacityFor(int slots) {
+        long base = maxCharge();
+        return (int) Math.min(Integer.MAX_VALUE, slots >= 7 ? base * 5 : slots >= 5 ? base * 5 / 2 : base);
+    }
+
     public void setCharge(int charge) {
-        int c = Math.max(0, Math.min(maxCharge(), charge));
+        int c = Math.max(0, Math.min(chargeCapacity(), charge));
         if (c != this.charge) {
             this.charge = c;
             chargeDirty = true;

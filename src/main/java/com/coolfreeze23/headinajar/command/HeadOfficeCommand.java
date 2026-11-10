@@ -34,7 +34,9 @@ public final class HeadOfficeCommand {
                         .then(Commands.literal("list").executes(HeadOfficeCommand::listTrust)))
                 .then(Commands.literal("courier").executes(ctx -> {
                     var player = ctx.getSource().getPlayerOrException();
-                    ctx.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.translatable(com.coolfreeze23.headinajar.form.Courier.book(player)), false);
+                    String result = com.coolfreeze23.headinajar.form.Courier.book(player);
+                    ctx.getSource().sendSuccess(() -> "courier.headinajar.booked".equals(result) ? com.coolfreeze23.headinajar.form.Courier.booked(player)
+                            : net.minecraft.network.chat.Component.translatable(result), false);
                     return 1;
                 }))
                 .then(Commands.literal("status")

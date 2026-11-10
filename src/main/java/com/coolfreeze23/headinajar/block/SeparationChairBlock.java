@@ -134,7 +134,9 @@ public class SeparationChairBlock extends BaseEntityBlock {
             com.coolfreeze23.headinajar.feedback.Refusals.deny(server, chair, "chair.in_use");
             return InteractionResult.CONSUME;
         }
-        if (player.isShiftKeyDown() || chair.seated() != null) {
+        // a jar can't sit in the chair, but it may read the chair's panel
+        boolean jar = player.getData(ModRegistry.JAR_STATE).form() == com.coolfreeze23.headinajar.form.Form.JAR;
+        if (player.isShiftKeyDown() || chair.seated() != null || jar) {
             server.openMenu(chair, pos);
             return InteractionResult.CONSUME;
         }

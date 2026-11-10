@@ -1,0 +1,48 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "patchouli"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "headinajar:surgical_steel_blend"
+    }
+  ],
+  "result": {
+    "id": "minecraft:written_book",
+    "count": 1,
+    "components": {
+      "minecraft:written_book_content": {
+        "title": "Employee Handbook",
+        "author": "Noggin & Sons",
+        "generation": 0,
+        "pages": [
+          "{\"translate\": \"book.headinajar.written.1\"}",
+          "{\"translate\": \"book.headinajar.written.2\"}",
+          "{\"translate\": \"book.headinajar.written.3\"}",
+          "{\"translate\": \"book.headinajar.written.4\"}",
+          "{\"translate\": \"book.headinajar.written.5\"}",
+          "{\"translate\": \"book.headinajar.written.6\"}",
+          "{\"translate\": \"book.headinajar.written.7\", \"with\": [{\"keybind\": \"key.headinajar.swap\"}]}",
+          "{\"translate\": \"book.headinajar.written.8\"}",
+          "{\"translate\": \"book.headinajar.written.9\"}",
+          "{\"translate\": \"book.headinajar.written.10\"}",
+          "{\"translate\": \"book.headinajar.written.11\", \"with\": [{\"keybind\": \"key.headinajar.drive\"}]}",
+          "{\"translate\": \"book.headinajar.written.12\", \"with\": [{\"keybind\": \"key.headinajar.swap\"}]}"
+        ],
+        "resolved": true
+      },
+      "minecraft:custom_name": "{\"translate\": \"book.headinajar.handbook\", \"italic\": false}"
+    }
+  }
+}

@@ -136,7 +136,7 @@ public class ChargingDockBlock extends BaseEntityBlock {
         }
         Told told = settle(JARS.get(player.getUUID()), give(dock, state, RATE), state);
         if (told == JARS.put(player.getUUID(), told) || !(player instanceof ServerPlayer server)) return;
-        int percent = Math.round(100f * state.charge() / JarState.maxCharge());
+        int percent = Math.round(100f * state.charge() / state.chargeCapacity());
         server.displayClientMessage(switch (told) {
             case CHARGING -> Component.translatable("message.headinajar.dock_charging", percent);
             case FULL -> Component.translatable("message.headinajar.dock_full");
@@ -159,7 +159,7 @@ public class ChargingDockBlock extends BaseEntityBlock {
         if (!state.form().isDecapitated() || state.form().isJarred()) return;
         Told told = settle(HEADS.get(owner.getUUID()), give(dock, state, RATE * ticks), state);
         if (told == HEADS.put(owner.getUUID(), told)) return;
-        int percent = Math.round(100f * state.charge() / JarState.maxCharge());
+        int percent = Math.round(100f * state.charge() / state.chargeCapacity());
         owner.displayClientMessage(switch (told) {
             case CHARGING -> Component.translatable("message.headinajar.dock_head_charging", percent);
             case FULL -> Component.translatable("message.headinajar.dock_head_full");
@@ -170,12 +170,12 @@ public class ChargingDockBlock extends BaseEntityBlock {
 
     /** A jar told it is full stays "full" while the dock tops up what a few ticks of upkeep took. */
     private static Told settle(Told before, Told now, JarState state) {
-        return before == Told.FULL && now == Told.CHARGING && state.charge() >= JarState.maxCharge() * 0.95 ? Told.FULL : now;
+        return before == Told.FULL && now == Told.CHARGING && state.charge() >= state.chargeCapacity() * 0.95 ? Told.FULL : now;
     }
 
     /** Moves up to {@code most} FE into the jar; returns what the dock is doing. */
     private static Told give(Entity dock, JarState state, int most) {
-        int room = JarState.maxCharge() - state.charge();
+        int room = state.chargeCapacity() - state.charge();
         if (room <= 0) return Told.FULL;
         int moved = Math.min(Math.min(most, room), dock.energy.getEnergyStored());
         if (moved <= 0) return Told.EMPTY;

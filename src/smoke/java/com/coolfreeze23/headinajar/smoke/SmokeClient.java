@@ -310,7 +310,7 @@ public class SmokeClient {
                             sb.append(String.format(java.util.Locale.ROOT, "pos %.1f %.1f %.1f, health %.1f, food %d, ", player.getX(), player.getY(), player.getZ(), player.getHealth(), player.getFoodData().getFoodLevel()));
                             sb.append("vehicle ").append(player.getVehicle() == null ? "-" : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(player.getVehicle().getType()));
                             sb.append(", form ").append(st.form()).append(st.compact() ? " (compact)" : "");
-                            sb.append(", charge ").append(st.charge()).append("/").append(com.coolfreeze23.headinajar.form.JarState.maxCharge());
+                            sb.append(", charge ").append(st.charge()).append("/").append(st.chargeCapacity());
                             sb.append(", saline ").append(st.saline()).append("/").append(st.maxSaline());
                             sb.append(", integrity ").append(st.integrity()).append("/").append(st.maxIntegrity());
                             sb.append(", link ").append(st.quality()).append("% ").append(String.format(java.util.Locale.ROOT, "%.1f", st.headDistance())).append("m");

@@ -251,7 +251,7 @@ public class BoardGameTests {
         array.items().setStackInSlot(5, new ItemStack(Items.DRAGON_HEAD));
         h.assertTrue(array.potential() == 176 + 0, "a dragon head worked without the Board Room Core");
         array.items().setStackInSlot(CerebralArrayBlockEntity.SLOT_CORE, new ItemStack(ModRegistry.BOARD_ROOM_CORE.get()));
-        h.assertTrue(array.potential() == Math.round((20 * 4 + 80 + 1000) * 1.1f), "dragon head with the core makes " + array.potential());
+        h.assertTrue(array.potential() == Math.round((20 * 4 + 80 + com.coolfreeze23.headinajar.block.HeadJobs.DRAGON_HEAD) * 1.1f), "dragon head with the core makes " + array.potential());
         // no broth, no thought
         h.getLevel().setDayTime(0);
         CerebralArrayBlockEntity.serverTick(h.getLevel(), array.getBlockPos(), array.getBlockState(), array);

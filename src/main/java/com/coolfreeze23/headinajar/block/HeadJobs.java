@@ -14,6 +14,8 @@ import net.minecraft.world.level.Level;
 
 /** What jarred heads do for a living: which head is which, what a head earns in a Cerebral Array, and villager staff. */
 public final class HeadJobs {
+    /** FE/t of a Dragon Head in a Cerebral Array with a Board Room Core. Only one Dragon Head counts: the chair at the head of the table. */
+    public static final int DRAGON_HEAD = 300;
     private HeadJobs() {
     }
 
@@ -46,7 +48,7 @@ public final class HeadJobs {
 
     /** FE/t a head makes in a Cerebral Array by thinking very hard about broth. The Dragon Head needs a Board Room Core. */
     public static int arrayOutput(ItemStack stack, boolean boardRoom) {
-        if (stack.is(Items.DRAGON_HEAD)) return boardRoom ? 1000 : 0;
+        if (stack.is(Items.DRAGON_HEAD)) return boardRoom ? DRAGON_HEAD : 0;
         return arrayOutput(type(stack));
     }
 

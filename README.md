@@ -86,8 +86,9 @@ chair. The bar at the top of the screen is your **link quality**.
   saline and charge topped up and boosts the link.
 - **Swap** (**K**) between your body and your head whenever you like. Going back into your body needs a decent signal.
 - **Keep the head alive.** A head out in the world slowly drinks its saline. In jar form, press **J** for the jar menu
-  and put Saline Bottles (or Glass Patches, for a cracked jar) in its feed slot. Charge the jar on a **Charging Dock** or
-  in the Cradle.
+  and put Saline Bottles (or Glass Patches, for a cracked jar) in its feed slot. Charge the jar on a **Charging Dock**, in
+  the Cradle, or with redstone in the same feed slot (5,000 FE a dust, 45,000 a block). Without a Manipulator Arm a jar
+  can't touch the world, but it can still work every Noggin & Sons machine, mast and placard.
 - **Your body can die without you.** It becomes a corpse that keeps your things, and you wake up in your jar. Only losing
   the head itself is a real death.
 
@@ -109,7 +110,7 @@ your own head. **Let Go** in the jar menu is the last resort: you die and respaw
   better start. Embalming Fluid stops it rotting.
 - **Build a mecha.** Make an **Assembly Gantry** and **Mecha Plating**, then a **Hopper Frame**, **Hydraulic Legs** (so
   it can walk), a **Galvanic Stack** (power) and a **Drill**. Put them in the Gantry, give it 10 kFE, press Assemble,
-  and use the cockpit as a jar. The mouse buttons work the arms.
+  and use the cockpit as a jar. A mecha standing on the Gantry's pad charges from it. The mouse buttons work the arms.
 - **Start the lab.** Draw blood with a **Syringe**, spin it in a **Centrifuge**, read it in the **DNA Sequencer**, splice
   in the **Gene Splicer**, and inject yourself at the **Injection Rig**.
 - **Put heads to work.** Saw a head off with an empty jar in your other hand. Mob heads guard a **Turret Pedestal** or
@@ -157,7 +158,7 @@ Walk too far and the link breaks: you wake up in your head, wherever you left it
 - **Roll.** No wheels? The same key tips a bare jar on its side, and it can roll, very, very slowly. The world looks
   sideways while you do it.
 - **Call the Courier.** The jar menu's **Courier** button (or `/headoffice courier`) has your body delivered to your
-  head in 30 seconds, from anywhere, for a fifth of your charge.
+  head in 30 seconds, from anywhere, for 20 kFE of charge (or all you have, if less: it never refuses).
 - Or reach further: better goggles, Relay Masts, the Antenna Whip, an Entangled Pair, the Body Recall Beacon.
 
 ![Wheels](docs/images/wheels.gif) ![Rolling](docs/images/roll.gif)
@@ -168,7 +169,8 @@ Walk too far and the link breaks: you wake up in your head, wherever you left it
 
 - **Cranial Saline** (Saline Mixer: water, sugar, kelp and redstone) keeps a head alive; a jar out in the world slowly
   drinks it. **Jar Integrity** is the glass: hits crack it, Glass Patches mend it.
-- **Charge** (FE) runs jar modules. Charge in a Charging Dock, a Cradle, or from a Galvanic Pile fed with meat.
+- **Charge** (FE) runs jar modules: a Life Support Jar holds 100 kFE, a Reinforced Jar 250 kFE, an Executive Jar 500 kFE.
+  Charge in a Charging Dock, a Cradle, or with redstone in the jar menu's feed slot.
 - **Power:** Leyden Jars store FE, Tesla Nodes beam it wirelessly. **Relay Masts** (two tiers) carry your link across the
   map; a **Signal Jammer** ruins other people's.
 - **Safety placards**, because the company cares.
@@ -258,7 +260,7 @@ Active genes fire on R and G.
 - **Turret Pedestal:** a jarred mob head guards the area the way the mob fought: skeleton arrows, blaze fireballs, a
   guardian laser, witch potions, evoker fangs, a creeper mine. Never at you, your team, pets or villagers.
 - **Cerebral Array:** nine heads make power by thinking very hard about Nutrient Broth. Five or more hold a **Board
-  Meeting** (+10%, and the occasional vote in chat). A Dragon Head with the Board Room Core makes 1,000 FE/t.
+  Meeting** (+10%, and the occasional vote in chat). A Dragon Head with the Board Room Core makes 300 FE/t (only one counts).
 - **Villager staff:** hang a jarred villager on an **Employee Mount** beside a machine. Librarians read DNA better, Clerics
   steady the Splicer, Masons spare the blade, Fletchers speed up turrets, and so on, for one emerald a day. Unpaid staff
   work at half speed and complain about dental.
@@ -307,7 +309,9 @@ All optional. Nothing changes if a mod is missing.
 
 ## Handbook, advancements and sounds
 
-- **The Employee Handbook** (Patchouli): eight chapters, from Orientation to Human Resources.
+- **The Employee Handbook** (Patchouli): eight chapters, from Orientation to Human Resources. Every player is handed one
+  on their first day; a book and a Surgical Steel Blend make a new copy. Without Patchouli the copy is a plain written
+  book with the opening chapters, in the reader's own language.
 - **25 advancements**, among them Signed in Triplicate, Have You Tried Turning It Off and On Again, Headless Horseman,
   Mula-sem-cabeça, Splice of Life, Board Meeting and Chairman of the Board.
 - **Original sounds** for the blade, the botched cut, the link, the mecha's boot jingle, splicing, mutations, the Board

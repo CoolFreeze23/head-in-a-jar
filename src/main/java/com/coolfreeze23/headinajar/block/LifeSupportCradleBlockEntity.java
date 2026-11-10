@@ -149,7 +149,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
             int got = saline.drain(want, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE).getAmount();
             state.setSaline(state.saline() + got);
         }
-        int room = com.coolfreeze23.headinajar.form.JarState.maxCharge() - state.charge();
+        int room = state.chargeCapacity() - state.charge();
         int moved = Math.min(Math.min(10_000, room), energy.getEnergyStored());
         if (moved > 0) {
             energy.set(energy.getEnergyStored() - moved);

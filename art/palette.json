@@ -6,7 +6,7 @@
     "A": "Vanilla kin: low saturation, gentle hue shift, sits beside iron, smooth stone, quartz, copper and cauldron",
     "B": "Showroom: warmer, more saturated, stronger hue shift, sits beside gold, terracotta, honey and Create brass",
     "C": "Institutional: cooler and greyer, hospital-green enamel and gunmetal, sits beside deepslate, tuff and anvil",
-    "D": "Separation: a warm-metal brass ramp (red-brown shadows to pale yellow, saturated mids), a cleaner and cooler warning-yellow paint, lighter ivory with grey-violet shadows, steel two steps darker than the enamel, rubber with wider steps; teal, jar glass, saline, flesh and bone as in A"
+    "D": "Separation: a warm-metal brass ramp (red-brown shadows to pale yellow, saturated mids), a cleaner and cooler warning-yellow paint, lighter ivory with grey-violet shadows, steel two steps darker than the enamel, rubber with wider steps; teal, jar glass, saline, flesh and bone as in A; violet and cyan on A's hues with darker shadows and fuller mids, cyan keeping the signature 59e0f4"
   },
   "house": {
     "enamel": {
@@ -91,6 +91,24 @@
       "B": ["857a63", "b5ab8f", "dbd4b8", "fffce6"],
       "C": ["757563", "a5a48e", "ccc9b5", "f0eddf"],
       "D": ["807d66", "b1ad92", "d8d4bb", "fcf9e8"]
+    },
+    "violet": {
+      "alias": "v",
+      "label": {"A": "violet", "B": "royal violet", "C": "slate violet", "D": "deep violet"},
+      "note": "quantum, entangled and optics parts; bluer than vanilla amethyst",
+      "A": ["2a244a", "4e4178", "775da6", "a284c3", "d1b3e4"],
+      "B": ["25215f", "4d3a92", "7d56ba", "af80d5", "e0b4f2"],
+      "C": ["27223d", "48405e", "6a5d82", "927daa", "bea9ce"],
+      "D": ["221e3d", "423470", "6f4cb0", "a57bd5", "edd5fc"]
+    },
+    "cyan": {
+      "alias": "y",
+      "label": {"A": "glow cyan", "B": "electric cyan", "C": "dim cyan", "D": "glow cyan"},
+      "note": "screens, arcs and chips; the mod's signature cyan 59e0f4 is y3 in A and D; not teal glass or saline",
+      "A": ["0e3e73", "1972aa", "18aad7", "59e0f4", "96f5ff"],
+      "B": ["0e377f", "0c6fbc", "0aace6", "59e3fc", "8ef9ff"],
+      "C": ["1c3651", "2b6687", "3397b5", "58c5d8", "7fe7f1"],
+      "D": ["0b335e", "0b659e", "12b3e4", "59e0f4", "a5f6ff"]
     }
   },
   "shared": {

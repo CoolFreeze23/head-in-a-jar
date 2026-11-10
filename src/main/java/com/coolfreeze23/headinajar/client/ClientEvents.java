@@ -165,7 +165,7 @@ public final class ClientEvents {
                 && (hit.getEntity() instanceof HeadlessBody || (com.coolfreeze23.headinajar.host.Hosts.isHost(hit.getEntity())
                         || com.coolfreeze23.headinajar.host.Hosts.headless(hit.getEntity())) && state.form() == Form.JAR
                 || FormEvents.jarCanBoard(player, hit.getEntity()))
-                || mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE));
+                || headMachine(mc, player) && !(player.isSecondaryUseActive() && (!player.getMainHandItem().isEmpty() || !player.getOffhandItem().isEmpty())));
         if (!reachable) {
             event.setCanceled(true);
             event.setSwingHand(false);
@@ -174,7 +174,8 @@ public final class ClientEvents {
                 var held = player.getItemInHand(event.getHand());
                 boolean refill = event.isUseItem() && (mc.hitResult == null || mc.hitResult.getType() == net.minecraft.world.phys.HitResult.Type.MISS)
                         && (held.is(ModRegistry.SALINE_BOTTLE.get()) || held.is(ModRegistry.GLASS_PATCH.get()));
-                ClientRefusals.deny(refill ? "jar.refill_feed" : com.coolfreeze23.headinajar.feedback.Nudge.reason(mc.level, mc.hitResult, event.isAttack()),
+                ClientRefusals.deny(refill ? "jar.refill_feed" : event.isUseItem() && headMachine(mc, player) ? com.coolfreeze23.headinajar.feedback.Nudge.USE
+                                : com.coolfreeze23.headinajar.feedback.Nudge.reason(mc.level, mc.hitResult, event.isAttack()),
                         mc.hitResult instanceof EntityHitResult hit ? hit.getEntity() : null);
             } else if (state.form() == Form.HOSTED && event.isUseItem()) {
                 // riding a host: no hands, and one body at a time
@@ -183,6 +184,12 @@ public final class ClientEvents {
                         ? com.coolfreeze23.headinajar.host.HostEvents.SECOND_HOST : com.coolfreeze23.headinajar.host.HostEvents.NO_HANDS, target);
             }
         }
+    }
+
+    /** Whether the crosshair is on one of the mod's blocks that a head can work without an arm. */
+    private static boolean headMachine(Minecraft mc, Player player) {
+        return mc.hitResult instanceof net.minecraft.world.phys.BlockHitResult block && mc.hitResult.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK
+                && mc.level.getBlockState(block.getBlockPos()).is(FormEvents.HEAD_OPERABLE);
     }
 
     /** Collar Cam optics while linked: the Wide Lens widens the view, the Zoom Optic zooms x3 while its key is held. */
@@ -219,7 +226,8 @@ public final class ClientEvents {
             else if (state.form() == Form.JAR && state.heldEntity() < 0 && !state.fitted(ModuleType.TELEKINESIS) && ClientSetup.ABILITY.same(mc.options.keySprint)) {
                 // the ability shares its key with sprint and there is no Telekinesis: the press was a sprint, not a request
             } else if (state.form().isJarred() || state.form() == Form.BODY || state.form() == Form.LINKED) {
-                PacketDistributor.sendToServer(new Network.JarAction(Network.Action.ABILITY));
+                // a press of a key that is also sprint says so: the server tells the player once that it does both
+                PacketDistributor.sendToServer(new Network.JarAction(ClientSetup.ABILITY.same(mc.options.keySprint) ? Network.Action.ABILITY_SHARED : Network.Action.ABILITY));
             }
         }
         while (ClientSetup.SECONDARY.consumeClick()) {
