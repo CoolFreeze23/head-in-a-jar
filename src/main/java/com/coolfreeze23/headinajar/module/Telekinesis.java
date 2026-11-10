@@ -70,8 +70,18 @@ public final class Telekinesis {
         double blockDist = blockHit.getType() == HitResult.Type.MISS ? range * range : blockHit.getLocation().distanceToSqr(eye);
         AABB box = player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1.0);
         // the first thing on the line, liftable or not, so a refused creature or player is answered rather than skipped
+        // a jar that has just come out of its body stands inside it: the body is skipped unless nothing else is in
+        // line and the jar looks down at it
         EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, eye.add(look.scale(Math.sqrt(blockDist))), box,
-                e -> candidate(player, e), blockDist);
+                e -> candidate(player, e) && !standingIn(player, e), blockDist);
+        if (entityHit == null && player.getXRot() > 45) {
+            for (HeadlessBody own : level.getEntitiesOfClass(HeadlessBody.class, player.getBoundingBox().inflate(0.5), b -> standingIn(player, b))) {
+                if (own.getBoundingBox().clip(eye, eye.add(look.scale(2))).isPresent() || own.getBoundingBox().contains(eye)) {
+                    entityHit = new EntityHitResult(own);
+                    break;
+                }
+            }
+        }
 
         Entity held = null;
         if (entityHit != null) {
@@ -117,6 +127,11 @@ public final class Telekinesis {
 
     private static Vec3 centre(Entity e) {
         return e.position().add(0, e instanceof ItemEntity ? 0.25 : e.getBbHeight() / 2, 0);
+    }
+
+    /** The jar's own idle body, with the jar standing inside its box. */
+    private static boolean standingIn(ServerPlayer player, Entity e) {
+        return e instanceof HeadlessBody body && player.getUUID().equals(body.ownerId()) && body.getBoundingBox().inflate(0.1).contains(player.getEyePosition());
     }
 
     private static boolean candidate(ServerPlayer player, Entity e) {
@@ -180,9 +195,9 @@ public final class Telekinesis {
             release(player, state, Release.OUT_OF_RANGE);
             return;
         }
-        double distance = 2.2 + held.getBbWidth() * 0.7;
-        Vec3 target = player.getEyePosition().add(player.getLookAngle().scale(distance)).subtract(0, held.getBbHeight() / 2, 0);
-        Vec3 pull = target.subtract(held.position()).scale(0.35);
+        Vec3 target = holdPoint(player, held);
+        // heavier things follow more slowly, so they lag and swing behind
+        Vec3 pull = target.subtract(held.position()).scale(0.35 / (1 + 0.6 * heaviness(held)));
         if (pull.length() > 1.2) pull = pull.normalize().scale(1.2);
         // items and falling blocks take their gravity before they move: give it back so they hang where the pull puts
         // them (a creature takes it after moving, and the next tick's pull replaces what is left); a placed head adds
@@ -196,6 +211,22 @@ public final class Telekinesis {
         if (held instanceof HeldBlockEntity block) block.keepHeld();
         if (held instanceof Mob mob) mob.getNavigation().stop();
         state.spend(50);
+    }
+
+    /** 0 for a pebble, 1 for a cow or bigger: the held thing's size as a share of a cow's box. */
+    static double heaviness(Entity held) {
+        return Math.min(1, held.getBbWidth() * held.getBbWidth() * held.getBbHeight() / 1.1);
+    }
+
+    /**
+     * Where the held thing's feet are carried: in front of the jar along its look, clear of its face, and raised so
+     * that looking level holds a cow about a block and a half off the ground (a jar's eyes are half a block up);
+     * looking up lifts it higher, looking down lowers it. Heavier things hang a little lower.
+     */
+    public static Vec3 holdPoint(Player player, Entity held) {
+        double distance = 2.6 + held.getBbWidth() * 0.8;
+        double lift = 1.3 - 0.3 * heaviness(held);
+        return player.getEyePosition().add(player.getLookAngle().scale(distance)).add(0, lift, 0);
     }
 
     private static boolean fallsBeforeMoving(Entity held) {

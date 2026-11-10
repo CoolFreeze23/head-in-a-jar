@@ -31,7 +31,7 @@ import org.joml.Vector3f;
  */
 public final class Beams {
     public static final ResourceLocation RIBBON = HeadInAJar.id("textures/fx/beam_ribbon.png");
-    public static final float MIN_WIDTH_PER_BLOCK = 0.0035f;
+    public static final float MIN_WIDTH_PER_BLOCK = 0.007f;
     /** Nothing is drawn nearer the camera than this; it fades in over the next 1.0 blocks. */
     private static final float NEAR = 0.3f, FADE = 1.0f;
 
@@ -81,7 +81,7 @@ public final class Beams {
         Matrix4f mat = f.pose.last().pose();
         PoseStack.Pose normal = f.pose.last();
         VertexConsumer sheath = f.buffers.getBuffer(RenderType.beaconBeam(RIBBON, true));
-        strip(f, sheath, mat, normal, points, along, length, look, fade, 2.2f, look.sheath, 0.42f * look.alpha, false);
+        strip(f, sheath, mat, normal, points, along, length, look, fade, 2.2f, look.sheath, 0.65f * look.alpha, false);
         VertexConsumer core = f.buffers.getBuffer(RenderType.eyes(RIBBON));
         strip(f, core, mat, normal, points, along, length, look, fade, 1f, look.core, look.alpha, true);
     }
@@ -170,7 +170,7 @@ public final class Beams {
             double dist = mid.length();
             float near = Mth.clamp(((float) dist - NEAR) / FADE, 0, 1);
             if (near <= 0) continue;
-            float w = Math.max(width, (float) dist * MIN_WIDTH_PER_BLOCK * 1.5f);
+            float w = Math.max(width, (float) dist * MIN_WIDTH_PER_BLOCK);
             Vec3 s = p1.subtract(p0).cross(mid);
             if (s.lengthSqr() < 1e-9) continue;
             s = s.normalize().scale(w / 2);

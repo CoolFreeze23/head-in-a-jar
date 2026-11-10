@@ -236,6 +236,11 @@ public class SmokeClient {
                 String[] args = parts[1].split(" ");
                 Perf.start(args[0], Integer.parseInt(args[1]), report::add);
             }
+            case "camlog" -> {
+                // camlog NAME TICKS: every frame's camera kick and field-of-view pull from the effect kit
+                String[] args = parts[1].split(" ");
+                Perf.camlog(args[0], Integer.parseInt(args[1]), report::add);
+            }
             case "fxstate" -> report.add("fxstate " + (parts.length > 1 ? parts[1] : "") + " -> tethers " + com.coolfreeze23.headinajar.client.fx.TetherFx.live()
                     + ", loops " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + ", memos " + java.util.Arrays.toString(com.coolfreeze23.headinajar.client.fx.FxManager.HANDLED)
                     + ", beams drawn/asked " + com.coolfreeze23.headinajar.client.fx.Beams.counts() + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());

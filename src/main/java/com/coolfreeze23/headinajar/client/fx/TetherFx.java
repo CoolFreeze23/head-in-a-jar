@@ -108,7 +108,7 @@ public final class TetherFx {
         Vec3 toHead = head.subtract(fx.a());
         // a ring closes on the target, then motes stream from it to the head
         FxParticle ring = FxParticle.make(FxParticle.Look.RING, fx.a(), Vec3.ZERO);
-        if (ring != null) ring.color(FxColors.SIGNAL).size(width * 0.9f).grow(0.6f).frame(3).life(5).flat(toHead).add();
+        if (ring != null) ring.color(FxColors.SIGNAL_PALE).size(width * 1.1f).grow(0.55f).frame(3).life(6).flat(toHead).add();
         int motes = Comfort.particles(8);
         for (int i = 0; i < motes; i++) {
             double a = i * Math.PI * 2 / Math.max(1, motes);
@@ -142,7 +142,13 @@ public final class TetherFx {
                 t.landed = false;
                 t.vel = t.vel.add(fx.b().scale(0.6));
                 FxParticle ring = FxParticle.make(FxParticle.Look.RING, fx.a(), Vec3.ZERO);
-                if (ring != null) ring.color(FxColors.SIGNAL_PALE).size(0.5f).grow(2.2f).life(7).flat(fx.b()).add();
+                if (ring != null) ring.color(FxColors.SIGNAL_PALE).size(0.8f).grow(2.6f).life(8).flat(fx.b()).add();
+                for (int i = 0; i < Comfort.particles(10); i++) {
+                    double ang = i * Math.PI / 5;
+                    Vec3 out = fx.b().normalize().scale(0.25).add(Math.cos(ang) * 0.12, Math.sin(ang) * 0.12, Math.sin(ang + 1) * 0.12);
+                    FxParticle m = FxParticle.make(FxParticle.Look.MOTE, fx.a(), out);
+                    if (m != null) m.color(FxColors.SIGNAL_PALE).size(0.08f).life(10).add();
+                }
                 if (isMe(fx.entityA())) {
                     CameraDesk.fov(3, 2, 8);
                     CameraDesk.kick(1.2f, 2, 6);
@@ -313,7 +319,7 @@ public final class TetherFx {
 
     // --- drawing -------------------------------------------------------------------------------------------------
 
-    private static final Beams.Ribbon HOLD_LOOK = new Beams.Ribbon(FxColors.SIGNAL_DARK, FxColors.SIGNAL_PALE, 1 / 16f, 2 / 16f, 0.95f, 0);
+    private static final Beams.Ribbon HOLD_LOOK = new Beams.Ribbon(0x5aa6a4, FxColors.SIGNAL_PALE, 1.5f / 16, 2.5f / 16, 1f, 0);
     private static final Beams.Ribbon FIZZLE_LOOK = new Beams.Ribbon(FxColors.GREY_DARK, FxColors.GREY, 1 / 16f, 1 / 16f, 0.8f, 0);
 
     public static void render(Beams.Frame f) {
@@ -338,6 +344,16 @@ public final class TetherFx {
                     // seen from the holder's own eyes the line starts thin, so it never fills the bottom of the view
                     Beams.Ribbon look = mine(holder) ? new Beams.Ribbon(HOLD_LOOK.sheath(), HOLD_LOOK.core(), 1 / 96f, HOLD_LOOK.width1(), HOLD_LOOK.alpha(), 0) : HOLD_LOOK;
                     Beams.ribbon(f, pts, withScroll(look, scroll, 1), s -> s <= reach ? 1 : 0);
+                    if (reach < 1) {
+                        // the tip leads with a bright pulse while it shoots out
+                        Beams.bead(f, Beams.along(pts, reach), FxColors.SIGNAL_PALE, 0.3f, 1);
+                    } else {
+                        // power travelling down the line, two pulses a second from the head to the held thing
+                        for (int k = 0; k < 2; k++) {
+                            double along = ((t0(t) + pt) % 20 + k * 10) % 20 / 20.0;
+                            Beams.bead(f, Beams.along(pts, along), FxColors.SIGNAL_PALE, 0.16f, 0.9f);
+                        }
+                    }
                     if (held != null) boxShell(f, held, t, pt);
                 }
                 case THROWN -> {
@@ -515,6 +531,10 @@ public final class TetherFx {
         Vec3 p = e.getPosition(pt);
         double h = e instanceof ItemEntity ? 0.25 : e.getBbHeight() / 2;
         return p.add(0, h, 0);
+    }
+
+    private static int t0(Tether t) {
+        return t.age;
     }
 
     private static boolean mine(Entity holder) {

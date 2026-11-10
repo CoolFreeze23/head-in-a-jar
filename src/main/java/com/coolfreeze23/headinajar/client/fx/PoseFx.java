@@ -81,8 +81,8 @@ public final class PoseFx {
             Vec3 lean = LEAN.getOrDefault(e.getId(), Vec3.ZERO);
             // hangs from the line: leans its top toward the head, swings behind with the lean, turns slowly
             Vec3 pull = holder == null ? Vec3.ZERO : holder.getEyePosition(pt).subtract(e.getPosition(pt).add(0, h / 2, 0));
-            Vec3 tilt = new Vec3(pull.x, 0, pull.z).normalize().scale(8).add(new Vec3(lean.x, 0, lean.z).scale(-120));
-            double deg = Math.min(18, tilt.length()) * k;
+            Vec3 tilt = new Vec3(pull.x, 0, pull.z).normalize().scale(5).add(new Vec3(lean.x, 0, lean.z).scale(-80));
+            double deg = Math.min(12, tilt.length()) * k;
             pose.translate(0, h / 2, 0);
             if (deg > 0.1) {
                 Vec3 axis = new Vec3(tilt.z, 0, -tilt.x).normalize();

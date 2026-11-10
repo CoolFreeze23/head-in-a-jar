@@ -27,9 +27,10 @@ public class ShellLayer<T extends LivingEntity, M extends EntityModel<T>> extend
 
     /** The shell's colour at {@code alpha} (additive, so the fade goes into the colour). */
     public static int color(float alpha) {
-        float a = Math.min(1, alpha) * 0.85f;
-        int rgb = FxColors.SIGNAL;
-        return FastColor.ARGB32.color(255, (int) ((rgb >> 16 & 255) * a), (int) ((rgb >> 8 & 255) * a), (int) ((rgb & 255) * a));
+        // the texture is painted teal itself (a shader pack that drops the vertex colour still shows teal), so the
+        // vertex colour is a grey that only fades it
+        int a = (int) (Math.min(1, alpha) * 255);
+        return FastColor.ARGB32.color(255, a, a, a);
     }
 
     @Override
@@ -38,14 +39,19 @@ public class ShellLayer<T extends LivingEntity, M extends EntityModel<T>> extend
         float alpha = TetherFx.shell(entity, partialTick);
         if (alpha <= 0.01f) return;
         float scroll = (ageInTicks * 0.01f) % 1;
-        var vc = buffers.getBuffer(RenderType.energySwirl(TEXTURE, scroll, scroll));
-        pose.pushPose();
         // model space runs downward from 1.5 blocks above the feet: grow the shell about the body's middle
         float mid = 1.501f - entity.getBbHeight() / 2 / Math.max(0.01f, entity.getScale());
-        pose.translate(0, mid, 0);
-        pose.scale(1.06f, 1.06f, 1.06f);
-        pose.translate(0, -mid, 0);
-        getParentModel().renderToBuffer(pose, vc, 0xF000F0, OverlayTexture.NO_OVERLAY, color(alpha));
-        pose.popPose();
+        // two layers of streaks scrolling different ways, so the shell is seen by day without looking for it
+        for (int layer = 0; layer < 2; layer++) {
+            float u = layer == 0 ? scroll : 0.5f - scroll * 1.3f, v = layer == 0 ? scroll : 0.25f + scroll * 0.7f;
+            var vc = buffers.getBuffer(RenderType.energySwirl(TEXTURE, u, v));
+            pose.pushPose();
+            pose.translate(0, mid, 0);
+            float grow = layer == 0 ? 1.06f : 1.1f;
+            pose.scale(grow, grow, grow);
+            pose.translate(0, -mid, 0);
+            getParentModel().renderToBuffer(pose, vc, 0xF000F0, OverlayTexture.NO_OVERLAY, color(alpha));
+            pose.popPose();
+        }
     }
 }

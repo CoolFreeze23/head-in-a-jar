@@ -93,12 +93,14 @@ public final class CameraDesk {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void angles(ViewportEvent.ComputeCameraAngles event) {
         float k = scale();
+        lastPitch = 0;
         if (k <= 0) return;
         float pt = (float) event.getPartialTick();
         float tr = Mth.lerp(pt, traumaO, trauma);
         float rot = tr * tr * 3 * k;
         float time = (ticks + pt) * 0.6f;
         float pitch = rot * noise(time, 1) + kickPitch * envelope(kickTime + pt, kickRise, kickLength) * k;
+        lastPitch = pitch;
         event.setPitch(event.getPitch() - pitch);
         var player = Minecraft.getInstance().player;
         // never touch roll while riding or piloting (other mods roll mounts; a cockpit must stay level)
@@ -107,12 +109,19 @@ public final class CameraDesk {
 
     @SubscribeEvent
     public static void fov(ViewportEvent.ComputeFov event) {
-        if (fovTime >= fovRise + fovFall) return;
+        if (fovTime >= fovRise + fovFall) {
+            lastFov = 0;
+            return;
+        }
         float k = scale() * Minecraft.getInstance().options.fovEffectScale().get().floatValue();
         if (k <= 0) return;
         float e = envelope(fovTime + (float) event.getPartialTick(), fovRise, fovRise + fovFall);
-        event.setFOV(event.getFOV() + fovPull * e * k);
+        lastFov = fovPull * e * k;
+        event.setFOV(event.getFOV() + lastFov);
     }
+
+    /** For the harness: what the last frame added to the pitch and the field of view, in degrees. */
+    public static float lastPitch, lastFov;
 
     /** For tests and the harness: the current trauma. */
     public static float trauma() {

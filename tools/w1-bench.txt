@@ -101,7 +101,7 @@ mecha skitter 9 -60 0 galvanic_stack,armor_plating,drill
 mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
 # the jar: a glass stand behind the turrets, a pig to lift
 /fill -1 -58 -13 1 -58 -11 minecraft:glass
-/summon pig 0 -60 -7 {NoAI:1b,PersistenceRequired:1b}
+/summon pig 0 -60 -7 {PersistenceRequired:1b,attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 /tp @s 0.5 -57 -11.5 0 37
 wait 10
 jar
@@ -109,9 +109,12 @@ fit telekinesis,manipulator_arm,armor_plating
 charge 100000
 /gamemode survival
 wait 10
-grab
+lookat pig
 wait 10
+key ability
+wait 20
 look 0 15
+fxstate bench_grabbed
 # settle, then measure: the tether and the lab's beams in view, then the same view with nothing held
 wait 200
 fxstate bench_holding

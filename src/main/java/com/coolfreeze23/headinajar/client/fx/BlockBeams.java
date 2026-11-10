@@ -89,7 +89,7 @@ public final class BlockBeams {
         long seed = node.getBlockPos().asLong() * 31 + now / every;
         int n = Mth.clamp((int) (a.distanceTo(b) * 2), 6, 16);
         Vec3[] pts = Beams.arcPath(a, b, n, seed, flowing ? 0.28f : 0.18f, null);
-        Beams.arc(f, pts, FxColors.POWER, FxColors.POWER_PALE, flowing ? 0.05f : 0.025f, flowing ? 0.9f : 0.4f);
+        Beams.arc(f, pts, FxColors.POWER, FxColors.POWER_PALE, flowing ? 0.07f : 0.035f, flowing ? 0.95f : 0.45f);
         if (flowing) {
             // a bright bead runs from the sender to the receiver every 10 ticks: which way the power goes
             float t = ((now % 10) + f.partialTick()) / 10f;
