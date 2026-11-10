@@ -23,7 +23,8 @@ import bbbuild  # noqa: E402
 
 TEX = (64, 64)
 MATERIALS = {
-    'enamel': 'ddd5c3', 'brass': 'd99a35', 'steel': '7b818b', 'dsteel': '5c616b', 'bright': 'ced3d8',
+    'enamel': 'ddd5c3', 'brass': 'd99a35', 'steel': '7b818b',  # also the jets' heat-stained bells
+    'dsteel': '5c616b', 'bright': 'ced3d8',
     'rubber': '27262d', 'copper': 'c26b4c', 'lens': '141318', 'lamp_a': 'ffc24e', 'yellow': 'f4bd1e',
 }
 
@@ -37,8 +38,9 @@ MODULES = {
     'drill': {
         'bones': [('mount', [0, 0, 0], None, None), ('bit', [0, 0, -8], 'mount', None)],
         'cubes': [
-            C('collar', [-3, -3, -2], [3, 3, 0], 'rubber', 'mount'),
-            C('motor', [-3.5, -3.5, -8], [3.5, 3.5, -2], 'enamel', 'mount'),
+            C('neck', [-2, -2, -1], [2, 2, 0], 'dsteel', 'mount'),          # a step where it meets the cuff
+            C('collar', [-3, -3, -3], [3, 3, -1], 'rubber', 'mount'),
+            C('motor', [-3.5, -3.5, -8], [3.5, 3.5, -3], 'enamel', 'mount'),
             C('band', [-4, -4, -6], [4, 4, -4], 'brass', 'mount'),
             C('vent', [-1.5, 3.5, -7], [1.5, 4.5, -3], 'dsteel', 'mount'),
             C('chuck', [-2, -2, -10], [2, 2, -8], 'dsteel', 'bit'),
@@ -59,14 +61,19 @@ MODULES = {
                   ('nozzle_1', [3, -2, -4], 'mount', None), ('pilot_0', [-2, 3, -1.5], 'mount', None),
                   ('pilot_1', [0, 3, -1.5], 'mount', None), ('pilot_2', [2, 3, -1.5], 'mount', None)],
         'cubes': [
-            C('manifold', [-4, -2, -3], [4, 3, 0], 'dsteel', 'mount'),
-            C('lamp_rail', [-3.5, 3, -2.5], [3.5, 4, -0.5], 'brass', 'mount'),
-            C('pod_0', [-5, -2, -6], [-1, 6, -2], 'enamel', 'nozzle_0'),
+            C('flange', [-3, -1, -1], [3, 2, 0], 'dsteel', 'mount'),          # a step where it meets the socket
+            C('manifold', [-4, -2, -3], [4, 3, -1], 'dsteel', 'mount'),
+            C('lamp_rail', [-3.5, 3, -3], [3.5, 4, -1], 'brass', 'mount'),
+            C('pod_top_0', [-5, 3, -6], [-1, 6, -2], 'enamel', 'nozzle_0'),
+            C('pod_groove_0', [-4, 2, -5], [-2, 3, -3], 'dsteel', 'nozzle_0'),
+            C('pod_low_0', [-5, -2, -6], [-1, 2, -2], 'enamel', 'nozzle_0'),
             C('ring_0', [-5.5, -3, -6.5], [-0.5, -2, -1.5], 'brass', 'nozzle_0'),
-            C('bell_0', [-5, -6, -6], [-1, -3, -2], 'rubber', 'nozzle_0'),
-            C('pod_1', [1, -2, -6], [5, 6, -2], 'enamel', 'nozzle_1'),
+            C('bell_0', [-5, -6, -6], [-1, -3, -2], 'steel', 'nozzle_0'),       # heat-stained steel
+            C('pod_top_1', [1, 3, -6], [5, 6, -2], 'enamel', 'nozzle_1'),
+            C('pod_groove_1', [2, 2, -5], [4, 3, -3], 'dsteel', 'nozzle_1'),
+            C('pod_low_1', [1, -2, -6], [5, 2, -2], 'enamel', 'nozzle_1'),
             C('ring_1', [0.5, -3, -6.5], [5.5, -2, -1.5], 'brass', 'nozzle_1'),
-            C('bell_1', [1, -6, -6], [5, -3, -2], 'rubber', 'nozzle_1'),
+            C('bell_1', [1, -6, -6], [5, -3, -2], 'steel', 'nozzle_1'),
             C('pilot_lit_0', [-2.5, 4, -2], [-1.5, 5, -1], 'lamp_a', 'pilot_0'),
             C('pilot_lit_1', [-0.5, 4, -2], [0.5, 5, -1], 'lamp_a', 'pilot_1'),
             C('pilot_lit_2', [1.5, 4, -2], [2.5, 5, -1], 'lamp_a', 'pilot_2'),
@@ -85,13 +92,13 @@ MODULES = {
     'hydraulic_legs': {
         'bones': [('mount_thigh', [0, 0, 0], None, None), ('mount_shin', [0, 0, 0], None, None)],
         'cubes': [
-            C('ram', [-1.5, -4, -3], [1.5, 4, 0], 'brass', 'mount_thigh'),
+            C('ram', [-1.5, -4, -3], [1.5, 4, -1], 'brass', 'mount_thigh'),    # held a pixel off the thigh by its clamps
             C('ram_clamp_top', [-2, 3, -2], [2, 5, 0], 'dsteel', 'mount_thigh'),
             C('ram_clamp_low', [-2, -5, -2], [2, -3, 0], 'dsteel', 'mount_thigh'),
             C('hose', [1.5, -3, -2], [2.5, 3, -1], 'rubber', 'mount_thigh'),
             C('damper', [-1, -5, -2], [1, 3, 0], 'bright', 'mount_shin'),
-            C('damper_can', [-1.5, 1, -3], [1.5, 5, 0], 'copper', 'mount_shin'),
-            C('damper_boot', [-1.5, -5, -3], [1.5, -3, 0], 'rubber', 'mount_shin'),
+            C('damper_can', [-1.5, 1, -3], [1.5, 5, -1], 'copper', 'mount_shin'),
+            C('damper_boot', [-1.5, -5, -3], [1.5, -3, -1], 'rubber', 'mount_shin'),
         ],
         'locators': [],
         'clips': {},

@@ -69,9 +69,9 @@ MATERIALS = {
     'enamel': ('ddd5c3', 255),   # e3 ivory enamel: hull, forearms, sensor
     'brass':  ('d99a35', 255),   # b3: collar lip, glass band, joints, knee caps, latch, hinge barrels, plates
     'steel':  ('7b818b', 255),   # s3: legs, upper arms
-    'dsteel': ('5c616b', 255),   # s2: hinge plate, ankles, heel spurs
+    'dsteel': ('5c616b', 255),   # s2: the darks: collar base, arch ceilings, keel, hoods, knee axles, ankles, heel spurs
     'rubber': ('27262d', 255),   # r1: feet, cuffs, vent grilles
-    'yellow': ('f4bd1e', 255),   # w2: warning-striped latch posts and vent flaps (stripes are the painter's)
+    'yellow': ('f4bd1e', 255),   # w2: warning-striped vent flaps and louvres (stripes are the painter's)
     'lens':   ('141318', 255),   # lamps when off (rubber 0)
     'lamp_g': ('77f08a', 255),   # core lamp lit (indicator green 2; glowmask later)
     'lamp_a': ('ffc24e', 255),   # tail lamps lit (amber 2)
@@ -91,23 +91,23 @@ def bones():
     b = [
         ('root', [0, 0, 0], None, None),
         ('hips', [0, HIP_Y, 0], 'root', None),
-        ('socket_core', [0, 14, 0], 'hips', [-90, 0, 0]),
+        ('socket_core', [0, 13, 0], 'hips', [-90, 0, 0]),
         ('torso', [0, 21, 0], 'hips', None),
         ('jar_anchor', [0, SEAT_Y, 0], 'torso', None),
         ('restraint', [0, 29, 9], 'torso', None),
-        ('clamp_l', [-7, 37.5, 0], 'restraint', None),
-        ('clamp_r', [7, 37.5, 0], 'restraint', None),
+        ('clamp_l', [-7.5, 40.7, 0], 'restraint', None),
+        ('clamp_r', [7.5, 40.7, 0], 'restraint', None),
         ('sensor', [0, 17, -10.5], 'torso', None),
-        ('socket_sensor', [0, 17, -12.5], 'sensor', [90, 0, 0]),
-        ('lamp_sensor', [0, 14.5, -15.5], 'sensor', None),
-        ('lamp_core', [0, 22.5, -11.5], 'torso', None),
-        ('lamp_l', [-7, 24, 10.5], 'torso', None),
-        ('lamp_r', [7, 24, 10.5], 'torso', None),
-        ('vent_l', [-11.5, 24, 5], 'torso', None),
-        ('vent_r', [11.5, 24, 5], 'torso', None),
-        ('socket_back', [0, 20, 10], 'torso', [0, 180, 0]),
-        ('socket_torso_0', [-5.5, 20.5, -10], 'torso', None),
-        ('socket_torso_1', [5.5, 20.5, -10], 'torso', None),
+        ('socket_sensor', [0, 17, -12], 'sensor', [90, 0, 0]),
+        ('lamp_sensor', [0, 14.5, -14.5], 'sensor', None),
+        ('lamp_core', [0, 23, -10.5], 'torso', None),
+        ('lamp_l', [-5, 24, 10.5], 'torso', None),
+        ('lamp_r', [5, 24, 10.5], 'torso', None),
+        ('vent_l', [-11.5, 25, 4], 'torso', None),
+        ('vent_r', [11.5, 25, 4], 'torso', None),
+        ('socket_back', [0, 21, 10], 'torso', [0, 180, 0]),
+        ('socket_torso_0', [-5.5, 21, -10], 'torso', None),
+        ('socket_torso_1', [5.5, 21, -10], 'torso', None),
     ]
     for side, s in (('l', -1), ('r', 1)):
         b += [
@@ -115,7 +115,7 @@ def bones():
             ('forearm_' + side, [s * 12.5, 21, -2], 'arm_' + side, [REST_FOREARM, 0, 0]),
             ('socket_arm_' + side, [s * 12.5, 13, -2], 'forearm_' + side, [-90, 0, 0]),
             ('leg_' + side, [s * HIP_X, HIP_Y, 0], 'hips', [REST_THIGH, 0, 0]),
-            ('socket_thigh_' + side, [s * 9.5, 15, 0], 'leg_' + side, [0, -s * 90, 0]),
+            ('socket_thigh_' + side, [s * 9.5, 16, 0], 'leg_' + side, [0, -s * 90, 0]),
             ('shin_' + side, [s * HIP_X, HIP_Y - THIGH, 0], 'leg_' + side, [REST_SHIN, 0, 0]),
             ('socket_shin_' + side, [s * 9, 2.5, 0], 'shin_' + side, [0, -s * 90, 0]),
             ('foot_' + side, [s * HIP_X, HIP_Y - THIGH - SHIN, 0], 'shin_' + side, [REST_FOOT, 0, 0]),
@@ -130,54 +130,88 @@ def C(name, f, t, mat, parent, **kw):
 
 def cubes():
     J = SEAT_Y
+    L = 40.7    # the jar's lid top (base 26.4 + 14.3): the restraint's hoop rests on it
     c = [
-        # ---- torso: a rounded enamel pod (two crossed boxes, a steel keel between the thighs) with the jar standing
-        # in the open in a brass collar on its top ----
-        C('hull', [-10, 17, -8], [10, 26, 8], 'enamel', 'torso'),
-        C('hull_cross', [-8, 17, -10], [8, 26, 10], 'enamel', 'torso'),
-        C('keel', [-4, 14, -6], [4, 17, 6], 'dsteel', 'torso'),
+        # ---- the pod: an upper hull carrying the collar, a front and a back slab (stepped a pixel below the deck and
+        # two above the hull's underside, so no two faces share a plane), a centre skirt between the thighs, dark
+        # wheel-arch ceilings over the hips, a dark neck and a steel keel under it ----
+        C('hull', [-10, 20, -8], [10, 26, 8], 'enamel', 'torso'),
+        C('slab_f', [-8, 18, -10], [8, 25, -8], 'enamel', 'torso'),
+        C('slab_b', [-8, 18, 8], [8, 25, 10], 'enamel', 'torso'),
+        C('skirt', [-3, 16, -8], [3, 20, 8], 'enamel', 'torso'),
+        C('arch_l', [-10, 19, -7], [-3, 20, 7], 'dsteel', 'torso'),
+        C('arch_r', [3, 19, -7], [10, 20, 7], 'dsteel', 'torso'),
+        C('keel_neck', [-2, 15, -5], [2, 16, 5], 'dsteel', 'torso'),
+        C('keel', [-4, 13, -6], [4, 15, 6], 'dsteel', 'torso'),
+        # the jar's seat, the collar's dark base (the shadow line under the brass lip) and the brass collar
         C('seat', [-6, 25.4, -6], [6, 26.4, 6], 'dsteel', 'torso'),
-        C('collar_f', [-9.5, 25.5, -9.5], [9.5, 28.5, -7.5], 'brass', 'torso'),
-        C('collar_b', [-9.5, 25.5, 7.5], [9.5, 28.5, 9.5], 'brass', 'torso'),
-        C('collar_l', [-9.5, 25.5, -7.5], [-7.5, 28.5, 7.5], 'brass', 'torso'),
-        C('collar_r', [7.5, 25.5, -7.5], [9.5, 28.5, 7.5], 'brass', 'torso'),
-        # the two warning-striped latch posts the restraint's front bar comes down on
-        C('post_l', [-9.5, 28.5, -9.5], [-7.5, 36.5, -7.5], 'yellow', 'torso'),
-        C('post_r', [7.5, 28.5, -9.5], [9.5, 36.5, -7.5], 'yellow', 'torso'),
+        C('collar_base_f', [-8.5, 25.5, -8.5], [8.5, 26.5, -7.5], 'dsteel', 'torso'),
+        C('collar_base_b', [-8.5, 25.5, 7.5], [8.5, 26.5, 8.5], 'dsteel', 'torso'),
+        C('collar_base_l', [-8.5, 25.5, -7.5], [-7.5, 26.5, 7.5], 'dsteel', 'torso'),
+        C('collar_base_r', [7.5, 25.5, -7.5], [8.5, 26.5, 7.5], 'dsteel', 'torso'),
+        C('collar_f', [-9.5, 26.5, -9.5], [9.5, 28.5, -7.5], 'brass', 'torso'),
+        C('collar_b', [-9.5, 26.5, 7.5], [9.5, 28.5, 9.5], 'brass', 'torso'),
+        C('collar_l', [-9.5, 26.5, -7.5], [-7.5, 28.5, 7.5], 'brass', 'torso'),
+        C('collar_r', [7.5, 26.5, -7.5], [9.5, 28.5, 7.5], 'brass', 'torso'),
+        C('filler_cap', [7.5, 28.5, -9.5], [9.5, 29.5, -7.5], 'brass', 'torso'),
         C('bracket_l', [-11.5, 27, 8], [-9.5, 31, 10], 'dsteel', 'torso'),
         C('bracket_r', [9.5, 27, 8], [11.5, 31, 10], 'dsteel', 'torso'),
-        C('badge', [-2.5, 20, -11], [2.5, 25, -10], 'brass', 'torso'),
-        C('lens_core', [-1, 21.5, -12], [1, 23.5, -11], 'lens', 'torso'),
-        C('lamp_core_lit', [-1, 21.5, -12], [1, 23.5, -11], 'lamp_g', 'lamp_core', inflate=0.25),
-        # tail lamps on the back face, above the back socket
-        C('lens_l', [-8, 23, 10], [-6, 25, 11], 'lens', 'torso'),
-        C('lens_r', [6, 23, 10], [8, 25, 11], 'lens', 'torso'),
-        C('lamp_l_lit', [-8, 23, 10], [-6, 25, 11], 'lamp_a', 'lamp_l', inflate=0.25),
-        C('lamp_r_lit', [6, 23, 10], [8, 25, 11], 'lamp_a', 'lamp_r', inflate=0.25),
-        # striped vent flaps on the rear flanks, hinged along their top edge, opening outward
-        C('grille_l', [-10.5, 18, 2], [-9.5, 24, 8], 'rubber', 'torso'),
-        C('grille_r', [9.5, 18, 2], [10.5, 24, 8], 'rubber', 'torso'),
-        C('vent_flap_l', [-12.5, 18, 2], [-10.5, 24, 8], 'yellow', 'vent_l'),
-        C('vent_flap_r', [10.5, 18, 2], [12.5, 24, 8], 'yellow', 'vent_r'),
-        # chin sensor: a lamp-eyed turret hung under the pod's front edge (the look bone)
+        # front: a brass badge with the chest lamp sunk a pixel in a dark hood
+        C('badge', [-3, 20, -11], [3, 26, -10], 'brass', 'torso'),
+        C('hood_t', [-2, 24, -13], [2, 25, -11], 'dsteel', 'torso'),
+        C('hood_b', [-2, 21, -13], [2, 22, -11], 'dsteel', 'torso'),
+        C('hood_ls', [-2, 22, -13], [-1, 24, -11], 'dsteel', 'torso'),
+        C('hood_rs', [1, 22, -13], [2, 24, -11], 'dsteel', 'torso'),
+        C('lens_core', [-1, 22, -12], [1, 24, -11], 'lens', 'torso'),
+        C('lamp_core_lit', [-1, 22, -12], [1, 24, -11], 'lamp_g', 'lamp_core', inflate=0.25),
+        # back: a framed panel. A two-pixel lamp bar on top with the tail lamps sunk in its gaps, one-pixel side and
+        # bottom rims, a recessed field holding the brass number plate (the back module mounts on this field)
+        C('lampbar_l', [-8, 23, 10], [-6, 25, 12], 'enamel', 'torso'),
+        C('lampbar_c', [-4, 23, 10], [4, 25, 12], 'enamel', 'torso'),
+        C('lampbar_r', [6, 23, 10], [8, 25, 12], 'enamel', 'torso'),
+        C('rim_bl', [-8, 18, 10], [-6, 23, 11], 'enamel', 'torso'),
+        C('rim_br', [6, 18, 10], [8, 23, 11], 'enamel', 'torso'),
+        C('rim_bb', [-6, 18, 10], [6, 19, 11], 'enamel', 'torso'),
+        C('number_plate', [-3, 19.5, 10], [3, 21.5, 11], 'brass', 'torso'),
+        C('lens_l', [-6, 23, 10], [-4, 25, 11], 'lens', 'torso'),
+        C('lens_r', [4, 23, 10], [6, 25, 11], 'lens', 'torso'),
+        C('lamp_l_lit', [-6, 23, 10], [-4, 25, 11], 'lamp_a', 'lamp_l', inflate=0.25),
+        C('lamp_r_lit', [4, 23, 10], [6, 25, 11], 'lamp_a', 'lamp_r', inflate=0.25),
+        # flanks: a rubber vent mouth a pixel proud, covered by a striped flap with two real louvre slats
+        C('grille_l', [-11, 20, 1], [-10, 25, 7], 'rubber', 'torso'),
+        C('grille_r', [10, 20, 1], [11, 25, 7], 'rubber', 'torso'),
+        C('vent_flap_l', [-12, 20, 1], [-11, 25, 7], 'yellow', 'vent_l'),
+        C('louvre_1_l', [-13, 21, 1], [-12, 22, 7], 'yellow', 'vent_l'),
+        C('louvre_2_l', [-13, 23, 1], [-12, 24, 7], 'yellow', 'vent_l'),
+        C('vent_flap_r', [11, 20, 1], [12, 25, 7], 'yellow', 'vent_r'),
+        C('louvre_1_r', [12, 21, 1], [13, 22, 7], 'yellow', 'vent_r'),
+        C('louvre_2_r', [12, 23, 1], [13, 24, 7], 'yellow', 'vent_r'),
+        # chin sensor: the lens sunk a pixel inside a two-pixel rim (the look bone)
         C('sensor_neck', [-2, 15, -11.5], [2, 18, -9.5], 'brass', 'sensor'),
-        C('sensor_head', [-3, 12, -15], [3, 17, -10], 'enamel', 'sensor'),
-        C('sensor_lens', [-2, 13, -16], [2, 16, -15], 'lens', 'sensor'),
-        C('sensor_lens_lit', [-2, 13, -16], [2, 16, -15], 'lamp_p', 'lamp_sensor', inflate=0.25),
-        # ---- restraint: a brass lap bar hinged at the back of the collar. Two uprights, two side arms at the jar's
-        # shoulders and a front bar that comes down on the latch posts; two hooks drop over the posts; two rubber clamp
-        # pads press the glass under the lid's rim ----
-        C('upright_l', [-9, 28.5, 7], [-7, 38.5, 9], 'brass', 'restraint'),
-        C('upright_r', [7, 28.5, 7], [9, 38.5, 9], 'brass', 'restraint'),
-        C('arm_bar_l', [-9, 36.5, -7], [-7, 38.5, 7], 'brass', 'restraint'),
-        C('arm_bar_r', [7, 36.5, -7], [9, 38.5, 7], 'brass', 'restraint'),
-        C('front_bar', [-9.5, 36.5, -9.5], [9.5, 38.5, -7.5], 'brass', 'restraint'),
-        C('hook_l', [-10.5, 34.5, -9.5], [-9.5, 38.5, -7.5], 'brass', 'restraint'),
-        C('hook_r', [9.5, 34.5, -9.5], [10.5, 38.5, -7.5], 'brass', 'restraint'),
-        C('knuckle_l', [-9.5, 27.5, 7.5], [-6.5, 30.5, 10.5], 'steel', 'restraint'),
-        C('knuckle_r', [6.5, 27.5, 7.5], [9.5, 30.5, 10.5], 'steel', 'restraint'),
-        C('pad_l', [-7.5, 36.5, -3], [-6.5, 39.5, 3], 'rubber', 'clamp_l'),
-        C('pad_r', [6.5, 36.5, -3], [7.5, 39.5, 3], 'rubber', 'clamp_r'),
+        C('sensor_head', [-3, 12, -14], [3, 17, -10], 'enamel', 'sensor'),
+        C('sensor_rim_t', [-3, 16, -16], [3, 17, -14], 'enamel', 'sensor'),
+        C('sensor_rim_b', [-3, 12, -16], [3, 13, -14], 'enamel', 'sensor'),
+        C('sensor_rim_l', [-3, 13, -16], [-2, 16, -14], 'enamel', 'sensor'),
+        C('sensor_rim_r', [2, 13, -16], [3, 16, -14], 'enamel', 'sensor'),
+        C('sensor_lens', [-2, 13, -15], [2, 16, -14], 'lens', 'sensor'),
+        C('sensor_lens_lit', [-2, 13, -15], [2, 16, -14], 'lamp_p', 'lamp_sensor', inflate=0.25),
+        # ---- restraint: one brass hoop hinged at the back. Two uprights rise behind the jar, two rails run over
+        # the lid's edges, a crossbar lies across the lid's front, two hooks drop at the front corners outside the
+        # glass and catch the lid's rim. Below the lid, from the front, nothing crosses the jar. Two clamp pads on
+        # short arms press the glass at the shoulders ----
+        C('upright_l', [-9, 28.7, 7], [-7, L, 9], 'brass', 'restraint'),
+        C('upright_r', [7, 28.7, 7], [9, L, 9], 'brass', 'restraint'),
+        C('rail_l', [-9, L, -7.5], [-7, L + 2, 8.5], 'brass', 'restraint'),
+        C('rail_r', [7, L, -7.5], [9, L + 2, 8.5], 'brass', 'restraint'),
+        C('crossbar', [-9.5, L, -9.5], [9.5, L + 2, -7.5], 'brass', 'restraint'),
+        C('hook_l', [-9.5, L - 3, -9.5], [-7.5, L, -7.5], 'brass', 'restraint'),
+        C('hook_r', [7.5, L - 3, -9.5], [9.5, L, -7.5], 'brass', 'restraint'),
+        C('knuckle_l', [-10.5, 27.5, 8.5], [-7.5, 30.5, 11.5], 'steel', 'restraint'),
+        C('knuckle_r', [7.5, 27.5, 8.5], [10.5, 30.5, 11.5], 'steel', 'restraint'),
+        C('clamp_arm_l', [-8, L - 4, -1], [-7, L, 1], 'steel', 'clamp_l'),
+        C('clamp_arm_r', [7, L - 4, -1], [8, L, 1], 'steel', 'clamp_r'),
+        C('pad_l', [-7, L - 4, -2], [-6, L - 1, 2], 'rubber', 'clamp_l'),
+        C('pad_r', [6, L - 4, -2], [7, L - 1, 2], 'rubber', 'clamp_r'),
         # ---- stand-in jar (never exported): the WIDE Life Support Jar at its anchor, head inside ----
         C('standin_jar_base', [-7, J, -7], [7, J + 1, 7], 'standm', 'standin_jar'),
         C('standin_jar_glass', [-6.5, J + 1, -6.5], [6.5, J + 13, 6.5], 'standj', 'standin_jar'),
@@ -193,18 +227,22 @@ def cubes():
         def cube(name, xs, ys, zs, mat, parent, **kw):
             a, b2 = bx(*xs)
             c.append(C(name + '_' + side, [a, ys[0], zs[0]], [b2, ys[1], zs[1]], mat, parent + '_' + side, **kw))
-        # arm: brass shoulder on the pod's flank, steel upper arm, ivory forearm, rubber cuff (the wrist socket)
-        cube('shoulder', (-15, -10), (25, 29), (-4.5, 0.5), 'brass', 'arm')
+        # arm: a dark boss holds the brass shoulder a pixel off the flank (a shadow gap), steel upper arm, ivory
+        # forearm, rubber cuff (the wrist socket)
+        cube('shoulder_boss', (-11, -10), (26, 28), (-3, -1), 'dsteel', 'arm')
+        cube('shoulder', (-15, -11), (25, 29), (-4.5, 0.5), 'brass', 'arm')
         cube('upper_arm', (-14.5, -10.5), (21, 25), (-4, 0), 'steel', 'arm')
         cube('forearm', (-15, -10), (14, 21), (-4.5, 0.5), 'enamel', 'forearm')
         cube('cuff', (-15.5, -9.5), (13, 15), (-5, 1), 'rubber', 'forearm')
-        # leg (unchanged rig): brass hip joint inside the pod, 5 px steel thigh, brass knee cap, 4 px steel shin,
-        # steel ankle, rubber foot with a heel spur. Modelled straight down; the rest rotations fold it (knee back)
-        cube('hip_joint', (-10, -4), (18, 24), (-3, 3), 'brass', 'leg')
-        cube('thigh', (-9.5, -4.5), (9, 21), (-2.5, 2.5), 'steel', 'leg')
+        # leg (unchanged rig): brass hip housing in the dark wheel arch (clear of the flank), steel thigh, a dark
+        # knee axle (the gap between segments), a wider brass knee drum, steel shin, steel ankle, rubber foot with a
+        # heel spur. Modelled straight down; the rest rotations fold it (knee back)
+        cube('hip_joint', (-9, -5), (18, 24), (-3, 3), 'brass', 'leg')
+        cube('thigh', (-9.5, -4.5), (12, 21), (-2.5, 2.5), 'steel', 'leg')
+        cube('knee_axle', (-9, -5), (11, 12), (-1.5, 1.5), 'dsteel', 'shin')
         cube('knee', (-10, -4), (7, 11), (-2.5, 2.5), 'brass', 'shin')
-        cube('shin', (-9, -5), (-4, 9), (-2, 2), 'steel', 'shin')
-        cube('ankle', (-9, -5), (-5.5, -2.5), (-2, 2), 'dsteel', 'foot')
+        cube('shin', (-9, -5), (-4, 7), (-2, 2), 'steel', 'shin')
+        cube('ankle', (-9.5, -4.5), (-5.5, -2.5), (-2.5, 2.5), 'dsteel', 'foot')
         cube('sole', (-10.5, -3.5), (-6, -4), (-7, 3), 'rubber', 'foot')
         cube('heel', (-8, -6), (-6, -4), (3, 5), 'dsteel', 'foot')
     return c
@@ -238,12 +276,12 @@ def locators():
     return [
         ('fx_step_l', [-HIP_X, -6, -2], 'foot_l'),     # under the left sole: dust and the footfall
         ('fx_step_r', [HIP_X, -6, -2], 'foot_r'),
-        ('fx_vent_l', [-13, 20, 5], 'vent_l'),         # outside the left vent flap
-        ('fx_vent_r', [13, 20, 5], 'vent_r'),
-        ('fx_latch', [0, 37.5, -8.5], 'restraint'),    # the restraint's front bar, over the latch posts
+        ('fx_vent_l', [-14, 22, 4], 'vent_l'),         # outside the left vent flap
+        ('fx_vent_r', [14, 22, 4], 'vent_r'),
+        ('fx_latch', [0, 41.7, -8.5], 'restraint'),    # the hoop's crossbar over the lid
         ('fx_jar_exit', [0, 44, 0], 'torso'),          # above the collar, where the ejected jar leaves
         ('fx_hull', [0, 28.5, 0], 'torso'),            # smoke and sparks from the collar
-        ('fx_core', [0, 22.5, -12.5], 'torso'),        # the chest lamp
+        ('fx_core', [0, 23, -13], 'torso'),            # the chest lamp
         ('fx_wrist_l', [-12.5, 13, -2], 'socket_arm_l'),  # module muzzle base (a module adds its own tip)
         ('fx_wrist_r', [12.5, 13, -2], 'socket_arm_r'),
         ('fx_knee_l', [-HIP_X, 9, 2.5], 'shin_l'),

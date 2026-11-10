@@ -238,9 +238,10 @@ def lamps(core, side, sensor):
 
 
 def clamps(keys):
-    """Clamp pads on the restraint's side arms: o = degrees open (the pad's top swings away from the jar)."""
-    left = [(t, [0, 0, o[0]], e, a, i) for (t, o, e, a, i) in keys]
-    right = [(t, [0, 0, -o[0]], e, a, i) for (t, o, e, a, i) in keys]
+    """Clamp pads hanging on short arms from the hoop's rails: o = degrees open (the pad swings out, away from the
+    jar's shoulder)."""
+    left = [(t, [0, 0, -o[0]], e, a, i) for (t, o, e, a, i) in keys]
+    right = [(t, [0, 0, o[0]], e, a, i) for (t, o, e, a, i) in keys]
     return {'clamp_l': {'rotation': left}, 'clamp_r': {'rotation': right}}
 
 
@@ -282,16 +283,17 @@ def parked():
 
 
 def board():
-    """Controller "cockpit": the clamps snap open, the restraint (lap bar) swings up and back on its hinge, the jar is
-    set down into the collar, the bar comes down on the latch posts and the clamp pads close on the jar under its lid.
+    """Controller "cockpit": the clamps snap open, the restraint (the hoop) swings up and back on its hinge, the jar
+    is set down into the collar (held high and forward until the hoop has passed), the hoop comes down onto the lid
+    and its hooks catch the lid's front corners, and the clamp pads close on the jar's shoulders.
     Control is the pilot's from tick 0 (the legs controller keeps playing idle or walk)."""
     bones = {
         'restraint': {'rotation': [k(0, R()), k(1, R(x=-2), 'easeOutQuad'), k(2, R(x=-2)),
                                    k(8, R(x=115), 'easeOutCubic'), k(10, R(x=108), 'easeInOutSine'),
                                    k(13, R(x=108)), k(14, R(x=111), 'easeOutQuad'),
-                                   k(18, R(), 'easeInQuad'),                       # the bar lands on the posts
+                                   k(18, R(), 'easeInQuad'),                       # the hoop lands on the lid
                                    k(19, R(x=2), 'easeOutQuad'), k(21, R(), 'easeInQuad')]},
-        'jar_anchor': {'position': [k(0, P(y=16, z=-9)), k(4, P(y=16, z=-9)),
+        'jar_anchor': {'position': [k(0, P(y=20, z=-12)), k(6, P(y=20, z=-12)),
                                     k(10, P(y=1.5), 'easeInOutSine'), k(11, P(), 'easeInQuad'),  # seated
                                     k(12, P(y=0.4), 'easeOutQuad'), k(13, P(), 'easeInQuad')]},
     }
@@ -921,8 +923,8 @@ def eject():
             'restraint': {'rotation': [k(0, R()), k(1, R(x=-2), 'easeOutQuad'), k(2, R(x=-2)),
                                        k(5, R(x=150), 'easeOutExpo'), k(8, R(x=132), 'easeInOutSine'),
                                        k(11, R(x=140), 'easeInOutSine'), k(14, R(x=136), 'easeInOutSine')]},
-            'clamp_l': {'rotation': [k(0, R()), k(1, R(z=30), 'easeOutExpo')]},
-            'clamp_r': {'rotation': [k(0, R()), k(1, R(z=-30), 'easeOutExpo')]},
+            'clamp_l': {'rotation': [k(0, R()), k(1, R(z=-30), 'easeOutExpo')]},
+            'clamp_r': {'rotation': [k(0, R()), k(1, R(z=30), 'easeOutExpo')]},
             'jar_anchor': {'position': [k(0, P()), k(4, P()), k(6, P(y=18), 'easeOutCubic')],
                            'scale': [k(0, S(1), interp='step'), k(6, S(0), interp='step')]},
             'hips': {'position': [k(0, P()), k(4, P()), k(5, P(y=-2.5), 'easeOutQuad'), k(8, P(y=-1.5), 'easeInOutSine'),
