@@ -140,6 +140,8 @@ def parse_report(path):
                 e = re.search(r"expect (\S+)", rest)
                 if e:
                     cur["expect"] = e.group(1)
+                e = re.search(r" aim (\S+)", rest.split(" | ")[0])
+                cur["aim"] = e.group(1) if e else ""
                 pairs[pid] = cur
             elif cur and cur["id"] == pid and what == "act":
                 cur["phase"], cur["act"] = "act", rest
@@ -196,6 +198,30 @@ def form_of(riding_line):
     return m.group(1) if m else ""
 
 
+def aim_problem(rec):
+    """Why the crosshair was not on the intended target when the click was made, or '' if it was (or not checked)."""
+    want = rec.get("aim", "")
+    seen = next((x for x in rec["pre"] if x.startswith("inspect aim -> ")), None)
+    if not want or want == "any" or seen is None:
+        return ""
+    got = seen[len("inspect aim -> "):]
+    if want == "miss":
+        return "" if got == "miss" else f"crosshair on {got}, not the air"
+    if want.startswith("block:"):
+        x, y, z = (int(v) for v in want[6:].split(","))
+        m = re.match(r"block (\S+) at (-?\d+) (-?\d+) (-?\d+)", got)
+        if m and int(m.group(2)) == x and int(m.group(4)) == z and abs(int(m.group(3)) - y) <= 1:
+            return ""
+        return f"crosshair on {got}, not the block at {x} {y} {z}"
+    if want.startswith("entity"):
+        if not got.startswith("entity "):
+            return f"crosshair on {got}, not the entity"
+        need = want.split(":", 1)[1] if ":" in want else ""
+        if need and need not in got:
+            return f"crosshair on {got}, not {need}"
+    return ""
+
+
 def judge(pid, rec, pats, log_errors):
     """Observed class, text, lang key, the action's record line and notes."""
     notes = []
@@ -215,6 +241,10 @@ def judge(pid, rec, pats, log_errors):
     texts = messages(inp["shown"])
     keys = [match_key(t, pats) for t in texts]
     if rec["expect"] and pre_form and pre_form != rec["expect"]:
+        cls = "unreached"
+    miss = aim_problem(rec)
+    if miss:
+        notes.append("aim: " + miss)
         cls = "unreached"
     click = cls
     if errs:
@@ -258,6 +288,11 @@ def compare(pred, pred_key, cls, obs_key):
     want = PRED.get(pred)
     if want is None:
         return "review"
+    if pred_key and obs_key and cls in ("works", "refuses"):
+        # the predicted message itself was shown: a status line predicted as "works" is the same answer
+        wanted = [key_pattern(k.strip()) for k in re.split(r"[;,]", pred_key) if k.strip()]
+        if any(w.fullmatch(o) for w in wanted for o in obs_key.split()):
+            return "match"
     if cls != want:
         return "MISMATCH"
     if want == "refuses" and pred_key and obs_key:

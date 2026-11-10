@@ -1,0 +1,210 @@
+# Benchmark lab WITHOUT the jarred heads: the same scene as bench-lab.txt with every headblock and jarhead line left
+# out (turrets, arrays, mounts and sockets stand empty, no placed jarred heads), because in the released mod drawing
+# any jarred head crashes the client (Pose stack not empty). This is the scene the baseline numbers were taken on;
+# compare later waves on this file, and on bench-lab.txt once heads draw.
+# Benchmark lab: 42 machines, 4 mecha, a jar holding a pig with Telekinesis (scene from the performance review, 7.2).
+# Three scenarios, each settled and then timed in 30-second windows by "bench start/stop" (frame times on the render
+# thread, server tick times on the server thread, packets per second, entity count, the debug screen's fps string),
+# with "/tick query" read back by cmdout after each window.
+#   A: the lab, the player a jar holding the pig by Telekinesis, looking at the lab (3 windows), then the same with the
+#      camera turned away (render cost against tick cost), a window watched by the stand-in player (packets by type),
+#      a window under /debug (time per ticker, written to the game folder's debug/), and a 5-second frames capture.
+#   B: the jar piloting the fitted Colossus (3 windows).
+#   C: the player linked (head in a jar on the ground, body standing), no Telekinesis (3 windows).
+# Run: bash tools/smoke.sh tools/bench-lab.txt   (SMOKE_MODS / SMOKE_PROFILE / SMOKE_SHADER for the other configurations)
+@world flat
+@difficulty easy
+@observe 20
+wait 60
+fpscap 260 vsync 0
+/gamemode creative
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/gamerule randomTickSpeed 0
+/gamerule doImmediateRespawn true
+/gamerule keepInventory true
+/kill @e[type=!player]
+# targets: three tough husks the turrets can shoot all session
+/summon husk -2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/summon husk 0 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/summon husk 2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+# z=4: 8 turrets (4 skeleton with arrow chests under them, 2 guardian, 2 blaze)
+/setblock -8 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock -6 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock 6 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock 8 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock -8 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -6 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -4 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -2 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 2 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 4 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 6 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 8 -60 4 headinajar:turret_pedestal[facing=north]
+wait 5
+# z=7: 4 Cerebral Arrays, 9 villager heads each, Board Room Core and broth (the headblock verb fills both)
+/setblock -6 -60 7 headinajar:cerebral_array[facing=north]
+/setblock -2 -60 7 headinajar:cerebral_array[facing=north]
+/setblock 2 -60 7 headinajar:cerebral_array[facing=north]
+/setblock 6 -60 7 headinajar:cerebral_array[facing=north]
+wait 5
+# z=10: the lab
+/setblock -7 -60 10 headinajar:centrifuge[facing=north]
+/setblock -5 -60 10 headinajar:centrifuge[facing=north]
+/setblock -3 -60 10 headinajar:dna_sequencer[facing=north]
+/setblock -1 -60 10 headinajar:dna_sequencer[facing=north]
+/setblock 1 -60 10 headinajar:gene_splicer[facing=north]
+/setblock 3 -60 10 headinajar:gene_splicer[facing=north]
+/setblock 5 -60 10 headinajar:injection_rig[facing=north]
+/setblock 7 -60 10 headinajar:saline_mixer[facing=north]
+# 4 Employee Mounts sitting on machines (a mount above a machine counts as staff whatever its facing)
+/setblock -4 -59 4 headinajar:employee_mount[facing=north]
+/setblock -3 -59 10 headinajar:employee_mount[facing=north]
+/setblock 1 -59 10 headinajar:employee_mount[facing=north]
+/setblock 7 -59 10 headinajar:employee_mount[facing=north]
+wait 5
+# z=13: power. Leyden Jar feeds Tesla pair 1 (-7 -> -1); the middle Leyden Jar takes from it and feeds pair 2 (1 -> 7);
+# the end Leyden Jar is the sink. Target longs are BlockPos.asLong of (-1,-60,13) and (7,-60,13).
+/setblock -8 -60 13 headinajar:leyden_jar{Energy:250000}
+/setblock -7 -60 13 headinajar:tesla_node{Energy:10000,Target:-274877849660L}
+/setblock -1 -60 13 headinajar:tesla_node
+/setblock 0 -60 13 headinajar:leyden_jar
+/setblock 1 -60 13 headinajar:tesla_node{Energy:10000,Target:1924145405892L}
+/setblock 7 -60 13 headinajar:tesla_node
+/setblock 8 -60 13 headinajar:leyden_jar
+# z=16: relay stations, sockets, leech jars
+/setblock -6 -60 16 headinajar:relay_mast{Energy:100000}
+/setblock -3 -60 16 headinajar:relay_mast_mk2{Energy:100000}
+/setblock 0 -60 16 headinajar:signal_jammer{Energy:100000}
+/setblock 3 -60 16 headinajar:neural_socket
+/setblock 4 -60 16 headinajar:neural_socket
+/setblock 5 -60 16 headinajar:neural_socket
+/setblock 6 -60 16 headinajar:neural_socket
+/setblock -9 -60 16 headinajar:leech_jar
+/setblock 9 -60 16 headinajar:leech_jar
+wait 5
+# z=19: two placed jarred villager heads (the verb spawns, saws and places)
+# stock the lab (the verb works within 10 blocks of the player)
+/tp @s 0.5 -60 8.5 0 0
+wait 5
+lab
+# 4 mecha to the sides: one fully fitted Colossus, three other frames
+mecha colossus -14 -60 0 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,armor_plating,drill,hydraulic_fist,target_lock,tesla_coil,thermal_imaging,stealth_field,radiator_fins,battery_rack,jump_jets,night_optics,solar_skin
+mecha bulwark -9 -60 0 hydraulic_legs,galvanic_stack,armor_plating,drill,hydraulic_fist
+mecha skitter 9 -60 0 galvanic_stack,armor_plating,drill
+mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
+# the jar: a glass stand behind the turrets, a pig to lift
+/fill -1 -58 -13 1 -58 -11 minecraft:glass
+/summon pig 0 -60 -7 {NoAI:1b,PersistenceRequired:1b}
+/tp @s 0.5 -57 -11.5 0 37
+wait 10
+jar
+fit telekinesis,manipulator_arm,armor_plating
+charge 100000
+/gamemode survival
+/effect give @s minecraft:resistance 99999 4 true
+wait 10
+lookat pig
+tkgrab
+wait 10
+look 0 15
+inspect me
+inspect near all 30
+# ---- scenario A: settle 10 s, then three 30 s windows
+wait 200
+shot bench_A_start
+bench start A1
+wait 600
+bench stop
+cmdout tick query
+bench start A2
+wait 600
+bench stop
+cmdout tick query
+bench start A3
+wait 600
+bench stop
+cmdout tick query
+shot bench_A_end
+inspect near all 30
+# control: the same scene with the camera turned away (render cost against tick cost)
+look 180 15
+wait 40
+bench start Aaway
+wait 600
+bench stop
+cmdout tick query
+look 0 15
+wait 20
+# packets by type the server sends a second client watching the scene (the stand-in adds its own tracking cost)
+bystander spawn 3 -60 -10 0
+wait 40
+bystander mark
+bench start Apackets
+wait 600
+bench stop
+bystander packets
+bystander remove
+wait 20
+# time per ticker: /debug writes a profile into the game folder's debug/ (profiling adds its own cost)
+cmdout debug start
+wait 600
+cmdout debug stop
+frames bench_A 100
+wait 110
+# ---- scenario B: the jar pilots the fitted Colossus
+throw
+wait 10
+/tp @s -11.5 -60 -2.5 0 15
+wait 5
+mount
+wait 20
+riding B
+look 0 15
+wait 200
+shot bench_B_start
+bench start B1
+wait 600
+bench stop
+cmdout tick query
+bench start B2
+wait 600
+bench stop
+cmdout tick query
+bench start B3
+wait 600
+bench stop
+cmdout tick query
+shot bench_B_end
+# ---- scenario C: linked (the body stands, the head sits in a jar on the ground), no Telekinesis
+/kill @s
+wait 30
+/effect give @s minecraft:resistance 99999 4 true
+/tp @s 0.5 -60 -10.5 0 15
+wait 10
+separate
+wait 20
+look 0 15
+riding C
+inspect me
+wait 200
+shot bench_C_start
+bench start C1
+wait 600
+bench stop
+cmdout tick query
+bench start C2
+wait 600
+bench stop
+cmdout tick query
+bench start C3
+wait 600
+bench stop
+cmdout tick query
+shot bench_C_end
+inspect near all 40
+report bench done

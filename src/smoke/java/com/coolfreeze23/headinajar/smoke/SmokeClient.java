@@ -82,6 +82,9 @@ public class SmokeClient {
             NeoForge.EVENT_BUS.addListener(this::onTick);
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
             NeoForge.EVENT_BUS.addListener(frames::onFrame);
+            NeoForge.EVENT_BUS.addListener(Bench::onFrame);
+            NeoForge.EVENT_BUS.addListener(Bench::onServerPre);
+            NeoForge.EVENT_BUS.addListener(Bench::onServerPost);
         }
     }
 
@@ -96,6 +99,16 @@ public class SmokeClient {
         Minecraft mc = Minecraft.getInstance();
         try {
             tick(mc);
+            // the report so far is written out every 5 s, so a run that crashes the game still leaves its record
+            if (dir != null && state == 2 && ++flushTicks % 100 == 0 && report.size() != flushedLines) {
+                try {
+                    List<String> copy = new ArrayList<>(report);
+                    flushedLines = copy.size();
+                    Files.write(dir.resolve("report.txt"), copy);
+                } catch (RuntimeException | IOException ignored) {
+                    // another thread added a line while copying; the next flush catches up
+                }
+            }
         } catch (Exception e) {
             LOGGER.error("SMOKE: failed", e);
             report.add("EXCEPTION " + e);
@@ -103,6 +116,8 @@ public class SmokeClient {
         }
     }
 
+    private int flushTicks;
+    private int flushedLines;
     private String burstName;
     private int burstLeft;
     private int burstFrame;
@@ -181,7 +196,7 @@ public class SmokeClient {
         String[] parts = line.split(" ", 2);
         // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
         if (!java.util.Set.of("wait", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
-                "frames", "walk", "rightclick", "bystander").contains(parts[0])) {
+                "frames", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap").contains(parts[0])) {
             observer.setup(line);
         }
         switch (parts[0]) {
@@ -201,6 +216,25 @@ public class SmokeClient {
                 }
                 var server = mc.getSingleplayerServer();
                 server.execute(() -> report.add(Bystander.run(server, a)));
+                wait = 2;
+            }
+            case "bench" -> {
+                // bench start NAME | bench stop: frame and server tick timing without images (Bench.java)
+                String[] a = parts[1].trim().split(" +");
+                report.add(a[0].equals("start") ? Bench.start(a.length > 1 ? a[1] : "bench") : Bench.stop(mc));
+            }
+            case "fpscap" -> report.add(Bench.fpsCap(mc, line.trim().split(" +")));
+            case "cmdout" -> {
+                // cmdout COMMAND: run a server command (permission 4) and report what it printed
+                var server = mc.getSingleplayerServer();
+                var uuid = mc.player.getUUID();
+                String command = parts[1].startsWith("/") ? parts[1].substring(1) : parts[1];
+                server.execute(() -> {
+                    var player = server.getPlayerList().getPlayer(uuid);
+                    var out = new Bench.Collector();
+                    server.getCommands().performPrefixedCommand(player.createCommandSourceStack().withSource(out).withPermission(4), command);
+                    report.add("cmdout " + command + " -> " + String.join(" / ", out.lines).replace('\n', ' '));
+                });
                 wait = 2;
             }
             case "wait" -> wait = Integer.parseInt(parts[1]);
@@ -266,6 +300,12 @@ public class SmokeClient {
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
                 String[] a = parts[1].trim().split(" +");
+                if (a[0].equals("aim")) {
+                    // inspect aim: what the client's crosshair is on now (block, entity or nothing), from the client's hit result
+                    report.add("inspect aim -> " + aimText(mc));
+                    wait = 1;
+                    return;
+                }
                 server.execute(() -> {
                     var player = server.getPlayerList().getPlayer(uuid);
                     var level = player.serverLevel();
@@ -314,10 +354,45 @@ public class SmokeClient {
                             }
                             report.add(sb.append(n == 0 ? "none" : "").toString());
                         }
-                        default -> report.add("inspect " + a[0] + " -> unknown (block X Y Z, me, near TYPE R)");
+                        case "entity" -> {
+                            // inspect entity TYPE X Y Z [R]: the nearest entity of TYPE within R (default 2) of X Y Z, with its saved data
+                            var at = new net.minecraft.world.phys.Vec3(Double.parseDouble(a[2]), Double.parseDouble(a[3]), Double.parseDouble(a[4]));
+                            double r = a.length > 5 ? Double.parseDouble(a[5]) : 2;
+                            net.minecraft.world.entity.Entity best = null;
+                            for (var e : level.getEntities((net.minecraft.world.entity.Entity) null, new net.minecraft.world.phys.AABB(at, at).inflate(r))) {
+                                if (!a[1].equals("all") && !net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString().contains(a[1])) continue;
+                                if (best == null || e.position().distanceToSqr(at) < best.position().distanceToSqr(at)) best = e;
+                            }
+                            if (best == null) {
+                                report.add("inspect entity " + a[1] + " " + a[2] + " " + a[3] + " " + a[4] + " -> none");
+                            } else {
+                                var tag = new net.minecraft.nbt.CompoundTag();
+                                best.saveWithoutId(tag);
+                                for (String k : new String[]{"Pos", "Motion", "Rotation", "FallDistance", "Fire", "Air", "OnGround", "PortalCooldown", "UUID", "HurtTime", "HurtByTimestamp", "DeathTime", "FallFlying", "AbsorptionAmount", "Brain", "attributes"}) tag.remove(k);
+                                String nbt = tag.toString();
+                                if (nbt.length() > 1500) nbt = nbt.substring(0, 1500) + "...";
+                                report.add(String.format(java.util.Locale.ROOT, "inspect entity %s %s %s %s -> %s at %.1f %.1f %.1f%s %s", a[1], a[2], a[3], a[4],
+                                        net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(best.getType()), best.getX(), best.getY(), best.getZ(),
+                                        best instanceof net.minecraft.world.entity.LivingEntity le ? String.format(java.util.Locale.ROOT, " hp %.1f/%.1f", le.getHealth(), le.getMaxHealth()) : "",
+                                        nbt));
+                            }
+                        }
+                        default -> report.add("inspect " + a[0] + " -> unknown (block X Y Z, me, near TYPE R, entity TYPE X Y Z R, aim)");
                     }
                 });
                 wait = 2;
+            }
+            case "lookpos" -> {
+                // lookpos X Y Z: setup aim, like look: turns the view to a point, from the player's real eye position
+                String[] a = parts[1].trim().split(" +");
+                var eye = mc.player.getEyePosition();
+                double dx = Double.parseDouble(a[0]) - eye.x, dy = Double.parseDouble(a[1]) - eye.y, dz = Double.parseDouble(a[2]) - eye.z;
+                float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
+                float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
+                mc.player.setYRot(yaw);
+                mc.player.setXRot(pitch);
+                mc.player.setYHeadRot(yaw);
+                report.add(String.format(java.util.Locale.ROOT, "lookpos -> eye %.2f %.2f %.2f, yaw %.1f pitch %.1f", eye.x, eye.y, eye.z, yaw, pitch));
             }
             case "lookat" -> {
                 // lookat TYPE [DY]: turn the view (setup, like look) to the nearest entity whose type id contains TYPE,
@@ -349,7 +424,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -376,7 +451,7 @@ public class SmokeClient {
                             }
                         }
                         case "charge" -> state.setCharge(Integer.parseInt(parts[1]));
-                        case "grab" -> report.add("grab -> " + Telekinesis.grab(player, state));
+                        case "grab", "tkgrab" -> report.add("grab -> " + Telekinesis.grab(player, state));
                         case "throw" -> Telekinesis.throwHeld(player, state);
                         case "swap" -> report.add("swap -> " + (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED
                                 ? FormActions.linkedToJar(player) : FormActions.jarToLinked(player)));
@@ -485,7 +560,7 @@ public class SmokeClient {
                             net.minecraft.world.entity.LivingEntity target = a[0].equals("me") ? player : (net.minecraft.world.entity.LivingEntity) player.getVehicle();
                             var set = target.getData(ModRegistry.GENES);
                             set.clear();
-                            for (String name : a[1].split(",")) {
+                            for (String name : a.length > 1 ? a[1].split(",") : new String[0]) {
                                 set.serums.add(new com.coolfreeze23.headinajar.genetics.Serum(java.util.List.of(new com.coolfreeze23.headinajar.genetics.Serum.Entry(
                                         com.coolfreeze23.headinajar.genetics.Gene.valueOf(name.trim().toUpperCase(java.util.Locale.ROOT)), 1f)), 100));
                             }
@@ -530,6 +605,24 @@ public class SmokeClient {
                                 player.serverLevel().sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 3);
                             }
                             report.add("headblock " + a[3] + " -> " + (be == null ? "none" : be.getClass().getSimpleName()));
+                        }
+                        case "dock" -> {
+                            // dock X Y Z: a LINKED player carrying their head puts it into the Cradle at X Y Z (FormActions.dockCarried)
+                            String[] xyz = parts[1].trim().split(" +");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
+                            report.add("dock -> " + (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity c
+                                    && FormActions.dockCarried(player, c)));
+                        }
+                        case "locker" -> {
+                            // locker X Y Z: the Body Locker at X Y Z stores the nearest host within 3 blocks (or releases what it holds)
+                            String[] xyz = parts[1].trim().split(" +");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
+                            if (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity l) {
+                                l.use(player);
+                                report.add("locker -> " + (l.full() ? "holding" : "empty"));
+                            } else {
+                                report.add("locker -> no Body Locker there");
+                            }
                         }
                         case "drive" -> report.add("drive -> " + FormActions.drive(player));
                         case "pilotgenes" -> {
@@ -741,6 +834,21 @@ public class SmokeClient {
         }
         LOGGER.info("SMOKE: finished, {} report lines", report.size());
         mc.stop();
+    }
+
+    /** The client's crosshair target: "block ID at X Y Z face F", "entity ID at X Y Z", or "miss". */
+    static String aimText(Minecraft mc) {
+        var hit = mc.hitResult;
+        if (hit instanceof net.minecraft.world.phys.EntityHitResult eh) {
+            var e = eh.getEntity();
+            return String.format(java.util.Locale.ROOT, "entity %s at %.1f %.1f %.1f", BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()), e.getX(), e.getY(), e.getZ());
+        }
+        if (hit instanceof BlockHitResult bh && hit.getType() != net.minecraft.world.phys.HitResult.Type.MISS) {
+            var pos = bh.getBlockPos();
+            return "block " + BuiltInRegistries.BLOCK.getKey(mc.level.getBlockState(pos).getBlock()) + " at " + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+                    + " face " + bh.getDirection().getName();
+        }
+        return "miss";
     }
 
     private static String seatProbe(Minecraft mc, String id) {
