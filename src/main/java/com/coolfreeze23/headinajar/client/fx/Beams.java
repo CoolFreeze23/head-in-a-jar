@@ -61,8 +61,19 @@ public final class Beams {
      * Draws a ribbon through {@code points}. {@code fade} (0..1 along the beam, or null) multiplies the alpha per point:
      * how a tether is drawn while it shoots out, snaps or fades.
      */
+    /** Beams asked for and beams drawn since the last call to {@link #counts()} (for the harness). */
+    private static int asked, drawn;
+
+    public static String counts() {
+        String s = drawn + "/" + asked;
+        asked = drawn = 0;
+        return s;
+    }
+
     public static void ribbon(Frame f, Vec3[] points, Ribbon look, java.util.function.DoubleUnaryOperator fade) {
+        asked++;
         if (points.length < 2 || look.alpha <= 0.01f || !f.visible(points)) return;
+        drawn++;
         float length = 0;
         float[] along = new float[points.length];
         for (int i = 1; i < points.length; i++) along[i] = length += (float) points[i].distanceTo(points[i - 1]);
@@ -98,10 +109,15 @@ public final class Beams {
             if (a[i] <= 0.004f && a[i + 1] <= 0.004f) continue;
             Vec3 p0 = pts[i].subtract(f.camera), p1 = pts[i + 1].subtract(f.camera);
             float v0 = along[i] * vScale - look.scroll, v1 = along[i + 1] * vScale - look.scroll;
+            // both windings: these render types cull back faces, and which side faces the camera varies
             vertex(b, mat, normal, p0, side[i], -1, 0, v0, r, g, bl, a[i], additive);
             vertex(b, mat, normal, p0, side[i], 1, 1, v0, r, g, bl, a[i], additive);
             vertex(b, mat, normal, p1, side[i + 1], 1, 1, v1, r, g, bl, a[i + 1], additive);
             vertex(b, mat, normal, p1, side[i + 1], -1, 0, v1, r, g, bl, a[i + 1], additive);
+            vertex(b, mat, normal, p1, side[i + 1], -1, 0, v1, r, g, bl, a[i + 1], additive);
+            vertex(b, mat, normal, p1, side[i + 1], 1, 1, v1, r, g, bl, a[i + 1], additive);
+            vertex(b, mat, normal, p0, side[i], 1, 1, v0, r, g, bl, a[i], additive);
+            vertex(b, mat, normal, p0, side[i], -1, 0, v0, r, g, bl, a[i], additive);
         }
     }
 
@@ -137,7 +153,9 @@ public final class Beams {
 
     /** Draws an arc along {@code pts}: a fringe of {@code rgb} and a pale core; {@code width} in blocks. */
     public static void arc(Frame f, Vec3[] pts, int rgb, int coreRgb, float width, float alpha) {
+        asked++;
         if (pts.length < 2 || alpha <= 0.01f || !f.visible(pts)) return;
+        drawn++;
         VertexConsumer b = f.buffers.getBuffer(RenderType.lightning());
         Matrix4f mat = f.pose.last().pose();
         segments(f, b, mat, pts, rgb, width * 2.4f, alpha * 0.55f);
@@ -160,10 +178,8 @@ public final class Beams {
             // overlap the joints a little so the bends have no gaps
             Vec3 dir = p1.subtract(p0).normalize().scale(w * 0.3);
             Vec3 q0 = p0.subtract(dir), q1 = p1.add(dir);
-            b.addVertex(mat, (float) (q0.x - s.x), (float) (q0.y - s.y), (float) (q0.z - s.z)).setColor(r, g, bl, a);
-            b.addVertex(mat, (float) (q0.x + s.x), (float) (q0.y + s.y), (float) (q0.z + s.z)).setColor(r, g, bl, a);
-            b.addVertex(mat, (float) (q1.x + s.x), (float) (q1.y + s.y), (float) (q1.z + s.z)).setColor(r, g, bl, a);
-            b.addVertex(mat, (float) (q1.x - s.x), (float) (q1.y - s.y), (float) (q1.z - s.z)).setColor(r, g, bl, a);
+            Vec3[] c = {q0.subtract(s), q0.add(s), q1.add(s), q1.subtract(s)};
+            quad2(b, mat, c, r, g, bl, a);
         }
     }
 
@@ -181,7 +197,13 @@ public final class Beams {
         Matrix4f mat = f.pose.last().pose();
         float r = (rgb >> 16 & 255) / 255f, g = (rgb >> 8 & 255) / 255f, bl = (rgb & 255) / 255f;
         Vec3[] c = {p.subtract(right).subtract(up), p.subtract(right).add(up), p.add(right).add(up), p.add(right).subtract(up)};
-        for (Vec3 q : c) b.addVertex(mat, (float) q.x, (float) q.y, (float) q.z).setColor(r, g, bl, alpha);
+        quad2(b, mat, c, r, g, bl, alpha);
+    }
+
+    /** A position-colour quad drawn with both windings (lightning() culls back faces). */
+    private static void quad2(VertexConsumer b, Matrix4f mat, Vec3[] c, float r, float g, float bl, float a) {
+        for (int i = 0; i < 4; i++) b.addVertex(mat, (float) c[i].x, (float) c[i].y, (float) c[i].z).setColor(r, g, bl, a);
+        for (int i = 3; i >= 0; i--) b.addVertex(mat, (float) c[i].x, (float) c[i].y, (float) c[i].z).setColor(r, g, bl, a);
     }
 
     /** The point at fraction {@code t} of the way along a polyline. */

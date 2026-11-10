@@ -22,8 +22,11 @@ view 0
 perf idle_jar_no_tether 40
 wait 45
 frames tk_doer_day 150
-wait 3
+lookat cow
+wait 2
 key ability
+wait 10
+fxstate doer_grab
 wait 30
 perf doer_holding 40
 turn 70 0 20
@@ -60,6 +63,7 @@ frames tk_by5_day 170
 wait 3
 bystander key ability
 wait 20
+fxstate by5_holding
 bystander packets
 bystander mark
 wait 20

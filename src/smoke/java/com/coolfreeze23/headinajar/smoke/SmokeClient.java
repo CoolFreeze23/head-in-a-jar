@@ -238,7 +238,7 @@ public class SmokeClient {
             }
             case "fxstate" -> report.add("fxstate " + (parts.length > 1 ? parts[1] : "") + " -> tethers " + com.coolfreeze23.headinajar.client.fx.TetherFx.live()
                     + ", loops " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + ", memos " + java.util.Arrays.toString(com.coolfreeze23.headinajar.client.fx.FxManager.HANDLED)
-                    + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());
+                    + ", beams drawn/asked " + com.coolfreeze23.headinajar.client.fx.Beams.counts() + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "report" -> report.add(parts[1]);
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its

@@ -11,7 +11,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -26,8 +25,11 @@ public final class PoseFx {
     }
 
     private static final Map<Integer, Pose> POSES = new HashMap<>();
-    /** Entities this frame whose pose stack we pushed (popped in Post). */
-    private static final Map<LivingEntity, Boolean> PUSHED = new IdentityHashMap<>();
+    /**
+     * One entry per Pre this listener saw (true where it pushed the pose stack), taken off by the matching Post, so
+     * nested or repeated renders of one entity in a frame always balance.
+     */
+    private static final java.util.ArrayDeque<Boolean> PUSHED = new java.util.ArrayDeque<>();
     /** Smoothed lean of held things, by entity id. */
     private static final Map<Integer, Vec3> LEAN = new HashMap<>();
 
@@ -64,11 +66,14 @@ public final class PoseFx {
         float pt = event.getPartialTick();
         Pose p = POSES.get(e.getId());
         boolean held = TetherFx.held(e);
-        if (p == null && !held) return;
+        if (p == null && !held) {
+            PUSHED.push(false);
+            return;
+        }
         float k = Math.max(0.35f, Comfort.motion());
         var pose = event.getPoseStack();
         pose.pushPose();
-        PUSHED.put(e, true);
+        PUSHED.push(true);
         float h = e.getBbHeight();
         if (held) {
             Entity holder = TetherFx.holderOf(e);
@@ -111,7 +116,7 @@ public final class PoseFx {
 
     @SubscribeEvent
     public static void post(RenderLivingEvent.Post<?, ?> event) {
-        if (PUSHED.remove(event.getEntity()) != null) event.getPoseStack().popPose();
+        if (!PUSHED.isEmpty() && PUSHED.pop()) event.getPoseStack().popPose();
     }
 
     private PoseFx() {

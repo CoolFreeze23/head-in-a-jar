@@ -7,6 +7,7 @@ wait 40
 /gamerule doMobSpawning false
 /gamerule doDaylightCycle false
 /weather clear
+/kill @e[type=slime]
 hud off
 # --- the swap: the stand-in separates, walks its body 7 blocks off, then swaps to its head and back
 bystander spawn 0 -60 0 0
@@ -27,8 +28,13 @@ wait 3
 bystander key swap
 wait 60
 bystander state
-# --- the laser, from outside at 5 blocks, by day and at night
-bystander tp 0 -60 10 0 0
+# --- the laser, from outside at 5 blocks, by day and at night (a fresh stand-in)
+bystander remove
+wait 5
+/kill @e[type=headinajar:headless_body]
+/kill @e[type=headinajar:head_jar]
+bystander spawn 0 -60 10 0
+bystander tick on
 wait 5
 bystander form jar
 bystander fit lacrimal_laser
@@ -59,6 +65,8 @@ wait 40
 wait 40
 bystander mark
 frames tesla_day_5 60
+wait 20
+fxstate tesla
 wait 65
 bystander packets
 /tp @s 3.5 -55 50.5 180 6
@@ -76,6 +84,7 @@ wait 45
 wait 5
 headblock 0 -60 32 guardian
 /summon husk 6.5 -60 34.5 {NoAI:1b,PersistenceRequired:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/kill @e[type=slime]
 /tp @s 3.5 -59 39.5 160 10
 wait 10
 bystander mark
