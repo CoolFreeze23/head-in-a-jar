@@ -1,0 +1,30 @@
+# Attempt 26 continued: the corpse was delivered by the courier next to the jar. Right-click it as the jar (close),
+# then Let go -> Yes, and see what the fresh body finds.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+inspect me
+inspect near headless_body 6
+lookat headless_body
+wait 3
+shot c4b_corpse_close
+key use
+wait 25
+key attack
+wait 25
+inspect me
+report == Let go -> Yes
+key menu
+wait 10
+widget "Let go"
+wait 10
+observe 60
+widget "Yes"
+wait 60
+observe 20
+shot c4b_after_let_go
+inspect me
+inspect near headless_body 40
+inspect near item 40

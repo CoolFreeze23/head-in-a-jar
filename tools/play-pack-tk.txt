@@ -1,0 +1,48 @@
+# Run under both profiles (SMOKE_PROFILE unset, then pack): a jar with Telekinesis lifts a cow and throws it, by real
+# keys. The jar form and the module are set with the `jar` and `fit` setup verbs (the department C journey did it by
+# hand); this script compares only the keys. Under pack, R is both the ability and sprint, and attack is the right button.
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+wait 10
+jar
+wait 20
+fit telekinesis,hop_springs
+charge 100000
+wait 10
+/summon minecraft:cow 0.5 -60 3.0 {NoAI:1b}
+wait 10
+lookat cow 0.9
+wait 3
+shot tk_before
+inspect me
+report == R (the ability key) at the cow
+key ability
+wait 30
+inspect near cow 8
+shot tk_holding
+report == attack to throw
+key attack
+wait 40
+inspect near cow 30
+inspect me
+shot tk_thrown
+report == R with nothing in hand: walk forward first (does R also sprint?)
+key forward down
+wait 5
+key ability
+wait 20
+key forward up
+wait 10
+inspect me
+report == the Jar menu key
+key menu
+wait 15
+shot tk_menu
+press escape
+wait 5

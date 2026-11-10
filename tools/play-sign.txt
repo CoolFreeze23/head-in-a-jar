@@ -1,0 +1,62 @@
+# The chair's "Hold to sign" button under real input, in whichever profile the run uses (SMOKE_PROFILE unset or pack).
+# Flat world in survival; the chair is stocked with the `chair` setup verb (this script tests only the Sign input path).
+# Chair at 0 -60 3, the player at 0.5 -60 0.5 facing it. Sign button centre: rel 121 78 (SIGN_X 74 + 47, SIGN_Y 70 + 8).
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 25
+/setblock 0 -60 3 headinajar:separation_chair
+chair 0 -60 3
+wait 20
+report == A: plain use on the chair, then hold the real left button on Sign for 50 ticks
+look 0 25
+wait 3
+key use
+wait 25
+at rel 121 78 hold 50
+wait 10
+shot sign_A_after_hold
+report == B: keep the cursor on Sign without clicking, 50 ticks
+mouse rel 121 78
+wait 50
+report == C: Escape (screen closes; still seated?), then hold the attack button and press use again while seated
+press escape
+wait 10
+riding C-after-escape
+observe 80
+click left down
+wait 3
+key use
+wait 25
+wait 50
+observe 20
+shot sign_C_after_hover
+click left up
+wait 10
+riding C-end
+inspect me
+report == D: get up (sneak), stand, then hold the left button, press use on the chair while still holding, hover Sign
+sneak
+wait 20
+riding D-standing
+/tp @s 0.5 -60 0.5 0 -30
+wait 3
+click left down
+wait 3
+look 0 25
+wait 1
+observe 280
+key use
+wait 25
+mouse rel 121 78
+wait 60
+shot sign_D_after_hover
+click left up
+wait 220
+observe 20
+riding D-end
+inspect me

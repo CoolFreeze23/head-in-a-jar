@@ -1,0 +1,151 @@
+# Playtest department A: first join, then materials and the separation kit (cold read attempts 1-9, 17) by real clicks.
+# Survival, Easy, seed 12345, kept as "playtest". Work platform at y 199 around x 100, z -29 (setup: a place to stand).
+# Machines stand in a row at z -28; the player stands at z -29.5 facing south (yaw 0), pitch 39 targets the block 2 ahead.
+@world survival
+@keep playtest
+@seed 12345
+@observe 20
+wait 60
+report == first join: what a new player has (empty inventory, nothing in the advancements tab, seen on the first run)
+inspect me
+shot a_first_join
+key advancements
+wait 15
+shot a_advancements_at_start
+press escape
+wait 5
+key inventory
+wait 10
+# JEI's search box, bottom right (GUI scale 2: 1280x720 -> 640x360)
+at 542 346
+wait 3
+type handbook
+wait 10
+shot a_jei_search_handbook
+mouse 481 37
+wait 5
+shot a_jei_handbook_tooltip
+at 481 37
+wait 10
+shot a_jei_handbook_click
+screen none
+wait 5
+grab
+report == set up a place to stand and give vanilla materials
+/time set 1000
+/weather clear
+/fill 90 199 -40 130 199 -10 minecraft:smooth_stone
+/fill 90 200 -40 130 212 -10 minecraft:air
+/tp @s 100.5 200 -29.5 0 39
+/clear @s
+/give @s minecraft:crafting_table 1
+/give @s minecraft:furnace 1
+/give @s minecraft:iron_ingot 24
+/give @s minecraft:bone_meal 24
+/give @s minecraft:coal 27
+/give @s minecraft:copper_ingot 14
+/give @s minecraft:redstone 6
+/give @s minecraft:redstone_block 1
+/give @s minecraft:glass 10
+/give @s minecraft:glass_pane 1
+/give @s minecraft:amethyst_shard 4
+/give @s minecraft:piston 3
+/give @s minecraft:shears 1
+/give @s minecraft:lever 1
+/give @s minecraft:comparator 1
+/give @s minecraft:white_wool 3
+/give @s minecraft:slime_ball 1
+/give @s minecraft:leather 8
+/give @s minecraft:string 2
+/give @s minecraft:potion[minecraft:potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:potion[minecraft:potion_contents={potion:"minecraft:water"}] 1
+/give @s minecraft:sugar 2
+/give @s minecraft:kelp 2
+/give @s minecraft:rotten_flesh 8
+wait 10
+report == place the crafting table and the furnace by hand
+hotbar 1
+look 0 39
+wait 2
+key use
+wait 5
+/tp @s 102.5 200 -29.5 0 39
+hotbar 2
+wait 2
+key use
+wait 5
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+report == attempt 1: Surgical Steel Blend x24 (iron, bone meal, coal, shapeless)
+key use
+wait 10
+craft iron_ingot,bone_meal,coal x24
+wait 5
+shot a_blend_crafted
+press escape
+wait 5
+report == attempt 1: smelt the blends in the furnace
+/tp @s 102.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+slots
+slot item:headinajar:surgical_steel_blend
+slot 0
+slot item:coal
+slot 1
+wait 5
+shot a_furnace_loaded
+press escape
+wait 5
+report smelting: /tick sprint 4800 (24 blends x 200 ticks)
+/tick sprint 5000
+wait 400
+inspect block 102 200 -28
+/time set 1000
+wait 5
+key use
+wait 10
+slot 2 shift
+wait 5
+press escape
+wait 5
+inspect me
+report == attempts 2-9: parts and the kit at the crafting table
+/tp @s 100.5 200 -29.5 0 39
+wait 3
+key use
+wait 10
+report attempt 2: Neuro-Copper Wire x3 crafts
+craft copper_ingot,redstone,copper_ingot x3
+report attempt 3: Lens x4
+craft glass,amethyst_shard,glass x4
+report attempt 4: Servo x3
+craft _,piston,_/headinajar:surgical_steel_ingot,headinajar:neuro_copper_wire,headinajar:surgical_steel_ingot x3
+report attempt 7: Block of Surgical Steel, Excision Head, Booth Console, Separation Chair
+craft headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft _,headinajar:surgical_steel_block,_/headinajar:servo,headinajar:lens,shears/_,redstone_block,_
+craft headinajar:neuro_copper_wire,glass_pane,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,comparator,headinajar:surgical_steel_ingot/_,headinajar:neuro_copper_wire,_
+craft white_wool,headinajar:excision_head,white_wool/headinajar:surgical_steel_ingot,white_wool,headinajar:surgical_steel_ingot/headinajar:booth_console,headinajar:servo,lever
+wait 5
+shot a_chair_crafted
+report attempt 8: Life Support Jar, Relay Goggles, Collar Cam, Cranial Saline x2 crafts
+craft _,copper_ingot,_/glass,slime_ball,glass/headinajar:surgical_steel_ingot,redstone,headinajar:surgical_steel_ingot
+craft leather,copper_ingot,leather/headinajar:lens,headinajar:neuro_copper_wire,headinajar:lens
+craft _,headinajar:lens,_/headinajar:neuro_copper_wire,headinajar:servo,headinajar:neuro_copper_wire/headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot,headinajar:surgical_steel_ingot
+craft potion,sugar/kelp,redstone
+craft potion,sugar/kelp,redstone
+report attempt 9: Galvanic Pile
+craft copper_ingot,headinajar:neuro_copper_wire,copper_ingot/copper_ingot,rotten_flesh,copper_ingot/copper_ingot,headinajar:neuro_copper_wire,copper_ingot
+report attempt 17 (prep): Head Satchel
+craft string,leather,string/leather,_,leather/leather,leather,leather
+wait 10
+shot a_kit_crafted
+press escape
+wait 5
+inspect me
+key inventory
+wait 10
+shot a_inventory_kit
+press escape
+wait 5

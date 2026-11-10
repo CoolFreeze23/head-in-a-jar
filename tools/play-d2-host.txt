@@ -1,0 +1,113 @@
+# Department D, part 2 (attempts 29-34 continued). After play-d-host.txt: two NoAI cows at 104.5 200 -24.5 and
+# 104.5 200 -20.5, both at 6.4 / 10 health; the body at 102.5 200 -20.5; an empty jar in the off hand; hotbar: 3 stone
+# sword, 5 saw, 6 satchel, 7 body locker, 8 suture kit, 9 embalming fluid; neural lace in slot 35. Head on the dock.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+report == the jar out of the off hand (inventory clicks), then punch cow 1 four more times and saw it
+key inventory
+wait 8
+slot inv:40
+slot inv:9
+press escape
+wait 5
+/tp @s 102.5 200 -24.5 -90 20
+wait 5
+hotbar 7
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+inspect near cow 3
+hotbar 5
+wait 2
+observe 40
+key use
+wait 40
+observe 20
+inspect near cow 3
+shot d2_host_made
+report == attempt 30: the empty jar back in the off hand; punch cow 2 four more times and saw it
+key inventory
+wait 8
+slot inv:9
+slot inv:40
+press escape
+wait 5
+/tp @s 102.5 200 -20.5 -90 20
+wait 5
+hotbar 7
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+key attack
+wait 20
+hotbar 5
+wait 2
+observe 40
+key use
+wait 40
+observe 20
+inspect near cow 3
+inspect me
+shot d2_jarred_head
+report == fetch the head from the dock (satchel, empty-ish hand) and set it down beside the host
+/tp @s 112.5 200 -29.6 0 45
+wait 5
+hotbar 7
+wait 2
+key use
+wait 20
+inspect me
+/tp @s 104.5 200 -27.0 0 30
+wait 5
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+inspect near head_jar 4
+report == attempt 31: swap into the jar and right-click the host
+hotbar 7
+key swap
+wait 30
+look 0 10
+wait 3
+shot d2_jar_facing_host
+observe 60
+key use
+wait 60
+observe 20
+inspect me
+shot d2_riding_host
+report == attempt 32: Ability (R), Secondary, then walk where you look
+key ability
+wait 25
+key secondary
+wait 25
+shot d2_host_hud
+look 180 0
+key forward hold 30
+wait 5
+inspect me
+inspect near cow 4
+report == attempt 33: back to the body, Embalming Fluid on the host, then the Neural Lace
+key swap
+wait 30
+inspect me
+inspect near cow 8

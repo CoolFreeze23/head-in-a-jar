@@ -1,0 +1,77 @@
+# Department C, part 3c: the jar on the Charging Dock; Telekinesis (attempt 23); the Cradle moved to touch the pile.
+# After play-c3b-charge.txt: body LINKED at 108.5 200 -29.5 carrying the head; charge 20000. Satchel hotbar 6,
+# Telekinesis in slot 7 (hotbar 8). Pile 107, dock 108, cradle 109 (all at y 200, z -28).
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+inspect me
+inspect block 106 200 -28
+report == 22b: sneak-use the satchel aiming at the Charging Dock's top
+/tp @s 108.5 200 -29.5 0 45
+wait 3
+hotbar 6
+wait 2
+key sneak down
+wait 2
+key use
+wait 15
+key sneak up
+wait 10
+inspect near head_jar 4
+inspect block 108 200 -28
+/tick sprint 400
+wait 60
+/time set 1000
+inspect me
+inspect block 108 200 -28
+shot c3c_head_on_dock
+report == swap into the jar on the dock; wait 400 more
+key swap
+wait 30
+inspect me
+/tick sprint 400
+wait 60
+/time set 1000
+inspect me
+inspect block 108 200 -28
+shot c3c_jar_view_on_dock
+report == attempt 23: Telekinesis; fit it as the jar (menu), then R at a cow, then attack to throw
+key menu
+wait 10
+slot item:headinajar:telekinesis
+slot 2
+wait 3
+shot c3c_menu_tk
+press escape
+wait 5
+inspect me
+/summon minecraft:cow 108.5 200 -32.5
+wait 10
+turn 180 0 5
+wait 5
+look 180 10
+wait 3
+shot c3c_cow_ahead
+observe 40
+key ability
+wait 40
+inspect near cow 8
+shot c3c_tk_holding
+key attack
+wait 40
+observe 20
+inspect near cow 30
+inspect me
+shot c3c_tk_thrown
+report == Telekinesis on a block: R at the floor
+look 180 60
+wait 3
+key ability
+wait 30
+inspect me
+shot c3c_tk_block
+key ability
+wait 30

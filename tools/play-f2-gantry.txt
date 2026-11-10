@@ -1,0 +1,59 @@
+# Department F, part 2: place and power the Gantry, then look inside. After play-f-mecha.txt crafting.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/gamerule doMobSpawning false
+report == carry the head along (the first try placed nothing: 40 m from the head every right-click said "PACKET LOSS")
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 35
+wait 5
+lookat head_jar
+hotbar 5
+wait 2
+key use
+wait 20
+inspect me
+report == attempt 37/38: place the Assembly Gantry in the yard with a Galvanic Pile touching it; feed the pile
+/tp @s 80.5 200 7.5 0 39
+wait 3
+key inventory
+wait 8
+slot item:headinajar:assembly_gantry
+slot inv:0
+slot item:headinajar:galvanic_pile
+slot inv:1
+slot item:rotten_flesh
+slot inv:2
+press escape
+wait 5
+hotbar 1
+wait 2
+key use
+wait 10
+/tp @s 81.5 200 7.5 0 39
+wait 3
+hotbar 2
+wait 2
+key use
+wait 10
+/tp @s 81.5 200 7.5 0 30
+hotbar 3
+wait 2
+key use
+wait 20
+/tick sprint 800
+wait 100
+/time set 1000
+inspect block 80 200 9
+inspect block 81 200 9
+report == attempt 39: open the Gantry (right-click), list what it shows
+/tp @s 80.5 200 7.5 0 39
+wait 3
+key use
+wait 15
+shot f_gantry_gui
+widgets
+slots
+press escape
+wait 5

@@ -1,0 +1,47 @@
+# Attempt 26 as it happened: a zombie killed the body during a night skipped with /tick sprint while crafting.
+# Now the jar (no body) next to the corpse near 102.5 200 -29.5. What can a jar do here?
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/gamerule doMobSpawning false
+/kill @e[type=minecraft:zombie]
+inspect me
+inspect near headless_body 30
+shot c4_jar_after_body_death
+report == 26a: as the jar, right-click the corpse
+lookat headless_body
+wait 3
+key use
+wait 25
+shot c4_jar_use_corpse
+report == 26b: the Jar menu: Courier ("no body"?)
+key menu
+wait 10
+shot c4_menu_no_body
+widget "Courier"
+wait 20
+press escape
+wait 5
+report == 26c: Let go (the last resort)
+key menu
+wait 10
+widget "Let go"
+wait 15
+shot c4_let_go_confirm
+widgets
+widget "No"
+wait 10
+closegui
+grab
+report == wait for the courier (700 ticks), then Swap
+/tick sprint 700
+wait 120
+/time set 1000
+inspect near headless_body 30
+inspect me
+key swap
+wait 30
+inspect me
+shot c4_after_courier_swap

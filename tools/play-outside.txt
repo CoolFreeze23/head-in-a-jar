@@ -1,0 +1,110 @@
+# The big moments seen from outside: the stand-in second player ("Bystander") does them while the real client watches.
+# Flat world, default profile. Each moment: mark the bystander's packet record, open a watch window on the real client
+# (hotbar 1 with a long observe: an input that changes nothing), cause it, then list what the bystander was sent.
+# Setup verbs used on purpose: bystander operate/form/fit/charge, hostify, gantry (these moments were done by real input
+# on the player's own side in the journey; here only the watcher's side is under test).
+@world flat
+@gamemode survival
+@observe 30
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+report camera: six blocks from the chair, 45 degrees toward the patient's left front (the chair faces north: north-west of it)
+/tp @s -3.74 -60 -0.74 -45 9
+/setblock 0 -60 3 headinajar:separation_chair
+wait 10
+bystander spawn 2 -60 2 90
+wait 20
+report == 1. the operation, done by the bystander, watched from 8 blocks
+bystander mark
+hud off
+observe 260
+frames chair_op_outside 260
+bystander operate 0 -60 3
+wait 60
+shot out_op_60
+wait 80
+shot out_op_140
+wait 110
+observe 30
+bystander state
+bystander packets sound|particle|actionbar|chat|payload|title
+hud on
+shot out_op_after
+/tp @s 0.5 -60 -5.5 0 12
+report == 2. a link break: the bystander's body is taken 80 blocks away; its head stays by the chair
+bystander mark
+observe 220
+hotbar 1
+bystander tp 0 -60 80
+wait 210
+observe 30
+bystander state
+bystander packets sound|particle|actionbar|chat|title
+shot out_link_broken
+report == 3. mounting a host: a sawn cow beside the head; the bystander (now a jar) right-clicks it
+hostify minecraft:cow 3 -60 1
+wait 10
+report the bystander has no client, so its link quality never drops (try 1: still linked after 210 ticks at 77 blocks); it swaps into its head by the real Swap key payload instead
+bystander tp 0 -60 0
+bystander key swap
+wait 20
+bystander state
+bystander tp 1.5 -60 1 -90 0
+wait 5
+look 30 15
+bystander mark
+bystander useentity nearest cow
+wait 40
+bystander state
+bystander packets sound|particle|actionbar|chat|title|payload
+shot out_host_mounted
+view 1
+wait 5
+shot out_host_third_person
+view 0
+report == 4. Telekinesis lifting and throwing a cow, by the bystander's jar
+bystander sneak on
+wait 5
+bystander sneak off
+wait 10
+bystander fit telekinesis,hop_springs
+bystander charge 100000
+/summon minecraft:cow 4.5 -60 -2.5 {NoAI:1b}
+bystander tp 4.5 -60 0.5 180 -5
+wait 10
+look 60 10
+bystander mark
+bystander key ability
+wait 30
+shot out_tk_holding
+bystander state
+bystander key throw
+wait 40
+bystander packets sound|particle|actionbar|payload
+inspect near cow 40
+shot out_tk_thrown
+report == 5. a mecha: the bystander assembles a Hopper at a stocked Gantry, then boards it
+/setblock -6 -60 3 headinajar:assembly_gantry
+gantry -6 -60 3 hopper
+bystander tp -4 -60 1 90 30
+wait 5
+look 60 10
+bystander mark
+bystander useblock -6 -60 3
+wait 10
+frames gantry_assemble_outside 80
+bystander button 1
+wait 60
+inspect near hopper 20
+shot out_mecha_assembled
+bystander useentity nearest hopper
+wait 40
+bystander state
+bystander packets sound|particle|actionbar|chat|title|payload
+shot out_mecha_boarded
+view 1
+wait 5
+shot out_mecha_third
+view 0

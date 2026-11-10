@@ -1,0 +1,63 @@
+# Department F, part 3: after play-f2-gantry.txt placed the Gantry at 81 200 9 (no pile yet). Carry the head, place a
+# pile touching the Gantry, feed it, load the frame and modules, press Assemble.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/gamerule doMobSpawning false
+report == pick up the head (empty hand: hotbar 2)
+/execute at @e[type=headinajar:head_jar,limit=1,sort=nearest] run tp @s ~ ~ ~-2 0 35
+wait 5
+lookat head_jar
+hotbar 2
+wait 2
+key use
+wait 20
+inspect me
+report == the pile on the Gantry's east side, fed with rotten flesh
+/tp @s 82.5 200 7.5 0 39
+wait 3
+hotbar 3
+wait 2
+key use
+wait 10
+/tp @s 82.5 200 7.5 0 28
+hotbar 1
+wait 2
+key use
+wait 20
+/tick sprint 800
+wait 100
+/time set 1000
+inspect block 81 200 9
+inspect block 82 200 9
+report == attempt 39: open the Gantry, frame into the top-left slot, shift-click the modules in
+/tp @s 81.5 200 7.5 0 39
+wait 3
+key use
+wait 15
+shot f3_gantry_empty
+slot inv:13
+slot 0
+wait 5
+shot f3_gantry_frame
+slot inv:25 shift
+slot inv:33 shift
+slot inv:34 shift
+wait 5
+slots
+mouse rel 88 20
+shot f3_gantry_loaded
+report == press Assemble
+observe 60
+widget "Assemble"
+wait 60
+observe 20
+shot f3_after_assemble
+slots
+press escape
+wait 5
+inspect near hopper 12
+inspect block 81 200 9
+shot f3_mecha_outside

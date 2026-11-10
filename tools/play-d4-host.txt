@@ -1,0 +1,50 @@
+# Department D, part 4 (attempts 33-34). After play-d3-host.txt: the jar riding the host cow at about 91.3 201.3 -24.5;
+# the body at 104.5 200 -27.0. Hotbar 3 neural lace, 7 body locker, 9 embalming fluid.
+@world survival
+@keep playtest
+@observe 20
+wait 60
+/time set 1000
+/weather clear
+inspect me
+report == get off the host: Sneak (the action bar said "Press Left Shift to Dismount")
+sneak
+wait 20
+inspect me
+report == Swap to the body, walk to the host
+key swap
+wait 30
+inspect me
+/tp @s 94.5 200 -24.5 90 20
+wait 5
+lookat cow
+report == attempt 33a: Embalming Fluid on the host (right-click)
+hotbar 9
+wait 2
+key use
+wait 25
+report == attempt 33b: Neural Lace on the host
+hotbar 3
+wait 2
+lookat cow
+key use
+wait 25
+report == attempt 33c: empty hand (Body Locker held) right-click on the host: status?
+hotbar 7
+wait 2
+lookat cow
+key use
+wait 25
+report == attempt 34: place the Body Locker on the floor beside the host, right-click it
+look 0 60
+wait 2
+key use
+wait 10
+key use
+wait 25
+inspect near cow 6
+shot d4_locker
+report == right-click the locker again
+key use
+wait 25
+inspect near cow 6
