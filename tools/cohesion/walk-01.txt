@@ -1507,18 +1507,15 @@ wait 3
 /clear @s
 riding RESET-P035
 
-# ---- P039: (empty) | BODY | block headinajar:body_locker | empty locker, a host within 3 blocks
-report PAIR P039 begin spot 48 24 expect BODY aim block:48,-60,26 | (empty) | BODY | block headinajar:body_locker | empty locker, a host within 3 blocks
-/say PAIR P039
+# ---- P036: (empty) | BODY | block headinajar:jarred_head | placed jarred VILLAGER head
+report PAIR P036 begin spot 48 24 expect BODY aim block:48,-60,26 | (empty) | BODY | block headinajar:jarred_head | placed jarred VILLAGER head
+/say PAIR P036
 /kill @e[type=minecraft:slime]
 /tp @s 48.5 -60 24.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/setblock 48 -60 26 headinajar:body_locker
-hostify minecraft:pig 50 -60 26
-wait 5
-/data merge entity @e[type=minecraft:pig,x=50.5,y=-60,z=26.5,distance=..1.5,limit=1] {NoAI:1b}
+/setblock 48 -60 26 headinajar:jarred_head[facing=north]{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}}
 /clear @s
 wait 5
 /tp @s 48.5 -60 24.5 0 29.2
@@ -1528,18 +1525,18 @@ wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
-riding PRE-P039
+riding PRE-P036
 inspect me
 inspect aim
 inspect block 48 -60 26
-report PAIR P039 act key use
+report PAIR P036 act key use
 key use
 wait 12
-shot cw-P039
+shot cw-P036
 wait 17
 inspect me
 inspect block 48 -60 26
-report PAIR P039 end
+report PAIR P036 end
 /kill @s
 wait 15
 /kill @e[type=!minecraft:player,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
@@ -1548,17 +1545,17 @@ wait 15
 wait 3
 /kill @e[type=minecraft:item,x=42,y=-62,z=18,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P039
+riding RESET-P036
 
-# ---- P040: (empty) | BODY | block headinajar:body_locker | empty locker, no host nearby
-report PAIR P040 begin spot -72 48 expect BODY aim block:-72,-60,50 | (empty) | BODY | block headinajar:body_locker | empty locker, no host nearby
-/say PAIR P040
+# ---- P037: (empty) | BODY | block headinajar:jarred_head | placed jarred zombie (non-villager) head
+report PAIR P037 begin spot -72 48 expect BODY aim block:-72,-60,50 | (empty) | BODY | block headinajar:jarred_head | placed jarred zombie (non-villager) head
+/say PAIR P037
 /kill @e[type=minecraft:slime]
 /tp @s -71.5 -60 48.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/setblock -72 -60 50 headinajar:body_locker
+/setblock -72 -60 50 headinajar:jarred_head[facing=north]{Type:"minecraft:zombie",Entity:{}}
 /clear @s
 wait 5
 /tp @s -71.5 -60 48.5 0 29.2
@@ -1568,18 +1565,18 @@ wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
-riding PRE-P040
+riding PRE-P037
 inspect me
 inspect aim
 inspect block -72 -60 50
-report PAIR P040 act key use
+report PAIR P037 act key use
 key use
 wait 12
-shot cw-P040
+shot cw-P037
 wait 17
 inspect me
 inspect block -72 -60 50
-report PAIR P040 end
+report PAIR P037 end
 /kill @s
 wait 15
 /kill @e[type=!minecraft:player,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
@@ -1588,44 +1585,41 @@ wait 15
 wait 3
 /kill @e[type=minecraft:item,x=-78,y=-62,z=42,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P040
+riding RESET-P037
 
-# ---- P041: (empty) | BODY | block headinajar:body_locker | locker holding a host
-report PAIR P041 begin spot -48 48 expect BODY aim block:-48,-60,50 | (empty) | BODY | block headinajar:body_locker | locker holding a host
-/say PAIR P041
+# ---- P038: (empty) | JAR (no arm) | block headinajar:jarred_head | jarred villager head placed
+report PAIR P038 begin spot -48 48 expect JAR aim block:-48,-60,50 | (empty) | JAR (no arm) | block headinajar:jarred_head | jarred villager head placed
+/say PAIR P038
 /kill @e[type=minecraft:slime]
 /tp @s -47.5 -60 48.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/setblock -48 -60 50 headinajar:body_locker
-hostify minecraft:pig -46 -60 50
-wait 5
-/data merge entity @e[type=minecraft:pig,x=-45.5,y=-60,z=50.5,distance=..1.5,limit=1] {NoAI:1b}
+/setblock -48 -60 50 headinajar:jarred_head[facing=north]{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}}
 /clear @s
 wait 5
-/tp @s -47.5 -60 48.5 0 29.2
+/tp @s -44.5 -60 48.5 0 0
+jar
+wait 5
+/tp @s -47.5 -60 48.5 0 0
 wait 3
 lookpos -47.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
-key use
-wait 33
-/item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
-riding PRE-P041
+riding PRE-P038
 inspect me
 inspect aim
 inspect block -48 -60 50
-report PAIR P041 act key use
+report PAIR P038 act key use
 key use
 wait 12
-shot cw-P041
+shot cw-P038
 wait 17
 inspect me
 inspect block -48 -60 50
-report PAIR P041 end
+report PAIR P038 end
 /kill @s
 wait 15
 /kill @e[type=!minecraft:player,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
@@ -1634,41 +1628,41 @@ wait 15
 wait 3
 /kill @e[type=minecraft:item,x=-54,y=-62,z=42,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P041
+riding RESET-P038
 
-# ---- P043: (empty) | JAR (no arm) | block headinajar:body_locker | bare jar
-report PAIR P043 begin spot -24 48 expect JAR aim block:-24,-60,50 | (empty) | JAR (no arm) | block headinajar:body_locker | bare jar
-/say PAIR P043
+# ---- P039: (empty) | BODY | block headinajar:body_locker | empty locker, a host within 3 blocks
+report PAIR P039 begin spot -24 48 expect BODY aim block:-24,-60,50 | (empty) | BODY | block headinajar:body_locker | empty locker, a host within 3 blocks
+/say PAIR P039
 /kill @e[type=minecraft:slime]
 /tp @s -23.5 -60 48.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
 /setblock -24 -60 50 headinajar:body_locker
+hostify minecraft:pig -22 -60 50
+wait 5
+/data merge entity @e[type=minecraft:pig,x=-21.5,y=-60,z=50.5,distance=..1.5,limit=1] {NoAI:1b}
 /clear @s
 wait 5
-/tp @s -20.5 -60 48.5 0 0
-jar
-wait 5
-/tp @s -23.5 -60 48.5 0 0
+/tp @s -23.5 -60 48.5 0 29.2
 wait 3
 lookpos -23.5 -59.85 50.5
 wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
-riding PRE-P043
+riding PRE-P039
 inspect me
 inspect aim
 inspect block -24 -60 50
-report PAIR P043 act key use
+report PAIR P039 act key use
 key use
 wait 12
-shot cw-P043
+shot cw-P039
 wait 17
 inspect me
 inspect block -24 -60 50
-report PAIR P043 end
+report PAIR P039 end
 /kill @s
 wait 15
 /kill @e[type=!minecraft:player,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
@@ -1677,18 +1671,17 @@ wait 15
 wait 3
 /kill @e[type=minecraft:item,x=-30,y=-62,z=42,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P043
+riding RESET-P039
 
-# ---- P044: (empty) | any | block headinajar:leech_jar | leech jar with samples
-report PAIR P044 begin spot 0 48 expect BODY aim block:0,-60,50 | (empty) | any | block headinajar:leech_jar | leech jar with samples
-/say PAIR P044
+# ---- P040: (empty) | BODY | block headinajar:body_locker | empty locker, no host nearby
+report PAIR P040 begin spot 0 48 expect BODY aim block:0,-60,50 | (empty) | BODY | block headinajar:body_locker | empty locker, no host nearby
+/say PAIR P040
 /kill @e[type=minecraft:slime]
 /tp @s 0.5 -60 48.5 0 0
 /effect give @s minecraft:resistance 999 4 true
 /effect give @s minecraft:saturation 999 0 true
 wait 5
-/setblock 0 -60 50 headinajar:leech_jar
-/data merge block 0 -60 50 {Items:{Items:[{Slot:0,id:"headinajar:blood_sample",count:1}]}}
+/setblock 0 -60 50 headinajar:body_locker
 /clear @s
 wait 5
 /tp @s 0.5 -60 48.5 0 29.2
@@ -1698,18 +1691,18 @@ wait 10
 /item replace entity @s weapon.mainhand with minecraft:air
 /item replace entity @s weapon.offhand with minecraft:air
 wait 10
-riding PRE-P044
+riding PRE-P040
 inspect me
 inspect aim
 inspect block 0 -60 50
-report PAIR P044 act key use
+report PAIR P040 act key use
 key use
 wait 12
-shot cw-P044
+shot cw-P040
 wait 17
 inspect me
 inspect block 0 -60 50
-report PAIR P044 end
+report PAIR P040 end
 /kill @s
 wait 15
 /kill @e[type=!minecraft:player,x=-6,y=-62,z=42,dx=18,dy=14,dz=18]
@@ -1718,6 +1711,6 @@ wait 15
 wait 3
 /kill @e[type=minecraft:item,x=-6,y=-62,z=42,dx=18,dy=14,dz=18]
 /clear @s
-riding RESET-P044
+riding RESET-P040
 
 report WALK walk-01 done

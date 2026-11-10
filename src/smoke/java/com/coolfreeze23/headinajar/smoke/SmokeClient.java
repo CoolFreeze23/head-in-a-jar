@@ -61,7 +61,7 @@ public class SmokeClient {
     private static final String WORLD = "smoke";
 
     private final Deque<String> script = new ArrayDeque<>();
-    private final List<String> report = new ArrayList<>();
+    private final List<String> report = java.util.Collections.synchronizedList(new ArrayList<>());
     private final Observer observer = new Observer(report);
     private final Harness harness = new Harness(report, observer);
     private final Frames frames = new Frames(report);
@@ -185,7 +185,12 @@ public class SmokeClient {
                 // the report so far, every 10 lines, so a crash part-way keeps what came before it
                 if (++linesRun % 10 == 0 && dir != null) {
                     try {
-                        Files.write(dir.resolve("report.txt"), report);
+                        // the server thread adds lines too: write a copy taken while holding the list
+                        List<String> copy;
+                        synchronized (report) {
+                            copy = new ArrayList<>(report);
+                        }
+                        Files.write(dir.resolve("report.txt"), copy);
                     } catch (IOException | RuntimeException e) {
                         LOGGER.error("SMOKE: partial report", e);
                     }
