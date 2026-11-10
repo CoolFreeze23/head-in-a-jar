@@ -139,26 +139,29 @@ def top(cube, side='up'):
 
 # ------------------------------------------------------------------------------------------ shared recipes
 
-def shade_block(cube, mat, hi, mid, lo, glint=None, sides=('east', 'north', 'west', 'south')):
-    """Small parts: top row hi, bottom row lo, the rest mid; on faces 2+ px wide the left column is hi down to the
-    bottom row (light from the top left), and one glint pixel at the top-left corner of the north and west faces."""
+SIDES = ('east', 'north', 'west', 'south')
+
+
+def block(cube, mat, field, hi, lo, glint=None, sides=SIDES):
+    """Small parts: the top row one step lit, the bottom row and (on faces 3+ px wide) the right column dark, the field
+    between; one glint pixel at the top-left of the north and west faces when they are 3+ px wide. No lit patches."""
     for f in faces(cube, sides):
         for r in range(f.H):
             for c in range(f.W):
-                k = mid
-                if r == 0:
-                    k = hi
-                elif r == f.H - 1 and f.H > 1:
+                k = field
+                if f.H > 1 and r == f.H - 1:
                     k = lo
-                elif c == 0 and f.W > 1:
+                elif f.W >= 3 and c == f.W - 1:
+                    k = lo
+                elif r == 0:
                     k = hi
                 f.put(c, r, mat + str(k))
-        if glint is not None and f.side in ('north', 'west') and f.W > 1:
+        if glint is not None and f.side in ('north', 'west') and f.W >= 3:
             f.put(0, 0, mat + str(glint))
 
 
 def shade_top(cube, mat, field, nw, se, glint=None):
-    """An up face: field, the north and west edges one step up, the south and east edges one step down."""
+    """An up face: field, the north and west edges one step up, the south and east edges darker."""
     put, xs, zs = top(cube)
     for x in xs:
         for z in zs:
@@ -170,8 +173,6 @@ def shade_top(cube, mat, field, nw, se, glint=None):
             put(x, z, mat + str(k))
     if glint is not None:
         put(xs[0], zs[0], mat + str(glint))
-        if len(xs) > 2:
-            put(xs[1], zs[0], mat + str(glint))
 
 
 def plain(cube, key, sides=('down',)):
@@ -179,19 +180,50 @@ def plain(cube, key, sides=('down',)):
         f.fill(key)
 
 
+def brass(cube, sides=SIDES, top_too=True, down='b1'):
+    """The house brass recipe (style guide 1.4): field b3, lit top row b4, a 1 px b1 rim along the bottom and right,
+    on faces 6+ px wide one diagonal polish band (2 px, b4) with b5 at its upper end."""
+    for f in faces(cube, sides):
+        for r in range(f.H):
+            for c in range(f.W):
+                k = 'b3'
+                dark = 'b1' if f.H >= 3 else 'b2'   # on 1-2 px faces a b1 row would split the part in half
+                if f.H > 1 and r == f.H - 1:
+                    k = dark
+                elif f.W >= 3 and c == f.W - 1:
+                    k = dark if f.H > 1 else 'b2'
+                elif r == 0:
+                    k = 'b5' if f.H > 1 else 'b3'
+                f.put(c, r, k)
+        if f.W >= 6:
+            c0 = 2
+            if f.H == 1:
+                f.put(c0, 0, 'b5')
+                f.put(c0 + 1, 0, 'b4')
+            else:
+                for r in range(f.H - 1):
+                    f.put(c0 + (f.H - 2 - r), r, 'b4')
+                    f.put(c0 + (f.H - 2 - r) + 1, r, 'b4')
+                f.put(c0 + f.H - 2, 0, 'b5')
+        elif f.side in ('north', 'west') and f.W >= 2:
+            f.put(0, 0, 'b5')
+    if top_too:
+        shade_top(cube, 'b', 3, 5, 1)
+    plain(cube, down)
+
+
 def brushed_column(f, light, dark, streaks=(), bands=()):
-    """Tall 2 px faces (mast, rails, rods): column 0 `light`, column 1 `dark`; streaks are (col, r0, r1, key) runs of
-    an adjacent step; bands are (r0, key0, key1) from that row down (darkening toward the foot)."""
+    """Tall 2 px faces (mast, rails, rods): one field tone across the face (a lit-left/dark-right column pair was
+    tried and read as pinstripes once the four faces sat side by side); streaks are (col, r0, r1, key) runs of an
+    adjacent step, 3-8 px long; bands are (r0, key0, key1) from that row down (darkening toward the foot; key1 is
+    kept for the call signature and ignored)."""
     for r in range(f.H):
         k0, k1 = light, dark
         for b in bands:
             if r >= b[0]:
                 k0, k1 = b[1], b[2]
-        f.put(0, r, k0)
-        if f.W > 1:
-            f.put(1, r, k1)
-        for c in range(2, f.W):
-            f.put(c, r, k1)
+        for c in range(f.W):
+            f.put(c, r, k0)
     for c, r0, r1, k in streaks:
         for r in range(r0, r1):
             f.put(c, r, k)
@@ -202,50 +234,45 @@ def brushed_column(f, light, dark, streaks=(), bands=()):
 def paint_base():
     # rubber feet: matte, the top step only along the upper edge
     for n in ('foot_fl', 'foot_fr', 'foot_bl', 'foot_br'):
-        for f in faces(n, ('east', 'north', 'west', 'south')):
+        for f in faces(n, SIDES):
             f.fill('r1')
         plain(n, 'r2', ('up',))
         plain(n, 'r0', ('down',))
 
-    # plinth: brushed steel slab; the 1 px edge lit at its left end, dark at its right; top lit on the north and west
-    for f in faces('plinth', ('east', 'north', 'west', 'south')):
-        f.fill('s3')
-        f.put(0, 0, 's4')
-        f.put(1, 0, 's4')
-        f.put(f.W - 1, 0, 's2')
+    # plinth: company steel (darker and bluer than iron); the 1 px edge lit at its left end, dark at its right
+    for f in faces('plinth', SIDES):
+        f.fill('s2')
+        f.put(0, 0, 's3')
+        f.put(1, 0, 's3')
+        f.put(f.W - 1, 0, 's1')
     put, xs, zs = top('plinth')
     for x in xs:
         for z in zs:
-            k = 's3'
+            k = 's2'
             if z == -7 or x == -7:
-                k = 's4'
+                k = 's3'
             if z == 6 or x == 6:
-                k = 's2'
+                k = 's1'
             put(x, z, k)
-    for x in range(-5, 0):          # one long streak along the front margin (brushed along x)
-        put(x, -6, 's4')
-    for z in range(-4, 1):          # and along the left margin (brushed along z)
-        put(-6, z, 's4')
-    plain('plinth', 's1')
+    for x in range(-5, 0):          # brushed streaks along the exposed margins
+        put(x, -6, 's3')
+    for z in range(-4, 1):
+        put(-6, z, 's3')
+    for (x, z) in ((-6, -6), (4, -6)):     # a pair of rivets at the front corners: lit head, shadow below-right
+        put(x, z, 's4')
+        put(x + 1, z + 1, 's1')
+    plain('plinth', 's0')
 
-    # pedestal: in shadow under the seat
-    for f in faces('pedestal'):
+    for f in faces('pedestal'):     # in shadow under the seat
         f.fill('s1')
-    for f in faces('pedestal', ('north', 'west')):
-        f.put(0, 0, 's2')
 
-    # seat trim: a brass band; polish on its left third, darker toward the right end
-    for f in faces('seat_trim', ('east', 'north', 'west', 'south')):
-        f.fill('b4')
-        f.put(1, 0, 'b5')
-        f.put(2, 0, 'b5')
-        f.put(f.W - 2, 0, 'b3')
-        f.put(f.W - 1, 0, 'b2')
-    plain('seat_trim', 'b2', ('down', 'up'))
+    # seat trim: a 1 px brass band
+    brass('seat_trim')
+    plain('seat_trim', 'b1', ('up',))
 
     # seat cushion: rubber-black vinyl in three channels running front to back, piped along the front edge
     put, xs, zs = top('seat')
-    seams = (-3, 2)                 # seam columns (x); the channel to the right of each seam is lit on its left
+    seams = (-3, 2)
     for x in xs:
         for z in zs:
             k = 'r2'
@@ -254,11 +281,11 @@ def paint_base():
             elif x - 1 in seams or x == -7:
                 k = 'r3'
             if z == -7:
-                k = 'r3'            # piping along the front
+                k = 'r3'
             if z == 1:
-                k = 'r1'            # tucked under the backrest
+                k = 'r1'
             put(x, z, k)
-    for f in faces('seat', ('east', 'north', 'west', 'south')):
+    for f in faces('seat', SIDES):
         f.row(0, 'r3')
         f.row(1, 'r2')
         f.put(f.W - 1, 1, 'r1')
@@ -266,209 +293,178 @@ def paint_base():
 
     # footrest: a ribbed rubber footplate, ribs across the foot, stopping 1 px short of the ends
     put, xs, zs = top('footrest')
-    prof = {-8: 'r2', -9: 'r1', -10: 'r3', -11: 'r1', -12: 'r3'}   # back (in the seat's shadow) to the front nosing
+    prof = {-8: 'r2', -9: 'r1', -10: 'r3', -11: 'r1', -12: 'r3'}
     for x in xs:
         for z in zs:
             k = prof[z]
-            if x in (-7, 6) and z not in (-12,):
+            if x in (-7, 6) and z != -12:
                 k = 'r2'
             put(x, z, k)
-    for f in faces('footrest', ('east', 'north', 'west', 'south')):
+    for f in faces('footrest', SIDES):
         f.fill('r2')
         f.put(0, 0, 'r3')
         f.put(f.W - 1, 0, 'r1')
     plain('footrest', 'r0')
 
-    for f in faces('footrest_strut', ('east', 'north', 'west', 'south')):
-        f.rows(['s3 s3 s3 s2', 's2 s1 s1 s1'])
+    block('footrest_strut', 's', 2, 3, 1)
     plain('footrest_strut', 's2', ('up',))
     plain('footrest_strut', 's1')
 
 
 def paint_backrest():
-    # front: an enamel shell framing a channel-tufted ivory pad (three channels, rounded, lit from the left)
-    f = Face('backrest', 'north')          # 14 x 12, col 0 at the patient's right (+X)
-    chan = ['e4', 'e3', 'e3', 'e2']         # one channel across: lit left lip, field, shadowed right lip
-    low = ['e3', 'e3', 'e2', 'e1']          # the lower band, a step darker (faces darken downward)
+    # front: an ivory enamel shell holding a black tuck-and-roll pad (horizontal rolls: lit top line, body, groove),
+    # set in: the pad's left column one step into shadow
+    f = Face('backrest', 'north')           # 14 x 12, col 0 at the patient's right (+X)
+    roll = {0: 'r3', 1: 'r2', 2: 'r1'}   # a lit roll top, the roll, its shadow seam
     for r in range(12):
         for c in range(14):
             if r == 0:
                 k = 'e4'
             elif r == 11:
-                k = 'e2'
+                k = 'e1'
             elif c == 0:
                 k = 'e4'
             elif c == 13:
                 k = 'e2'
-            elif r == 1:
-                k = 'e2'                    # recessed: the pad's top row in the frame's shadow
+            elif r in (1, 10):
+                k = 'r1'                    # the pad tucked into the frame at top and bottom
             else:
-                k = (chan if r < 7 else low)[(c - 1) % 4]
-                if r == 10:
-                    k = 'e2' if k != 'e2' else 'e1'   # the tuck at the foot of the pad
+                k = roll[(r - 2) % 3]
             f.put(c, r, k)
     f.put(0, 0, 'e5')
     f.put(1, 0, 'e5')
-    f.put(1, 2, 'e5')                       # one glint on the first channel's lit lip
 
-    # back: the enamel shell with the maker's plate (Noggin & Sons, monogram N.S)
+    # back: the enamel shell (house casing: lit top and left, dark bottom and right) with the maker's plate
     b = Face('backrest', 'south')           # 14 x 12, col 0 at -X; the blade spine covers cols 6-7, rows 0-3
     for r in range(12):
         for c in range(14):
             k = 'e3'
             if r == 0 or c == 0:
                 k = 'e4'
-            if r == 11 or c == 13:
+            if c == 13:
                 k = 'e2'
+            if r == 11:
+                k = 'e1'
             b.put(c, r, k)
     b.put(0, 0, 'e5')
-    # the plate: brass rim (lit top and left), black enamel field, cream monogram "N.S" (Noggin & Sons; an
-    # ampersand cannot be drawn in the 1 px between the letters at 16 px to a block, so it is a brass interpunct).
-    # The plate's top rim runs under the blade spine (cols 6-7), as if the spine bracket were bolted through it.
-    for r in range(3, 12):
+    b.put(1, 0, 'e5')
+    # Noggin & Sons plate: 10 x 5 brass, set in an e1 seam, two rivets, two engraved lines (the name and the small
+    # print). Letters were tried at 3x5 and read as a pixel-font sticker; at 16 px to a block a plate says "maker's
+    # plate" by its shape, and the name goes in the tooltip.
+    for r in range(4, 11):
         for c in range(1, 13):
-            if r == 3 or c == 1:
-                k = 'b4'
-            elif r == 11 or c == 12:
-                k = 'b1'
-            else:
-                k = 'r1'
+            b.put(c, r, 'e1' if (r == 10 or c == 12) else 'e4')      # a lit panel the plate sits on
+    for r in range(5, 10):
+        for c in range(2, 12):
+            k = 'b3'
+            if r == 9 or c == 11:
+                k = 'b0'
+            elif r == 5 or c == 2:
+                k = 'b5'
             b.put(c, r, k)
-    b.put(1, 3, 'b5')
-    b.put(2, 3, 'b5')
-    b.put(12, 3, 'b3')
-    b.put(1, 11, 'b2')
-    N = ['x..x', 'xx.x', 'x.xx', 'x..x', 'x..x']
-    S = ['xxx', 'x..', 'xxx', '..x', 'xxx']
-    for r in range(5):
-        for c in range(4):
-            if N[r][c] == 'x':
-                b.put(2 + c, 5 + r, 'e5' if r < 3 else 'e4')
-        for c in range(3):
-            if S[r][c] == 'x':
-                b.put(9 + c, 5 + r, 'e5' if r < 3 else 'e4')
-    b.put(7, 9, 'b4')                      # the interpunct, on the baseline
-    # the field's own shading: its top row in the rim's shadow
-    for c in range(2, 12):
-        if PX[b.x0 + c, b.y0 + 4][:3] == rgba('r1')[:3]:
-            b.put(c, 4, 'r0')
+    b.put(2, 9, 'b1')
+    b.put(11, 5, 'b1')
+    for c in (3, 10):                       # rivets: lit head, its shadow below-right (T18)
+        b.put(c, 6, 'b5')
+    b.put(4, 7, 'b1')
+    b.put(10, 7, 'b1')
+    for c in range(5, 9):
+        b.put(c, 7, 'b1')                   # the name, engraved
+    for c in range(6, 9):
+        b.put(c, 8, 'b2')                   # the small print
 
-    # sides: enamel, three bands darkening downward, lit front edge
+    # sides: enamel, three bands darkening downward
     for side in ('east', 'west'):
         s = Face('backrest', side)          # 3 x 12
         for r in range(12):
             band = 'e4' if r < 4 else ('e3' if r < 9 else 'e2')
             for c in range(3):
                 s.put(c, r, band)
-        s.put(0, 0, 'e5')
-        s.col(0 if side == 'west' else 2, 'e4', 4, 9)   # the front edge (toward -Z) one step up in the middle band
+        s.put(0 if side == 'west' else 2, 0, 'e5')
         s.row(11, 'e1')
     plain('backrest', 'e3', ('up',))
     plain('backrest', 'e1')
 
     # brass cap along the top of the backrest
+    brass('backrest_cap', top_too=False)
     put, xs, zs = top('backrest_cap')
     for x in xs:
         for z in zs:
-            put(x, z, {2: 'b5', 3: 'b4', 4: 'b3'}[z])
-    for (x, z) in ((-5, 3), (-4, 3), (-6, 4), (-5, 4)):
-        put(x, z, 'b5')                      # one short diagonal polish band near the left end
-    put(6, 2, 'b4')
-    put(6, 3, 'b3')
-    put(6, 4, 'b2')
-    for f in faces('backrest_cap', ('east', 'north', 'west', 'south')):
-        f.fill('b3')
-        f.put(0, 0, 'b5')
-        f.put(1, 0, 'b4')
-        f.put(2, 0, 'b4')
-        f.put(f.W - 1, 0, 'b2')
-    plain('backrest_cap', 'b1')
+            put(x, z, {2: 'b4', 3: 'b3', 4: 'b1'}[z])
+    put(6, 2, 'b2')
+    put(6, 3, 'b1')
+    for (x, z, k) in ((-4, 2, 'b5'), (-3, 2, 'b5'), (-5, 3, 'b4'), (-4, 3, 'b4')):
+        put(x, z, k)                        # one short diagonal polish band near the left end
 
     # the spine behind the backrest (carries the blade hub)
-    for f in faces('spine', ('east', 'north', 'west', 'south')):
-        brushed_column(f, 's4', 's3', bands=((3, 's3', 's2'),))
-    shade_top('spine', 's', 3, 4, 2)
+    for f in faces('spine', SIDES):
+        brushed_column(f, 's3', 's3', bands=((3, 's2', 's2'),))
+        f.row(0, 's4')
+    shade_top('spine', 's', 2, 3, 1)
     plain('spine', 's1')
 
 
 def paint_mast():
-    # brass foot and bracket
-    shade_block('mast_foot', 'b', 5, 4, 2)
-    shade_top('mast_foot', 'b', 4, 5, 3, glint=5)
-    plain('mast_foot', 'b1')
-    for n in ('mast_bracket', 'post_bracket', 'rail_cap'):
-        shade_block(n, 'b', 5, 4, 2)
-        shade_top(n, 'b', 4, 5, 3)
-        plain(n, 'b1')
+    for n in ('mast_foot', 'mast_bracket', 'post_bracket', 'rail_cap'):
+        brass(n)
 
-    # the fixed mast: brushed steel, 27 px, three bands darkening toward the foot, placed streaks
-    for f in faces('mast', ('east', 'north', 'west', 'south')):
-        brushed_column(f, 's4', 's3',
-                       streaks=((1, 3, 8, 's4'), (0, 12, 16, 's3'), (1, 17, 21, 's2')),
-                       bands=((10, 's4', 's3'), (22, 's3', 's2')))
-        f.put(0, 0, 's5')
+    # the fixed mast: company steel, 27 px; lit left column, dark right column, placed streaks, darkening downward
+    for f in faces('mast', SIDES):
+        brushed_column(f, 's3', 's3',
+                       streaks=((0, 3, 9, 's4'), (1, 11, 16, 's2'), (0, 17, 21, 's2')),
+                       bands=((22, 's2', 's2'),))
+        f.row(0, 's4')
         f.row(f.H - 1, 's1')
-    shade_top('mast', 's', 4, 5, 3)
+    shade_top('mast', 's', 3, 4, 2)
     plain('mast', 's1')
 
-    # the sliding rail: the same steel with a rack (a dark notch every third row on the right column)
-    for f in faces('lift_rail', ('east', 'north', 'west', 'south')):
-        brushed_column(f, 's4', 's3', bands=((9, 's3', 's2'),))
+    # the sliding rail: the same steel; on its front and back a rack set in a channel (right column): a steel.1
+    # floor with a lit tooth every third row
+    for f in faces('lift_rail', SIDES):
+        brushed_column(f, 's3', 's3', streaks=((0, 2, 6, 's4'),), bands=((9, 's2', 's2'),))
+        f.row(0, 's4')
         if f.side in ('north', 'south'):
-            for r in range(1, f.H - 1, 3):
-                f.put(1, r, 's1')
-        f.put(0, 0, 's5')
-    shade_top('lift_rail', 's', 4, 5, 3)
+            for r in range(1, f.H):
+                f.put(1, r, 's3' if r % 3 == 1 else 's1')
+    shade_top('lift_rail', 's', 3, 4, 2)
     plain('lift_rail', 's1')
 
-    # pivot pin: a steel boss
-    for f in faces('pivot_pin', ('east', 'north', 'west', 'south')):
-        f.rows(['s4 s3', 's3 s1'])
-    shade_top('pivot_pin', 's', 4, 5, 3)
+    for f in faces('pivot_pin', SIDES):
+        f.rows(['s3 s2', 's2 s1'])
+    shade_top('pivot_pin', 's', 3, 4, 2)
     plain('pivot_pin', 's1')
 
 
 def paint_hood():
-    # beam: ivory enamel
-    shade_block('beam', 'e', 4, 3, 2, glint=5)
+    block('beam', 'e', 3, 4, 1, glint=5)
     shade_top('beam', 'e', 4, 5, 3)
     plain('beam', 'e1')
 
-    # the dryer dome. Sides: a lit bevel, the enamel field, a polished steel rim along the bottom (a 1950s dryer's
-    # chrome band). The front carries the maker's badge, the one brass thing on the hood's face.
-    for side in ('east', 'north', 'west', 'south'):
-        f = Face('dome', side)              # 12 x 3
-        f.row(0, 'e4')
+    # the dryer dome: one pressed enamel shell. Each side is a single plane with one feature, a row of vents, and a
+    # seam under the brim. (Bands, a chrome row and a front badge were tried; together they read as brickwork.)
+    for side in SIDES:
+        f = Face('dome', side)              # 12 x 3: one enamel plane, a vent row, a seam under the brim
+        f.row(0, 'e3')
         f.row(1, 'e3')
-        f.row(2, 's3')
-        f.put(f.W - 1, 1, 'e2')
-        f.put(f.W - 1, 2, 's2')
-        if side in ('north', 'west'):
-            f.put(0, 0, 'e5')
-            f.put(1, 0, 'e5')
-            for c in range(0, 4):
-                f.put(c, 2, 's4')
-            f.put(1, 2, 's5')
-        if side == 'north':
-            # the badge: a 4 x 2 brass plate over the band, lit top-left, shadowed bottom-right
-            f.put(4, 0, 'e3')               # the badge's shadow on the bevel above it
-            f.rows(['-', '- - - - b5 b4 b4 b3', '- - - - b4 b3 b3 b2'])
+        f.row(2, 'e1')
+        f.put(0, 0, 'e4')
+        f.put(1, 0, 'e4')
+        for c0 in (2, 5, 8):                # three 2 px vent slots
+            f.put(c0, 1, 'e0')
+            f.put(c0 + 1, 1, 'e0')
     put, xs, zs = top('dome')
     for x in xs:
         for z in zs:
             k = 'e4'
             if z == -6 or x == -6:
-                k = 'e5' if (z == -6 and x < -2) or (x == -6 and z < -2) else 'e4'
+                k = 'e5'
             if z == 5 or x == 5:
                 k = 'e3'
             put(x, z, k)
     put, xs, zs = top('dome', 'down')
     for x in xs:
         for z in zs:
-            k = 'r2'
-            if z in (-6, 5) or x in (-6, 5):
-                k = 'e1'
-            put(x, z, k)
+            put(x, z, 'e1' if (z in (-6, 5) or x in (-6, 5)) else 'r2')
     for x in range(-1, 1):                  # four radial vent slots in the hood's throat
         for z in (-5, -4, 3, 4):
             put(x, z, 'r0')
@@ -476,62 +472,51 @@ def paint_hood():
         for x in (-5, -4, 3, 4):
             put(x, z, 'r0')
 
-    # the brass cap: rim lit north and west, dark south and east, one hard polish band (b5 then b4) across the
-    # upper-left, a steel terminal in the middle (where the handshake sparks come from)
+    # the brass cap: the brass recipe, one diagonal polish band, a steel terminal (sparks) in a b1 ring
+    brass('dome_cap', top_too=False)
     put, xs, zs = top('dome_cap')
     for x in xs:
         for z in zs:
-            k = 'b4'
+            k = 'b3'
             if z == -4 or x == -4:
                 k = 'b5'
             if z == 3 or x == 3:
-                k = 'b2'
+                k = 'b1'
             put(x, z, k)
-    for x in xs:
-        for z in zs:
-            s_ = x + z
-            if s_ in (-5, -4) and -4 < x < 3 and -4 < z < 3:
-                put(x, z, 'b5')
-            if s_ == -3 and -4 < x < 3 and -4 < z < 3:
-                put(x, z, 'b3')
-    put(-4, -4, 'b5')
-    put(3, -4, 'b3')
-    put(-4, 3, 'b3')
-    for (x, z, k) in ((-1, -1, 's4'), (0, -1, 's3'), (-1, 0, 's3'), (0, 0, 's1')):
-        put(x, z, k)
-    for f in faces('dome_cap', ('east', 'north', 'west', 'south')):
-        f.fill('b4')
-        f.put(0, 0, 'b5')
-        f.put(1, 0, 'b5' if f.side in ('north', 'west') else 'b4')
-        f.put(f.W - 2, 0, 'b3')
-        f.put(f.W - 1, 0, 'b2')
-    plain('dome_cap', 'b1')
+    for (x, z) in ((-3, 0), (-2, -1), (-1, -2), (0, -3), (-3, 1), (-2, 0), (-1, -1), (0, -2), (1, -3)):
+        put(x, z, 'b4')                     # the polish band, 2 px wide, across the upper left
+    put(0, 0, 's4')                         # the spark terminal: a small steel boss
+    put(1, 0, 's3')
+    put(0, 1, 's3')
+    put(1, 1, 's1')
 
-    # rods behind the head
+    # rods behind the head: lit left column, dark right column
     for n in ('rod_l', 'rod_r'):
-        for f in faces(n, ('east', 'north', 'west', 'south')):
-            brushed_column(f, 's4', 's3', bands=((5, 's3', 's2'),))
-            f.put(0, 0, 's5')
+        for f in faces(n, SIDES):
+            brushed_column(f, 's3', 's3', streaks=((0, 1, 4, 's4'),), bands=((6, 's2', 's2'),))
+            f.row(0, 's4')
+            f.row(f.H - 1, 's1')
         shade_top(n, 's', 3, 4, 2)
         plain(n, 's1')
 
-    # the scan ring: teal glass, opaque frame; top lightest, outer faces with a short shine, inner faces darker
+    # the scan ring: teal glass, opaque frame. Top lightest, bottom darkest; outer faces body t2 with two short
+    # shine streaks at opposite ends; inner faces one step darker
     ring = {'ring_f': 'north', 'ring_b': 'south', 'ring_l': 'west', 'ring_r': 'east'}
     for n, outer in ring.items():
-        for f in faces(n, ('east', 'north', 'west', 'south')):
+        for f in faces(n, SIDES):
             if f.W * f.H == 1:
                 f.fill('t3')
                 continue
             if f.side == outer:
-                f.fill('t3')
-                for c in range(1, 4):
-                    f.put(c, 0, 't4')       # shine streak at the left end
-                f.put(f.W - 3, 0, 't4')
-                f.put(f.W - 2, 0, 't4')     # and a short one at the right (opposite corner)
-            else:
                 f.fill('t2')
+                f.put(1, 0, 't4')
+                f.put(2, 0, 't4')
+                f.put(f.W - 3, 0, 't3')
+                f.put(f.W - 2, 0, 't4')
+            else:
+                f.fill('t1')
         plain(n, 't4', ('up',))
-        plain(n, 't1', ('down',))
+        plain(n, 't0', ('down',))
     for f in faces('scan_sheet', ('up', 'down')):
         for r in range(f.H):
             for c in range(f.W):
@@ -540,182 +525,169 @@ def paint_hood():
         for c in range(1, f.W - 1):
             f.put(c, 4, 't2@170')           # one bright scan line across the middle
 
-    # the claw plate and its yellow temple jaws, rubber pads on the inner faces
-    shade_block('claw_plate', 's', 4, 3, 2)
+    # claw plate (steel) and its yellow temple jaws, rubber pads on the inner faces
+    block('claw_plate', 's', 3, 4, 1)
     shade_top('claw_plate', 's', 3, 4, 2)
     for f in faces('claw_plate', ('down',)):
         f.fill('s2')
-        f.row(0, 's1')
+        f.row(f.H - 1, 's1')
         f.col(f.W - 1, 's1')
     for n in ('jaw_l_top', 'jaw_r_top'):
-        shade_block(n, 'w', 3, 2, 1)
-        shade_top(n, 'w', 2, 3, 1)
-        plain(n, 'w1')
+        for f in faces(n, SIDES):
+            f.rows(['w2 w2'])
+        shade_top(n, 'w', 3, 3, 2)
+        plain(n, 'w2')
     for n, inner in (('jaw_l_tip', 'east'), ('jaw_r_tip', 'west')):
-        for f in faces(n, ('east', 'north', 'west', 'south')):
+        for f in faces(n, SIDES):
             for r in range(f.H):
-                k = 'w3' if r == 0 else ('w2' if r < 4 else 'w1')
                 for c in range(f.W):
+                    k = 'w2'
+                    if r == 0:
+                        k = 'w3'
+                    elif r == f.H - 1:
+                        k = 'w1'
                     f.put(c, r, k)
             if f.side == inner:
-                f.rows(['w3 w3', 'w2 w2', 'r3 r3', 'r2 r2', 'r2 r1', 'r1 r1'])
-        plain(n, 'w1', ('down', 'up'))
+                f.rows(['w3 w3', 'w2 w2', 'r3 r3', 'r2 r2', 'r2 r2', 'r1 r1'])
+        plain(n, 'w2', ('up',))
+        plain(n, 'w1', ('down',))
 
 
 def paint_barrier():
-    # post: warning yellow over a black kick band at the foot
-    for f in faces('barrier_post', ('east', 'north', 'west', 'south')):
-        for r in range(f.H):
-            if r < 3:
-                ks = ('w3', 'w2')
-            elif r < 9:
-                ks = ('w2', 'w2')
-            elif r == 9:
-                ks = ('w1', 'w1')
-            else:
-                ks = ('r2', 'r1') if r == 10 else ('r1', 'r1')
-            f.put(0, r, ks[0])
-            f.put(1, r, ks[1])
-    shade_top('barrier_post', 'w', 2, 3, 1)
+    # post: company steel over a black kick band, so the yellow-and-black arm is the one striped thing on this side
+    for f in faces('barrier_post', SIDES):
+        brushed_column(f, 's3', 's3', streaks=((0, 2, 6, 's4'),), bands=((7, 's2', 's2'),))
+        f.row(0, 's4')
+        f.rows(['-'] * 10 + ['r2 r2', 'r1 r1'])
+    shade_top('barrier_post', 's', 3, 4, 2)
     plain('barrier_post', 'r0')
 
-    shade_block('post_foot', 's', 3, 2, 1)
-    shade_top('post_foot', 's', 3, 4, 2)
+    block('post_foot', 's', 2, 3, 1)
+    shade_top('post_foot', 's', 2, 3, 1)
     plain('post_foot', 's1')
 
-    # lamp plate: matte black housing; the lit seams between lenses one step up
-    for f in faces('lamp_plate', ('east', 'north', 'west', 'south')):
-        f.fill('r1')
-        f.row(0, 'r3')
-        f.col(0, 'r2', 1)
+    # the signal backboard: matte black, lit along its top
+    for f in faces('lamp_plate', SIDES):
+        f.fill('r0')
+        if f.side == 'north':
+            for r in (0, 3, 6):
+                f.row(r, 'r3')              # a lit visor lip over each lens
+            f.row(9, 'r1')
+        else:
+            f.row(0, 'r3')
     shade_top('lamp_plate', 'r', 2, 3, 1)
     plain('lamp_plate', 'r0')
 
-    # dark lenses: the indicator ramp's two darkest steps, a 1 px glint top-left
+    # lenses: colour only on the front face. Off = the ramp's two darkest steps (step 1 field, step 0 lower right),
+    # so red, amber and green stay legible by day. Lit cap = steps 2 and 3 on its front, every front pixel glowing;
+    # the cap's sides are housing (rubber), not lit.
     for n, m in (('lens_green', 'G'), ('lens_amber', 'A'), ('lens_red', 'R')):
         for f in faces(n, ('north',)):
-            f.rows(['%s1 %s0' % (m, m), '%s0 %s0' % (m, m)])
+            f.rows(['%s1 %s1' % (m, m), '%s1 %s0' % (m, m)])
         for f in faces(n, ('east', 'west', 'south', 'up', 'down')):
-            f.fill('r0')
-        # lit caps: a pale hued core top-left, rim steps 2 and 1; every pixel glows
+            f.fill('r1')
         cap = n.replace('lens_', 'lamp_') + '_lit'
         for f in faces(cap, ('north',)):
-            for (c, r, k) in ((0, 0, 3), (1, 0, 2), (0, 1, 2), (1, 1, 1)):
+            for (c, r, k) in ((0, 0, 3), (1, 0, 2), (0, 1, 2), (1, 1, 2)):
                 f.put(c, r, '%s%d' % (m, k), lit=True)
         for f in faces(cap, ('east', 'west', 'up', 'down', 'south')):
-            f.fill(m + '1', lit=True)
+            f.fill('r1')
+        plain(cap, 'r2', ('up',))
 
-    # hub and counterweight: steel; the weight cast and darker, one bolt head
-    for f in faces('barrier_hub', ('east', 'north', 'west', 'south')):
-        f.rows(['s4 s3', 's3 s1'])
+    # hub and counterweight: steel, the weight with a lit top edge
+    for f in faces('barrier_hub', SIDES):
+        f.rows(['s3 s2', 's2 s1'])
     shade_top('barrier_hub', 's', 3, 4, 2)
     plain('barrier_hub', 's1')
-    for f in faces('counterweight', ('east', 'north', 'west', 'south')):
-        f.rows(['s3 s3 s2', 's2 s2 s1', 's2 s2 s1', 's1 s1 s0'])
-        f.put(1, 1, 's4')
-        f.put(2, 2, 's0')
+    for f in faces('counterweight', SIDES):
+        f.rows(['s4 s4 s3', 's2 s2 s1', 's2 s2 s1', 's1 s1 s0'])
     shade_top('counterweight', 's', 2, 3, 1)
     plain('counterweight', 's0')
 
-    # the arm: a level-crossing boom, banded across its length (yellow 4, black 3), each band lit along its upper
-    # row; the bands run unbroken round all four faces. Diagonals were tried first: on a 2 px pole they broke into
-    # a staircase of blotches.
-    bands = ['w3', 'w2', 'w2', 'w1', 'r2', 'r1', 'r1',
-             'w3', 'w2', 'w2', 'w1', 'r2', 'r1', 'r1',
-             'w3', 'w2', 'w2']
-    for f in faces('barrier_arm', ('east', 'north', 'west', 'south')):
+    # the arm: a level-crossing boom, banded across its length (yellow 4: yellow.2 field, yellow.3 top row, yellow.1
+    # bottom row; black 3: rubber.1 with a rubber.3 top row), unbroken round all four faces
+    Y, K = ['w3', 'w2', 'w2', 'w1'], ['r3', 'r1', 'r1']
+    bands = Y + K + Y + K + ['w3', 'w2', 'w1']
+    for f in faces('barrier_arm', SIDES):
         for r in range(f.H):
             for c in range(f.W):
-                k = bands[r]
-                if c == f.W - 1 and k in ('w2', 'w3'):
-                    k = 'w2' if k == 'w3' else 'w2'
-                f.put(c, r, k)
-    shade_top('barrier_arm', 'w', 2, 3, 1)
-    plain('barrier_arm', 'w1')
+                f.put(c, r, bands[r])
+    plain('barrier_arm', 'w2', ('up',))
+    plain('barrier_arm', 'w1', ('down',))
 
     # the rubber pad along the arm: ribs every third px with a lit line
-    for f in faces('barrier_pad', ('east', 'north', 'west', 'south')):
+    for f in faces('barrier_pad', SIDES):
         for r in range(f.H):
             f.put(0, r, ('r1', 'r3', 'r2')[r % 3])
     plain('barrier_pad', 'r2', ('up', 'down'))
 
 
 def paint_curtain():
-    """The privacy curtain hangs from its rail (the z = -3 edge) toward a hem (z = -9); pleats run along the hang,
+    """The privacy curtain hangs from its rail (the z = -3 edge) toward a hem (z = -9); its folds run along the hang,
     so on its big faces they are rows. Deployed, the rows become vertical folds."""
-    # Two broad folds across the curtain's width (rows: crest 2, flank 1, trough 1), deepening toward the hem, under a
-    # heading tape. (A version whose folds drifted a row partway down read as mottled stone, so the folds run straight.)
-    upper = 'cc' + 'ft' + 'cc' + 'ft'
-    lower = 't' + 'cc' + 'ft' + 'cc' + 'f'
+    # Two broad folds across the width (rows: crest 2, flank 1, trough 1), deepening toward the hem, under a heading
+    # tape. (A version whose folds drifted a row partway down read as mottled stone, so the folds run straight.)
+    upper = 'ccftccft'
     tone = {
-        0: {'c': 'e4', 'f': 'e4', 't': 'e3'},    # heading tape under the rail
+        0: {'c': 'e4', 'f': 'e3', 't': 'e2'},
         1: {'c': 'e4', 'f': 'e3', 't': 'e2'},
         2: {'c': 'e4', 'f': 'e3', 't': 'e2'},
         3: {'c': 'e4', 'f': 'e3', 't': 'e2'},
-        4: {'c': 'e3', 'f': 'e3', 't': 'e2'},
+        4: {'c': 'e4', 'f': 'e3', 't': 'e2'},
         5: {'c': 'e3', 'f': 'e2', 't': 'e1'},    # the hem
     }
-    prof = upper
     for side in ('east', 'west'):
         f = Face('curtain', side)           # 6 x 8; east: col 0 at the rail; west: col 5 at the rail
         for r in range(8):
             for c in range(6):
-                d = c if side == 'east' else 5 - c        # 0 at the rail, 5 at the hem
+                d = c if side == 'east' else 5 - c
                 f.put(c, r, tone[d][upper[r]])
     for side in ('north', 'south'):
-        f = Face('curtain', side)           # 1 x 8
+        f = Face('curtain', side)
         for r in range(8):
-            f.put(0, r, {'c': 'e3', 'f': 'e2', 't': 'e1'}[prof[r]])
+            f.put(0, r, {'c': 'e3', 'f': 'e2', 't': 'e1'}[upper[r]])
     for f in faces('curtain', ('up', 'down')):
         for r in range(f.H):
-            f.put(0, r, 'e1' if r in (0, f.H - 1) else 'e2')
+            f.put(0, r, 'e2')
 
-    # brass rail: a rod, lit on the north and west, with three ring glints
-    for f in faces('curtain_rail', ('east', 'north', 'west', 'south')):
+    # brass rail: a rod, lit on its north and west faces, one glint
+    for f in faces('curtain_rail', SIDES):
         lit = f.side in ('north', 'west')
         f.fill('b4' if lit else 'b3')
-        f.put(0, 0, 'b3' if lit else 'b2')
-        f.put(0, f.H - 1, 'b3' if lit else 'b2')
+        f.put(0, 0, 'b5')
+        f.put(0, f.H - 1, 'b1')
         if lit:
-            for r in (2, 5, 8):
-                f.put(0, r, 'b5')
+            f.put(0, 3, 'b5')
     plain('curtain_rail', 'b3', ('up', 'down'))
 
 
 def paint_blade():
     # the hub is the yellow guard
-    for f in faces('blade_hub', ('east', 'north', 'west', 'south')):
-        f.rows(['w3 w2', 'w2 w2', 'w1 w1'])
-    shade_top('blade_hub', 'w', 2, 3, 1)
+    for f in faces('blade_hub', SIDES):
+        f.rows(['w3 w3', 'w2 w2', 'w1 w1'])
+    shade_top('blade_hub', 'w', 3, 3, 2)
     plain('blade_hub', 'w1')
-    shade_block('blade_shank', 's', 3, 2, 1)
+    block('blade_shank', 's', 2, 3, 1)
     shade_top('blade_shank', 's', 3, 4, 2)
     plain('blade_shank', 's1')
 
-    # the blade: polished steel. A hard bright cutting edge (north, z = 3), a lit bevel behind it, a darker body
-    # with one brushed streak and a 2 px glint, the back darkest, and a cleaver's hanging hole near the tip. The
-    # light edge against the darker body is what says "blade" rather than "shelf".
+    # the blade, the polished-steel recipe: a flat lit top plane, a hard bright cutting edge (north, z = 3) with a
+    # darker grind line behind it, one 2 px glint, the back a step down; the edge face itself brightest
     for side in ('up', 'down'):
         put, xs, zs = top('blade', side)
         for x in xs:
             for z in zs:
-                put(x, z, {3: 's5', 4: 's4', 5: 's2', 6: 's2', 7: 's2', 8: 's1'}[z])
-        for x in (5, 6, 7, 8):
-            put(x, 6, 's3')                 # brushed streak along the length
+                put(x, z, {3: 's5', 4: 's3', 5: 's4', 6: 's4', 7: 's4', 8: 's3'}[z])
         if side == 'up':
-            put(5, 5, 's4')
-            put(6, 5, 's5')                 # the glint, where the bevel meets the body
-        for (x, z, k) in ((9, 6, 'r0'), (10, 6, 'r0'), (9, 7, 'r0'), (10, 7, 's3')):
-            put(x, z, k)                    # the hole, its far lower lip catching the light
-    f = Face('blade', 'north')              # the edge itself, 8 x 1
+            put(6, 6, 's5')
+            put(7, 6, 's5')
+    f = Face('blade', 'north')
     f.fill('s5')
-    f.put(f.W - 1, 0, 's4')
-    f = Face('blade', 'south')              # the back
-    f.fill('s1')
-    plain('blade', 's2', ('east',))
-    plain('blade', 's1', ('west',))
-
-    for f in faces('blade_spine', ('east', 'north', 'west', 'south')):
+    f = Face('blade', 'south')
+    f.fill('s2')
+    plain('blade', 's3', ('east',))
+    plain('blade', 's2', ('west',))
+    for f in faces('blade_spine', SIDES):
         f.fill('s2')
         f.put(0, 0, 's3')
     plain('blade_spine', 's4', ('up',))
@@ -734,15 +706,15 @@ def paint_tray():
                 k = 'r1'
             put(x, z, k)
     for (cx, cz, dx, dz) in ((-4, -4, 1, 1), (3, -4, -1, 1), (-4, 3, 1, -1), (3, 3, -1, -1)):
-        put(cx, cz, 'w2')
-        put(cx + dx, cz, 'w2')
-        put(cx, cz + dz, 'w2')
-    for f in faces('tray', ('east', 'north', 'west', 'south')):
+        put(cx, cz, 'w3')
+        put(cx + dx, cz, 'w3')
+        put(cx, cz + dz, 'w3')
+    for f in faces('tray', SIDES):
         f.fill('r2')
         f.put(0, 0, 'r3')
         f.put(f.W - 1, 0, 'r1')
     f = Face('tray', 'west')
-    f.rows(['- - - b4 b3 b3 b2'])
+    f.rows(['- - - b5 b4 b3 b1'])
     plain('tray', 'r0')
 
 

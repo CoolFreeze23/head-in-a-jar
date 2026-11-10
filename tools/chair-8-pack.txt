@@ -1,0 +1,22 @@
+# Separation Chair with a modpack's settings, third person over the shoulder: the operation from the jar side
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock -3 -60 0 minecraft:iron_block
+/setblock 4 -60 -1 minecraft:brewing_stand
+hud off
+view 1
+bystander spawn 0 -60 -2 0
+wait 40
+bystander chair 0 -60 0
+wait 40
+/tp @s 3.9 -60 4.1 140 12
+view 1
+wait 5
+frames pack_op_shoulder 270
+bystander button 0
+wait 285
+report pack done

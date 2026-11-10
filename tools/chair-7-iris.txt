@@ -1,0 +1,21 @@
+# Separation Chair under a shader pack: the operation three-quarter on the jar side
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock -3 -60 0 minecraft:iron_block
+/setblock 4 -60 -1 minecraft:brewing_stand
+hud off
+view 0
+bystander spawn 0 -60 -2 0
+wait 40
+bystander chair 0 -60 0
+wait 40
+/tp @s 4.7 -58.6 4.7 135 18
+wait 5
+frames iris_op_3q 270
+bystander button 0
+wait 285
+report iris done

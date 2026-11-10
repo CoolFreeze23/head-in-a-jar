@@ -1,0 +1,48 @@
+# The chair with its jar on the tray beside the repainted Centrifuge, an unrepainted lab machine and vanilla blocks;
+# and the row of machines that share the lab side texture. Day, night, torchlight.
+@observe 10
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock -8 -60 0 minecraft:iron_block
+/setblock -6 -60 0 minecraft:smooth_stone
+/setblock -4 -60 0 minecraft:piston[facing=up]
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 3 -60 0 headinajar:centrifuge[facing=south]
+/setblock 5 -60 0 headinajar:body_printer[facing=south]
+/setblock 7 -60 0 minecraft:brewing_stand
+/setblock 9 -60 0 minecraft:anvil
+chair 0 -60 0
+/setblock -4 -60 20 headinajar:centrifuge[facing=south]
+/setblock -2 -60 20 headinajar:cerebral_array[facing=south]
+/setblock 0 -60 20 headinajar:dna_sequencer[facing=south]
+/setblock 2 -60 20 headinajar:gene_splicer[facing=south]
+/setblock 4 -60 20 headinajar:injection_rig[facing=south]
+/setblock 6 -60 21 minecraft:glass
+/setblock 6 -60 20 headinajar:saline_mixer[facing=south]
+/setblock 6 -59 21 headinajar:neural_socket
+hud off
+/tp @s 0.5 -58.4 9.5 180 10
+wait 40
+shot row_day
+/tp @s 1.5 -58.4 27.5 180 10
+wait 20
+shot lab_row_day
+/tp @s 0.5 -58.4 9.5 180 10
+/time set 18000
+wait 20
+shot row_night
+/setblock -2 -60 2 minecraft:torch
+/setblock 4 -60 2 minecraft:torch
+wait 20
+shot row_torch
+/tp @s 1.5 -58.4 27.5 180 10
+/setblock 1 -60 22 minecraft:torch
+wait 20
+shot lab_row_torch
+/time set 6000
+/tp @s 2.5 -58.4 3.5 160 20
+wait 20
+shot jar_tray_centrifuge_close
+report row done

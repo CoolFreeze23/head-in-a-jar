@@ -75,6 +75,18 @@ public class SeparationChairRenderer extends GeoBlockRenderer<SeparationChairBlo
         return Mth.clamp(0.5f - above / 14f, 0, 1);
     }
 
+    /** The scan sheet is translucent glass light (alpha in the sheet): it gets a translucent render type of its own. */
+    @Override
+    public void renderRecursively(PoseStack poseStack, SeparationChairBlockEntity chair, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource,
+                                  VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
+        if (!isReRender && "scan_plane".equals(bone.getName())) {
+            RenderType glass = RenderType.entityTranslucent(getTextureLocation(chair));
+            super.renderRecursively(poseStack, chair, bone, glass, bufferSource, bufferSource.getBuffer(glass), false, partialTick, packedLight, packedOverlay, colour);
+            return;
+        }
+        super.renderRecursively(poseStack, chair, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+    }
+
     static GeoBone bone(String name) {
         return MODEL.getBone(name).orElse(null);
     }

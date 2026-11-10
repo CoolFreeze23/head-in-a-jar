@@ -1,0 +1,76 @@
+# Separation Chair films, default profile: the operation three-quarter on the jar side, from the front, the botch,
+# the blade from the side, and the patient's own eyes. Chair at 0 -60 0 facing south: the jar comes out to the east.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+hud off
+bystander spawn 0 -60 -2 0
+wait 20
+bystander chair 0 -60 0
+wait 40
+/tp @s 4.7 -58.6 4.7 135 18
+wait 5
+frames v_op_3q 270
+bystander button 0
+wait 280
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 0 -60 -2 0 0
+wait 10
+/tp @s 0.5 -58.6 6.5 180 14
+wait 5
+frames v_op_front 270
+bystander operate 0 -60 0
+wait 280
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 0 -60 -2 0 0
+wait 10
+/tp @s 4.7 -58.6 4.7 135 18
+wait 5
+frames v_botch_3q 270
+bystander operate 0 -60 0
+wait 104
+/data merge block 0 -60 0 {Botched:1b}
+wait 176
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 0 -60 -2 0 0
+wait 10
+/tp @s -1.8 -59.6 0.5 -90 25
+wait 5
+bystander operate 0 -60 0
+wait 108
+frames v_blade_side 30
+wait 150
+bystander key swap
+wait 10
+bystander form body
+wait 10
+bystander close
+bystander tp 0 -60 -2 0 0
+wait 10
+bystander tp 3 -60 -3 0 0
+/tp @s 0.5 -60 2.5 180 30
+chair 0 -60 0
+key use
+wait 10
+press escape
+view 0
+look 180 0
+sign 0 -60 0
+frames v_firstperson 260
+wait 270
+report video done

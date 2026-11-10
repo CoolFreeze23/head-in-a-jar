@@ -1,0 +1,40 @@
+# item/reinforced_life_support_jar: swap of item/life_support_jar.txt (steel one step darker: s4 -> s3, s2 -> s1;
+# brass valve -> steel, step for step) plus two additions so the tier reads by shape at 1x: a steel band across the
+# glass at its neck under the lid (row 5, two rivet heads), two lid bolts (row 3), and steel straps down both sides of
+# the glass from lid to base with two clamp lugs each (columns 1-2 and 13-14). Palette A.
+texture: item/reinforced_life_support_jar.png
+size: 16x16
+key:
+  ..  clear
+  G3  indicator_green.3
+  f2  flesh.2
+  f3  flesh.3
+  j1  jar_glass.1
+  j3  jar_glass.3
+  j4  jar_glass.4
+  l0  saline.0
+  l2  saline.2
+  l3  saline.3
+  r1  rubber.1
+  s0  steel.0
+  s1  steel.1
+  s2  steel.2
+  s3  steel.3
+  s4  steel.4
+pixels:
+.. .. .. .. .. .. s2 s4 s4 s2 .. .. .. .. .. ..
+.. .. .. .. .. .. s2 s2 s0 s0 .. .. .. .. .. ..
+.. .. .. s1 s1 s1 s0 s0 s0 s0 s1 s1 s1 .. .. ..
+.. .. s1 s4 s3 s3 s3 s3 s3 s1 s1 s3 s4 s0 .. ..
+.. .. s1 s1 s1 s1 s1 s1 s1 s1 s1 s1 s1 s0 .. ..
+.. .. .. s3 s4 s2 s2 s2 s2 s2 s2 s4 s0 .. .. ..
+.. .. s3 j3 j4 .. .. .. .. .. .. .. j1 s0 .. ..
+.. s1 s3 j3 j4 r1 r1 r1 r1 r1 r1 .. j1 s0 s0 ..
+.. .. s3 j3 .. f3 r1 f3 f2 r1 f2 .. j1 s0 .. ..
+.. .. s3 j3 .. f3 f3 f3 f2 f2 f2 .. j1 s0 .. ..
+.. .. s3 j1 l3 l3 l3 l3 l3 l3 l3 l3 j1 s0 .. ..
+.. s1 s3 j1 j4 l0 l0 l0 l0 l0 l3 l2 j1 s0 s0 ..
+.. .. s3 j1 l0 l0 l0 l0 l0 l0 l0 l0 j1 s0 .. ..
+.. .. s1 s3 s3 s3 s3 s3 s3 s3 s3 s3 s3 s0 .. ..
+.. .. s1 s1 s1 s1 s1 s1 s1 r1 G3 r1 s1 s0 .. ..
+.. .. .. s0 s0 s0 s0 s0 s0 s0 s0 s0 s0 .. .. ..

@@ -1,0 +1,44 @@
+# centrifuge_front: the Centrifuge's front. The lab casing frame (see lab_side.txt) round one focal feature: the
+# speed dial: a clean round dark steel ring with a lit arc at its top-left, a bone face with a glint top-left and its
+# shade bottom-right, a two-pixel dark needle with a red tip at the top of its range, and a one-pixel cast shadow. Secondary: a two-row brass maker's badge with its drop shadow, and the run lamp (2x2 green,
+# pale core top-left, in a steel bezel lit on its left; painted, not emissive: this block has no glow overlay).
+# Hand-placed, palette A, no noise.
+texture: block/centrifuge_front.png
+size: 16x16
+key:
+  e0  enamel.0
+  e1  enamel.1
+  e2  enamel.2
+  e3  enamel.3
+  e4  enamel.4
+  s0  steel.0
+  s1  steel.1
+  s3  steel.3
+  s4  steel.4
+  b1  brass.1
+  b2  brass.2
+  b3  brass.3
+  b4  brass.4
+  o1  bone.1
+  o2  bone.2
+  o3  bone.3
+  G2  indicator_green.2
+  G3  indicator_green.3
+  R1  indicator_red.1
+pixels:
+e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e0
+e1 e4 e3 e3 e3 e3 e3 e3 e3 e3 e3 e3 e3 e3 e2 e0
+e1 e3 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e1 e0
+e1 e3 e0 b4 b3 b3 b3 b2 e1 s4 G3 G2 s1 e2 e1 e0
+e1 e3 e0 b2 b2 b2 b2 b1 e0 s4 G2 G2 s1 e2 e1 e0
+e1 e3 e0 e1 e0 e0 e0 e0 e0 e1 s1 s1 s1 e2 e1 e0
+e1 e3 e0 e1 e1 e1 s3 s3 s1 s1 e1 e1 e1 e2 e1 e0
+e1 e3 e0 e1 e1 s3 o3 o2 o2 R1 s1 e1 e1 e2 e1 e0
+e1 e3 e0 e1 s3 o2 o2 o2 s0 o2 o2 s1 e1 e2 e1 e0
+e1 e3 e0 e1 s1 o2 o2 s0 o2 o2 o1 s1 e1 e2 e1 e0
+e1 e3 e0 e1 s1 o2 o2 o2 o2 o1 o1 s1 e0 e2 e1 e0
+e1 e3 e0 e1 e1 s1 o2 o1 o1 o1 s1 e0 e0 e2 e1 e0
+e1 e3 e0 e1 e1 e1 s1 s1 s1 s1 e0 e0 e1 e2 e1 e0
+e1 e3 e0 e2 e2 e2 e2 e2 e2 e2 e2 e2 e2 e2 e1 e0
+e1 e2 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e1 e0
+e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0 e0

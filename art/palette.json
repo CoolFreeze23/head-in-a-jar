@@ -1,85 +1,96 @@
 {
   "format": 1,
   "about": "House palette for Head in a Jar textures. Every ramp runs darkest (step 0) to lightest. A colour is named by its key, material.step (brass.0), or by its alias, the material's letter plus the step (b0). Materials under 'house' have one ramp per style set; switching 'default' recolours every compiled texture. Materials under 'shared' are the same in every set. Print the table with: python tools/tex/tex.py palette",
-  "default": "A",
+  "default": "D",
   "sets": {
     "A": "Vanilla kin: low saturation, gentle hue shift, sits beside iron, smooth stone, quartz, copper and cauldron",
     "B": "Showroom: warmer, more saturated, stronger hue shift, sits beside gold, terracotta, honey and Create brass",
-    "C": "Institutional: cooler and greyer, hospital-green enamel and gunmetal, sits beside deepslate, tuff and anvil"
+    "C": "Institutional: cooler and greyer, hospital-green enamel and gunmetal, sits beside deepslate, tuff and anvil",
+    "D": "Separation: a warm-metal brass ramp (red-brown shadows to pale yellow, saturated mids), a cleaner and cooler warning-yellow paint, lighter ivory with grey-violet shadows, steel two steps darker than the enamel, rubber with wider steps; teal, jar glass, saline, flesh and bone as in A"
   },
   "house": {
     "enamel": {
       "alias": "e",
-      "label": {"A": "ivory enamel", "B": "cream enamel", "C": "eggshell green enamel"},
+      "label": {"A": "ivory enamel", "B": "cream enamel", "C": "eggshell green enamel", "D": "clean ivory enamel"},
       "A": ["6b645d", "8f867b", "aba293", "c6bdaa", "dfd7bf", "f7f0d5"],
       "B": ["7a665f", "9c877b", "b6a391", "cfbfa7", "e6dabc", "fcf5d2"],
-      "C": ["51585c", "6f7f7e", "889b91", "9eb5a0", "bdceb4", "dfe6ca"]
+      "C": ["51585c", "6f7f7e", "889b91", "9eb5a0", "bdceb4", "dfe6ca"],
+      "D": ["736c78", "a29b9c", "c3bcb1", "ddd5c3", "efe9d8", "fdf9eb"]
     },
     "brass": {
       "alias": "b",
-      "label": {"A": "brass", "B": "polished brass", "C": "satin brass"},
+      "label": {"A": "brass", "B": "polished brass", "C": "satin brass", "D": "warm brass"},
       "A": ["5c3823", "845732", "a47641", "c29954", "dfbe6e", "fae591"],
       "B": ["612a18", "894a25", "a96f35", "c7984c", "e4c56d", "fff199"],
-      "C": ["523c29", "775b3c", "95784d", "b19561", "ccb47a", "e6d397"]
+      "C": ["523c29", "775b3c", "95784d", "b19561", "ccb47a", "e6d397"],
+      "D": ["46291a", "774824", "ac6a2a", "d99a35", "f2c650", "fff1a4"]
     },
     "steel": {
       "alias": "s",
-      "label": {"A": "brushed steel", "B": "brushed steel", "C": "gunmetal"},
+      "label": {"A": "brushed steel", "B": "brushed steel", "C": "gunmetal", "D": "dark brushed steel"},
       "A": ["35373d", "5a5e65", "797e86", "989ea4", "b6bcc0", "d5d9db"],
       "B": ["383942", "5e626c", "7e848d", "9ea5ac", "bec5c9", "dfe4e6"],
-      "C": ["212229", "424650", "5f646f", "7c828c", "999fa7", "b6bcc2"]
+      "C": ["212229", "424650", "5f646f", "7c828c", "999fa7", "b6bcc2"],
+      "D": ["2a2c34", "42464f", "5c616b", "7b818b", "a1a7af", "ced3d8"]
     },
     "teal_glass": {
       "alias": "t",
-      "label": {"A": "teal glass", "B": "teal glass", "C": "smoked teal glass"},
+      "label": {"A": "teal glass", "B": "teal glass", "C": "smoked teal glass", "D": "teal glass"},
       "note": "frame and shine streaks opaque; body is step 1 at alpha 110 (alias tb)",
       "A": ["1d434c", "39787e", "5aa6a4", "86cac1", "beede1"],
       "B": ["123c52", "2b7284", "4da6ac", "7ed1cc", "bff5ea"],
-      "C": ["1c343d", "39656e", "5a9195", "83b9b7", "b4dbd6"]
+      "C": ["1c343d", "39656e", "5a9195", "83b9b7", "b4dbd6"],
+      "D": ["1d434c", "39787e", "5aa6a4", "86cac1", "beede1"]
     },
     "rubber": {
       "alias": "r",
-      "label": {"A": "rubber black", "B": "rubber black", "C": "rubber black"},
+      "label": {"A": "rubber black", "B": "rubber black", "C": "rubber black", "D": "rubber black"},
       "note": "matte: no specular pixel; warning stripes pair w2 with r1",
       "A": ["151317", "252329", "333137", "3f3e45"],
       "B": ["17141a", "29252d", "36333c", "43414a"],
-      "C": ["131214", "212024", "2d2d31", "39383d"]
+      "C": ["131214", "212024", "2d2d31", "39383d"],
+      "D": ["141318", "27262d", "3a3941", "504f58"]
     },
     "warning": {
       "alias": "w",
-      "label": {"A": "warning yellow", "B": "warning yellow", "C": "warning yellow"},
+      "label": {"A": "warning yellow", "B": "warning yellow", "C": "warning yellow", "D": "warning yellow (paint)"},
       "note": "stripes 2 px wide at 45 degrees, w2 against r1",
       "A": ["8c5414", "b77d1f", "daa936", "fad85f"],
       "B": ["994e0c", "c17c18", "e1af34", "ffe666"],
-      "C": ["805319", "ac7b27", "cfa33e", "f0cf65"]
+      "C": ["805319", "ac7b27", "cfa33e", "f0cf65"],
+      "D": ["9a6806", "d39c0e", "f4bd1e", "fedb58"]
     },
     "jar_glass": {
       "alias": "j",
-      "label": {"A": "jar glass (green)", "B": "jar glass (mint)", "C": "jar glass (green)"},
+      "label": {"A": "jar glass (green)", "B": "jar glass (mint)", "C": "jar glass (green)", "D": "jar glass (green)"},
       "A": ["1d4732", "3a7a4e", "5ba364", "8bc987", "caedbe"],
       "B": ["184c3b", "36805b", "5aaa75", "89d095", "c4f5c4"],
-      "C": ["1c3d2d", "396e4c", "5a9565", "83b983", "badbb4"]
+      "C": ["1c3d2d", "396e4c", "5a9565", "83b983", "badbb4"],
+      "D": ["1d4732", "3a7a4e", "5ba364", "8bc987", "caedbe"]
     },
     "saline": {
       "alias": "l",
-      "label": {"A": "saline", "B": "saline", "C": "saline"},
+      "label": {"A": "saline", "B": "saline", "C": "saline", "D": "saline"},
       "A": ["2b7480", "4ea9ab", "7bcdc6", "b4ede2"],
       "B": ["217185", "46abb1", "77d4cb", "b8f5e5"],
-      "C": ["2f6a70", "519b9c", "7ac0ba", "afe0d8"]
+      "C": ["2f6a70", "519b9c", "7ac0ba", "afe0d8"],
+      "D": ["2b7480", "4ea9ab", "7bcdc6", "b4ede2"]
     },
     "flesh": {
       "alias": "f",
-      "label": {"A": "flesh", "B": "flesh", "C": "flesh"},
+      "label": {"A": "flesh", "B": "flesh", "C": "flesh", "D": "flesh"},
       "A": ["4c1a27", "7d323a", "a44d4b", "c87767", "eba688"],
       "B": ["52172a", "832d3a", "ab4746", "cf7863", "f2ad85"],
-      "C": ["471e26", "75363b", "99514e", "bb7669", "db9e88"]
+      "C": ["471e26", "75363b", "99514e", "bb7669", "db9e88"],
+      "D": ["4c1a27", "7d323a", "a44d4b", "c87767", "eba688"]
     },
     "bone": {
       "alias": "o",
-      "label": {"A": "bone", "B": "bone", "C": "bone"},
+      "label": {"A": "bone", "B": "bone", "C": "bone", "D": "bone"},
       "A": ["807d66", "b1ad92", "d8d4bb", "fcf9e8"],
       "B": ["857a63", "b5ab8f", "dbd4b8", "fffce6"],
-      "C": ["757563", "a5a48e", "ccc9b5", "f0eddf"]
+      "C": ["757563", "a5a48e", "ccc9b5", "f0eddf"],
+      "D": ["807d66", "b1ad92", "d8d4bb", "fcf9e8"]
     }
   },
   "shared": {

@@ -1,0 +1,44 @@
+# item/compact_life_support_jar: the Compact Jar (8 px of glass, two rows shorter: no clear 
+# row above the head and no mid saline row). Three-quarter front view with the lid's top face showing (T20), lit top-left,
+# selective outlines (s1 on the lit top and left runs, s0 bottom and right). A brass hand-wheel valve, cutout glass
+# (clear, jar-glass edges, a 2 px shine streak continued by a glint over the liquid), the head inside (hair, a lit
+# face above the saline, its dark silhouette below the surface), saline with a meniscus row, a mid row and the
+# darkest row at the bottom, one bubble; the green status lamp in a dark housing on the base. Opaque or clear only (items are never
+# translucent). Hand-placed, palette A.
+texture: item/compact_life_support_jar.png
+size: 16x16
+key:
+  ..  clear
+  G3  indicator_green.3
+  b0  brass.0
+  b2  brass.2
+  b4  brass.4
+  f2  flesh.2
+  f3  flesh.3
+  j1  jar_glass.1
+  j3  jar_glass.3
+  j4  jar_glass.4
+  l0  saline.0
+  l3  saline.3
+  r1  rubber.1
+  s0  steel.0
+  s1  steel.1
+  s2  steel.2
+  s4  steel.4
+pixels:
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. b2 b4 b4 b2 .. .. .. .. .. ..
+.. .. .. .. .. .. b2 b2 b0 b0 .. .. .. .. .. ..
+.. .. .. .. s1 s1 s0 s0 s0 s0 s1 s1 .. .. .. ..
+.. .. .. s1 s4 s4 s4 s4 s4 s2 s2 s4 s0 .. .. ..
+.. .. .. s1 s2 s2 s2 s2 s2 s2 s2 s2 s0 .. .. ..
+.. .. .. .. s0 s0 s0 s0 s0 s0 s0 s0 .. .. .. ..
+.. .. .. .. j3 j4 r1 r1 r1 r1 .. j1 .. .. .. ..
+.. .. .. .. j3 .. r1 f3 f2 r1 .. j1 .. .. .. ..
+.. .. .. .. j3 .. f3 f3 f2 f2 .. j1 .. .. .. ..
+.. .. .. .. j1 l3 l3 l3 l3 l3 l3 j1 .. .. .. ..
+.. .. .. .. j1 l0 l0 l0 l0 l0 l0 j1 .. .. .. ..
+.. .. .. s1 s4 s4 s4 s4 s4 s4 s4 s4 s0 .. .. ..
+.. .. .. s1 s2 s2 s2 s2 r1 G3 r1 s2 s0 .. .. ..
+.. .. .. .. s0 s0 s0 s0 s0 s0 s0 s0 .. .. .. ..
