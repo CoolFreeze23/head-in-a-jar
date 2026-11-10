@@ -53,9 +53,9 @@ REFUSALS = {
     'mecha.arm.protected': ('This ground is protected. Dig somewhere else.', 'Este terreno é protegido. Cave em outro lugar.'),
     # the Assembly Gantry's buttons (the old lines, with a next step, drawn over its screen)
     'gantry.no_frame': ('No frame to build on. Put one in the frame slot.', 'Nenhuma estrutura para montar. Ponha uma no espaço da estrutura.'),
-    'gantry.pad_busy': ('The pad is taken. Clear it first.', 'A plataforma está ocupada. Libere primeiro.'),
+    'gantry.pad_busy': ("Something stands on the Gantry. Clear its top first.", 'Tem algo em cima do pórtico. Libere o topo primeiro.'),
     'gantry.no_power': ('Assembly needs 10 kFE. Feed the Gantry power.', 'A montagem precisa de 10 kFE. Alimente o pórtico.'),
-    'gantry.pad_empty': ('No mecha on the pad. Park one on it.', 'Nenhum mecha na plataforma. Estacione um nela.'),
+    'gantry.pad_empty': ('No mecha on the Gantry. Park one on top of it.', 'Nenhum mecha no pórtico. Estacione um em cima dele.'),
     'gantry.pad_occupied': ('Someone is aboard that mecha. They need to get out first.', 'Tem alguém a bordo do mecha. Precisa sair antes.'),
     'gantry.not_yours': ("That mecha isn't yours. Its owner can trust you.", 'Esse mecha não é seu. O dono pode confiar em você.'),
     'gantry.slots_busy': ('The slots are full. Empty the Gantry first.', 'Os espaços estão cheios. Esvazie o pórtico primeiro.'),

@@ -96,6 +96,8 @@ public final class FormActions {
         BlockPos pos = cradle.getBlockPos();
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.CRADLE,
                 new HeadRegistry.Spot(cradle.getLevel().dimension(), Vec3.atBottomCenterOf(pos)), null));
+        // a Cradle with no power or no saline docks the head and keeps nothing topped up: say so, and what feeds it
+        cradle.tellWhatIsMissing(player);
     }
 
     // --- swapping between body and head -------------------------------------------------------------
@@ -338,10 +340,28 @@ public final class FormActions {
     public static boolean setDownHead(ServerPlayer player) {
         JarState state = state(player);
         if (state.form() != Form.LINKED || !state.carryingHead()) return false;
-        state.setCarryingHead(false);
+        // aimed at a Charging Dock within reach, the head goes onto its plate
+        BlockPos aimed = com.coolfreeze23.headinajar.block.ChargingDockBlock.aimed(player);
+        if (aimed != null) return setDownHeadAt(player, com.coolfreeze23.headinajar.block.ChargingDockBlock.top(aimed));
         Vec3 at = player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(0.8));
-        // facing a wall, the head goes down at the feet instead of inside the wall
-        if (!player.level().noCollision(net.minecraft.world.phys.AABB.ofSize(at.add(0, 0.5, 0), 0.86, 0.95, 0.86))) at = player.position();
+        // facing a wall, the head goes down at the feet instead of inside the wall (a dock there takes it on its plate)
+        var footprint = (state.compact() ? FormEvents.COMPACT_SIZE : FormEvents.JAR_SIZE).makeBoundingBox(at);
+        if (com.coolfreeze23.headinajar.block.ChargingDockBlock.under(player.level(), footprint) == null
+                && !player.level().noCollision(net.minecraft.world.phys.AABB.ofSize(at.add(0, 0.5, 0), 0.86, 0.95, 0.86))) at = player.position();
+        return setDownHeadAt(player, at);
+    }
+
+    /**
+     * A LINKED player sets their carried head down at this spot. A spot overlapping a Charging Dock puts the head on the
+     * middle of its plate, never sunk into it.
+     */
+    public static boolean setDownHeadAt(ServerPlayer player, Vec3 at) {
+        JarState state = state(player);
+        if (state.form() != Form.LINKED || !state.carryingHead()) return false;
+        var footprint = (state.compact() ? FormEvents.COMPACT_SIZE : FormEvents.JAR_SIZE).makeBoundingBox(at);
+        var dock = com.coolfreeze23.headinajar.block.ChargingDockBlock.under(player.level(), footprint);
+        if (dock != null) at = com.coolfreeze23.headinajar.block.ChargingDockBlock.top(dock.getBlockPos());
+        state.setCarryingHead(false);
         placeHead(player, player.serverLevel(), at, player.getYRot() + 180);
         Network.sync(player);
         return true;

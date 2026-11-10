@@ -4,7 +4,6 @@ import com.coolfreeze23.headinajar.menu.LabMenu;
 import com.coolfreeze23.headinajar.registry.ModFluids;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -127,15 +125,9 @@ public class CerebralArrayBlockEntity extends LabMachine {
         }
     }
 
-    /** Sends FE to every neighbour that takes it. */
+    /** Shares FE among the neighbours that take it. */
     private void push(Level level, BlockPos pos) {
-        for (Direction d : Direction.values()) {
-            if (energy.getEnergyStored() <= 0) return;
-            var target = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(d), d.getOpposite());
-            if (target == null || !target.canReceive()) continue;
-            int sent = target.receiveEnergy(Math.min(energy.getEnergyStored(), 20_000), false);
-            if (sent > 0) energy.set(energy.getEnergyStored() - sent);
-        }
+        PowerBlockEntities.share(level, pos, energy, 20_000);
     }
 
     private void vote(Level level) {
