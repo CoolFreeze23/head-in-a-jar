@@ -55,6 +55,12 @@ public final class ClientHooks {
 
     public static void tick() {
         if (!handshakeActive()) return;
+        // off the host (got down, teleported, the host gone): the handshake is over, and the ability key is the jar's again
+        var player = net.minecraft.client.Minecraft.getInstance().player;
+        if (player == null || player.getVehicle() == null || player.getVehicle().getId() != handshakeEntity) {
+            handshakeEntity = -1;
+            return;
+        }
         if (flash > 0) flash--;
         if (flash < 0) flash++;
         if (++tick >= ROUND_TICKS) {
