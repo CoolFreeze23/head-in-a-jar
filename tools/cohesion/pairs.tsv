@@ -1,0 +1,405 @@
+id	item	offhand	sneak	form	target	setup	outcome	effect	lang_key	code_ref	surprise
+P001	(empty)		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	works	you sit (Seat entity) and the Form 27-B menu opens		block/SeparationChairBlock.java:103-116	
+P002	(empty)		yes	BODY	block headinajar:separation_chair	chair placed	works	menu opens without sitting (load parts)		block/SeparationChairBlock.java:107-109	
+P003	(empty)		no	LINKED	block headinajar:separation_chair	player already separated	refuses	you sit; pressing Sign refuses	dolores.headinajar.refuse.already	block/SeparationChairBlockEntity.java:178-181	
+P004	(empty)		no	BODY	block headinajar:separation_chair	chair missing power or parts, seated, press Sign	refuses	Dolores names the first missing thing	dolores.headinajar.refuse.<power|jar|goggles|collar|saline>	block/SeparationChairBlockEntity.java:173-177	
+P005	(empty)		no	JAR (no arm)	block headinajar:separation_chair	bare jar, no Manipulator Arm	nothing	click cancelled on the client: the chair is not in #headinajar:head_operable		client/ClientEvents.java:162-168; form/FormEvents.java:143-147	Y
+P006	(empty)		no	BODY	block headinajar:life_support_cradle	empty cradle	refuses	action bar "The Cradle is empty" plus a chat line with FE and saline	message.headinajar.cradle_empty; message.headinajar.cradle_status	block/LifeSupportCradleBlock.java:88-95	
+P007	(empty)		no	BODY	block headinajar:life_support_cradle	cradle holding another player's head	refuses	says whose head it holds, plus status line	message.headinajar.cradle_holds; message.headinajar.cradle_status	block/LifeSupportCradleBlock.java:90-95	
+P008	(empty)		no	LINKED	block headinajar:life_support_cradle	your own head docked, Head Satchel in inventory	works	head goes from the cradle into the satchel (carrying)		block/LifeSupportCradleBlock.java:90; form/FormActions.java:280-288	
+P009	(empty)		no	LINKED	block headinajar:life_support_cradle	your own head docked, NO satchel	refuses	says the Cradle holds <your own name>'s head; never says you need a satchel	message.headinajar.cradle_holds	block/LifeSupportCradleBlock.java:90-92; form/FormActions.java:282	Y
+P010	(empty)		no	LINKED+head	block headinajar:life_support_cradle	carrying your head, empty cradle	works	head docks in the cradle (bottle-fill sound)		form/FormActions.java:291-299	
+P011	(empty)		no	JAR (no arm)	block headinajar:life_support_cradle	bare jar, empty cradle	refuses	says the Cradle is empty; a jar cannot climb in by clicking (only K while standing on it with a body to link to)	message.headinajar.cradle_empty	block/LifeSupportCradleBlock.java:88-89; form/FormActions.java:180-181	Y
+P012	(empty)		no	any	block headinajar:galvanic_pile	pile placed	works	status: FE and fuel count	message.headinajar.pile_status	block/GalvanicPileBlock.java:90-96	
+P013	(empty)		no	any	block headinajar:charging_dock	dock placed	nothing	no use handler at all; no status, no sound		block/ChargingDockBlock.java (no useWithoutItem)	Y
+P014	(empty)		no	JAR (no arm)	block headinajar:charging_dock	bare jar standing next to it	nothing	the tag lets the click through, but the block has no handler		block/ChargingDockBlock.java; data tags/block/head_operable.json	Y
+P015	(empty)		no	any (incl. bare JAR)	block headinajar:saline_mixer	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P016	(empty)		no	any (incl. bare JAR)	block headinajar:body_printer	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P017	(empty)		no	any (incl. bare JAR)	block headinajar:centrifuge	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P018	(empty)		no	any (incl. bare JAR)	block headinajar:dna_sequencer	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P019	(empty)		no	any (incl. bare JAR)	block headinajar:gene_splicer	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P020	(empty)		no	any (incl. bare JAR)	block headinajar:injection_rig	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P021	(empty)		no	any (incl. bare JAR)	block headinajar:cerebral_array	machine placed	works	opens its menu		block/MachineBlock.java:104-110	
+P022	(empty)		no	BODY	block headinajar:assembly_gantry	gantry placed	works	opens the gantry menu		block/MachineBlock.java:104-110	
+P023	(empty)		no	JAR (no arm)	block headinajar:assembly_gantry	bare jar	nothing	cancelled: gantry not head_operable, so a head cannot order its own mecha		client/ClientEvents.java:162-168	Y
+P024	(empty)		no	BODY	menu button: Body Printer "Print"	printer loaded	refuses	only a jar may order a body	message.headinajar.printer_has_head	block/BodyPrinterBlockEntity.java:120-123	
+P025	(empty)		no	JAR (no arm)	menu button: Body Printer "Print"	printer missing items or saline	refuses	missing materials	message.headinajar.printer_missing	block/BodyPrinterBlockEntity.java:124-131	
+P026	(empty)		no	BODY	menu button: Injection Rig "Inject"	serum in slot, 5 kFE stored	works	serum goes into your body, 1 damage, glass bottle back	message.headinajar.inject.<ok|mutated|rejected|full|too_heavy>	block/LabMachines.java:385-407	
+P027	(empty)		no	JAR (no arm)	menu button: Injection Rig "Inject"	serum in slot	refuses	needs a body	message.headinajar.rig_needs_body	block/LabMachines.java:386-390	
+P028	(empty)		no	BODY	menu button: Injection Rig "Inject"	serum in slot, under 5 kFE	refuses	message text says 'Assembly needs 10 kFE' (gantry wording, wrong machine and amount)	gantry.headinajar.no_power	block/LabMachines.java:393-396	Y
+P029	(empty)		no	any (incl. bare JAR)	block headinajar:leyden_jar	placed	works	energy status	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P030	(empty)		no	BODY	block headinajar:tesla_node	placed	works	energy status	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P031	(empty)		no	BODY	block headinajar:relay_mast	placed	works	energy status	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P032	(empty)		no	BODY	block headinajar:relay_mast_mk2	placed	works	energy status	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P033	(empty)		no	BODY	block headinajar:signal_jammer	placed	works	energy status	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P034	(empty)		no	JAR (no arm)	block headinajar:relay_mast	bare jar (also tesla_node, relay_mast_mk2, signal_jammer)	nothing	cancelled: not head_operable, so the telepresence blocks a head depends on cannot be read by a head		client/ClientEvents.java:162-168	Y
+P035	(empty)		no	any	block headinajar:safety_placard	placard on a wall	works	cycles to the next of 12 notices and prints it	placard.headinajar.<0-11>	block/SafetyPlacardBlock.java:70-77	
+P036	(empty)		no	BODY	block headinajar:jarred_head	placed jarred VILLAGER head	works	opens the villager trading screen		block/JarredHeadBlock.java:74-81; block/JarredHeadBlockEntity.java:57-72	
+P037	(empty)		no	BODY	block headinajar:jarred_head	placed jarred zombie (non-villager) head	refuses	"A jarred zombie head. It looks at you."	message.headinajar.jarred_head	block/JarredHeadBlock.java:77-79	
+P038	(empty)		no	JAR (no arm)	block headinajar:jarred_head	jarred villager head placed	nothing	cancelled: a head cannot trade with another head (not head_operable)		client/ClientEvents.java:162-168	Y
+P039	(empty)		no	BODY	block headinajar:body_locker	empty locker, a host within 3 blocks	works	nearest unridden host is stored	message.headinajar.locker_stored	block/BodyLockerBlockEntity.java:42-56	
+P040	(empty)		no	BODY	block headinajar:body_locker	empty locker, no host nearby	refuses	no host within 3 blocks	message.headinajar.locker_none	block/BodyLockerBlockEntity.java:46-48	
+P041	(empty)		no	BODY	block headinajar:body_locker	locker holding a host	works	host released in front	message.headinajar.locker_released	block/BodyLockerBlockEntity.java:57-67	
+P042	(empty)		no	BODY	block headinajar:body_locker	your own Headless Body standing beside it	refuses	locker_none: a Body Locker never takes a Headless Body (it only looks for Mob hosts)	message.headinajar.locker_none	block/BodyLockerBlockEntity.java:43	Y
+P043	(empty)		no	JAR (no arm)	block headinajar:body_locker	bare jar	nothing	cancelled: not head_operable		client/ClientEvents.java:162-168	Y
+P044	(empty)		no	any	block headinajar:leech_jar	leech jar with samples	works	all samples into inventory, count shown	message.headinajar.leech_jar	registry/ModRegistry.java:177-182; block/LeechJarBlockEntity.java:73-83	
+P045	(empty)		no	any	block headinajar:turret_pedestal	empty turret	refuses	fit a jarred mob head	turret.headinajar.needs_head	block/TurretPedestalBlockEntity.java:226-230	
+P046	(empty)		no	any	block headinajar:turret_pedestal	turret with a head	works	head comes out into inventory		block/TurretPedestalBlockEntity.java:234-236	
+P047	(empty)		no	any	block headinajar:employee_mount	empty mount	refuses	only a jarred villager works here	staff.headinajar.needs_villager	block/EmployeeMountBlockEntity.java:105-109	
+P048	(empty)		no	any	block headinajar:employee_mount	mount with a villager	works	staff status, paid or unpaid	staff.headinajar.status_paid / status_unpaid	block/EmployeeMountBlockEntity.java:120-122	
+P049	(empty)		yes	any	block headinajar:employee_mount	mount with a villager, both hands empty	works	villager head comes down into inventory		block/EmployeeMountBlockEntity.java:116-119	
+P050	(empty)		no	JAR (no arm)	block headinajar:neural_socket	empty socket, no mob head	works	jar plugs in: SOCKET form, teleported on top	socket.headinajar.plugged	block/NeuralSocketBlockEntity.java:164-168, 180-193	
+P051	(empty)		no	JAR (no arm)	block headinajar:neural_socket	socket holding a jarred mob head	works	the mob head pops out into the jar inventory instead of plugging you in; click again to plug in		block/NeuralSocketBlockEntity.java:166, 174-177	Y
+P052	(empty)		no	BODY	block headinajar:neural_socket	empty socket	nothing	no message: socket only reacts to a jar or a jarred head		block/NeuralSocketBlockEntity.java:164-178	Y
+P053	(empty)		no	BODY	block headinajar:neural_socket	socket holding a mob head	works	mob head comes out		block/NeuralSocketBlockEntity.java:174-177	
+P054	(empty)		no	BODY	block headinajar:neural_socket	another player plugged in	nothing	no message		block/NeuralSocketBlockEntity.java:164-178	Y
+P055	(empty)		no	BODY	block headinajar:surgical_steel_block	placed	nothing	plain block (vanilla)		no handler (vanilla default)	
+P056	(empty)		no	BODY	fluid headinajar:cranial_saline (in world)	standing in a saline pool as a jar or with a placed head	nothing	the world fluid never refills a jar; it is only water-like		registry/ModFluids.java:42-55 (no refill hook)	Y
+P057	(empty)		no	LINKED	entity headinajar:head_jar (own)	your placed head, Head Satchel in inventory	works	you pick your head up (carrying)		entity/HeadJarEntity.java:183; form/FormActions.java:268-277	
+P058	(empty)		no	LINKED	entity headinajar:head_jar (own)	your placed head, no satchel	refuses	need a satchel	message.headinajar.need_satchel	entity/HeadJarEntity.java:184-186	
+P059	(empty)		no	any	entity headinajar:head_jar (another player's)	friend separated, head placed	nothing	PASS for anyone but the owner: no name, no status		entity/HeadJarEntity.java:171	Y
+P060	(empty)		no	LINKED	entity headinajar:head_jar (own), left click	your placed head	works	each hit takes Jar Integrity; at 0 the jar shatters and you die for real		entity/HeadJarEntity.java:136-167	
+P061	(empty)		no	BODY	entity headinajar:head_jar (another player's), left click	owner online	works	damages the owner's Jar Integrity; offline owners are protected (nothing happens)		entity/HeadJarEntity.java:136-153	
+P062	(empty)		no	JAR (no arm)	entity headinajar:headless_body (own, with Collar Cam)	separated in the chair, signal good	works	head is put down here, you wake in the body (LINKED)		entity/HeadlessBody.java:211-213; form/FormActions.java:170-194	
+P063	(empty)		no	JAR (no arm)	entity headinajar:headless_body (own, with Collar Cam)	signal quality 20 or less	refuses	signal too weak	message.headinajar.signal_too_weak	form/FormActions.java:175-178	
+P064	(empty)		no	JAR (no arm)	entity headinajar:headless_body (own, no collar)	separated by /headoffice detach	works	head goes straight back on (BODY), jar and modules returned		entity/HeadlessBody.java:212; form/FormActions.java:441-467	
+P065	(empty)		no	JAR (no arm)	entity headinajar:headless_body (own corpse)	body died while linked	works	opens the 54-slot corpse inventory (no revive without a Suture Kit)		entity/HeadlessBody.java:204-208	
+P066	(empty)		no	HOSTED	entity headinajar:headless_body (own)	riding a host next to your standing body	nothing	the client lets the click through, but the body only answers a JAR; no hint to dismount first		entity/HeadlessBody.java:211-215; form/FormEvents.java:165	Y
+P067	(empty)		no	SOCKET	entity headinajar:headless_body (own)	plugged in, body adjacent	nothing	body answers only JAR form		entity/HeadlessBody.java:211-215	
+P068	(empty)		no	any	entity headinajar:headless_body (another player's)	friend separated	nothing	PASS on both sides: no owner name or status		entity/HeadlessBody.java:194, 215	Y
+P069	(empty)		no	BODY	entity headinajar:headless_body (another player's corpse)	owner trusts you (/headoffice trust)	works	opens the corpse inventory		entity/HeadlessBody.java:204-208	
+P070	(empty)		no	BODY	entity headinajar:headless_body (another player's corpse)	not trusted	nothing	client returns SUCCESS (arm swings), server PASS: no message		entity/HeadlessBody.java:194, 209	Y
+P071	(empty)		no	BODY	entity headinajar:headless_body (any), left click	idle body, owner online	works	body takes damage; at 0 it lies down as a corpse		entity/HeadlessBody.java:166-187	
+P072	(empty)		no	BODY	host (mob made host, e.g. minecraft:pig)	sawn pig	works	freshness and sync shown	message.headinajar.host_status	host/HostInteractions.java:68-71	
+P073	(empty)		no	JAR (no arm)	host (mob made host)	sawn pig, nobody riding	works	jar climbs on (HOSTED); Neural Handshake starts on a fresh host		host/HostInteractions.java:66-67; form/FormActions.java:220-253	
+P074	(empty)		no	JAR (no arm)	host (mob made host)	another jar already riding it	refuses	someone is already in that body	message.headinajar.host_busy	host/HostInteractions.java:67; form/FormActions.java:223	
+P075	(empty)		no	LINKED+head	host (mob made host)	carrying your head in the satchel	works	body is left standing, you take over the host		host/HostInteractions.java:66; form/FormActions.java:224-226	
+P076	(empty)		no	LINKED	host (mob made host)	head elsewhere	refuses	status only	message.headinajar.host_status	host/HostInteractions.java:68-71	
+P077	(empty)		no	HOSTED	host (a second host)	riding host A, click host B	nothing	hosted jars are locked out; FormEvents skips the host path when form is HOSTED; no hop between bodies		form/FormEvents.java:177-181; client/ClientEvents.java:162-168	Y
+P078	(empty)		no	JAR (no arm)	host brazil_legends:headless_mule (never sawn)	Brazil Legends present	works	becomes a host on the spot and the jar mounts it		form/FormEvents.java:167-178	
+P079	(empty)		no	BODY	shell headinajar:lunk / rover / spider_walker	shell placed	works	status (freshness 100, sync 100)	message.headinajar.host_status	host/HostInteractions.java:68-71	
+P080	(empty)		yes	BODY	shell headinajar:rover	rover placed	works	9-slot cargo opens		host/HostInteractions.java:53-56; entity/ShellEntity.java:63-69	
+P081	(empty)		yes	BODY	shell headinajar:lunk or spider_walker	placed	refuses	only the Rover has cargo	message.headinajar.no_cargo	entity/ShellEntity.java:64-66	
+P082	(empty)		no	JAR (no arm)	shell headinajar:lunk	empty shell	works	jar climbs in (HOSTED, no handshake, runs on jar charge)		host/HostInteractions.java:66-67	
+P083	(empty)		no	BODY	mecha (own, empty) e.g. headinajar:hopper	assembled at the gantry	works	battery and HP shown	message.headinajar.mecha_status	host/HostInteractions.java:58-64	
+P084	(empty)		yes	BODY	mecha (own, empty)	mecha with a Cargo Hold	refuses	same status line: there is no way to open a mecha cargo hold by hand	message.headinajar.mecha_status	host/HostInteractions.java:53-64	Y
+P085	(empty)		no	BODY	mecha (occupied, Passenger Pod)	a pilot inside, Passenger Pod fitted	works	you ride as a passenger		host/HostInteractions.java:61	
+P086	(empty)		no	BODY	mecha (occupied, no pod; Wheelhouse seats)	a pilot inside, Wheelhouse frame (2 seats), no pod	refuses	status only: the Wheelhouse built-in seats are reachable only with a Passenger Pod fitted	message.headinajar.mecha_status	host/HostInteractions.java:61; entity/MechaEntity.java:260-262	Y
+P087	(empty)		no	JAR (no arm)	mecha (own, empty)	owned by you	works	PILOT form		host/HostInteractions.java:66-67; form/FormActions.java:227-238	
+P088	(empty)		no	JAR (no arm)	mecha (someone else's, empty)	other owner, not trusted	refuses	"belongs to someone else" is sent, then overwritten in the same tick by "Someone is already in that body"	message.headinajar.not_your_mecha then message.headinajar.host_busy	form/FormActions.java:229-232; host/HostInteractions.java:67	Y
+P089	(empty)		no	JAR (no arm)	mecha (occupied)	a pilot inside	refuses	someone is already in that body	message.headinajar.host_busy	form/FormActions.java:223	
+P090	(empty)		no	JAR (no arm)	vanilla mob minecraft:cow (not a host)	healthy cow	nothing	cancelled; no hint that the saw must make it a host first		client/ClientEvents.java:162-168; form/FormEvents.java:181	Y
+P091	(empty)		no	BODY	vanilla mob minecraft:villager	healthy villager	works	vanilla trading		no handler (vanilla default)	
+P092	(empty)		no	BODY	another player (any form)	friend in JAR, LINKED or BODY	nothing	no mod handler: you cannot help, carry or read another player		no handler (vanilla default)	Y
+P093	(empty)		no	JAR (no arm)	anything, left click	bare jar	nothing	attack cancelled on client and server; no message		client/ClientEvents.java:152-168; form/FormEvents.java:193-196	Y
+P094	(empty)		no	HOSTED	vanilla mob, left click	riding a host, target within reach	works	the host swings and hits it		host/HostEvents.java:193-206	
+P095	(empty)		no	HOSTED	vanilla mob, left click	target beyond host reach	nothing	event cancelled, no swing		host/HostEvents.java:200-205	
+P096	(empty)		no	PILOT	anything, left or right click	piloting a mecha	works	drives the left / right arm module; empty arm slot does nothing		client/PilotClient.java:40-41; client/ClientEvents.java:154-158	
+P097	(empty)		no	LINKED	anything	link quality under 20	refuses	one click in four is dropped	hud.headinajar.packet_loss	client/ClientEvents.java:138-143	
+P098	(empty)		no	JAR (no arm)	the air	bare jar	nothing	right click cancelled		client/ClientEvents.java:162-168; form/FormEvents.java:153-155	
+P099	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:pig	full health	refuses	too lively	message.headinajar.saw_too_healthy	item/SurgicalSawItem.java:51-53	
+P100	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:pig	below 25% health	works	pig becomes a host (persistent, target cleared)	message.headinajar.host_made	item/SurgicalSawItem.java:68-78; host/HostEvents.java:181-190	
+P101	headinajar:surgical_saw	headinajar:life_support_jar	no	BODY	vanilla mob minecraft:pig	below 25% health	works	jar used up, Jarred Pig Head given, pig dies		item/SurgicalSawItem.java:60-66	
+P102	headinajar:surgical_saw	headinajar:compact_life_support_jar	no	BODY	vanilla mob minecraft:pig	below 25% health	works	MAKES A HOST instead: the off-hand check is only for the plain Life Support Jar; the Compact Jar stays in your hand	message.headinajar.host_made	item/SurgicalSawItem.java:61	Y
+P103	headinajar:surgical_saw	headinajar:reinforced_life_support_jar	no	BODY	vanilla mob minecraft:pig	below 25% health (same for executive_life_support_jar)	works	makes a host, not a jarred head	message.headinajar.host_made	item/SurgicalSawItem.java:61	Y
+P104	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:villager	below 25% health	works	villager becomes a host (saw runs before the trade screen)	message.headinajar.host_made	host/HostEvents.java:181-190	
+P105	headinajar:surgical_saw	headinajar:life_support_jar	no	BODY	vanilla mob minecraft:villager	below 25% health	works	Jarred Villager Head that keeps its trades		item/SurgicalSawItem.java:60-66; item/JarredHeadItem.java:34-44	
+P106	headinajar:surgical_saw		no	BODY	boss minecraft:wither	any health	refuses	bosses are off limits	message.headinajar.saw_refused	item/SurgicalSawItem.java:47-49; host/Hosts.java:73-78	
+P107	headinajar:surgical_saw		no	BODY	boss minecraft:ender_dragon	any health	unclear	the click lands on an EnderDragonPart, which is not a Mob or LivingEntity: expected nothing at all (inferred)		host/HostEvents.java:183; item/SurgicalSawItem.java:40	Y
+P108	headinajar:surgical_saw		no	BODY	vanilla mob with a name tag	below 25%	refuses	named mobs are off limits	message.headinajar.saw_refused	host/Hosts.java:75	
+P109	headinajar:surgical_saw		no	BODY	pet minecraft:wolf (your own, tamed)	below 25%	works	your own pet becomes a host	message.headinajar.host_made	host/Hosts.java:76	
+P110	headinajar:surgical_saw		no	BODY	pet minecraft:wolf (another player's)	below 25%	refuses	other people's pets are off limits	message.headinajar.saw_refused	host/Hosts.java:76	
+P111	headinajar:surgical_saw		no	BODY	host (already sawn)	sawn pig	refuses	hosts are off limits	message.headinajar.saw_refused	host/Hosts.java:77	
+P112	headinajar:surgical_saw		no	BODY	shell headinajar:lunk	shell placed (any health)	refuses	shells are hosts	message.headinajar.saw_refused	host/Hosts.java:77; entity/ShellEntity.java:36-39	
+P113	headinajar:surgical_saw		no	BODY	mecha headinajar:hopper	any	refuses	mechas are hosts	message.headinajar.saw_refused	host/Hosts.java:77; entity/MechaEntity.java:59-62	
+P114	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:iron_golem	below 25%	works	golem becomes a host	message.headinajar.host_made	item/SurgicalSawItem.java:68-78	
+P115	headinajar:surgical_saw		no	BODY	entity headinajar:headless_body	any body or corpse	nothing	not a Mob: saw PASSes, body PASSes		item/SurgicalSawItem.java:40; entity/HeadlessBody.java:215	Y
+P116	headinajar:surgical_saw		no	BODY	another player	any form, any health	nothing	not a Mob; no player decapitation by saw (design: only the chair)		item/SurgicalSawItem.java:40	Y
+P117	headinajar:surgical_saw		no	BODY	the air (yourself)	whole	nothing	no use() override; a player trying to saw their own head gets no pointer to the chair		item/SurgicalSawItem.java (no use)	Y
+P118	headinajar:surgical_saw		no	BODY	minecraft:armor_stand	placed	nothing	not a Mob		item/SurgicalSawItem.java:40	
+P119	headinajar:surgical_saw	headinajar:life_support_jar	no	BODY	vanilla mob minecraft:pig, saw held in OFF hand	jar in main hand, saw in off hand, pig below 25%	unclear	main hand passes, then the off-hand saw fires and checks the off hand (the saw itself): expected host, not jarred head	message.headinajar.host_made	host/HostEvents.java:183; item/SurgicalSawItem.java:60	
+P120	headinajar:surgical_saw		no	JAR (with arm)	vanilla mob minecraft:pig	below 25%	works	same as BODY (the saw handler runs at HIGHEST, before the lockout)	message.headinajar.host_made	host/HostEvents.java:181-190	
+P121	headinajar:surgical_saw		no	JAR (no arm)	vanilla mob minecraft:pig	below 25%	nothing	client cancels the click (pig is not a host yet)		client/ClientEvents.java:162-168	Y
+P122	headinajar:suture_kit		no	BODY	the air (yourself)	whole	refuses	how-to line (client side only)	message.headinajar.suture_how	item/SutureKitItem.java:33-37	
+P123	headinajar:suture_kit		no	LINKED	the air (yourself)	head placed or docked elsewhere	refuses	how-to line	message.headinajar.suture_how	item/SutureKitItem.java:35-37	
+P124	headinajar:suture_kit		no	LINKED+head	the air (yourself)	carrying your head in a satchel	works	hold 3 s (brush animation): whole again, goggles and collar returned worn, Nausea 30 s		item/SutureKitItem.java:39-52; form/FormActions.java:391-431	
+P125	headinajar:suture_kit		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	works	teleport to the body, whole again, armour back on		entity/HeadlessBody.java:197-201; form/FormActions.java:395-431	
+P126	headinajar:suture_kit		no	JAR (no arm)	entity headinajar:headless_body (own corpse)	body died	works	whole again at 6 HP, corpse inventory returned		entity/HeadlessBody.java:197-201; form/FormActions.java:406-409	
+P127	headinajar:suture_kit		no	JAR (no arm)	the air (yourself)	bare jar	nothing	item use cancelled for a bare jar; no message		form/FormEvents.java:153-155; client/ClientEvents.java:162-168	Y
+P128	headinajar:suture_kit		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	works	PICKS THE HEAD UP instead of suturing; you must then use the kit in the air		entity/HeadJarEntity.java:174-183	Y
+P129	headinajar:suture_kit		no	LINKED	entity headinajar:head_jar (own)	no satchel	refuses	need a satchel	message.headinajar.need_satchel	entity/HeadJarEntity.java:184-186	
+P130	headinajar:suture_kit		no	BODY	host (mob made host)	sawn pig	works	shows host status (the kit is ignored)	message.headinajar.host_status	host/HostInteractions.java:68-71	Y
+P131	headinajar:suture_kit		no	JAR (with arm)	host (mob made host)	sawn pig	works	climbs onto the host (the kit is ignored)		host/HostInteractions.java:66-67	
+P132	headinajar:suture_kit		no	BODY	entity headinajar:headless_body (another player's)	friend separated	nothing	only the owner can be sutured; no way to sew a friend back up		entity/HeadlessBody.java:197, 215	Y
+P133	headinajar:suture_kit		no	BODY	another player (LINKED+head)	friend carrying their head	nothing	no handler		no handler (vanilla default)	Y
+P134	headinajar:suture_kit		no	HOSTED	entity headinajar:headless_body (own)	riding a host beside your body	nothing	suture needs JAR form		entity/HeadlessBody.java:197	Y
+P135	headinajar:surgical_wrench		no	BODY	block headinajar:tesla_node	two unlinked nodes 10 blocks apart	misrouted	shows energy status; the wrench useOn is never reached because PowerBlock.useWithoutItem consumes the click first (vanilla 1.21.1 order: block useItemOn, then useWithoutItem, then item useOn). Linking cannot be done by clicking.	message.headinajar.energy_status (expected message.headinajar.tesla_from)	block/PowerBlock.java:73-79; item/SurgicalWrenchItem.java:25-53	Y
+P136	headinajar:surgical_wrench		yes	BODY	block headinajar:tesla_node	linked node	works	sneaking skips the block, the wrench unlinks	message.headinajar.tesla_unlinked	item/SurgicalWrenchItem.java:33-37	
+P137	headinajar:surgical_wrench		yes	BODY	block headinajar:tesla_node, then a second node	try to link by sneaking	refuses	sneak always unlinks; there is no click sequence that sets From	message.headinajar.tesla_unlinked	item/SurgicalWrenchItem.java:33-37	Y
+P138	headinajar:surgical_wrench		no	BODY	block headinajar:separation_chair	placed	works	sits you down (wrench ignored)		block/SeparationChairBlock.java:89-91, 103-116	
+P139	headinajar:surgical_wrench		no	BODY	block headinajar:life_support_cradle	empty	refuses	cradle messages (wrench ignored)	message.headinajar.cradle_empty	block/LifeSupportCradleBlock.java:77-95	
+P140	headinajar:surgical_wrench		no	BODY	block headinajar:galvanic_pile	placed	works	pile status (wrench ignored)	message.headinajar.pile_status	block/GalvanicPileBlock.java:78-96	
+P141	headinajar:surgical_wrench		no	BODY	block headinajar:charging_dock	placed	nothing	no block handler, wrench PASSes		item/SurgicalWrenchItem.java:30	Y
+P142	headinajar:surgical_wrench		no	BODY	block headinajar:saline_mixer	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P143	headinajar:surgical_wrench		no	BODY	block headinajar:body_printer	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P144	headinajar:surgical_wrench		no	BODY	block headinajar:assembly_gantry	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P145	headinajar:surgical_wrench		no	BODY	block headinajar:centrifuge	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P146	headinajar:surgical_wrench		no	BODY	block headinajar:dna_sequencer	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P147	headinajar:surgical_wrench		no	BODY	block headinajar:gene_splicer	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P148	headinajar:surgical_wrench		no	BODY	block headinajar:injection_rig	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P149	headinajar:surgical_wrench		no	BODY	block headinajar:cerebral_array	placed	works	opens the menu (wrench ignored)		block/MachineBlock.java:95-110	
+P150	headinajar:surgical_wrench		no	BODY	block headinajar:leyden_jar	placed	works	energy status (wrench ignored)	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P151	headinajar:surgical_wrench		no	BODY	block headinajar:relay_mast	placed	works	energy status (wrench ignored)	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P152	headinajar:surgical_wrench		no	BODY	block headinajar:relay_mast_mk2	placed	works	energy status (wrench ignored)	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P153	headinajar:surgical_wrench		no	BODY	block headinajar:signal_jammer	placed	works	energy status (wrench ignored)	message.headinajar.energy_status	block/PowerBlock.java:73-79	
+P154	headinajar:surgical_wrench		no	BODY	block headinajar:safety_placard	placed	works	cycles the notice	placard.headinajar.<n>	block/SafetyPlacardBlock.java:70-77	
+P155	headinajar:surgical_wrench		no	BODY	block headinajar:body_locker	host nearby	works	stores / releases the host	message.headinajar.locker_stored	registry/ModRegistry.java:145-150	
+P156	headinajar:surgical_wrench		no	BODY	block headinajar:leech_jar	placed	works	empties it	message.headinajar.leech_jar	registry/ModRegistry.java:177-182	
+P157	headinajar:surgical_wrench		no	BODY	block headinajar:turret_pedestal	turret holding a head	nothing	Holder.use with a non-empty, non-head item does nothing		block/TurretPedestalBlockEntity.java:225-237	Y
+P158	headinajar:surgical_wrench		no	BODY	block headinajar:employee_mount	mount with a villager	works	staff status	staff.headinajar.status_paid	block/EmployeeMountBlockEntity.java:120-122	
+P159	headinajar:surgical_wrench		no	BODY	block headinajar:neural_socket	empty	nothing	no message		block/NeuralSocketBlockEntity.java:164-178	Y
+P160	headinajar:surgical_wrench		no	BODY	block headinajar:jarred_head	villager head	works	trades		block/JarredHeadBlock.java:74-81	
+P161	headinajar:surgical_wrench		yes	BODY	any mod machine except tesla_node	sneaking skips block use	nothing	the wrench has no rotate, pick-up or configure action on any other block		item/SurgicalWrenchItem.java:30	Y
+P162	headinajar:surgical_wrench		no	BODY	shell or mecha	placed	works	host / mecha status (wrench ignored); no repair or dismantle	message.headinajar.host_status	host/HostInteractions.java:58-71	Y
+P163	headinajar:jarred_head		no	BODY	block headinajar:turret_pedestal	empty, skeleton head	works	head fitted, you become owner; needs 10 FE/t and arrows from a container below		block/TurretPedestalBlockEntity.java:226-233	
+P164	headinajar:jarred_head		no	BODY	block headinajar:turret_pedestal	empty, jarred PIG head	unclear	head is fitted and the turret draws power, but a pig has no attack: it never fires and never says so		block/TurretPedestalBlockEntity.java:199-201	Y
+P165	headinajar:jarred_head		no	BODY	block headinajar:turret_pedestal	already holding a head	nothing	no swap, no message		block/TurretPedestalBlockEntity.java:225-237	Y
+P166	headinajar:jarred_head		no	BODY	block headinajar:employee_mount	empty, jarred villager	works	villager hired; pays itself 1 emerald a day from an adjacent chest		block/EmployeeMountBlockEntity.java:105-114	
+P167	headinajar:jarred_head		no	BODY	block headinajar:employee_mount	empty, jarred zombie	refuses	only a villager	staff.headinajar.needs_villager	block/EmployeeMountBlockEntity.java:106-108	
+P168	headinajar:jarred_head		no	BODY	block headinajar:employee_mount	already staffed	works	shows staff status; the held head is ignored	staff.headinajar.status_unpaid	block/EmployeeMountBlockEntity.java:120-122	
+P169	headinajar:jarred_head		no	BODY	block headinajar:neural_socket	empty socket, jarred zombie / villager / enderman	works	head goes in and runs its program (1 Hz clock / staircase / stare detector)		block/NeuralSocketBlockEntity.java:170-173, 133-141	
+P170	headinajar:jarred_head		no	BODY	block headinajar:neural_socket	empty socket, jarred skeleton	unclear	accepted, but only zombie, villager and enderman heads have a program: no output, no message		block/NeuralSocketBlockEntity.java:140	Y
+P171	headinajar:jarred_head		no	BODY	block headinajar:neural_socket	socket already holding a head	nothing	no message		block/NeuralSocketBlockEntity.java:164-178	Y
+P172	headinajar:jarred_head		no	BODY	block headinajar:cerebral_array	array placed	works	opens the menu; the head is not inserted by the click, you place it in a slot		block/MachineBlock.java:95-110	
+P173	headinajar:jarred_head		no	BODY	block headinajar:jarred_head	a jarred head already placed	works	that head answers (trade or message); heads do not stack	message.headinajar.jarred_head	block/JarredHeadBlock.java:74-81	
+P174	headinajar:jarred_head		no	BODY	block headinajar:life_support_cradle	empty cradle	refuses	mob heads cannot dock: says the Cradle is empty	message.headinajar.cradle_empty	block/LifeSupportCradleBlock.java:84-95	Y
+P175	headinajar:jarred_head		no	BODY	ground (any free block face)		works	places the jarred head block facing you		item/JarredHeadItem.java:60-75	
+P176	headinajar:jarred_head		no	BODY	host (a headless pig host)	sawn pig	works	host status only: no way to put a mob head back on a host	message.headinajar.host_status	host/HostInteractions.java:68-71	Y
+P177	headinajar:jarred_head		no	BODY	block headinajar:body_printer	printer placed	works	opens the printer menu		block/MachineBlock.java:104-110	
+P178	minecraft:zombie_head		no	BODY	block headinajar:turret_pedestal	empty turret	refuses	a vanilla skull is not a jarred head	turret.headinajar.needs_head	block/TurretPedestalBlockEntity.java:227-229	
+P179	minecraft:zombie_head		no	BODY	block headinajar:neural_socket	empty socket	nothing	vanilla skull ignored without a message		block/NeuralSocketBlockEntity.java:170	Y
+P180	minecraft:dragon_head		no	BODY	block headinajar:cerebral_array (slot)	Board Room Core in slot 10	works	1000 FE/t (0 without the core)		block/HeadJobs.java:38-39; block/CerebralArrayBlockEntity.java:44-47	
+P181	headinajar:lunk_chassis		no	BODY	ground		works	shell stands up facing you		item/ShellChassisItem.java:29-37	
+P182	headinajar:rover_chassis		no	BODY	ground		works	shell stands up facing you		item/ShellChassisItem.java:29-37	
+P183	headinajar:spider_walker_chassis		no	BODY	ground		works	shell stands up facing you		item/ShellChassisItem.java:29-37	
+P184	headinajar:lunk_chassis		no	BODY	shell headinajar:lunk (placed)	trying to fold it back	works	host status; there is no way to fold a shell back into its chassis (killing it drops 2 Servos and 3 ingots)	message.headinajar.host_status	host/HostInteractions.java:68-71; entity/ShellEntity.java:80-85	Y
+P185	headinajar:life_support_jar		no	BODY	the air (yourself)	whole	nothing	no use(): jars go into the Separation Chair		item/LifeSupportJarItem.java (no use)	
+P186	headinajar:compact_life_support_jar		no	BODY	the air (yourself)	whole	nothing	no use(): jars go into the Separation Chair		item/LifeSupportJarItem.java (no use)	
+P187	headinajar:reinforced_life_support_jar		no	BODY	the air (yourself)	whole	nothing	no use(): jars go into the Separation Chair		item/LifeSupportJarItem.java (no use)	
+P188	headinajar:executive_life_support_jar		no	BODY	the air (yourself)	whole	nothing	no use(): jars go into the Separation Chair		item/LifeSupportJarItem.java (no use)	
+P189	headinajar:life_support_jar		no	BODY	block headinajar:separation_chair	placed	works	sits you down; the jar in hand is not loaded (load it in the menu)		block/SeparationChairBlock.java:89-91	
+P190	headinajar:relay_goggles		no	LINKED	entity headinajar:head_jar (own)	your placed head (any tier, incl. quantum_goggles)	works	new goggles fitted, old pair returned		entity/HeadJarEntity.java:175-177; form/FormActions.java:313-324	
+P191	headinajar:relay_goggles		no	LINKED	block headinajar:life_support_cradle (own head docked)		works	goggles fitted to the docked head		block/LifeSupportCradleBlock.java:63-66	
+P192	headinajar:relay_goggles		no	BODY	the air (yourself)	whole	nothing	no use(): goggles go in the chair		item/RelayGogglesItem.java (no use)	
+P193	headinajar:relay_goggles		no	LINKED	entity headinajar:head_jar (another player's)		nothing	owner only		entity/HeadJarEntity.java:171	Y
+P194	headinajar:collar_cam		no	BODY	the air (yourself)	whole or LINKED	nothing	no use(): collars go in the chair		item/CollarCamItem.java (no use)	
+P195	headinajar:collar_cam		no	JAR (no arm)	entity headinajar:headless_body (own, no collar)	body from /headoffice detach or a crooked collar you want to replace	misrouted	the held collar is ignored: the head goes straight back on (reattach); a collar can never be fitted to an existing body		entity/HeadlessBody.java:211-213	Y
+P196	headinajar:collar_wide_lens (any collar_* upgrade)	headinajar:collar_cam	no	BODY	the air (yourself)	Collar Cam in the other hand	works	upgrade fitted into that collar (4 max)	collar.headinajar.installed	item/QuantumItems.java:94-112	
+P197	headinajar:collar_wide_lens (any collar_* upgrade)		no	LINKED	the air (yourself)	collar on your neck	works	fitted into your own collar	collar.headinajar.installed	item/QuantumItems.java:99-107	
+P198	headinajar:collar_wide_lens (any collar_* upgrade)		no	BODY	the air (yourself)	no collar anywhere	refuses	message reads "No Collar Cam to fit it to, or no room left": one key for two reasons	collar.headinajar.no_room	item/QuantumItems.java:100-103	
+P199	headinajar:collar_wide_lens (any collar_* upgrade)		no	JAR (no arm)	the air (yourself)	collar is on your body	nothing	item use cancelled for a bare jar		form/FormEvents.java:153-155	Y
+P200	headinajar:head_satchel		yes	LINKED+head	the air (yourself)	carrying your head	works	head set down in front of you		item/HeadSatchelItem.java:28-35; form/FormActions.java:302-310	
+P201	headinajar:head_satchel		no	LINKED+head	the air (yourself)	carrying your head, not sneaking	nothing	PASS without a message		item/HeadSatchelItem.java:30-32	Y
+P202	headinajar:head_satchel		no	BODY	the air (yourself)	whole	nothing	PASS		item/HeadSatchelItem.java:30-32	
+P203	headinajar:saline_bottle		no	JAR (with arm)	the air (yourself)	saline below max	nothing	no use(): a jar refills only through the Jar menu feed slot (J)		item (plain Item); menu/JarMenu.java:60-74	Y
+P204	headinajar:saline_bottle		no	BODY	the air (yourself)	whole	nothing	not drinkable		plain Item	
+P205	headinajar:saline_bottle		no	LINKED	entity headinajar:head_jar (own)	saline below max	works	+250 mB, glass bottle back		entity/HeadJarEntity.java:179-181; form/LifeSupport.java:88-93	
+P206	headinajar:saline_bottle		no	LINKED	entity headinajar:head_jar (own)	saline already full, satchel in inventory	misrouted	refill is skipped and the head is PICKED UP		entity/HeadJarEntity.java:179-183	Y
+P207	headinajar:saline_bottle		no	BODY	block headinajar:life_support_cradle	tank has 250 mB of room	works	+250 mB into the cradle tank, bottle back		block/LifeSupportCradleBlock.java:67-76	
+P208	headinajar:saline_bottle		no	BODY	block headinajar:life_support_cradle	tank full (4000 mB)	nothing	returns success without filling: arm swings, nothing changes, no message		block/LifeSupportCradleBlock.java:68-75	Y
+P209	headinajar:saline_bottle		no	BODY	block headinajar:body_printer	printer needs saline	misrouted	opens the menu; bottles are not poured in (the printer needs 2000 mB by bucket or pipe)		block/MachineBlock.java:95-110	Y
+P210	headinajar:saline_bottle		no	BODY	block headinajar:saline_mixer		works	opens the menu		block/MachineBlock.java:95-110	
+P211	headinajar:saline_bottle		no	BODY	block headinajar:jarred_head (villager)	jarred villager head placed	misrouted	opens the trade screen; mob heads have no saline to refill		block/JarredHeadBlock.java:74-81	Y
+P212	headinajar:saline_bottle		no	BODY	block headinajar:jarred_head (zombie)		refuses	the head description line	message.headinajar.jarred_head	block/JarredHeadBlock.java:77-79	
+P213	headinajar:saline_bottle		no	BODY	another player (JAR form)	friend low on saline	nothing	no way to refill someone else		no handler (vanilla default)	Y
+P214	headinajar:saline_bottle		no	BODY	entity headinajar:head_jar (another player's)	friend drying out	nothing	owner only		entity/HeadJarEntity.java:171	Y
+P215	headinajar:saline_bottle		no	BODY	block headinajar:separation_chair		works	sits you down (not loaded)		block/SeparationChairBlock.java:89-91	
+P216	headinajar:glass_patch		no	JAR (with arm)	the air (yourself)	integrity below max	nothing	no use(); repair only via the Jar menu feed slot		plain Item; menu/JarMenu.java:60-74	Y
+P217	headinajar:glass_patch		no	LINKED	entity headinajar:head_jar (own)	integrity below max	works	+5 Jar Integrity		entity/HeadJarEntity.java:179-181; form/LifeSupport.java:94-98	
+P218	headinajar:glass_patch		no	BODY	block headinajar:jarred_head (mob)	jarred zombie head placed	refuses	description line only; mob jars have no integrity to patch	message.headinajar.jarred_head	block/JarredHeadBlock.java:74-81	Y
+P219	headinajar:glass_patch		no	BODY	block headinajar:jarred_head (villager)		misrouted	opens trading		block/JarredHeadBlock.java:77	Y
+P220	headinajar:glass_patch		no	BODY	entity headinajar:head_jar (another player's)	cracked friend	nothing	owner only		entity/HeadJarEntity.java:171	Y
+P221	headinajar:glass_patch		no	BODY	another player (JAR form)	cracked friend	nothing	no handler		no handler (vanilla default)	Y
+P222	headinajar:embalming_fluid		no	BODY	host (mob made host)	freshness below 100	works	freshness 100, decay halved for a day, glass bottle back	message.headinajar.embalmed	host/HostInteractions.java:30-38	
+P223	headinajar:embalming_fluid		no	BODY	shell or mecha		works	shells never decay: status line instead	message.headinajar.host_status / mecha_status	host/HostInteractions.java:30, 58-71	
+P224	headinajar:embalming_fluid		no	JAR (no arm)	entity headinajar:headless_body (own)	your idle body	nothing	body has no embalm handler (bodies do not decay); no message		entity/HeadlessBody.java:190-216	Y
+P225	headinajar:embalming_fluid		no	JAR (no arm)	entity headinajar:headless_body (own corpse)		works	opens the corpse inventory (fluid ignored)		entity/HeadlessBody.java:204-208	
+P226	headinajar:embalming_fluid		no	BODY	vanilla mob minecraft:pig (not a host)		nothing	no handler		no handler (vanilla default)	Y
+P227	headinajar:embalming_fluid		no	BODY	the air (yourself)		nothing	plain item		plain Item	
+P228	headinajar:neural_lace		no	BODY	host (mob made host)	sync below 50%	refuses	needs 50% sync	message.headinajar.lace_needs_sync	host/HostInteractions.java:40-44	
+P229	headinajar:neural_lace		no	BODY	host (mob made host)	sync 50% or more	works	never decays again	message.headinajar.laced	host/HostInteractions.java:45-51	
+P230	headinajar:neural_lace		no	BODY	shell		works	status line (shells need no lace)	message.headinajar.host_status	host/HostInteractions.java:40, 68-71	
+P231	headinajar:neural_lace		no	BODY	vanilla mob (not a host)		nothing	no handler		no handler (vanilla default)	
+P232	headinajar:syringe		no	BODY	vanilla mob minecraft:pig	healthy	works	Blood Sample of Pig (quality from health), 1 damage		genetics/GeneEvents.java:124-137; item/GeneticsItems.java:110-131	
+P233	headinajar:syringe		no	BODY	vanilla mob minecraft:villager	healthy	works	sample drawn; trade screen does not open		genetics/GeneEvents.java:134-137	
+P234	headinajar:syringe		no	BODY	vanilla mob minecraft:skeleton		refuses	bloodless: use a Marrow Drill	message.headinajar.bloodless	item/GeneticsItems.java:112-117	
+P235	headinajar:syringe		no	BODY	vanilla mob minecraft:iron_golem (not a host)		refuses	bloodless (oil)	message.headinajar.bloodless	item/GeneticsItems.java:112-117; data tags/entity_type/blood/oil.json	
+P236	headinajar:syringe		no	BODY	boss minecraft:warden		refuses	hide too thick	message.headinajar.boss_hide	item/GeneticsItems.java:118-121	
+P237	headinajar:leviathan_needle		no	BODY	boss minecraft:warden		works	sample drawn		item/GeneticsItems.java:118	
+P238	headinajar:syringe		no	BODY	boss minecraft:ender_dragon		unclear	click lands on an EnderDragonPart (not a LivingEntity): expected nothing, so the Draconic Wings gene may be unobtainable (inferred)		genetics/GeneEvents.java:126	Y
+P239	headinajar:marrow_drill		no	BODY	vanilla mob minecraft:skeleton		works	marrow sample		item/GeneticsItems.java:113	
+P240	headinajar:marrow_drill		no	BODY	vanilla mob minecraft:pig		refuses	wrong tool	message.headinajar.wrong_tool	item/GeneticsItems.java:113-116	
+P241	headinajar:oil_tap		no	BODY	vanilla mob minecraft:iron_golem (not a host)		works	oil sample, no damage		item/GeneticsItems.java:113	
+P242	headinajar:oil_tap		no	BODY	shell headinajar:lunk	the oil blood tag lists lunk, rover, spider_walker, hopper, bulwark	misrouted	host status: FormEvents sends every host click to HostInteractions, which cancels the event before GeneEvents runs	message.headinajar.host_status	form/FormEvents.java:177-180; host/HostInteractions.java:24-25; genetics/GeneEvents.java:124	Y
+P243	headinajar:syringe		no	BODY	mecha headinajar:hopper	own or not	misrouted	mecha status; never draws (same cancel order)	message.headinajar.mecha_status	form/FormEvents.java:177-180; host/HostInteractions.java:58-64	Y
+P244	headinajar:oil_tap		no	BODY	mecha headinajar:bulwark		misrouted	mecha status; never draws	message.headinajar.mecha_status	form/FormEvents.java:177-180; host/HostInteractions.java:58-64	Y
+P245	headinajar:syringe		no	BODY	host (sawn pig)		misrouted	host status; no blood from a host body	message.headinajar.host_status	form/FormEvents.java:177-180; host/HostInteractions.java:68-71	Y
+P246	headinajar:syringe		no	BODY	another player		nothing	draw() returns PASS for players: no way to sample a player body		item/GeneticsItems.java:111	Y
+P247	headinajar:syringe		no	BODY	the air (yourself)		nothing	no use()		item/GeneticsItems.java (no use)	Y
+P248	headinajar:syringe		no	BODY	entity headinajar:headless_body (any)	idle body	unclear	draws a warm "Blood Sample of Headless Body" and hurts the body 1; the sample carries no genes and not the owner's genes		genetics/GeneEvents.java:126-131; item/GeneticsItems.java:110-131	Y
+P249	headinajar:ecto_trap		no	BODY	vanilla mob minecraft:allay		works	ecto sample, harmless		item/GeneticsItems.java:113	
+P250	headinajar:syringe		no	JAR (no arm)	vanilla mob minecraft:pig		nothing	cancelled on the client (not a host)		client/ClientEvents.java:162-168	Y
+P251	headinajar:serum_cassette		no	BODY	host (sawn pig)	filled serum	misrouted	host status; the serum is NOT injected. SerumItem.inject's host branch is unreachable by a click (HostInteractions cancels the event at HIGH priority before GeneEvents at NORMAL)	message.headinajar.host_status (expected message.headinajar.inject.ok)	form/FormEvents.java:177-180; host/HostInteractions.java:24-25; item/GeneticsItems.java:172-173	Y
+P252	headinajar:serum_cassette		no	BODY	shell headinajar:lunk	filled serum	misrouted	host status; serum not injected	message.headinajar.host_status	form/FormEvents.java:177-180; host/HostInteractions.java:68-71	Y
+P253	headinajar:serum_cassette		no	BODY	mecha headinajar:chimera (own)	filled serum, free Gene Port	misrouted	mecha status; the Chimera Gene Ports cannot be filled by clicking	message.headinajar.mecha_status (expected message.headinajar.inject.ok)	form/FormEvents.java:177-180; host/HostInteractions.java:58-64; item/GeneticsItems.java:162-171	Y
+P254	headinajar:serum_cassette		no	BODY	mecha headinajar:hopper	no Gene Ports	misrouted	mecha status, never the gene-port message	message.headinajar.mecha_status (expected message.headinajar.mecha_gene_port)	host/HostInteractions.java:58-64	Y
+P255	headinajar:serum_cassette		no	JAR (with arm)	mecha headinajar:chimera (own)		works	you climb in as pilot (serum ignored)		host/HostInteractions.java:66-67	
+P256	headinajar:serum_cassette		no	BODY	vanilla mob minecraft:villager (not a host)		misrouted	inject() PASSes, vanilla trade screen opens		item/GeneticsItems.java:175; genetics/GeneEvents.java:134	Y
+P257	headinajar:serum_cassette		no	BODY	the air (yourself)	whole	nothing	no use(): self-injection only at the Injection Rig		item/GeneticsItems.java:152-221 (no use)	Y
+P258	headinajar:serum_cassette		no	BODY	another player		nothing	PASS		item/GeneticsItems.java:175	Y
+P259	headinajar:serum_cassette		no	BODY	entity headinajar:headless_body (own idle body)		nothing	PASS; bodies keep genes but cannot be dosed directly		item/GeneticsItems.java:175; entity/HeadlessBody.java:215	Y
+P260	headinajar:serum_cassette		no	BODY	block headinajar:injection_rig		works	opens the rig menu (put the cassette in its slot, press Inject)		block/MachineBlock.java:104-110	
+P261	headinajar:gene_wash		no	BODY	the air (drink)	genes on your body	works	all genes and mutations cleared	message.headinajar.washed	item/GeneticsItems.java:230-246	
+P262	headinajar:gene_wash		no	JAR (with arm)	the air (drink)		nothing	the bottle is consumed and nothing happens, no message		item/GeneticsItems.java:236-243	Y
+P263	headinajar:gene_wash		no	BODY	host or mecha		works	status line; no way to wash a host or a Chimera except the gantry	message.headinajar.host_status	host/HostInteractions.java:58-71	Y
+P264	headinajar:emp_grenade		no	BODY	the air (throw) near a LINKED player	within 8 blocks of the hit	works	link broken: they wake in their head	message.headinajar.emp	form/Emp.java:41-47	
+P265	headinajar:emp_grenade		no	BODY	the air (throw) near a jar		works	jar charge halved		form/Emp.java:48-51	
+P266	headinajar:emp_grenade		no	BODY	the air (throw) near a mecha		works	battery halved, forced vent		form/Emp.java:54-58	
+P267	headinajar:emp_grenade		no	BODY	the air (throw) near a turret_pedestal		works	turret energy to 0		form/Emp.java:59-65	
+P268	headinajar:emp_grenade		no	BODY	the air (throw) near a life_support_cradle	docked head, owner far away	nothing	the pulse ignores cradles, docks, masts, jammers, Leyden jars and placed head jars; only players, mechas and turrets are touched		form/Emp.java:36-67	Y
+P269	headinajar:emp_grenade		no	BODY	the air (throw) near a LINKED player with Shielded Housing		nothing	immune, no message (by design)		form/Emp.java:43	
+P270	headinajar:emp_grenade		no	JAR (no arm)	the air		nothing	item use cancelled for a bare jar		form/FormEvents.java:153-155	Y
+P271	headinajar:entangled_pair		no	BODY	the air		works	two Entangled Shards sharing one id		item/QuantumItems.java:148-160	
+P272	headinajar:entangled_shard		no	BODY	the air		nothing	no use(); craft it with goggles or a collar		item/QuantumItems.java:164-180	
+P273	headinajar:replacement_blade		no	BODY	block headinajar:separation_chair	chair idle	works	blade wear reset	dolores.headinajar.new_blade	block/SeparationChairBlock.java:88-99	
+P274	headinajar:replacement_blade		no	BODY	block headinajar:separation_chair	operation running	nothing	FAIL without a message		block/SeparationChairBlock.java:92	Y
+P275	headinajar:mecha_plating		no	BODY	mecha (own, damaged)		misrouted	status line; plating repairs only at the gantry (Repair button) or via a Welding Torch arm	message.headinajar.mecha_status	host/HostInteractions.java:58-64	Y
+P276	headinajar:plasma_pellet		no	BODY	mecha (own) with a Fusion Bottle		misrouted	status line; fuel is taken from mecha cargo or the pilot inventory, never by hand	message.headinajar.mecha_status	host/HostInteractions.java:58-64; mecha/MechaSystems.java:90	Y
+P277	headinajar:bio_gel		no	BODY	mecha headinajar:chimera (own)		misrouted	status line; Bio-Gel heals only from cargo or pilot inventory	message.headinajar.mecha_status	host/HostInteractions.java:58-64; mecha/MechaSystems.java:202-210	Y
+P278	headinajar:hopper_frame (any *_frame or mecha_* module)		no	BODY	the air		nothing	no use(); fitted in the Assembly Gantry		item/MechaFrameItem.java; item/MechaModuleItem.java	
+P279	headinajar:hop_springs (any jar module)		no	JAR (with arm)	the air		nothing	no use(); fit modules in the Jar menu (J)		item/ModuleItem.java (no use)	
+P280	headinajar:hop_springs (any jar module)		no	BODY	the air	whole player	nothing	no use; a whole player cannot open the Jar menu either		item/ModuleItem.java; client/ClientEvents.java:191	
+P281	minecraft:rotten_flesh		no	BODY	block headinajar:galvanic_pile		works	stack goes into the fuel slot (also spider eye, raw meat, raw fish)		block/GalvanicPileBlock.java:77-87	
+P282	minecraft:coal		no	BODY	block headinajar:galvanic_pile		refuses	pile status only; coal is not fuel	message.headinajar.pile_status	block/GalvanicPileBlock.java:78-80, 90-96	
+P283	minecraft:lead		no	BODY	host (sawn pig) / shell		misrouted	status line: every item on a host is swallowed (also name tags, saddles, breeding food)	message.headinajar.host_status	host/HostInteractions.java:24-25, 68-71	Y
+P284	minecraft:name_tag		no	BODY	host (sawn pig)		misrouted	status line; a host cannot be named	message.headinajar.host_status	host/HostInteractions.java:24-25, 68-71	Y
+P285	headinajar:board_room_core		no	BODY	block headinajar:cerebral_array		works	opens the menu (core goes in slot 10 by hand)		block/MachineBlock.java:95-110	
+P286	minecraft:water_bucket		no	BODY	block headinajar:life_support_cradle	tank takes: saline	refuses	tank refuses this fluid without saying so; cradle_empty / cradle_status lines	message.headinajar.cradle_empty	block/LifeSupportCradleBlock.java:77-80; block/LifeSupportCradleBlockEntity.java:28-29	Y
+P287	headinajar:cranial_saline_bucket		no	BODY	block headinajar:life_support_cradle	tank takes: saline	works	fills 1000 mB, empty bucket back		block/LifeSupportCradleBlock.java:77-80; block/LifeSupportCradleBlockEntity.java:28-29	
+P288	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:life_support_cradle	tank takes: saline	refuses	tank refuses this fluid without saying so; cradle_empty / cradle_status lines	message.headinajar.cradle_empty	block/LifeSupportCradleBlock.java:77-80; block/LifeSupportCradleBlockEntity.java:28-29	Y
+P289	minecraft:bucket		no	BODY	block headinajar:life_support_cradle	tank takes: saline	works	takes 1000 mB back out if the tank holds at least 1000 mB; else cradle_empty / cradle_status lines		block/LifeSupportCradleBlock.java:77-80; block/LifeSupportCradleBlockEntity.java:28-29	
+P290	minecraft:water_bucket		no	BODY	block headinajar:saline_mixer	tank takes: water in, saline out	works	fills 1000 mB, empty bucket back		block/MachineBlock.java:95-99; block/SalineMixerBlockEntity.java:37-48, 88-101	
+P291	headinajar:cranial_saline_bucket		no	BODY	block headinajar:saline_mixer	tank takes: water in, saline out	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/SalineMixerBlockEntity.java:37-48, 88-101	Y
+P292	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:saline_mixer	tank takes: water in, saline out	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/SalineMixerBlockEntity.java:37-48, 88-101	Y
+P293	minecraft:bucket		no	BODY	block headinajar:saline_mixer	tank takes: water in, saline out	works	takes 1000 mB of mixed saline (bucket of saline)		block/MachineBlock.java:95-99; block/SalineMixerBlockEntity.java:37-48, 88-101	
+P294	minecraft:water_bucket		no	BODY	block headinajar:body_printer	tank takes: saline	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/BodyPrinterBlockEntity.java:48	Y
+P295	headinajar:cranial_saline_bucket		no	BODY	block headinajar:body_printer	tank takes: saline	works	fills 1000 mB, empty bucket back		block/MachineBlock.java:95-99; block/BodyPrinterBlockEntity.java:48	
+P296	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:body_printer	tank takes: saline	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/BodyPrinterBlockEntity.java:48	Y
+P297	minecraft:bucket		no	BODY	block headinajar:body_printer	tank takes: saline	works	takes 1000 mB back out if the tank holds at least 1000 mB; else the menu opens		block/MachineBlock.java:95-99; block/BodyPrinterBlockEntity.java:48	
+P298	minecraft:water_bucket		no	BODY	block headinajar:cerebral_array	tank takes: broth	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/CerebralArrayBlockEntity.java:29	Y
+P299	headinajar:cranial_saline_bucket		no	BODY	block headinajar:cerebral_array	tank takes: broth	misrouted	tank refuses this fluid without saying so; the menu opens		block/MachineBlock.java:95-99; block/CerebralArrayBlockEntity.java:29	Y
+P300	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:cerebral_array	tank takes: broth	works	fills 1000 mB, empty bucket back		block/MachineBlock.java:95-99; block/CerebralArrayBlockEntity.java:29	
+P301	minecraft:bucket		no	BODY	block headinajar:cerebral_array	tank takes: broth	works	takes 1000 mB back out if the tank holds at least 1000 mB; else the menu opens		block/MachineBlock.java:95-99; block/CerebralArrayBlockEntity.java:29	
+P302	any bucket		no	BODY	block headinajar:centrifuge / dna_sequencer / gene_splicer / injection_rig / assembly_gantry	no fluid capability	works	opens the menu		block/MachineBlock.java:95-110	
+P303	headinajar:cranial_saline_bucket		no	BODY	block headinajar:charging_dock / galvanic_pile / leyden_jar		works	vanilla: places the fluid next to the block (dock) or shows status (pile, Leyden jar)		no handler (vanilla default)	
+P304	headinajar:cranial_saline_bucket		no	JAR (with arm)	the air (yourself)		works	vanilla: places a saline source; the jar is not refilled		no handler (vanilla default)	Y
+P305	any item		no	HOSTED	any block not in head_operable, any entity but your own body	riding a host	nothing	client cancels the click; server lockout cancels too		client/ClientEvents.java:152-168; form/FormEvents.java:51-55, 143-182	Y
+P306	any item		no	SOCKET	anything	plugged into a Neural Socket	nothing	locked out; keys drive the socket instead		form/FormEvents.java:51-55	
+P307	any item		no	JAR (no arm)	any block in #headinajar:head_operable	e.g. galvanic_pile with rotten flesh	works	the block handles it as for a body (pile takes the fuel)		form/FormEvents.java:143-146; client/ClientEvents.java:164	
+P308	any item		no	JAR (no arm)	the air	any usable item (Gene Wash, EMP grenade, Entangled Pair, collar upgrades)	nothing	item use cancelled; nothing says a Manipulator Arm is needed		form/FormEvents.java:153-155; client/ClientEvents.java:162-168	Y
+N001	headinajar:syringe		no	LINKED	the air (yourself)	head placed or docked elsewhere	unpredicted	proposal: draws your own blood sample, 1 damage (BODY/LINKED); check what happens today		_process/brainstorm/cohesion.md:54	
+N002	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own corpse)	body died	unpredicted	proposal: sample from your own corpse carries your genes (P248 says it does not); check whether the corpse inventory opens instead		_process/brainstorm/cohesion.md:54	
+N003	headinajar:syringe		no	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed	unpredicted	proposal: refuse with a line ("glass is not a vein"); today expected silent		_process/brainstorm/cohesion.md:54	
+N004	headinajar:syringe		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer (description line or nothing)		_process/brainstorm/cohesion.md:54	
+N005	headinajar:syringe		no	BODY	block headinajar:leech_jar	leech jar with samples	unpredicted	proposal: empties the Leech Jar into your inventory, as the empty hand does (P044)		_process/brainstorm/cohesion.md:54	
+N006	headinajar:serum_cassette		no	LINKED	entity headinajar:head_jar (own)	filled serum, your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead (as other items do, P128)		_process/brainstorm/cohesion.md:55	
+N007	headinajar:serum_cassette		no	BODY	block headinajar:jarred_head	filled serum, jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:55	
+N008	headinajar:saline_bottle		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line (bodies take no saline); check today's answer		_process/brainstorm/cohesion.md:56	
+N009	headinajar:saline_bottle		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +10 freshness; today expected host status only		_process/brainstorm/cohesion.md:56	
+N010	headinajar:saline_bottle		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse ("shells run dry"); today expected host status		_process/brainstorm/cohesion.md:56	
+N011	headinajar:saline_bottle		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:56	
+N012	headinajar:glass_patch		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:57	
+N013	headinajar:glass_patch		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:57	
+N014	headinajar:glass_patch		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 4 HP; today expected host status only		_process/brainstorm/cohesion.md:57	
+N015	headinajar:glass_patch		no	BODY	mecha headinajar:hopper	damaged mecha	unpredicted	proposal: refuse and point at Mecha Plating; today expected mecha status		_process/brainstorm/cohesion.md:57	
+N016	headinajar:glass_patch		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:57	
+N017	headinajar:suture_kit		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:58	
+N018	headinajar:suture_kit		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:58	
+N019	headinajar:suture_kit		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:58	
+N020	headinajar:suture_kit		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	proposal: refuse with a line; today expected you sit down		_process/brainstorm/cohesion.md:58	
+N021	headinajar:embalming_fluid		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:59	
+N022	headinajar:embalming_fluid		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse with a line; check whether it picks the head up instead		_process/brainstorm/cohesion.md:59	
+N023	headinajar:embalming_fluid		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 8): preserves the head as a trophy and gives the jar back; check today's answer		_process/brainstorm/cohesion.md:59	
+N024	headinajar:embalming_fluid		no	BODY	block headinajar:body_printer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:59	
+N025	headinajar:nutrient_broth_bucket		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse; today expected vanilla bucket behaviour (places a broth source where you look)		_process/brainstorm/cohesion.md:60	
+N026	headinajar:nutrient_broth_bucket		no	BODY	another player	friend in JAR form	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:60	
+N027	headinajar:nutrient_broth_bucket		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	proposal: refuse with a line; check today's answer (may place fluid)		_process/brainstorm/cohesion.md:60	
+N028	headinajar:nutrient_broth_bucket		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up or places fluid		_process/brainstorm/cohesion.md:60	
+N029	headinajar:nutrient_broth_bucket		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal (idea 6): +50 freshness; today expected host status only		_process/brainstorm/cohesion.md:60	
+N030	headinajar:nutrient_broth_bucket		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: refuse with a line; today expected host status		_process/brainstorm/cohesion.md:60	
+N031	headinajar:nutrient_broth_bucket		no	BODY	mecha headinajar:hopper	own, Bio-Reactor Core fitted	unpredicted	proposal: fuels the Bio-Reactor; today expected mecha status only		_process/brainstorm/cohesion.md:60	
+N032	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:60	
+N033	headinajar:neural_lace		no	BODY	another player	friend in BODY form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:61	
+N034	headinajar:neural_lace		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:61	
+N035	headinajar:neural_lace		no	BODY	mecha headinajar:hopper	assembled at the gantry	unpredicted	proposal: refuse with a line; today expected mecha status		_process/brainstorm/cohesion.md:61	
+N036	headinajar:neural_lace		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:61	
+N037	headinajar:neural_lace		no	BODY	block headinajar:injection_rig	machine placed	unpredicted	proposal (idea 36): at the Rig it raises your own gene load to 6; today expected the menu opens		_process/brainstorm/cohesion.md:61	
+N038	headinajar:gene_wash		no	BODY	another player	friend with genes	unpredicted	proposal: refuse with a line; check whether you drink it yourself instead		_process/brainstorm/cohesion.md:62	
+N039	headinajar:gene_wash		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, body has genes	unpredicted	proposal: washes the idle body; check today's answer		_process/brainstorm/cohesion.md:62	
+N040	headinajar:gene_wash		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:62	
+N041	headinajar:gene_wash		no	BODY	shell headinajar:lunk	placed	unpredicted	proposal: washes the shell; today expected host status		_process/brainstorm/cohesion.md:62	
+N042	headinajar:gene_wash		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:62	
+N043	headinajar:gene_wash		no	BODY	block headinajar:gene_splicer	machine placed	unpredicted	proposal: refuse with a line; today expected the menu opens		_process/brainstorm/cohesion.md:62	
+N044	headinajar:surgical_wrench		no	BODY	the air (yourself)	whole	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:63	
+N045	headinajar:surgical_wrench		no	BODY	another player	friend in any form	unpredicted	proposal: refuse with a line; today expected nothing		_process/brainstorm/cohesion.md:63	
+N046	headinajar:surgical_wrench		no	JAR (with arm)	entity headinajar:headless_body (own)	body with a crooked Collar Cam	unpredicted	proposal: straightens a crooked collar; check today's answer		_process/brainstorm/cohesion.md:63	
+N047	headinajar:surgical_wrench		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:63	
+N048	headinajar:surgical_wrench		no	BODY	host (mob made host)	sawn pig	unpredicted	proposal: host status (as today)		_process/brainstorm/cohesion.md:63	
+N049	headinajar:surgical_wrench		yes	BODY	shell headinajar:lunk	placed	unpredicted	proposal (idea 20): folds the shell back into its chassis; today expected host status		_process/brainstorm/cohesion.md:63	
+N050	headinajar:surgical_wrench		yes	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal: picks the jarred head block up; check today's answer (may do nothing)		_process/brainstorm/cohesion.md:63	
+N051	headinajar:jarred_head		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing, jarred pig head in hand	unpredicted	proposal: refuse with a line; check today's answer		_process/brainstorm/cohesion.md:64	
+N052	headinajar:jarred_head		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	proposal: refuse; check whether it picks the head up instead		_process/brainstorm/cohesion.md:64	
+N053	headinajar:jarred_head		no	BODY	mecha headinajar:hopper	own, Shoulder Mount fitted (idea 30)	unpredicted	proposal: fits the head on a Shoulder Mount; today expected mecha status		_process/brainstorm/cohesion.md:64	
+N054	headinajar:emp_grenade		no	JAR (with arm)	the air (throw) near your own headless body	body standing within 8 blocks of the hit	unpredicted	proposal: standing body stunned 3 s, corpse untouched; note the throwing jar may halve its own charge		_process/brainstorm/cohesion.md:65	
+N055	headinajar:emp_grenade		no	BODY	the air (throw) near a placed head jar	friend's head placed, within 8 blocks of the hit	unpredicted	proposal: placed head charge halved; today expected nothing (P268)		_process/brainstorm/cohesion.md:65	
+N056	headinajar:emp_grenade		no	BODY	the air (throw) near a host	sawn pig within 8 blocks of the hit	unpredicted	proposal: host stunned 3 s; today expected nothing		_process/brainstorm/cohesion.md:65	
+N057	headinajar:emp_grenade		no	BODY	the air (throw) near a shell	Lunk within 8 blocks of the hit	unpredicted	proposal: shell battery halved; today expected nothing		_process/brainstorm/cohesion.md:65	
+N058	headinajar:emp_grenade		no	BODY	the air (throw) near a jarred_head block	jarred zombie head placed within 8 blocks	unpredicted	proposal: heads stunned 10 s; today expected nothing		_process/brainstorm/cohesion.md:65	
+N059	headinajar:emp_grenade		no	BODY	the air (throw) near a signal_jammer	powered jammer within 8 blocks of the hit	unpredicted	proposal (idea 29): station drained 50% or offline 30 s; today expected nothing		_process/brainstorm/cohesion.md:65	
+N060	headinajar:mecha_plating		no	BODY	shell headinajar:lunk	damaged shell	unpredicted	proposal: repairs 10 HP; today expected host status		_process/brainstorm/cohesion.md:66	
+N061	headinajar:mecha_plating		no	BODY	block headinajar:assembly_gantry	gantry placed	unpredicted	opens the gantry menu (Repair button there), as today		_process/brainstorm/cohesion.md:66	
+N062	headinajar:bio_gel		no	BODY	host (mob made host)	sawn pig, freshness below 100	unpredicted	proposal: +25 freshness; today expected host status only		_process/brainstorm/cohesion.md:67	
+N063	headinajar:collar_cam		no	BODY	host (mob made host)	laced host (Neural Lace applied)	unpredicted	proposal (idea 24): fits a collar so the laced host is a remote body; today expected host status		_process/brainstorm/cohesion.md:68	
+N064	headinajar:collar_cam		no	BODY	block headinajar:jarred_head	jarred zombie head placed	unpredicted	proposal (idea 35): CCTV camera on the head; check today's answer		_process/brainstorm/cohesion.md:68	
+N065	headinajar:collar_cam		no	BODY	block headinajar:turret_pedestal	turret holding a head	unpredicted	proposal: CCTV; today expected nothing (as P157)		_process/brainstorm/cohesion.md:68	
+N066	headinajar:collar_cam		no	BODY	block headinajar:employee_mount	mount with a villager	unpredicted	proposal: CCTV; today expected staff status		_process/brainstorm/cohesion.md:68	
+N067	headinajar:leyden_jar		no	BODY	shell headinajar:lunk	charged Leyden Jar item, shell battery low	unpredicted	proposal: charges the shell; today expected host status		_process/brainstorm/cohesion.md:69	
+N068	headinajar:leyden_jar		no	BODY	mecha headinajar:hopper	charged Leyden Jar item, battery low	unpredicted	proposal: charges the mecha; today expected mecha status		_process/brainstorm/cohesion.md:69	
+N069	headinajar:leyden_jar		no	BODY	ground	charged Leyden Jar item	unpredicted	places the block and keeps its charge (as today)		_process/brainstorm/cohesion.md:69	
+N070	(empty)		no	BODY	block headinajar:body_locker, left click	locker holding a mecha (stored first with an empty-hand click, mecha within 3 blocks)	unpredicted	break the locker; check whether the stored mecha is lost		_process/review/glitches-hosts-mecha.md:481	
+N071	headinajar:surgical_saw		no	BODY	vanilla mob minecraft:zombie	wearing an iron helmet, below 25% health	unpredicted	zombie becomes a host; then look whether the helmet floats where the head was (also try a mob with a Hats-mod hat)		_process/review/pack.md:423	
+N072	(empty)		yes	BODY	entity headinajar:headless_body (another player's)	friend separated, Carry On installed	unpredicted	check whether Carry On picks the body up, and what that does to the owner		_process/review/pack.md:424	
+N073	(empty)		yes	BODY	entity headinajar:head_jar (another player's)	friend separated, head placed, Carry On installed	unpredicted	check whether Carry On picks the placed head jar up		_process/review/pack.md:424	
+N074	(empty)		yes	BODY	block headinajar:saline_mixer	machine placed, Carry On installed	unpredicted	check whether Carry On lifts the machine with its contents, or the menu opens		_process/review/pack.md:424	
+N075	(empty)		no	JAR (no arm)	block minecraft:chest	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		_process/review/text.md:674	
+N076	(empty)		no	JAR (no arm)	block minecraft:crafting_table	bare jar	unpredicted	confirm the silent lockout: nothing happens and no message		_process/review/text.md:674	
+N077	headinajar:jarred_head		no	BODY	block headinajar:separation_chair	chair placed, nobody seated	unpredicted	put a mob's jarred head in the chair instead of an empty jar; expected you sit down, then check whether the menu jar slot takes it		_process/playtest/cold-read.md:238	
+N078	headinajar:surgical_saw		no	LINKED	vanilla mob minecraft:cow (not a host)	below 25% health	unpredicted	saw a cow with your own head already off; expected the cow becomes a host		_process/playtest/cold-read.md:240	
+N079	headinajar:jarred_head		no	BODY	shell headinajar:rover	jarred villager head, rover placed	unpredicted	put a jarred villager on a Rover; expected host status only (no way to mount a head)		_process/playtest/cold-read.md:243	
+N080	(empty)		no	LINKED	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse while headless (there is an advancement); also with the Periscope Stalk collar upgrade, check the view height		_process/playtest/cold-read.md:244	
+N081	(empty)		no	JAR (no arm)	vanilla mob minecraft:horse	tamed, saddled	unpredicted	ride a horse as the jar; expected nothing (not a host)		_process/playtest/cold-read.md:245	
+N082	headinajar:signal_jammer		no	LINKED	ground	next to your placed head	unpredicted	place a Signal Jammer near your own head, then watch link quality		_process/playtest/cold-read.md:262	
+N083	headinajar:emp_grenade		no	BODY	the air (throw) near a cerebral_array	array running with heads, within 8 blocks of the hit	unpredicted	EMP at a Cerebral Array; expected nothing (the pulse touches only players, mechas and turrets)		_process/playtest/cold-read.md:264	
+N084	headinajar:syringe		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	syringe on your own headless body; expected a sample with no genes (as P248) or nothing		_process/playtest/cold-read.md:271	
+N085	headinajar:syringe		no	LINKED	entity headinajar:head_jar (own)	your placed head, satchel in inventory	unpredicted	syringe on your own head; check whether it picks the head up instead		_process/playtest/cold-read.md:271	
+N086	headinajar:syringe		no	BODY	shell headinajar:lunk	placed	unpredicted	syringe on a Lunk; expected host status (the click never reaches the syringe, as P242)		_process/playtest/cold-read.md:272	
+N087	headinajar:leviathan_needle		no	BODY	boss minecraft:ender_dragon		unpredicted	expected nothing: the click lands on a dragon part (as P238)		_process/playtest/cold-read.md:273	
+N088	headinajar:leviathan_needle		no	BODY	boss minecraft:wither		unpredicted	expected a sample drawn		_process/playtest/cold-read.md:273	
+N089	minecraft:dragon_breath		no	BODY	block headinajar:centrifuge	machine placed	unpredicted	put dragon's breath in the Centrifuge; expected the menu opens (the bottle is not inserted by the click)		_process/playtest/cold-read.md:274	
+N090	headinajar:serum_cassette		no	BODY	shell headinajar:rover	filled serum	unpredicted	serum into a Rover (are robots hosts?); expected host status, not injected (as P252)		_process/playtest/cold-read.md:278	
+N091	minecraft:cooked_beef		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed steak to the pile; compare with rotten flesh (P281)		_process/playtest/cold-read.md:280	
+N092	minecraft:porkchop		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a raw porkchop to the pile; expected into the fuel slot		_process/playtest/cold-read.md:280	
+N093	minecraft:spider_eye		no	BODY	block headinajar:galvanic_pile	pile placed	unpredicted	feed a spider eye to the pile; expected into the fuel slot		_process/playtest/cold-read.md:280	
+N094	headinajar:neural_lace		no	BODY	the air (yourself)	whole	unpredicted	put the Neural Lace on your own body; expected nothing (hosts only)		_process/playtest/cold-read.md:282	
+N095	headinajar:neural_lace		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	Neural Lace on your own headless body; expected nothing		_process/playtest/cold-read.md:282	
+N096	(empty)		no	JAR (no arm)	mecha (occupied, Passenger Pod)	a pilot inside, Passenger Pod fitted	unpredicted	a friend who is a jar boards the Passenger Pod; check whether a jar can ride as passenger		_process/playtest/cold-read.md:290	
