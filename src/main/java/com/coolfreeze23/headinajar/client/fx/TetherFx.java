@@ -335,7 +335,9 @@ public final class TetherFx {
                     float reach = Mth.clamp((t.age + pt - 2) / 3f, 0, 1);
                     if (reach <= 0) break;
                     Vec3[] pts = Beams.curve(a, ctrl, b, 12);
-                    Beams.ribbon(f, pts, withScroll(HOLD_LOOK, scroll, 1), s -> s <= reach ? 1 : 0);
+                    // seen from the holder's own eyes the line starts thin, so it never fills the bottom of the view
+                    Beams.Ribbon look = mine(holder) ? new Beams.Ribbon(HOLD_LOOK.sheath(), HOLD_LOOK.core(), 1 / 96f, HOLD_LOOK.width1(), HOLD_LOOK.alpha(), 0) : HOLD_LOOK;
+                    Beams.ribbon(f, pts, withScroll(look, scroll, 1), s -> s <= reach ? 1 : 0);
                     if (held != null) boxShell(f, held, t, pt);
                 }
                 case THROWN -> {
@@ -513,6 +515,11 @@ public final class TetherFx {
         Vec3 p = e.getPosition(pt);
         double h = e instanceof ItemEntity ? 0.25 : e.getBbHeight() / 2;
         return p.add(0, h, 0);
+    }
+
+    private static boolean mine(Entity holder) {
+        var mc = Minecraft.getInstance();
+        return holder == mc.player && mc.options.getCameraType().isFirstPerson();
     }
 
     private static boolean isMe(int id) {

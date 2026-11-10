@@ -25,15 +25,15 @@ import org.joml.Vector3f;
  * <li><b>arc</b>: a jagged polyline re-rolled from a seed, a coloured fringe and a pale core ({@code lightning()}).</li>
  * </ul>
  * Every beam is at least {@link #MIN_WIDTH_PER_BLOCK} x its distance wide (about a pixel at 70 degrees on 1080p), so it
- * still reads at 30 blocks; anything within 0.6 blocks of the camera fades out, so a beam that starts at the doer's own
+ * still reads at 30 blocks; anything within 1.3 blocks of the camera fades out, so a beam that starts at the doer's own
  * eyes never covers the screen; and each beam is culled by its own box, so a long beam is not lost when one end is
  * off screen.
  */
 public final class Beams {
     public static final ResourceLocation RIBBON = HeadInAJar.id("textures/fx/beam_ribbon.png");
     public static final float MIN_WIDTH_PER_BLOCK = 0.0035f;
-    /** Nothing is drawn nearer the camera than this; it fades in over the next 0.6 blocks. */
-    private static final float NEAR = 0.15f, FADE = 0.6f;
+    /** Nothing is drawn nearer the camera than this; it fades in over the next 1.0 blocks. */
+    private static final float NEAR = 0.3f, FADE = 1.0f;
 
     /** One frame's drawing context: camera-relative coordinates, the world's buffers and frustum. */
     public record Frame(PoseStack pose, MultiBufferSource buffers, Vec3 camera, Frustum frustum, float partialTick, float time) {

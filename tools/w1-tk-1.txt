@@ -15,7 +15,7 @@ jar
 fit telekinesis
 charge 100000
 wait 10
-/summon cow 3.5 -60 4.5 {NoAI:1b}
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 wait 20
 lookat cow
 view 0
@@ -55,7 +55,7 @@ bystander form jar
 bystander tp 12 -60 0 0 0
 bystander fit telekinesis
 bystander charge 100000
-/summon cow 12.5 -60 4.5 {NoAI:1b}
+/summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 wait 30
 bystander look 0 -6
 # 5 blocks, three-quarter, by day
@@ -96,7 +96,7 @@ wait 60
 # 30 blocks, by day
 /kill @e[type=cow]
 /kill @e[type=item]
-/summon cow 12.5 -60 4.5 {NoAI:1b}
+/summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 bystander look 0 -6
 /tp @s 40.5 -55 9.5 105 8
 wait 30
@@ -122,7 +122,7 @@ wait 60
 /time set 18000
 /kill @e[type=cow]
 /kill @e[type=item]
-/summon cow 12.5 -60 4.5 {NoAI:1b}
+/summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 bystander look 0 -6
 /tp @s 16.5 -60 6.5 135 12
 wait 30
@@ -146,7 +146,7 @@ bystander key throw
 wait 60
 /kill @e[type=cow]
 /kill @e[type=item]
-/summon cow 12.5 -60 4.5 {NoAI:1b}
+/summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 bystander look 0 -6
 /tp @s 40.5 -55 9.5 105 8
 wait 30
