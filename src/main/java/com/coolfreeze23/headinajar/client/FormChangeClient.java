@@ -50,17 +50,28 @@ public final class FormChangeClient {
         if (lastForm != null && form != lastForm) hold(mc);
         lastForm = form;
         release(mc);
-        Entity vehicle = mc.player.getVehicle();
-        if (vehicle != lastVehicle) {
-            lastVehicle = vehicle;
-            boardLine = vehicle == null ? null : boarded(vehicle);
-            boardTicks = boardLine == null ? 0 : 10;
-        }
-        // vanilla's hint can land after this tick's (its passengers packet may come in a later frame): keep ours on top
+        boarding(mc);
+        // vanilla's hint can land after ours (its passengers packet may come in a later frame): keep ours on top a while
         if (boardTicks > 0) {
             boardTicks--;
             mc.gui.setOverlayMessage(boardLine, false);
         }
+    }
+
+    /** Every frame, as soon as the passengers packet that put vanilla's line up has been handled, before it is drawn. */
+    @SubscribeEvent
+    public static void frame(net.neoforged.neoforge.client.event.RenderFrameEvent.Pre event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) boarding(mc);
+    }
+
+    private static void boarding(Minecraft mc) {
+        Entity vehicle = mc.player.getVehicle();
+        if (vehicle == lastVehicle) return;
+        lastVehicle = vehicle;
+        boardLine = vehicle == null ? null : boarded(vehicle);
+        boardTicks = boardLine == null ? 0 : 10;
+        if (boardLine != null) mc.gui.setOverlayMessage(boardLine, false);
     }
 
     private static KeyMapping[] movement(Minecraft mc) {
