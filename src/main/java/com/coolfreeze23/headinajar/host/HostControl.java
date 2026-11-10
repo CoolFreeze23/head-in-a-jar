@@ -65,6 +65,7 @@ public final class HostControl {
         double speed = flier && host.getAttribute(Attributes.FLYING_SPEED) != null
                 ? host.getAttributeValue(Attributes.FLYING_SPEED) : host.getAttributeValue(Attributes.MOVEMENT_SPEED);
         if (Hosts.data(host).effectiveSync() >= 100) speed *= 1.1;
+        if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity) speed *= com.coolfreeze23.headinajar.entity.ShellEntity.RIDDEN_SCALE;
         return (float) Math.max(0.05, speed);
     }
 

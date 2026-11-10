@@ -18,6 +18,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 
 /**
@@ -58,6 +59,43 @@ public class ShellEntity extends PathfinderMob {
     public static AttributeSupplier.Builder spiderWalker() {
         return PathfinderMob.createMobAttributes().add(Attributes.MAX_HEALTH, 30).add(Attributes.MOVEMENT_SPEED, 0.28)
                 .add(Attributes.ATTACK_DAMAGE, 4).add(Attributes.STEP_HEIGHT, 1.0).add(Attributes.SAFE_FALL_DISTANCE, 64);
+    }
+
+    /**
+     * A ridden shell's speed attribute is read as a mob's walking pace; ridden, the rider's full input would make it four
+     * times a sprint. Ridden, a shell goes at this share of it: the Rover fast, the Spider Walker brisk, the Lunk slow.
+     */
+    public static final double RIDDEN_SCALE = 0.5;
+    /** Blocks a tick (about six a second) at or above which running into a wall is a crash. */
+    public static final double CRASH_SPEED = 0.3;
+    private Vec3 lastPos;
+    private double lastSpeed;
+    private int crashCooldown;
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (level().isClientSide) return;
+        // a rider moves the shell from their client, so its speed is read between ticks, not inside one
+        double speed = lastPos == null ? 0 : position().subtract(lastPos).horizontalDistance();
+        if (crashCooldown > 0) crashCooldown--;
+        if (horizontalCollision && Math.max(speed, lastSpeed) >= CRASH_SPEED && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot) crash(pilot);
+        lastSpeed = speed;
+        lastPos = position();
+    }
+
+    /** Into a wall at speed: one bump to the jar's glass, a clang and a line, then a moment before the next one counts. */
+    private void crash(ServerPlayer pilot) {
+        crashCooldown = 40;
+        var state = com.coolfreeze23.headinajar.form.FormActions.state(pilot);
+        if (state.integrity() > 1) state.setIntegrity(state.integrity() - 1);
+        level().playSound(null, getX(), getY(), getZ(), net.minecraft.sounds.SoundEvents.IRON_GOLEM_DAMAGE, net.minecraft.sounds.SoundSource.NEUTRAL, 0.8f, 1.4f);
+        level().playSound(null, pilot.getX(), pilot.getY(), pilot.getZ(), net.minecraft.sounds.SoundEvents.GLASS_HIT, net.minecraft.sounds.SoundSource.PLAYERS, 1, 0.9f);
+        if (level() instanceof net.minecraft.server.level.ServerLevel server) {
+            Vec3 front = position().add(getLookAngle().multiply(1, 0, 1).scale(getBbWidth() * 0.6)).add(0, getBbHeight() * 0.5, 0);
+            server.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT, front.x, front.y, front.z, 8, 0.2, 0.2, 0.2, 0.1);
+        }
+        pilot.displayClientMessage(Component.translatable("message.headinajar.shell_crash", getDisplayName()), true);
     }
 
     public void openCargo(ServerPlayer player) {
