@@ -544,7 +544,7 @@ side-config tab (which face pushes or pulls what). Every machine has a Jade tool
 ```
 +---------------------------------------------+
 | [FE]  ( jar render: your head, slow spin )  [SAL] |
-| [##]   Owner: Alvin        Integrity 20/20  [###] |
+| [##]   Owner: Dev          Integrity 20/20  [###] |
 | [##]   Link hub: ON   Range 160 m           [###] |
 |        Body: 140 m NE  Q 92%                      |
 |  [Swap into body]   [Jar Cam]   [Release]         |

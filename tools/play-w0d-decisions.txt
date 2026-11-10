@@ -1,0 +1,60 @@
+@world flat
+@gamemode survival
+@observe 20
+wait 60
+/gamerule doMobSpawning false
+/time set 6000
+/tp @s 0.5 -60 0.5 -90 10
+report == H1 the first-day handbook (no Patchouli in this profile)
+inspect me
+hotbar 1
+shot handbook_held_en
+key use
+wait 10
+shot handbook_p1_en
+press page.down
+wait 5
+shot handbook_p2_en
+press escape
+lang pt_br
+wait 10
+key use
+wait 10
+shot handbook_p1_pt
+press page.down
+wait 5
+press page.down
+wait 5
+shot handbook_p3_pt
+press escape
+lang en_us
+wait 10
+report == H2 relog: no second book
+inspect me
+report == J1 a bare jar works the Gantry, a chest still refuses
+/setblock 2 -60 0 headinajar:assembly_gantry
+/setblock 0 -60 2 minecraft:chest
+jar
+wait 10
+look -90 10
+key use
+wait 10
+shot jar_gantry_menu
+press escape
+look 0 10
+key use
+shot jar_chest_refused
+report == J2 the feed slot says what it takes
+key jar_menu
+wait 10
+slots
+mouse rel 160 64
+wait 5
+shot feed_tooltip_en
+lang pt_br
+wait 10
+mouse rel 160 64
+wait 5
+shot feed_tooltip_pt
+press escape
+lang en_us
