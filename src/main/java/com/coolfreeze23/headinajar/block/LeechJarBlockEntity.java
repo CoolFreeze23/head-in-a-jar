@@ -28,6 +28,11 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems {
     public static final int INTERVAL = 600, MIN = 15, MAX = 35;
     private final ItemStackHandler items = new ItemStackHandler(9) {
         @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return stack.is(ModRegistry.BLOOD_SAMPLE.get());
+        }
+
+        @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
@@ -92,7 +97,7 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         timer = tag.getInt("Timer");
     }
 }

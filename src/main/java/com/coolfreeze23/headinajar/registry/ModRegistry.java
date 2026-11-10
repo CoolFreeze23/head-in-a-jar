@@ -518,7 +518,7 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CHAIR_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CHAIR_BE.get(), (be, side) -> be.items());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, PILE_BE.get(), (be, side) -> be.energy());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PILE_BE.get(), (be, side) -> be.fuel());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PILE_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.fuel(), com.coolfreeze23.headinajar.block.MachineItems.all(1, com.coolfreeze23.headinajar.block.MachineItems.Role.INPUT), side));
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, DOCK_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CRADLE_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, LOCKER_BE.get(), (be, side) -> be.energy());
@@ -526,10 +526,10 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, GANTRY_BE.get(), (be, side) -> be.items());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CRADLE_BE.get(), (be, side) -> be.saline());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, MIXER_BE.get(), (be, side) -> be.energy());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MIXER_BE.get(), (be, side) -> be.items());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MIXER_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.items(), com.coolfreeze23.headinajar.block.SalineMixerBlockEntity.ROLES, side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, MIXER_BE.get(), (be, side) -> be.pipes());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, PRINTER_BE.get(), (be, side) -> be.energy());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PRINTER_BE.get(), (be, side) -> be.items());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PRINTER_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.items(), com.coolfreeze23.headinajar.block.BodyPrinterBlockEntity.ROLES, side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PRINTER_BE.get(), (be, side) -> be.saline());
         for (var type : java.util.List.of(LEYDEN_BE.get(), TESLA_BE.get())) {
             event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.PowerBlockEntities.Powered) be).energy());
@@ -539,12 +539,12 @@ public final class ModRegistry {
         }
         for (var type : java.util.List.of(CENTRIFUGE_BE.get(), SEQUENCER_BE.get(), SPLICER_BE.get(), RIG_BE.get())) {
             event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.LabMachine) be).energy());
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.LabMachine) be).items());
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type, (be, side) -> ((com.coolfreeze23.headinajar.block.LabMachine) be).automation(side));
         }
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LEECH_JAR_BE.get(), (be, side) -> be.items());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, LEECH_JAR_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.items(), com.coolfreeze23.headinajar.block.MachineItems.all(9, com.coolfreeze23.headinajar.block.MachineItems.Role.OUTPUT), side));
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, TURRET_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ARRAY_BE.get(), (be, side) -> be.energy());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ARRAY_BE.get(), (be, side) -> be.items());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ARRAY_BE.get(), (be, side) -> be.automation(side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ARRAY_BE.get(), (be, side) -> be.broth());
     }
 

@@ -82,7 +82,8 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
 
         @Override
         public boolean isFluidValid(int tank, FluidStack stack) {
-            return tank == 0 ? water.isFluidValid(stack) : saline.isFluidValid(stack);
+            // only the water tank is filled from outside; the saline tank is the output
+            return tank == 0 && water.isFluidValid(stack);
         }
 
         @Override
@@ -101,6 +102,10 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
         }
     };
     private int progress;
+    /** Why mixing is paused (a {@code MachineMenu} stall code). */
+    private int stall;
+    public static final MachineItems.Role[] ROLES = {MachineItems.Role.INPUT, MachineItems.Role.INPUT, MachineItems.Role.INPUT,
+            MachineItems.Role.INPUT, MachineItems.Role.OUTPUT};
 
     private final ContainerData data = new ContainerData() {
         @Override
@@ -110,6 +115,7 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
                 case 1 -> water.getFluidAmount();
                 case 2 -> saline.getFluidAmount();
                 case 3 -> progress;
+                case 4 -> stall;
                 default -> 0;
             };
         }
@@ -120,7 +126,7 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     };
 
@@ -148,13 +154,24 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
         return saline;
     }
 
-    private boolean canMix() {
-        return water.getFluidAmount() >= 1000 && saline.getSpace() >= 1000 && energy.getEnergyStored() >= FE_PER_TICK
-                && !items.getStackInSlot(SLOT_SUGAR).isEmpty() && !items.getStackInSlot(SLOT_KELP).isEmpty() && !items.getStackInSlot(SLOT_REDSTONE).isEmpty();
+    /** What stops a batch now (a {@code MachineMenu} stall code), or 0. */
+    private int blocked() {
+        boolean stocked = !items.getStackInSlot(SLOT_SUGAR).isEmpty() && !items.getStackInSlot(SLOT_KELP).isEmpty() && !items.getStackInSlot(SLOT_REDSTONE).isEmpty();
+        if (water.getFluidAmount() < 1000 || !stocked) return com.coolfreeze23.headinajar.menu.MachineMenu.NO_INPUT;
+        if (saline.getSpace() < 1000) return com.coolfreeze23.headinajar.menu.MachineMenu.OUTPUT_BLOCKED;
+        if (energy.getEnergyStored() < FE_PER_TICK) return com.coolfreeze23.headinajar.menu.MachineMenu.NO_POWER;
+        return 0;
+    }
+
+    public int progress() {
+        return progress;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, SalineMixerBlockEntity mixer) {
-        if (mixer.canMix()) {
+        int blocked = mixer.blocked();
+        // a batch already started waits for what it is missing (power, an ingredient, room) instead of starting over
+        mixer.stall = blocked != 0 && (mixer.progress > 0 || blocked != com.coolfreeze23.headinajar.menu.MachineMenu.NO_INPUT) ? blocked : 0;
+        if (blocked == 0) {
             mixer.energy.set(mixer.energy.getEnergyStored() - FE_PER_TICK);
             // a Fisherman on staff mixes 25% faster
             if (++mixer.progress >= Math.round(BATCH_TICKS / (1 + 0.25f * HeadJobs.staff(level, pos, "fisherman")))) {
@@ -163,8 +180,6 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
                 for (int slot : new int[]{SLOT_SUGAR, SLOT_KELP, SLOT_REDSTONE}) mixer.items.extractItem(slot, 1, false);
                 mixer.saline.fill(new FluidStack(ModFluids.SALINE.source.get(), 1000), IFluidHandler.FluidAction.EXECUTE);
             }
-        } else if (mixer.progress > 0) {
-            mixer.progress = 0;
         }
         // bottling
         ItemStack in = mixer.items.getStackInSlot(SLOT_BOTTLE_IN);
@@ -191,7 +206,7 @@ public class SalineMixerBlockEntity extends BlockEntity implements MenuProvider,
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
-        items.deserializeNBT(registries, tag.getCompound("Items"));
+        MachineItems.load(items, tag.getCompound("Items"), registries);
         water.readFromNBT(registries, tag.getCompound("Water"));
         saline.readFromNBT(registries, tag.getCompound("Saline"));
         progress = tag.getInt("Progress");

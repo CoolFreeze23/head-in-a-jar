@@ -7,6 +7,7 @@ import com.coolfreeze23.headinajar.genetics.Genetics;
 import com.coolfreeze23.headinajar.genetics.Serum;
 import com.coolfreeze23.headinajar.item.GeneticsItems;
 import com.coolfreeze23.headinajar.menu.LabMenu;
+import com.coolfreeze23.headinajar.menu.MachineMenu;
 import com.coolfreeze23.headinajar.network.Network;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
@@ -34,6 +35,10 @@ public final class LabMachines {
     private LabMachines() {
     }
 
+    static Component geneName(Gene gene) {
+        return Component.translatable("gene.headinajar." + gene.id());
+    }
+
     // --- Centrifuge ----------------------------------------------------------------------------------
 
     /** Spins a Blood Sample into a DNA Fraction (same creature and quality) and a Plasma Vial. 3,000 FE over 8 s. */
@@ -44,9 +49,16 @@ public final class LabMachines {
             super(ModRegistry.CENTRIFUGE_BE.get(), pos, state, LabMenu.Kind.CENTRIFUGE, 20_000);
         }
 
+        private static final MachineItems.Role[] ROLES = {MachineItems.Role.INPUT, MachineItems.Role.OUTPUT, MachineItems.Role.OUTPUT};
+
         @Override
         protected boolean valid(int slot, ItemStack stack) {
-            return slot == 0 && (stack.is(ModRegistry.BLOOD_SAMPLE.get()) || stack.is(Items.DRAGON_BREATH));
+            return slot == 0 && (stack.is(ModRegistry.BLOOD_SAMPLE.get()) && GeneticsItems.species(stack) != null || stack.is(Items.DRAGON_BREATH));
+        }
+
+        @Override
+        public MachineItems.Role[] roles() {
+            return ROLES;
         }
 
         private ItemStack[] results() {
@@ -63,10 +75,22 @@ public final class LabMachines {
 
         public static void serverTick(Level level, BlockPos pos, BlockState state, Centrifuge c) {
             ItemStack[] out = c.results();
-            if (out == null || !c.place(1, out[0], true) || !c.place(2, out[1], true) || !c.spend(FE_PER_TICK)) {
+            if (out == null) {
+                // nothing to spin (or a sample of a creature this world doesn't have): start again from zero
                 c.progress = 0;
+                c.stall = c.items.getStackInSlot(0).isEmpty() ? MachineMenu.RUNNING : MachineMenu.UNREADABLE;
                 return;
             }
+            // a full output or a flicker of power pauses the spin; it carries on where it was
+            if (!c.place(1, out[0], true) || !c.place(2, out[1], true)) {
+                c.stall = MachineMenu.OUTPUT_BLOCKED;
+                return;
+            }
+            if (!c.spend(FE_PER_TICK)) {
+                c.stall = MachineMenu.NO_POWER;
+                return;
+            }
+            c.stall = MachineMenu.RUNNING;
             if (++c.progress >= TICKS) {
                 c.progress = 0;
                 c.items.extractItem(0, 1, false);
@@ -120,7 +144,17 @@ public final class LabMachines {
 
         @Override
         protected boolean valid(int slot, ItemStack stack) {
-            return stack.is(ModRegistry.DNA_FRACTION.get());
+            return stack.is(ModRegistry.DNA_FRACTION.get()) && GeneticsItems.species(stack) != null;
+        }
+
+        @Override
+        public MachineItems.Role[] roles() {
+            return new MachineItems.Role[]{MachineItems.Role.INPUT};
+        }
+
+        /** Whether the fraction in the slot can be read (its creature exists in this world). */
+        private boolean readable() {
+            return GeneticsItems.species(items.getStackInSlot(0)) != null;
         }
 
         @Override
@@ -130,7 +164,17 @@ public final class LabMachines {
 
         @Override
         public boolean button(ServerPlayer player, int id) {
-            if (items.getStackInSlot(0).isEmpty()) return false;
+            if (id != AUTO && (id < CALL || id >= CALL + (1 << 24))) return false;
+            // switching Auto off always works
+            if (id == AUTO && auto) {
+                auto = false;
+                progress = 0;
+                setChanged();
+                return true;
+            }
+            if (items.getStackInSlot(0).isEmpty()) return refuse(player, "lab.sequencer.empty", Component.translatable("item.headinajar.dna_fraction"));
+            // a fraction from a creature this world doesn't have: nothing to read, so nothing is spent
+            if (!readable()) return refuse(player, "lab.sequencer.unreadable");
             owner = GeneArchive.key(player);
             if (id == AUTO) {
                 auto = !auto;
@@ -139,17 +183,14 @@ public final class LabMachines {
                 return true;
             }
             if (id >= CALL && id < CALL + (1 << 24)) {
-                if (!spend(COST)) {
-                    player.displayClientMessage(Component.translatable("gantry.headinajar.no_power"), true);
-                    return false;
-                }
+                if (!spend(COST)) return refuse(player, "lab.no_power", COST, Component.translatable("block.headinajar.galvanic_pile"));
                 int right = correct(seed, id - CALL);
                 // a jar with a Cortex Coprocessor gets one miscall forgiven
                 if (com.coolfreeze23.headinajar.form.FormActions.state(player).has(com.coolfreeze23.headinajar.module.ModuleType.CORTEX_COPROCESSOR)) {
                     right = Math.min(BASES, right + 1);
                 }
                 read(player.serverLevel(), 0.5f + 0.5f * right / BASES);
-                player.displayClientMessage(Component.translatable("message.headinajar.called", right, BASES), true);
+                tell(player, Component.translatable("message.headinajar.called", right, BASES));
                 return true;
             }
             return false;
@@ -177,10 +218,22 @@ public final class LabMachines {
         }
 
         public static void serverTick(Level level, BlockPos pos, BlockState state, Sequencer s) {
-            if (!s.auto || s.items.getStackInSlot(0).isEmpty() || !s.spend(FE_PER_TICK)) {
+            if (!s.auto || s.items.getStackInSlot(0).isEmpty()) {
                 s.progress = 0;
+                s.stall = s.auto ? MachineMenu.NO_INPUT : MachineMenu.RUNNING;
                 return;
             }
+            // checked before any FE is spent: an unreadable fraction never burns power
+            if (!s.readable()) {
+                s.progress = 0;
+                s.stall = MachineMenu.UNREADABLE;
+                return;
+            }
+            if (!s.spend(FE_PER_TICK)) {
+                s.stall = MachineMenu.NO_POWER;
+                return;
+            }
+            s.stall = MachineMenu.RUNNING;
             if (++s.progress >= TICKS) {
                 s.progress = 0;
                 // a Librarian on staff reads at up to 90%
@@ -231,6 +284,13 @@ public final class LabMachines {
             };
         }
 
+        private static final MachineItems.Role[] ROLES = {MachineItems.Role.INPUT, MachineItems.Role.INPUT, MachineItems.Role.INPUT, MachineItems.Role.OUTPUT};
+
+        @Override
+        public MachineItems.Role[] roles() {
+            return ROLES;
+        }
+
         @Override
         protected int value(int i) {
             return switch (i) {
@@ -254,11 +314,12 @@ public final class LabMachines {
 
         /** Sets strand position {@code slot} to {@code gene} (null clears). The owner must have read it to Draft. */
         public boolean pick(ServerPlayer player, int slot, Gene gene) {
-            if (running || slot < 0 || slot > 2) return false;
+            if (slot < 0 || slot > 2) return false;
+            if (running) return refuse(player, "lab.splicer.running");
             owner = GeneArchive.key(player);
             if (gene != null) {
-                if (GeneArchive.potency(readouts().getOrDefault(gene, 0f)) <= 0) return false;
-                for (int i = 0; i < 3; i++) if (i != slot && strand[i] == gene) return false;
+                if (GeneArchive.potency(readouts().getOrDefault(gene, 0f)) <= 0) return refuse(player, "lab.splicer.unread", geneName(gene));
+                for (int i = 0; i < 3; i++) if (i != slot && strand[i] == gene) return refuse(player, "lab.splicer.duplicate", geneName(gene));
             }
             strand[slot] = gene;
             refresh();
@@ -281,16 +342,19 @@ public final class LabMachines {
         @Override
         public boolean button(ServerPlayer player, int id) {
             if (id == SPLICE) {
-                if (running) return false;
+                if (running) return refuse(player, "lab.splicer.running");
+                // the run is the presser's: it builds from their library, so every gene in the strand must be theirs
                 owner = GeneArchive.key(player);
                 refresh();
-                String problem = problem();
-                if (problem != null) {
-                    player.displayClientMessage(Component.translatable(problem), true);
-                    return false;
+                Map<Gene, Float> library = readouts();
+                for (Gene g : strand()) {
+                    if (GeneArchive.potency(library.getOrDefault(g, 0f)) <= 0) return refuse(player, "lab.splicer.unread", geneName(g));
                 }
+                String problem = problem();
+                if (problem != null) return refuse(player, problem, problemArgs(problem));
                 running = true;
                 progress = 0;
+                setChanged();
                 return true;
             }
             if (id >= PICK && id < PICK + 300) {
@@ -300,24 +364,49 @@ public final class LabMachines {
             return false;
         }
 
+        /** Why the strand can't be spliced now (a refusal reason), or null. */
         private String problem() {
-            if (strand().isEmpty()) return "splicer.headinajar.no_genes";
-            if (load > MAX_LOAD) return "splicer.headinajar.too_heavy";
-            if (items.getStackInSlot(SLOT_GEL).isEmpty()) return "splicer.headinajar.no_gel";
-            if (items.getStackInSlot(SLOT_BOTTLE).isEmpty()) return "splicer.headinajar.no_bottle";
-            if (!items.getStackInSlot(SLOT_OUT).isEmpty()) return "splicer.headinajar.out_full";
+            if (strand().isEmpty()) return "lab.splicer.no_genes";
+            if (load > MAX_LOAD) return "lab.splicer.too_heavy";
+            if (items.getStackInSlot(SLOT_GEL).isEmpty()) return "lab.splicer.no_gel";
+            if (items.getStackInSlot(SLOT_BOTTLE).isEmpty()) return "lab.splicer.no_bottle";
+            if (!items.getStackInSlot(SLOT_OUT).isEmpty()) return "lab.splicer.out_full";
             return null;
+        }
+
+        private Object[] problemArgs(String problem) {
+            return switch (problem) {
+                case "lab.splicer.too_heavy" -> new Object[]{load, MAX_LOAD};
+                case "lab.splicer.no_gel" -> new Object[]{Component.translatable("item.headinajar.bio_gel")};
+                case "lab.splicer.no_bottle" -> new Object[]{Component.translatable("item.minecraft.glass_bottle")};
+                case "lab.splicer.out_full" -> new Object[]{Component.translatable("item.headinajar.serum_cassette")};
+                default -> new Object[0];
+            };
         }
 
         public static void serverTick(Level level, BlockPos pos, BlockState state, Splicer s) {
             if (level.getGameTime() % 10 == 0) s.refresh();
-            if (!s.running) return;
-            if (s.problem() != null) {
-                s.running = false;
-                s.progress = 0;
+            if (!s.running) {
+                s.stall = MachineMenu.RUNNING;
                 return;
             }
-            if (!s.spend(FE_PER_TICK)) return;
+            String problem = s.problem();
+            if (problem != null) {
+                if (s.strand().isEmpty()) {
+                    s.running = false;
+                    s.progress = 0;
+                    s.setChanged();
+                    return;
+                }
+                // gel or bottle taken, or the output not emptied: the run waits with its progress
+                s.stall = problem.equals("lab.splicer.out_full") ? MachineMenu.OUTPUT_BLOCKED : MachineMenu.NO_INPUT;
+                return;
+            }
+            if (!s.spend(FE_PER_TICK)) {
+                s.stall = MachineMenu.NO_POWER;
+                return;
+            }
+            s.stall = MachineMenu.RUNNING;
             if (++s.progress >= TICKS) s.finish();
         }
 
@@ -355,7 +444,7 @@ public final class LabMachines {
             super.loadAdditional(tag, registries);
             for (int i = 0; i < 3; i++) {
                 String id = tag.getString("Gene" + i);
-                strand[i] = id.isEmpty() ? null : Gene.valueOf(id.toUpperCase(java.util.Locale.ROOT));
+                strand[i] = Gene.byId(id);
             }
             running = tag.getBoolean("Running");
         }
@@ -377,6 +466,11 @@ public final class LabMachines {
         }
 
         @Override
+        public MachineItems.Role[] roles() {
+            return new MachineItems.Role[]{MachineItems.Role.INPUT};
+        }
+
+        @Override
         public boolean button(ServerPlayer player, int id) {
             if (id != INJECT) return false;
             return inject(player) != null;
@@ -385,19 +479,27 @@ public final class LabMachines {
         public Genetics.Result inject(ServerPlayer player) {
             Form form = player.getData(ModRegistry.JAR_STATE).form();
             if (form != Form.BODY && form != Form.LINKED) {
-                player.displayClientMessage(Component.translatable("message.headinajar.rig_needs_body"), true);
+                refuse(player, "lab.rig.needs_body");
                 return null;
             }
             var serum = Serum.of(items.getStackInSlot(0));
-            if (serum.isEmpty()) return null;
+            if (serum.isEmpty()) {
+                refuse(player, "lab.rig.empty", Component.translatable("item.headinajar.serum_cassette"));
+                return null;
+            }
             if (energy.getEnergyStored() < COST) {
-                player.displayClientMessage(Component.translatable("gantry.headinajar.no_power"), true);
+                refuse(player, "lab.no_power", COST, Component.translatable("block.headinajar.galvanic_pile"));
                 return null;
             }
             Genetics.Result result = Genetics.inject(player, serum.get(), Genetics.Target.BODY, player.getRandom());
+            if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) {
+                refuse(player, result == Genetics.Result.FULL ? "lab.rig.full" : "lab.rig.too_heavy");
+                return result;
+            }
             GeneticsItems.SerumItem.report(player, result);
+            // the screen hides the action bar: say it over the screen too
+            tell(player, Component.translatable("message.headinajar.inject." + result.name().toLowerCase(java.util.Locale.ROOT)));
             if (result == Genetics.Result.OK || result == Genetics.Result.MUTATED) GeneticsItems.SerumItem.injected(player, serum.get(), player);
-            if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) return result;
             spend(COST);
             items.extractItem(0, 1, false);
             com.coolfreeze23.headinajar.form.FormActions.give(player, new ItemStack(Items.GLASS_BOTTLE));

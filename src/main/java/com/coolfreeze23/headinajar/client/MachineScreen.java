@@ -117,6 +117,12 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         super.renderLabels(g, mouseX, mouseY);
+        // a paused machine says why, top right, opposite its name
+        int status = menu.statusIndex() < 0 ? 0 : menu.data(menu.statusIndex());
+        if (status > 0 && status < MachineMenu.STALLS.length) {
+            Component why = Component.translatable("gui.headinajar.stall." + MachineMenu.STALLS[status]);
+            g.drawString(font, why, imageWidth - 7 - font.width(why), titleLabelY, 0x902020, false);
+        }
         for (String[] row : lines) {
             String[] xy = row[0].split(",");
             Object[] args = new Object[row.length - 2];
