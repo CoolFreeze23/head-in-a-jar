@@ -1,6 +1,8 @@
 package com.coolfreeze23.headinajar.mecha;
 
 import com.coolfreeze23.headinajar.entity.MechaEntity;
+import com.coolfreeze23.headinajar.feedback.Refusals;
+import com.coolfreeze23.headinajar.feedback.Refuser;
 import com.coolfreeze23.headinajar.form.FormActions;
 import com.coolfreeze23.headinajar.form.JarState;
 import com.coolfreeze23.headinajar.host.Hosts;
@@ -8,6 +10,7 @@ import com.coolfreeze23.headinajar.module.ModuleType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,6 +59,8 @@ public final class MechaLogic {
         float progress;
         int held = -1;
         int cooldown;
+        /** This press has already been refused (one refusal per press, however long it is held). */
+        boolean refused;
     }
 
     // --- weight ---------------------------------------------------------------------------------------
@@ -96,10 +101,18 @@ public final class MechaLogic {
         return new Vec3(strafe, 0, forward);
     }
 
+    /** The Legs modules that carry a frame built on legs. */
+    public static final java.util.List<MechaModule> WALKING_LEGS = java.util.List.of(MechaModule.HYDRAULIC_LEGS, MechaModule.ARACHNID_LEGS,
+            MechaModule.STILTS, MechaModule.HOVER_SKIRT, MechaModule.LAVA_TREADS);
+
     /** Whether the frame can walk: a Legs module that walks, or locomotion built into the frame. */
     public static boolean canWalk(MechaEntity m) {
-        return m.frame().locomotion != MechaFrame.Locomotion.LEGS || m.has(MechaModule.HYDRAULIC_LEGS) || m.has(MechaModule.ARACHNID_LEGS)
-                || m.has(MechaModule.HOVER_SKIRT) || m.has(MechaModule.LAVA_TREADS) || m.has(MechaModule.STILTS);
+        return walks(m.frame(), m::has);
+    }
+
+    /** Whether a frame with these modules fitted can walk (also asked by the Gantry before it builds). */
+    public static boolean walks(MechaFrame frame, java.util.function.Predicate<MechaModule> fitted) {
+        return frame.locomotion != MechaFrame.Locomotion.LEGS || WALKING_LEGS.stream().anyMatch(fitted);
     }
 
     /** Off-road for treads: soft natural ground. */
@@ -236,12 +249,26 @@ public final class MechaLogic {
         }
 
         // arms
-        if (pilot instanceof ServerPlayer sp && m.vent() == 0 && m.battery() > 0) {
+        if (pilot instanceof ServerPlayer sp) {
+            boolean live = m.vent() == 0 && m.battery() > 0;
+            int armed = 0;
             for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) {
                 int bit = 1 << (side % 2);
                 boolean held = (m.armsHeld & bit) != 0, before = (m.armsBefore & bit) != 0;
-                MechaArms.tick(m, sp, side, held, held && !before, !held && before);
+                if (m.arm(side) != null) armed |= bit;
+                if (live) {
+                    MechaArms.tick(m, sp, side, held, held && !before, !held && before);
+                } else {
+                    MechaArms.release(m, side);
+                    if (held && !before && m.arm(side) != null) {
+                        Refusals.deny(sp, Refuser.at(m), m.vent() > 0 ? "mecha.arm.venting" : "mecha.arm.no_power",
+                                Component.translatable("block.headinajar.assembly_gantry"));
+                    }
+                }
             }
+            // a button with no arm behind it on this frame
+            int pressed = m.armsHeld & ~m.armsBefore & ~armed;
+            if (pressed != 0) Refusals.deny(sp, Refuser.at(m), "mecha.arm.empty", Component.translatable("block.headinajar.assembly_gantry"));
         } else {
             for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) MechaArms.release(m, side);
         }

@@ -111,6 +111,11 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
             case AssemblyGantryMenu.ASSEMBLE -> {
                 if (frame == null) return say(player, "gantry.headinajar.no_frame");
                 if (onPad() != null) return say(player, "gantry.headinajar.pad_busy");
+                if (!com.coolfreeze23.headinajar.mecha.MechaLogic.walks(frame, this::fitted)) {
+                    Object[] legs = com.coolfreeze23.headinajar.mecha.MechaLogic.WALKING_LEGS.stream()
+                            .map(leg -> Component.translatable(ModRegistry.mechaModule(leg).getDescriptionId())).toArray();
+                    return com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "gantry.no_legs", legs);
+                }
                 if (energy.getEnergyStored() < ASSEMBLE_COST) return say(player, "gantry.headinajar.no_power");
                 MechaEntity mecha = ModRegistry.mechaType(frame).create(level);
                 if (mecha == null) return false;
@@ -178,6 +183,16 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 return false;
             }
         }
+    }
+
+    /** Whether a module of this kind sits in one of the frame's slots. */
+    private boolean fitted(MechaModule module) {
+        MechaFrame frame = frame();
+        if (frame == null) return false;
+        for (int i = 0; i < frame.totalSlots(); i++) {
+            if (items.getStackInSlot(FIRST_MODULE + i).getItem() instanceof MechaModuleItem item && item.type() == module) return true;
+        }
+        return false;
     }
 
     private boolean say(ServerPlayer player, String key) {

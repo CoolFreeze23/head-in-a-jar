@@ -2,8 +2,11 @@ package com.coolfreeze23.headinajar.mecha;
 
 import com.coolfreeze23.headinajar.entity.HeldBlockEntity;
 import com.coolfreeze23.headinajar.entity.MechaEntity;
+import com.coolfreeze23.headinajar.feedback.Refusals;
+import com.coolfreeze23.headinajar.feedback.Refuser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +32,7 @@ public final class MechaArms {
         if (s.cooldown > 0) s.cooldown--;
         if (arm == null) return;
         float eff = MechaLogic.effectiveness(m);
+        if (pressed) s.refused = false;
         if (pressed) MechaSystems.revealed(m);
         if (released) release(m, side);
         if (eff <= 0) return;
@@ -49,6 +53,7 @@ public final class MechaArms {
                 if (held) chainsaw(m, pilot, side, eff);
             }
             case HYDRAULIC_FIST -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (!pressed || s.cooldown > 0) return;
                 Entity target = MechaLogic.lookEntity(pilot, m, 4.5);
                 int force = m.armSlider(side);
@@ -62,6 +67,7 @@ public final class MechaArms {
                 }
             }
             case GRAPPLE_HOOK -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (!pressed || s.cooldown > 0 || !m.spend(800)) return;
                 s.cooldown = 20;
                 Entity target = MechaLogic.lookEntity(pilot, m, 32);
@@ -81,7 +87,11 @@ public final class MechaArms {
             case TRACTOR_BEAM -> beam(m, pilot, side, held, pressed);
             case RIVET_GUN -> {
                 if (!held || s.cooldown > 0) return;
-                if (!takeAmmo(m, pilot) || !m.spend(30)) return;
+                if (!takeAmmo(m, pilot)) {
+                    refuse(m, pilot, s, "mecha.arm.no_rivets");
+                    return;
+                }
+                if (!m.spend(30)) return;
                 s.cooldown = 4;
                 Vec3 look = pilot.getLookAngle();
                 Arrow rivet = new Arrow(m.serverLevel(), m, new ItemStack(Items.ARROW), null);
@@ -94,6 +104,7 @@ public final class MechaArms {
                 m.playSound(SoundEvents.CROSSBOW_SHOOT, 0.6f, 1.8f);
             }
             case MANIPULATOR_HAND -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0 && m.spend(50)) {
                     s.cooldown = 5;
                     hand(m, pilot);
@@ -109,6 +120,8 @@ public final class MechaArms {
                 if (held && m.spend(60)) flame(m, pilot, side, eff);
             }
             case ARC_CANNON -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
+                else if (pressed && m.battery() < 6000) refuse(m, pilot, s, "mecha.arm.low_power", 6, Component.translatable("block.headinajar.assembly_gantry"));
                 if (pressed && s.cooldown <= 0 && m.battery() >= 6000) {
                     m.spend(6000);
                     s.cooldown = 10 + 30 * m.armSlider(side) / 100;
@@ -116,12 +129,14 @@ public final class MechaArms {
                 }
             }
             case HEMO_SYRINGE -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0 && m.spend(20)) {
                     s.cooldown = 10;
                     hemo(m, pilot, eff);
                 }
             }
             case HARVESTER -> {
+                if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0) {
                     s.cooldown = 10;
                     harvest(m, pilot);
@@ -428,6 +443,13 @@ public final class MechaArms {
     }
 
     /** Lets go of anything the arm carries. */
+    /** Refuses this press of an arm, once however long the button stays held. */
+    private static void refuse(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s, String reason, Object... args) {
+        if (s.refused) return;
+        s.refused = true;
+        Refusals.deny(pilot, Refuser.at(m), reason, args);
+    }
+
     public static void release(MechaEntity m, int side) {
         MechaLogic.ArmState s = m.armState[side];
         s.target = null;

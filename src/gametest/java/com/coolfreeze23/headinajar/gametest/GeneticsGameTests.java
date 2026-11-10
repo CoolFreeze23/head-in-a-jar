@@ -358,6 +358,9 @@ public class GeneticsGameTests {
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.DISASSEMBLE), "disassemble failed");
         ItemStack frame = gantry.items().getStackInSlot(AssemblyGantryBlockEntity.SLOT_FRAME);
         h.assertTrue(MechaFrameItem.genes(frame).map(g -> g.has(Gene.SPIDER_CLIMB)).orElse(false), "frame lost the genes");
+        // a frame on legs is only built with legs that walk
+        gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.CHIMERA.firstIndex(com.coolfreeze23.headinajar.mecha.MechaModule.Slot.LEGS),
+                new ItemStack(ModRegistry.mechaModule(com.coolfreeze23.headinajar.mecha.MechaModule.HYDRAULIC_LEGS)));
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assemble failed");
         MechaEntity rebuilt = gantry.onPad();
         h.assertTrue(rebuilt != null && rebuilt.frame() == MechaFrame.CHIMERA && Genetics.genes(rebuilt).has(Gene.SPIDER_CLIMB), "rebuilt chimera has no genes");

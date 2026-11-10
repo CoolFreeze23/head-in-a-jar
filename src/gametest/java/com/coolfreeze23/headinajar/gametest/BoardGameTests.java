@@ -156,6 +156,8 @@ public class BoardGameTests {
         gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + last, new ItemStack(ModRegistry.mechaModule(MechaModule.TARGET_LOCK)));
         int shoulder = MechaFrame.COLOSSUS.firstIndex(MechaModule.Slot.ARM) + 3;
         gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + shoulder, new ItemStack(ModRegistry.mechaModule(MechaModule.ARC_CANNON)));
+        gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.COLOSSUS.firstIndex(MechaModule.Slot.LEGS),
+                new ItemStack(ModRegistry.mechaModule(MechaModule.HYDRAULIC_LEGS)));
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assemble failed");
         MechaEntity m = gantry.onPad();
         h.assertTrue(m != null && m.frame() == MechaFrame.COLOSSUS && m.moduleAt(last) == MechaModule.TARGET_LOCK && m.arm(3) == MechaModule.ARC_CANNON,
