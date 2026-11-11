@@ -1,0 +1,29 @@
+# Third repair pass, real input: a bare jar chased by a zombie is told what each knock leaves of its glass, louder at
+# three points, told when the glass is gone, and its death line names the zombie in the company's words. Night, so the
+# zombie doesn't burn. Default profile.
+@world flat
+@gamemode survival
+@difficulty normal
+@observe 20
+wait 40
+/time set 18000
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision 999 0 true
+/tp @s 0.5 -60 0.5 0 0
+wait 5
+jar
+wait 10
+inspect me
+/summon minecraft:zombie 0.5 -60 4.5
+report == J1 the zombie at the jar (expect: The glass took a knock, then Glass at 3/10, then No glass left, then the death line in chat)
+observe 420
+key sneak down
+wait 60
+shot j1_glass_knock
+wait 80
+shot j1_glass_low
+wait 270
+key sneak up
+observe 20
+shot j1_death_screen
+inspect me

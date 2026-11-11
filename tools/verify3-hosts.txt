@@ -1,0 +1,52 @@
+# Third repair pass, real input: a ridden cow at full sync tops out near a sprint (about 5.6 blocks a second: about 17
+# blocks for 60 ticks of forward, less the start), slower at zero sync. Then a wrecked mecha throws its pilot clear: the
+# glass takes one knock and the pilot is told. Default profile.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 0
+wait 5
+hostify minecraft:cow 0.5 -60 2.5
+wait 5
+jar
+wait 5
+lookat cow
+key use
+wait 20
+riding R0-boarded
+look 0 0
+sync 100
+riding R1-start
+report == R1 full sync, forward 60 ticks (expect: moved about 15-17)
+observe 70
+key forward hold 60
+observe 20
+riding R1-end
+sync 0
+report == R2 zero sync, forward 60 ticks (expect: a little less)
+observe 70
+key forward hold 60
+observe 20
+riding R2-end
+report == M1 off the cow, into a Hopper, then the Hopper is wrecked (expect: form jar, glass 9/10, the line over the HUD)
+sneak hold 3
+wait 20
+/tp @s 40.5 -60 0.5 0 10
+wait 5
+mecha HOPPER 40.5 -60 2.5 hydraulic_legs
+wait 20
+lookat hopper
+key use
+wait 20
+riding M1-aboard
+inspect me
+/damage @e[type=headinajar:hopper,limit=1] 1000 minecraft:generic
+wait 2
+shot m1_wrecked_line
+wait 20
+riding M1-after
+inspect me

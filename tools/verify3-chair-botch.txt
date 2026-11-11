@@ -1,0 +1,31 @@
+# Third repair pass: a botched cut piped to a Cradle floats upside down in the Cradle, as it would on the tray. The botch
+# is forced with /data at operation tick ~105 (after the chair decides it). Chair at 0 -60 3, Cradle at 2 -60 3.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 25
+/setblock 0 -60 3 headinajar:separation_chair
+/setblock 2 -60 3 headinajar:life_support_cradle
+/clear @s
+chair 0 -60 3
+wait 20
+look 0 25
+key use
+wait 25
+observe 160
+at rel 121 78 hold 50
+wait 105
+/data merge block 0 -60 3 {Botched:1b}
+wait 160
+inspect block 2 -60 3
+/tp @s 2.5 -60 0.8 0 30
+wait 10
+shot cb_cradle_upside_down
+view 2
+wait 5
+shot cb_cradle_front
+view 0

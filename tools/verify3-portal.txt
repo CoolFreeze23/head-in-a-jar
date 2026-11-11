@@ -1,0 +1,55 @@
+# Third repair pass: verify, don't assume. P1 the linked body walks into a nether portal with its head left behind: it is
+# stopped and told why. P2 a jar riding a pig through the same portal: afterwards it is a plain jar or still on its
+# host, never HOSTED on nothing. The portal is set by command (frame sunk one block so it is walked into at floor level).
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/fill 20 -61 0 20 -57 3 minecraft:obsidian
+/fill 20 -60 1 20 -58 2 minecraft:nether_portal[axis=z]
+report == P1 (expect: the portal line naming the Head Satchel, once every few seconds, no teleport)
+/tp @s 14.5 -60 1.5 90 0
+wait 5
+separate
+wait 20
+inspect near head_jar 4
+/tp @s 18.5 -60 1.5 -90 0
+wait 5
+observe 140
+key forward hold 12
+wait 128
+report the body stands in the portal block now, 120 ticks
+/tp @s 20.5 -60 1.5 -90 0
+observe 140
+key sneak hold 120
+observe 20
+inspect me
+shot p1_portal_line
+report == P2 swap into the head, ride a pig into the portal
+/tp @s 14.5 -60 1.5 90 0
+wait 5
+hostify minecraft:pig 15 -60 1
+wait 5
+key swap
+wait 30
+inspect me
+/tp @s 13.5 -60 1.5 -90 30
+wait 5
+lookat pig
+key use
+wait 20
+look -90 0
+riding P2-start
+observe 200
+key forward hold 60
+wait 140
+observe 20
+riding P2-end
+inspect me
+shot p2_after_portal
+wait 60
+riding P2-later
+inspect me
