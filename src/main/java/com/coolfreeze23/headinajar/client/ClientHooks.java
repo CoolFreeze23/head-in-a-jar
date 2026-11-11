@@ -19,6 +19,9 @@ public final class ClientHooks {
     private static int hits;
     private static boolean pressedThisRound;
     private static int flash;
+    /** Whether this client has seen itself on the handshake's host yet, and how long it has waited to. */
+    private static boolean seenRiding;
+    private static int waited;
 
     private ClientHooks() {
     }
@@ -33,6 +36,8 @@ public final class ClientHooks {
         tick = 0;
         hits = 0;
         pressedThisRound = false;
+        seenRiding = false;
+        waited = 0;
     }
 
     public static boolean handshakeActive() {
@@ -46,7 +51,7 @@ public final class ClientHooks {
 
     /** Called when the ability key is pressed during a handshake. */
     public static void press() {
-        if (!handshakeActive() || pressedThisRound) return;
+        if (!handshakeActive() || !seenRiding || pressedThisRound) return;
         pressedThisRound = true;
         boolean hit = Math.abs(ring(0) - 20f) <= 6f;
         if (hit) hits++;
@@ -56,9 +61,16 @@ public final class ClientHooks {
     public static void tick() {
         if (!handshakeActive()) return;
         // off the host (got down, teleported, the host gone): the handshake is over, and the ability key is the jar's again
+        // (the handshake can arrive a tick before this client sees itself riding: it waits for that before it starts)
         var player = net.minecraft.client.Minecraft.getInstance().player;
-        if (player == null || player.getVehicle() == null || player.getVehicle().getId() != handshakeEntity) {
+        boolean riding = player != null && player.getVehicle() != null && player.getVehicle().getId() == handshakeEntity;
+        if (riding) seenRiding = true;
+        if (player == null || com.coolfreeze23.headinajar.host.HandshakeRule.over(riding, seenRiding, waited)) {
             handshakeEntity = -1;
+            return;
+        }
+        if (!seenRiding) {
+            waited++;
             return;
         }
         if (flash > 0) flash--;
@@ -74,13 +86,15 @@ public final class ClientHooks {
     }
 
     public static void render(GuiGraphics g, float partial) {
-        if (!handshakeActive()) return;
+        if (!handshakeActive() || !seenRiding) return;
         Minecraft mc = Minecraft.getInstance();
         int cx = g.guiWidth() / 2, cy = g.guiHeight() / 2 + 30;
         circle(g, cx, cy, 20, flash > 0 ? 0xFF55FF77 : flash < 0 ? 0xFFFF5555 : 0xFFFFFFFF);
         circle(g, cx, cy, ring(partial), 0xFF59E0F4);
         g.drawCenteredString(mc.font, Component.translatable("hud.headinajar.handshake", round + 1, Component.keybind(ClientSetup.ABILITY.getName())),
                 cx, cy + 34, 0xFFFFFF);
+        // above the ring: below it, at a large GUI scale, the line would run into the hearts
+        g.drawCenteredString(mc.font, Component.translatable("hud.headinajar.handshake_legs"), cx, cy - 72, 0xDDDDDD);
     }
 
     private static void circle(GuiGraphics g, int cx, int cy, float r, int color) {

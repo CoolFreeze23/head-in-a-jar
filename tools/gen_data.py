@@ -143,6 +143,7 @@ import gen_p16_repairs3; gen_p16_repairs3.run(EN, PT, write, shaped)  # warnings
 import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
 import gen_p14_effects; gen_p14_effects.run(EN, PT, write, shaped)  # the effect kit, Telekinesis, swap, laser, arcs
+import gen_p17_release3; gen_p17_release3.run(EN, PT, write, shaped)  # the 0.3.0 release's own fixes
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)
