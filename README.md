@@ -295,7 +295,9 @@ up in your head. "Connection to body lost. Walk back to it, or book the Courier.
 
 ### Swap
 
-<!-- PIC: swap | x -->
+![A teal mote leaves a jar on the ground and arcs over to a headless body standing a few blocks away, which shivers as the player takes it over](docs/images/swap.gif)
+
+*Swap, seen by a bystander: the mind goes from the jar to the body. Press **Swap**.*
 
 - **Linked**: **Swap** wakes you up in your head at any signal. Your body is left standing, in its armour.
 - **Jar**: **Swap** puts your head down where it stands (into a Cradle if you are sitting in one) and moves you into
