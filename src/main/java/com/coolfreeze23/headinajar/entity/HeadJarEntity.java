@@ -159,9 +159,12 @@ public class HeadJarEntity extends Entity {
     public boolean hurt(DamageSource source, float amount) {
         if (level().isClientSide || isRemoved()) return false;
         boolean bypass = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
-        // another player's head is not theirs to knock: they are told so, and the glass is untouched
-        if (!bypass && source.getEntity() instanceof ServerPlayer hitter && !hitter.getUUID().equals(ownerId())) {
-            com.coolfreeze23.headinajar.feedback.Refusals.deny(hitter, com.coolfreeze23.headinajar.feedback.Refuser.at(this), "head.hit_not_yours", ownerName());
+        // no player knocks a placed head, its owner included (a swing at your own head is a slip, not a plan): they are
+        // told so, and the glass is untouched
+        if (!bypass && source.getEntity() instanceof ServerPlayer hitter) {
+            boolean own = hitter.getUUID().equals(ownerId());
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(hitter, com.coolfreeze23.headinajar.feedback.Refuser.at(this),
+                    own ? "head.hit_own" : "head.hit_not_yours", own ? Component.translatable("item.headinajar.head_satchel") : ownerName());
             return false;
         }
         boolean heat = source.is(DamageTypeTags.IS_FIRE);

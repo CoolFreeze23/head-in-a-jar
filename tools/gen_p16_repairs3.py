@@ -19,6 +19,38 @@ REFUSALS = {
     # Print pressed while a finished body waits in the vat for its owner (%s) to be a jar again
     'printer.waiting': ("A body waits in the vat for %s. It comes out once they're a jar.",
                         'Um corpo espera no tanque por %s. Ele sai quando voltar a ser pote.'),
+    # its owner swung at their own placed head: %s the Head Satchel
+    'head.hit_own': ("That's your own head. Carry it in your %s instead.",
+                     'Essa é a sua própria cabeça. Carregue-a na sua %s.'),
+    # the company's things used at nothing they work on: what they are for. %1$s the Separation Chair, %2$s the saw
+    'item.air.jar': ('A jar goes in the %1$s, or in your off hand while you use the %2$s.',
+                     'Um pote vai na %1$s, ou na mão secundária enquanto você usa a %2$s.'),
+    'item.air.goggles': ('Goggles go in the %s, or onto a set-down head: use them on its jar.',
+                         'Os óculos vão na %s, ou numa cabeça pousada: use-os no pote dela.'),
+    'item.air.collar': ('The collar goes in the %s, with a jar and goggles.',
+                        'A câmera vai na %s, com um pote e óculos.'),
+    # %s the Assembly Gantry
+    'item.air.mecha': ('Frames and mecha modules go in the %s.', 'Estruturas e módulos de mecha vão no %s.'),
+    # a jar module: %s the jar menu key; or, with a head on, %s the Separation Chair
+    'item.air.module_jar': ('Fit it from the jar menu (%s).', 'Instale pelo menu do pote (%s).'),
+    'item.air.module_body': ("Modules fit a head's jar. Get separated at the %s first.",
+                             'Módulos vão no pote de uma cabeça. Separe-se na %s primeiro.'),
+    # %1$s Relay Goggles, %2$s Collar Cam
+    'item.air.shard': ('Craft it with %1$s or a %2$s; its twin goes to the other.',
+                       'Combine com %1$s ou uma %2$s; o gêmeo vai para o outro.'),
+    'item.air.embalm': ('Use it on a host body to keep it fresh.', 'Use num corpo hospedeiro para mantê-lo fresco.'),
+    'item.air.lace': ('Use it on a host body at 50%% sync or more.', 'Use num corpo hospedeiro com 50%% de sincronia ou mais.'),
+    'item.air.saw': ('Use the saw on a creature worn below a quarter of its health.',
+                     'Use a serra numa criatura com menos de um quarto da vida.'),
+    'item.air.wrench': ("Use the wrench on one of the company's machines.", 'Use a chave numa das máquinas da empresa.'),
+    # Saline Bottle or Glass Patch with the head on: %s the item
+    'item.air.head_on': ('Your head is on. %s is for a head in a jar.', 'Sua cabeça está no lugar. %s é para uma cabeça no pote.'),
+    # a body tool used on another player: %s the item
+    'item.on_colleague': ('Colleagues are not specimens. Use the %s on a creature or a host.',
+                          'Colegas não são espécimes. Use %s numa criatura ou num hospedeiro.'),
+    # a head plugged into a Neural Socket clicked (sneak with the jar menu key unplugs it)
+    'socket.hands': ('Plugged into the socket. Sneak with the jar menu key to unplug first.',
+                     'Conectado ao soquete. Agache com a tecla do menu do pote para desconectar antes.'),
 }
 
 # id (after 'warning.headinajar.'): (en, pt)

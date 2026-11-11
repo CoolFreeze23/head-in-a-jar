@@ -600,4 +600,67 @@ public class ThirdRepairGameTests {
         h.assertTrue(Math.abs(cow.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() - 0.2) < 1e-4, "the cow's attribute changed");
         done(h, p);
     }
+    // --- the walker's last silent pairs: things used at nothing, or on a colleague -----------------------------------
+
+    private static void useInAir(ServerPlayer p, ItemStack stack) {
+        p.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        p.gameMode.useItem(p, p.serverLevel(), stack, InteractionHand.MAIN_HAND);
+    }
+
+    @GameTest(template = "platform")
+    public static void theCompanysThingsSayWhereTheyGo(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR);
+        useInAir(p, new ItemStack(ModRegistry.LIFE_SUPPORT_JAR.get()));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.jar", "a jar in the air");
+        useInAir(p, new ItemStack(ModRegistry.RELAY_GOGGLES.get()));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.goggles", "goggles in the air");
+        useInAir(p, new ItemStack(ModRegistry.mechaModule(MechaModule.HYDRAULIC_LEGS)));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.mecha", "a mecha module in the air");
+        useInAir(p, new ItemStack(ModRegistry.module(ModuleType.MAGNET)));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.module_body", "a jar module with the head on");
+        useInAir(p, new ItemStack(ModRegistry.SURGICAL_SAW.get()));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.saw", "the saw in the air");
+        useInAir(p, new ItemStack(ModRegistry.SALINE_BOTTLE.get()));
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.air.head_on", "saline with the head on");
+        done(h, p);
+    }
+
+    @GameTest(template = "platform")
+    public static void aFriendsJarTakesSalineFromSomeoneItTrusts(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR), friend = player(h, FLOOR.east(2));
+        FormActions.detach(friend, 3);
+        state(friend).setSaline(500);
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModRegistry.SALINE_BOTTLE.get(), 2));
+        p.interactOn(friend, InteractionHand.MAIN_HAND);
+        h.assertValueEqual(Refusals.lastDelivered(p), "head.not_yours", "an untrusted bottle");
+        h.assertValueEqual(state(friend).saline(), 500, "saline after an untrusted bottle");
+        HeadRegistry.get(friend).setTrust(friend.getUUID(), p.getUUID(), true);
+        p.interactOn(friend, InteractionHand.MAIN_HAND);
+        h.assertValueEqual(state(friend).saline(), 750, "saline from a trusted friend");
+        HeadRegistry.get(friend).setTrust(friend.getUUID(), p.getUUID(), false);
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModRegistry.SURGICAL_SAW.get()));
+        p.interactOn(friend, InteractionHand.MAIN_HAND);
+        h.assertValueEqual(Refusals.lastDelivered(p), "item.on_colleague", "the saw on a colleague");
+        done(h, p, friend);
+    }
+
+    @GameTest(template = "platform")
+    public static void anOwnersSwingAtTheirHeadIsASlipNotAKnock(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR.east(1));
+        HeadJarEntity head = separate(h, p, FLOOR.east(2));
+        int glass = state(p).integrity();
+        p.attack(head);
+        h.assertValueEqual(state(p).integrity(), glass, "the owner cracked their own glass");
+        h.assertValueEqual(Refusals.lastDelivered(p), "head.hit_own", "the owner's answer");
+        done(h, p);
+    }
+
+    @GameTest(template = "platform")
+    public static void aPluggedInHeadsClicksAreAnswered(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR);
+        // the request the client sends when it stops a plugged-in head's click
+        Refusals.fromClient(p, com.coolfreeze23.headinajar.form.ItemAnswers.SOCKET_HANDS, -1);
+        h.assertValueEqual(Refusals.lastDelivered(p), "socket.hands", "a socket's click");
+        done(h, p);
+    }
 }
