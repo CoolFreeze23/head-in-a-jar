@@ -69,14 +69,15 @@ nether quartz, gold, lapis, diamonds, ender pearls, netherite scrap, obsidian an
 
 1. **Surgical Steel Blend**: iron ingot, bone meal and coal, shapeless. Smelt it (10 seconds) or blast it (5 seconds)
    into a **Surgical Steel Ingot**. Nine ingots make a **Block of Surgical Steel**, and back.
-2. The parts:
+2. The parts. In every recipe on this page, "ingot" on its own means a Surgical Steel Ingot, and "gap" an empty
+   square.
 
 | Part | Recipe |
 |---|---|
 | **Neuro-Copper Wire** (makes 4) | copper ingot, redstone, copper ingot in a row |
 | **Lens** | glass, amethyst shard, glass in a row |
 | **Servo** | a piston on top; ingot, wire, ingot below |
-| **Synapse Chip** | quartz, wire, quartz; gold ingot, lapis, gold ingot below (not needed this week) |
+| **Synapse Chip** | quartz, wire, quartz; gold ingot, lapis, gold ingot below (needed from Day 7: nether quartz) |
 
 ### Day 2: power and saline
 
@@ -104,7 +105,7 @@ nether quartz, gold, lapis, diamonds, ender pearls, netherite scrap, obsidian an
    (white wool, Excision Head, white wool; ingot, white wool, ingot; Booth Console, servo, lever).
 2. Place the chair with your Galvanic Pile touching it. It needs **40,000 FE**: ten rotten flesh, about 100 seconds of
    burning.
-3. Keep the room clear: the block to the left of the seat and the one above it (the jar tray), the block in front and
+3. Keep the room clear (left as the patient sits): the block to the left of the seat and the one above it (the jar tray), the block in front and
    the two above it, the front-left block one and two up, and the space above the chair.
 4. **Use** the chair to sit down; its console opens. Load the jar, the goggles, the Collar Cam and four bottles of
    saline. Hold the **Sign** button for two seconds.
@@ -138,8 +139,8 @@ Walk too far and the link breaks: you wake up in your head. To get back:
 
 - **Borrow a body.** Make a **Surgical Saw**, wear a creature down below a quarter of its health and saw its head
   off. As a jar, **Use** the standing body to climb on. See [Hostile Takeover](#hostile-takeover-mob-bodies).
-- **Build a mecha.** An **Assembly Gantry**, a **Hopper Frame**, **Hydraulic Legs** and a **Galvanic Stack**, 10 kFE,
-  Assemble. See [Mecha Division](#mecha-division).
+- **Build a mecha.** **Mecha Plating** (8 ingots around an iron block, makes 2), an **Assembly Gantry**, a **Hopper
+  Frame** and **Hydraulic Legs**, 10 kFE, Assemble; a **Galvanic Stack** keeps it charged. See [Mecha Division](#mecha-division).
 - **Start the lab.** Syringe, Centrifuge, DNA Sequencer, Gene Splicer, Injection Rig. See
   [Genetics Department](#genetics-department).
 - **Put heads to work.** Saw a head off with an empty Life Support Jar in your other hand. See
@@ -159,7 +160,7 @@ Head Office recognises six forms of employee, plus one carrying arrangement. Fin
 | Break and place blocks | Yes | Yes | Yes | Only with a **Manipulator Arm** (half speed, 200 FE a block) | No | Through the mecha's arms | No |
 | Attack | Yes | Yes | Yes | Only with an Arm (200 FE a swing, half damage) | The host's abilities | The mecha's arms | No |
 | Use items in the air | Yes | Yes | Yes | Only with an Arm | No | No | No |
-| Pick up items | Yes | Yes | Yes | Only with an Arm or a **Magnet** | Same as jar | Same as jar | Same as jar |
+| Pick up items | Yes | Yes | Yes | Only with an Arm or a **Magnet** (Telekinesis lifts items but does not pocket them) | Same as jar | Same as jar | Same as jar |
 | Open blocks | All | All | All | The company's machines only (see below); vanilla blocks need an Arm | None | None | None |
 | Portals | Yes | **No**, unless you carry your head or your goggles and collar are entangled | Yes | Yes | As a ridden mob | Yes, except the Colossus and Executive (too big) | No |
 | **Swap** | Nothing | Wake up in your head | Become a jar where you stand | Back into your body | "Not from up here. Get down first." | Opens the Cargo Hold | "Swap works from a jar or a body. Get down first." |
@@ -191,7 +192,7 @@ professional about it.
   **Cranial Saline**. Hoppers and pipes can load it. Empty slots show what goes in them.
 - **Power**: 40,000 FE stored before it will start. It holds 50,000 and takes up to 2,000 FE a tick. A Galvanic Pile
   touching it is the usual supply.
-- **Room**: the block to the left of the seat and the block above that (the tray: a jar can't even be loaded with them
+- **Room** (left and right as the patient sits): the block to the left of the seat and the block above that (the tray: a jar can't even be loaded with them
   blocked), the block in front and the two above it, the front-left block one and two up, and the space above the chair.
 
 **Use** sits you down and opens the console. **Sneak** and **Use** with empty hands opens it without sitting. Anyone
@@ -391,7 +392,7 @@ it back." `linkLossInventory` in the server config can keep your things with you
 A corpse can't be hurt. You, in a body, can **Use** it to open its belongings, as can anyone you trust (and your
 team). Anyone else: "They can let you in with /headoffice trust." As a jar at your corpse, **Use** it: a Suture Kit
 anywhere on you or in the corpse is used and your head goes back on; with no kit, the belongings open so you can take
-the parts for one. A body that falls into the void leaves its corpse where it last stood.
+the parts for one (a Suture Kit is shapeless and fits your inventory's own crafting grid). A body that falls into the void leaves its corpse where it last stood.
 
 ### Putting your head back on
 
@@ -507,11 +508,15 @@ their charge, mecha half their battery, turrets go dark. Shielded Housing protec
 
 **Use** any of these with an empty hand to see what it holds.
 
+**Powering things.** Every Noggin & Sons machine takes FE (Forge Energy) from any side: a Galvanic Pile, Leyden Jar
+or unlinked Tesla Node touching it, a linked Tesla Node, or another mod's cables. 1 kFE is 1,000 FE; mB is a
+thousandth of a bucket.
+
 <!-- PIC: tesla | x -->
 
 | Block | Recipe | What it does |
 |---|---|---|
-| **Galvanic Pile** | six copper ingots, two wires, one rotten flesh | Burns meat into 20 FE a tick: rotten flesh 4,000 FE, spider eye 6,000, raw meat or fish 3,000. Holds 50,000. Shares its power evenly among every machine touching it. **Use** meat on it to feed it (a jar can't). "The pile is full of rotten flesh. Let it burn some first." |
+| **Galvanic Pile** | six copper ingots, two wires, one rotten flesh | Burns meat into 20 FE a tick: rotten flesh 4,000 FE, spider eye 6,000, raw meat or fish 3,000. Holds 50,000. Shares its power evenly among every machine touching it. **Use** meat on it to feed it (a jar can't). Its fuel slot takes one stack of one kind of meat at a time. "The pile is full of rotten flesh. Let it burn some first." |
 | **Leyden Jar** | wire; glass, copper block, glass; glass, ingot, glass | A 250,000 FE battery. Takes and gives 2,000 FE a tick, to every neighbour except other Leyden Jars |
 | **Tesla Node** | lightning rod; wire, copper block, wire; three ingots | Sends up to 2,000 FE a tick to the node it is linked to, up to 16 blocks away, losing 5%. Unlinked, it feeds its neighbours. A crackling arc joins linked nodes and brightens while power flows |
 | **Surgical Wrench** | a diagonal of three ingots with a wire | Links Tesla Nodes: **Use** the sending node, then the receiving one. **Sneak** and **Use** a node to unlink it. "Too far: nodes reach 16 blocks. Put one closer." |
@@ -551,6 +556,8 @@ A head in a jar is a head. Modules are how Noggin & Sons makes it an employee ag
 
 - Modules go into the jar, not the jar item. You fit them **after** the operation, as a **jar**: press **Jar menu**,
   then drag a module into an open slot (or **Sneak**-click it from your inventory). Take it out the same way.
+  Craft modules before the operation or as a linked body, and keep them in your inventory: your head keeps the
+  inventory, but a jar cannot use a crafting table.
 - One of each kind per jar. A second **Telekinesis Module** simply won't go in.
 - Slots: **Life Support Jar** 3, **Compact Jar** 3, **Reinforced Jar** 5, **Executive Jar** 7. Slots your jar doesn't
   have are shown shut.
@@ -1732,16 +1739,16 @@ someone plugged in: "Steve is plugged in. Wait until they unplug."
 Six keys of your own, under **Head in a Jar** in the Controls screen. Rebind them as you like; every line the game shows
 uses the key you chose.
 
-| Action (Controls screen) | Default | body | linked | jar | hosted | pilot | socket |
+| Action (its name in the Controls screen) | Default | body | linked | jar | hosted | pilot | socket |
 |---|---|---|---|---|---|---|---|
-| **Jar menu** | J | Refused: "Your head is still on. The jar menu is for a head in a jar." | Refused: "The jar menu is with your head. Swap to it first." | Opens the Jar menu | Opens the Jar menu | Opens the Jar menu | Opens the Jar menu |
-| **Jar ability (Telekinesis)** | R | Your first active gene | Your first active gene | Telekinesis: grab, or set down | The host's main ability (needs 50% sync) | The selected utility module | Pulses the selected face at full strength |
-| **Host secondary ability** | G | Your second active gene | Your second active gene | Lacrimal Laser | The host's second ability (needs 75% sync) | Next utility module | Next face |
-| **Swap body / head** | K | - | Back into your head, at any signal | Out to your body, on a signal above 20% | Refused: "Not from up here. Get down first." | Opens the Cargo Hold | Refused: "Swap works from a jar or a body. Get down first." |
-| **Jar wheels / tip over** | V | - | Refused: "Your body has legs. Walk." | Wheels down or up; without Wheels, tip over or sit up | Refused: "Not from up here. Get down first." | Refused, the same | - |
-| **Collar zoom** | C | - | Zooms x3 while held, with a **Zoom Optic** on the **Collar Cam** | - | - | - | - |
+| **Jar menu** (Jar menu) | J | Refused: "Your head is still on. The jar menu is for a head in a jar." | Refused: "The jar menu is with your head. Swap to it first." | Opens the Jar menu | Opens the Jar menu | Opens the Jar menu | Opens the Jar menu |
+| **Ability** (Jar ability (Telekinesis)) | R | Your first active gene | Your first active gene | Telekinesis: grab, or set down | The host's main ability (needs 50% sync) | The selected utility module | Pulses the selected face at full strength |
+| **Secondary** (Host secondary ability) | G | Your second active gene | Your second active gene | Lacrimal Laser | The host's second ability (needs 75% sync) | Next utility module | Next face |
+| **Swap** (Swap body / head) | K | - | Back into your head, at any signal | Out to your body, on a signal above 20% | Refused: "Not from up here. Get down first." | Opens the Cargo Hold | Refused: "Swap works from a jar or a body. Get down first." |
+| **Drive** (Jar wheels / tip over) | V | - | Refused: "Your body has legs. Walk." | Wheels down or up; without Wheels, tip over or sit up | Refused: "Not from up here. Get down first." | Refused, the same | - |
+| **Collar zoom** (Collar zoom) | C | - | Zooms x3 while held, with a **Zoom Optic** on the **Collar Cam** | - | - | - | - |
 
-A dash means the key does nothing there. Carrying your head counts as linked.
+A dash means the key does nothing there. For these keys, carrying your head counts as linked.
 
 Some details the table has no room for:
 
@@ -1756,7 +1763,7 @@ Some details the table has no room for:
 - In a cockpit, **Ability** and **Secondary** run the mecha's utility modules. Hold **Sneak** with them, or fit no
   utility, and they fire the mecha's genes instead. With neither: "No utility module fitted." The jar's own
   Telekinesis never works from a cockpit.
-- **Ability** is also the Neural Handshake key (see below).
+- **Ability** is also the Neural Handshake key (see [Hostile Takeover](#the-neural-handshake)).
 - If **Ability** and **Sprint** share a key, a jar without Telekinesis takes the press as a sprint. The first time
   the key does both, a line says so, once.
 
@@ -1782,11 +1789,6 @@ Some details the table has no room for:
 | Any click | linked, signal under 20% | One in four is lost. The link bar shows "CLICK LOST". |
 | Movement keys | after any change of form | Keys you were holding count as let go until you press them again. |
 
-### The Neural Handshake
-
-The first time a jar boards a mob host, three rings close in on a circle. Press **Ability** as each ring meets it.
-Each hit adds 3% sync. A miss costs you a few seconds of nausea. The host's legs wait until it is done. Utility Shells
-skip it. Turn it off with `handshake` in the client config for a flat 5%.
 
 ## Commands
 
