@@ -18,6 +18,28 @@ DOLORES's voice).
 - **GeckoLib 4.9.3 or newer for 1.21.1** (required: the Separation Chair is animated with it).
 - Everything else is optional (see [Other mods](#other-mods)).
 
+## What's new in 0.3.0
+
+- **Telekinesis you can see.** A held creature, item or block hangs out in front of the jar where you can see all of
+  it, joined to the jar by a glowing line, and swings and lags behind with its weight. The ability key sets it down,
+  attack throws it, and the hold says why it ended when it runs out of charge or reach. A grab that fails says why
+  (too heavy, a boss, a machine, nothing in reach). Lifting another player, their placed head or their body takes
+  their trust: `/headoffice trust add`.
+- **Effects for the big moments.** Swapping between your body and your head, the Lacrimal Laser, the arcs between
+  linked Tesla Nodes and a guardian turret's lock beam are drawn properly now, with their own sounds. `screenShake` in
+  the client config (0-100) sets how much they may move the camera; the photosensitive option turns it off.
+- **Warned before it costs you.** A jar's glass says every knock it takes, and warns at the last ones before a hit is
+  a real death. A head left near fire, a jar smashed by a mob and a wrecked mecha all say what happened (a wrecked
+  mecha throws you clear). The Syringe warns before it would kill a weakened creature, and the lab machines say when
+  a step would use up a sample or a print.
+- **More clicks answer.** The company's items used at nothing or on a colleague say where they go; a friend you trust
+  can top up your jar with a Saline Bottle or a Glass Patch; clicks while plugged into a Neural Socket say how to
+  unplug; hitting your own placed head no longer cracks it.
+- **Hosts ride at a sensible pace.** A ridden cow, pig or other land creature now tops out near a sprint (a cow was
+  nearly twice that). Horses and the other vanilla mounts are unchanged.
+- **The chair:** a seated patient can reopen the panel with use, and DOLORES says so truly when your head is piped to a
+  Cradle instead of the tray.
+
 ## What's new in 0.2.0
 
 - **A new Separation Chair.** Rebuilt and fully animated: the barrier comes down, the hood scans you, the blade swings,
@@ -50,6 +72,7 @@ DOLORES's voice).
 ## Contents
 
 - [Requirements](#requirements)
+- [What's new in 0.3.0](#whats-new-in-030)
 - [What's new in 0.2.0](#whats-new-in-020)
 - [Tutorial: your first week at Head Office](#tutorial-your-first-week-at-head-office)
 - [Getting your head off](#getting-your-head-off)

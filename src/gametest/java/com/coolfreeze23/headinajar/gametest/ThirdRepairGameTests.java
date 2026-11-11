@@ -436,7 +436,7 @@ public class ThirdRepairGameTests {
         h.succeed();
     }
 
-    // --- 7. what the machine verifier read in the code ---------------------------------------------------------------
+    // --- 7. what a reading of the machines' code found --------------------------------------------------------------
 
     @GameTest(template = "platform")
     public static void aNitwitIsNeverChargedAnEmerald(GameTestHelper h) {
