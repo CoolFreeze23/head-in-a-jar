@@ -1965,8 +1965,8 @@ The mod brings its own sounds, all with subtitles:
   the client config (0-100) sets how much they may move the camera; the photosensitive option turns it off.
 - **Warned before it costs you.** A jar's glass says every knock it takes, and warns at the last ones before a hit is
   a real death. A head left near fire, a jar smashed by a mob and a wrecked mecha all say what happened (a wrecked
-  mecha throws you clear). The Syringe never takes a creature's last health, and the lab machines say when
-  a step would use up a sample or a print.
+  mecha throws you clear). The Syringe never takes a creature's last health, and a printed body that
+  has to wait for you says so.
 - **More clicks answer.** The company's items used at nothing or on a colleague say where they go; a friend you trust
   can top up your jar with a Saline Bottle or a Glass Patch; clicks while plugged into a Neural Socket say how to
   unplug; hitting your own placed head no longer cracks it.
