@@ -163,7 +163,7 @@ public class EffectGameTests {
         done(h, holder);
     }
 
-    @GameTest(template = "platform", timeoutTicks = 80)
+    @GameTest(template = "platform", timeoutTicks = 140)
     public static void aHeldCowIsCarriedInTheAir(GameTestHelper h) {
         ServerPlayer holder = jar(h, FLOOR.east(3), 0, 0);
         state(holder).setCharge(100_000);
@@ -176,9 +176,19 @@ public class EffectGameTests {
         h.onEachTick(() -> tick(holder));
         h.runAfterDelay(40, () -> {
             double up = cow.getY() - floor;
-            h.assertTrue(up > 1.2 && up < 2.0, "looking level, the cow's feet are " + up + " above the floor, not about a block and a half");
-            h.assertTrue(cow.distanceTo(holder) > 2.5, "the cow is in the jar's face: " + cow.distanceTo(holder));
+            h.assertTrue(up > 0.55 && up < 1.0, "looking level, the cow's feet are " + up + " above the floor, not about 0.7");
+            h.assertTrue(cow.distanceTo(holder) > 3.5, "the cow is too near the jar to be seen whole: " + cow.distanceTo(holder));
+            // its top edge within 20 degrees of the crosshair, from the jar's eyes
+            double top = cow.getBoundingBox().maxY - holder.getEyeY();
+            double out = Math.sqrt(Math.pow(cow.getX() - holder.getX(), 2) + Math.pow(cow.getZ() - holder.getZ(), 2));
+            h.assertTrue(Math.toDegrees(Math.atan2(top, out)) < 22, "the cow's top is " + Math.toDegrees(Math.atan2(top, out)) + " degrees above the crosshair");
             h.assertFalse(cow.isNoGravity(), "the hold set the saved gravity flag");
+            // thrown level from that height it lands with no fall damage (vanilla's 3-block threshold)
+            key(holder, Network.Action.THROW);
+        });
+        h.runAfterDelay(100, () -> {
+            h.assertTrue(cow.onGround(), "the thrown cow has not landed");
+            h.assertTrue(cow.getHealth() == cow.getMaxHealth(), "the thrown cow took " + (cow.getMaxHealth() - cow.getHealth()) + " fall damage");
             done(h, holder);
         });
     }

@@ -218,15 +218,27 @@ public final class Telekinesis {
         return Math.min(1, held.getBbWidth() * held.getBbWidth() * held.getBbHeight() / 1.1);
     }
 
+    /** How far above the crosshair the top of a held thing may reach when the jar looks level: 20 degrees. */
+    private static final double TOP_SLOPE = Math.tan(Math.toRadians(20));
+    /** The least a held thing's feet clear the ground under it. */
+    private static final double MIN_CLEARANCE = 0.6;
+
     /**
-     * Where the held thing's feet are carried: in front of the jar along its look, clear of its face, and raised so
-     * that looking level holds a cow about a block and a half off the ground (a jar's eyes are half a block up);
-     * looking up lifts it higher, looking down lowers it. Heavier things hang a little lower.
+     * Where the held thing's feet are carried. Looking level, its feet are a little above the jar's eyes (a cow's about
+     * 0.7 of a block off the ground, a jar's eyes being half a block up) and it is far enough out that its top edge is no
+     * more than 20 degrees above the crosshair, so the jar sees all of what it holds; never nearer than keeps it out of
+     * the jar's face. Looking up lifts it, looking down lowers it, but never below {@link #MIN_CLEARANCE} over the
+     * ground beneath it. Bigger things sit farther out by the same rule; heavier ones hang a little lower.
      */
     public static Vec3 holdPoint(Player player, Entity held) {
-        double distance = 2.6 + held.getBbWidth() * 0.8;
-        double lift = 1.3 - 0.3 * heaviness(held);
-        return player.getEyePosition().add(player.getLookAngle().scale(distance)).add(0, lift, 0);
+        double lift = 0.3 - 0.1 * heaviness(held);
+        double distance = Math.max(2.6 + held.getBbWidth() * 0.8, (lift + held.getBbHeight()) / TOP_SLOPE);
+        Vec3 feet = player.getEyePosition().add(player.getLookAngle().scale(distance)).add(0, lift, 0);
+        var ground = player.level().clip(new ClipContext(feet.add(0, 1, 0), feet.subtract(0, 4, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, held));
+        if (ground.getType() == HitResult.Type.BLOCK && feet.y < ground.getLocation().y + MIN_CLEARANCE) {
+            feet = new Vec3(feet.x, ground.getLocation().y + MIN_CLEARANCE, feet.z);
+        }
+        return feet;
     }
 
     private static boolean fallsBeforeMoving(Entity held) {
