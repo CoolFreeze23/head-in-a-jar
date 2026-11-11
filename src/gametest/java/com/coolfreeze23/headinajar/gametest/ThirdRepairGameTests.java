@@ -663,4 +663,17 @@ public class ThirdRepairGameTests {
         h.assertValueEqual(Refusals.lastDelivered(p), "socket.hands", "a socket's click");
         done(h, p);
     }
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void aPrintWithNobodyToPrintForGoesIdle(GameTestHelper h) {
+        var printer = stockedPrinter(h, BodyPrinterBlockEntity.ENERGY);
+        // what /data merge does to a printer that isn't printing
+        var registries = h.getLevel().registryAccess();
+        var tag = printer.saveWithoutMetadata(registries);
+        tag.putInt("Progress", BodyPrinterBlockEntity.TICKS - 1);
+        printer.loadWithComponents(tag, registries);
+        h.runAfterDelay(25, () -> {
+            h.assertFalse(printer.printing(), "a print for nobody kept running");
+            h.succeed();
+        });
+    }
 }

@@ -159,6 +159,12 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, BodyPrinterBlockEntity printer) {
         if (!printer.printing()) return;
+        // a print with nobody to print it for (its progress set by hand, say) is no print: the vat goes back to idle
+        if (printer.client == null) {
+            printer.progress = -1;
+            printer.setChanged();
+            return;
+        }
         // a finished body waits in the vat while its owner has a body on
         if (printer.progress >= TICKS) {
             if (level.getGameTime() % 20 == 0) printer.deliver((ServerLevel) level);
