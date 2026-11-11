@@ -58,12 +58,37 @@ public final class HostControl {
         }
     }
 
+    /**
+     * The highest base walking pace a driven land host keeps: about 5.1 blocks a second flat out, 5.6 at full sync (a
+     * player's sprint is 5.6). Steady speed on flat ground is the pace times about 44 blocks a second.
+     */
+    public static final double LAND_PACE = 0.1164;
+
+    /**
+     * Whether a host's ridden pace is held to {@link #LAND_PACE}: a land creature on the ground, not a flier, a swimmer
+     * in water, one of the mod's shells or mechas (they have their own scale), or a creature vanilla lets a player ride
+     * at its own pace (horses, donkeys, mules, llamas, camels).
+     */
+    public static boolean paced(LivingEntity host, boolean flier) {
+        if (flier || host.isInWater() || host.getAttribute(Attributes.MOVEMENT_SPEED) == null) return false;
+        if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity || host instanceof com.coolfreeze23.headinajar.entity.MechaEntity) return false;
+        return !(host instanceof net.minecraft.world.entity.animal.horse.AbstractHorse) && !(host instanceof net.minecraft.world.entity.animal.camel.Camel);
+    }
+
     public static float riddenSpeed(LivingEntity host, Player pilot) {
         if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) return com.coolfreeze23.headinajar.mecha.MechaLogic.riddenSpeed(m);
         HostDefinition def = Hosts.definition(host);
         boolean flier = def != null && def.has("flight");
         double speed = flier && host.getAttribute(Attributes.FLYING_SPEED) != null
                 ? host.getAttributeValue(Attributes.FLYING_SPEED) : host.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        if (paced(host, flier)) {
+            // a mob's speed attribute is its walking pace under its own AI; driven flat out it would be a gallop. Its base
+            // pace is held to a player's, the modifiers on it (stiffness, genes) still counted, so a cow at full sync
+            // tops out near a sprint. A real mount keeps the pace vanilla rides it at.
+            var attribute = host.getAttribute(Attributes.MOVEMENT_SPEED);
+            double base = attribute.getBaseValue();
+            if (base > LAND_PACE) speed *= LAND_PACE / base;
+        }
         if (Hosts.data(host).effectiveSync() >= 100) speed *= 1.1;
         if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity) speed *= com.coolfreeze23.headinajar.entity.ShellEntity.RIDDEN_SCALE;
         return (float) Math.max(0.05, speed);

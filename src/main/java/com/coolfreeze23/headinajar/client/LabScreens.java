@@ -204,8 +204,13 @@ public final class LabScreens {
             int colour = stability >= 60 ? 0x207020 : stability >= 30 ? 0x806010 : 0x902020;
             g.drawString(font, Component.translatable("gui.headinajar.splicer.stability", stability), 127, 36, colour, false);
             g.drawString(font, Component.translatable("gui.headinajar.splicer.mutation", mutation), 127, 44, colour, false);
-            g.drawString(font, Component.translatable("gui.headinajar.splicer.load", load, LabMachines.Splicer.MAX_LOAD), 34, 51,
-                    load > LabMachines.Splicer.MAX_LOAD ? 0x902020 : 0x404040, false);
+            // the load against the lightest thing that can take it: a body (3), a host (6) or a Chimera's ports (8)
+            var fits = com.coolfreeze23.headinajar.genetics.Genetics.Target.lightestFor(load);
+            Component line = fits == null
+                    ? Component.translatable("gui.headinajar.splicer.load_heavy", load, LabMachines.Splicer.MAX_LOAD)
+                    : Component.translatable("gui.headinajar.splicer.load_fits", load, fits.loadCap,
+                            Component.translatable("gui.headinajar.splicer.target." + fits.name().toLowerCase(java.util.Locale.ROOT)));
+            g.drawString(font, line, 34, 51, fits == null ? 0x902020 : 0x404040, false);
         }
     }
 }

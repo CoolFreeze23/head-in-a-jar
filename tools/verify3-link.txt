@@ -1,0 +1,32 @@
+# Third repair pass: the packet-loss flash on the link bar, caught. At about 12% link quality, right-clicks placing stone;
+# after each, a burst of shots one every other tick for 16 ticks, so the second-long red frame and the CLICK LOST label
+# under the link bar fall in at least one. Default profile.
+@world flat
+@gamemode survival
+@observe 12
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 -90 0
+wait 5
+separate
+wait 5
+/tp @s -43.0 -60 0.5 90 35
+/give @s minecraft:stone 64
+wait 40
+inspect me
+hotbar 2
+key use
+burst lf1 8
+key use
+burst lf2 8
+key use
+burst lf3 8
+key use
+burst lf4 8
+key use
+burst lf5 8
+key use
+burst lf6 8
+inspect me

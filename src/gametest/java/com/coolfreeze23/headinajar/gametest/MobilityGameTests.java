@@ -103,7 +103,8 @@ public class MobilityGameTests {
         HeadlessBody body = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(3)).stream().findFirst().orElse(null);
         h.assertTrue(body != null, "no body");
         h.assertTrue(Courier.book(p).equals("courier.headinajar.already_here"), "booked a courier for a body right here");
-        Vec3 far = p.position().add(40, 0, 0);
+        // far out of reach straight up: 40 blocks sideways lands in whichever test the grid placed next door
+        Vec3 far = p.position().add(0, 40, 0);
         p.teleportTo(far.x, far.y, far.z);
         // a real player keeps the chunks round it loaded; a test player is never ticked, so hold its new chunk the same way
         var chunk = new net.minecraft.world.level.ChunkPos(BlockPos.containing(far));

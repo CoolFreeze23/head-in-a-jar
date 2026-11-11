@@ -128,7 +128,7 @@ public class CerebralArrayBlockEntity extends LabMachine {
                 level.sendBlockUpdated(pos, state, state, 3);
             }
         }
-        if (heads >= MEETING && fed && level.getGameTime() % VOTE_TICKS == pos.asLong() % VOTE_TICKS) a.vote(level);
+        if (heads >= MEETING && fed && level.getGameTime() % VOTE_TICKS == Math.floorMod(pos.asLong(), (long) VOTE_TICKS)) a.vote(level);
         if (fed && level.getGameTime() % 100 == 0) {
             if (heads >= MEETING) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "board_meeting");
             if (a.output >= 500) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "brain_trust");

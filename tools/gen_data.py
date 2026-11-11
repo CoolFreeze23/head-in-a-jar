@@ -139,6 +139,7 @@ import gen_p12_machines; gen_p12_machines.run(EN, PT, write, shaped)  # machines
 import gen_p13_followups; gen_p13_followups.run(EN, PT, write, shaped)  # follow-ups seen in the game
 import gen_p15_repairs2; gen_p15_repairs2.run(EN, PT, write, shaped)  # what a new player's playthrough found
 import gen_p16_decisions; gen_p16_decisions.run(EN, PT, write, shaped)  # what a bare jar may work, the handbook, power lines
+import gen_p16_repairs3; gen_p16_repairs3.run(EN, PT, write, shaped)  # warnings before a costly knock, deaths, lab and chair repairs
 import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
 assert set(EN) == set(PT), set(EN) ^ set(PT)

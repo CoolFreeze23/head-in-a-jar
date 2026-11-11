@@ -1,0 +1,32 @@
+{
+  "name": "Who carries what",
+  "icon": "headinajar:dna_fraction",
+  "category": "headinajar:genetics",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A gene goes into a serum once your library has it read to 30%: a $(item)Draft$(). Each auto-read of a $(item)DNA Fraction$() at the $(item)DNA Sequencer$() adds 15% of the fraction's quality, shared among its creature's genes. A quality-80 fraction of a one-gene creature adds 12%: three reads to a Draft. A two-gene creature takes five. Calling the bases yourself reads up to 25% of the quality, so fewer. A fraction's tooltip counts the reads for you."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Creatures not listed here (a cow, a pig, a sheep, a zombie) carry nothing readable: their fractions say so. The pages that follow list every gene and who carries it."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Spider Climb$(): Spider, Cave Spider$(br)$(item)Ender Blink$(): Enderman$(br)$(item)Rabbit Spring$(): Rabbit$(br)$(item)Strider Soles$(): Strider$(br)$(item)Phantom Membrane$(): Phantom, Bat$(br)$(item)Dolphin Grace$(): Dolphin$(br)$(item)Equine Gait$(): Horse, Camel, Donkey, Mule"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Breeze Updraft$(): Breeze$(br)$(item)Gills$(): Squid, Cod, Salmon, Drowned, Tropical Fish$(br)$(item)Golem Frame$(): Iron Golem$(br)$(item)Turtle Shell$(): Turtle$(br)$(item)Blaze Core$(): Blaze, Magma Cube$(br)$(item)Slime Body$(): Slime$(br)$(item)Wither Ward$(): Wither Skeleton"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Cat Eyes$(): Cat, Ocelot$(br)$(item)Glow Cells$(): Glow Squid$(br)$(item)Echolocation$(): Bat$(br)$(item)Venom Sac$(): Cave Spider$(br)$(item)Pack Instinct$(): Wolf$(br)$(item)Hoglin Tusks$(): Hoglin$(br)$(item)Guardian Eye$(): Guardian, Elder Guardian"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Creeper Gland$(): Creeper$(br)$(item)Axolotl Regrowth$(): Axolotl$(br)$(item)Feather Bones$(): Chicken$(br)$(item)Hero's Blood$(): Villager$(br)$(item)Draconic Wings$(): Ender Dragon$(br)$(item)Sonic Boom$(): Warden$(br)$(item)Decay Aura$(): Wither"
+    }
+  ]
+}

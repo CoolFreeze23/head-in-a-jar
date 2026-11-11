@@ -1,0 +1,62 @@
+# Third repair pass, real input: a stranger's knock on a placed head is refused; the head in a soul fire cracks a point a
+# second and its owner is warned each time; a Glass Patch on your own placed head mends it; a head left in the fire
+# breaks with its own death line. Default profile and SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+report == H1 the head set down 1.5 east of me; the bystander knocks on it (expect: its refusal payload, my glass still 10/10)
+/tp @s 0.5 -60 0.5 -90 0
+wait 5
+separate
+wait 20
+inspect near head_jar 4
+bystander spawn 2 -60 2 180
+wait 10
+bystander look 180 35
+bystander mark
+bystander attack nearest head_jar
+wait 10
+bystander packets payload|actionbar|sound
+inspect me
+bystander remove
+report == H2 soul fire under the head (expect: actionbar Your head is in the fire, glass 9/10, then 8, 7; feedback.danger; glass 6-8 at the end)
+/tp @s -6.5 -60 0.5 -90 10
+wait 5
+/setblock 2 -61 0 minecraft:soul_soil
+/setblock 2 -60 0 minecraft:soul_fire
+observe 75
+key sneak down
+wait 30
+shot h2_fire_warning
+wait 35
+key sneak up
+observe 20
+inspect me
+/setblock 2 -60 0 minecraft:air
+wait 10
+report == H3 a Glass Patch on my own placed head, by a real click (expect: glass +5, the head stays put)
+/give @s headinajar:glass_patch 2
+/tp @s 0.5 -60 0.5 -90 20
+wait 5
+hotbar 2
+lookat head_jar
+key use
+wait 10
+inspect me
+inspect near head_jar 4
+report == H4 the head left in the fire until it breaks (expect: warnings every two seconds, then the chat line left their head too near the fire, and the death screen)
+/tp @s -6.5 -60 0.5 -90 10
+wait 5
+/setblock 2 -60 0 minecraft:soul_fire
+observe 300
+key sneak down
+wait 290
+key sneak up
+observe 20
+shot h4_death_screen
+inspect me

@@ -35,6 +35,12 @@ public final class Genetics {
             this.loadCap = loadCap;
             this.serums = serums;
         }
+
+        /** The lightest thing a serum of this load goes into (a body, then a host, then a Chimera), or null if none. */
+        public static Target lightestFor(int load) {
+            for (Target t : new Target[]{BODY, HOST, MECHA}) if (load <= t.loadCap) return t;
+            return null;
+        }
     }
 
     public enum Result { OK, MUTATED, REJECTED, FULL, TOO_HEAVY }

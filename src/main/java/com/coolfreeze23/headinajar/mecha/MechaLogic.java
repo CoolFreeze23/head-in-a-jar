@@ -411,10 +411,29 @@ public final class MechaLogic {
         for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) MechaArms.release(m, side);
     }
 
-    /** Destroyed: a puff with no block damage, half the modules drop, the rest is scrap. */
+    /**
+     * Destroyed: a puff with no block damage, half the modules drop, the rest is scrap. The cockpit protects its jar to
+     * the end: the pilot is thrown clear before the blast, which spares whoever was aboard, and the glass takes one
+     * knock (never the last point), as in a shell's crash. The pilot is told what happened and what is left.
+     */
     public static void destroyed(MechaEntity m) {
         ServerLevel level = m.serverLevel();
-        level.explode(m, m.getX(), m.getY() + 1, m.getZ(), 2, Level.ExplosionInteraction.NONE);
+        java.util.List<Entity> aboard = new java.util.ArrayList<>(m.getPassengers());
+        if (Hosts.pilot(m) instanceof ServerPlayer pilot) {
+            eject(m, pilot);
+            var state = FormActions.state(pilot);
+            if (state.integrity() > 1) state.setIntegrity(state.integrity() - 1);
+            level.playSound(null, pilot.getX(), pilot.getY(), pilot.getZ(), SoundEvents.GLASS_HIT, net.minecraft.sounds.SoundSource.PLAYERS, 1, 0.9f);
+            com.coolfreeze23.headinajar.feedback.Warnings.danger(pilot, 1, "mecha.wrecked", m.getDisplayName(), state.integrity(), state.maxIntegrity(),
+                    net.minecraft.network.chat.Component.translatable("item.headinajar.glass_patch"));
+        }
+        var spare = new net.minecraft.world.level.ExplosionDamageCalculator() {
+            @Override
+            public boolean shouldDamageEntity(net.minecraft.world.level.Explosion explosion, Entity entity) {
+                return !aboard.contains(entity) && super.shouldDamageEntity(explosion, entity);
+            }
+        };
+        level.explode(m, null, spare, m.getX(), m.getY() + 1, m.getZ(), 2, false, Level.ExplosionInteraction.NONE);
         for (ItemStack stack : m.modules()) {
             if (stack.isEmpty()) continue;
             if (level.random.nextBoolean()) m.spawnAtLocation(stack.copy());

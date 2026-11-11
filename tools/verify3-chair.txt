@@ -1,0 +1,37 @@
+# Third repair pass, real input: seated in the chair with its panel closed, use opens it again; with a Cradle beside the
+# chair, DOLORES says the head was piped to the Cradle (and her recorded line about the outlet does not play).
+# Chair at 0 -60 3 (faces north), Cradle at 2 -60 3; the Sign button is rel 121 78. Default profile and SMOKE_PROFILE=pack.
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/effect give @s minecraft:resistance 999 4 true
+/tp @s 0.5 -60 0.5 0 25
+/setblock 0 -60 3 headinajar:separation_chair
+/setblock 2 -60 3 headinajar:life_support_cradle
+/clear @s
+chair 0 -60 3
+wait 20
+report == C1 sit, close the panel, use from the seat (expect on the last use: screen open SeparationChairScreen)
+/give @s minecraft:dirt 1
+look 0 25
+key use
+wait 25
+press escape
+wait 20
+riding C1-seated
+key use
+wait 25
+shot c1_reopened
+report == C2 sign; the head goes to the Cradle (expect: DOLORES line Your head has been piped to the Cradle; no sound headinajar:dolores.en.done)
+observe 320
+at rel 121 78 hold 50
+wait 300
+observe 20
+inspect me
+inspect block 2 -60 3
+look 70 40
+wait 5
+shot c2_cradle

@@ -410,6 +410,7 @@ public class MachineRepairGameTests {
         printer.items().setStackInSlot(3, new ItemStack(Items.SLIME_BALL, 8));
         printer.saline().fill(new net.neoforged.neoforge.fluids.FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), 2000),
                 net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+        printer.energy().set(BodyPrinterBlockEntity.ENERGY);
         FormActions.detach(jar, 3);
         printer.createMenu(1, jar.getInventory(), jar).clickMenuButton(jar, 0);
         h.assertTrue(printer.printing() && printer.items().getStackInSlot(0).isEmpty(), "setup: the print did not start");

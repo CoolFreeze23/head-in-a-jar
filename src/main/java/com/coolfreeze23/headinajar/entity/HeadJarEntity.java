@@ -46,7 +46,9 @@ public class HeadJarEntity extends Entity {
     private int upsideDownTicks;
     public static final float MAX_HEALTH = 10;
     private float health = MAX_HEALTH;
-    private int hurtTicks;
+    private int hurtTicks, heatTicks;
+    /** The last knock was heat (fire, lava): a jar lost to it is announced as burned. */
+    private boolean lastHeat;
 
     public HeadJarEntity(EntityType<? extends HeadJarEntity> type, Level level) {
         super(type, level);
@@ -131,6 +133,9 @@ public class HeadJarEntity extends Entity {
     public void tick() {
         super.tick();
         if (hurtTicks > 0) hurtTicks--;
+        if (heatTicks > 0) heatTicks--;
+        // glass doesn't catch fire: only what it stands in heats it
+        if (!level().isClientSide && getRemainingFireTicks() > 0) clearFire();
         if (!level().isClientSide && upsideDownTicks > 0 && --upsideDownTicks == 0) entityData.set(UPSIDE_DOWN, false);
         if (!isNoGravity()) setDeltaMovement(getDeltaMovement().add(0, -0.04, 0));
         move(MoverType.SELF, getDeltaMovement());
@@ -154,16 +159,43 @@ public class HeadJarEntity extends Entity {
     public boolean hurt(DamageSource source, float amount) {
         if (level().isClientSide || isRemoved()) return false;
         boolean bypass = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
-        if (!bypass && (isInvulnerableTo(source) || hurtTicks > 0)) return false;
+        // no player knocks a placed head, its owner included (a swing at your own head is a slip, not a plan): they are
+        // told so, and the glass is untouched
+        if (!bypass && source.getEntity() instanceof ServerPlayer hitter) {
+            boolean own = hitter.getUUID().equals(ownerId());
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(hitter, com.coolfreeze23.headinajar.feedback.Refuser.at(this),
+                    own ? "head.hit_own" : "head.hit_not_yours", own ? Component.translatable("item.headinajar.head_satchel") : ownerName());
+            return false;
+        }
+        boolean heat = source.is(DamageTypeTags.IS_FIRE);
+        if (!bypass && (isInvulnerableTo(source) || (heat ? heatTicks > 0 : hurtTicks > 0))) return false;
         if (!bypass && Config.get(Config.PROTECT_OFFLINE, true) && owner() == null) return false;
-        hurtTicks = 10;
-        level().playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.2f);
         ServerPlayer owner = owner();
+        var state = owner == null ? null : owner.getData(ModRegistry.JAR_STATE);
+        // the owner's Heat Shield keeps the jar cool wherever it stands, as it does the jar they are
+        // (the owner is out in their body, so the module counts as fitted to this jar, and runs on its charge)
+        if (heat && !bypass && state != null && state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HEAT_SHIELD) && state.charge() > 0) return false;
+        // heat cracks the glass a point a second, never faster: time to come and fetch it
+        if (heat) heatTicks = 20;
+        else hurtTicks = 10;
+        lastHeat = heat;
+        level().playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.2f);
         if (owner != null) {
             // the jar's glass is the owner's Jar Integrity
-            var state = owner.getData(ModRegistry.JAR_STATE);
-            state.setIntegrity(state.integrity() - (int) Math.ceil(amount));
-            if (state.integrity() <= 0) shatter();
+            state.setIntegrity(state.integrity() - (heat && !bypass ? 1 : (int) Math.ceil(amount)));
+            if (state.integrity() <= 0) {
+                shatter();
+            } else {
+                // its owner hears of every knock, with what is left and where to go
+                int every = com.coolfreeze23.headinajar.form.JarPeril.EVERY;
+                Object satchel = Component.translatable("item.headinajar.head_satchel");
+                String why = heat ? "head.burning" : "head.hit";
+                if (heat || state.integrity() <= com.coolfreeze23.headinajar.form.JarPeril.LOW) {
+                    com.coolfreeze23.headinajar.feedback.Warnings.danger(owner, every, why, state.integrity(), state.maxIntegrity(), satchel);
+                } else {
+                    com.coolfreeze23.headinajar.feedback.Warnings.warn(owner, every, why, state.integrity(), state.maxIntegrity(), satchel);
+                }
+            }
         } else {
             health -= amount;
             if (health <= 0) shatter();
@@ -201,7 +233,8 @@ public class HeadJarEntity extends Entity {
         ServerPlayer owner = owner();
         if (owner != null && owner.getData(ModRegistry.JAR_STATE).form() == Form.LINKED) {
             FormActions.REAL_DEATH.add(owner.getUUID());
-            owner.hurt(owner.damageSources().genericKill(), Float.MAX_VALUE);
+            owner.hurt(com.coolfreeze23.headinajar.form.JarPeril.source(owner, lastHeat
+                    ? com.coolfreeze23.headinajar.form.JarPeril.HEAD_BURNED : com.coolfreeze23.headinajar.form.JarPeril.HEAD_LOST, null, null), Float.MAX_VALUE);
             FormActions.REAL_DEATH.remove(owner.getUUID());
         }
     }
