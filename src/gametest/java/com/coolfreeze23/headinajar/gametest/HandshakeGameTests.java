@@ -25,4 +25,20 @@ public class HandshakeGameTests {
         h.assertTrue(HandshakeRule.over(false, true, 0), "went on after getting down");
         h.succeed();
     }
+
+    /** The saw used on an armour stand (a living thing that is not a creature) says what it is for. */
+    @GameTest(template = "platform")
+    public static void theSawOnAnArmourStandSaysWhatItIsFor(GameTestHelper h) {
+        net.minecraft.server.level.ServerPlayer p = h.makeMockServerPlayerInLevel();
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        var at = h.absoluteVec(net.minecraft.world.phys.Vec3.atBottomCenterOf(new net.minecraft.core.BlockPos(7, 2, 7)));
+        p.moveTo(at.x, at.y, at.z, 0, 0);
+        var stand = h.spawn(net.minecraft.world.entity.EntityType.ARMOR_STAND, new net.minecraft.core.BlockPos(7, 2, 9));
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                new net.minecraft.world.item.ItemStack(com.coolfreeze23.headinajar.registry.ModRegistry.SURGICAL_SAW.get()));
+        p.interactOn(stand, net.minecraft.world.InteractionHand.MAIN_HAND);
+        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "item.air.saw", "the saw on an armour stand");
+        h.getLevel().getServer().getPlayerList().remove(p);
+        h.succeed();
+    }
 }

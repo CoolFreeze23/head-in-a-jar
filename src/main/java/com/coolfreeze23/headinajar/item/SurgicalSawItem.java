@@ -35,7 +35,14 @@ public class SurgicalSawItem extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (!(target instanceof Mob mob)) return InteractionResult.PASS;
+        if (!(target instanceof Mob mob)) {
+            // an armour stand or the like: say what the saw is for (another player is answered before this)
+            if (player instanceof ServerPlayer server && !(target instanceof Player)) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(server, "item.air.saw");
+                return InteractionResult.FAIL;
+            }
+            return InteractionResult.PASS;
+        }
         if (player.level().isClientSide) return InteractionResult.SUCCESS;
         return saw((ServerPlayer) player, stack, mob, hand);
     }
