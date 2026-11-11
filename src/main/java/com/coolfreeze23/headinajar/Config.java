@@ -95,6 +95,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue DOLORES_VOICE = C
             .comment("DOLORES, the Separation Chair, speaks her lines aloud (off: her lines are shown as text only).")
             .define("doloresVoice", true);
+    public static final ModConfigSpec.IntValue SCREEN_SHAKE = C
+            .comment("How much the mod's effects may move the camera (shake, kicks, field-of-view pulls), in percent. The photosensitive option turns them all off.")
+            .defineInRange("screenShake", 100, 0, 100);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

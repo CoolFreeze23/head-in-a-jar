@@ -89,11 +89,17 @@ public final class BoardEvents {
             hit.getEntity().hurt(level.damageSources().indirectMagic(player, player), 4);
             end = hit.getLocation();
         }
-        for (int i = 1; i <= 8; i++) {
-            Vec3 p = eye.lerp(end, i / 8.0);
-            level.sendParticles(ParticleTypes.FALLING_WATER, p.x, p.y, p.z, 2, 0.02, 0.02, 0.02, 0);
+        if (hit == null) {
+            // the beam is drawn to the first block in its way (what it hurts is unchanged)
+            var block = level.clip(new net.minecraft.world.level.ClipContext(eye, end, net.minecraft.world.level.ClipContext.Block.COLLIDER,
+                    net.minecraft.world.level.ClipContext.Fluid.NONE, player));
+            if (block.getType() != net.minecraft.world.phys.HitResult.Type.MISS) end = block.getLocation();
         }
-        level.playSound(null, player.blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.PLAYERS, 0.5f, 2f);
+        // one memo: every client draws the twin weeping beams and the drips itself
+        com.coolfreeze23.headinajar.fx.Fx.send(level, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.LASER, eye, end,
+                player.getId(), hit == null ? -1 : hit.getEntity().getId(), hit == null ? 0 : 1));
+        level.playSound(null, eye.x, eye.y, eye.z, com.coolfreeze23.headinajar.fx.FxSounds.LASER.get(), SoundSource.PLAYERS, 1.0f,
+                com.coolfreeze23.headinajar.fx.FxSounds.pitch(player.getRandom()));
         return true;
     }
 

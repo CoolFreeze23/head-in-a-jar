@@ -86,6 +86,8 @@ public class SmokeClient {
             NeoForge.EVENT_BUS.addListener(Bench::onFrame);
             NeoForge.EVENT_BUS.addListener(Bench::onServerPre);
             NeoForge.EVENT_BUS.addListener(Bench::onServerPost);
+            NeoForge.EVENT_BUS.register(Perf.class);
+            NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) -> Bystander.serverTick());
         }
     }
 
@@ -98,6 +100,7 @@ public class SmokeClient {
 
     private void onTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
+        Perf.tick();
         try {
             tick(mc);
             // the report so far is written out every 5 s, so a run that crashes the game still leaves its record
@@ -289,6 +292,19 @@ public class SmokeClient {
                     report.add("hostcopy -> " + e);
                 }
             }
+            case "perf" -> {
+                // perf NAME TICKS: frame times over TICKS ticks (mean, median, p99); the script carries on
+                String[] args = parts[1].split(" ");
+                Perf.start(args[0], Integer.parseInt(args[1]), report::add);
+            }
+            case "camlog" -> {
+                // camlog NAME TICKS: every frame's camera kick and field-of-view pull from the effect kit
+                String[] args = parts[1].split(" ");
+                Perf.camlog(args[0], Integer.parseInt(args[1]), report::add);
+            }
+            case "fxstate" -> report.add("fxstate " + (parts.length > 1 ? parts[1] : "") + " -> tethers " + com.coolfreeze23.headinajar.client.fx.TetherFx.live()
+                    + ", loops " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + ", memos " + java.util.Arrays.toString(com.coolfreeze23.headinajar.client.fx.FxManager.HANDLED)
+                    + ", beams drawn/asked " + com.coolfreeze23.headinajar.client.fx.Beams.counts() + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());
             case "view" -> mc.options.setCameraType(net.minecraft.client.CameraType.values()[Integer.parseInt(parts[1])]);
             case "guiscale" -> {
                 // guiscale N: the GUI scale option (0 = auto), applied at once as the options screen does

@@ -210,6 +210,7 @@ public final class Network {
         });
         registrar.playToClient(Refused.TYPE, Refused.CODEC, (msg, ctx) -> com.coolfreeze23.headinajar.client.ClientRefusals.show(msg.line()));
         com.coolfreeze23.headinajar.host.HostFiles.register(registrar);
+        com.coolfreeze23.headinajar.fx.Fx.register(registrar);
         registrar.playToServer(RefuseRequest.TYPE, RefuseRequest.CODEC, (msg, ctx) -> {
             if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.feedback.Refusals.fromClient(player, msg.reason(), msg.target());
         });
@@ -233,6 +234,7 @@ public final class Network {
         if (me.level().getEntity(msg.entityId()) instanceof Player target) {
             JarState state = target.getData(ModRegistry.JAR_STATE);
             boolean changedForm = state.form() != msg.state().form();
+            if (changedForm && target == me) com.coolfreeze23.headinajar.client.fx.SwapFx.formChanging(state.form(), msg.state().form());
             state.copyFrom(msg.state());
             state.takeDirty(true);
             if (changedForm) target.refreshDimensions();

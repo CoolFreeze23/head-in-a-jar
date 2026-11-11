@@ -1,0 +1,113 @@
+# The swap, the Lacrimal Laser, Tesla arcs and the guardian lock, default profile, watched by the real client; the
+# stand-in second player swaps and fires. Easy difficulty so a husk can stand as the turret's target.
+@difficulty easy
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+/kill @e[type=slime]
+hud off
+# --- the swap: the stand-in separates, walks its body 7 blocks off, then swaps to its head and back
+bystander spawn 0 -60 0 0
+bystander tick on
+wait 10
+bystander form linked
+wait 10
+bystander tp 7 -60 0 270 0
+wait 20
+/tp @s 3.5 -59 6.5 180 10
+wait 20
+frames swap_by_to_head 60
+wait 3
+bystander key swap
+wait 60
+frames swap_by_to_body 60
+wait 3
+bystander key swap
+wait 60
+bystander state
+# --- the laser, from outside at 5 blocks, by day and at night (a fresh stand-in)
+bystander remove
+wait 5
+/kill @e[type=headinajar:headless_body]
+/kill @e[type=headinajar:head_jar]
+bystander spawn 0 -60 10 0
+bystander tick on
+wait 5
+bystander form jar
+# out of its own body, which stays where the head came off
+bystander tp 0 -60 12 0 0
+bystander fit lacrimal_laser
+bystander charge 100000
+/summon pig 0.5 -60 15.5 {NoAI:1b}
+bystander look 0 -4
+/tp @s 5.5 -59 14 70 8
+wait 20
+bystander mark
+frames laser_by5_day 40
+wait 3
+bystander key secondary
+wait 40
+bystander packets
+/time set 18000
+wait 25
+frames laser_by5_night 40
+wait 3
+bystander key secondary
+wait 40
+/time set 6000
+# --- Tesla arcs: a Leyden Jar feeds node A, which sends to node B, which feeds a second jar
+/setblock -1 -60 20 headinajar:leyden_jar{Energy:250000}
+/setblock 0 -60 20 headinajar:tesla_node{Energy:10000,Target:1649267527620L}
+/setblock 6 -60 20 headinajar:tesla_node
+/setblock 7 -60 20 headinajar:leyden_jar
+/tp @s 3.5 -59 25.5 180 10
+wait 40
+bystander mark
+frames tesla_day_5 60
+wait 20
+fxstate tesla
+wait 65
+bystander packets
+/tp @s 3.5 -55 50.5 180 6
+wait 20
+frames tesla_day_30 40
+wait 45
+/time set 18000
+/tp @s 3.5 -59 25.5 180 10
+wait 20
+frames tesla_night_5 40
+wait 45
+/time set 6000
+# --- the guardian turret's lock on a husk
+/setblock 0 -60 32 headinajar:turret_pedestal[facing=north]{Energy:40000}
+wait 5
+headblock 0 -60 32 guardian
+/summon husk 6.5 -60 34.5 {NoAI:1b,PersistenceRequired:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/kill @e[type=slime]
+/tp @s 3.5 -59 39.5 160 10
+wait 10
+bystander mark
+frames turret_lock_day 100
+wait 105
+bystander packets
+/time set 18000
+frames turret_lock_night 100
+wait 105
+/time set 6000
+# --- the laser from the jar's own eyes
+bystander remove
+/tp @s 0.5 -60 10.5 0 0
+jar
+fit lacrimal_laser
+charge 100000
+lookat pig
+view 0
+wait 10
+frames laser_doer 40
+wait 3
+key secondary
+wait 40
+fxstate end

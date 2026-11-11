@@ -1,0 +1,154 @@
+# Benchmark lab (the performance review's scene): 42 machines, 4 mecha, a jar with Telekinesis. Settle, then measure (see 7.3).
+wait 60
+/gamemode creative
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/gamerule randomTickSpeed 0
+/kill @e[type=!player]
+# targets: three tough husks the turrets can shoot all session
+/summon husk -2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/summon husk 0 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+/summon husk 2 -60 0 {NoAI:1b,PersistenceRequired:1b,Silent:1b,Health:1000f,attributes:[{id:"minecraft:generic.max_health",base:1000d}]}
+# z=4: 8 turrets (4 skeleton with arrow chests under them, 2 guardian, 2 blaze)
+/setblock -8 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock -6 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock 6 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock 8 -61 4 minecraft:chest{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:arrow",count:64}]}
+/setblock -8 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -6 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -4 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock -2 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 2 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 4 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 6 -60 4 headinajar:turret_pedestal[facing=north]
+/setblock 8 -60 4 headinajar:turret_pedestal[facing=north]
+wait 5
+headblock -8 -60 4 skeleton
+headblock -6 -60 4 skeleton
+headblock 6 -60 4 skeleton
+headblock 8 -60 4 skeleton
+headblock -4 -60 4 guardian
+headblock 4 -60 4 guardian
+headblock -2 -60 4 blaze
+headblock 2 -60 4 blaze
+# z=7: 4 Cerebral Arrays, 9 villager heads each, Board Room Core and broth (the headblock verb fills both)
+/setblock -6 -60 7 headinajar:cerebral_array[facing=north]
+/setblock -2 -60 7 headinajar:cerebral_array[facing=north]
+/setblock 2 -60 7 headinajar:cerebral_array[facing=north]
+/setblock 6 -60 7 headinajar:cerebral_array[facing=north]
+wait 5
+headblock -6 -60 7 villager,villager,villager,villager,villager,villager,villager,villager,villager
+headblock -2 -60 7 villager,villager,villager,villager,villager,villager,villager,villager,villager
+headblock 2 -60 7 villager,villager,villager,villager,villager,villager,villager,villager,villager
+headblock 6 -60 7 villager,villager,villager,villager,villager,villager,villager,villager,villager
+# z=10: the lab
+/setblock -7 -60 10 headinajar:centrifuge[facing=north]
+/setblock -5 -60 10 headinajar:centrifuge[facing=north]
+/setblock -3 -60 10 headinajar:dna_sequencer[facing=north]
+/setblock -1 -60 10 headinajar:dna_sequencer[facing=north]
+/setblock 1 -60 10 headinajar:gene_splicer[facing=north]
+/setblock 3 -60 10 headinajar:gene_splicer[facing=north]
+/setblock 5 -60 10 headinajar:injection_rig[facing=north]
+/setblock 7 -60 10 headinajar:saline_mixer[facing=north]
+# 4 Employee Mounts sitting on machines (a mount above a machine counts as staff whatever its facing)
+/setblock -4 -59 4 headinajar:employee_mount[facing=north]
+/setblock -3 -59 10 headinajar:employee_mount[facing=north]
+/setblock 1 -59 10 headinajar:employee_mount[facing=north]
+/setblock 7 -59 10 headinajar:employee_mount[facing=north]
+wait 5
+headblock -4 -59 4 villager
+headblock -3 -59 10 villager
+headblock 1 -59 10 villager
+headblock 7 -59 10 villager
+# z=13: power. Leyden Jar feeds Tesla pair 1 (-7 -> -1); the middle Leyden Jar takes from it and feeds pair 2 (1 -> 7);
+# the end Leyden Jar is the sink. Target longs are BlockPos.asLong of (-1,-60,13) and (7,-60,13).
+/setblock -8 -60 13 headinajar:leyden_jar{Energy:250000}
+/setblock -7 -60 13 headinajar:tesla_node{Energy:10000,Target:-274877849660L}
+/setblock -1 -60 13 headinajar:tesla_node
+/setblock 0 -60 13 headinajar:leyden_jar
+/setblock 1 -60 13 headinajar:tesla_node{Energy:10000,Target:1924145405892L}
+/setblock 7 -60 13 headinajar:tesla_node
+/setblock 8 -60 13 headinajar:leyden_jar
+# z=16: relay stations, sockets, leech jars
+/setblock -6 -60 16 headinajar:relay_mast{Energy:100000}
+/setblock -3 -60 16 headinajar:relay_mast_mk2{Energy:100000}
+/setblock 0 -60 16 headinajar:signal_jammer{Energy:100000}
+/setblock 3 -60 16 headinajar:neural_socket
+/setblock 4 -60 16 headinajar:neural_socket
+/setblock 5 -60 16 headinajar:neural_socket
+/setblock 6 -60 16 headinajar:neural_socket
+/setblock -9 -60 16 headinajar:leech_jar
+/setblock 9 -60 16 headinajar:leech_jar
+wait 5
+headblock 3 -60 16 zombie
+headblock 4 -60 16 villager
+headblock 5 -60 16 zombie
+headblock 6 -60 16 enderman
+# z=19: two placed jarred villager heads (the verb spawns, saws and places)
+jarhead villager -1 -60 19
+jarhead villager 1 -60 19
+# stock the lab (the verb works within 10 blocks of the player)
+/tp @s 0.5 -60 8.5 0 0
+wait 5
+lab
+# 4 mecha to the sides: one fully fitted Colossus, three other frames
+mecha colossus -14 -60 0 hydraulic_legs,missile_pod,cargo_hold,galvanic_stack,armor_plating,drill,hydraulic_fist,target_lock,tesla_coil,thermal_imaging,stealth_field,radiator_fins,battery_rack,jump_jets,night_optics,solar_skin
+mecha bulwark -9 -60 0 hydraulic_legs,galvanic_stack,armor_plating,drill,hydraulic_fist
+mecha skitter 9 -60 0 galvanic_stack,armor_plating,drill
+mecha kite 14 -60 0 galvanic_stack,armor_plating,rocket_pack
+# the jar: a glass stand behind the turrets, a pig to lift
+/fill -1 -58 -13 1 -58 -11 minecraft:glass
+/summon pig 0 -60 -7 {PersistenceRequired:1b,attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/tp @s 0.5 -57 -11.5 0 37
+wait 10
+jar
+fit telekinesis,manipulator_arm,armor_plating
+charge 100000
+/gamemode survival
+wait 10
+lookat pig
+wait 10
+key ability
+wait 20
+look 0 15
+fxstate bench_grabbed
+# settle, then measure: the tether and the lab's beams in view, then the same view with nothing held
+wait 200
+fxstate bench_holding
+perf bench_tether_in_view 400
+wait 405
+shot bench_A_holding
+key ability
+wait 40
+fxstate bench_released
+perf bench_no_tether 400
+wait 405
+shot bench_A_released
+# the same, looking away from the lab and the pig
+key ability
+wait 40
+look 180 15
+wait 20
+perf bench_holding_facing_away 400
+wait 405
+# packets the stand-in second player receives while it watches a held pig, for 10 s
+bystander spawn 0 -60 -16 0
+bystander tick on
+wait 40
+bystander mark
+wait 200
+bystander packets
+look 0 15
+bystander mark
+wait 200
+bystander packets
+report the pig is let go
+key ability
+wait 20
+bystander mark
+wait 200
+bystander packets
+fxstate end

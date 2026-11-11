@@ -104,6 +104,17 @@ final class Bystander {
         }
     }
 
+    /**
+     * The server ticks a real player from its connection, which the stand-in's recording connection is not; with
+     * {@code bystander tick on} it is ticked here instead, once a server tick, so what happens in a player's own tick
+     * (a Telekinesis hold, its synced state) happens for it too. Off by default, as before.
+     */
+    static boolean ticking;
+
+    static void serverTick() {
+        if (ticking && present()) player.doTick();
+    }
+
     static boolean present() {
         return player != null && !player.isRemoved();
     }
@@ -176,6 +187,10 @@ final class Bystander {
                 player.setXRot(Float.parseFloat(a[3]));
                 player.setYHeadRot(player.getYRot());
                 return "bystander look";
+            }
+            case "tick" -> {
+                ticking = a.length > 2 && a[2].equals("on");
+                return "bystander tick " + ticking;
             }
             case "gamemode" -> {
                 player.setGameMode(GameType.byName(a[2]));

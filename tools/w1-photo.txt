@@ -1,0 +1,25 @@
+# The swap from the doer's own eyes with the photosensitive option on (the wipe becomes a crossfade).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud on
+view 0
+# --- the swap from the doer's own eyes: back into the body, take the head off with goggles and collar, walk off, swap
+/tp @s 0.5 -60 0.5 0 0
+body
+wait 10
+separate
+wait 10
+/tp @s 0.5 -60 8.5 180 10
+wait 20
+frames photo_swap_to_head 40
+wait 3
+key swap
+wait 45
+frames photo_swap_to_body 40
+wait 3
+key swap
+wait 45
+fxstate end

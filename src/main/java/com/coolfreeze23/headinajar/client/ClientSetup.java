@@ -57,6 +57,7 @@ public class ClientSetup {
         NeoForge.EVENT_BUS.register(FormChangeClient.class);
         NeoForge.EVENT_BUS.register(BlockTooltips.class);
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
+        com.coolfreeze23.headinajar.client.fx.FxClient.init(modBus);
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {

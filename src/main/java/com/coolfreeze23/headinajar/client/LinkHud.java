@@ -61,7 +61,11 @@ public final class LinkHud {
         if (lossTicks > 0) lossTicks--;
         JarState state = player.getData(ModRegistry.JAR_STATE);
         if (state.form() != lastForm) {
-            if (lastForm.isDecapitated() || state.form().isDecapitated()) wipeTicks = 10;
+            if (lastForm.isDecapitated() || state.form().isDecapitated()) {
+                wipeTicks = 10;
+                // under the photosensitive option the wipe is a plain crossfade from the old view's last frame,
+                // kept when the new form arrived (SwapFx.formChanging, from the sync packet)
+            }
             lastForm = state.form();
             barTicks = 100;
         }
@@ -105,7 +109,7 @@ public final class LinkHud {
         }
         if (wipeTicks > 0) {
             float a = wipeTicks / 10f;
-            if (photosensitive()) g.fill(0, 0, w, h, ((int) (a * 200) << 24));
+            if (photosensitive()) com.coolfreeze23.headinajar.client.fx.SwapFx.renderCrossfade(g, delta.getGameTimeDeltaPartialTick(false));
             else noise(g, w, h, a * intensity(), true);
         }
     }

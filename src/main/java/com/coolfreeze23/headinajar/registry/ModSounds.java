@@ -40,6 +40,7 @@ public final class ModSounds {
     public static void register(IEventBus bus) {
         com.coolfreeze23.headinajar.block.ChairSounds.load();
         com.coolfreeze23.headinajar.block.DoloresVoice.load();
+        com.coolfreeze23.headinajar.fx.FxSounds.load();
         SOUNDS.register(bus);
     }
 

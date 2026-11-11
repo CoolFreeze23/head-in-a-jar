@@ -1,0 +1,113 @@
+# The hold from the jar's own eyes (day, night), from behind in third person, and from a bystander at 5 blocks, after
+# moving the hold point out and down so the jar sees the whole cow; the thrown cow's health before and after landing.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+# --- the jar's own eyes, by day
+/tp @s 0.5 -60 0.5 0 0
+jar
+/tp @s 3.5 -60 0.5 0 0
+fit telekinesis
+charge 100000
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+view 0
+lookat cow
+wait 10
+frames doer_day 160
+wait 3
+key ability
+wait 30
+look 0 0
+wait 10
+turn 60 0 20
+wait 12
+turn -110 -5 30
+wait 10
+inspect near cow 12
+key attack
+wait 70
+inspect near cow 40
+# --- from behind, third person (how he plays)
+/kill @e[type=cow]
+/kill @e[type=item]
+/tp @s 3.5 -60 0.5 0 0
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+view 1
+lookat cow
+wait 10
+frames third_person_day 160
+wait 3
+key ability
+wait 30
+look 0 0
+wait 10
+turn 60 0 20
+wait 12
+turn -110 -5 30
+wait 10
+key attack
+wait 70
+view 0
+# --- the jar's own eyes, at night
+/time set 18000
+/kill @e[type=cow]
+/kill @e[type=item]
+/tp @s 3.5 -60 0.5 0 0
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+lookat cow
+wait 10
+frames doer_night 140
+wait 3
+key ability
+wait 30
+look 0 0
+wait 10
+turn 60 0 20
+wait 12
+turn -110 -5 30
+wait 10
+key attack
+wait 50
+/time set 6000
+# --- a bystander at 5 blocks (the stand-in holds), framed wide enough for the swing
+/kill @e[type=cow]
+/kill @e[type=item]
+body
+wait 10
+bystander spawn 12 -60 0 0
+bystander tick on
+wait 10
+bystander form jar
+bystander tp 14 -60 0 0 0
+bystander fit telekinesis
+bystander charge 100000
+/summon cow 14.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander look 0 0
+/tp @s 21.5 -59.4 9.5 125 2
+wait 30
+frames bystander5_day 170
+wait 3
+bystander key ability
+wait 30
+bystander look 20 0
+wait 1
+bystander look 40 0
+wait 1
+bystander look 55 0
+wait 12
+bystander look 30 0
+wait 1
+bystander look 0 0
+wait 1
+bystander look -30 0
+wait 16
+bystander key throw
+wait 60
+fxstate end

@@ -1,0 +1,110 @@
+# What the first films missed, default profile: the preview brackets, a camera kick measured, the doer's laser, a
+# fizzle on an untrusting player's body, set-down and both drops seen from outside, the swap from the doer's eyes.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+view 0
+# --- the preview brackets: teal on a cow, grey on a chest
+/tp @s 0.5 -60 0.5 0 0
+jar
+/tp @s 3.5 -60 0.5 0 0
+fit telekinesis,lacrimal_laser
+charge 100000
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/setblock 5 -60 3 minecraft:chest
+wait 20
+lookat cow
+wait 10
+frames preview_cow 30
+wait 35
+look -40 8
+wait 5
+frames preview_chest 30
+wait 35
+# --- a grab and a throw with the camera service logged on every frame
+lookat cow
+wait 10
+camlog grab_throw 90
+frames camera_grab_throw 90
+wait 3
+key ability
+wait 35
+turn 40 -10 10
+wait 15
+key attack
+wait 45
+# --- the doer's own laser
+/kill @e[type=cow]
+/summon pig 3.5 -60 7.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 10
+lookat pig
+wait 10
+frames laser_doer 40
+wait 3
+key secondary
+wait 40
+# --- a fizzle on a body whose owner has not trusted this jar
+bystander spawn 10 -60 0 0
+bystander tick on
+wait 10
+bystander form jar
+bystander tp 14 -60 0 0 0
+/tp @s 10.5 -60 -3.5 0 0
+wait 10
+lookat headless_body
+wait 10
+frames fizzle_untrusted_body 40
+wait 3
+key ability
+wait 40
+# --- set down, out of charge and out of range, seen from 5 blocks (the stand-in holds)
+bystander fit telekinesis
+bystander charge 100000
+/summon cow 14.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander look 0 -6
+/tp @s 18.5 -60 7.5 135 10
+wait 20
+bystander key ability
+wait 30
+frames release_set_down 50
+wait 3
+bystander key ability
+wait 50
+bystander key ability
+wait 30
+frames release_no_charge 60
+wait 3
+bystander charge 0
+wait 60
+bystander charge 100000
+wait 5
+bystander key ability
+wait 30
+frames release_out_of_range 50
+wait 3
+bystander tp 14 -60 -30 0 0
+wait 50
+fxstate releases
+hud on
+# --- the swap from the doer's own eyes: back into the body, take the head off with goggles and collar, walk off, swap
+bystander remove
+/tp @s 0.5 -60 0.5 0 0
+body
+wait 10
+separate
+wait 10
+/tp @s 0.5 -60 8.5 180 10
+wait 20
+frames swap_doer_to_head 40
+wait 3
+key swap
+wait 45
+frames swap_doer_to_body 40
+wait 3
+key swap
+wait 45
+fxstate end

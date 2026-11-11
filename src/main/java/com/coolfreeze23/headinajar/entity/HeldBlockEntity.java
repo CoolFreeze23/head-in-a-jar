@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 /** A block lifted out of the world by Telekinesis. Without a holder it falls as an ordinary falling block. */
 public class HeldBlockEntity extends Entity {
     private static final EntityDataAccessor<BlockState> STATE = SynchedEntityData.defineId(HeldBlockEntity.class, EntityDataSerializers.BLOCK_STATE);
-    private static final DustParticleOptions SHIMMER = new DustParticleOptions(new Vector3f(0.3f, 1.0f, 0.4f), 0.8f);
+    private static final DustParticleOptions SHIMMER = new DustParticleOptions(new Vector3f(0x86 / 255f, 0xca / 255f, 0xc1 / 255f), 0.7f);
     private long lastHeld;
 
     public HeldBlockEntity(EntityType<? extends HeldBlockEntity> type, Level level) {

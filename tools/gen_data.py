@@ -142,6 +142,7 @@ import gen_p16_decisions; gen_p16_decisions.run(EN, PT, write, shaped)  # what a
 import gen_p16_repairs3; gen_p16_repairs3.run(EN, PT, write, shaped)  # warnings before a costly knock, deaths, lab and chair repairs
 import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
+import gen_p14_effects; gen_p14_effects.run(EN, PT, write, shaped)  # the effect kit, Telekinesis, swap, laser, arcs
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)
