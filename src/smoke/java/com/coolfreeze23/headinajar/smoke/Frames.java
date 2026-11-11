@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * "frames NAME TICKS": saves every rendered frame for TICKS client ticks, at the real frame rate, as PNGs in
- * $SMOKE_FRAMES_DIR (default D:\hij-study\frames)\DATE-TIME_NAME\NAME_00000.png, with frames.csv (frame, client tick,
+ * $SMOKE_FRAMES_DIR (tools/smoke.sh sets build/frames; else "frames" in the game folder)/DATE-TIME_NAME/NAME_00000.png, with frames.csv (frame, client tick,
  * partial tick, milliseconds since the first frame). The script carries on meanwhile, so inputs can be made during it.
  * PNGs are written by worker threads; when 48 frames are waiting the render thread waits for them (the CSV marks
  * those frames "stalled").
@@ -49,7 +49,7 @@ final class Frames {
 
     static Path root() {
         String env = System.getenv("SMOKE_FRAMES_DIR");
-        return Path.of(env != null && !env.isBlank() ? env : "D:\\hij-study\\frames");
+        return Path.of(env != null && !env.isBlank() ? env : "frames");
     }
 
     void start(String name, int ticks) throws IOException {

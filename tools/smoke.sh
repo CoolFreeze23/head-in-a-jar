@@ -10,8 +10,8 @@
 #   SMOKE_PACK_MODS=1     the same as SMOKE_MODS=anim (kept for old scripts)
 #   SMOKE_SHADER=FILE     a shader pack zip from the instance's shaderpacks folder, switched on through Iris (needs iris);
 #                         "off" or unset writes enableShaders=false
-#   SMOKE_FRAMES_DIR      where "frames" captures go (default D:\hij-study\frames)
-#   SMOKE_ARCHIVE         where the previous run's smoke-out is moved (default /d/hij-study/smoke-archive); a script
+#   SMOKE_FRAMES_DIR      where "frames" captures go (default build/frames in this checkout)
+#   SMOKE_ARCHIVE         where the previous run's smoke-out is moved (default build/smoke-archive in this checkout); a script
 #                         line "@clean" deletes it instead
 #   SMOKE_TIMEOUT_MIN     minutes before the client gives up (default 15)
 #   SMOKE_WIDTH/HEIGHT    window size (default 1280x720)
@@ -20,6 +20,7 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 SCRIPT=$(cd "$(dirname "${1:-$ROOT/tools/smoke-basic.txt}")" && pwd)/$(basename "${1:-$ROOT/tools/smoke-basic.txt}")
 export MSYS_NO_PATHCONV=1
 cd "$ROOT"
+export SMOKE_FRAMES_DIR="${SMOKE_FRAMES_DIR:-$ROOT/build/frames}"
 PACK="${SMOKE_PACK_DIR:-${APPDATA:-}/PrismLauncher/instances/CrazyCraft 5.0/minecraft}"
 
 prepare() {
@@ -29,7 +30,7 @@ prepare() {
     if grep -qE '^@clean\b' "$SCRIPT"; then
       rm -rf run-smoke/smoke-out
     else
-      local dest="${SMOKE_ARCHIVE:-/d/hij-study/smoke-archive}/$(date +%Y%m%d-%H%M%S)"
+      local dest="${SMOKE_ARCHIVE:-$ROOT/build/smoke-archive}/$(date +%Y%m%d-%H%M%S)"
       mkdir -p "$dest" && mv run-smoke/smoke-out "$dest/" && echo "previous smoke-out moved to $dest"
     fi
   fi
