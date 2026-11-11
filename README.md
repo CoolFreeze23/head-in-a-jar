@@ -35,6 +35,8 @@ DOLORES's voice).
 - **More clicks answer.** The company's items used at nothing or on a colleague say where they go; a friend you trust
   can top up your jar with a Saline Bottle or a Glass Patch; clicks while plugged into a Neural Socket say how to
   unplug; hitting your own placed head no longer cracks it.
+- **The Neural Handshake now always starts when you first board a host** (it used to be skipped now and then), and
+  the HUD says that the host's legs wait until it is done.
 - **Hosts ride at a sensible pace.** A ridden cow, pig or other land creature now tops out near a sprint (a cow was
   nearly twice that). Horses and the other vanilla mounts are unchanged.
 - **The chair:** a seated patient can reopen the panel with use, and DOLORES says so truly when your head is piped to a

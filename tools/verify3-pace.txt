@@ -22,6 +22,8 @@ inspect near cow 6
 lookat cow
 key use
 wait 20
+# a fresh host plays the Neural Handshake first (three 30-tick rounds): its legs wait for it
+wait 100
 riding R0-boarded
 look 180 0
 sync 100

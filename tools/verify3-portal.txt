@@ -41,6 +41,8 @@ wait 5
 lookat pig
 key use
 wait 20
+# a fresh host plays the Neural Handshake first (three 30-tick rounds): its legs wait for it
+wait 100
 look -90 0
 riding P2-start
 observe 200
