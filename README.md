@@ -307,7 +307,15 @@ up in your head. "Connection to body lost. Walk back to it, or book the Courier.
 
 ### Carrying your head
 
-<!-- PIC: carry | a linked body hugging its jar in both arms -->
+![A headless player walks towards the camera hugging a jar with a head in it, a hand on each side](docs/images/carry_hug.gif)
+
+*Carrying your head with an empty hand: **Use** your set-down head with a Head Satchel on you.*
+
+![Seen from the front, a headless player holding a stick walks along with the jar on their back, its glass showing past the shoulders](docs/images/carry_back.gif)
+
+*Hold anything and the jar goes on your back.*
+
+![First person while carrying: two hands on the sides of the jar in front of the camera](docs/images/carry_first_person.png)
 
 With a **Head Satchel** in your inventory (or on a Curios belt), **Use** your set-down head; to take it out of a
 Cradle, **Use** the Cradle. Without a satchel: "You need a Head Satchel to carry your head".
