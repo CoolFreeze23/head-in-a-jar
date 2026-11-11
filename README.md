@@ -624,7 +624,9 @@ A failed grab sends the line out and curls it back, with a fizzle.
 
 ### Lacrimal Laser
 
-<!-- PIC: laser | a jar weeping two thin water beams from its goggles onto a zombie -->
+![A jar weeps two thin beams from its goggles onto a pig a few blocks away](docs/images/laser.gif)
+
+*The Lacrimal Laser, seen from the side. Press **Secondary** as a jar.*
 
 The **Lacrimal Laser** makes the head weep under pressure. Craft it from 1 Lens on top of 2 Ghast Tears with a Copper
 Ingot between them.
