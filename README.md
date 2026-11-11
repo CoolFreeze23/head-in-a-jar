@@ -750,7 +750,9 @@ Peaceful), and is drawn without its head.
 
 ### Steering
 
-<!-- PIC: ride | x -->
+![A jar riding a headless cow across a field, seen from behind](docs/images/ride.gif)
+
+*Riding a host: it goes where you look. **Sneak** gets off.*
 
 - It goes where you look. Forward is full speed, backward a quarter, sideways half.
 - **Jump** jumps, except the Iron Golem, which cannot.
@@ -763,7 +765,9 @@ Peaceful), and is drawn without its head.
 
 ### The Neural Handshake
 
-<!-- PIC: handshake | x -->
+![From behind a jar on a headless cow: a cyan ring closes on a white circle below the crosshair, three times](docs/images/handshake.gif)
+
+*The Neural Handshake when you first board a host: press **Ability** as the ring meets the circle.*
 
 The first time anyone boards a host, the jar and the body introduce themselves.
 
@@ -958,7 +962,9 @@ It never rots, is fire immune once synced, throws fireballs and sprints. Riding 
 
 ## Utility Shells
 
-<!-- PIC: shells | the Lunk, the Rover and the Spider Walker side by side, a jar in the Rover's socket -->
+![A jar in a Spider Walker climbs straight up a stone brick wall](docs/images/climb.gif)
+
+*A Spider Walker climbing: walk into the wall.*
 
 Robot bodies for a jar, for when a cow will not do. A shell needs no saw and no handshake, never rots, and counts as
 fully synced from the start. It runs on your jar's charge.
