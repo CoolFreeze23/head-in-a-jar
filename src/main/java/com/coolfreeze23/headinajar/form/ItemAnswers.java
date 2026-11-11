@@ -77,6 +77,19 @@ public final class ItemAnswers {
     }
 
     /**
+     * The saw clicked on an armour stand: the stand takes the click for itself (its "at a point" interaction), so the
+     * saw is never asked. Say what the saw is for.
+     */
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void sawAtAStand(PlayerInteractEvent.EntityInteractSpecific event) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || !(event.getTarget() instanceof net.minecraft.world.entity.decoration.ArmorStand)) return;
+        if (!event.getItemStack().is(ModRegistry.SURGICAL_SAW.get())) return;
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.FAIL);
+        Refusals.deny(player, "item.air.saw");
+    }
+
+    /**
      * Used on another player: a friend's jar takes saline and a patch from someone it trusts; the company's tools for
      * bodies and creatures say they are not for colleagues.
      */

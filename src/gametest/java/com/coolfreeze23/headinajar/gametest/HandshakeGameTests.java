@@ -36,6 +36,12 @@ public class HandshakeGameTests {
         var stand = h.spawn(net.minecraft.world.entity.EntityType.ARMOR_STAND, new net.minecraft.core.BlockPos(7, 2, 9));
         p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
                 new net.minecraft.world.item.ItemStack(com.coolfreeze23.headinajar.registry.ModRegistry.SURGICAL_SAW.get()));
+        // a click on an armour stand reaches the server first as an interaction at a point on it (the stand's own)
+        var result = net.neoforged.neoforge.common.CommonHooks.onInteractEntityAt(p, stand, stand.position().add(0, 1, 0),
+                net.minecraft.world.InteractionHand.MAIN_HAND);
+        h.assertTrue(result != null && !result.consumesAction(), "the stand took the saw's click: " + result);
+        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "item.air.saw", "the saw on an armour stand");
+        // and as a plain interaction with it
         p.interactOn(stand, net.minecraft.world.InteractionHand.MAIN_HAND);
         h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "item.air.saw", "the saw on an armour stand");
         h.getLevel().getServer().getPlayerList().remove(p);
