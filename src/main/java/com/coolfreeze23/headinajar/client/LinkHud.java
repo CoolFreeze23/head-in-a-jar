@@ -35,8 +35,8 @@ public final class LinkHud {
         if (state.form() != lastForm) {
             if (lastForm.isDecapitated() || state.form().isDecapitated()) {
                 wipeTicks = 10;
-                // under the photosensitive option the wipe is a plain crossfade from the old view's last frame
-                if (photosensitive()) com.coolfreeze23.headinajar.client.fx.SwapFx.captureForCrossfade();
+                // under the photosensitive option the wipe is a plain crossfade from the old view's last frame,
+                // kept when the new form arrived (SwapFx.formChanging, from the sync packet)
             }
             lastForm = state.form();
             barTicks = 100;

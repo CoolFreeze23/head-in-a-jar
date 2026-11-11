@@ -163,6 +163,46 @@ public class EffectGameTests {
         done(h, holder);
     }
 
+    @GameTest(template = "platform", timeoutTicks = 80)
+    public static void aHeldCowIsCarriedInTheAir(GameTestHelper h) {
+        ServerPlayer holder = jar(h, FLOOR.east(3), 0, 0);
+        state(holder).setCharge(100_000);
+        var cow = h.spawn(EntityType.COW, FLOOR.east(3).south(3));
+        double floor = cow.getY();
+        place(h, holder, FLOOR.east(3), 0, -15);
+        key(holder, Network.Action.ABILITY);
+        h.assertTrue(state(holder).heldEntity() == cow.getId(), "a cow was not lifted");
+        place(h, holder, FLOOR.east(3), 0, 0);
+        h.onEachTick(() -> tick(holder));
+        h.runAfterDelay(40, () -> {
+            double up = cow.getY() - floor;
+            h.assertTrue(up > 1.2 && up < 2.0, "looking level, the cow's feet are " + up + " above the floor, not about a block and a half");
+            h.assertTrue(cow.distanceTo(holder) > 2.5, "the cow is in the jar's face: " + cow.distanceTo(holder));
+            h.assertFalse(cow.isNoGravity(), "the hold set the saved gravity flag");
+            done(h, holder);
+        });
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 60)
+    public static void aJarStandingInItsBodyLiftsWhatItLooksAt(GameTestHelper h) {
+        // the head comes off where the body stands, so the jar is inside its own body's box
+        ServerPlayer holder = player(h, FLOOR.east(3), 0, -15);
+        FormActions.detach(holder, 3);
+        FormActions.state(holder).setModule(0, new ItemStack(ModRegistry.module(ModuleType.TELEKINESIS)));
+        place(h, holder, FLOOR.east(3), 0, -15);
+        var cow = h.spawn(EntityType.COW, FLOOR.east(3).south(3));
+        key(holder, Network.Action.ABILITY);
+        h.assertTrue(state(holder).heldEntity() == cow.getId(), "the jar lifted something other than the cow it looks at: " + state(holder).heldEntity());
+        key(holder, Network.Action.ABILITY);
+        // looking down at its own body with nothing else in line, it may still lift it
+        cow.discard();
+        place(h, holder, FLOOR.east(3), 0, 80);
+        key(holder, Network.Action.ABILITY);
+        var held = h.getLevel().getEntity(state(holder).heldEntity());
+        h.assertTrue(held instanceof HeadlessBody, "looking down at its own body, the jar did not lift it: " + held);
+        done(h, holder);
+    }
+
     // --- one memo per moment ------------------------------------------------------------------------------------
 
     @GameTest(template = "platform", timeoutTicks = 120)

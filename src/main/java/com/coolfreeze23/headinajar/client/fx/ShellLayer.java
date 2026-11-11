@@ -33,6 +33,38 @@ public class ShellLayer<T extends LivingEntity, M extends EntityModel<T>> extend
         return FastColor.ARGB32.color(255, a, a, a);
     }
 
+    /**
+     * The shell's render type: vanilla's scrolling energy swirl, except while an Iris shader pack is on. BSL (and packs
+     * like it) draw the energy swirl in their own warm white whatever its colour, while they keep the colour of the
+     * plain emissive type; so under a shader pack the shell is drawn with that one (its streaks then hold still).
+     */
+    public static RenderType type(float u, float v) {
+        return shaderPackOn() ? RenderType.eyes(TEXTURE) : RenderType.energySwirl(TEXTURE, u, v);
+    }
+
+    private static java.lang.reflect.Method irisInUse;
+    private static Object iris;
+    private static boolean irisLooked;
+
+    static boolean shaderPackOn() {
+        if (!irisLooked) {
+            irisLooked = true;
+            try {
+                Class<?> api = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+                iris = api.getMethod("getInstance").invoke(null);
+                irisInUse = api.getMethod("isShaderPackInUse");
+            } catch (ReflectiveOperationException | LinkageError e) {
+                iris = null;
+            }
+        }
+        if (iris == null) return false;
+        try {
+            return (Boolean) irisInUse.invoke(iris);
+        } catch (ReflectiveOperationException e) {
+            return false;
+        }
+    }
+
     @Override
     public void render(PoseStack pose, MultiBufferSource buffers, int light, T entity, float limbSwing, float limbSwingAmount,
                        float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -44,7 +76,7 @@ public class ShellLayer<T extends LivingEntity, M extends EntityModel<T>> extend
         // two layers of streaks scrolling different ways, so the shell is seen by day without looking for it
         for (int layer = 0; layer < 2; layer++) {
             float u = layer == 0 ? scroll : 0.5f - scroll * 1.3f, v = layer == 0 ? scroll : 0.25f + scroll * 0.7f;
-            var vc = buffers.getBuffer(RenderType.energySwirl(TEXTURE, u, v));
+            var vc = buffers.getBuffer(type(u, v));
             pose.pushPose();
             pose.translate(0, mid, 0);
             float grow = layer == 0 ? 1.06f : 1.1f;

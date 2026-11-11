@@ -102,7 +102,15 @@ public final class SwapFx {
 
     // --- the doer's crossfade under the photosensitive option -----------------------------------------------------
 
-    /** Called the tick the doer's form changes: keeps the last frame of the old view to fade out of. */
+    /**
+     * Called as the local player's new form arrives, before anything is drawn in it: under the photosensitive option,
+     * when the swap's wipe would play, keeps the last frame of the old view to crossfade from.
+     */
+    public static void formChanging(com.coolfreeze23.headinajar.form.Form from, com.coolfreeze23.headinajar.form.Form to) {
+        if (Comfort.photosensitive() && (from.isDecapitated() || to.isDecapitated())) captureForCrossfade();
+    }
+
+    /** Keeps the last frame of the old view to fade out of. */
     public static void captureForCrossfade() {
         var mc = Minecraft.getInstance();
         RenderTarget main = mc.getMainRenderTarget();

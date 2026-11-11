@@ -1,0 +1,35 @@
+# The preview brackets (the HUD on: they are part of it), then the camera service measured on every frame: a grab (field of view pulls in) and a throw (pushes out, kicks up).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud on
+view 0
+/tp @s 0.5 -60 0.5 0 0
+jar
+/tp @s 3.5 -60 0.5 0 0
+fit telekinesis
+charge 100000
+/summon cow 3.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+lookat cow
+wait 10
+frames preview_cow 30
+wait 35
+/setblock 5 -60 3 minecraft:chest
+look -40 8
+wait 10
+frames preview_chest 30
+wait 35
+/setblock 5 -60 3 minecraft:air
+lookat cow
+wait 10
+camlog grab_throw 80
+frames camera_grab_throw 80
+wait 3
+key ability
+wait 35
+key attack
+wait 45
+fxstate end

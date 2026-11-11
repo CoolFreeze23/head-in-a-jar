@@ -1,0 +1,33 @@
+# The Tesla arc and the Lacrimal Laser from 30 blocks by day, after the wider beams.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+/kill @e[type=slime]
+hud off
+/setblock -1 -60 20 headinajar:leyden_jar{Energy:250000}
+/setblock 0 -60 20 headinajar:tesla_node{Energy:10000,Target:1649267527620L}
+/setblock 6 -60 20 headinajar:tesla_node
+/setblock 7 -60 20 headinajar:leyden_jar
+/tp @s 3.5 -57 50.5 180 4
+wait 60
+frames tesla_day_30 60
+wait 65
+bystander spawn 0 -60 0 0
+bystander tick on
+wait 10
+bystander form jar
+bystander tp 0 -60 3 0 0
+bystander fit lacrimal_laser
+bystander charge 100000
+/summon pig 0.5 -60 7.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander look 0 -4
+/tp @s 30.5 -57 5.5 90 4
+wait 30
+frames laser_30_day 40
+wait 3
+bystander key secondary
+wait 40
+fxstate end

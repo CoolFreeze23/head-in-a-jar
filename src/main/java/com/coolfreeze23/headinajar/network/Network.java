@@ -232,6 +232,7 @@ public final class Network {
         if (me.level().getEntity(msg.entityId()) instanceof Player target) {
             JarState state = target.getData(ModRegistry.JAR_STATE);
             boolean changedForm = state.form() != msg.state().form();
+            if (changedForm && target == me) com.coolfreeze23.headinajar.client.fx.SwapFx.formChanging(state.form(), msg.state().form());
             state.copyFrom(msg.state());
             state.takeDirty(true);
             if (changedForm) target.refreshDimensions();

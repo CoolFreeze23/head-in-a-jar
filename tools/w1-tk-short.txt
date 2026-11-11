@@ -51,9 +51,9 @@ bystander fit telekinesis
 bystander charge 100000
 /summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
 wait 30
-bystander look 0 -6
+bystander look 0 0
 # 5 blocks, three-quarter, by day
-/tp @s 16.5 -60 6.5 135 12
+/tp @s 16.5 -60 6.5 135 -2
 wait 10
 bystander mark
 frames tk_by5_day 170
@@ -91,7 +91,7 @@ wait 60
 /kill @e[type=cow]
 /kill @e[type=item]
 /summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
-bystander look 0 -6
+bystander look 0 0
 /tp @s 40.5 -55 9.5 105 8
 wait 30
 frames tk_by30_day 150
@@ -117,8 +117,8 @@ wait 60
 /kill @e[type=cow]
 /kill @e[type=item]
 /summon cow 12.5 -60 4.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
-bystander look 0 -6
-/tp @s 16.5 -60 6.5 135 12
+bystander look 0 0
+/tp @s 16.5 -60 6.5 135 -2
 wait 30
 frames tk_by5_night 150
 wait 3

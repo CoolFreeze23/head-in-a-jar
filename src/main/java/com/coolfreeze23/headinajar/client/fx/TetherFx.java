@@ -428,7 +428,7 @@ public final class TetherFx {
         AABB box = held.getBoundingBox().move(held.getPosition(pt).subtract(held.position())).inflate(held instanceof ItemEntity ? 0.12 : 0.04);
         if (f.frustum() != null && !f.frustum().isVisible(box)) return;
         float time = held.tickCount + pt;
-        var vc = f.buffers().getBuffer(RenderType.energySwirl(ShellLayer.TEXTURE, (time * 0.01f) % 1, (time * 0.01f) % 1));
+        var vc = f.buffers().getBuffer(ShellLayer.type((time * 0.01f) % 1, (time * 0.01f) % 1));
         int c = ShellLayer.color(alpha);
         float r = (c >> 16 & 255) / 255f, g = (c >> 8 & 255) / 255f, b = (c & 255) / 255f;
         var mat = f.pose().last().pose();
