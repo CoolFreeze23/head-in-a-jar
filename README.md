@@ -593,7 +593,9 @@ A head in a jar is a head. Modules are how Noggin & Sons makes it an employee ag
 
 ### Telekinesis
 
-<!-- PIC: telekinesis | a jar holding a cow in the air, the teal line from its goggles to the glowing cow -->
+![Seen from behind, a jar lifts a cow, swings it round on a glowing line and throws it](docs/images/telekinesis.gif)
+
+*Telekinesis: **Ability** to grab, look to move it, **Attack** to throw.*
 
 The **Telekinesis Module** lets the head move things it has no hands for. Craft it from 4 Amethyst Shards (corners),
 3 Ender Pearls, 1 Copper Ingot (centre) and 1 Redstone (bottom middle).
@@ -1625,7 +1627,9 @@ A head is too valuable to waste. Saw one off with an empty jar in your other han
 **Jarred Head** finds work here. **Use** a block while holding the head to fit it; **Use** with an empty hand to take
 it back.
 
-<!-- PIC: heads-at-work | a guardian turret locking a zombie, an Array with a full rack, a villager on a mount -->
+![A jarred guardian head on a Turret Pedestal turns, locks a beam on a zombie and fires](docs/images/guardian.gif)
+
+*A guardian turret locking on: fit a jarred guardian head and give the pedestal power.*
 
 ### Turret Pedestal
 
