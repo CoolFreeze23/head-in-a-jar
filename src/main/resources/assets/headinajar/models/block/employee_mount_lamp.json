@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "headinajar:block/machine/employee_mount"
+  },
+  "elements": [
+    {
+      "name": "lamp_lens",
+      "from": [
+        12,
+        9,
+        8
+      ],
+      "to": [
+        16,
+        11,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            8,
+            6
+          ],
+          "texture": "#lens"
+        },
+        "east": {
+          "uv": [
+            0,
+            4,
+            4,
+            6
+          ],
+          "texture": "#lens"
+        },
+        "south": {
+          "uv": [
+            12,
+            4,
+            16,
+            6
+          ],
+          "texture": "#lens"
+        },
+        "west": {
+          "uv": [
+            8,
+            4,
+            12,
+            6
+          ],
+          "texture": "#lens"
+        },
+        "up": {
+          "uv": [
+            8,
+            4,
+            4,
+            0
+          ],
+          "texture": "#lens"
+        },
+        "down": {
+          "uv": [
+            12,
+            0,
+            8,
+            4
+          ],
+          "texture": "#lens"
+        }
+      }
+    }
+  ]
+}

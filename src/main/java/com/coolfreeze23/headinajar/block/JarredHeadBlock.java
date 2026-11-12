@@ -33,7 +33,10 @@ import java.util.List;
 public class JarredHeadBlock extends BaseEntityBlock {
     public static final MapCodec<JarredHeadBlock> CODEC = simpleCodec(JarredHeadBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 10, 12);
+    /** The plinth (its front, with the plaque and bell, toward where the head looks) and the jar on it, facing north. */
+    private static final VoxelShape SHAPE_NORTH = net.minecraft.world.phys.shapes.Shapes.or(Block.box(0, 0, 2, 16, 7, 16),
+            Block.box(0.85, 7, 0.85, 15.15, 16, 15.15));
+    private static final VoxelShape[] SHAPES = new VoxelShape[4];
 
     public JarredHeadBlock(Properties properties) {
         super(properties);
@@ -50,24 +53,33 @@ public class JarredHeadBlock extends BaseEntityBlock {
         builder.add(FACING);
     }
 
+    /** The plinth is the block's model; the jar and the head are drawn by the block entity's renderer. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.INVISIBLE;
+        return RenderShape.MODEL;
+    }
+
+    /** The plinth under the jar's bounds; the lid and valve above the cell are drawn, not solid. */
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        Direction facing = state.getValue(FACING);
+        int i = facing.get2DDataValue();
+        // the plinth's front is toward where the head looks (the opposite of the block's facing)
+        if (SHAPES[i] == null) SHAPES[i] = com.coolfreeze23.headinajar.machine.TallMachine.rotate(SHAPE_NORTH, facing.getOpposite());
+        return SHAPES[i];
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide) {
+            return type == ModRegistry.JARRED_HEAD_BE.get() ? (l, p, s, be) -> ((JarredHeadBlockEntity) be).clientTick() : null;
+        }
+        return createTickerHelper(type, ModRegistry.JARRED_HEAD_BE.get(), JarredHeadBlockEntity::serverTick);
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new JarredHeadBlockEntity(pos, state);
-    }
-
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModRegistry.JARRED_HEAD_BE.get(), JarredHeadBlockEntity::serverTick);
     }
 
     @Override

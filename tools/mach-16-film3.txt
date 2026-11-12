@@ -1,0 +1,200 @@
+# Batch three filmed: each machine near (about 4 blocks) at work, a refusal, a brown-out where it has one, a second
+# player at its screen where it has one, then at about ten blocks. One machine at a time at 0,-60,0.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -2 -60 2 225
+# --- the Charging Dock: the second player's jar steps on (the switch shuts, the dial climbs), the power runs out (the
+# droop), a click on an empty dock is refused
+/setblock 0 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 0 -60 0 {Energy:20000}
+/tp @s 2.8 -59 3.6 143 12
+bystander form jar
+wait 20
+frames dock3_occupy_near 140
+wait 5
+bystander tp 0 -59.7 0 180 0
+wait 135
+frames dock3_brownout_near 120
+/data merge block 0 -60 0 {Energy:0}
+wait 125
+bystander tp -2 -60 3 225 0
+bystander form body
+wait 20
+frames dock3_refuse_near 60
+wait 3
+bystander useblock 0 -60 0 up
+wait 60
+/data merge block 0 -60 0 {Energy:20000}
+bystander form jar
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames dock3_ten_blocks 160
+wait 5
+bystander tp 0 -59.7 0 180 0
+wait 150
+bystander tp -2 -60 3 225 0
+bystander form body
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+wait 20
+# --- the Tesla Node: a pair linked, sending (the ring spins, the ball faces its partner); a brown-out (send_low);
+# a wrench's sneak-use on an unlinked node is refused
+/setblock 0 -60 0 headinajar:tesla_node[facing=south]
+/setblock 0 -60 8 headinajar:tesla_node[facing=north]
+/tp @s 3.5 -58.6 5 150 12
+wait 20
+frames tesla3_link_send_near 200
+/data merge block 0 -60 0 {Energy:10000,Target:36804L}
+wait 205
+frames tesla3_brownout_near 160
+/data merge block 0 -60 0 {Energy:200}
+wait 40
+/data merge block 0 -60 0 {Energy:200}
+wait 40
+/data merge block 0 -60 0 {Energy:200}
+wait 80
+/give @s headinajar:surgical_wrench
+hotbar 1
+/tp @s 0.5 -59 10.5 180 20
+wait 10
+sneak down
+frames tesla3_refuse_near 50
+wait 3
+key use
+wait 50
+sneak up
+closegui
+/clear @s
+/data merge block 0 -60 0 {Energy:10000}
+/tp @s 7.3 -58.6 12 135 8
+wait 10
+frames tesla3_ten_blocks 160
+wait 165
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Injection Rig: the second player presses Inject (the shot); presses again and walks off (called off); with
+# too little power it refuses
+/setblock 0 -60 0 headinajar:injection_rig[facing=south]
+/tp @s 2.8 -59 3.6 143 12
+lab
+wait 10
+frames rig3_shot_second_player_near 120
+wait 5
+bystander tp -1 -60 2 200 0
+bystander useblock 0 -60 0 north
+bystander button 1
+wait 3
+bystander close
+wait 115
+lab
+wait 5
+frames rig3_cancel_near 100
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander close
+wait 10
+bystander tp -4 -60 4 200 0
+wait 90
+/data merge block 0 -60 0 {Energy:100}
+frames rig3_refuse_near 60
+wait 3
+bystander tp -1 -60 2 200 0
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander close
+wait 60
+lab
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rig3_ten_blocks 120
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander close
+wait 120
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the DNA Sequencer: the second player opens it (the drawer), switches Auto on (the beats ring), a brown-out
+# spaces the beats, Auto with nothing in the reader is refused
+/setblock 0 -60 0 headinajar:dna_sequencer[facing=south]
+/tp @s 2.8 -59 3.6 143 12
+wait 10
+frames seq3_screen_second_player_near 60
+bystander useblock 0 -60 0 north
+wait 40
+bystander close
+wait 20
+frames seq3_refuse_near 50
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander close
+wait 50
+lab
+frames seq3_auto_near 260
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander close
+wait 260
+frames seq3_brownout_near 200
+/data merge block 0 -60 0 {Energy:0}
+wait 40
+/data merge block 0 -60 0 {Energy:200}
+wait 40
+/data merge block 0 -60 0 {Energy:200}
+wait 40
+/data merge block 0 -60 0 {Energy:200}
+wait 80
+lab
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames seq3_ten_blocks 200
+wait 205
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Cerebral Array: nine heads, fed (bobbing, upright), then unfed (they sag); the vote runs on the server's
+# clock every 300 s and is not filmed here
+/setblock 0 -60 0 headinajar:cerebral_array[facing=south]
+headblock 0 -60 0 villager,villager,zombie,villager,creeper,villager,skeleton,villager,pig
+/data merge block 0 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:2000}}}
+/tp @s 1.6 -59.2 3 190 14
+wait 40
+frames array3_fed_near 80
+wait 85
+/data merge block 0 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:0}}}
+wait 40
+frames array3_unfed_near 80
+wait 85
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames array3_ten_blocks 80
+wait 85
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Employee Mount: a stone refused; hired, paid from a chest beside it (payday, then the stamp at its tics)
+/setblock 0 -60 0 headinajar:employee_mount[facing=south]
+/give @s minecraft:stone
+hotbar 1
+/tp @s 0.5 -59.5 2.2 180 20
+wait 10
+frames mount3_refuse_near 50
+wait 3
+key use
+wait 50
+closegui
+/clear @s
+headblock 0 -60 0 villager
+/setblock 1 -60 0 minecraft:chest
+/data merge block 1 -60 0 {Items:[{Slot:0b,id:"minecraft:emerald",count:5}]}
+/tp @s 1.8 -59.3 2.6 200 18
+wait 5
+frames mount3_payday_stamp_near 400
+wait 405
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames mount3_ten_blocks 200
+wait 205
+report film3 done

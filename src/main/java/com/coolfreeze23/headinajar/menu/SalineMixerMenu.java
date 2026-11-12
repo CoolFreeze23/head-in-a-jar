@@ -9,12 +9,12 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
-/** Data: 0 energy/10, 1 water mB, 2 saline mB, 3 progress, 4 stall reason. */
+/** Data: 0 energy/10, 1 water mB, 2 saline mB, 3 progress, 4 stall reason, 5 this batch's length. */
 public class SalineMixerMenu extends MachineMenu {
     public static final int[][] SLOTS = {{30, 17}, {30, 37}, {30, 57}, {124, 17}, {124, 57}};
 
     public SalineMixerMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buf) {
-        this(id, inventory, new ItemStackHandler(5), new SimpleContainerData(5), buf.readBlockPos());
+        this(id, inventory, new ItemStackHandler(5), new SimpleContainerData(6), buf.readBlockPos());
     }
 
     public SalineMixerMenu(int id, Inventory inventory, IItemHandler items, ContainerData data, BlockPos pos) {

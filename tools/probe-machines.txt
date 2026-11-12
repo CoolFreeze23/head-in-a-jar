@@ -1,0 +1,126 @@
+# Render-cost probes for animated machines (assets: tools/machine_probes.py; blocks: src/smoke/.../MachineProbe.java).
+# (a) does a baked model's .mcmeta texture animate; (b) frame time while 40 baked machines flip a blockstate;
+# (c) 40 GeckoLib block entities: not drawn, controller stopped, playing a loop.
+@observe 1
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+time set noon
+weather clear
+hud off
+tp @s 0 -60 0
+setblock -1 -60 3 headinajar:anim_probe_a
+setblock 1 -60 3 headinajar:anim_probe_b
+look 0 30
+wait 60
+report (a) animated texture: 20 shots, one every other tick (frames change every 10 ticks: red, green, blue, yellow)
+burst anim 20
+# glass: chunk-drawn stained glass in front of block-entity-drawn items (a campfire's food) and a GeckoLib part
+setblock 10 -60 4 minecraft:campfire[lit=false]{Items:[{Slot:0b,id:"minecraft:beef",count:1},{Slot:2b,id:"minecraft:cod",count:1}]}
+setblock 12 -60 4 headinajar:gecko_loop
+setblock 10 -60 3 minecraft:light_blue_stained_glass
+setblock 12 -60 3 minecraft:light_blue_stained_glass
+setblock 11 -60 3 minecraft:glass
+setblock 11 -60 4 minecraft:campfire[lit=false]{Items:[{Slot:0b,id:"minecraft:beef",count:1}]}
+tp @s 11 -60 0.5
+look 0 35
+wait 40
+shot glass_front
+tp @s 0 -57 2
+look 0 30
+wait 60
+perf warmup 100
+wait 105
+perf empty_1 200
+wait 205
+setblock -7 -60 10 headinajar:lamp_probe[lamp=1]
+setblock -5 -60 10 headinajar:lamp_probe[lamp=1]
+setblock -3 -60 10 headinajar:lamp_probe[lamp=1]
+setblock -1 -60 10 headinajar:lamp_probe[lamp=1]
+setblock 1 -60 10 headinajar:lamp_probe[lamp=1]
+setblock 3 -60 10 headinajar:lamp_probe[lamp=1]
+setblock 5 -60 10 headinajar:lamp_probe[lamp=1]
+setblock 7 -60 10 headinajar:lamp_probe[lamp=1]
+setblock -7 -60 12 headinajar:lamp_probe[lamp=1]
+setblock -5 -60 12 headinajar:lamp_probe[lamp=1]
+setblock -3 -60 12 headinajar:lamp_probe[lamp=1]
+setblock -1 -60 12 headinajar:lamp_probe[lamp=1]
+setblock 1 -60 12 headinajar:lamp_probe[lamp=1]
+setblock 3 -60 12 headinajar:lamp_probe[lamp=1]
+setblock 5 -60 12 headinajar:lamp_probe[lamp=1]
+setblock 7 -60 12 headinajar:lamp_probe[lamp=1]
+setblock -7 -60 14 headinajar:lamp_probe[lamp=1]
+setblock -5 -60 14 headinajar:lamp_probe[lamp=1]
+setblock -3 -60 14 headinajar:lamp_probe[lamp=1]
+setblock -1 -60 14 headinajar:lamp_probe[lamp=1]
+setblock 1 -60 14 headinajar:lamp_probe[lamp=1]
+setblock 3 -60 14 headinajar:lamp_probe[lamp=1]
+setblock 5 -60 14 headinajar:lamp_probe[lamp=1]
+setblock 7 -60 14 headinajar:lamp_probe[lamp=1]
+setblock -7 -60 16 headinajar:lamp_probe[lamp=1]
+setblock -5 -60 16 headinajar:lamp_probe[lamp=1]
+setblock -3 -60 16 headinajar:lamp_probe[lamp=1]
+setblock -1 -60 16 headinajar:lamp_probe[lamp=1]
+setblock 1 -60 16 headinajar:lamp_probe[lamp=1]
+setblock 3 -60 16 headinajar:lamp_probe[lamp=1]
+setblock 5 -60 16 headinajar:lamp_probe[lamp=1]
+setblock 7 -60 16 headinajar:lamp_probe[lamp=1]
+setblock -7 -60 18 headinajar:lamp_probe[lamp=1]
+setblock -5 -60 18 headinajar:lamp_probe[lamp=1]
+setblock -3 -60 18 headinajar:lamp_probe[lamp=1]
+setblock -1 -60 18 headinajar:lamp_probe[lamp=1]
+setblock 1 -60 18 headinajar:lamp_probe[lamp=1]
+setblock 3 -60 18 headinajar:lamp_probe[lamp=1]
+setblock 5 -60 18 headinajar:lamp_probe[lamp=1]
+setblock 7 -60 18 headinajar:lamp_probe[lamp=1]
+wait 80
+shot grid_lamp
+perf lamp_static 200
+wait 205
+flip sync 20 -7 -60 10 7 -60 18
+wait 3
+perf lamp_sync20 200
+wait 205
+flip stagger 20 -7 -60 10 7 -60 18
+wait 3
+perf lamp_stagger20 200
+wait 205
+flip sync 1 -7 -60 10 7 -60 18
+wait 3
+perf lamp_sync1_worst 200
+wait 205
+flip off
+wait 20
+perf lamp_static_2 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_skip replace headinajar:lamp_probe
+wait 80
+shot grid_skip
+perf gecko_skip 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_stop replace headinajar:gecko_skip
+wait 80
+shot grid_stop
+perf gecko_stop 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_loop replace headinajar:gecko_stop
+wait 80
+shot grid_loop
+perf gecko_loop 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_stop replace headinajar:gecko_loop
+wait 80
+perf gecko_stop_2 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_loop replace headinajar:gecko_stop
+wait 80
+perf gecko_loop_2 200
+wait 205
+fill -7 -60 10 7 -60 18 headinajar:gecko_skip replace headinajar:gecko_loop
+wait 80
+perf gecko_skip_2 200
+wait 205
+fill -7 -60 10 7 -60 18 air replace headinajar:gecko_skip
+wait 80
+perf empty_2 200
+wait 205
+report done

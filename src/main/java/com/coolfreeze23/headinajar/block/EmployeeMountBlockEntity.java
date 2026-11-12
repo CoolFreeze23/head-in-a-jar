@@ -26,7 +26,11 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * An Employee Mount: a bracket on a machine's side holding a Jarred Villager, who works there for 1 emerald a day from a
  * chest touching the mount. Unpaid staff work at half bonus and complain; nitwits do nothing and say so.
  */
-public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder {
+public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
+        software.bernie.geckolib.animatable.GeoBlockEntity {
+    /** Block events: a complaint (param: days unpaid), payday (param: days it had gone unpaid). */
+    public static final int EV_COMPLAINT = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN, EV_PAYDAY = EV_COMPLAINT + 1;
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
     public static final int COMPLAINT_TICKS = 2400;
     private static final String[] COMPLAINTS = {"dental", "overtime", "jar", "union", "view", "smell", "pension", "broth", "chair", "manager"};
     private final ItemStackHandler items = new ItemStackHandler(1) {
@@ -93,6 +97,8 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
             if (handler == null) continue;
             for (int i = 0; i < handler.getSlots(); i++) {
                 if (handler.getStackInSlot(i).is(Items.EMERALD) && !handler.extractItem(i, 1, false).isEmpty()) {
+                    long missed = Math.max(0, day() - 1 - paidThrough);
+                    if (paidThrough >= 0 || missed > 0) kit.event(EV_PAYDAY, (int) Math.min(255, missed));
                     paidThrough = day();
                     setChanged();
                     return true;
@@ -114,6 +120,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         String key = "nitwit".equals(job) ? "staff.headinajar.nitwit." + level.random.nextInt(4)
                 : "staff.headinajar.complaint." + COMPLAINTS[level.random.nextInt(COMPLAINTS.length)];
         Component line = Component.translatable("staff.headinajar.says", Component.translatable("entity.minecraft.villager." + job), Component.translatable(key));
+        kit.event(EV_COMPLAINT, (int) Math.min(255, Math.max(0, day() - paidThrough)));
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(12))) p.displayClientMessage(line, false);
         level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.STAFF_COMPLAIN.get(), SoundSource.BLOCKS, 0.8f, 1);
     }
@@ -127,7 +134,11 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
                 return;
             }
             items.setStackInSlot(0, held.split(1));
-            payroll();
+            // hired today: counted from today, not from the world's first day, if the first wage isn't there yet
+            if (!payroll()) {
+                paidThrough = day() - 1;
+                setChanged();
+            }
             com.coolfreeze23.headinajar.Advance.grant(player, "staffed");
             level.playSound(null, worldPosition, SoundEvents.VILLAGER_WORK_LIBRARIAN, SoundSource.BLOCKS, 1, 1);
             return;
@@ -155,12 +166,80 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         paidThrough = tag.contains("PaidThrough") ? tag.getLong("PaidThrough") : -1;
     }
 
+    /** The server's tick, then what the cubicle shows: the lamp, the head, the day it is paid through. */
+    public static void kitTick(Level level, BlockPos pos, BlockState state, EmployeeMountBlockEntity mount) {
+        serverTick(level, pos, state, mount);
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (mount.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        else if ("nitwit".equals(mount.profession())) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
+        else lamp = mount.paid() ? com.coolfreeze23.headinajar.machine.MachineLamp.READY : com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        mount.kit.tick(lamp, false, false, 0);
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    /** Days the head has gone unpaid (0 paid; the client reckons it from the synced day). */
+    public long daysMissed() {
+        if (level == null || head().isEmpty()) return 0;
+        return Math.max(0, day() - paidThrough);
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
+        tag.putLong("paid", paidThrough);
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
+        paidThrough = tag.getLong("paid");
+    }
+
+    @Override
+    public void clientTick() {
+    }
+
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = new CompoundTag();
-        tag.put("Items", HeadInfo.syncTag(items, registries));
+        CompoundTag tag = kit.syncTag();
         tag.putBoolean("Synced", true);
         return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+        kit.read(packet.getTag());
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations3.mount(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
     }
 
     @Override

@@ -1,0 +1,79 @@
+# Fifth batch, retakes: the Leech Jar seen from its front-left with the cow at its east side (the nozzle turned to it),
+# its Butcher's hat; the Jarred Heads watching a passing player close up, the bell and the refusal (empty hand, the
+# stand-in beside, not in front); the placard cycled by a real click.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/fill -2 -61 -6 34 -61 14 minecraft:smooth_stone
+/setblock 19 -60 0 headinajar:leech_jar[facing=south]
+jarhead villager 23 -60 0
+jarhead zombie 24 -60 0
+/fill 27 -60 -1 31 -58 -1 minecraft:stone_bricks
+/setblock 27 -59 0 headinajar:safety_placard[facing=south,notice=2]
+/clear @s
+hud off
+wait 40
+# --- Leech: the cow arrives at its east side, seen from the front-left ----------------------------------------
+/tp @s 17.6 -59.3 2.4 220 22
+wait 10
+frames leech_7_turn_to_cow_front_left_near 100
+/summon minecraft:cow 20.5 -60 0.5 {NoAI:1b,Rotation:[90f,0f]}
+wait 105
+/data merge block 19 -60 0 {Timer:595}
+frames leech_8_sample_front_left_near 40
+wait 45
+# the cow walks round to the west side: the carrier follows
+/tp @e[type=minecraft:cow] 17.5 -60 0.5
+/tp @s 20.6 -59.3 2.4 140 22
+wait 2
+frames leech_9_follow_west_near 70
+wait 75
+/tp @e[type=minecraft:cow] 25.5 -60 8.5
+# a Butcher on an Employee Mount facing the jar: the leech wears the paper hat
+/setblock 19 -60 1 headinajar:employee_mount[facing=south]
+/data merge block 19 -60 1 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:butcher",type:"minecraft:plains",level:1}}}}}]}}
+wait 40
+/tp @s 18.6 -58.6 1.8 200 40
+wait 5
+shot leech_hat_close
+inspect block 19 -60 1
+/setblock 19 -60 1 minecraft:air
+wait 30
+shot leech_no_hat_close
+# --- Jarred Heads: a player walking past close ------------------------------------------------------------------
+/tp @s 21.5 -59.6 2.2 230 15
+wait 10
+frames heads_4_watching_close 110
+wait 10
+/tp @s 22.3 -59.6 2.5 205 15
+wait 15
+/tp @s 23.3 -59.6 2.6 185 15
+wait 15
+/tp @s 24.3 -59.6 2.6 170 15
+wait 15
+/tp @s 25.3 -59.6 2.4 150 15
+wait 15
+/tp @s 26.0 -59.6 2.0 130 15
+wait 40
+bystander spawn 22 -60 1 270
+wait 10
+/tp @s 23.5 -60 2.6 180 30
+wait 5
+observe 40
+frames heads_5_bell_and_refusal_near 70
+bystander useblock 23 -60 0 up
+wait 25
+key use
+wait 45
+bystander remove
+inspect block 23 -60 0
+# --- Safety Placard ------------------------------------------------------------------------------------------
+/tp @s 27.5 -60 2.2 180 0
+wait 5
+frames placard_3_cycle_near 40
+key use
+wait 45
+inspect block 27 -59 0
+report retake done

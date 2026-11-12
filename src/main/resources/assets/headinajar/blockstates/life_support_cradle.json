@@ -1,7 +1,39 @@
 {
-  "variants": {
-    "": {
-      "model": "headinajar:block/life_support_cradle"
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle",
+        "y": 270
+      }
     }
-  }
+  ]
 }

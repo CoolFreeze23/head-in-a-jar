@@ -1,0 +1,385 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "globe": "headinajar:block/machine/injection_rig_globe_lit",
+    "particle": "headinajar:block/machine/injection_rig"
+  },
+  "elements": [
+    {
+      "name": "globe_0",
+      "from": [
+        6,
+        7,
+        6
+      ],
+      "to": [
+        10,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            6,
+            10.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            9.5,
+            6,
+            10,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            11,
+            6,
+            11.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            10.5,
+            6,
+            11,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            10.5,
+            6,
+            10,
+            2
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            11,
+            2,
+            10.5,
+            6
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "globe_1",
+      "from": [
+        5,
+        8,
+        6
+      ],
+      "to": [
+        11,
+        9,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            6,
+            5.75,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            4.5,
+            6,
+            5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            6.25,
+            6,
+            7,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            5.75,
+            6,
+            6.25,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            5.75,
+            6,
+            5,
+            2
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            6.5,
+            2,
+            5.75,
+            6
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "globe_2",
+      "from": [
+        4,
+        9,
+        6
+      ],
+      "to": [
+        12,
+        12,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            6,
+            3,
+            9
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            1.5,
+            6,
+            2,
+            9
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            3.5,
+            6,
+            4.5,
+            9
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            3,
+            6,
+            3.5,
+            9
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            3,
+            6,
+            2,
+            2
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            4,
+            2,
+            3,
+            6
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "globe_3",
+      "from": [
+        5,
+        12,
+        6
+      ],
+      "to": [
+        11,
+        13,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            6,
+            8.25,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            7,
+            6,
+            7.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            8.75,
+            6,
+            9.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            8.25,
+            6,
+            8.75,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            8.25,
+            6,
+            7.5,
+            2
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            9,
+            2,
+            8.25,
+            6
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "globe_4",
+      "from": [
+        6,
+        13,
+        6
+      ],
+      "to": [
+        10,
+        14,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12,
+            6,
+            12.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            11.5,
+            6,
+            12,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            13,
+            6,
+            13.5,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            12.5,
+            6,
+            13,
+            7
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            12.5,
+            6,
+            12,
+            2
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            13,
+            2,
+            12.5,
+            6
+          ],
+          "texture": "#globe",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}

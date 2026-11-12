@@ -79,6 +79,8 @@ public final class NeuroLink {
         if (n == 0) return 0;
         net.minecraft.world.phys.Vec3[] at = new net.minecraft.world.phys.Vec3[n];
         double[] q = new double[n];
+        int[] via = new int[n];
+        java.util.Arrays.fill(via, -1);
         boolean[] done = new boolean[n];
         for (int i = 0; i < n; i++) {
             at[i] = net.minecraft.world.phys.Vec3.atCenterOf(masts.get(i).pos()).add(0, 1, 0);
@@ -93,12 +95,29 @@ public final class NeuroLink {
                 if (done[j]) continue;
                 double hop = fromDistance(at[best].distanceTo(at[j]), Math.min(masts.get(best).radius(), masts.get(j).radius()));
                 double cand = Math.min(q[best], hop) * 0.97;
-                if (cand > q[j]) q[j] = cand;
+                if (cand > q[j]) {
+                    q[j] = cand;
+                    via[j] = best;
+                }
             }
         }
         double result = 0;
+        int last = -1;
         for (int i = 0; i < n; i++) {
-            result = Math.max(result, Math.min(q[i], fromDistance(player.position().distanceTo(at[i]), masts.get(i).radius())));
+            double r = Math.min(q[i], fromDistance(player.position().distanceTo(at[i]), masts.get(i).radius()));
+            if (r > result) {
+                result = r;
+                last = i;
+            }
+        }
+        // the winning chain, walked back from the body's end: each mast's dish turns to its next hop (the body for the last)
+        if (last >= 0) {
+            long now = player.level().getGameTime();
+            BlockPos next = player.blockPosition();
+            for (int i = last, guard = 0; i >= 0 && guard < n; i = via[i], guard++) {
+                if (player.level().getBlockEntity(masts.get(i).pos()) instanceof com.coolfreeze23.headinajar.block.PowerBlockEntities.Station mast) mast.route(next, now);
+                next = masts.get(i).pos();
+            }
         }
         return result;
     }
@@ -109,7 +128,12 @@ public final class NeuroLink {
         HeadRegistry heads = HeadRegistry.get(player);
         for (var jammer : RelayRegistry.get(player.getServer()).powered(RelayRegistry.Kind.JAMMER, player.level().dimension(), player.level().getGameTime())) {
             if (jammer.owner() != null && heads.trusts(jammer.owner(), player)) continue;
-            if (player.position().distanceTo(net.minecraft.world.phys.Vec3.atCenterOf(jammer.pos())) <= jammer.radius()) return 0.3;
+            if (player.position().distanceTo(net.minecraft.world.phys.Vec3.atCenterOf(jammer.pos())) <= jammer.radius()) {
+                if (player.level().getBlockEntity(jammer.pos()) instanceof com.coolfreeze23.headinajar.block.PowerBlockEntities.Station station) {
+                    station.jammed(player.level().getGameTime());
+                }
+                return 0.3;
+            }
         }
         return 1;
     }

@@ -1,0 +1,107 @@
+# Retakes after the ten-block fixes: the Tesla Node (the ball lit and the ring kicked on each pulse, the arc two
+# texels wide), the Cerebral Array sitting (the gavel lifts every 40-80 ticks, the heads blink and glance), the Signal
+# Jammer's light marker vane, and the Cloakroom with a husk: checked in, a stranger refused, the owner's check-out
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -3 -60 3 225
+# --- the Tesla Node pair sending
+/setblock 0 -60 0 headinajar:tesla_node[facing=south]
+/setblock 0 -60 8 headinajar:tesla_node[facing=north]
+/data merge block 0 -60 0 {Energy:10000,Target:36804L}
+/tp @s 3.5 -58.6 5 150 12
+wait 40
+frames tesla5_send_near 120
+wait 125
+/data merge block 0 -60 0 {Energy:10000}
+/tp @s 7.3 -58.6 12 135 8
+wait 10
+frames tesla5_ten_blocks 160
+wait 165
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Cerebral Array sitting
+/setblock 0 -60 0 headinajar:cerebral_array[facing=south]
+headblock 0 -60 0 villager,villager,zombie,villager,creeper,villager,skeleton,villager,pig
+/data merge block 0 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:6000}}}
+/tp @s 1.6 -59.2 3 190 14
+wait 40
+frames array5_sitting_near 200
+wait 205
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames array5_ten_blocks 200
+wait 205
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Signal Jammer jamming, at ten blocks
+/setblock 0 -60 0 headinajar:signal_jammer[facing=south]
+/data merge block 0 -60 0 {Energy:50000}
+/tp @s 2.8 -59 3.6 143 10
+jam 0 -60 0
+wait 40
+shot jammer5_near
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames jammer5_ten_blocks 200
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 20
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Cloakroom: a husk host checked in by the player; the second player's click refused; the player takes it out;
+# at ten blocks, in and out again
+/setblock 0 -60 0 headinajar:body_locker[facing=south]
+hostify minecraft:husk 0 -60 2
+/tp @s 2.5 -59 3.5 150 10
+wait 20
+frames locker5_checkin_near 100
+wait 3
+useblock 0 -60 0 north
+wait 95
+frames locker5_stranger_refused_near 80
+bystander tp -2 -60 2 225 0
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 40
+inspect block 0 -60 0
+useblock 0 -60 0 north
+wait 40
+hostify minecraft:husk 0 -60 2
+wait 10
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames locker5_ten_blocks 160
+wait 3
+locker 0 -60 0
+wait 80
+locker 0 -60 0
+wait 80
+report retake4 done

@@ -171,6 +171,60 @@ public class HostGameTests {
         done(h, p);
     }
 
+    /** A body checked in by one player: a stranger's click is refused and the body stays in; the owner's lets it out. */
+    @GameTest(template = "platform")
+    public static void aLockerKeepsABodyFromAStranger(GameTestHelper h) {
+        ServerPlayer owner = player(h, FLOOR), stranger = player(h, FLOOR.east());
+        h.setBlock(FLOOR.north(2), ModRegistry.BODY_LOCKER.get());
+        var locker = (BodyLockerBlockEntity) h.getBlockEntity(FLOOR.north(2));
+        host(h, EntityType.PIG, FLOOR.north(1), owner);
+        locker.use(owner);
+        h.assertTrue(locker.full(), "host not stored");
+        locker.use(stranger);
+        h.assertTrue(locker.full(), "a stranger took the body out");
+        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(stranger), "locker.not_yours", "the stranger's answer");
+        locker.use(owner);
+        h.assertFalse(locker.full(), "the owner could not take the body out");
+        done(h, owner, stranger);
+    }
+
+    /** Someone the owner trusts (/headoffice trust) takes the body out for them. */
+    @GameTest(template = "platform")
+    public static void aLockerGivesABodyToATrustedColleague(GameTestHelper h) {
+        ServerPlayer owner = player(h, FLOOR), colleague = player(h, FLOOR.east());
+        h.setBlock(FLOOR.north(2), ModRegistry.BODY_LOCKER.get());
+        var locker = (BodyLockerBlockEntity) h.getBlockEntity(FLOOR.north(2));
+        host(h, EntityType.PIG, FLOOR.north(1), owner);
+        locker.use(owner);
+        com.coolfreeze23.headinajar.form.HeadRegistry.get(h.getLevel().getServer()).setTrust(owner.getUUID(), colleague.getUUID(), true);
+        locker.use(colleague);
+        h.assertFalse(locker.full(), "a trusted colleague could not take the body out");
+        com.coolfreeze23.headinajar.form.HeadRegistry.get(h.getLevel().getServer()).setTrust(owner.getUUID(), colleague.getUUID(), false);
+        done(h, owner, colleague);
+    }
+
+    /** A locker saved before it knew who checked a body in (no StoredOwner) loads with its body and lets anyone take it out. */
+    @GameTest(template = "platform")
+    public static void anOldLockerLoadsAndReleases(GameTestHelper h) {
+        ServerPlayer owner = player(h, FLOOR), other = player(h, FLOOR.east());
+        h.setBlock(FLOOR.north(2), ModRegistry.BODY_LOCKER.get());
+        var locker = (BodyLockerBlockEntity) h.getBlockEntity(FLOOR.north(2));
+        host(h, EntityType.PIG, FLOOR.north(1), owner);
+        locker.use(owner);
+        var saved = locker.saveWithFullMetadata(h.getLevel().registryAccess());
+        h.assertTrue(saved.hasUUID("StoredOwner"), "the owner is not saved");
+        saved.remove("StoredOwner");
+        h.setBlock(FLOOR.north(2), net.minecraft.world.level.block.Blocks.AIR);
+        h.setBlock(FLOOR.north(2), ModRegistry.BODY_LOCKER.get());
+        var old = (BodyLockerBlockEntity) h.getBlockEntity(FLOOR.north(2));
+        old.loadWithComponents(saved, h.getLevel().registryAccess());
+        h.assertTrue(old.full(), "the old locker lost its body");
+        old.use(other);
+        h.assertFalse(old.full(), "an old locker kept its body from a click");
+        h.assertTrue(h.getEntities(EntityType.PIG).stream().anyMatch(e -> !e.isRemoved() && Hosts.isHost(e)), "the body did not come out");
+        done(h, owner, other);
+    }
+
     @GameTest(template = "platform")
     public static void syncUnlocksAtThresholds(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);

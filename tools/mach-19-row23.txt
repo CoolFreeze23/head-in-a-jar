@@ -1,0 +1,104 @@
+# Every machine on the kit working in one row beside the Separation Chair: whole and in stretches, by day and at night (written by tools/mach_rows.py)
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/clear @s
+hud off
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 headinajar:galvanic_pile[facing=south]
+/data merge block 2 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/setblock 4 -60 0 headinajar:saline_mixer[facing=south]
+/data merge block 4 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/setblock 6 -60 0 headinajar:centrifuge[facing=south]
+/data merge block 6 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+/setblock 8 -60 0 headinajar:life_support_cradle[facing=south]
+/data merge block 8 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 8 -60 0 1
+/setblock 10 -60 0 headinajar:body_printer[facing=south]
+/data merge block 10 -60 0 {Energy:250000,Progress:200,Client:[I;55,66,77,88],ClientName:"Dev"}
+/setblock 12 -60 0 headinajar:gene_splicer[facing=south]
+/data merge block 12 -60 0 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+/setblock 14 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 14 -60 0 {Energy:20000}
+/setblock 16 -60 0 headinajar:tesla_node[facing=south]
+/setblock 16 -60 -6 headinajar:tesla_node[facing=south]
+/data merge block 16 -60 -6 {Energy:0}
+/data merge block 16 -60 0 {Energy:10000,Target:4672924397508L}
+/setblock 18 -60 0 headinajar:injection_rig[facing=south]
+/setblock 20 -60 0 headinajar:dna_sequencer[facing=south]
+/setblock 22 -60 0 headinajar:cerebral_array[facing=south]
+headblock 22 -60 0 villager,villager,zombie,villager,creeper,villager,skeleton,villager,pig
+/data merge block 22 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:6000}}}
+/setblock 24 -60 0 headinajar:employee_mount[facing=south]
+headblock 24 -60 0 villager
+/setblock 26 -60 0 headinajar:relay_mast[facing=south]
+/data merge block 26 -60 0 {Energy:50000}
+mastroute 26 -60 0 26 -60 -20
+/setblock 28 -60 0 headinajar:relay_mast_mk2[facing=south]
+/data merge block 28 -60 0 {Energy:50000}
+mastroute 28 -60 0 -20 -60 0
+/setblock 30 -60 0 headinajar:signal_jammer[facing=south]
+/data merge block 30 -60 0 {Energy:50000}
+jam 30 -60 0
+/setblock 32 -60 0 headinajar:turret_pedestal[facing=south]
+/data merge block 32 -60 0 {Energy:40000}
+headblock 32 -60 0 blaze
+/summon minecraft:zombie 32 -60 -8 {NoAI:1b}
+/setblock 34 -60 0 headinajar:body_locker[facing=south]
+hostify minecraft:husk 34 -60 2
+/setblock 36 -60 0 headinajar:leyden_jar[facing=south]
+/data merge block 36 -60 0 {Energy:200000}
+/setblock 38 -60 0 headinajar:neural_socket[facing=south]
+headblock 38 -60 0 zombie
+/setblock 40 -60 0 headinajar:leech_jar[facing=south]
+/summon minecraft:cow 40.5 -60 1.6 {NoAI:1b,Rotation:[90f,0f]}
+jarhead minecraft:villager 42 -60 0
+/setblock 44 -60 -1 minecraft:stone
+/setblock 44 -60 0 headinajar:safety_placard[facing=south,notice=3]
+/tp @s 20.5 -59 3 180 0
+lab
+wait 5
+bystander spawn 20 -60 3 180
+bystander useblock 20 -60 0 north
+bystander button 1
+bystander close
+wait 10
+bystander tp 48 -60 -4 180 0
+bystander form jar
+wait 20
+bystander tp 14 -59.7 0 180 0
+wait 10
+/tp @s 36.5 -59 3.5 150 10
+wait 20
+useblock 34 -60 0 north
+wait 40
+/tp @s 22.5 -57.6 31 180 8
+wait 60
+shot row23_day
+frames row23_day 100
+wait 105
+/tp @s 7.5 -58.6 10 180 8
+wait 10
+shot row23_ten_1
+frames row23_ten_1 100
+wait 105
+/tp @s 23.5 -58.6 10 180 8
+wait 10
+shot row23_ten_2
+frames row23_ten_2 100
+wait 105
+/tp @s 38.5 -58.6 10 180 8
+wait 10
+shot row23_ten_3
+frames row23_ten_3 100
+wait 105
+/time set 18000
+/tp @s 22.5 -57.6 31 180 8
+wait 20
+shot row23_night
+frames row23_night 80
+wait 85
+/time set 6000
+report row23 done

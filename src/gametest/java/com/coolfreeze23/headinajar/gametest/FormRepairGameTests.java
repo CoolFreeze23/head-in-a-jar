@@ -452,7 +452,8 @@ public class FormRepairGameTests {
         // an empty Cradle: the jar climbs in
         h.setBlock(FLOOR.north(2), ModRegistry.CRADLE.get());
         useBlock(h, p, FLOOR.north(2));
-        h.assertTrue(p.blockPosition().equals(h.absolutePos(FLOOR.north(2).above())), "the jar did not climb into the Cradle: " + p.blockPosition());
+        // the jar stands on the armchair's seat cushion, in the Cradle's own cell
+        h.assertTrue(p.blockPosition().equals(h.absolutePos(FLOOR.north(2))), "the jar did not climb into the Cradle: " + p.blockPosition());
         h.assertTrue(LifeSupportCradleBlockEntity.under(p) != null, "the jar is not in the Cradle");
         // a boat and a minecart need no hands
         place(h, p, FLOOR.south(2), 0, 0);

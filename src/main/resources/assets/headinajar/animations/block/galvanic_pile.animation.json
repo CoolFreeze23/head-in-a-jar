@@ -1,0 +1,268 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "work": {
+      "loop": true,
+      "animation_length": 2.5,
+      "bones": {
+        "handle": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.45": {
+              "vector": [
+                0,
+                9,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "1.75": {
+              "vector": [
+                0,
+                -94,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.85": {
+              "vector": [
+                0,
+                -90,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.9": {
+              "vector": [
+                0,
+                -90,
+                0
+              ]
+            },
+            "2.05": {
+              "vector": [
+                0,
+                -81,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.35": {
+              "vector": [
+                0,
+                -184,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "2.5": {
+              "vector": [
+                0,
+                -180,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.35": {
+          "effect": "headinajar:pile.crackle|0.4|1.0"
+        },
+        "1.75": {
+          "effect": "headinajar:pile.ratchet|0.35|1.0"
+        },
+        "2.35": {
+          "effect": "headinajar:pile.ratchet|0.35|1.1"
+        }
+      },
+      "particle_effects": {
+        "0.3": {
+          "effect": "headinajar:pile_spark",
+          "locator": "term_a"
+        }
+      }
+    },
+    "refuel": {
+      "animation_length": 1.2,
+      "bones": {
+        "handle": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.15": {
+              "vector": [
+                0,
+                -15,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.85": {
+              "vector": [
+                0,
+                360,
+                0
+              ],
+              "easing": "easeInOutCubic"
+            },
+            "1.0": {
+              "vector": [
+                0,
+                362,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "1.2": {
+              "vector": [
+                0,
+                360,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.25": {
+          "effect": "headinajar:pile.ratchet|0.4|0.9"
+        },
+        "0.4": {
+          "effect": "headinajar:pile.ratchet|0.4|0.95"
+        },
+        "0.55": {
+          "effect": "headinajar:pile.ratchet|0.4|1.0"
+        },
+        "0.7": {
+          "effect": "headinajar:pile.ratchet|0.4|1.05"
+        }
+      }
+    },
+    "finish": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.5,
+      "bones": {
+        "handle": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                -6,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                182,
+                0
+              ],
+              "easing": "easeInOutCubic"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                180,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.1": {
+          "effect": "headinajar:pile.sigh|0.5|1.0"
+        }
+      },
+      "particle_effects": {
+        "0.15": {
+          "effect": "minecraft:poof",
+          "locator": "screw_top"
+        }
+      }
+    },
+    "refuse": {
+      "animation_length": 0.4,
+      "bones": {
+        "handle": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                -3,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                3,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -3,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:machine.rattle|0.4|1.0"
+        }
+      }
+    }
+  }
+}

@@ -141,6 +141,14 @@ final class Bystander {
         return new BlockPos(Integer.parseInt(a[i]), Integer.parseInt(a[i + 1]), Integer.parseInt(a[i + 2]));
     }
 
+    /**
+     * True while the server waits for this player to confirm a teleport. Until then the game drops every block click
+     * from the player without a word (ServerGamePacketListenerImpl.handleUseItemOn); a real client confirms at once.
+     */
+    private static boolean teleportPending() {
+        return ((ServerGameListenerAccess) player.connection).hij$awaitingPosition() != null;
+    }
+
     private static void useBlock(BlockPos pos, Direction face) {
         Vec3 hit = Vec3.atCenterOf(pos).add(face.getStepX() * 0.5, face.getStepY() * 0.5, face.getStepZ() * 0.5);
         player.connection.handleUseItemOn(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(hit, face, pos, false), sequence++));
@@ -208,8 +216,10 @@ final class Bystander {
             case "useblock" -> {
                 // useblock X Y Z [FACE]: right-click a block face (the real ServerboundUseItemOnPacket path)
                 Direction face = a.length > 5 ? Direction.byName(a[5]) : Direction.UP;
+                boolean pending = teleportPending();
                 useBlock(pos(a, 2), face);
-                return "bystander useblock -> vehicle " + vehicle() + ", menu " + player.containerMenu.getClass().getSimpleName();
+                return "bystander useblock -> vehicle " + vehicle() + ", menu " + player.containerMenu.getClass().getSimpleName()
+                        + (pending ? ", DROPPED by the server: a teleport not yet confirmed" : "");
             }
             case "useitem" -> {
                 player.connection.handleUseItem(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, sequence++, player.getYRot(), player.getXRot()));
@@ -293,6 +303,9 @@ final class Bystander {
                     }
                     default -> "unknown form " + a[2];
                 };
+                // a change of form can move the player (back onto its body): confirm it as a client would, unless the
+                // script asks to see the unconfirmed state ("raw")
+                if (a.length <= 3 || !a[3].equals("raw")) confirmTeleport();
                 return "bystander form " + r + " -> form " + form();
             }
             case "fit" -> {

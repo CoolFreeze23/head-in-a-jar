@@ -100,7 +100,8 @@ public class MobilityGameTests {
     @GameTest(template = "platform")
     public static void courierBringsTheBodyHome(GameTestHelper h) {
         ServerPlayer p = jar(h);
-        HeadlessBody body = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(3)).stream().findFirst().orElse(null);
+        // its own body: a neighbouring test may have one standing within reach
+        HeadlessBody body = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(3), b -> p.getUUID().equals(b.ownerId())).stream().findFirst().orElse(null);
         h.assertTrue(body != null, "no body");
         h.assertTrue(Courier.book(p).equals("courier.headinajar.already_here"), "booked a courier for a body right here");
         // far out of reach straight up: 40 blocks sideways lands in whichever test the grid placed next door
@@ -108,6 +109,8 @@ public class MobilityGameTests {
         p.teleportTo(far.x, far.y, far.z);
         // a real player keeps the chunks round it loaded; a test player is never ticked, so hold its new chunk the same way
         var chunk = new net.minecraft.world.level.ChunkPos(BlockPos.containing(far));
+        // 40 blocks off may be the next test's own ground: leave its hold on that chunk as it was
+        boolean held = h.getLevel().getForcedChunks().contains(chunk.toLong());
         h.getLevel().setChunkForced(chunk.x, chunk.z, true);
         h.runAfterDelay(20, () -> {
             try {
@@ -116,11 +119,12 @@ public class MobilityGameTests {
                 h.assertTrue(before - FormActions.state(p).charge() == JarState.maxCharge() / 5, "wrong fee");
                 h.assertTrue(Courier.book(p).equals("courier.headinajar.on_its_way"), "booked twice");
                 h.assertTrue(Courier.deliver(p), "not delivered");
-                HeadlessBody arrived = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(4)).stream().findFirst().orElse(null);
+                HeadlessBody arrived = h.getLevel().getEntitiesOfClass(HeadlessBody.class, p.getBoundingBox().inflate(4), b -> b.getUUID().equals(body.getUUID()))
+                        .stream().findFirst().orElse(null);
                 h.assertTrue(arrived != null && arrived.getUUID().equals(body.getUUID()), "the body is not beside the head");
                 h.assertTrue(arrived.position().distanceTo(p.position()) < Courier.NEARBY, "delivered too far away");
             } finally {
-                h.getLevel().setChunkForced(chunk.x, chunk.z, false);
+                if (!held) h.getLevel().setChunkForced(chunk.x, chunk.z, false);
             }
             done(h, p);
         });

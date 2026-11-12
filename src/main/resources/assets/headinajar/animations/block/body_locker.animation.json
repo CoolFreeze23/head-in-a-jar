@@ -1,0 +1,529 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "checkin": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 1.5,
+      "bones": {
+        "shutter": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -1,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                -1,
+                0
+              ]
+            },
+            "0.7": {
+              "vector": [
+                0,
+                -7,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "0.75": {
+              "vector": [
+                0,
+                -6.5,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.8": {
+              "vector": [
+                0,
+                -7,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "ticket": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.8": {
+              "vector": [
+                0,
+                0,
+                22
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.9": {
+              "vector": [
+                0,
+                0,
+                -14
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.05": {
+              "vector": [
+                0,
+                0,
+                8
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.2": {
+              "vector": [
+                0,
+                0,
+                -4
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.35": {
+              "vector": [
+                0,
+                0,
+                1.5
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          },
+          "scale": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.8": {
+              "pre": [
+                0,
+                0,
+                0
+              ],
+              "post": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.45": {
+          "effect": "headinajar:locker.ratchet|0.4|1.0"
+        },
+        "0.55": {
+          "effect": "headinajar:locker.ratchet|0.4|1.05"
+        },
+        "0.65": {
+          "effect": "headinajar:locker.ratchet|0.4|1.1"
+        },
+        "0.7": {
+          "effect": "headinajar:locker.thunk|0.6|1.0"
+        },
+        "0.8": {
+          "effect": "headinajar:locker.ticket_clink|0.4|1.2"
+        },
+        "1.2": {
+          "effect": "headinajar:machine.done|0.5|1.0"
+        }
+      },
+      "timeline": {
+        "0.0": "locker:checkin;",
+        "0.9": "locker:portrait_on;"
+      }
+    },
+    "checkout": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 1.2,
+      "bones": {
+        "shutter": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                -7,
+                0
+              ]
+            },
+            "0.2": {
+              "vector": [
+                0,
+                -7,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -6,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.8": {
+              "vector": [
+                0,
+                0.3,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.9": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "ticket": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                0,
+                -15
+              ],
+              "easing": "easeOutCubic"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                0,
+                -20
+              ],
+              "easing": "easeInQuad"
+            }
+          },
+          "scale": {
+            "0.0": {
+              "vector": [
+                1,
+                1,
+                1
+              ]
+            },
+            "0.2": {
+              "pre": [
+                1,
+                1,
+                1
+              ],
+              "post": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.1": {
+          "effect": "headinajar:locker.bell|0.4|2.0"
+        },
+        "0.2": {
+          "effect": "headinajar:locker.ticket_clink|0.4|1.2"
+        },
+        "0.4": {
+          "effect": "headinajar:locker.ratchet|0.4|1.1"
+        },
+        "0.55": {
+          "effect": "headinajar:locker.ratchet|0.4|1.05"
+        },
+        "0.7": {
+          "effect": "headinajar:locker.ratchet|0.4|1.0"
+        }
+      },
+      "timeline": {
+        "0.9": "locker:portrait_off;"
+      }
+    },
+    "refuse_empty": {
+      "animation_length": 0.4,
+      "bones": {
+        "shutter": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                -2,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -2,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "ticket": {
+          "scale": {
+            "vector": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:machine.rattle|0.4|1.0"
+        }
+      }
+    },
+    "refuse_full": {
+      "animation_length": 0.4,
+      "bones": {
+        "shutter": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                -7,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                -6,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                -7,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -6,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                -7,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "ticket": {
+          "scale": {
+            "vector": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:machine.rattle|0.4|1.0"
+        }
+      }
+    },
+    "refuse_ticket": {
+      "animation_length": 0.4,
+      "bones": {
+        "shutter": {
+          "position": {
+            "vector": [
+              0,
+              -7,
+              0
+            ]
+          }
+        },
+        "ticket": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                0,
+                8
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                0,
+                -8
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                8
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          },
+          "scale": {
+            "vector": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:locker.ticket_rattle|0.4|1.0"
+        }
+      }
+    },
+    "held_full": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.05,
+      "bones": {
+        "shutter": {
+          "position": {
+            "vector": [
+              0,
+              -7,
+              0
+            ]
+          }
+        },
+        "ticket": {
+          "scale": {
+            "vector": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    },
+    "held_empty": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.05,
+      "bones": {
+        "shutter": {
+          "position": {
+            "vector": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "ticket": {
+          "scale": {
+            "vector": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

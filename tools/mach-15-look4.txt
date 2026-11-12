@@ -1,0 +1,45 @@
+# Batch four, first look: the masts (one carrying a link, its dish turning), the jammer jamming, the turret with a
+# blaze's head on a target, the Cloakroom checking a body in and out
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/setblock 0 -60 0 headinajar:relay_mast[facing=south]
+/setblock 4 -60 0 headinajar:relay_mast_mk2[facing=south]
+/setblock 8 -60 0 headinajar:signal_jammer[facing=south]
+/setblock 12 -60 0 headinajar:turret_pedestal[facing=south]
+/setblock 16 -60 0 headinajar:body_locker[facing=south]
+/data merge block 0 -60 0 {Energy:50000}
+/data merge block 4 -60 0 {Energy:50000}
+/data merge block 8 -60 0 {Energy:50000}
+/data merge block 12 -60 0 {Energy:40000}
+/tp @s 8.5 -58.6 9 180 8
+wait 40
+shot look4_rest_row
+/tp @s 2 -58.4 5 180 12
+wait 5
+shot look4_masts_close
+/tp @s 13 -58.6 5 180 10
+wait 5
+shot look4_turret_locker_close
+# the turret: a blaze's head, a zombie to watch
+headblock 12 -60 0 blaze
+/summon minecraft:zombie 12 -60 -6 {NoAI:1b}
+/tp @s 15 -58.4 4 150 10
+frames look4_turret 160
+wait 165
+shot look4_turret_target
+/kill @e[type=minecraft:zombie]
+# the Cloakroom: a pig checked in and out by the player
+/summon minecraft:pig 16 -60 2 {NoAI:1b}
+/tp @s 17.5 -59 4.5 160 12
+frames look4_cloakroom 140
+wait 5
+useblock 16 -60 0 north
+wait 60
+shot look4_cloakroom_full
+useblock 16 -60 0 north
+wait 70
+report look4 done

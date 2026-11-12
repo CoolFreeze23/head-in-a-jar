@@ -1,0 +1,39 @@
+# Galvanic Pile, whole job: fed by a real click, one piece burnt through (refuel, work, finish), a refusal; near, then far
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 0 -60 8 headinajar:galvanic_pile[facing=south]
+/give @s minecraft:rotten_flesh 1
+/give @s minecraft:spider_eye 2
+hud off
+# near: three-quarter front at about 4 blocks, the player's crosshair on the pile
+/tp @s 2.8 -59 3.6 143 22
+wait 10
+hotbar 1
+observe 240
+frames pile_job_near 300
+wait 2
+key use
+wait 250
+# the refusal: the slot already holds rotten flesh, a spider eye can't go in (pile.full)
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+wait 30
+observe 40
+hotbar 2
+frames pile_refuse_near 60
+wait 5
+key use
+wait 60
+# far: about ten blocks, the second pile
+/tp @s 7.3 -58.6 15.4 135 12
+/clear @s
+/give @s minecraft:rotten_flesh 1
+wait 10
+frames pile_job_far 290
+wait 2
+/data merge block 0 -60 8 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:1}]}}
+wait 290
+report pile done

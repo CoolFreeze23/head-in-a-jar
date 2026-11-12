@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/cradle",
+    "particle": "headinajar:block/machine/cradle"
+  },
+  "elements": [
+    {
+      "name": "bag_skin_0",
+      "from": [
+        17,
+        1,
+        5
+      ],
+      "to": [
+        21,
+        8,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.375,
+            12.090909,
+            4.875,
+            12.727273
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            4,
+            12.090909,
+            4.375,
+            12.727273
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            5.25,
+            12.090909,
+            5.75,
+            12.727273
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            4.875,
+            12.090909,
+            5.25,
+            12.727273
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            4.875,
+            12.090909,
+            4.375,
+            11.818182
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            5.375,
+            11.818182,
+            4.875,
+            12.090909
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

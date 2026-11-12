@@ -1,0 +1,82 @@
+# The first twelve machines working in a row beside the Separation Chair: by day, at night, by torchlight (written by tools/mach_rows.py)
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/clear @s
+hud off
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 headinajar:galvanic_pile[facing=south]
+/data merge block 2 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/setblock 4 -60 0 headinajar:saline_mixer[facing=south]
+/data merge block 4 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/setblock 6 -60 0 headinajar:centrifuge[facing=south]
+/data merge block 6 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+/setblock 8 -60 0 headinajar:life_support_cradle[facing=south]
+/data merge block 8 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 8 -60 0 1
+/setblock 10 -60 0 headinajar:body_printer[facing=south]
+/data merge block 10 -60 0 {Energy:250000,Progress:200,Client:[I;55,66,77,88],ClientName:"Dev"}
+/setblock 12 -60 0 headinajar:gene_splicer[facing=south]
+/data merge block 12 -60 0 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+/setblock 14 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 14 -60 0 {Energy:20000}
+/setblock 16 -60 0 headinajar:tesla_node[facing=south]
+/setblock 16 -60 -6 headinajar:tesla_node[facing=south]
+/data merge block 16 -60 -6 {Energy:0}
+/data merge block 16 -60 0 {Energy:10000,Target:4672924397508L}
+/setblock 18 -60 0 headinajar:injection_rig[facing=south]
+/setblock 20 -60 0 headinajar:dna_sequencer[facing=south]
+/setblock 22 -60 0 headinajar:cerebral_array[facing=south]
+headblock 22 -60 0 villager,villager,zombie,villager,creeper,villager,skeleton,villager,pig
+/data merge block 22 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:6000}}}
+/setblock 24 -60 0 headinajar:employee_mount[facing=south]
+headblock 24 -60 0 villager
+/tp @s 20.5 -59 3 180 0
+lab
+wait 5
+bystander spawn 20 -60 3 180
+bystander useblock 20 -60 0 north
+bystander button 1
+bystander close
+wait 10
+bystander tp 28 -60 -4 180 0
+bystander form jar
+wait 20
+bystander tp 14 -59.7 0 180 0
+wait 10
+/tp @s 12.5 -57.6 21 180 8
+wait 60
+shot row12_day
+frames row12_day 100
+wait 105
+/tp @s 7.5 -58.6 10 180 8
+wait 10
+shot row12_ten_1
+frames row12_ten_1 100
+wait 105
+/tp @s 20.5 -58.6 10 180 8
+wait 10
+shot row12_ten_2
+frames row12_ten_2 100
+wait 105
+/time set 18000
+/tp @s 12.5 -57.6 21 180 8
+wait 20
+shot row12_night
+frames row12_night 80
+wait 85
+/setblock 1 -60 2 minecraft:torch
+/setblock 5 -60 2 minecraft:torch
+/setblock 9 -60 2 minecraft:torch
+/setblock 13 -60 2 minecraft:torch
+/setblock 17 -60 2 minecraft:torch
+/setblock 21 -60 2 minecraft:torch
+/setblock 25 -60 2 minecraft:torch
+wait 20
+shot row12_torch
+frames row12_torch 80
+wait 85
+/time set 6000
+report row12 done

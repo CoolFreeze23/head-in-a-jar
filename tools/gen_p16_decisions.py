@@ -13,7 +13,7 @@ import os
 
 # blocks of the mod that open a screen or print a status when used, added to the ones already in head_operable
 HEAD_OPERABLE = ['separation_chair', 'assembly_gantry', 'body_locker', 'tesla_node', 'relay_mast', 'relay_mast_mk2',
-                 'signal_jammer', 'leech_jar', 'safety_placard', 'jarred_head']
+                 'signal_jammer', 'leech_jar', 'safety_placard', 'jarred_head', 'machine_top']
 
 # the written edition: the opening chapters of the handbook (Orientation, Elective Separation), as plain pages.
 # (en, pt, keybinds filled in as %s, in order)

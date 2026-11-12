@@ -1,0 +1,333 @@
+# Retake after the light fix and the running particles: the light stills, then each machine's job near and far
+@observe 20
+wait 40
+bystander spawn -2 -60 2 225
+# --- mach-6-light
+# Light on the machines' upper halves, the plain client: the row by day, night and torchlight, close; a ceiling lamp
+# over one machine; the Pile's pan, felt and the Mixer's saline surface at two blocks
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 minecraft:iron_block
+/setblock 4 -60 0 minecraft:brewing_stand
+/setblock 6 -60 0 minecraft:blast_furnace[facing=south]
+/setblock 8 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 10 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 12 -60 0 headinajar:centrifuge[facing=south]
+/data merge block 8 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 10 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/data merge block 12 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+hud off
+/tp @s 10.5 -58.8 5 160 12
+wait 60
+shot light_day_close
+/tp @s 6.5 -59 9 180 6
+wait 5
+shot light_day_row
+/tp @s 9.8 -59.4 2.2 143 41
+wait 5
+shot light_pile_2blocks
+/tp @s 9.8 -59.4 2.2 143 33
+wait 5
+burst light_felt 20
+/tp @s 11.3 -58 2.1 153 53
+wait 5
+shot light_mixer_surface_2blocks
+burst light_ripple 20
+/time set 18000
+/tp @s 10.5 -58.8 5 160 12
+wait 10
+shot light_night_close
+/setblock 7 -60 2 minecraft:torch
+/setblock 11 -60 2 minecraft:torch
+/setblock 13 -60 2 minecraft:torch
+wait 10
+shot light_torch_close
+# a lamp hung over the Centrifuge in a roofed bay, by night
+/fill 11 -57 -1 13 -57 1 minecraft:stone
+/setblock 12 -58 0 minecraft:lantern[hanging=true]
+wait 10
+/tp @s 13.5 -59 3.5 150 15
+wait 5
+shot light_lantern_bay
+report light done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+/time set 6000
+wait 20
+# --- mach-2-pile
+# Galvanic Pile, whole job: fed by a real click, one piece burnt through (refuel, work, finish), a refusal; near, then far
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 0 -60 8 headinajar:galvanic_pile[facing=south]
+/give @s minecraft:rotten_flesh 1
+/give @s minecraft:spider_eye 2
+hud off
+# near: three-quarter front at about 4 blocks, the player's crosshair on the pile
+/tp @s 2.8 -59 3.6 143 22
+wait 10
+hotbar 1
+observe 240
+frames pile_job_near 300
+wait 2
+key use
+wait 250
+# the refusal: the slot already holds rotten flesh, a spider eye can't go in (pile.full)
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+wait 30
+observe 40
+hotbar 2
+frames pile_refuse_near 60
+wait 5
+key use
+wait 60
+# far: about ten blocks, the second pile
+/tp @s 7.3 -58.6 15.4 135 12
+/clear @s
+/give @s minecraft:rotten_flesh 1
+wait 10
+frames pile_job_far 290
+wait 2
+/data merge block 0 -60 8 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:1}]}}
+wait 290
+report pile done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+/time set 6000
+wait 20
+# --- mach-3-mixer
+# Saline Mixer, whole job: a batch (doses, paddle, the tank rising), bottling (the tap, bottles under it, the flag),
+# the screen opened by a second player (the caps lift), a refusal, a brown-out; near, then far
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 0 -60 10 headinajar:saline_mixer[facing=south]
+hud off
+/tp @s 2.8 -59 3.6 143 18
+wait 20
+# the screen, opened and closed by the second player while the real client watches
+observe 30
+frames mixer_screen_near 70
+wait 5
+bystander useblock 0 -60 0 north
+wait 35
+bystander close
+wait 35
+# a batch: everything in, 200 ticks, then four bottles filled
+/data merge block 0 -60 0 {Energy:20000,Water:{Fluid:{id:"minecraft:water",amount:2000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:1},{Slot:1b,id:"minecraft:kelp",count:1},{Slot:2b,id:"minecraft:redstone",count:1}]}}
+frames mixer_job_near 280
+wait 230
+/data merge block 0 -60 0 {Items:{Size:5,Items:[{Slot:3b,id:"minecraft:glass_bottle",count:3}]}}
+wait 50
+# a refusal: lava is not water
+/give @s minecraft:lava_bucket 1
+hotbar 1
+wait 5
+observe 40
+frames mixer_refuse_near 50
+wait 3
+key use
+wait 50
+/clear @s
+# a brown-out: power for every other tick only
+/data merge block 0 -60 0 {Energy:0,Water:{Fluid:{id:"minecraft:water",amount:2000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:1},{Slot:1b,id:"minecraft:kelp",count:1},{Slot:2b,id:"minecraft:redstone",count:1}]}}
+frames mixer_brownout_near 120
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+/data merge block 0 -60 0 {Energy:10}
+wait 1
+inspect block 0 -60 0
+wait 20
+# far: about ten blocks, the second mixer, a batch and bottles
+/tp @s 7.3 -58.6 17.4 135 10
+wait 10
+/data merge block 0 -60 10 {Energy:20000,Water:{Fluid:{id:"minecraft:water",amount:2000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:1},{Slot:1b,id:"minecraft:kelp",count:1},{Slot:2b,id:"minecraft:redstone",count:1}]}}
+frames mixer_job_far 260
+wait 210
+/data merge block 0 -60 10 {Items:{Size:5,Items:[{Slot:3b,id:"minecraft:glass_bottle",count:3}]}}
+wait 55
+report mixer done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+/time set 6000
+wait 20
+# --- mach-4-centrifuge
+# Centrifuge, whole job: the drawer answering a second player's screen, a balanced spin-up, an unevenly loaded spin
+# (the wobble and the sign), the coast-down, the rack filling and the flag, a refusal, a brown-out; near, then far
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:centrifuge[facing=south]
+/setblock 0 -60 10 headinajar:centrifuge[facing=south]
+hud off
+/tp @s 2.8 -59 3.6 143 15
+wait 20
+observe 30
+frames centrifuge_screen_near 70
+wait 5
+bystander useblock 0 -60 0 north
+wait 35
+bystander close
+wait 35
+# four samples: balanced; after 100 ticks two are taken out (unbalanced: it wobbles and asks for balance)
+/data merge block 0 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:4}]}}
+frames centrifuge_job_near 420
+wait 100
+/data merge block 0 -60 0 {Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:2}]}}
+wait 330
+# a refusal: the Surgical Wrench has no use on it (sneak and use)
+/give @s headinajar:surgical_wrench 1
+hotbar 1
+wait 5
+sneak down
+observe 40
+frames centrifuge_refuse_near 50
+wait 3
+key use
+wait 45
+sneak up
+/clear @s
+# a brown-out: power for every other tick only
+/data merge block 0 -60 0 {Energy:0,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:4}]}}
+frames centrifuge_brownout_near 120
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+inspect block 0 -60 0
+wait 40
+# far: about ten blocks, the second centrifuge
+/tp @s 7.3 -58.6 17.4 135 10
+wait 10
+/data merge block 0 -60 10 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:2}]}}
+frames centrifuge_job_far 400
+wait 400
+report centrifuge done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+/time set 6000
+wait 20

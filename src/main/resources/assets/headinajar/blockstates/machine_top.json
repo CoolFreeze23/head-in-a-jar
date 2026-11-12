@@ -1,0 +1,3591 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "machine": "galvanic_pile"
+      },
+      "apply": {
+        "model": "headinajar:block/galvanic_pile_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "saline_mixer"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "saline_mixer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "saline_mixer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "saline_mixer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "saline_mixer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "centrifuge"
+      },
+      "apply": {
+        "model": "headinajar:block/centrifuge_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "life_support_cradle",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_printer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "gene_splicer"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "gene_splicer",
+        "stab": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "gene_splicer",
+        "stab": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "gene_splicer",
+        "stab": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "charging_dock",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "tesla_node"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "5"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_5"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "6"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_6"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "injection_rig",
+        "saline": "7"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_7"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "dna_sequencer"
+      },
+      "apply": {
+        "model": "headinajar:block/dna_sequencer_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "cerebral_array",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "relay_mast_mk2"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_mk2_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "turret_pedestal"
+      },
+      "apply": {
+        "model": "headinajar:block/turret_pedestal_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "body_locker"
+      },
+      "apply": {
+        "model": "headinajar:block/body_locker_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "saline": "0|1|2|3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leyden_jar",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob_spark"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "machine": "leech_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leech_jar_top"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "galvanic_pile"
+      },
+      "apply": {
+        "model": "headinajar:block/galvanic_pile_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "saline_mixer"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "saline_mixer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "saline_mixer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "saline_mixer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "saline_mixer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "centrifuge"
+      },
+      "apply": {
+        "model": "headinajar:block/centrifuge_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "life_support_cradle",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_printer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "gene_splicer"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "gene_splicer",
+        "stab": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "gene_splicer",
+        "stab": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "gene_splicer",
+        "stab": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "charging_dock",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "tesla_node"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "5"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_5",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "6"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_6",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "injection_rig",
+        "saline": "7"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_7",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "dna_sequencer"
+      },
+      "apply": {
+        "model": "headinajar:block/dna_sequencer_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "cerebral_array",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "relay_mast_mk2"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_mk2_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "turret_pedestal"
+      },
+      "apply": {
+        "model": "headinajar:block/turret_pedestal_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "body_locker"
+      },
+      "apply": {
+        "model": "headinajar:block/body_locker_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "saline": "0|1|2|3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leyden_jar",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob_spark",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "machine": "leech_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leech_jar_top",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "galvanic_pile"
+      },
+      "apply": {
+        "model": "headinajar:block/galvanic_pile_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "saline_mixer"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "saline_mixer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "saline_mixer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "saline_mixer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "saline_mixer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "centrifuge"
+      },
+      "apply": {
+        "model": "headinajar:block/centrifuge_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "life_support_cradle",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_printer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "gene_splicer"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "gene_splicer",
+        "stab": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "gene_splicer",
+        "stab": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "gene_splicer",
+        "stab": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "charging_dock",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "tesla_node"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "5"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_5",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "6"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_6",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "injection_rig",
+        "saline": "7"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_7",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "dna_sequencer"
+      },
+      "apply": {
+        "model": "headinajar:block/dna_sequencer_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "cerebral_array",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "relay_mast_mk2"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_mk2_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "turret_pedestal"
+      },
+      "apply": {
+        "model": "headinajar:block/turret_pedestal_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "body_locker"
+      },
+      "apply": {
+        "model": "headinajar:block/body_locker_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "saline": "0|1|2|3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leyden_jar",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob_spark",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "machine": "leech_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leech_jar_top",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "galvanic_pile"
+      },
+      "apply": {
+        "model": "headinajar:block/galvanic_pile_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "saline_mixer"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "saline_mixer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "saline_mixer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "saline_mixer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "saline_mixer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_top_saline_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "centrifuge"
+      },
+      "apply": {
+        "model": "headinajar:block/centrifuge_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "life_support_cradle",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cradle_top_saline_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_printer",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_top_saline_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "gene_splicer"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "gene_splicer",
+        "stab": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "gene_splicer",
+        "stab": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "gene_splicer",
+        "stab": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/gene_splicer_top_stab_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "charging_dock",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/charging_dock_top_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "tesla_node"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "5"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_5",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "6"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_6",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "injection_rig",
+        "saline": "7"
+      },
+      "apply": {
+        "model": "headinajar:block/injection_rig_top_serum_7",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "dna_sequencer"
+      },
+      "apply": {
+        "model": "headinajar:block/dna_sequencer_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "cerebral_array",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array_top_broth_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_top_own_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "relay_mast_mk2"
+      },
+      "apply": {
+        "model": "headinajar:block/relay_mast_mk2_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "turret_pedestal"
+      },
+      "apply": {
+        "model": "headinajar:block/turret_pedestal_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "body_locker"
+      },
+      "apply": {
+        "model": "headinajar:block/body_locker_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "saline": "0|1|2|3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leyden_jar",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_top_knob_spark",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "machine": "leech_jar"
+      },
+      "apply": {
+        "model": "headinajar:block/leech_jar_top",
+        "y": 270
+      }
+    }
+  ]
+}

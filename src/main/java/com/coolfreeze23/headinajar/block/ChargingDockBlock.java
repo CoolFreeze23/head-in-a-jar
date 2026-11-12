@@ -38,9 +38,14 @@ import java.util.UUID;
  * A low plate that charges, at 500 FE/t from FE fed into it, a jar standing on it or its owner's head set down on it.
  * It says when it starts, when the jar is full and when it has nothing to give, and sparks while it charges.
  */
-public class ChargingDockBlock extends BaseEntityBlock {
+public class ChargingDockBlock extends BaseEntityBlock implements com.coolfreeze23.headinajar.machine.TallMachine {
     public static final MapCodec<ChargingDockBlock> CODEC = simpleCodec(ChargingDockBlock::new);
-    private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 4, 15);
+    public static final net.minecraft.world.level.block.state.properties.DirectionProperty FACING = net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
+    /** The plate and the column behind it (facing north); the upper cell: the column, the board, the dial and the switch. */
+    private static final VoxelShape LOWER = net.minecraft.world.phys.shapes.Shapes.or(Block.box(1, 0, 1, 15, 4, 15), Block.box(5, 0, 15, 9, 16, 16));
+    private static final VoxelShape UPPER = net.minecraft.world.phys.shapes.Shapes.or(Block.box(5, 0, 15, 9, 16, 16), Block.box(3, 8, 9, 11, 16, 16),
+            Block.box(12, 4, 12, 16, 16, 16), Block.box(1, 4, 13, 16, 11, 16));
+    private final VoxelShape[] lower = new VoxelShape[4];
     public static final int RATE = 500;
     /** Height of the plate's top above the block's floor. */
     public static final double TOP = 4 / 16.0;
@@ -52,6 +57,53 @@ public class ChargingDockBlock extends BaseEntityBlock {
 
     public ChargingDockBlock(Properties properties) {
         super(properties);
+        registerDefaultState(stateDefinition.any().setValue(FACING, net.minecraft.core.Direction.NORTH)
+                .setValue(com.coolfreeze23.headinajar.machine.MachineLamp.LAMP, com.coolfreeze23.headinajar.machine.MachineLamp.OFF));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(net.minecraft.world.level.block.state.StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, com.coolfreeze23.headinajar.machine.MachineLamp.LAMP);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind topKind() {
+        return com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind.CHARGING_DOCK;
+    }
+
+    @Override
+    public VoxelShape upperShapeNorth() {
+        return UPPER;
+    }
+
+    /** The lamp is under the dial, in the upper half. */
+    @Override
+    public boolean lampAbove() {
+        return true;
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
+        super.onRemove(state, level, pos, newState, moved);
+        if (!state.is(newState.getBlock())) com.coolfreeze23.headinajar.machine.TallMachine.removeTop(level, pos);
+    }
+
+    @Override
+    public <E extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<E> getTicker(Level level, BlockState state,
+                                                                                                          net.minecraft.world.level.block.entity.BlockEntityType<E> type) {
+        if (type != ModRegistry.DOCK_BE.get()) return null;
+        if (level.isClientSide) return (l, p, s, be) -> ((Entity) be).clientTick();
+        return (l, p, s, be) -> ((Entity) be).serverTick();
     }
 
     @Override
@@ -66,7 +118,9 @@ public class ChargingDockBlock extends BaseEntityBlock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        int i = facingOf(state).get2DDataValue();
+        if (lower[i] == null) lower[i] = com.coolfreeze23.headinajar.machine.TallMachine.rotate(LOWER, facingOf(state));
+        return lower[i];
     }
 
     @Override
@@ -85,6 +139,12 @@ public class ChargingDockBlock extends BaseEntityBlock {
             return net.minecraft.world.InteractionResult.CONSUME;
         }
         int stored = dock.energy.getEnergyStored();
+        // an empty dock refuses (its switch hops, its lamp goes red), saying what feeds it
+        if (stored <= 0) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(server, com.coolfreeze23.headinajar.feedback.Refuser.at(dock), "dock.empty",
+                    0, dock.energy.getMaxEnergyStored(), Component.translatable("block.headinajar.galvanic_pile"));
+            return net.minecraft.world.InteractionResult.CONSUME;
+        }
         player.displayClientMessage(Component.translatable(stored > 0 ? "message.headinajar.dock_status" : "message.headinajar.dock_empty",
                 stored, dock.energy.getMaxEnergyStored(), Component.translatable("block.headinajar.galvanic_pile")), true);
         return net.minecraft.world.InteractionResult.CONSUME;
@@ -185,9 +245,150 @@ public class ChargingDockBlock extends BaseEntityBlock {
         return Told.CHARGING;
     }
 
-    public static class Entity extends BlockEntity {
+    public static class Entity extends BlockEntity implements com.coolfreeze23.headinajar.machine.KitMachine, software.bernie.geckolib.animatable.GeoBlockEntity {
         private final Buffer energy = new Buffer(20_000, 2_000, 0, this::setChanged);
         private long lastSpark;
+        // --- the machine kit: what the dock shows ------------------------------------------------------------------
+        /** The switch: nobody on the plate, charging, a jar on and nothing to give, the jar full. */
+        public static final int OPEN = 0, SHUT = 1, LOW = 2, FULL = 3;
+        private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+        private int switchState, charge = -1;
+        private long chargeSentAt;
+        /** Client: the dial's needle (degrees, 0 at E, 180 at F) and its speed; last tick's too. */
+        public float needle, needlePrev, needleVel;
+
+        @Override
+        public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+            return kit;
+        }
+
+        /** OPEN, SHUT, LOW or FULL. */
+        public int switchState() {
+            return switchState;
+        }
+
+        /** The occupant's charge in percent (-1 with nobody on the plate). */
+        public int charge() {
+            return charge;
+        }
+
+        /** Who stands on the plate (a jar or a placed head), what it holds, and so the switch and the lamp. */
+        void serverTick() {
+            if (level == null) return;
+            if (level.getGameTime() % 5 == 0) {
+                JarState occupant = null;
+                AABB above = new AABB(worldPosition).expandTowards(0, 1, 0);
+                for (net.minecraft.world.entity.Entity e : level.getEntities((net.minecraft.world.entity.Entity) null, above,
+                        e -> e instanceof Player || e instanceof HeadJarEntity)) {
+                    if (under(level, e.getBoundingBox()) != this) continue;
+                    if (e instanceof Player p && FormActions.state(p).form().isJarred()) occupant = FormActions.state(p);
+                    else if (e instanceof HeadJarEntity head && head.ownerId() != null && level.getServer() != null
+                            && level.getServer().getPlayerList().getPlayer(head.ownerId()) instanceof ServerPlayer owner) occupant = FormActions.state(owner);
+                    if (occupant != null) break;
+                }
+                int was = switchState;
+                if (occupant == null) {
+                    switchState = OPEN;
+                    charge = -1;
+                } else {
+                    float f = occupant.chargeCapacity() <= 0 ? 1 : occupant.charge() / (float) occupant.chargeCapacity();
+                    if (f >= 1 || switchState == FULL && f >= 0.95f) switchState = FULL;
+                    else switchState = energy.getEnergyStored() > 0 ? SHUT : LOW;
+                    int percent = Math.round(100 * Math.min(1, f));
+                    // the needle's reading: sent on a change of 3 % or more, at most every 10 ticks
+                    if (charge < 0 || Math.abs(percent - charge) >= 3 && level.getGameTime() - chargeSentAt >= 10 || percent == 100 && charge != 100) {
+                        charge = percent;
+                        chargeSentAt = level.getGameTime();
+                    }
+                }
+                if (was != switchState && switchState == FULL) {
+                    level.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.DOCK_DING.get(), SoundSource.BLOCKS, 1, 1);
+                }
+            }
+            com.coolfreeze23.headinajar.machine.MachineLamp lamp = switch (switchState) {
+                case SHUT -> com.coolfreeze23.headinajar.machine.MachineLamp.WORK;
+                case LOW -> com.coolfreeze23.headinajar.machine.MachineLamp.LOW;
+                case FULL -> com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
+                default -> energy.getEnergyStored() > 0 ? com.coolfreeze23.headinajar.machine.MachineLamp.READY : com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+            };
+            kit.tick(lamp, switchState == SHUT, switchState != OPEN, 0);
+        }
+
+        @Override
+        public void writeSync(CompoundTag tag) {
+            if (switchState != OPEN) tag.putByte("sw", (byte) switchState);
+            if (charge >= 0) tag.putByte("charge", (byte) charge);
+        }
+
+        @Override
+        public void readSync(CompoundTag tag) {
+            switchState = tag.getByte("sw");
+            charge = tag.contains("charge") ? tag.getByte("charge") : -1;
+        }
+
+        /** The needle: a damped spring toward the occupant's charge (empty: rest at E; brown-out: below E), pinned at both ends. */
+        @Override
+        public void clientTick() {
+            needlePrev = needle;
+            float target = switchState == LOW ? -8 : charge < 0 ? 0 : 180 * charge / 100f;
+            double r = kit.since(com.coolfreeze23.headinajar.machine.MachineKit.EV_REFUSE, level == null ? 0 : level.getGameTime());
+            if (r >= 0 && r < 8) target += (float) (14 * Math.sin(Math.PI * r / 2));
+            needleVel = needleVel * 0.72f + (target - needle) * 0.25f;
+            needle += needleVel;
+            if (needle < -10 || needle > 190) {
+                needle = Math.max(-10, Math.min(190, needle));
+                needleVel *= -0.3f;
+            }
+            if (Math.abs(needleVel) < 0.01f && Math.abs(target - needle) < 0.05f) {
+                needle = target;
+                needleVel = 0;
+            }
+        }
+
+        @Override
+        public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+            CompoundTag tag = kit.syncTag();
+            tag.putBoolean("Synced", true);
+            return tag;
+        }
+
+        @Override
+        public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+            return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+        }
+
+        @Override
+        public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+            kit.read(tag);
+        }
+
+        @Override
+        public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket packet,
+                                 HolderLookup.Provider registries) {
+            kit.read(packet.getTag());
+        }
+
+        @Override
+        public boolean triggerEvent(int id, int param) {
+            return kit.triggerEvent(id, param);
+        }
+
+        private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+        @Override
+        public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+            com.coolfreeze23.headinajar.client.MachineAnimations3.dock(this, controllers);
+        }
+
+        @Override
+        public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+            return cache;
+        }
+
+        @Override
+        public double getTick(Object blockEntity) {
+            return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
+        }
 
         public Entity(BlockPos pos, BlockState state) {
             super(ModRegistry.DOCK_BE.get(), pos, state);

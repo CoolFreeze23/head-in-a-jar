@@ -89,6 +89,10 @@ public final class LabScreens {
                 return;
             }
             calls.add(base);
+            if (calls.size() < LabMachines.Sequencer.BASES) {
+                // each key rings on the register for everyone watching (the twelfth is the read itself)
+                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, LabMachines.Sequencer.KEY + (calls.size() - 1) * 4 + base);
+            }
             if (calls.size() == LabMachines.Sequencer.BASES) {
                 int[] c = calls.stream().mapToInt(Integer::intValue).toArray();
                 minecraft.gameMode.handleInventoryButtonClick(menu.containerId, LabMachines.Sequencer.CALL + LabMachines.Sequencer.encode(c));

@@ -55,7 +55,9 @@ public class HeadHolderBlock<T extends BlockEntity & HeadHolderBlock.Holder> ext
     @Override
     public <E extends BlockEntity> BlockEntityTicker<E> getTicker(Level level, BlockState state, BlockEntityType<E> blockEntityType) {
         if (level.isClientSide) {
-            return createTickerHelper(blockEntityType, com.coolfreeze23.headinajar.registry.ModRegistry.TURRET_BE.get(), TurretPedestalBlockEntity::clientTick);
+            return (l, p, st, be) -> {
+                if (be instanceof com.coolfreeze23.headinajar.machine.KitMachine machine) machine.clientTick();
+            };
         }
         return super.getTicker(level, state, blockEntityType);
     }

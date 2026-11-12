@@ -24,13 +24,64 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** A padded stand with tubes that keeps a head alive and safe. Use it to dock or take your head. */
-public class LifeSupportCradleBlock extends BaseEntityBlock {
+/**
+ * A wingback armchair that keeps a head alive and safe, breathing for it. Use it to dock or take your head. Two cells
+ * tall (the hidden top cell holds the back, the headrest and the bag); a jar can climb into its seat.
+ */
+public class LifeSupportCradleBlock extends BaseEntityBlock implements com.coolfreeze23.headinajar.machine.TallMachine {
     public static final MapCodec<LifeSupportCradleBlock> CODEC = simpleCodec(LifeSupportCradleBlock::new);
-    private static final VoxelShape SHAPE = Shapes.or(Block.box(1, 0, 1, 15, 5, 15), Block.box(3, 5, 3, 13, 16, 13));
+    public static final net.minecraft.world.level.block.state.properties.DirectionProperty FACING =
+            net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+    public static final net.minecraft.world.level.block.state.properties.IntegerProperty SALINE = com.coolfreeze23.headinajar.machine.MachineLamp.level("saline");
+    /** What is drawn and clicked: the whole chair. */
+    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
+    private static final VoxelShape UPPER = Shapes.or(Block.box(0, 0, 13, 16, 12, 16), Block.box(1, 0, 1, 15, 8, 15), Block.box(9, 0, 9, 13, 12, 13));
+    /** What collides: the base under the cushion and the back; the seat is free for a jar to stand in. */
+    private static final VoxelShape SOLID = Shapes.or(Block.box(0, 0, 0, 16, 6, 16), Block.box(0, 6, 13, 16, 16, 16));
+    private static final VoxelShape UPPER_SOLID = Block.box(0, 0, 13, 16, 12, 16);
+    private final VoxelShape[] solid = new VoxelShape[4];
 
     public LifeSupportCradleBlock(Properties properties) {
         super(properties);
+        registerDefaultState(stateDefinition.any().setValue(FACING, net.minecraft.core.Direction.NORTH)
+                .setValue(com.coolfreeze23.headinajar.machine.MachineLamp.LAMP, com.coolfreeze23.headinajar.machine.MachineLamp.OFF).setValue(SALINE, 0));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(net.minecraft.world.level.block.state.StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, com.coolfreeze23.headinajar.machine.MachineLamp.LAMP, SALINE);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind topKind() {
+        return com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind.LIFE_SUPPORT_CRADLE;
+    }
+
+    @Override
+    public boolean lampAbove() {
+        return true;
+    }
+
+    @Override
+    public VoxelShape upperShapeNorth() {
+        return UPPER;
+    }
+
+    @Override
+    public VoxelShape upperCollisionNorth() {
+        return UPPER_SOLID;
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        int i = facingOf(state).get2DDataValue();
+        if (solid[i] == null) solid[i] = com.coolfreeze23.headinajar.machine.TallMachine.rotate(SOLID, facingOf(state));
+        return solid[i];
     }
 
     @Override
@@ -55,7 +106,7 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModRegistry.CRADLE_BE.get(), LifeSupportCradleBlockEntity::serverTick);
+        return createTickerHelper(type, ModRegistry.CRADLE_BE.get(), level.isClientSide ? (l, p, s, c) -> c.clientTick() : LifeSupportCradleBlockEntity::kitTick);
     }
 
     @Override
@@ -117,10 +168,11 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    /** Moves a jar onto the Cradle's pad, if there is room above it. */
+    /** Moves a jar onto the Cradle's seat cushion, if there is room for it there. */
     private static boolean climbIn(ServerPlayer player, BlockPos pos) {
         Level level = player.level();
-        net.minecraft.world.phys.Vec3 seat = net.minecraft.world.phys.Vec3.atBottomCenterOf(pos.above());
+        // on the cushion (6 px up), as far back as a jar fits in front of the back (it stands 2 px forward of centre)
+        net.minecraft.world.phys.Vec3 seat = com.coolfreeze23.headinajar.machine.TallMachine.local(pos, level.getBlockState(pos), 0, 6, -2);
         if (!level.noCollision(player, player.getDimensions(player.getPose()).makeBoundingBox(seat))) return false;
         player.teleportTo(seat.x, seat.y, seat.z);
         player.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
@@ -135,5 +187,6 @@ public class LifeSupportCradleBlock extends BaseEntityBlock {
             cradle.ejectHead();
         }
         super.onRemove(state, level, pos, newState, moved);
+        if (!state.is(newState.getBlock())) com.coolfreeze23.headinajar.machine.TallMachine.removeTop(level, pos);
     }
 }

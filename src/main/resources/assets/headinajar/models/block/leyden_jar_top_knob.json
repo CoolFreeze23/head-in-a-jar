@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/leyden_jar",
+    "particle": "headinajar:block/machine/leyden_jar"
+  },
+  "elements": [
+    {
+      "name": "knob",
+      "from": [
+        6,
+        9,
+        6
+      ],
+      "to": [
+        10,
+        13,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            0.444444,
+            1,
+            0.888889
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.444444,
+            0.5,
+            0.888889
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            0.444444,
+            2,
+            0.888889
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            1,
+            0.444444,
+            1.5,
+            0.888889
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            1,
+            0.444444,
+            0.5,
+            0
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            0,
+            1,
+            0.444444
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "headinajar:block/machine/body_printer"
+  },
+  "elements": [
+    {
+      "name": "lamp_lens",
+      "from": [
+        13,
+        13,
+        -4
+      ],
+      "to": [
+        15,
+        15,
+        -3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            3,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            6,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "west": {
+          "uv": [
+            3,
+            1,
+            4,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            1,
+            0
+          ],
+          "texture": "#lens"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "texture": "#lens"
+        }
+      }
+    }
+  ]
+}

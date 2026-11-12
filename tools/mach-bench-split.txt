@@ -1,0 +1,311 @@
+# The machine line bench: 10 Piles, 10 Mixers, 10 Centrifuges in mixed states and 10 other machines, in view.
+# Written by tools/mach_bench_gen.py; the same script runs against the old blocks and the new ones.
+@observe 1
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+gamerule doMobSpawning false
+time set noon
+weather clear
+hud off
+tp @s 0.5 -54 -6.5
+look 0 14
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -3 -60 6 headinajar:galvanic_pile
+data merge block -3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -1 -60 6 headinajar:galvanic_pile
+data merge block -1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 1 -60 6 headinajar:galvanic_pile
+data merge block 1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 7 -60 6 headinajar:galvanic_pile
+data merge block 7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock 9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -3 -60 10 headinajar:saline_mixer
+data merge block -3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -1 -60 10 headinajar:saline_mixer
+data merge block -1 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 1 -60 10 headinajar:saline_mixer
+data merge block 1 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 7 -60 10 headinajar:saline_mixer
+data merge block 7 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock 9 -60 10 headinajar:saline_mixer
+data merge block 9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -3 -60 14 headinajar:centrifuge
+data merge block -3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -1 -60 14 headinajar:centrifuge
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 1 -60 14 headinajar:centrifuge
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock 7 -60 14 headinajar:centrifuge
+data merge block 7 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock 9 -60 14 headinajar:centrifuge
+data merge block 9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 18 headinajar:cerebral_array
+setblock -5 -60 18 headinajar:cerebral_array
+setblock -3 -60 18 headinajar:turret_pedestal
+setblock -1 -60 18 headinajar:turret_pedestal
+setblock 1 -60 18 headinajar:turret_pedestal
+setblock 3 -60 18 headinajar:turret_pedestal
+setblock 5 -60 18 headinajar:neural_socket
+setblock 7 -60 18 headinajar:neural_socket
+setblock -9 -60 18 headinajar:neural_socket
+setblock 9 -60 18 headinajar:neural_socket
+wait 100
+shot bench_scene
+perf warmup 1200
+wait 1205
+machdebug 0
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m0_1 200
+wait 205
+machdebug 1
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m1_1 200
+wait 205
+machdebug 4
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m4_1 200
+wait 205
+machdebug 8
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m8_1 200
+wait 205
+machdebug 2
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m2_1 200
+wait 205
+machdebug 0
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m0_2 200
+wait 205
+machdebug 1
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m1_2 200
+wait 205
+machdebug 4
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m4_2 200
+wait 205
+machdebug 8
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m8_2 200
+wait 205
+machdebug 2
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m2_2 200
+wait 205
+machdebug 0
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m0_3 200
+wait 205
+machdebug 1
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m1_3 200
+wait 205
+machdebug 4
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m4_3 200
+wait 205
+machdebug 8
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m8_3 200
+wait 205
+machdebug 2
+data merge block -7 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -5 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -3 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block 1 -60 10 {Water:{Fluid:{id:"minecraft:water",amount:4000}},Saline:{},Energy:20000}
+data merge block -7 -60 14 {Energy:20000}
+data merge block -5 -60 14 {Energy:20000}
+data merge block -3 -60 14 {Energy:20000}
+data merge block -1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 1 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+wait 20
+perf bench_m2_3 200
+wait 205
+machdebug 0
+shot bench_end
+report bench done

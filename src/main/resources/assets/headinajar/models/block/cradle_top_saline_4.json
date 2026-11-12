@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/cradle",
+    "particle": "headinajar:block/machine/cradle"
+  },
+  "elements": [
+    {
+      "name": "bag_saline_4",
+      "from": [
+        17,
+        1,
+        5
+      ],
+      "to": [
+        21,
+        8,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.375,
+            13.545455,
+            0.875,
+            14.181818
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            13.545455,
+            0.375,
+            14.181818
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1.25,
+            13.545455,
+            1.75,
+            14.181818
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0.875,
+            13.545455,
+            1.25,
+            14.181818
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0.875,
+            13.545455,
+            0.375,
+            13.272727
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            1.375,
+            13.272727,
+            0.875,
+            13.545455
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

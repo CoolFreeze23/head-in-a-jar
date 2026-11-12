@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "counter": "headinajar:block/machine/injection_rig_counter_still",
+    "particle": "headinajar:block/machine/injection_rig"
+  },
+  "elements": [
+    {
+      "name": "counter",
+      "from": [
+        5,
+        13,
+        4
+      ],
+      "to": [
+        11,
+        16,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            7,
+            4
+          ],
+          "texture": "#counter"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            4
+          ],
+          "texture": "#counter"
+        },
+        "south": {
+          "uv": [
+            8,
+            1,
+            14,
+            4
+          ],
+          "texture": "#counter"
+        },
+        "west": {
+          "uv": [
+            7,
+            1,
+            8,
+            4
+          ],
+          "texture": "#counter"
+        },
+        "up": {
+          "uv": [
+            7,
+            1,
+            1,
+            0
+          ],
+          "texture": "#counter"
+        },
+        "down": {
+          "uv": [
+            13,
+            0,
+            7,
+            1
+          ],
+          "texture": "#counter"
+        }
+      }
+    }
+  ]
+}

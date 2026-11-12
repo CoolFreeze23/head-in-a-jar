@@ -35,8 +35,31 @@ import java.util.UUID;
  * touching inventory and the fill of a touching tank. With no jar, a mob head runs a fixed program: a Zombie is a 1 Hz
  * clock, a Villager steps through an 8-step staircase, an Enderman fires when a player looks at it.
  */
-public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder {
+public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
+        software.bernie.geckolib.animatable.GeoBlockEntity {
     public static final int CHANNELS = 6, PULSE_TICKS = 2;
+    /** What the clients are told runs the outputs: the levels themselves (0), or a head's program they reckon from the clock. */
+    public static final int PROG_LEVELS = 0, PROG_CLOCK = 1, PROG_STAIRS = 2;
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+    /** Synced: a jar or a head is on it; which program; the six levels shown (4 bits a face), sampled every 2 ticks. */
+    private boolean occupied;
+    private int program;
+    private int shownLevels;
+    /** Client: when the occupied bit last changed (game time; long ago for what a late joiner first sees). */
+    public double changedAt = Double.NaN;
+    private boolean wasOccupied;
+
+    @Override
+    public void clientTick() {
+        if (level == null) return;
+        long now = level.getGameTime();
+        if (Double.isNaN(changedAt)) {
+            changedAt = now - 1000;
+            wasOccupied = occupied;
+        }
+        if (occupied != wasOccupied) changedAt = now;
+        wasOccupied = occupied;
+    }
     private final int[] out = new int[CHANNELS];
     private final int[] pulse = new int[CHANNELS];
     private final ItemStackHandler items = new ItemStackHandler(1) {
@@ -126,6 +149,89 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, NeuralSocketBlockEntity s) {
+        work(level, pos, state, s);
+        // what it shows: the clamps (a jar or a head on it), the bars, the lamp
+        s.occupied = s.occupant != null || !s.head().isEmpty();
+        EntityType<?> type = s.occupant == null ? s.headInfo().type() : null;
+        s.program = type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED ? PROG_CLOCK
+                : type == EntityType.VILLAGER ? PROG_STAIRS : PROG_LEVELS;
+        if (level.getGameTime() % 2 == 0) s.shownLevels = s.program == PROG_LEVELS ? s.packedLevels() : 0;
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (!s.occupied) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        else if (s.program != PROG_LEVELS || s.lit()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WORK;
+        else lamp = com.coolfreeze23.headinajar.machine.MachineLamp.READY;
+        s.kit.tick(lamp, false, false, 0);
+    }
+
+    /** The six faces' levels, 4 bits each by the face's 3D index. */
+    public int packedLevels() {
+        int packed = 0;
+        for (Direction d : Direction.values()) packed |= output(d) << (4 * d.get3DDataValue());
+        return packed;
+    }
+
+    /** Client: the level a face shows now (a program's from the clock, else the synced one). */
+    public int shown(Direction face, long time) {
+        return switch (program) {
+            case PROG_CLOCK -> (time % 20) < 10 ? 15 : 0;
+            case PROG_STAIRS -> (int) ((time / 10) % 8) * 2 + 1;
+            default -> (shownLevels >>> (4 * face.get3DDataValue())) & 15;
+        };
+    }
+
+    public boolean occupied() {
+        return occupied;
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (occupied) tag.putBoolean("occ", true);
+        if (program != 0) tag.putByte("prog", (byte) program);
+        if (shownLevels != 0) tag.putInt("lv", shownLevels);
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        occupied = tag.getBoolean("occ");
+        program = tag.getByte("prog");
+        shownLevels = tag.getInt("lv");
+    }
+
+    /** The refusal's clip: the open clamps hop, or the shut ones chatter. */
+    @Override
+    public int refusalPart(String reason) {
+        return occupied ? 1 : 0;
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations5.socket(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
+    }
+
+    /** The socket's own job, as it always was. */
+    private static void work(Level level, BlockPos pos, BlockState state, NeuralSocketBlockEntity s) {
         boolean pulsed = false;
         for (int i = 0; i < CHANNELS; i++) {
             if (s.pulse[i] > 0 && --s.pulse[i] == 0) pulsed = true;
@@ -312,12 +418,24 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         occupant = tag.hasUUID("Occupant") ? tag.getUUID("Occupant") : null;
     }
 
+    /** The trimmed head (what draws it) and the kit's few fields; never the save. */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = new CompoundTag();
+        CompoundTag tag = kit.syncTag();
         tag.put("Items", HeadInfo.syncTag(items, registries));
         tag.putBoolean("Synced", true);
         return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+        if (tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), registries);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+        handleUpdateTag(packet.getTag(), registries);
     }
 
     @Override

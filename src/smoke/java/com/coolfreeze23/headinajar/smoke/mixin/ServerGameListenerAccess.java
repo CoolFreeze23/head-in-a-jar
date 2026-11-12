@@ -10,4 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ServerGameListenerAccess {
     @Accessor("awaitingPositionFromClient")
     void hij$setAwaitingPosition(Vec3 position);
+
+    @Accessor("awaitingPositionFromClient")
+    Vec3 hij$awaitingPosition();
 }

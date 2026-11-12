@@ -1,0 +1,156 @@
+# Fifth batch, filmed: each machine near and at ten blocks in its states and in a refusal (default client, 854x480).
+# Real input: the refusals (key use by the player), the Leech Jar emptied (key use), the placard cycled (key use);
+# the stand-in second player plugs into the socket as a jar and opens trading at the villager's head.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/fill -2 -61 -6 34 -61 14 minecraft:smooth_stone
+/setblock 0 -60 0 headinajar:leyden_jar[facing=south]
+/setblock 2 -60 0 headinajar:leyden_jar[facing=south]
+/setblock 4 -60 0 headinajar:leyden_jar[facing=south]
+/setblock 6 -60 0 headinajar:leyden_jar[facing=south]
+/setblock 8 -60 0 headinajar:leyden_jar[facing=south]
+/data merge block 2 -60 0 {Energy:40000}
+/data merge block 4 -60 0 {Energy:100000}
+/data merge block 6 -60 0 {Energy:170000}
+/data merge block 8 -60 0 {Energy:250000}
+/setblock 12 -60 0 headinajar:neural_socket[facing=south]
+/setblock 15 -60 0 headinajar:neural_socket[facing=south]
+headblock 12 -60 0 zombie
+/setblock 19 -60 0 headinajar:leech_jar[facing=south]
+jarhead villager 23 -60 0
+jarhead zombie 24 -60 0
+/fill 27 -60 -1 31 -58 -1 minecraft:stone_bricks
+/setblock 27 -59 0 headinajar:safety_placard[facing=south,notice=2]
+/setblock 29 -59 0 headinajar:safety_placard[facing=south,notice=6]
+/setblock 31 -59 0 headinajar:safety_placard[facing=south,notice=11]
+hud off
+wait 40
+# --- Leyden Jar: the fifth charging from a burning pile behind it, crossing to full (spark at the knob) ----------
+/setblock 10 -60 0 headinajar:leyden_jar[facing=south]
+/setblock 10 -60 -1 headinajar:galvanic_pile[facing=south]
+/data merge block 10 -60 -1 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+/data merge block 10 -60 0 {Energy:193000}
+/tp @s 11.6 -59.4 2.4 150 18
+wait 20
+frames leyden_1_charge_full_near 140
+wait 145
+inspect block 10 -60 0
+/tp @s 5.5 -58.6 10.5 180 5
+wait 10
+frames leyden_2_row_ten_blocks 60
+wait 65
+# --- Neural Socket: the stand-in plugs in as a jar (the clamps), the bars change, a refusal, the release -------------
+bystander spawn 15 -60 2 180
+bystander form jar
+wait 20
+/tp @s 17.2 -59.2 2.6 135 15
+wait 10
+frames socket_1_plug_in_near 60
+bystander useblock 15 -60 0 up
+wait 65
+/data merge block 15 -60 0 {Out:[I;4,15,9,15,6,12]}
+frames socket_2_bars_near 60
+wait 20
+/data merge block 15 -60 0 {Out:[I;15,3,0,6,15,1]}
+wait 20
+/data merge block 15 -60 0 {Out:[I;0,0,15,0,0,15]}
+wait 25
+# a real click on the occupied socket: refused, the shut clamps chatter, the lamp red
+/tp @s 15.5 -60 2.2 180 35
+wait 5
+observe 40
+frames socket_3_refusal_occupied_near 50
+key use
+wait 50
+inspect block 15 -60 0
+# the stand-in leaves: the jar is gone, the clamps let go
+/tp @s 17.2 -59.2 2.6 135 15
+wait 5
+frames socket_4_release_near 50
+bystander remove
+wait 55
+# a real click with a stick on the empty socket: refused (needs a head), the open clamps hop
+/give @s minecraft:stick
+/tp @s 15.5 -60 2.2 180 35
+wait 5
+frames socket_5_refusal_empty_near 40
+key use
+wait 45
+/clear @s minecraft:stick
+/tp @s 13.5 -58.6 10.5 180 5
+wait 10
+frames socket_6_zombie_clock_ten_blocks 60
+wait 65
+# --- Leech Jar: a cow arrives at its east side (it wakes and turns), a sample, the cow goes, emptied, full --------
+/tp @s 21.4 -59.2 3.0 145 18
+wait 10
+frames leech_1_wake_near 90
+/summon minecraft:cow 20.5 -60 0.5 {NoAI:1b,Rotation:[90f,0f]}
+wait 95
+/data merge block 19 -60 0 {Timer:595}
+frames leech_2_sample_near 40
+wait 45
+/tp @e[type=minecraft:cow] 25.5 -60 6.5
+frames leech_3_settle_near 50
+wait 55
+# a real click with an empty hand: the samples into the player's hands, the crank turns twice
+/tp @s 19.5 -60 2.3 180 25
+wait 5
+frames leech_4_emptied_near 40
+key use
+wait 45
+/data merge block 19 -60 0 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1},{Slot:5b,id:"headinajar:blood_sample",count:1},{Slot:6b,id:"headinajar:blood_sample",count:1},{Slot:7b,id:"headinajar:blood_sample",count:1},{Slot:8b,id:"headinajar:blood_sample",count:1}]}}
+/tp @s 21.4 -59.2 3.0 145 18
+wait 5
+frames leech_5_full_sulk_near 40
+wait 45
+inspect block 19 -60 0
+/tp @e[type=minecraft:cow] 20.5 -60 0.5
+/data merge block 19 -60 0 {Items:{Size:9,Items:[]},Timer:560}
+/tp @s 19.5 -58.6 10.5 180 5
+wait 10
+frames leech_6_wake_sample_ten_blocks 80
+wait 85
+# --- Jarred Heads: they watch the player walk past; the stand-in opens trading (the bell); a real click is refused --
+/tp @s 21.0 -59.6 2.5 225 10
+wait 10
+frames heads_1_watching_near 90
+wait 10
+/tp @s 22.0 -59.6 2.8 210 10
+wait 10
+/tp @s 23.0 -59.6 3.0 185 10
+wait 10
+/tp @s 24.0 -59.6 3.0 175 10
+wait 10
+/tp @s 25.0 -59.6 2.8 155 10
+wait 10
+/tp @s 26.0 -59.6 2.5 135 10
+wait 40
+bystander spawn 23 -60 2 180
+wait 10
+/tp @s 23.5 -60 2.6 180 30
+wait 5
+frames heads_2_bell_and_refusal_near 70
+bystander useblock 23 -60 0 up
+wait 25
+key use
+wait 45
+bystander remove
+/tp @s 23.5 -58.6 10.5 180 5
+wait 10
+frames heads_3_ten_blocks 40
+wait 45
+# --- Safety Placard: a real click cycles the notice ------------------------------------------------------------
+/tp @s 27.5 -60 2.2 180 0
+wait 5
+frames placard_1_cycle_near 30
+key use
+wait 35
+/tp @s 29.5 -58.6 10.5 180 3
+wait 10
+frames placard_2_ten_blocks 20
+wait 25
+report film done

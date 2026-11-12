@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "own": "headinajar:block/machine/signal_jammer_grille_idle",
+    "particle": "headinajar:block/machine/signal_jammer"
+  },
+  "elements": [
+    {
+      "name": "grille",
+      "from": [
+        4,
+        4,
+        1
+      ],
+      "to": [
+        7,
+        8,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            4,
+            5
+          ],
+          "texture": "#own"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            5
+          ],
+          "texture": "#own"
+        },
+        "south": {
+          "uv": [
+            5,
+            1,
+            8,
+            5
+          ],
+          "texture": "#own"
+        },
+        "west": {
+          "uv": [
+            4,
+            1,
+            5,
+            5
+          ],
+          "texture": "#own"
+        },
+        "up": {
+          "uv": [
+            4,
+            1,
+            1,
+            0
+          ],
+          "texture": "#own"
+        },
+        "down": {
+          "uv": [
+            7,
+            0,
+            4,
+            1
+          ],
+          "texture": "#own"
+        }
+      }
+    }
+  ]
+}

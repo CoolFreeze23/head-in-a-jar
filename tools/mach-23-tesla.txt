@@ -1,0 +1,61 @@
+# The Tesla Node pair sending with its receiver kept drained (a sink pulling 2,000 FE/t from it): near, then at ten
+# blocks. The ball's light and the ring's kick come once a second, with the arc two texels wide.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+/setblock 0 -60 0 headinajar:tesla_node[facing=south]
+/setblock 0 -60 8 headinajar:tesla_node[facing=north]
+/data merge block 0 -60 0 {Energy:200000,Target:36804L}
+/data merge block 0 -60 8 {Energy:0}
+/tp @s 6.5 -58.6 4.5 90 10
+wait 30
+frames tesla6_send_near 120
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/tp @s 10.5 -58.6 4.5 90 6
+wait 10
+frames tesla6_ten_blocks 160
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:200000}
+wait 18
+report retake5 done

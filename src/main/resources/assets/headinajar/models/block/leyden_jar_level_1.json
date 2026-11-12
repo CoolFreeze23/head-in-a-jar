@@ -1,0 +1,233 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/leyden_jar",
+    "particle": "headinajar:block/machine/leyden_jar"
+  },
+  "elements": [
+    {
+      "name": "fill1_n0",
+      "from": [
+        6,
+        3,
+        3
+      ],
+      "to": [
+        10,
+        5,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.125,
+            13.333333,
+            10.625,
+            13.555556
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            10,
+            13.333333,
+            10.125,
+            13.555556
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            10.75,
+            13.333333,
+            11.25,
+            13.555556
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            10.625,
+            13.333333,
+            10.75,
+            13.555556
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            10.625,
+            13.333333,
+            10.125,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            11.125,
+            13.222222,
+            10.625,
+            13.333333
+          ],
+          "texture": "#0"
+        }
+      },
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false
+    },
+    {
+      "name": "fill1_e0",
+      "from": [
+        12,
+        3,
+        6
+      ],
+      "to": [
+        13,
+        5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            13,
+            0.625,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            13,
+            0.5,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1.125,
+            13,
+            1.25,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0.625,
+            13,
+            1.125,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0.625,
+            13,
+            0.5,
+            12.555556
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            0.75,
+            12.555556,
+            0.625,
+            13
+          ],
+          "texture": "#0"
+        }
+      },
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false
+    },
+    {
+      "name": "fill1_w0",
+      "from": [
+        3,
+        3,
+        6
+      ],
+      "to": [
+        4,
+        5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.75,
+            13,
+            1.875,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            1.25,
+            13,
+            1.75,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            2.375,
+            13,
+            2.5,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            1.875,
+            13,
+            2.375,
+            13.222222
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            1.875,
+            13,
+            1.75,
+            12.555556
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            2,
+            12.555556,
+            1.875,
+            13
+          ],
+          "texture": "#0"
+        }
+      },
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false
+    }
+  ],
+  "ambientocclusion": false
+}

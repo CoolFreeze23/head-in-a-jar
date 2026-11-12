@@ -1,0 +1,91 @@
+# Batch three, first look: the six at rest and at work (the dock with a jar on it, the nodes linked and sending, the
+# rig's shot for a second player, the sequencer reading, the array's heads, the mount's employee)
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/setblock 0 -60 0 headinajar:cerebral_array[facing=south]
+/setblock 3 -60 0 headinajar:employee_mount[facing=south]
+/setblock 6 -60 0 headinajar:dna_sequencer[facing=south]
+/setblock 9 -60 0 headinajar:injection_rig[facing=south]
+/setblock 12 -60 0 headinajar:tesla_node[facing=south]
+/setblock 15 -60 0 headinajar:charging_dock[facing=south]
+/setblock 12 -60 6 headinajar:tesla_node[facing=north]
+/tp @s 7.5 -58.6 9 180 8
+wait 40
+shot look3_rest_row
+/tp @s 2 -58.8 4 200 10
+wait 5
+shot look3_rest_array_mount
+/tp @s 8 -58.8 4 180 10
+wait 5
+shot look3_rest_seq_rig
+/tp @s 13.5 -58.8 4 180 10
+wait 5
+shot look3_rest_node_dock
+# at work
+headblock 0 -60 0 villager,villager,zombie,villager,creeper,villager,skeleton,villager,pig
+/data merge block 0 -60 0 {Broth:{Fluid:{id:"headinajar:nutrient_broth",amount:6000}}}
+headblock 3 -60 0 villager
+/tp @s 7.5 -59 3 180 0
+lab
+wait 5
+/data merge block 12 -60 0 {Energy:10000,Target:3298534911940L}
+/data merge block 12 -60 6 {Energy:0}
+/data merge block 15 -60 0 {Energy:20000}
+bystander spawn 6 -60 3 180
+bystander useblock 6 -60 0 north
+bystander button 1
+bystander close
+wait 30
+inspect block 6 -60 0
+inspect block 12 -60 0
+/tp @s 2 -58.8 4 200 10
+wait 40
+shot look3_array_heads
+machdebug 128
+wait 5
+shot look3_array_heads_shrunk
+machdebug 0
+/tp @s 1.2 -59.4 2.2 180 20
+wait 5
+shot look3_array_close
+machdebug 128
+wait 5
+shot look3_array_close_shrunk
+machdebug 0
+/tp @s 3.5 -59.2 2.2 180 20
+wait 5
+shot look3_mount_close
+/tp @s 8 -58.8 4 180 10
+frames look3_seq 120
+wait 125
+shot look3_seq_reading
+# the rig: a second player (a body) presses Inject in its screen
+bystander tp 9 -60 3 180 0
+bystander useblock 9 -60 0 north
+bystander button 1
+/tp @s 11.2 -58.8 4 150 12
+frames look3_rig_shot 120
+wait 5
+bystander close
+wait 120
+inspect block 9 -60 0
+/tp @s 12.5 -58.6 10 180 8
+wait 5
+frames look3_nodes 80
+wait 85
+# the dock: the player's own jar steps onto the plate
+/tp @s 15.5 -60 4 180 15
+jar
+wait 20
+/tp @s 15.5 -59.75 0.5 180 30
+wait 30
+inspect block 15 -60 0
+/tp @s 17.5 -58.6 3.5 140 15
+/tp @s 15.5 -59.75 0.5 180 30
+frames look3_dock 80
+wait 85
+report look3 done

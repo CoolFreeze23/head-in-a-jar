@@ -21,7 +21,14 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
  * second). Five or more heads hold a Board Meeting: +10% output, and now and then a vote. A Dragon Head needs the Board Room
  * Core in the tenth slot. Power goes out to every neighbour that takes FE.
  */
-public class CerebralArrayBlockEntity extends LabMachine {
+public class CerebralArrayBlockEntity extends LabMachine implements com.coolfreeze23.headinajar.machine.KitMachine, software.bernie.geckolib.animatable.GeoBlockEntity {
+    /** Block event: the gavel lifts for a vote (it falls ten ticks later, as the vote is taken); param ayes | nays << 4 | motion << 8. */
+    public static final int EV_VOTE = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN;
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+    private boolean fedShown;
+    /** A vote announced at the gavel's lift and taken at its strike: its tick and its numbers. */
+    private long voteAt = -1;
+    private int voteAyes, voteMotion;
     public static final int HEAD_SLOTS = 9, SLOT_CORE = 9, TANK = 8000, MEETING = 5, VOTE_TICKS = 6000;
     private static final String[] MOTIONS = {"broth", "lunch", "windows", "chair", "union", "dental", "merger", "picnic"};
     private final FluidTank broth = new FluidTank(TANK, f -> f.getFluid().isSame(ModFluids.BROTH.source.get())) {
@@ -128,7 +135,9 @@ public class CerebralArrayBlockEntity extends LabMachine {
                 level.sendBlockUpdated(pos, state, state, 3);
             }
         }
-        if (heads >= MEETING && fed && level.getGameTime() % VOTE_TICKS == Math.floorMod(pos.asLong(), (long) VOTE_TICKS)) a.vote(level);
+        // the gavel lifts ten ticks before the vote is taken (the strike lands on it)
+        if (heads >= MEETING && fed && (level.getGameTime() + 10) % VOTE_TICKS == Math.floorMod(pos.asLong(), (long) VOTE_TICKS)) a.callVote(level);
+        if (a.voteAt >= 0 && level.getGameTime() >= a.voteAt) a.vote(level);
         if (fed && level.getGameTime() % 100 == 0) {
             if (heads >= MEETING) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "board_meeting");
             if (a.output >= 500) com.coolfreeze23.headinajar.Advance.nearby(level, pos.getCenter(), 16, "brain_trust");
@@ -140,20 +149,112 @@ public class CerebralArrayBlockEntity extends LabMachine {
         PowerBlockEntities.share(level, pos, energy, 20_000);
     }
 
+    /** The motion and its count, decided as the gavel lifts; the cards show them as it falls. */
+    private void callVote(Level level) {
+        voteAyes = 1 + level.random.nextInt(heads());
+        voteMotion = level.random.nextInt(MOTIONS.length);
+        voteAt = level.getGameTime() + 10;
+        int nays = heads() - voteAyes;
+        kit.event(EV_VOTE, voteAyes | nays << 4 | voteMotion << 8);
+    }
+
     private void vote(Level level) {
-        int ayes = 1 + level.random.nextInt(heads());
-        Component line = Component.translatable("array.headinajar.vote", Component.translatable("array.headinajar.motion." + MOTIONS[level.random.nextInt(MOTIONS.length)]),
+        voteAt = -1;
+        int ayes = Math.min(voteAyes, heads());
+        Component line = Component.translatable("array.headinajar.vote", Component.translatable("array.headinajar.motion." + MOTIONS[voteMotion]),
                 ayes, heads() - ayes);
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(32))) p.displayClientMessage(line, false);
-        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.ARRAY_MURMUR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
+        // the gavel's strike and the room's murmur
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.ARRAY_GAVEL.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.ARRAY_MURMUR.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
+    }
+
+    /** The server's tick, then what the stand shows: the lamp, the urn's broth, whether the heads are fed. */
+    public static void kitTick(Level level, BlockPos pos, BlockState state, CerebralArrayBlockEntity a) {
+        serverTick(level, pos, state, a);
+        boolean fed = a.getPersistentData().getBoolean("Fed");
+        int heads = a.heads();
+        a.fedShown = fed && heads > 0;
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (heads == 0) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        else if (!fed) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
+        else if (a.energy.getEnergyStored() >= a.energy.getMaxEnergyStored()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.READY;
+        else lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WORK;
+        a.kit.level(CerebralArrayBlock.BROTH, com.coolfreeze23.headinajar.machine.MachineLamp.step(a.broth.getFluidAmount(), TANK));
+        a.kit.tick(lamp, a.output > 0, a.output > 0, 0);
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    /** The heads are fed (upright; unfed they sag). */
+    public boolean fed() {
+        return fedShown;
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
+        if (fedShown) tag.putBoolean("fed", true);
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
+        fedShown = tag.getBoolean("fed");
+    }
+
+    @Override
+    public void clientTick() {
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = new CompoundTag();
-        tag.put("Items", HeadInfo.syncTag(items, registries));
+        CompoundTag tag = kit.syncTag();
         tag.putBoolean("Synced", true);
         return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket packet,
+                             HolderLookup.Provider registries) {
+        kit.read(packet.getTag());
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    @Override
+    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, net.minecraft.world.entity.player.Inventory inventory,
+                                                                         net.minecraft.world.entity.player.Player player) {
+        kit.startOpen(player);
+        return super.createMenu(id, inventory, player);
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations3.array(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
     }
 
     @Override

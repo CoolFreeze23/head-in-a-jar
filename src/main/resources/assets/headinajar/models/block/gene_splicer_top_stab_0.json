@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "stab": "headinajar:block/machine/gene_splicer_stab_0",
+    "particle": "headinajar:block/machine/gene_splicer"
+  },
+  "elements": [
+    {
+      "name": "stab_glass",
+      "from": [
+        7,
+        5,
+        5
+      ],
+      "to": [
+        11,
+        7,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            5,
+            3
+          ],
+          "texture": "#stab"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            3
+          ],
+          "texture": "#stab"
+        },
+        "south": {
+          "uv": [
+            6,
+            1,
+            10,
+            3
+          ],
+          "texture": "#stab"
+        },
+        "west": {
+          "uv": [
+            5,
+            1,
+            6,
+            3
+          ],
+          "texture": "#stab"
+        },
+        "up": {
+          "uv": [
+            5,
+            1,
+            1,
+            0
+          ],
+          "texture": "#stab"
+        },
+        "down": {
+          "uv": [
+            9,
+            0,
+            5,
+            1
+          ],
+          "texture": "#stab"
+        }
+      }
+    }
+  ]
+}

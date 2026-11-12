@@ -1,0 +1,332 @@
+# The fifth batch bench as an A/B in one session (written by tools/mach5_bench.py).
+@observe 1
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+gamerule doMobSpawning false
+time set noon
+weather clear
+hud off
+fill -6 -60 23 6 -59 23 minecraft:stone_bricks
+summon minecraft:cow -3.5 -60 14.5 {NoAI:1b,Silent:1b}
+tp @s 0.5 -50 -6.5
+look 0 28
+setblock -5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -5 -60 6 {Energy:0}
+setblock -3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -3 -60 6 {Energy:40000}
+setblock -1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -1 -60 6 {Energy:100000}
+setblock 1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 1 -60 6 {Energy:170000}
+setblock 3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 3 -60 6 {Energy:250000}
+setblock 5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 5 -60 6 {Energy:20000}
+setblock 5 -60 7 headinajar:galvanic_pile
+data merge block 5 -60 7 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 10 headinajar:neural_socket[facing=north]
+data merge block -5 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie"}}}]}}
+setblock -3 -60 10 headinajar:neural_socket[facing=north]
+data merge block -3 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}}}]}}
+setblock -1 -60 10 headinajar:neural_socket[facing=north]
+data merge block -1 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:creeper"}}}]}}
+setblock 1 -60 10 headinajar:neural_socket[facing=north]
+setblock 3 -60 10 headinajar:neural_socket[facing=north]
+setblock 5 -60 10 headinajar:neural_socket[facing=north]
+setblock -5 -60 14 headinajar:leech_jar[facing=north]
+setblock -3 -60 14 headinajar:leech_jar[facing=north]
+data merge block -3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1},{Slot:5b,id:"headinajar:blood_sample",count:1},{Slot:6b,id:"headinajar:blood_sample",count:1},{Slot:7b,id:"headinajar:blood_sample",count:1},{Slot:8b,id:"headinajar:blood_sample",count:1}]}}
+setblock -1 -60 14 headinajar:leech_jar[facing=north]
+setblock 1 -60 14 headinajar:leech_jar[facing=north]
+setblock 3 -60 14 headinajar:leech_jar[facing=north]
+data merge block 3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1}]}}
+setblock 5 -60 14 headinajar:leech_jar[facing=north]
+data merge block 5 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1}]}}
+setblock -5 -60 18 headinajar:jarred_head[facing=south]
+data merge block -5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -3 -60 18 headinajar:jarred_head[facing=south]
+data merge block -3 -60 18 {Type:"minecraft:zombie"}
+setblock -1 -60 18 headinajar:jarred_head[facing=south]
+data merge block -1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 1 -60 18 headinajar:jarred_head[facing=south]
+data merge block 1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 3 -60 18 headinajar:jarred_head[facing=south]
+data merge block 3 -60 18 {Type:"minecraft:zombie"}
+setblock 5 -60 18 headinajar:jarred_head[facing=south]
+data merge block 5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -5 -60 22 headinajar:safety_placard[facing=north,notice=0]
+setblock -3 -60 22 headinajar:safety_placard[facing=north,notice=2]
+setblock -1 -60 22 headinajar:safety_placard[facing=north,notice=4]
+setblock 1 -60 22 headinajar:safety_placard[facing=north,notice=6]
+setblock 3 -60 22 headinajar:safety_placard[facing=north,notice=8]
+setblock 5 -60 22 headinajar:safety_placard[facing=north,notice=10]
+wait 100
+shot b5_machines
+perf warmup 1200
+wait 1205
+setblock -5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -5 -60 6 {Energy:0}
+setblock -3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -3 -60 6 {Energy:40000}
+setblock -1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -1 -60 6 {Energy:100000}
+setblock 1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 1 -60 6 {Energy:170000}
+setblock 3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 3 -60 6 {Energy:250000}
+setblock 5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 5 -60 6 {Energy:20000}
+setblock 5 -60 7 headinajar:galvanic_pile
+data merge block 5 -60 7 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 10 headinajar:neural_socket[facing=north]
+data merge block -5 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie"}}}]}}
+setblock -3 -60 10 headinajar:neural_socket[facing=north]
+data merge block -3 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}}}]}}
+setblock -1 -60 10 headinajar:neural_socket[facing=north]
+data merge block -1 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:creeper"}}}]}}
+setblock 1 -60 10 headinajar:neural_socket[facing=north]
+setblock 3 -60 10 headinajar:neural_socket[facing=north]
+setblock 5 -60 10 headinajar:neural_socket[facing=north]
+setblock -5 -60 14 headinajar:leech_jar[facing=north]
+setblock -3 -60 14 headinajar:leech_jar[facing=north]
+data merge block -3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1},{Slot:5b,id:"headinajar:blood_sample",count:1},{Slot:6b,id:"headinajar:blood_sample",count:1},{Slot:7b,id:"headinajar:blood_sample",count:1},{Slot:8b,id:"headinajar:blood_sample",count:1}]}}
+setblock -1 -60 14 headinajar:leech_jar[facing=north]
+setblock 1 -60 14 headinajar:leech_jar[facing=north]
+setblock 3 -60 14 headinajar:leech_jar[facing=north]
+data merge block 3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1}]}}
+setblock 5 -60 14 headinajar:leech_jar[facing=north]
+data merge block 5 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1}]}}
+setblock -5 -60 18 headinajar:jarred_head[facing=south]
+data merge block -5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -3 -60 18 headinajar:jarred_head[facing=south]
+data merge block -3 -60 18 {Type:"minecraft:zombie"}
+setblock -1 -60 18 headinajar:jarred_head[facing=south]
+data merge block -1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 1 -60 18 headinajar:jarred_head[facing=south]
+data merge block 1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 3 -60 18 headinajar:jarred_head[facing=south]
+data merge block 3 -60 18 {Type:"minecraft:zombie"}
+setblock 5 -60 18 headinajar:jarred_head[facing=south]
+data merge block 5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -5 -60 22 headinajar:safety_placard[facing=north,notice=0]
+setblock -3 -60 22 headinajar:safety_placard[facing=north,notice=2]
+setblock -1 -60 22 headinajar:safety_placard[facing=north,notice=4]
+setblock 1 -60 22 headinajar:safety_placard[facing=north,notice=6]
+setblock 3 -60 22 headinajar:safety_placard[facing=north,notice=8]
+setblock 5 -60 22 headinajar:safety_placard[facing=north,notice=10]
+kill @e[type=item]
+wait 100
+perf machines_1 200
+wait 205
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -5 -60 18 minecraft:furnace
+setblock -3 -60 18 minecraft:furnace
+setblock -1 -60 18 minecraft:furnace
+setblock 1 -60 18 minecraft:furnace
+setblock 3 -60 18 minecraft:furnace
+setblock 5 -60 18 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock -3 -60 22 minecraft:furnace
+setblock -1 -60 22 minecraft:furnace
+setblock 1 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_1 200
+wait 205
+setblock -5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -5 -60 6 {Energy:0}
+setblock -3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -3 -60 6 {Energy:40000}
+setblock -1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -1 -60 6 {Energy:100000}
+setblock 1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 1 -60 6 {Energy:170000}
+setblock 3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 3 -60 6 {Energy:250000}
+setblock 5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 5 -60 6 {Energy:20000}
+setblock 5 -60 7 headinajar:galvanic_pile
+data merge block 5 -60 7 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 10 headinajar:neural_socket[facing=north]
+data merge block -5 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie"}}}]}}
+setblock -3 -60 10 headinajar:neural_socket[facing=north]
+data merge block -3 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}}}]}}
+setblock -1 -60 10 headinajar:neural_socket[facing=north]
+data merge block -1 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:creeper"}}}]}}
+setblock 1 -60 10 headinajar:neural_socket[facing=north]
+setblock 3 -60 10 headinajar:neural_socket[facing=north]
+setblock 5 -60 10 headinajar:neural_socket[facing=north]
+setblock -5 -60 14 headinajar:leech_jar[facing=north]
+setblock -3 -60 14 headinajar:leech_jar[facing=north]
+data merge block -3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1},{Slot:5b,id:"headinajar:blood_sample",count:1},{Slot:6b,id:"headinajar:blood_sample",count:1},{Slot:7b,id:"headinajar:blood_sample",count:1},{Slot:8b,id:"headinajar:blood_sample",count:1}]}}
+setblock -1 -60 14 headinajar:leech_jar[facing=north]
+setblock 1 -60 14 headinajar:leech_jar[facing=north]
+setblock 3 -60 14 headinajar:leech_jar[facing=north]
+data merge block 3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1}]}}
+setblock 5 -60 14 headinajar:leech_jar[facing=north]
+data merge block 5 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1}]}}
+setblock -5 -60 18 headinajar:jarred_head[facing=south]
+data merge block -5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -3 -60 18 headinajar:jarred_head[facing=south]
+data merge block -3 -60 18 {Type:"minecraft:zombie"}
+setblock -1 -60 18 headinajar:jarred_head[facing=south]
+data merge block -1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 1 -60 18 headinajar:jarred_head[facing=south]
+data merge block 1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 3 -60 18 headinajar:jarred_head[facing=south]
+data merge block 3 -60 18 {Type:"minecraft:zombie"}
+setblock 5 -60 18 headinajar:jarred_head[facing=south]
+data merge block 5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -5 -60 22 headinajar:safety_placard[facing=north,notice=0]
+setblock -3 -60 22 headinajar:safety_placard[facing=north,notice=2]
+setblock -1 -60 22 headinajar:safety_placard[facing=north,notice=4]
+setblock 1 -60 22 headinajar:safety_placard[facing=north,notice=6]
+setblock 3 -60 22 headinajar:safety_placard[facing=north,notice=8]
+setblock 5 -60 22 headinajar:safety_placard[facing=north,notice=10]
+kill @e[type=item]
+wait 100
+perf machines_2 200
+wait 205
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -5 -60 18 minecraft:furnace
+setblock -3 -60 18 minecraft:furnace
+setblock -1 -60 18 minecraft:furnace
+setblock 1 -60 18 minecraft:furnace
+setblock 3 -60 18 minecraft:furnace
+setblock 5 -60 18 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock -3 -60 22 minecraft:furnace
+setblock -1 -60 22 minecraft:furnace
+setblock 1 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_2 200
+wait 205
+setblock -5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -5 -60 6 {Energy:0}
+setblock -3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -3 -60 6 {Energy:40000}
+setblock -1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block -1 -60 6 {Energy:100000}
+setblock 1 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 1 -60 6 {Energy:170000}
+setblock 3 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 3 -60 6 {Energy:250000}
+setblock 5 -60 6 headinajar:leyden_jar[facing=north]
+data merge block 5 -60 6 {Energy:20000}
+setblock 5 -60 7 headinajar:galvanic_pile
+data merge block 5 -60 7 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 10 headinajar:neural_socket[facing=north]
+data merge block -5 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie"}}}]}}
+setblock -3 -60 10 headinajar:neural_socket[facing=north]
+data merge block -3 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}}}]}}
+setblock -1 -60 10 headinajar:neural_socket[facing=north]
+data merge block -1 -60 10 {Items:{Size:1,Items:[{Slot:0b,id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:creeper"}}}]}}
+setblock 1 -60 10 headinajar:neural_socket[facing=north]
+setblock 3 -60 10 headinajar:neural_socket[facing=north]
+setblock 5 -60 10 headinajar:neural_socket[facing=north]
+setblock -5 -60 14 headinajar:leech_jar[facing=north]
+setblock -3 -60 14 headinajar:leech_jar[facing=north]
+data merge block -3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1},{Slot:5b,id:"headinajar:blood_sample",count:1},{Slot:6b,id:"headinajar:blood_sample",count:1},{Slot:7b,id:"headinajar:blood_sample",count:1},{Slot:8b,id:"headinajar:blood_sample",count:1}]}}
+setblock -1 -60 14 headinajar:leech_jar[facing=north]
+setblock 1 -60 14 headinajar:leech_jar[facing=north]
+setblock 3 -60 14 headinajar:leech_jar[facing=north]
+data merge block 3 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1}]}}
+setblock 5 -60 14 headinajar:leech_jar[facing=north]
+data merge block 5 -60 14 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1}]}}
+setblock -5 -60 18 headinajar:jarred_head[facing=south]
+data merge block -5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -3 -60 18 headinajar:jarred_head[facing=south]
+data merge block -3 -60 18 {Type:"minecraft:zombie"}
+setblock -1 -60 18 headinajar:jarred_head[facing=south]
+data merge block -1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 1 -60 18 headinajar:jarred_head[facing=south]
+data merge block 1 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock 3 -60 18 headinajar:jarred_head[facing=south]
+data merge block 3 -60 18 {Type:"minecraft:zombie"}
+setblock 5 -60 18 headinajar:jarred_head[facing=south]
+data merge block 5 -60 18 {Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}
+setblock -5 -60 22 headinajar:safety_placard[facing=north,notice=0]
+setblock -3 -60 22 headinajar:safety_placard[facing=north,notice=2]
+setblock -1 -60 22 headinajar:safety_placard[facing=north,notice=4]
+setblock 1 -60 22 headinajar:safety_placard[facing=north,notice=6]
+setblock 3 -60 22 headinajar:safety_placard[facing=north,notice=8]
+setblock 5 -60 22 headinajar:safety_placard[facing=north,notice=10]
+kill @e[type=item]
+wait 100
+perf machines_3 200
+wait 205
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -5 -60 18 minecraft:furnace
+setblock -3 -60 18 minecraft:furnace
+setblock -1 -60 18 minecraft:furnace
+setblock 1 -60 18 minecraft:furnace
+setblock 3 -60 18 minecraft:furnace
+setblock 5 -60 18 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock -3 -60 22 minecraft:furnace
+setblock -1 -60 22 minecraft:furnace
+setblock 1 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_3 200
+wait 205
+shot b5_cubes
+report bench done

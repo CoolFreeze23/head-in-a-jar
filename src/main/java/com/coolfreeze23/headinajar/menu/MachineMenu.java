@@ -90,6 +90,15 @@ public class MachineMenu extends AbstractContainerMenu {
         return copy;
     }
 
+    /** Closed (by the player, by walking away, by leaving): a kit machine's hatch or drawer may shut. */
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        if (!player.level().isClientSide && player.level().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.machine.KitMachine machine) {
+            machine.kit().stopOpen(player);
+        }
+    }
+
     @Override
     public boolean stillValid(Player player) {
         return player.distanceToSqr(pos.getCenter()) < 64 && player.level().getBlockEntity(pos) != null;

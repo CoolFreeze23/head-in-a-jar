@@ -1,0 +1,242 @@
+# Batch four filmed: each machine near (about 4 blocks) at work, a refusal where it has one, a brown-out, a second
+# player where it matters, then at about ten blocks. One machine at a time at 0,-60,0.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -3 -60 3 225
+# --- the relay_mast: a link routed through it, the next hop moving round (the dish turns), then the power gone (the droop)
+/setblock 0 -60 0 headinajar:relay_mast[facing=south]
+/data merge block 0 -60 0 {Energy:50000}
+/tp @s 3.5 -58.4 4.5 145 8
+wait 20
+frames mast4_route_near 300
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+frames mast4_brownout_near 120
+/data merge block 0 -60 0 {Energy:0}
+wait 80
+/data merge block 0 -60 0 {Energy:50000}
+wait 45
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames mast4_ten_blocks 240
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the relay_mast_mk2: a link routed through it, the next hop moving round (the dish turns), then the power gone (the droop)
+/setblock 0 -60 0 headinajar:relay_mast_mk2[facing=south]
+/data merge block 0 -60 0 {Energy:50000}
+/tp @s 3.5 -58.4 4.5 145 8
+wait 20
+frames mk2_4_route_near 300
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+frames mk2_4_brownout_near 120
+/data merge block 0 -60 0 {Energy:0}
+wait 80
+/data merge block 0 -60 0 {Energy:50000}
+wait 45
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames mk2_4_ten_blocks 240
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 -20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 0 -60 -20
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 20 -60 0
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+mastroute 0 -60 0 0 -60 20
+wait 30
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Signal Jammer: idle, then jamming (the turbine spins up), power gone (it runs down)
+/setblock 0 -60 0 headinajar:signal_jammer[facing=south]
+/data merge block 0 -60 0 {Energy:50000}
+/tp @s 2.8 -59 3.6 143 10
+wait 40
+frames jammer4_jam_near 240
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+frames jammer4_brownout_near 160
+/data merge block 0 -60 0 {Energy:0}
+wait 165
+/data merge block 0 -60 0 {Energy:50000}
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames jammer4_ten_blocks 200
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+jam 0 -60 0
+wait 15
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Turret Pedestal: a stone refused; a zombie's head fitted, its patrol; a zombie comes in reach (the headbutt);
+# a blaze's head on a distant zombie (the charge and the fireball); the power gone (the droop)
+/setblock 0 -60 0 headinajar:turret_pedestal[facing=south]
+/data merge block 0 -60 0 {Energy:40000}
+/give @s minecraft:stone
+hotbar 1
+/tp @s 0.5 -59.4 2.8 180 20
+wait 10
+frames turret4_refuse_near 50
+wait 3
+key use
+wait 50
+closegui
+/clear @s
+headblock 0 -60 0 blaze
+/tp @s 3.5 -58.6 4.5 145 10
+wait 10
+frames turret4_patrol_near 200
+wait 205
+/summon minecraft:zombie 0 -60 -7 {NoAI:1b}
+frames turret4_shot_near 200
+wait 205
+frames turret4_brownout_near 120
+/data merge block 0 -60 0 {Energy:0}
+wait 125
+/data merge block 0 -60 0 {Energy:40000}
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames turret4_ten_blocks 200
+wait 205
+/kill @e[type=minecraft:zombie]
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Cloakroom: a host body (a zombie sawn into a host) checked in by the player, then out (instant release, the
+# show after); the second player's click on it while full; at ten blocks
+/setblock 0 -60 0 headinajar:body_locker[facing=south]
+hostify minecraft:zombie 0 -60 2
+/tp @s 2.5 -59 3.5 150 10
+wait 20
+frames locker4_checkin_near 100
+wait 3
+useblock 0 -60 0 north
+wait 95
+frames locker4_second_player_near 60
+bystander tp -2 -60 2 225 0
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 60
+hostify minecraft:zombie 0 -60 2
+wait 10
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames locker4_ten_blocks 160
+wait 3
+useblock 0 -60 0 north
+wait 80
+useblock 0 -60 0 north
+wait 80
+report film4 done

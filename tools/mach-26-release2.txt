@@ -1,0 +1,135 @@
+# Retakes for the 0.3.0 merge's pass: the guardian turret with a target that stays (difficulty easy: peaceful takes
+# zombies away), a Cradle with an upside-down head beside one with its head upright, the Body Printer refused to a jar
+# short of power (the player as a jar, through its screen's Print button), and the dock's and the locker's refusals with
+# nothing else at the spot to catch the click
+@observe 20
+wait 40
+/time set 6000
+/difficulty easy
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -3 -60 3 225
+# --- the guardian turret: locks, fires; a second target pulled out of range halfway through its lock
+/setblock 0 -60 0 headinajar:turret_pedestal[facing=south]
+/data merge block 0 -60 0 {Energy:40000}
+headblock 0 -60 0 guardian
+/tp @s 4.5 -58.6 3.5 135 10
+wait 40
+frames rel2_turret_lock_near 220
+/summon minecraft:zombie -2 -60 -6 {NoAI:1b,PersistenceRequired:1b,Silent:1b}
+wait 120
+/kill @e[type=minecraft:zombie]
+/summon minecraft:zombie 3 -60 -6 {NoAI:1b,PersistenceRequired:1b,Silent:1b}
+wait 22
+/tp @e[type=minecraft:zombie] 3 -60 -40
+wait 70
+/kill @e[type=minecraft:zombie]
+/tp @s 8.5 -58.4 7.5 135 8
+wait 20
+frames rel2_turret_ten_blocks 220
+/summon minecraft:zombie -2 -60 -6 {NoAI:1b,PersistenceRequired:1b,Silent:1b}
+wait 120
+/kill @e[type=minecraft:zombie]
+/summon minecraft:zombie 3 -60 -6 {NoAI:1b,PersistenceRequired:1b,Silent:1b}
+wait 22
+/tp @e[type=minecraft:zombie] 3 -60 -40
+wait 70
+/kill @e[type=minecraft:zombie]
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=minecraft:item]
+wait 20
+# --- two Cradles: the left one's head upside down, the right one's upright
+/setblock 0 -60 0 headinajar:life_support_cradle[facing=south]
+/setblock 3 -60 0 headinajar:life_support_cradle[facing=south]
+/data merge block 0 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+/data merge block 3 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 0 -60 0 1 upside
+cradlehead 3 -60 0 2
+/tp @s 1.9 -59.3 2.3 180 8
+wait 20
+shot rel2_cradles_close
+frames rel2_cradles_near 80
+wait 85
+/tp @s 8.5 -58.4 8.5 145 8
+wait 10
+frames rel2_cradles_ten_blocks 80
+wait 85
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=headinajar:head_jar]
+/kill @e[type=minecraft:item]
+wait 20
+# --- the Body Printer: the player, a jar, presses Print short of a whole print's power
+/setblock 0 -60 0 headinajar:body_printer[facing=south]
+/data merge block 0 -60 0 {Energy:100000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+/tp @s 0.5 -60 2.5 180 0
+jar
+wait 20
+/tp @s 0.5 -60 2.2 180 0
+lookpos 0.5 -59.6 0.5
+wait 10
+frames rel2_printer_refuse_near 100
+key use
+wait 15
+widgets
+widget Print
+wait 10
+shot rel2_printer_refuse_screen
+wait 20
+closegui
+wait 50
+inspect block 0 -60 0
+body
+wait 20
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=minecraft:item]
+wait 20
+# --- the Charging Dock, empty: the player's click on the plate, then the second player's from ten blocks' view
+/setblock 0 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 0 -60 0 {Energy:0}
+/tp @s 0.5 -60 2.5 180 0
+lookpos 0.5 -59.75 0.4
+wait 10
+frames rel2_dock_refuse_near 60
+key use
+wait 60
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel2_dock_refuse_ten_blocks 60
+bystander tp -2 -60 3 225 0
+bystander useblock 0 -60 0 up
+bystander packets actionbar|chat|refus
+wait 60
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Body Locker: the player checks a husk in by a click; the second player is refused; the player takes it out
+/setblock 0 -60 0 headinajar:body_locker[facing=south]
+hostify minecraft:husk 0 -60 2
+/kill @e[type=minecraft:item]
+/tp @s 2.5 -60 2.5 135 0
+lookpos 0.5 -59.5 0.5
+wait 10
+frames rel2_locker_near 220
+key use
+wait 60
+bystander tp -2 -60 2 225 0
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 60
+lookpos 0.5 -59.5 0.5
+key use
+wait 90
+hostify minecraft:husk 0 -60 2
+/kill @e[type=minecraft:item]
+lookpos 0.5 -59.5 0.5
+key use
+wait 20
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel2_locker_refuse_ten_blocks 80
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 80
+/difficulty peaceful
+report release2 done

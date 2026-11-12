@@ -1,0 +1,75 @@
+# Fifth batch in the row with the earlier machines, by day, at night and by torchlight (run in the default client,
+# under Sodium, in the owner's settings and with Iris and BSL). Working states set by command.
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/fill -4 -61 -8 26 -61 10 minecraft:smooth_stone
+# the earlier machines (behind, z = -3)
+/setblock 0 -60 -3 headinajar:galvanic_pile[facing=south]
+/data merge block 0 -60 -3 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+/setblock 3 -60 -3 headinajar:saline_mixer[facing=south]
+/data merge block 3 -60 -3 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+/setblock 6 -60 -3 headinajar:centrifuge[facing=south]
+/data merge block 6 -60 -3 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+/setblock 9 -60 -3 headinajar:charging_dock[facing=south]
+/setblock 12 -60 -3 headinajar:tesla_node[facing=south]
+/setblock 15 -60 -3 headinajar:cerebral_array[facing=south]
+/setblock 18 -60 -3 headinajar:separation_chair[facing=south]
+# the five (front, z = 1)
+/setblock 0 -60 1 headinajar:leyden_jar[facing=south]
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+/data merge block 0 -60 1 {Energy:150000}
+/setblock 2 -60 1 headinajar:leyden_jar[facing=south]
+/data merge block 2 -60 1 {Energy:250000}
+/setblock 5 -60 1 headinajar:neural_socket[facing=south]
+headblock 5 -60 1 zombie
+/setblock 7 -60 1 headinajar:neural_socket[facing=south]
+headblock 7 -60 1 villager
+/setblock 10 -60 1 headinajar:leech_jar[facing=south]
+/data merge block 10 -60 1 {Items:{Size:9,Items:[{Slot:0b,id:"headinajar:blood_sample",count:1},{Slot:1b,id:"headinajar:blood_sample",count:1},{Slot:2b,id:"headinajar:blood_sample",count:1},{Slot:3b,id:"headinajar:blood_sample",count:1},{Slot:4b,id:"headinajar:blood_sample",count:1}]}}
+/summon minecraft:cow 11.5 -60 1.5 {NoAI:1b,Rotation:[90f,0f]}
+jarhead villager 14 -60 1
+jarhead zombie 15 -60 1
+jarhead villager 16 -60 1
+/fill 19 -60 2 23 -58 2 minecraft:stone_bricks
+/setblock 19 -59 3 headinajar:safety_placard[facing=south,notice=0]
+/setblock 21 -59 3 headinajar:safety_placard[facing=south,notice=2]
+/setblock 23 -59 3 headinajar:safety_placard[facing=south,notice=9]
+/kill @e[type=minecraft:item]
+hud off
+wait 60
+/time set 6000
+/tp @s 10.5 -57.5 11.5 180 10
+wait 30
+shot row_day
+frames row_1_day 60
+wait 65
+/tp @s 6.5 -59 6.5 180 6
+wait 10
+shot row_day_close
+/time set 18000
+wait 20
+/tp @s 10.5 -57.5 11.5 180 10
+wait 10
+shot row_night
+frames row_2_night 60
+wait 65
+/setblock 4 -60 4 minecraft:torch
+/setblock 9 -60 4 minecraft:torch
+/setblock 13 -60 4 minecraft:torch
+/setblock 18 -60 5 minecraft:torch
+/setblock 1 -60 -1 minecraft:torch
+/setblock 8 -60 -1 minecraft:torch
+wait 40
+shot row_torch
+frames row_3_torchlight 60
+wait 65
+/tp @s 6.5 -59 6.5 180 6
+wait 10
+shot row_torch_close
+/tp @s 15 -59 5.5 180 10
+wait 10
+shot row_torch_heads
+report row done

@@ -1,0 +1,51 @@
+# Light on the machines' upper halves, the plain client: the row by day, night and torchlight, close; a ceiling lamp
+# over one machine; the Pile's pan, felt and the Mixer's saline surface at two blocks
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 minecraft:iron_block
+/setblock 4 -60 0 minecraft:brewing_stand
+/setblock 6 -60 0 minecraft:blast_furnace[facing=south]
+/setblock 8 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 10 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 12 -60 0 headinajar:centrifuge[facing=south]
+/data merge block 8 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 10 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/data merge block 12 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+hud off
+/tp @s 10.5 -58.8 5 160 12
+wait 60
+shot light_day_close
+/tp @s 6.5 -59 9 180 6
+wait 5
+shot light_day_row
+/tp @s 9.8 -59.4 2.2 143 41
+wait 5
+shot light_pile_2blocks
+/tp @s 9.8 -59.4 2.2 143 33
+wait 5
+burst light_felt 20
+/tp @s 11.3 -58 2.1 153 53
+wait 5
+shot light_mixer_surface_2blocks
+burst light_ripple 20
+/time set 18000
+/tp @s 10.5 -58.8 5 160 12
+wait 10
+shot light_night_close
+/setblock 7 -60 2 minecraft:torch
+/setblock 11 -60 2 minecraft:torch
+/setblock 13 -60 2 minecraft:torch
+wait 10
+shot light_torch_close
+# a lamp hung over the Centrifuge in a roofed bay, by night
+/fill 11 -57 -1 13 -57 1 minecraft:stone
+/setblock 12 -58 0 minecraft:lantern[hanging=true]
+wait 10
+/tp @s 13.5 -59 3.5 150 15
+wait 5
+shot light_lantern_bay
+report light done

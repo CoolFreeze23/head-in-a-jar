@@ -49,7 +49,17 @@ import java.util.UUID;
  * Turrets never target their owner's team, players (unless the server allows PvP turrets), tamed animals, villagers or
  * golems.
  */
-public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder {
+public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
+        software.bernie.geckolib.animatable.GeoBlockEntity {
+    /** Block event: a shot, its param the kind (0 a shot, 1 a blaze's charge, 2 a lunge, 3 a creeper's pulse, 4 a lob, 5 a beam, 6 a nod). */
+    public static final int EV_SHOT = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN;
+    public static final int SHOT = 0, CHARGE = 1, LUNGE = 2, PULSE = 3, LOB = 4, BEAM = 5, NOD = 6;
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+    /** The target (kept through the cooldown) and power, as the clients are told; -1 none. */
+    private int targetId = -1;
+    private boolean powered;
+    /** Client: the mount's pitch (degrees, + up) and last tick's. */
+    public float pitch, pitchO;
     public static final int RANGE = 16, FE_PER_TICK = 10, IDLE_FE_PER_TICK = 1;
     /** Has a target (shooting or reloading): runs at the firing rate. Not saved. */
     private boolean engaged;
@@ -71,6 +81,8 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     private int cooldown, lockTicks, lockedId = -1;
     /** Client: where the head looks. */
     public float yaw, yawO;
+    /** Client: the bore's mouth in the world as this turret was last drawn (null until then), for the lock beam. */
+    public net.minecraft.world.phys.Vec3 muzzleSeen;
     /** A guardian head's lock: the target and the game time it began (synced on change; -1 when none). */
     private int syncedLock = -1;
     private long lockStart;
@@ -146,6 +158,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             return;
         }
         LivingEntity target = t.findTarget();
+        t.targetId = target == null ? -1 : target.getId();
         if (target == null) {
             t.lockTicks = 0;
             t.engaged = false;
@@ -180,12 +193,14 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             arrow.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.15, dir.z, 1.8f, 2f);
             level.addFreshEntity(arrow);
             level.playSound(null, worldPosition, SoundEvents.SKELETON_SHOOT, SoundSource.BLOCKS, 1, 1);
+            kit.event(EV_SHOT, SHOT);
             cooldown = rate(20);
         } else if (type == EntityType.BLAZE) {
             Vec3 v = dir.normalize();
             SmallFireball ball = new SmallFireball(level, from.x, from.y, from.z, v);
             level.addFreshEntity(ball);
             level.playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1, 1);
+            kit.event(EV_SHOT, CHARGE);
             cooldown = rate(30);
         } else if (type == EntityType.GUARDIAN || type == EntityType.ELDER_GUARDIAN) {
             // a 2 s lock, then the laser
@@ -198,6 +213,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             if (++lockTicks >= 40) {
                 target.hurt(level.damageSources().magic(), 6);
                 level.playSound(null, worldPosition, SoundEvents.GUARDIAN_ATTACK, SoundSource.BLOCKS, 1, 1);
+                kit.event(EV_SHOT, BEAM);
                 com.coolfreeze23.headinajar.fx.Fx.send(level, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.TURRET_SHOT, to, null, -1, target.getId(), 0));
                 lockTicks = 0;
                 cooldown = rate(20);
@@ -205,24 +221,28 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             }
         } else if (type == EntityType.CREEPER) {
             if (target.distanceToSqr(from) > 9) return;
+            kit.event(EV_SHOT, PULSE);
             level.explode(null, from.x, from.y, from.z, 3, Level.ExplosionInteraction.NONE);
             items.setStackInSlot(0, ItemStack.EMPTY);
         } else if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) {
             if (target.distanceToSqr(from) > 2.5 * 2.5) return;
             target.hurt(level.damageSources().generic(), 4);
             level.playSound(null, worldPosition, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundSource.BLOCKS, 0.6f, 1.4f);
+            kit.event(EV_SHOT, LUNGE);
             cooldown = rate(20);
         } else if (type == EntityType.SNOW_GOLEM) {
             Snowball ball = new Snowball(level, from.x, from.y, from.z);
             ball.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 1.6f, 1f);
             level.addFreshEntity(ball);
             target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 1));
+            kit.event(EV_SHOT, SHOT);
             cooldown = rate(10);
         } else if (type == EntityType.WITCH) {
             ThrownPotion potion = new ThrownPotion(level, from.x, from.y, from.z);
             potion.setItem(PotionContents.createItemStack(Items.SPLASH_POTION, Potions.WEAKNESS));
             potion.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 0.9f, 2f);
             level.addFreshEntity(potion);
+            kit.event(EV_SHOT, LOB);
             cooldown = rate(60);
         } else if (type == EntityType.EVOKER) {
             Vec3 step = new Vec3(dir.x, 0, dir.z).normalize();
@@ -230,6 +250,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 Vec3 p = from.add(step.scale(i));
                 level.addFreshEntity(new EvokerFangs(level, p.x, worldPosition.getY(), p.z, (float) Math.atan2(step.z, step.x), i, null));
             }
+            kit.event(EV_SHOT, NOD);
             cooldown = rate(60);
         } else {
             cooldown = 20;
@@ -311,15 +332,113 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         }
     }
 
-    /** Client, 20 times a second: the head turns toward the nearest hostile it can see (a guess; the server picks the real target). */
-    public static void clientTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
-        t.yawO = t.yaw;
-        if (t.head().isEmpty()) return;
-        var c = pos.getCenter();
-        LivingEntity near = level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(RANGE), e -> e instanceof Enemy && e.isAlive()).stream()
-                .min(Comparator.comparingDouble(e -> e.distanceToSqr(c))).orElse(null);
-        float want = near == null ? t.yaw + 0.5f : (float) (Math.atan2(near.getZ() - c.z, near.getX() - c.x) * (180 / Math.PI)) - 90;
-        t.yaw = net.minecraft.util.Mth.wrapDegrees(t.yaw + net.minecraft.util.Mth.wrapDegrees(want - t.yaw) * 0.3f);
+    /** The server's tick, then what the mount shows: the lamp, its target and power. */
+    public static void kitTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
+        serverTick(level, pos, state, t);
+        t.powered = t.energy.getEnergyStored() > 0;
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (t.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        else if (!t.powered) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.LOW;
+        else lamp = t.engaged ? com.coolfreeze23.headinajar.machine.MachineLamp.WORK : com.coolfreeze23.headinajar.machine.MachineLamp.READY;
+        t.kit.tick(lamp, t.engaged, t.engaged, 0);
+    }
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    public int targetId() {
+        return targetId;
+    }
+
+    public boolean powered() {
+        return powered;
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
+        tag.putInt("target", targetId);
+        if (powered) tag.putBoolean("on", true);
+        // a guardian head's lock, for the beam every watcher draws (-1 none)
+        tag.putInt("Lock", syncedLock);
+        tag.putLong("LockStart", lockStart);
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
+        targetId = tag.contains("target") ? tag.getInt("target") : -1;
+        powered = tag.getBoolean("on");
+        syncedLock = tag.contains("Lock") ? tag.getInt("Lock") : -1;
+        lockStart = tag.getLong("LockStart");
+    }
+
+    /**
+     * Client, 20 times a second: on a target (the server's), the mount snaps round and chases it (x0.3 a tick) and tilts
+     * toward it; with none, it patrols 60 degrees either side of its front; unpowered it droops.
+     */
+    @Override
+    public void clientTick() {
+        yawO = yaw;
+        pitchO = pitch;
+        if (level == null || head().isEmpty()) return;
+        float front = switch (getBlockState().getValue(MachineBlock.FACING)) {
+            case SOUTH -> 0;
+            case WEST -> 90;
+            case EAST -> -90;
+            default -> 180;
+        };
+        float wantYaw, wantPitch;
+        var c = worldPosition.getCenter();
+        var target = targetId >= 0 ? level.getEntity(targetId) : null;
+        if (!powered) {
+            wantYaw = yaw;
+            wantPitch = -10;
+        } else if (target != null) {
+            double dx = target.getX() - c.x, dz = target.getZ() - c.z, dy = target.getY() + target.getBbHeight() * 0.6 - (c.y + 0.5);
+            wantYaw = (float) Math.toDegrees(Math.atan2(dx, dz));
+            wantPitch = net.minecraft.util.Mth.clamp((float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))), -10, 25);
+        } else {
+            long t = level.getGameTime() + (worldPosition.asLong() & 63);
+            wantYaw = front + (float) (60 * Math.sin(2 * Math.PI * t / 130));
+            wantPitch = 0;
+        }
+        yaw = yaw + net.minecraft.util.Mth.wrapDegrees(wantYaw - yaw) * (target != null ? 0.3f : 0.5f);
+        pitch += (wantPitch - pitch) * 0.2f;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+        kit.read(packet.getTag());
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations4.turret(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
     }
 
     @Override
@@ -336,20 +455,12 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         MachineItems.load(items, tag.getCompound("Items"), registries);
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
-        // only the update tag carries the lock; a saved turret starts without one
-        if (tag.contains("Lock")) {
-            syncedLock = tag.getInt("Lock");
-            lockStart = tag.getLong("LockStart");
-        }
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = new CompoundTag();
-        tag.put("Items", HeadInfo.syncTag(items, registries));
+        CompoundTag tag = kit.syncTag();
         tag.putBoolean("Synced", true);
-        tag.putInt("Lock", syncedLock);
-        tag.putLong("LockStart", lockStart);
         return tag;
     }
 

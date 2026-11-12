@@ -1,0 +1,24 @@
+# Batch three retake: a click on an empty Charging Dock is refused (the switch hops, the lamp goes red, the line says
+# what feeds it), first the player's own click, then the second player's
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -2 -60 2 225
+/setblock 0 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 0 -60 0 {Energy:0}
+/tp @s 2.8 -59 3.6 143 12
+wait 30
+inspect block 0 -60 0
+frames dock3_refuse_retake_near 120
+wait 3
+useblock 0 -60 0 up
+wait 60
+bystander useblock 0 -60 0 up
+bystander packets actionbar|chat|refus
+wait 57
+inspect block 0 -60 0
+report retake3 done

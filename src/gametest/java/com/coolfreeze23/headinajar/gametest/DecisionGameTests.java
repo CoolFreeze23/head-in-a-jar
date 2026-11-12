@@ -193,11 +193,12 @@ public class DecisionGameTests {
         // a block in the mouth is not placed against a machine, and sneaking past the machine to use it is an item use
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIRT));
         useBlock(h, p, FLOOR.west(2));
-        h.assertTrue(h.getBlockState(FLOOR.west(2).above()).isAir(), "a bare jar placed a block against a Tesla Node");
+        // the node stands two cells tall: no dirt where its upper half is
+        h.assertFalse(h.getBlockState(FLOOR.west(2).above()).is(Blocks.DIRT), "a bare jar placed a block against a Tesla Node");
         p.setShiftKeyDown(true);
         h.runAfterDelay(Refusals.DEBOUNCE + 1, () -> {
             useBlock(h, p, FLOOR.west(2));
-            h.assertTrue(h.getBlockState(FLOOR.west(2).above()).isAir(), "a sneaking bare jar placed a block");
+            h.assertFalse(h.getBlockState(FLOOR.west(2).above()).is(Blocks.DIRT), "a sneaking bare jar placed a block");
             h.assertValueEqual(Refusals.lastDelivered(p), Nudge.USE, "sneak-use line");
             done(h, p);
         });

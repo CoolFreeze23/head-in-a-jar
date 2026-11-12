@@ -1,0 +1,223 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.galvanic_pile",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3,
+        "visible_bounds_offset": [
+          0,
+          1,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "stack_top",
+          "pivot": [
+            0,
+            17,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                17,
+                -4
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                32,
+                71
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                19,
+                -3
+              ],
+              "size": [
+                6,
+                1,
+                6
+              ],
+              "uv": [
+                104,
+                81
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                20,
+                -4
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                32,
+                61
+              ]
+            }
+          ]
+        },
+        {
+          "name": "press",
+          "pivot": [
+            0,
+            23,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8,
+                23,
+                -8
+              ],
+              "size": [
+                16,
+                2,
+                16
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1,
+                25,
+                -6
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                64,
+                71
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                25,
+                -6
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                72,
+                71
+              ]
+            }
+          ],
+          "locators": {
+            "term_a": [
+              1,
+              27,
+              -5
+            ],
+            "term_b": [
+              -1,
+              27,
+              -5
+            ]
+          }
+        },
+        {
+          "name": "handle",
+          "pivot": [
+            0,
+            29,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                24,
+                -1
+              ],
+              "size": [
+                2,
+                5,
+                2
+              ],
+              "uv": [
+                80,
+                25
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                29,
+                -1
+              ],
+              "size": [
+                12,
+                2,
+                2
+              ],
+              "uv": [
+                54,
+                18
+              ]
+            },
+            {
+              "origin": [
+                6,
+                29,
+                -1
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                48,
+                90
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                29,
+                -1
+              ],
+              "size": [
+                2,
+                3,
+                2
+              ],
+              "uv": [
+                56,
+                90
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

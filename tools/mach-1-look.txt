@@ -1,0 +1,54 @@
+# The machine line, first look: the Galvanic Pile, Saline Mixer and Centrifuge at rest, loaded and working
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 3 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 6 -60 0 headinajar:centrifuge[facing=south]
+/tp @s 3.5 -58.4 6.5 180 15
+hud off
+wait 20
+shot look_rest_row
+inspect block 0 -59 0
+inspect block 3 -60 0
+/tp @s 4.5 -58.6 3.3 155 20
+wait 5
+shot look_rest_3q
+# loaded: meat in the pan, ingredients and bottles, samples
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 3 -60 0 {Energy:20000,Water:{Fluid:{id:"minecraft:water",amount:3000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:4},{Slot:1b,id:"minecraft:kelp",count:4},{Slot:2b,id:"minecraft:redstone",count:4},{Slot:3b,id:"minecraft:glass_bottle",count:8}]}}
+/data merge block 6 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:2}]}}
+wait 30
+/tp @s 3.5 -58.4 6.5 180 15
+wait 3
+shot look_working_row
+/tp @s 1.5 -58.8 2.6 200 25
+wait 3
+shot look_pile_close
+/tp @s 4.5 -58.6 2.6 200 25
+wait 3
+shot look_mixer_close
+/tp @s 7.5 -58.6 2.6 200 25
+wait 3
+shot look_centrifuge_close
+frames centrifuge_spin 40
+wait 45
+/tp @s 4.5 -58.6 3.3 155 20
+frames row_work 60
+wait 65
+inspect block 0 -60 0
+inspect block 3 -60 0
+inspect block 6 -60 0
+wait 120
+/tp @s 3.5 -58.4 6.5 180 15
+wait 3
+shot look_later_row
+/tp @s 4.5 -58.6 2.6 200 25
+wait 3
+shot look_mixer_later
+/tp @s 3.5 -57 12 180 12
+wait 3
+shot look_row_10
+report mach look done

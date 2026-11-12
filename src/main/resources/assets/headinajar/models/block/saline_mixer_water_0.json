@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "water": "headinajar:block/machine/saline_mixer_water_0",
+    "particle": "headinajar:block/machine/saline_mixer"
+  },
+  "elements": [
+    {
+      "name": "water_face",
+      "from": [
+        11,
+        4,
+        1
+      ],
+      "to": [
+        13,
+        8,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            3,
+            5
+          ],
+          "texture": "#water"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            5
+          ],
+          "texture": "#water"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            6,
+            5
+          ],
+          "texture": "#water"
+        },
+        "west": {
+          "uv": [
+            3,
+            1,
+            4,
+            5
+          ],
+          "texture": "#water"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            1,
+            0
+          ],
+          "texture": "#water"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "texture": "#water"
+        }
+      }
+    }
+  ]
+}

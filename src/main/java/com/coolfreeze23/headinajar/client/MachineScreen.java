@@ -26,6 +26,9 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
     private final List<Gauge> gauges = new ArrayList<>();
     private final List<Arrow> arrows = new ArrayList<>();
     private final List<String[]> lines = new ArrayList<>();
+    /** Lines wrapped to a width: x, y, width and the translation key. */
+    private final List<String[]> wrapped = new ArrayList<>();
+    private boolean inventoryLabel = true;
     private final List<int[]> buttons = new ArrayList<>();
     private final List<String> buttonKeys = new ArrayList<>();
 
@@ -51,6 +54,12 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
         return this;
     }
 
+    /** An arrow whose length is itself a synced number (a batch shortened by staff): max = data[maxIndex]. */
+    public MachineScreen<M> arrowOf(int x, int y, int index, int maxIndex) {
+        arrows.add(new Arrow(x, y, index, -1 - maxIndex));
+        return this;
+    }
+
     public MachineScreen<M> arrow(int x, int y, int index, int max) {
         arrows.add(new Arrow(x, y, index, max));
         return this;
@@ -63,6 +72,18 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
         row[1] = key;
         for (int i = 0; i < indexes.length; i++) row[2 + i] = String.valueOf(indexes[i]);
         lines.add(row);
+        return this;
+    }
+
+    /** A line of text at (x, y) wrapped to {@code width} pixels, one line under the other (for text that differs in length by language). */
+    public MachineScreen<M> wrappedLine(int x, int y, int width, String key) {
+        wrapped.add(new String[]{String.valueOf(x), String.valueOf(y), String.valueOf(width), key});
+        return this;
+    }
+
+    /** No "Inventory" label over the player's slots (its row is used by the machine's own text). */
+    public MachineScreen<M> noInventoryLabel() {
+        inventoryLabel = false;
         return this;
     }
 
@@ -108,7 +129,8 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
         for (Arrow arrow : arrows) {
             int ax = x + arrow.x, ay = y + arrow.y;
             g.fill(ax, ay + 3, ax + 22, ay + 8, 0xFF8B8B8B);
-            int filled = arrow.max <= 0 ? 0 : 22 * menu.data(arrow.index) / arrow.max;
+            int max = arrow.max < 0 ? menu.data(-1 - arrow.max) : arrow.max;
+            int filled = max <= 0 ? 0 : Math.min(22, 22 * menu.data(arrow.index) / max);
             g.fill(ax, ay + 3, ax + filled, ay + 8, 0xFF55C060);
             for (int i = 0; i < 5; i++) g.fill(ax + 22 + i, ay + i, ax + 23 + i, ay + 11 - i, filled >= 22 ? 0xFF55C060 : 0xFF8B8B8B);
         }
@@ -124,10 +146,17 @@ public class MachineScreen<M extends MachineMenu> extends AbstractContainerScree
         int whyX = why == null ? 0 : imageWidth - 7 - font.width(why);
         if (why != null && titleLabelX + font.width(title) + 6 > whyX) {
             g.drawString(font, why, titleLabelX, titleLabelY, 0x902020, false);
-            g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
         } else {
-            super.renderLabels(g, mouseX, mouseY);
+            g.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
             if (why != null) g.drawString(font, why, whyX, titleLabelY, 0x902020, false);
+        }
+        if (inventoryLabel) g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+        for (String[] row : wrapped) {
+            int x = Integer.parseInt(row[0]), y = Integer.parseInt(row[1]);
+            for (var part : font.split(Component.translatable(row[3]), Integer.parseInt(row[2]))) {
+                g.drawString(font, part, x, y, 0x404040, false);
+                y += font.lineHeight + 1;
+            }
         }
         for (String[] row : lines) {
             String[] xy = row[0].split(",");

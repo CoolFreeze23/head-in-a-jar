@@ -1,0 +1,53 @@
+# The Body Printer's screen with its materials line wrapped under the slots and the gauge, at GUI scales 2 and 3, in
+# English and Brazilian Portuguese; then an old Saline Mixer under glass clicked: the chat line that says it stands cut
+# off (once)
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/clear @s
+/setblock 0 -60 0 headinajar:body_printer[facing=south]
+/data merge block 0 -60 0 {Energy:100000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2000}}}
+/tp @s 0.5 -60 2.5 180 0
+lookpos 0.5 -59.5 0.5
+wait 10
+guiscale 2
+key use
+wait 15
+shot printer_screen_en_gui2
+guiscale 3
+wait 10
+shot printer_screen_en_gui3
+closegui
+lang pt_br
+wait 10
+key use
+wait 15
+guiscale 2
+wait 10
+shot printer_screen_pt_gui2
+guiscale 3
+wait 10
+shot printer_screen_pt_gui3
+closegui
+lang en_us
+wait 10
+guiscale 2
+/fill -3 -60 -3 6 -56 6 minecraft:air
+wait 10
+/setblock 0 -59 0 minecraft:glass
+/setblock 0 -60 0 headinajar:saline_mixer[facing=south]
+/tp @s 0.5 -60 2.5 180 0
+lookpos 0.5 -59.7 0.5
+wait 20
+key use
+wait 10
+closegui
+wait 5
+key use
+wait 10
+closegui
+wait 5
+shot mixer_cut_off_chat
+report printerscreen done

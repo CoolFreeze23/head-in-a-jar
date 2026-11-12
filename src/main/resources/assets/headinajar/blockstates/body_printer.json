@@ -1,20 +1,234 @@
 {
-  "variants": {
-    "facing=north": {
-      "model": "headinajar:block/body_printer",
-      "y": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer"
+      }
     },
-    "facing=east": {
-      "model": "headinajar:block/body_printer",
-      "y": 90
+    {
+      "when": {
+        "facing": "north",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_0"
+      }
     },
-    "facing=south": {
-      "model": "headinajar:block/body_printer",
-      "y": 180
+    {
+      "when": {
+        "facing": "north",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_1"
+      }
     },
-    "facing=west": {
-      "model": "headinajar:block/body_printer",
-      "y": 270
+    {
+      "when": {
+        "facing": "north",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/body_printer_saline_4",
+        "y": 270
+      }
     }
-  }
+  ]
 }

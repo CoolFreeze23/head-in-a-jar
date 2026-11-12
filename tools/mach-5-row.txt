@@ -1,0 +1,51 @@
+# The three machines working in a row beside the Separation Chair, an iron block, a brewing stand and a blast furnace:
+# by day, at night, by torchlight; then a wall hiding their lower halves (is anything culled at the top cell?)
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 minecraft:iron_block
+/setblock 4 -60 0 minecraft:brewing_stand
+/setblock 6 -60 0 minecraft:blast_furnace[facing=south]
+/setblock 8 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 10 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 12 -60 0 headinajar:centrifuge[facing=south]
+/data merge block 8 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 10 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/data merge block 12 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+hud off
+/tp @s 6.5 -59 9 180 6
+wait 60
+shot row_day
+frames row_day 100
+wait 105
+/tp @s 10.5 -58.8 5 160 12
+wait 5
+shot row_day_close
+/time set 18000
+/tp @s 6.5 -59 9 180 6
+wait 20
+shot row_night
+frames row_night 80
+wait 85
+/setblock 1 -60 2 minecraft:torch
+/setblock 5 -60 2 minecraft:torch
+/setblock 9 -60 2 minecraft:torch
+/setblock 13 -60 2 minecraft:torch
+wait 20
+shot row_torch
+frames row_torch 80
+wait 85
+/tp @s 10.5 -58.8 5 160 12
+wait 5
+shot row_torch_close
+/time set 6000
+/fill 7 -60 3 13 -60 3 minecraft:stone
+/tp @s 10.5 -59.6 6.5 180 -14
+wait 20
+shot culling_wall
+frames culling_wall 60
+wait 65
+report row done

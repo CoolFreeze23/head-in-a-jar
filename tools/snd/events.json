@@ -1227,6 +1227,3328 @@
       "how_to_play": "Clip \"aftercare\", key 14: the dome's bow. No random pitch. Keyframe volume 1.0 (the file carries the loudness)."
     },
     {
+      "id": "headinajar:machine.drawer_out",
+      "files": [
+        "headinajar:machine/drawer_out_1",
+        "headinajar:machine/drawer_out_2",
+        "headinajar:machine/drawer_out_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (small slide) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Drawer slides out",
+        "pt_br": "Gaveta desliza para fora"
+      },
+      "clip_keys": "drawer_open key 0: machine.drawer_out|0.5|1.0 -> machine.drawer_out|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip drawer_open, key 0: the detent lets go at 3 ms, the slide runs ticks 1-4 decelerating; machine.drawer_stop is the stop at key 4. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.drawer_stop",
+      "files": [
+        "headinajar:machine/drawer_stop_1",
+        "headinajar:machine/drawer_stop_2",
+        "headinajar:machine/drawer_stop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.05,
+        1.15
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (soft stop) (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "drawer_open key 4: machine.drawer_stop|0.4|1.1 -> machine.drawer_stop|1.0|1.1",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip drawer_open, key 4, pitch 1.1 (the random range is centred on it). No subtitle (part of the slide). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.drawer_shut",
+      "files": [
+        "headinajar:machine/drawer_shut_1",
+        "headinajar:machine/drawer_shut_2",
+        "headinajar:machine/drawer_shut_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "soft clack (M max target -28.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Drawer shuts",
+        "pt_br": "Gaveta fecha"
+      },
+      "clip_keys": "drawer_close key 4: machine.drawer_shut|0.5|1.0 -> machine.drawer_shut|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip drawer_close, key 4 (the contact): the clack at 3 ms, the 0.5 px bounce lands at about 100 ms (tick 6). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.hatch_open",
+      "files": [
+        "headinajar:machine/hatch_open_1",
+        "headinajar:machine/hatch_open_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (small hinge) (M max target -28.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Hatch opens",
+        "pt_br": "Portinhola abre"
+      },
+      "clip_keys": "hatch_open key 0: machine.hatch_open|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip hatch_open, key 0: catch at 3 ms, creak while it swings, the stay tap at 200-212 ms (tick 4). Not used by the Pile, Mixer or Centrifuge yet. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.hatch_shut",
+      "files": [
+        "headinajar:machine/hatch_shut_1",
+        "headinajar:machine/hatch_shut_2",
+        "headinajar:machine/hatch_shut_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (small panel shut) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Hatch shuts",
+        "pt_br": "Portinhola fecha"
+      },
+      "clip_keys": "hatch_shut key 4: machine.hatch_shut|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip hatch_shut, key 4 (the contact): the strike at 3 ms, the magnet catch at 18 ms, the bounce lands at about 100 ms (tick 6). Not used by these three machines yet. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.flag_up",
+      "files": [
+        "headinajar:machine/flag_up_1",
+        "headinajar:machine/flag_up_2",
+        "headinajar:machine/flag_up_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (sprung flick) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Flag: ready to collect",
+        "pt_br": "Bandeira: pode retirar"
+      },
+      "clip_keys": "flag_up key 2: machine.flag_up|0.6|1.0 -> machine.flag_up|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip flag_up, key 2: the spring flicks at 3 ms, the arm meets its stop as it overshoots at 105-135 ms, the plate jiggles after. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.flag_down",
+      "files": [
+        "headinajar:machine/flag_down_1",
+        "headinajar:machine/flag_down_2",
+        "headinajar:machine/flag_down_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (light tap) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Flag folds down",
+        "pt_br": "Bandeira abaixa"
+      },
+      "clip_keys": "flag_down key 4: machine.flag_down|0.5|1.0 -> machine.flag_down|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Kit clip flag_down, key 4 (the contact): the tap at 3 ms, the bounce lands at about 100 ms (tick 6). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:machine.rattle",
+      "files": [
+        "headinajar:machine/rattle_1",
+        "headinajar:machine/rattle_2",
+        "headinajar:machine/rattle_3"
+      ],
+      "volume": 0.4,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class file, played quieter (a layer) (M max target -27.0)",
+      "hit_ms": 100,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "refuse (and refuse_s/k/r, refuse_open) key 0: machine.rattle|0.4|1.0 (keep 0.4)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Every machine's refuse clip, key 0, at volume 0.4 (deliberately: it is a layer under the server's feedback.refused, which carries the subtitle and the message). Strokes at 100, 200, 300 ms on the clip's reversals (ticks 2, 4, 6); a faint tick at 3 ms."
+    },
+    {
+      "id": "headinajar:pile.crackle",
+      "files": [
+        "headinajar:pile/crackle_1",
+        "headinajar:pile/crackle_2",
+        "headinajar:pile/crackle_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "arc crackle (small) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Pile sparks",
+        "pt_br": "Pilha solta faísca"
+      },
+      "clip_keys": "work key 7: pile.crackle|0.4|1.0 -> pile.crackle|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Pile clip work, key 7 (a tick after the spark particle at 6), at term_a. Every 50 ticks while working. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:pile.ratchet",
+      "files": [
+        "headinajar:pile/ratchet_1",
+        "headinajar:pile/ratchet_2",
+        "headinajar:pile/ratchet_3",
+        "headinajar:pile/ratchet_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.9,
+        0.95,
+        1.0,
+        1.05,
+        1.1
+      ],
+      "loudness_class": "ratchet tooth (M max target -31.0)",
+      "hit_ms": 4,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Press screw ratchets",
+        "pt_br": "Catraca da prensa estala"
+      },
+      "clip_keys": "refuel keys 5, 8, 11, 14: pile.ratchet|0.4|0.9, 0.95, 1.0, 1.05 -> volume 1.0, same pitches; work keys 35, 47: pile.ratchet|0.35|1.0 and |0.35|1.1 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Refuel keys 5, 8, 11, 14 at pitch 0.9, 0.95, 1.0, 1.05; work keys 35 and 47 at pitch 1.0 and 1.1; volume 1.0 for all (the four refuel clicks together measure about -26.4, the whole-ratchet class). A random take each time. Each click is gone in under 100 ms (-84 dB or lower 100 ms after its peak), so clicks 3 ticks apart stay separate."
+    },
+    {
+      "id": "headinajar:pile.sigh",
+      "files": [
+        "headinajar:pile/sigh_1",
+        "headinajar:pile/sigh_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (clamp release, soft) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Press sighs, spent",
+        "pt_br": "Prensa suspira, esgotada"
+      },
+      "clip_keys": "finish key 2: pile.sigh|0.5|1.0 -> pile.sigh|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Pile clip finish, key 2: the exhale at once, the plate comes to rest at 300 ms (tick 8), with the poof at 3. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:pile.plop",
+      "files": [
+        "headinajar:pile/plop_1",
+        "headinajar:pile/plop_2",
+        "headinajar:pile/plop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glass clink class (small wet event) (M max target -27.0)",
+      "hit_ms": 200,
+      "contact_offset_ticks": 4,
+      "subtitle": {
+        "en_us": "Meat plops into pan",
+        "pt_br": "Carne cai na cuba"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the pan, on the insert click: the file's hit is at 200 ms, so started at the click it lands on tick 4 of the 8-tick plop (contact_offset_ticks 4). The bounce settles at 400 ms (tick 8)."
+    },
+    {
+      "id": "headinajar:pile.bzzt",
+      "files": [
+        "headinajar:pile/bzzt_1",
+        "headinajar:pile/bzzt_2",
+        "headinajar:pile/bzzt_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "idle machine life (M max target -36.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Meat twitches",
+        "pt_br": "Carne se contorce"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the pan, with the twitch (every 600 ticks while working; the lump hops 0.5 px for 4 ticks): play at the twitch's first tick, volume 1.0. Very quiet by design (idle life)."
+    },
+    {
+      "id": "headinajar:mixer.tink",
+      "files": [
+        "headinajar:mixer/tink_1",
+        "headinajar:mixer/tink_2",
+        "headinajar:mixer/tink_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.25,
+        1.1,
+        0.95
+      ],
+      "loudness_class": "glass clink (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Canister cap tinks",
+        "pt_br": "Tampa do frasco tilinta"
+      },
+      "clip_keys": "batch keys 12, 26, 40: mixer.tink|0.4|1.25, 1.1, 0.95 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mixer clip batch, keys 12, 26, 40 (the three dose contacts) at pitch 1.25, 1.1, 0.95: sugar, kelp, redstone. A random take each time. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:mixer.caps_up",
+      "files": [
+        "headinajar:mixer/caps_up_1",
+        "headinajar:mixer/caps_up_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (three small lifts) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Canister caps lift",
+        "pt_br": "Tampas dos frascos sobem"
+      },
+      "clip_keys": "open key 0: mixer.caps_up|0.4|1.0 -> mixer.caps_up|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mixer clip open, key 0: one sound for all three caps (unseat ticks at 45-150 ms, open stops at 200, 250, 300 ms). Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:mixer.cap_down",
+      "files": [
+        "headinajar:mixer/cap_down_1",
+        "headinajar:mixer/cap_down_2",
+        "headinajar:mixer/cap_down_3"
+      ],
+      "volume": 0.6,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.2,
+        1.1,
+        1.0
+      ],
+      "loudness_class": "tick (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Canister caps settle",
+        "pt_br": "Tampas dos frascos baixam"
+      },
+      "clip_keys": "close keys 3, 4, 5: mixer.cap_down|0.3|1.2, 1.1, 1.0 -> volume 0.6, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mixer clip close, keys 3, 4, 5 at pitch 1.2, 1.1, 1.0, volume 0.6 (three clicks in 100 ms add up; see the trio measurement). A different take each time if the handler allows."
+    },
+    {
+      "id": "headinajar:mixer.glug",
+      "files": [
+        "headinajar:mixer/glug_1",
+        "headinajar:mixer/glug_2",
+        "headinajar:mixer/glug_3",
+        "headinajar:mixer/glug_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glug (soft, repeating) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Saline tap glugs",
+        "pt_br": "Torneira de soro gorgoleja"
+      },
+      "clip_keys": "bottle key 4: mixer.glug|0.5|1.0 -> mixer.glug|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mixer clip bottle, key 4 (the tap at its stop), once per 10-tick loop while bottling. Random take and pitch 0.95-1.05 every time, so the run never repeats exactly. Keyframe volume 1.0 (the file carries the loudness)."
+    },
+    {
+      "id": "headinajar:mixer.paddle",
+      "files": [
+        "headinajar:mixer/paddle_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.9,
+        1.1
+      ],
+      "attenuation": 10,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hum/motor loop (soft), at full speed (M max target -29.5)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Mixer stirs saline",
+        "pt_br": "Misturador mexe o soro"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per mixer, at locator tank): volume = paddle speed (0 to 1), pitch = 0.9 + 0.2 x speed, both chased (0.2 a tick, pitch at most 0.05 a tick); start at volume 0, stop when the volume falls under 0.01. Register with \"stream\": false so the whole file is one looped buffer. Seamless 3.3 s file, no fades in it."
+    },
+    {
+      "id": "headinajar:centrifuge.whine",
+      "files": [
+        "headinajar:centrifuge/whine_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.8,
+        1.2
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hum/motor loop (centrifuge), at full speed (M max target -28.0)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Centrifuge whirs",
+        "pt_br": "Centrífuga zune"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per centrifuge, at locator whine): volume = rotor speed s (0 to 1), pitch = 0.8 + 0.4 x s, both chased (0.2 a tick, pitch at most 0.05 a tick); start at volume 0, stop when the volume falls under 0.01. Register with \"stream\": false. Seamless 2.4 s file, no fades in it. The finish stays the server's vanilla brewing-stand sound plus feedback.done."
+    },
+    {
+      "id": "headinajar:cradle.hose_swing",
+      "files": [
+        "headinajar:cradle/hose_swing_1",
+        "headinajar:cradle/hose_swing_2",
+        "headinajar:cradle/hose_swing_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class swish (light) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "dock(_c) key 2: cradle.hose_swing|0.3|1.0 -> cradle.hose_swing|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clips dock and dock_c, key 2 (the top of the 4-degree lift): the unhook at 3 ms, the swish 50-300 ms accelerating into the valve; cradle.hose_click is the contact at key 8. No subtitle (part of docking; the click carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.hose_click",
+      "files": [
+        "headinajar:cradle/hose_click_1",
+        "headinajar:cradle/hose_click_2",
+        "headinajar:cradle/hose_click_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (small brass click) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Hose clicks onto valve",
+        "pt_br": "Mangueira encaixa na válvula"
+      },
+      "clip_keys": "dock(_c) key 8: cradle.hose_click|0.5|1.0 -> cradle.hose_click|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clips dock and dock_c, key 8 (the contact): the click at 3 ms, the detent 10-16 ms later, the bounce seats again at 100 ms (tick 10). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.blanket_whoosh",
+      "files": [
+        "headinajar:cradle/blanket_whoosh_1",
+        "headinajar:cradle/blanket_whoosh_2",
+        "headinajar:cradle/blanket_whoosh_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.1
+      ],
+      "loudness_class": "servo-class swish (cloth) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "dock(_c) key 13: cradle.blanket_whoosh|0.4|1.0 -> |1.0|1.0; undock(_c) key 7: cradle.blanket_whoosh|0.4|1.1 -> |1.0|1.1",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock key 13 at pitch 1.0 (lift at 3 ms, the two carries 0-300 ms, the drop 300-450 ms into cradle.flump at key 22); undock key 7 at pitch 1.1 (the same 9-tick move: the file ends 41 ms before the flump at 16). No subtitle (cradle.flump carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.flump",
+      "files": [
+        "headinajar:cradle/flump_1",
+        "headinajar:cradle/flump_2",
+        "headinajar:cradle/flump_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.2
+      ],
+      "loudness_class": "soft landing (wool) (M max target -28.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Blanket flumps",
+        "pt_br": "Cobertor cai macio"
+      },
+      "clip_keys": "dock(_c) key 22: cradle.flump|0.5|1.0 -> |1.0|1.0; undock(_c) key 16: cradle.flump|0.4|1.2 -> |1.0|1.2",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock key 22 (onto the seat rail) at pitch 1.0, undock key 16 (onto the arm) at pitch 1.2: the landing at 3 ms, the half-pixel bounce lands again at 100 ms (83 ms at 1.2). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.seal_pfff",
+      "files": [
+        "headinajar:cradle/seal_pfff_1",
+        "headinajar:cradle/seal_pfff_2",
+        "headinajar:cradle/seal_pfff_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (small pfff) (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Valve seal hisses",
+        "pt_br": "Vedação da válvula chia"
+      },
+      "clip_keys": "undock(_c) key 0: cradle.seal_pfff|0.5|1.0 -> cradle.seal_pfff|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clips undock and undock_c, key 0 (with the cradle_puff particle at 1): the seal unsticks at 3 ms, the pfff decays over 0.3-0.4 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.hose_hang",
+      "files": [
+        "headinajar:cradle/hose_hang_1",
+        "headinajar:cradle/hose_hang_2",
+        "headinajar:cradle/hose_hang_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (rubber on brass hook) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Hose hung back up",
+        "pt_br": "Mangueira volta ao gancho"
+      },
+      "clip_keys": "undock(_c) key 4: cradle.hose_hang|0.4|1.0 -> cradle.hose_hang|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clips undock and undock_c, key 4 (the contact on the hook): the knock at 3 ms, the bounce knocks again at 100 ms (tick 6). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.inhale",
+      "files": [
+        "headinajar:cradle/inhale_1",
+        "headinajar:cradle/inhale_2",
+        "headinajar:cradle/inhale_3",
+        "headinajar:cradle/inhale_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.96,
+        1.04
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "breath (soft, repeating; tick class level) (M max target -30.6)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Bellows breathe in",
+        "pt_br": "O fole puxa o ar"
+      },
+      "clip_keys": "breathe key 3: cradle.inhale|0.3|1.0 -> cradle.inhale|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clip breathe (60 ticks, looped while a head is docked and powered), key 3: the flap at 3 ms, the in-breath swells to a peak 400-500 ms in and is gone by 0.9-1.06 s (the crest tops out at tick 22). Four takes; a random one each breath, and if the handler allows, never the same take twice running. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:cradle.exhale",
+      "files": [
+        "headinajar:cradle/exhale_1",
+        "headinajar:cradle/exhale_2",
+        "headinajar:cradle/exhale_3",
+        "headinajar:cradle/exhale_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.96,
+        1.04
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "breath (soft, repeating; tick class level) (M max target -30.6)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Bellows breathe out",
+        "pt_br": "O fole solta o ar"
+      },
+      "clip_keys": "breathe key 50: cradle.exhale|0.35|1.0 -> cradle.exhale|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Cradle clip breathe, key 50 (the crest landing on the column, easeInQuad): the soft landing and the flap at 3 ms, then the out-breath through the relief valve, gone in 0.6-0.8 s (before the next inhale at tick 63); the 0.4 px bounce touches at 100 ms (tick 52). The crest sinks over ticks 32-48 before this key; the file is built for the key at 50. Four takes, as for the inhale. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.start",
+      "files": [
+        "headinajar:printer/start_1",
+        "headinajar:printer/start_2",
+        "headinajar:printer/start_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.1
+      ],
+      "loudness_class": "servo (motor spin-up) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Body Printer starts",
+        "pt_br": "Impressora de Corpos liga"
+      },
+      "clip_keys": "print key 0: printer.start|0.6|1.0 -> |1.0|1.0; unstall key 1: printer.start|0.4|1.1 -> |1.0|1.1",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, key 0 (pitch 1.0), and unstall, key 1 (pitch 1.1, the recovery): the contactor at 3 ms, the spin-up over 0.5 s, the gear at 140 ms; it fades from 0.55 s as printer.whirr is chased up. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.tap",
+      "files": [
+        "headinajar:printer/tap_1",
+        "headinajar:printer/tap_2",
+        "headinajar:printer/tap_3",
+        "headinajar:printer/tap_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.2,
+        1.2,
+        1.1,
+        1.1,
+        0.9
+      ],
+      "loudness_class": "tick (light tap) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Print head taps",
+        "pt_br": "Cabeçote de impressão bate"
+      },
+      "clip_keys": "print keys 963, 968: printer.tap|0.4|1.2; 981, 986: |0.4|1.1; 1154: |0.3|0.9; unloaded key 8: |0.3|0.9 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, keys 963, 968 (pitch 1.2), 981, 986 (1.1), 1154 (0.9), and unloaded key 8 (0.9): each tap at 3 ms, gone in about 80 ms. A random take each time. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.zip",
+      "files": [
+        "headinajar:printer/zip_1",
+        "headinajar:printer/zip_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (light zip) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Print head measures",
+        "pt_br": "Cabeçote tira as medidas"
+      },
+      "clip_keys": "print key 972: printer.zip|0.5|1.0 -> printer.zip|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, key 972: the pawl at 3 ms, the teeth following the easeInOutCubic speed, the stop tick at 300 ms (tick 978). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.ratchet",
+      "files": [
+        "headinajar:printer/ratchet_1",
+        "headinajar:printer/ratchet_2",
+        "headinajar:printer/ratchet_3",
+        "headinajar:printer/ratchet_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.06,
+        1.12
+      ],
+      "loudness_class": "ratchet tooth (M max target -31.0)",
+      "hit_ms": 4,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Collar Cam ratchets",
+        "pt_br": "Catraca do colarinho estala"
+      },
+      "clip_keys": "print keys 1000, 1002, 1004: printer.ratchet|0.5|1.0, 1.06, 1.12 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, keys 1000, 1002, 1004 at pitch 1.0, 1.06, 1.12: each click at 4 ms and gone inside 100 ms, so the three stay three. A different take each time if the handler allows. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.develop",
+      "files": [
+        "headinajar:printer/develop_1",
+        "headinajar:printer/develop_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class hum (rising) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Body print develops",
+        "pt_br": "A impressão se revela"
+      },
+      "clip_keys": "print key 1008: printer.develop|0.6|1.0 -> printer.develop|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, key 1008 (the wind-up's top; the bar then sinks to 1140): the relay at 3 ms, the hum and the rising whine over 1.0-1.1 s, faded by 1.3-1.4 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.thunk",
+      "files": [
+        "headinajar:printer/thunk_1",
+        "headinajar:printer/thunk_2",
+        "headinajar:printer/thunk_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.9,
+        1.1
+      ],
+      "loudness_class": "slam (bar on the floor) (M max target -23.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Print bar thunks",
+        "pt_br": "Barra de impressão bate"
+      },
+      "clip_keys": "print key 1140: printer.thunk|0.5|0.9 -> |1.0|0.9; refuse key 6: printer.thunk|0.4|1.1 -> |1.0|1.1",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip print, key 1140 (the bar lands; pitch 0.9) and refuse, key 6 (the slam after the kick; pitch 1.1, under the server's feedback.refused): the hit at 3 ms, the sleeve rattles 13-40 ms later, a settle tick at 55 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.unlatch",
+      "files": [
+        "headinajar:printer/unlatch_1",
+        "headinajar:printer/unlatch_2",
+        "headinajar:printer/unlatch_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch release (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Booth door unlatches",
+        "pt_br": "Porta da cabine destrava"
+      },
+      "clip_keys": "deliver key 2: printer.unlatch|0.5|1.0 -> printer.unlatch|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip deliver, key 2: the latch at 3 ms, the spring 25 ms later, the seal squeak at 150 ms (tick 5, the wind-up), the hinge creaking faintly through the swing, gone before printer.door_stop at 15. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.door_stop",
+      "files": [
+        "headinajar:printer/door_stop_1",
+        "headinajar:printer/door_stop_2",
+        "headinajar:printer/door_stop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.9
+      ],
+      "loudness_class": "latch (door on its stop) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Booth door swings open",
+        "pt_br": "Porta da cabine se abre"
+      },
+      "clip_keys": "deliver key 15: printer.door_stop|0.6|0.9 -> printer.door_stop|1.0|0.9",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip deliver, key 15 (104 degrees, the overshoot) at pitch 0.9: the knock at 3 ms, the glass rattle 15-50 ms, the hinge settle tick at 200 ms (222 ms at 0.9; the door is back at 100 on tick 19). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.step",
+      "files": [
+        "headinajar:printer/step_1",
+        "headinajar:printer/step_2",
+        "headinajar:printer/step_3",
+        "headinajar:printer/step_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        0.95,
+        0.85
+      ],
+      "loudness_class": "step (bare foot, light) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Printed body steps out",
+        "pt_br": "Corpo impresso sai andando"
+      },
+      "clip_keys": "deliver keys 24, 30, 35: printer.step|0.4|1.0, |0.4|0.95, |0.5|0.85 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip deliver, keys 24, 30, 35 at pitch 1.0, 0.95, 0.85 (the body walking out, ducking under the sign): the heel at 3 ms, the ball of the foot 26-42 ms later. A different take each step if the handler allows. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.door_swing",
+      "files": [
+        "headinajar:printer/door_swing_1",
+        "headinajar:printer/door_swing_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class swing (hinge and air) (M max target -27.7)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "shut key 0: printer.door_swing|0.4|1.0 -> printer.door_swing|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip shut, key 0: the knock off the stop at 3 ms, the wind-up to tick 3, the swing accelerating 150-750 ms; printer.door_shut is the contact at key 15. No subtitle (the shut carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.door_shut",
+      "files": [
+        "headinajar:printer/door_shut_1",
+        "headinajar:printer/door_shut_2",
+        "headinajar:printer/door_shut_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (glass door in a brass frame) (M max target -22.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Booth door shuts",
+        "pt_br": "Porta da cabine fecha"
+      },
+      "clip_keys": "shut key 15: printer.door_shut|0.6|1.0 -> printer.door_shut|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip shut, key 15 (the contact): the slam at 3 ms, the glass rattle and the catch 12-35 ms, the 2-degree bounce closes again at 250 ms (tick 20). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.ready",
+      "files": [
+        "headinajar:printer/ready_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "blip (small bell ping) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Printer pings: ready",
+        "pt_br": "Impressora apita: pronta"
+      },
+      "clip_keys": "loaded key 7: printer.ready|0.4|1.0 -> printer.ready|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip loaded, key 7 (all four materials in; the head arrives at the centre): one E6 bell ping, fixed pitch, 0.6-0.7 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.wind_down",
+      "files": [
+        "headinajar:printer/wind_down_1",
+        "headinajar:printer/wind_down_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (motor running down) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Printer winds down",
+        "pt_br": "Impressora perde o fôlego"
+      },
+      "clip_keys": "stall key 0: printer.wind_down|0.4|1.0 -> printer.wind_down|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Printer clip stall, key 0 (the rate has been 0 for 20 ticks): the contactor drops at 3 ms, the motor runs down over about 0.6 s, the sleeve creaks as the bar sags, the knock at 0.80 s (tick 16). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:printer.whirr",
+      "files": [
+        "headinajar:printer/whirr_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.8,
+        1.0
+      ],
+      "attenuation": 10,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hum/motor loop (small carriage), at full rate (M max target -29.0)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Print carriage whirs",
+        "pt_br": "Carro de impressão zune"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per printer, at the carriage): volume = work rate (0 to 1), pitch = 0.8 + 0.2 x rate, both chased (0.2 a tick, pitch at most 0.05 a tick); start at volume 0 when the print starts, stop when the volume falls under 0.01 (the print ends, or a stall). Register with \"stream\": false. Seamless 3.0 s file, no fades in it; it carries no shuttle rhythm (the shuttle and the loop drift apart under brown-out)."
+    },
+    {
+      "id": "headinajar:splicer.stitch",
+      "files": [
+        "headinajar:splicer/stitch_1",
+        "headinajar:splicer/stitch_2",
+        "headinajar:splicer/stitch_3",
+        "headinajar:splicer/stitch_4"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        0.95,
+        1.05,
+        0.98,
+        0.9,
+        0.85
+      ],
+      "loudness_class": "tick (needle stitch, repeating) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Splicer stitches",
+        "pt_br": "Emendador costura"
+      },
+      "clip_keys": "work_0/1/2 keys 5, 15, ... 75: splicer.stitch|0.3|1.0, 0.95, 1.05, 0.98 (cycling); after a stutter t0+8: |0.3|0.9; stop and finish key 6: |0.3|0.85 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips work_0/1/2, every stitch's contact (t0 + 5) at the clip's cycling pitches, t0 + 8 after a stutter at 0.9, and the coast's last stitch (stop/finish key 6) at 0.85: the chk at 3 ms, gone in under 0.12 s. Twice a second for a minute: a random take each time, never the same twice running if the handler allows. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.stutter",
+      "files": [
+        "headinajar:splicer/stutter_1",
+        "headinajar:splicer/stutter_2",
+        "headinajar:splicer/stutter_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (caught stitch) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Stitch catches",
+        "pt_br": "O ponto engasga"
+      },
+      "clip_keys": "work_1 key 74, work_2 keys 34 and 74 (t0 + 4): splicer.stutter|0.4|1.0 -> splicer.stutter|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips work_1 and work_2, a tick into each stuttering stitch's hang (t0 + 4): the snag at 3 ms, the chatter to about 120 ms, the groan gone by 150 ms; the late punch is splicer.stitch at 0.9 four ticks on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.clutch",
+      "files": [
+        "headinajar:splicer/clutch_1",
+        "headinajar:splicer/clutch_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (clutch engaging) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Splicer clutch engages",
+        "pt_br": "Embreagem do emendador engata"
+      },
+      "clip_keys": "start key 3: splicer.clutch|0.5|1.0 -> splicer.clutch|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clip start, key 3 (the rock back reaches its hold): the dog teeth at 3 ms, the belt slap 12-16 ms, the detent at 120 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.coast",
+      "files": [
+        "headinajar:splicer/coast_1",
+        "headinajar:splicer/coast_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class run-down (no motor) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Splicer wheel coasts",
+        "pt_br": "Volante desacelera"
+      },
+      "clip_keys": "stop and finish_0/1/2 key 0: splicer.coast|0.5|1.0 -> splicer.coast|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips stop and finish_0/1/2, key 0: the drive lets go at 3 ms, the run-down over 1.0 s (the turn ends on tick 20), the pawl on the rock back at 1.15 s (tick 23) and the settle at 1.30 s (tick 26). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.hic",
+      "files": [
+        "headinajar:splicer/hic_1",
+        "headinajar:splicer/hic_2",
+        "headinajar:splicer/hic_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.12
+      ],
+      "loudness_class": "latch (mechanical hiccup) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Splicer hiccups",
+        "pt_br": "Emendador soluça"
+      },
+      "clip_keys": "finish_1 key 31: splicer.hic|0.6|1.0; finish_2 keys 31, 41: |0.6|1.0 and |0.6|1.12 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips finish_1 and finish_2, on each kick (t + 1): the clack and the catch at 3-40 ms, the three spools land at 186-214 ms by take (166-191 ms at 1.12; the clip's tick 5 is 200 ms). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.eject",
+      "files": [
+        "headinajar:splicer/eject_1",
+        "headinajar:splicer/eject_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (cassette pop-up) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Serum cassette pops up",
+        "pt_br": "Cassete de soro salta"
+      },
+      "clip_keys": "finish_0/1/2 key T + 2: splicer.eject|0.6|1.0 -> splicer.eject|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips finish_0/1/2 at T + 2 (the bottom of the dip): the latch at 3 ms, the slide up, the catch at 140-150 ms, the half-pixel settle at 335-350 ms (T + 9). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.thread",
+      "files": [
+        "headinajar:splicer/thread_1",
+        "headinajar:splicer/thread_2",
+        "headinajar:splicer/thread_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.95,
+        1.0,
+        1.05
+      ],
+      "loudness_class": "tick (thread zip) (M max target -32.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Thread unspools",
+        "pt_br": "Linha desenrola do carretel"
+      },
+      "clip_keys": "pick_1/2/3 key 1: splicer.thread|0.4|0.95, 1.0, 1.05 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips pick_1, pick_2, pick_3, key 1 at pitch 0.95, 1.0, 1.05: the tug at 3 ms, the zip decaying over about 0.3 s as the spool lifts to tick 4. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.seat",
+      "files": [
+        "headinajar:splicer/seat_1",
+        "headinajar:splicer/seat_2",
+        "headinajar:splicer/seat_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (spool on its pin) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "pick_1/2/3 key 8: splicer.seat|0.4|1.0 -> splicer.seat|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Splicer clips pick_1/2/3, key 8 (the contact): the knock at 3 ms, the bounce 58-72 ms later. No subtitle (part of the pick; the thread carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:splicer.bell",
+      "files": [
+        "headinajar:splicer/bell_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "blip (small bell), under feedback.done (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Splicer bell dings",
+        "pt_br": "Sininho do emendador toca"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the splicer, when the strand reaches the next stage (the `stitch` blockstate steps; four times a job), volume 1.0, fixed pitch, on that tick (hit at 3 ms, no pre-roll). Not at the finish: the finish stays feedback.done. Debounce 20 ticks."
+    },
+    {
+      "id": "headinajar:array.card",
+      "files": [
+        "headinajar:array/card_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.925,
+        0.95,
+        0.975,
+        1.0,
+        1.025,
+        1.05,
+        1.075,
+        1.1,
+        1.125
+      ],
+      "loudness_class": "tick (card flip, one of nine) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jury cards flip up",
+        "pt_br": "Cartões do júri se erguem"
+      },
+      "clip_keys": "vote and vote_anyway keys 14, 17, ... 38: array.card|0.3|0.925 ... 1.125 (0.9 + 0.025 i) -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Array clips vote and vote_anyway, a card every 3 ticks from key 14 to 38 (one per seat, the empty seats' keys too unless the code drops them) at pitch 0.9 + 0.025 i, i = 1..9: the hinge at 3 ms, the flap gone in about 0.1 s, so the nine stay nine. One file: the rising pitch is the ripple. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:array.cards_down",
+      "files": [
+        "headinajar:array/cards_down_1",
+        "headinajar:array/cards_down_2",
+        "headinajar:array/cards_down_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.05,
+        0.95
+      ],
+      "loudness_class": "tick (a row of cards landing) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jury cards drop",
+        "pt_br": "Cartões do júri baixam"
+      },
+      "clip_keys": "vote and vote_anyway keys 53, 55: array.cards_down|0.5|1.05 and |0.5|0.95 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Array clips vote and vote_anyway, keys 53 and 55 (the back and front rows' contacts; the middle row's, 54, falls between the two files): three taps 6-25 ms apart at 3 ms, the bounce a tick on. A different take each time if the handler allows. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:array.gavel",
+      "files": [
+        "headinajar:array/gavel_1",
+        "headinajar:array/gavel_2",
+        "headinajar:array/gavel_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (gavel on its block) (M max target -23.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Gavel bangs",
+        "pt_br": "Malhete bate na mesa"
+      },
+      "clip_keys": "vote_anyway keys 45, 50: array.gavel|1.0|0.95 and |1.0|1.08 (keep); refuse keys 4, 8: array.gavel|0.4|1.4 and |0.4|1.5 (keep 0.4: light taps, a layer under feedback.refused)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the array, on the vote tick T (the strike of the clip's first bang, c10), volume 1.0, random pitch 0.97-1.03, no pre-roll (hit at 3 ms); vote_anyway's two extra bangs (keys 45, 50) and the refusal's taps (keys 4, 8) are keyframed at the pitches the clips give. The bounce tocks again 46-55 ms on."
+    },
+    {
+      "id": "headinajar:array.murmur",
+      "files": [
+        "headinajar:array/murmur_1",
+        "headinajar:array/murmur_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "voices (low murmur, synthesised) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jury murmurs",
+        "pt_br": "O júri murmura"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the array, on the vote tick T with array.gavel, volume 1.0, random pitch 0.95-1.05: four voices catch their breath on the bang (3 ms) and murmur for 1.05-1.25 s. No words: synthesised. Not the older sounds/array_murmur.ogg from tools/make_sounds.py, which this replaces if the mod registers that one under this id."
+    },
+    {
+      "id": "headinajar:array.steam",
+      "files": [
+        "headinajar:array/steam_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 6,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "idle machine life (faint loop) (M max target -34.0)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Broth urn steams",
+        "pt_br": "A urna de caldo fumega"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per array, at locator urn) while `fed` is true and the broth is above 0: volume 1.0, pitch 1.0; start at volume 0 and chase it up 0.1 a tick, down the same when fed ends, stop under 0.01. Register with \"stream\": false. Seamless 2.0 s file, no fades in it. Deliberately faint (idle life)."
+    },
+    {
+      "id": "headinajar:mount.receiver_lift",
+      "files": [
+        "headinajar:mount/receiver_lift_1",
+        "headinajar:mount/receiver_lift_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (handset off its cradle) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Receiver lifted",
+        "pt_br": "Fone tirado do gancho"
+      },
+      "clip_keys": "complaint key 2: mount.receiver_lift|0.5|1.0 -> mount.receiver_lift|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip complaint, key 2 (the bottom of the quarter-pixel press): the press tick at 3 ms, the handset unseats at 55-66 ms (tick 3) with the hookswitch and a faint ringer tinkle. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.hr_ringback",
+      "files": [
+        "headinajar:mount/hr_ringback_1",
+        "headinajar:mount/hr_ringback_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick-class level (a burr in a handset) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Handset rings out",
+        "pt_br": "O fone chama do outro lado"
+      },
+      "clip_keys": "complaint key 12: mount.hr_ringback|0.3|1.0 -> mount.hr_ringback|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip complaint, key 12 (the handset just at the ear): one ringback burr from 3 ms, cut at 170-205 ms by the far end picking up (the clunk at 192-228 ms), just before mount.hr_mumble at key 16. Fixed pitch (a telephone tone). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.hr_mumble",
+      "files": [
+        "headinajar:mount/hr_mumble_1",
+        "headinajar:mount/hr_mumble_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.96,
+        1.04
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "voice (tinny, through a handset; synthesised) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "HR mumbles down the line",
+        "pt_br": "RH resmunga ao telefone"
+      },
+      "clip_keys": "complaint key 16: mount.hr_mumble|0.35|1.0 -> mount.hr_mumble|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip complaint, key 16: stressed syllables at 0, 150, 300, 450, 600 ms land on the handset's jabbers (ticks 16, 19, 22, 25, 28), then a falling tail to 1.05-1.2 s, well before the lift at 60. No words: synthesised. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.receiver_clack",
+      "files": [
+        "headinajar:mount/receiver_clack_1",
+        "headinajar:mount/receiver_clack_2",
+        "headinajar:mount/receiver_clack_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (handset on its cradle) (M max target -24.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Receiver slammed down",
+        "pt_br": "Fone batido no gancho"
+      },
+      "clip_keys": "complaint key 64: mount.receiver_clack|0.6|1.0 -> mount.receiver_clack|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip complaint, key 64 (the slam's contact): the clack, the hookswitch and the ringer's jangle at 3-10 ms, the bounce a tick on (65). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.stamp_lift",
+      "files": [
+        "headinajar:mount/stamp_lift_1",
+        "headinajar:mount/stamp_lift_2",
+        "headinajar:mount/stamp_lift_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (soft, repeating) (M max target -32.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "stamp key 2; stamp_3 keys 2, 12, 22: mount.stamp_lift|0.25|1.0 -> mount.stamp_lift|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clips stamp (key 2) and stamp_3 (keys 2, 12, 22), played by each client at every paid tic: the unstick at 3 ms, the neck's tick at 60 ms. No subtitle (part of the stamp; the thump carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.stamp_thump",
+      "files": [
+        "headinajar:mount/stamp_thump_1",
+        "headinajar:mount/stamp_thump_2",
+        "headinajar:mount/stamp_thump_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.05,
+        1.1
+      ],
+      "loudness_class": "tick (soft thump, repeating) (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Clerk stamps a form",
+        "pt_br": "Funcionário carimba"
+      },
+      "clip_keys": "stamp key 11: mount.stamp_thump|0.5|1.0; stamp_3 keys 11, 21, 31: |0.5|1.0, 1.05, 1.1 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clips stamp (key 11) and stamp_3 (keys 11, 21, 31 at pitch 1.0, 1.05, 1.1): the thump at 3 ms, the bounce a tick on. A random take each time. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.clink",
+      "files": [
+        "headinajar:mount/clink_1",
+        "headinajar:mount/clink_2",
+        "headinajar:mount/clink_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.2
+      ],
+      "loudness_class": "glass clink class (gem on a copper tray) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Pay clinks into tray",
+        "pt_br": "Pagamento tilinta na bandeja"
+      },
+      "clip_keys": "payday and payday_back key 0: mount.clink|0.6|1.2 -> mount.clink|1.0|1.2",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clips payday and payday_back, key 0 (the emerald dropped into the tray by code), pitch 1.2: the strike at 3 ms, three hops 55-146 ms on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.cheer",
+      "files": [
+        "headinajar:mount/cheer_1",
+        "headinajar:mount/cheer_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "voice (small happy chirp; synthesised) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Employee cheers",
+        "pt_br": "Funcionário comemora"
+      },
+      "clip_keys": "payday_back key 40: mount.cheer|0.4|1.0 -> mount.cheer|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip payday_back, key 40 (the head has turned round from the wall to be paid): two quick rising syllables from 3 ms, about 0.3 s. No words: synthesised. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mount.bell_ting",
+      "files": [
+        "headinajar:mount/bell_ting_1"
+      ],
+      "volume": 0.5,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "blip (desk bell), played as a layer (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "refuse key 1: mount.bell_ting|0.4|1.0 -> mount.bell_ting|0.5|1.0 (keep it a layer)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mount clip refuse, key 1, at volume 0.5 (deliberately: a layer under the server's feedback.refused, which carries the subtitle and the message, as machine.rattle at 0.4): one E7 ting, 0.7 s, fixed pitch."
+    },
+    {
+      "id": "headinajar:mount.sigh",
+      "files": [
+        "headinajar:mount/sigh_1",
+        "headinajar:mount/sigh_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "breath (soft; tick class level) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Employee sighs",
+        "pt_br": "Funcionário suspira"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the jar (locator jar_top), every 400 ticks while the head has been turned to the wall (three days or more unpaid), volume 1.0, random pitch 0.95-1.05: the breath out from 3 ms, 0.8-0.9 s. No words: synthesised."
+    },
+    {
+      "id": "headinajar:sequencer.key",
+      "files": [
+        "headinajar:sequencer/key_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.8,
+        0.9,
+        1.0,
+        1.1
+      ],
+      "loudness_class": "tick (register key) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Register key clacks",
+        "pt_br": "Tecla da caixa estala"
+      },
+      "clip_keys": "press_a/c/g/t key 2: sequencer.key|0.5|0.8, 0.9, 1.0, 1.1 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clips press_a, press_c, press_g, press_t, key 2 (the key at the bottom of its well) at pitch 0.8, 0.9, 1.0, 1.1: the clack at 3 ms, the escapement 18 ms on, gone in about 0.1 s. One file: the pitch is the key. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:sequencer.crank",
+      "files": [
+        "headinajar:sequencer/crank_1",
+        "headinajar:sequencer/crank_2",
+        "headinajar:sequencer/crank_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class (crank and gear train) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Register crank turns",
+        "pt_br": "Manivela da caixa gira"
+      },
+      "clip_keys": "ring key 4: sequencer.crank|0.4|1.0 -> sequencer.crank|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clip ring, key 4 (the turn is ticks 3-8): the teeth from 3 ms to 195 ms, the lever's clunk at 200 ms (tick 8), the pawl at 250 ms (tick 9). Every call: a random take each time. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:sequencer.tab",
+      "files": [
+        "headinajar:sequencer/tab_1",
+        "headinajar:sequencer/tab_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        0.9
+      ],
+      "loudness_class": "tick (flag on its stop) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Register tab pops up",
+        "pt_br": "A plaqueta da caixa sobe"
+      },
+      "clip_keys": "ring key 7: sequencer.tab|0.4|1.0; tally keys 5, 12, ... (slot s at 7s + 5): |0.4|1.0 + 0.02 s; load key 1: |0.4|0.9 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clips ring (key 7), tally and tally_full (each slot's pop at 7s + 5, pitch 1.0 + 0.02 s) and load (key 1, pitch 0.9): the plate on its top stop at 3 ms, the wobble 27-34 ms on, gone inside 0.12 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:sequencer.tab_down",
+      "files": [
+        "headinajar:sequencer/tab_down_1",
+        "headinajar:sequencer/tab_down_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (flag into the body) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Register tab drops",
+        "pt_br": "A plaqueta da caixa desce"
+      },
+      "clip_keys": "tally key 93 (tally_full 107), unload key 4: sequencer.tab_down|0.4|1.0 -> sequencer.tab_down|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clips tally (key 93), tally_full (key 107) and unload (key 4): the plate at the bottom of its well at 3 ms, the bounce a tick on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:sequencer.tear",
+      "files": [
+        "headinajar:sequencer/tear_1",
+        "headinajar:sequencer/tear_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick-class rasp (paper tear) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Receipt torn off",
+        "pt_br": "Recibo arrancado"
+      },
+      "clip_keys": "tear key 4: sequencer.tear|0.5|1.0 -> sequencer.tear|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clip tear, key 4 (the end of the flick): the fibres part from 3 ms over 60-85 ms, the strip flutters to about 0.2 s; the paper particle at 6. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:sequencer.bell",
+      "files": [
+        "headinajar:sequencer/bell_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.12
+      ],
+      "loudness_class": "blip (till bell) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Register bell rings",
+        "pt_br": "Campainha da caixa toca"
+      },
+      "clip_keys": "ding and ding_open key 1: sequencer.bell|0.7|1.0; ding2 key 7 and ding2_open key 8: |0.7|1.12 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Sequencer clips ding, ding_open (key 1, pitch 1.0) and ding2, ding2_open (key 1 at 1.0, then key 7 or 8 at 1.12, a full house): one G6 bell from 3 ms, about 0.9 s. The drawer's machine.drawer_stop and drawer_shut are the kit's. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.unlatch",
+      "files": [
+        "headinajar:rig/unlatch_1",
+        "headinajar:rig/unlatch_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch release (with the lift) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Syringe unlatches",
+        "pt_br": "Seringa destrava"
+      },
+      "clip_keys": "inject key 0: rig.unlatch|0.5|1.0 -> rig.unlatch|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig clip inject, key 0: the latch at 3 ms, the needle sliding out of the sheath from 100 ms (tick 2), clear at 280-300 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.servo",
+      "files": [
+        "headinajar:rig/servo_1",
+        "headinajar:rig/servo_2",
+        "headinajar:rig/servo_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        0.9
+      ],
+      "loudness_class": "servo (arm swing) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Injection arm swings",
+        "pt_br": "Braço da injeção gira"
+      },
+      "clip_keys": "inject key 7: rig.servo|0.4|1.0; accepted/rejected/mutated key 4 and cancel key 2: |0.4|0.9 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig clip inject, key 7 (pitch 1.0, the swing out: wind-up 7-9, out 9-17) and the tails' key 4 and cancel's key 2 (pitch 0.9, home): the relay at 3 ms, the motor to the stop at 500 ms (556 ms at 0.9), the settle tick at 620 ms. A random take each time. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.prime",
+      "files": [
+        "headinajar:rig/prime_1",
+        "headinajar:rig/prime_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.1
+      ],
+      "loudness_class": "latch (cocking) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "inject key 25: rig.prime|0.4|1.1 -> rig.prime|1.0|1.1",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig clip inject, key 25 at pitch 1.1 (the jab's wind-up): the catch at 3 ms, the squeak, the hold at about 100 ms (tick 27). No subtitle (part of the jab; rig.hiss carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.plunge",
+      "files": [
+        "headinajar:rig/plunge_1",
+        "headinajar:rig/plunge_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (plunger home, short) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Plunger driven home",
+        "pt_br": "Êmbolo vai até o fim"
+      },
+      "clip_keys": "accepted and mutated key 2: rig.plunge|0.4|1.0 -> rig.plunge|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tails accepted and mutated, key 2 (inject tick 32): the thumb on the flange at 3 ms, the squirt, the bounce a tick on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.ding",
+      "files": [
+        "headinajar:rig/ding_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.2
+      ],
+      "loudness_class": "blip (pump bell) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Rig dings: accepted",
+        "pt_br": "Injetora toca: aceito"
+      },
+      "clip_keys": "accepted key 3: rig.ding|0.5|1.2 -> rig.ding|1.0|1.2",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tail accepted, key 3 (inject tick 33), pitch 1.2 (the E6 bell heard about G6): the solenoid at 3 ms, the bell at 5 ms, about 0.6 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.burp",
+      "files": [
+        "headinajar:rig/burp_1",
+        "headinajar:rig/burp_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.8
+      ],
+      "loudness_class": "wet event (rubbery burp) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Serum burps back",
+        "pt_br": "O soro volta num arroto"
+      },
+      "clip_keys": "rejected key 1: rig.burp|0.6|0.8 -> rig.burp|1.0|0.8",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tail rejected, key 1 (inject tick 31), pitch 0.8: the plunger's thump at 3 ms, the burp over 0.2-0.25 s (0.25-0.31 s at 0.8). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.counter",
+      "files": [
+        "headinajar:rig/counter_1",
+        "headinajar:rig/counter_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        0.9
+      ],
+      "loudness_class": "tick-class run (counter wheels) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Pump counter rolls",
+        "pt_br": "O contador gira"
+      },
+      "clip_keys": "rejected key 3: rig.counter|0.4|0.9 -> rig.counter|1.0|0.9",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tail rejected, key 3 (inject tick 33), pitch 0.9 (with the counter blockstate rolling): the detents from 3 ms slowing to the clunk at 0.31-0.36 s (0.34-0.40 s at 0.9). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.sproing",
+      "files": [
+        "headinajar:rig/sproing_1",
+        "headinajar:rig/sproing_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class twang (coil spring) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Needle sproings back",
+        "pt_br": "Agulha salta para trás"
+      },
+      "clip_keys": "mutated key 3: rig.sproing|0.5|1.0 -> rig.sproing|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tail mutated, key 3 (inject tick 33, the needle startling back): the knock and the chirp at 3 ms, the spring's wobble dying over about half a second. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.holster",
+      "files": [
+        "headinajar:rig/holster_1",
+        "headinajar:rig/holster_2",
+        "headinajar:rig/holster_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (syringe in its sheath) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Syringe holstered",
+        "pt_br": "Seringa volta ao coldre"
+      },
+      "clip_keys": "accepted/rejected/mutated key 15 and cancel key 12: rig.holster|0.5|1.0 -> rig.holster|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Rig tails' key 15 (inject tick 45) and cancel's key 12: the seat at 3 ms, the tip 6-11 ms on, the bounce a tick on, a settle tick at 100 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:rig.hiss",
+      "files": [
+        "headinajar:rig/hiss_1",
+        "headinajar:rig/hiss_2",
+        "headinajar:rig/hiss_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (the injection) (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Injection hisses",
+        "pt_br": "A injeção chia"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the rig (or at the injected player), on the pending inject's tick 30 (the jab lands; with the flinch and the plaster), volume 1.0, random pitch 0.95-1.05, no pre-roll: the needle's tk at 3 ms, the hiss decaying over 0.25-0.4 s."
+    },
+    {
+      "id": "headinajar:tesla.perk",
+      "files": [
+        "headinajar:tesla/perk_1",
+        "headinajar:tesla/perk_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class (field charging) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla node perks up",
+        "pt_br": "Nó Tesla se anima"
+      },
+      "clip_keys": "perk key 0: tesla.perk|0.5|1.0 -> tesla.perk|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip perk, key 0: the relay at 3 ms, the rising bwip with the ring's lift to 350 ms (tick 7), let go in 40 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.look",
+      "files": [
+        "headinajar:tesla/look_1",
+        "headinajar:tesla/look_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class rub (ball on the rim, soft) (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "perk key 7: tesla.look|0.3|1.0 -> tesla.look|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip perk, key 7 (the code's look-round sweep runs ticks 6-32): the rub follows the sweep's speed, turns at 275 and 925 ms, eases to rest by 1.35 s. No subtitle (part of the perk). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.settle",
+      "files": [
+        "headinajar:tesla/settle_1",
+        "headinajar:tesla/settle_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick-class (ring caught by its field) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla node settles",
+        "pt_br": "Nó Tesla se acomoda"
+      },
+      "clip_keys": "perk key 31: tesla.settle|0.3|1.0 -> tesla.settle|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip perk, key 31 (the ring back on its field): the thum at 3 ms, the bounce caught again at 100 ms (tick 33). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.swing",
+      "files": [
+        "headinajar:tesla/swing_1",
+        "headinajar:tesla/swing_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class rub (ball swinging round) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "link key 0: tesla.swing|0.4|1.0 -> tesla.swing|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip link, key 0 (the code's aim spring swings the ball, ticks 0-15): the rub at the spring's speed, a tick where it turns back, a settle tick. No subtitle (tesla.link_zap carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.link_zap",
+      "files": [
+        "headinajar:tesla/link_zap_1",
+        "headinajar:tesla/link_zap_2",
+        "headinajar:tesla/link_zap_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "arc crackle (the link) (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla arc links",
+        "pt_br": "Arco Tesla se conecta"
+      },
+      "clip_keys": "link key 16: tesla.link_zap|0.6|1.0 -> tesla.link_zap|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip link, key 16 (start drawing the arc on this tick): the snap at 3 ms, the crackle and buzz 130-200 ms, the ring's jump caught at 53 ms (tick 17). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.unlink",
+      "files": [
+        "headinajar:tesla/unlink_1",
+        "headinajar:tesla/unlink_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class (arc letting go) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla link breaks",
+        "pt_br": "Ligação Tesla se rompe"
+      },
+      "clip_keys": "unlink key 0: tesla.unlink|0.4|1.0 -> tesla.unlink|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip unlink, key 0: the snap at 3 ms, the falling pew over 0.22-0.26 s, the relay at 30 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.wind_down",
+      "files": [
+        "headinajar:tesla/wind_down_1",
+        "headinajar:tesla/wind_down_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (hum running down) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Tesla node winds down",
+        "pt_br": "Nó Tesla desacelera"
+      },
+      "clip_keys": "stop key 0: tesla.wind_down|0.4|1.0 -> tesla.wind_down|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Tesla clip stop, key 0 (sending ends; stop tesla.hum at the same moment): the relay at 3 ms, the hum running down over about 0.8 s, the ring's fall caught at 240-250 ms (tick 5) and its bounce at 400 ms (tick 8). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:tesla.hum",
+      "files": [
+        "headinajar:tesla/hum_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.85,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hum/motor loop (the coil sending), at full rate (M max target -29.0)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Tesla node hums",
+        "pt_br": "Nó Tesla zumbe"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per node, at locator coil) while `sending`: volume = rate / 4 (0 to 1), pitch = 0.85 + 0.15 x rate / 4 (the brown-out's send_low is about volume 0.4, pitch 0.9), both chased (0.2 a tick, pitch at most 0.05 a tick); start at volume 0, stop when the volume falls under 0.01 (tesla.wind_down covers the end). Register with \"stream\": false. Seamless 2.0 s file (one turn of the ring at full rate), no fades in it."
+    },
+    {
+      "id": "headinajar:dock.clack",
+      "files": [
+        "headinajar:dock/clack_1",
+        "headinajar:dock/clack_2",
+        "headinajar:dock/clack_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (knife switch into its jaws) (M max target -24.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Knife switch closes",
+        "pt_br": "Chave-faca fecha"
+      },
+      "clip_keys": "occupy, topup, occupy_low key 9; brownout_out key 6; tap_on key 7: dock.clack|0.6|1.0 -> |1.0|1.0; tap_low key 3: |0.4|1.0 (keep 0.4: it will not stay)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock clips occupy, topup and occupy_low (key 9), brownout_out (6), tap_on (7) and tap_low (3, at 0.4): the clack at 3 ms, the wipe, the blade seated again at about 150 ms (tick 12). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:dock.fall",
+      "files": [
+        "headinajar:dock/fall_1",
+        "headinajar:dock/fall_2",
+        "headinajar:dock/fall_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (switch onto its open stop) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Knife switch falls open",
+        "pt_br": "Chave-faca cai aberta"
+      },
+      "clip_keys": "vacate and full key 8, vacate_low key 6, tap key 7: dock.fall|0.4|1.0 (dock_anim.py keys these as dock.thunk; rename to dock.fall) -> dock.fall|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock clips vacate and full (key 8), vacate_low (6) and tap (7): the knock on the stop at 3 ms, the blade's ring, the bounce down again at about 200 ms. dock_anim.py currently names this event dock.thunk. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:dock.ding",
+      "files": [
+        "headinajar:dock/ding_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "blip (scale bell) (M max target -29.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Dock dings: full",
+        "pt_br": "Base toca: carga completa"
+      },
+      "clip_keys": "full key 10: dock.ding|0.6|1.0 -> dock.ding|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock clip full, key 10 (the switch tripped open, the jar full): one C6 bell from 3 ms, about 1.1 s, fixed pitch. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:dock.fizzle",
+      "files": [
+        "headinajar:dock/fizzle_1",
+        "headinajar:dock/fizzle_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class (arc sputtering out) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Dock browns out",
+        "pt_br": "Base perde a força"
+      },
+      "clip_keys": "brownout key 0, occupy_low key 12: dock.fizzle|0.4|1.0 -> dock.fizzle|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock clips brownout (key 0) and occupy_low (key 12): the snap at 3 ms, the sputtering buzz dying over 0.7 s, the blade's scrape 0.25-0.65 s, the smoke's puff at 400 ms (tick 8). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:dock.meter_tick",
+      "files": [
+        "headinajar:dock/meter_tick_1",
+        "headinajar:dock/meter_tick_2",
+        "headinajar:dock/meter_tick_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.1
+      ],
+      "loudness_class": "tick (soft, repeating) (M max target -32.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Charge meter ticks",
+        "pt_br": "Medidor de carga tiquetaqueia"
+      },
+      "clip_keys": "charging keys 10 and 30: dock.meter_tick|0.2|1.0 and |0.2|1.1 (dock_anim.py keys these as dock.tick; rename to dock.meter_tick) -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Dock clip charging (a 40-tick loop while charging), keys 10 and 30 at pitch 1.0 and 1.1: one soft tick at 3 ms, gone in under 50 ms. dock_anim.py currently names this event dock.tick. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:dock.spark",
+      "files": [
+        "headinajar:dock/spark_1",
+        "headinajar:dock/spark_2",
+        "headinajar:dock/spark_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (small electric snap) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at locator jaws, with the minecraft:electric_spark particle the clips emit (occupy and topup key 10, charging keys 0 and 20, tap_on keys 3 and 8), volume 1.0, random pitch 0.94-1.06: the snap at 3 ms, gone in about 60 ms. No subtitle (the clack and the meter carry the charging). The clips key the particle only; play this beside it, or add it to the clips as dock.spark|1.0|1.0."
+    },
+    {
+      "id": "headinajar:mast.swing",
+      "files": [
+        "headinajar:mast/swing_1",
+        "headinajar:mast/swing_2",
+        "headinajar:mast/swing_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (dish turning on its yoke) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Relay dish turns",
+        "pt_br": "Antena do relé gira"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the dish (Mk I and Mk II), when a turn starts (aim_turn from the current yaw on every change of `aim`, tick 0), volume 1.0, random pitch 0.95-1.05, no pre-roll: the relay at 3 ms, the wrong-way wind-up to 250 ms, the backlash knock at 290-310 ms (the hold, tick 6), the swing's motor and bearing groan, let go from 0.53-0.66 s; the rest of the turn is silent. Short on purpose: one per turn, also when a new aim arrives mid-turn."
+    },
+    {
+      "id": "headinajar:mast.droop",
+      "files": [
+        "headinajar:mast/droop_1",
+        "headinajar:mast/droop_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (dish sagging onto its stop) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Relay dish droops",
+        "pt_br": "Antena do relé tomba"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the dish (Mk I and Mk II), when `powered` goes false and the droop starts (tick 0), volume 1.0, random pitch 0.95-1.05, no pre-roll: the brake's relay at 3 ms, the sag groaning faster to the stop at 800 ms (tick 16), the bounce settling at 1.0 s (tick 20). Nothing for the power coming back (the lamp and the next swing carry it)."
+    },
+    {
+      "id": "headinajar:mast.flinch",
+      "files": [
+        "headinajar:mast/flinch_1",
+        "headinajar:mast/flinch_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "arc crackle and clank (lightning flinch) (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Relay dish flinches",
+        "pt_br": "Antena do relé estremece"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the dish (Mk I and Mk II), when the flinch starts (a lightning strike within the mast's range while it rains), volume 1.0, random pitch 0.95-1.05, no pre-roll: the clank and the static's crack at 3 ms, the creep back faint to the settle tick at 1.50-1.60 s. It plays under the thunder, so it does not try to be loud."
+    },
+    {
+      "id": "headinajar:mast.stage_up",
+      "files": [
+        "headinajar:mast/stage_up_1",
+        "headinajar:mast/stage_up_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (small solenoid lift) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Mast lamp rises",
+        "pt_br": "Lâmpada do mastro sobe"
+      },
+      "clip_keys": "stage_up key 1: mast.stage_up|0.4|1.0 -> mast.stage_up|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mk II clip stage_up, key 1 (the dip): the solenoid at 3 ms, the catch at 50 ms (tick 2), the slide up to the top stop at 290-300 ms (tick 7), the detent at 450 ms (tick 10). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:mast.stage_down",
+      "files": [
+        "headinajar:mast/stage_down_1",
+        "headinajar:mast/stage_down_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (stage seated in the pole) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Mast lamp lowers",
+        "pt_br": "Lâmpada do mastro desce"
+      },
+      "clip_keys": "stage_down key 7: mast.stage_down|0.4|1.0 -> mast.stage_down|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Mk II clip stage_down, key 7 (the contact): the seat at 3 ms, the puff, the bounce seated again at 150 ms (tick 10). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:jammer.whirr",
+      "files": [
+        "headinajar:jammer/whirr_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.5,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hum/motor loop (turbine), at the jamming rate (M max target -29.0)",
+      "contact_offset_ticks": 0,
+      "loop": true,
+      "subtitle": {
+        "en_us": "Jammer turbine whirrs",
+        "pt_br": "Turbina do bloqueador gira"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Looped client sound (a tickable sound instance with looping on, created once per jammer, at the rotor) while it is awake and `speed` (the code's degrees a tick) is above 0.5: with u = speed / 36, volume = 0.25 + 0.75 x u and pitch = 0.5 + 0.5 x u (idle, 4.5 a tick: volume 0.34, pitch 0.56; jamming, 36: 1.0 and 1.0), both chased (0.2 a tick, pitch at most 0.05 a tick); start at volume 0, stop when the volume falls under 0.01 or the speed under 0.5. Register with \"stream\": false. Seamless 2.0 s file (four turns at the jamming rate), no fades in it."
+    },
+    {
+      "id": "headinajar:jammer.static",
+      "files": [
+        "headinajar:jammer/static_1",
+        "headinajar:jammer/static_2",
+        "headinajar:jammer/static_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "arc crackle class (radio static burst) (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jammer crackles",
+        "pt_br": "Bloqueador chia"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the jammer, when `jamming` goes true (not again while it stays true), volume 1.0, random pitch 0.94-1.06, no pre-roll: the relay at 3 ms, the static held 0.22-0.40 s and dying away, about 0.7-0.9 s heard."
+    },
+    {
+      "id": "headinajar:turret.windup",
+      "files": [
+        "headinajar:turret/windup_1",
+        "headinajar:turret/windup_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class (burner winding up) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Turret winds up",
+        "pt_br": "Torreta se prepara"
+      },
+      "clip_keys": "charge key 1: turret.windup|0.5|1.0 -> turret.windup|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Turret clip charge, key 1 (the blaze): the igniter at 3 ms, the roar and the coil's whine swelling under the tremble's ticks (every 50 ms), let go at 0.44-0.48 s (tick 10). The shot itself (the kick on 12) is the server's fireball sound; this file stops before it. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:turret.lunge",
+      "files": [
+        "headinajar:turret/lunge_1",
+        "headinajar:turret/lunge_2",
+        "headinajar:turret/lunge_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (ram onto its stop) (M max target -23.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Turret headbutts",
+        "pt_br": "Torreta dá uma cabeçada"
+      },
+      "clip_keys": "lunge key 6: turret.lunge|0.5|1.0 -> turret.lunge|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Turret clip lunge, key 6 (the end of the thrust, with the code's 20-degree headbutt): the bang at 3 ms, the chuff, the jar's glass rattling 12-40 ms on, the exhaust as the ram draws back. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:turret.hiss",
+      "files": [
+        "headinajar:turret/hiss_1",
+        "headinajar:turret/hiss_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (gas out of the collar) (M max target -24.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Turret hisses",
+        "pt_br": "Torreta chia"
+      },
+      "clip_keys": "pulse key 0: turret.hiss|0.6|1.0 -> turret.hiss|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Turret clip pulse, key 0 (the creeper): the valve tick at 3 ms, the two swells of hiss at 150 and 350 ms with the collar's, fizzling away by about 0.7 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:turret.servo",
+      "files": [
+        "headinajar:turret/servo_1",
+        "headinajar:turret/servo_2",
+        "headinajar:turret/servo_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (yaw servo step, repeating) (M max target -31.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the turret, while it tracks a target (the chase, after the snap): on a tick where the yaw moves more than 1 degree, at most every fourth tick (a run of steps 4 ticks apart measures about -28; every second tick it builds to about -25, too loud for garnish), volume 1.0, random pitch 0.94-1.06 (pitch 0.9 + 0.1 x min(1, step / 10) would follow the step's size), a random take: the tooth at 3 ms, the whir for 24-40 ms, gone in under 0.1 s. Not during the patrol sweep. No subtitle (turret.lock carries the tracking)."
+    },
+    {
+      "id": "headinajar:turret.lock",
+      "files": [
+        "headinajar:turret/lock_1",
+        "headinajar:turret/lock_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "warning (lock-on chirp) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Turret locks on",
+        "pt_br": "Torreta trava a mira"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the turret, on a new target (the synced targetId changing from -1 or to another mob, with the snap), volume 1.0, fixed pitch (a beep): the relay at 3 ms, two rising chirps 75-85 ms apart, gone by about 0.2 s. Not again on the cooldown's re-sync of the same target."
+    },
+    {
+      "id": "headinajar:locker.bell",
+      "files": [
+        "headinajar:locker/bell_1"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        2.0
+      ],
+      "loudness_class": "blip (desk bell) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Cloakroom bell dings",
+        "pt_br": "Campainha da chapelaria"
+      },
+      "clip_keys": "checkout key 2: locker.bell|0.4|2.0 -> locker.bell|1.0|2.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the locker, on checkin and checkout tick 0, volume 1.0, pitch 1.0 (one E6 ding, about 1.2 s); and the checkout clip's second ding, key 2, at pitch 2.0 (the octave above, about 0.6 s). Fixed pitch: the octave pair is the cloakroom's ding-ding. One file: the pitch is the note. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:locker.ratchet",
+      "files": [
+        "headinajar:locker/ratchet_1",
+        "headinajar:locker/ratchet_2",
+        "headinajar:locker/ratchet_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.0,
+        1.05,
+        1.1
+      ],
+      "loudness_class": "ratchet tooth (M max target -31.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Cloakroom shutter rolls",
+        "pt_br": "Persiana da chapelaria rola"
+      },
+      "clip_keys": "checkin keys 9, 11, 13: locker.ratchet|0.4|1.0, 1.05, 1.1; checkout keys 8, 11, 14: |0.4|1.1, 1.05, 1.0 -> volume 1.0, same pitches",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Locker clips checkin (keys 9, 11, 13 at pitch 1.0, 1.05, 1.1, rolling down) and checkout (keys 8, 11, 14 at 1.1, 1.05, 1.0, rolling up): the pawl at 3 ms, the slats 5-38 ms on, gone inside 80 ms. A different take each time if the handler allows. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:locker.thunk",
+      "files": [
+        "headinajar:locker/thunk_1",
+        "headinajar:locker/thunk_2",
+        "headinajar:locker/thunk_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "slam (shutter on the sill) (M max target -23.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Shutter slams down",
+        "pt_br": "Persiana bate no balcão"
+      },
+      "clip_keys": "checkin key 14: locker.thunk|0.6|1.0 -> locker.thunk|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Locker clip checkin, key 14 (the end of the roll down): the bar on the sill at 3 ms, the slats concertina 5-62 ms on, the bounce lands at 95-108 ms (ticks 15-16). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:locker.unlatch",
+      "files": [
+        "headinajar:locker/unlatch_1",
+        "headinajar:locker/unlatch_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch release (M max target -25.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Shutter unlatches",
+        "pt_br": "Persiana destrava"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at the locker, on checkout tick 4 (the clip keys only the 1 px lift; play this with it, or add it to the clip as locker.unlatch|1.0|1.0 at key 4 beside locker.ticket_clink), volume 1.0, random pitch 0.95-1.05: the catch at 3 ms, the spring's zing, the slats shuffling 26-54 ms on, before the ratchet at 8."
+    },
+    {
+      "id": "headinajar:locker.checkin",
+      "files": [
+        "headinajar:locker/checkin_1",
+        "headinajar:locker/checkin_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class swish (a body drawn in) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Body whisked inside",
+        "pt_br": "Corpo sugado para dentro"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the locker (or the client with its puff trail), on checkin tick 0 (the host stored), with locker.bell, volume 1.0, random pitch 0.95-1.05, no pre-roll: the valve at 3 ms, the whoosh toward the window to 0.26-0.30 s, the fwump inside at 270-300 ms (tick 6, the end of the trail)."
+    },
+    {
+      "id": "headinajar:locker.portrait_on",
+      "files": [
+        "headinajar:locker/portrait_on_1",
+        "headinajar:locker/portrait_on_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (card into its frame) (M max target -31.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at locator portrait, on the checkin clip's timeline key 18 (`locker:portrait_on`, as the portrait is drawn), volume 1.0, random pitch 0.95-1.05: the tick at 3 ms, the seat 11-14 ms on. No subtitle (garnish; the shutter and the chime carry the check-in)."
+    },
+    {
+      "id": "headinajar:locker.portrait_off",
+      "files": [
+        "headinajar:locker/portrait_off_1",
+        "headinajar:locker/portrait_off_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (card flipped to VACANT) (M max target -31.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, at locator portrait, on the checkout clip's timeline key 18 (`locker:portrait_off`, as the card returns to VACANT), volume 1.0, random pitch 0.95-1.05: the catch at 3 ms, the flap, the click flat 18-22 ms on. No subtitle (garnish)."
+    },
+    {
+      "id": "headinajar:locker.ticket_clink",
+      "files": [
+        "headinajar:locker/ticket_clink_1",
+        "headinajar:locker/ticket_clink_2"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        1.0,
+        1.0
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "pitch_per_play": [
+        1.2
+      ],
+      "loudness_class": "glass clink class (brass ticket on a hook) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Cloakroom ticket clinks",
+        "pt_br": "Ficha da chapelaria tilinta"
+      },
+      "clip_keys": "checkin key 16 and checkout key 4: locker.ticket_clink|0.4|1.2 -> locker.ticket_clink|1.0|1.2",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Locker clips checkin (key 16, the ticket appears on the hook) and checkout (key 4, it is taken off), pitch 1.2: the disc on the hook at 3 ms, its second touch 21-26 ms on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:locker.ticket_rattle",
+      "files": [
+        "headinajar:locker/ticket_rattle_1",
+        "headinajar:locker/ticket_rattle_2"
+      ],
+      "volume": 0.4,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo-class file, played quieter (a layer) (M max target -27.0)",
+      "hit_ms": 100,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "refuse_ticket key 0: locker.ticket_rattle|0.4|1.0 (keep 0.4)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Locker clip refuse_ticket, key 0, at volume 0.4 (deliberately: a layer under the server's feedback.refused, which carries the subtitle and the message, as machine.rattle): a faint tick at 3 ms, the chatter at 100, 200, 300 ms on the clip's reversals (ticks 2, 4, 6)."
+    },
+    {
+      "id": "headinajar:leech.stir",
+      "files": [
+        "headinajar:leech/stir_1",
+        "headinajar:leech/stir_2",
+        "headinajar:leech/stir_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glug class, softer (a slosh in the globe) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Leech stirs",
+        "pt_br": "Sanguessuga se mexe"
+      },
+      "clip_keys": "wake key 1: leech.stir|0.3|1.0 -> leech.stir|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clip wake, key 1 (a creature has come close; the leech starts its swim to the glass): the squelch at 3 ms, the slosh dying over about half a second, two or three bubbles. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leech.flop",
+      "files": [
+        "headinajar:leech/flop_1",
+        "headinajar:leech/flop_2",
+        "headinajar:leech/flop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "wet event (soft flop on the water) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Leech flops back",
+        "pt_br": "Sanguessuga volta à água"
+      },
+      "clip_keys": "settle key 10: leech.flop|0.3|1.0 -> leech.flop|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clip settle, key 10 (the leech back in the middle of the water): the slap at 3 ms, the spray and a bubble, the ripple lapping the glass for about 0.2 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leech.nozzle_pop",
+      "files": [
+        "headinajar:leech/nozzle_pop_1",
+        "headinajar:leech/nozzle_pop_2",
+        "headinajar:leech/nozzle_pop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (small sprung pop) (M max target -28.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Sampling nozzle pops out",
+        "pt_br": "Bico de coleta salta"
+      },
+      "clip_keys": "sample key 5: leech.nozzle_pop|0.4|1.0 -> leech.nozzle_pop|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clip sample, key 5 (the nozzle cup at the end of its 2 px easeOutBack pop): the catch, the cup's ring and the hollow pop at 3 ms, the overshoot's tick 46-55 ms on. The bite on 6 is the server's vanilla hurt and honey-drink sounds, not this. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leech.crank_ratchet",
+      "files": [
+        "headinajar:leech/crank_ratchet_1",
+        "headinajar:leech/crank_ratchet_2",
+        "headinajar:leech/crank_ratchet_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick-class run (ratchet crank, one turn) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Leech Jar crank turns",
+        "pt_br": "Manivela gira estalando"
+      },
+      "clip_keys": "sample key 11; empty keys 1 and 11: leech.crank_ratchet|0.5|1.0 -> leech.crank_ratchet|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clips sample (key 11: one turn over ticks 11-18, back to 360 on 19) and empty (keys 1 and 11: two turns over ticks 2-21, one file per turn): the pawl lifts at 3 ms, 10-14 clicks over 0.35 s bunched in the middle of the turn, the pawl seats at 0.40 s. A random take each time, so the two turns of empty differ. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leech.plink",
+      "files": [
+        "headinajar:leech/plink_1",
+        "headinajar:leech/plink_2",
+        "headinajar:leech/plink_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glass clink (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Sample vial drops",
+        "pt_br": "Frasco de amostra cai"
+      },
+      "clip_keys": "sample key 19: leech.plink|0.6|1.0 -> leech.plink|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clip sample, key 19 (the vial lands in the rack as the blockstate `samples` changes): the clink at 3 ms, one hop 28-41 ms on, a roll tick at 100 ms. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leech.vials_clatter",
+      "files": [
+        "headinajar:leech/vials_clatter_1",
+        "headinajar:leech/vials_clatter_2",
+        "headinajar:leech/vials_clatter_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "glass clink class (a short clatter) (M max target -26.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Vials clatter out",
+        "pt_br": "Frascos caem tilintando"
+      },
+      "clip_keys": "empty key 21: leech.vials_clatter|0.5|1.0 -> leech.vials_clatter|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Leech Jar clip empty, key 21 (the end of the second turn; the rack clears on the server's tick): the first vial at 3 ms, seven to nine knocks thinning out over 0.2-0.35 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:socket.servo",
+      "files": [
+        "headinajar:socket/servo_1",
+        "headinajar:socket/servo_2",
+        "headinajar:socket/servo_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (clamps climbing) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "clamp key 1: socket.servo|0.4|1.0 -> socket.servo|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Neural Socket clip clamp, key 1: the relay at 3 ms, the motor from 50 ms (tick 2) while the clamps climb, stopping dead at 350 ms (tick 8) where socket.clamp bites. No subtitle (socket.clamp carries it). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:socket.clamp",
+      "files": [
+        "headinajar:socket/clamp_1",
+        "headinajar:socket/clamp_2",
+        "headinajar:socket/clamp_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "clamp (M max target -22.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Socket clamps jar",
+        "pt_br": "Soquete prende o pote"
+      },
+      "clip_keys": "clamp key 8: socket.clamp|0.6|1.0 -> socket.clamp|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Neural Socket clip clamp, key 8 (the four clamps at the top of their 6 px climb, gripping the jar's base; the poof particles on 9): four bites within 5-10 ms from 3 ms, the steel cap's body, the pawls locking 20-30 ms on. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:socket.plug",
+      "files": [
+        "headinajar:socket/plug_1",
+        "headinajar:socket/plug_2",
+        "headinajar:socket/plug_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.97,
+        1.03
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (plug-in click with a hum onset) (M max target -30.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Jar plugged in",
+        "pt_br": "Pote conectado"
+      },
+      "clip_keys": "clamp key 12: socket.plug|0.5|1.0 -> socket.plug|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Neural Socket clip clamp, key 12 (the jack risen 1 px into the jar's base): the click at 3 ms, the hum swelling to 35-45 ms and gone by about 0.25 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:socket.sigh",
+      "files": [
+        "headinajar:socket/sigh_1",
+        "headinajar:socket/sigh_2",
+        "headinajar:socket/sigh_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "hiss (clamp release) (M max target -24.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Socket clamps release",
+        "pt_br": "Soquete solta as garras"
+      },
+      "clip_keys": "release key 0: socket.sigh|0.5|1.0 -> socket.sigh|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Neural Socket clip release, key 0: the valve's tsk at 3 ms, the hiss held 40 ms and dying over about 0.6-0.8 s, before the clamps land at key 8 (socket.drop). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:socket.drop",
+      "files": [
+        "headinajar:socket/drop_1",
+        "headinajar:socket/drop_2",
+        "headinajar:socket/drop_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.95,
+        1.05
+      ],
+      "attenuation": 8,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "latch (clamps onto their stops, lighter than the clamp) (M max target -26.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": null,
+      "clip_keys": "release key 8: socket.drop|0.5|1.0 -> socket.drop|1.0|1.0",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Neural Socket clip release, key 8 (the clamps back on their stops): four light knocks 13-24 ms apart from 3 ms, two bouncing 62-95 ms on. No subtitle (socket.sigh carries the release). Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:leyden.full",
+      "files": [
+        "headinajar:leyden/full_1",
+        "headinajar:leyden/full_2",
+        "headinajar:leyden/full_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "tick (small electric snap) (M max target -30.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Leyden jar fully charged",
+        "pt_br": "Garrafa de Leyden carregada"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Server, at the Leyden Jar, once on the tick the jar reaches full charge (with the one spark from the knob to the handle), volume 1.0, random pitch 0.94-1.06, no pre-roll: the snap at 3 ms, the crackle over 0.17-0.25 s."
+    },
+    {
       "id": "headinajar:fx.tk.grab",
       "files": [
         "headinajar:fx/tk_grab_1",
@@ -1266,6 +4588,7 @@
       "category": "PLAYERS",
       "loudness_class": "hum (loop, at full) (M max target -28.0)",
       "contact_offset_ticks": 0,
+      "loop": true,
       "subtitle": {
         "en_us": "Telekinesis hums",
         "pt_br": "Telecinese zumbe"
@@ -1436,6 +4759,7 @@
       "category": "BLOCKS",
       "loudness_class": "arc crackle (loop) (M max target -31.0)",
       "contact_offset_ticks": 0,
+      "loop": true,
       "subtitle": {
         "en_us": "Tesla Node arcs",
         "pt_br": "Nó de Tesla faísca"

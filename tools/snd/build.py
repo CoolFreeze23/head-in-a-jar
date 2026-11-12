@@ -20,13 +20,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from nsynth import finish, export, rng, steps  # noqa: E402
-import recipes_feedback, recipes_jar, recipes_chair, recipes_fx  # noqa: E402
+import recipes_feedback, recipes_jar, recipes_chair, recipes_machines  # noqa: E402
+import recipes_machines2  # noqa: E402
+import recipes_machines3  # noqa: E402
+import recipes_machines4  # noqa: E402
+import recipes_machines5  # noqa: E402
+import recipes_fx  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 SOUNDS_DIR = os.path.join(ROOT, 'src', 'main', 'resources', 'assets', 'headinajar', 'sounds')
 EVENTS_JSON = os.path.join(HERE, 'events.json')
 
-ALL = recipes_feedback.SOUNDS + recipes_jar.SOUNDS + recipes_chair.SOUNDS + recipes_fx.SOUNDS
+ALL = recipes_feedback.SOUNDS + recipes_jar.SOUNDS + recipes_chair.SOUNDS + recipes_machines.SOUNDS + recipes_machines2.SOUNDS + recipes_machines3.SOUNDS + recipes_machines4.SOUNDS + recipes_machines5.SOUNDS + recipes_fx.SOUNDS
 
 
 def seed(sid, take):
@@ -45,7 +50,7 @@ def build_one(s):
         except ValueError as e:
             print(f"{s['id']:28s} take {take}  NOT BUILT: {e}")
             continue
-        x = finish(x, s['target'], fade_out_ms=s['fade_ms'])
+        x = s['finish'](x, s['target']) if s.get('finish') else finish(x, s['target'], fade_out_ms=s['fade_ms'])
         path = os.path.join(SOUNDS_DIR, *f"{s['file']}_{take}.ogg".split('/'))
         export(x, path)
         cuts = steps(x)
@@ -69,6 +74,8 @@ def event_entry(s):
     if s.get('hit_ms') is not None:
         e['hit_ms'] = s['hit_ms']
     e['contact_offset_ticks'] = s.get('preroll_ticks', 0)
+    if s.get('loop'):
+        e['loop'] = True
     if s.get('ticks'):
         e['chair_ticks'] = s['ticks']
     e['subtitle'] = {'en_us': s['subtitle_en'], 'pt_br': s['subtitle_pt']} if s.get('subtitle_en') else None

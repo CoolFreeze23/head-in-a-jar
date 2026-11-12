@@ -55,15 +55,17 @@ public class SafetyPlacardBlock extends Block {
                 ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState() : state;
     }
 
+    /** The framed board, its back on the wall: the whole face of the block, 3 px deep (facing north: the wall to the south). */
+    private static final VoxelShape SHAPE_NORTH = Block.box(0, 0, 13, 16, 16, 16);
+    private static final VoxelShape[] SHAPES = new VoxelShape[4];
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case NORTH -> Block.box(1, 2, 15, 15, 14, 16);
-            case SOUTH -> Block.box(1, 2, 0, 15, 14, 1);
-            case WEST -> Block.box(15, 2, 1, 16, 14, 15);
-            case EAST -> Block.box(0, 2, 1, 1, 14, 15);
-            default -> Shapes.block();
-        };
+        Direction facing = state.getValue(FACING);
+        if (facing.getAxis().isVertical()) return Shapes.block();
+        int i = facing.get2DDataValue();
+        if (SHAPES[i] == null) SHAPES[i] = com.coolfreeze23.headinajar.machine.TallMachine.rotate(SHAPE_NORTH, facing);
+        return SHAPES[i];
     }
 
     @Override

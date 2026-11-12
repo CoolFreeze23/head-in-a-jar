@@ -1,0 +1,70 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "saline": "headinajar:block/machine/body_printer_saline_0",
+    "particle": "headinajar:block/machine/body_printer"
+  },
+  "elements": [
+    {
+      "name": "saline_face_hi",
+      "from": [
+        0,
+        0,
+        10
+      ],
+      "to": [
+        1,
+        7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            2,
+            3,
+            9
+          ],
+          "texture": "#saline"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            2,
+            9
+          ],
+          "texture": "#saline"
+        },
+        "south": {
+          "uv": [
+            5,
+            2,
+            6,
+            9
+          ],
+          "texture": "#saline"
+        },
+        "west": {
+          "uv": [
+            3,
+            2,
+            5,
+            9
+          ],
+          "texture": "#saline"
+        },
+        "up": {
+          "uv": [
+            3,
+            2,
+            2,
+            0
+          ],
+          "texture": "#saline"
+        }
+      }
+    }
+  ]
+}

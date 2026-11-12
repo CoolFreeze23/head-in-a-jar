@@ -43,6 +43,10 @@ public class ClientSetup {
         modBus.addListener(ClientSetup::gui);
         modBus.addListener(ClientSetup::playerLayers);
         modBus.addListener(ClientSetup::fluids);
+        modBus.addListener(RestBake::wrap);
+        modBus.addListener(MachineRenderers3::colors);
+        MachineClient5.init(modBus);
+        NeoForge.EVENT_BUS.addListener(RestBake::onFrame);
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent e) -> e.enqueueWork(() -> {
             com.coolfreeze23.headinajar.compat.Compat.clientSetup();
             for (var fluid : com.coolfreeze23.headinajar.registry.ModFluids.ALL) {
@@ -67,13 +71,11 @@ public class ClientSetup {
         event.registerEntityRenderer(ModRegistry.SEAT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerEntityRenderer(ModRegistry.MISSILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModRegistry.EMP_GRENADE_ENTITY.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
-        event.registerBlockEntityRenderer(ModRegistry.CRADLE_BE.get(), CradleRenderer::new);
         event.registerBlockEntityRenderer(ModRegistry.CHAIR_BE.get(), SeparationChairRenderer::new);
+        MachineRenderers.register(event);
+        MachineRenderers3.register(event);
+        MachineRenderers4.register(event);
         event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
-        event.registerBlockEntityRenderer(ModRegistry.TURRET_BE.get(), HeadWorkRenderers.Turret::new);
-        event.registerBlockEntityRenderer(ModRegistry.MOUNT_BE.get(), HeadWorkRenderers.Mount::new);
-        event.registerBlockEntityRenderer(ModRegistry.ARRAY_BE.get(), HeadWorkRenderers.Array::new);
-        event.registerBlockEntityRenderer(ModRegistry.SOCKET_BE.get(), HeadWorkRenderers.Socket::new);
         for (var frame : com.coolfreeze23.headinajar.mecha.MechaFrame.values()) {
             event.registerEntityRenderer(ModRegistry.mechaType(frame), c -> new MechaRenderer(c, frame));
         }
@@ -108,13 +110,15 @@ public class ClientSetup {
         event.register(ModRegistry.MIXER_MENU.get(), (com.coolfreeze23.headinajar.menu.SalineMixerMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
                 new MachineScreen<>(menu, inv, title).energy(20_000)
                         .gauge(52, 17, 12, 56, 1, 4000, 0xFF3F76E4, "gui.headinajar.water")
-                        .arrow(70, 37, 3, 200)
+                        .arrowOf(70, 37, 3, 5)
                         .gauge(100, 17, 12, 56, 2, 4000, 0xFF5FC8C0, "gui.headinajar.saline"));
         event.register(ModRegistry.PRINTER_MENU.get(), (com.coolfreeze23.headinajar.menu.BodyPrinterMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
                 new MachineScreen<>(menu, inv, title).energy(250_000)
-                        .gauge(72, 17, 12, 56, 1, 4000, 0xFF5FC8C0, "gui.headinajar.saline")
+                        .gauge(72, 17, 12, 40, 1, 4000, 0xFF5FC8C0, "gui.headinajar.saline")
                         .arrow(92, 30, 2, 1200)
-                        .line(30, 62, "gui.headinajar.printer.need")
+                        // what a print takes, under the slots and the gauge, wrapped (the Portuguese runs as long)
+                        .wrappedLine(20, 60, 148, "gui.headinajar.printer.need")
+                        .noInventoryLabel()
                         .button(120, 26, 48, 20, "gui.headinajar.printer.print", 0));
     }
 

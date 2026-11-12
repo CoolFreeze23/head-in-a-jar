@@ -1,0 +1,61 @@
+# The six machines working in a row beside the Separation Chair, an iron block, a brewing stand and a blast furnace:
+# by day, at night, by torchlight; close on the three new ones; then a wall hiding their lower halves
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/setblock 0 -60 0 headinajar:separation_chair[facing=south]
+/setblock 2 -60 0 minecraft:iron_block
+/setblock 4 -60 0 minecraft:brewing_stand
+/setblock 6 -60 0 minecraft:blast_furnace[facing=south]
+/setblock 8 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 10 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 12 -60 0 headinajar:centrifuge[facing=south]
+/setblock 14 -60 0 headinajar:life_support_cradle[facing=south]
+/setblock 16 -60 0 headinajar:body_printer[facing=south]
+/setblock 18 -60 0 headinajar:gene_splicer[facing=south]
+/data merge block 8 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 10 -60 0 {Energy:20000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2500}},Water:{Fluid:{id:"minecraft:water",amount:4000}},Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:16},{Slot:1b,id:"minecraft:kelp",count:16},{Slot:2b,id:"minecraft:redstone",count:16},{Slot:4b,id:"headinajar:saline_bottle",count:4}]}}
+/data merge block 12 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+/data merge block 14 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 14 -60 0 1
+/data merge block 16 -60 0 {Energy:250000,Progress:200,Client:[I;55,66,77,88],ClientName:"Dev"}
+/data merge block 18 -60 0 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+hud off
+/tp @s 9.5 -58.8 11 180 6
+wait 60
+shot row2_day
+frames row2_day 100
+wait 105
+/tp @s 16.5 -58.8 5 170 12
+wait 5
+shot row2_day_close
+/time set 18000
+/tp @s 9.5 -58.8 11 180 6
+wait 20
+shot row2_night
+frames row2_night 80
+wait 85
+/setblock 1 -60 2 minecraft:torch
+/setblock 5 -60 2 minecraft:torch
+/setblock 9 -60 2 minecraft:torch
+/setblock 13 -60 2 minecraft:torch
+/setblock 15 -60 2 minecraft:torch
+/setblock 17 -60 2 minecraft:torch
+/setblock 19 -60 2 minecraft:torch
+wait 20
+shot row2_torch
+frames row2_torch 80
+wait 85
+/tp @s 16.5 -58.8 5 170 12
+wait 5
+shot row2_torch_close
+/time set 6000
+/fill 13 -60 3 19 -60 3 minecraft:stone
+/tp @s 16.5 -59.6 6.5 180 -14
+wait 20
+shot row2_culling_wall
+frames row2_culling_wall 60
+wait 65
+report row2 done

@@ -30,7 +30,8 @@ REFUSALS = {
     # the Surgical Saw, keeping the head
     'saw.survived': ('%s pulled through. Weaken it further and try again.', '%s resistiu. Enfraqueça mais e tente de novo.'),
     # the Body Locker
-    'locker.not_yours': ("That body belongs to someone else. The locker won't take it.", 'Esse corpo é de outra pessoa. O armário não aceita.'),
+    'locker.not_yours': ("That body is someone else's. Its owner can trust you with /headoffice trust.",
+                         'Esse corpo é de outra pessoa. O dono pode confiar em você com /headoffice trust.'),
     'locker.cannot_store': ("%s doesn't fit the paperwork. It stays out.", '%s não cabe na papelada. Fica de fora.'),
     'locker.unknown': ("The file for %s can't be read. Ask an operator.", 'A ficha de %s está ilegível. Chame um operador.'),
     # mecha

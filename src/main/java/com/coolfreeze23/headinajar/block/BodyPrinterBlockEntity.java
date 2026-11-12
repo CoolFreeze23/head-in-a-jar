@@ -38,7 +38,8 @@ import java.util.UUID;
  * The Body Printer: 16 rotten flesh, 8 bone blocks, 4 redstone blocks, 8 slime balls and 2000 mB Cranial Saline, then
  * 200 kFE over 60 seconds, print a fresh Headless Body (Collar Cam fitted) for the head that pressed Print.
  */
-public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider, HasItems {
+public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider, HasItems, com.coolfreeze23.headinajar.machine.KitMachine,
+        software.bernie.geckolib.animatable.GeoBlockEntity {
     public static final int[] NEED = {16, 8, 4, 8};
     public static final int SALINE = 2000;
     public static final int TICKS = 1200;
@@ -99,6 +100,159 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
 
     public BodyPrinterBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.PRINTER_BE.get(), pos, state);
+    }
+
+    // --- the machine kit: what the booth shows (the print's rule above is untouched) ---------------------------
+
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+    /** Synced: the materials in (a bit each, flesh, bone, redstone, slime), the delivered body still in front of the door, whose skin is printed. */
+    private int materials;
+    private boolean held;
+    private UUID skin;
+    // server: the last tick's progress, the body just delivered and when
+    private int lastProgress = -1;
+    /** The last tick a running print went without power (its lamp says so for a second after). */
+    private long starvedAt = Long.MIN_VALUE / 2;
+    private UUID lastClient, deliveredBody;
+    private long deliveredAt = Long.MIN_VALUE / 2;
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    public int materials() {
+        return materials;
+    }
+
+    /** The printed body still stands in the doorway (the door stays open over it). */
+    public boolean held() {
+        return held;
+    }
+
+    public UUID skin() {
+        return skin;
+    }
+
+    public int progress() {
+        return progress;
+    }
+
+    /** The print's tick, then what the booth shows. */
+    public static void kitTick(Level level, BlockPos pos, BlockState state, BodyPrinterBlockEntity printer) {
+        if (printer.printing()) printer.lastClient = printer.client;
+        serverTick(level, pos, state, printer);
+        printer.show(level);
+    }
+
+    /** Where the server puts the new body: one block out of the door. */
+    private Vec3 doorstep() {
+        return Vec3.atBottomCenterOf(worldPosition.relative(getBlockState().getValue(MachineBlock.FACING)));
+    }
+
+    private void show(Level level) {
+        long now = level.getGameTime();
+        boolean advanced = printing() && progress > lastProgress && lastProgress >= 0;
+        // a print that stood still this tick (not its first, not one done and waiting) was short of power
+        if (printing() && lastProgress >= 0 && !advanced && progress < TICKS) starvedAt = now;
+        if (lastProgress >= 0 && !printing()) {
+            // the print came out: the body that stepped out holds the door open while it stands in it
+            kit.event(com.coolfreeze23.headinajar.machine.MachineKit.EV_FINISH, 0);
+            deliveredAt = now;
+            Vec3 at = doorstep();
+            deliveredBody = level.getEntitiesOfClass(HeadlessBody.class, new net.minecraft.world.phys.AABB(at, at).inflate(1),
+                    b -> lastClient != null && lastClient.equals(b.ownerId())).stream().findFirst().map(net.minecraft.world.entity.Entity::getUUID).orElse(null);
+        }
+        lastProgress = printing() ? progress : -1;
+        if (deliveredBody != null && level instanceof ServerLevel server) {
+            var body = server.getEntity(deliveredBody);
+            held = body != null && body.isAlive() && body.position().distanceTo(doorstep()) < 0.6 && now - deliveredAt < 600;
+            if (!held) deliveredBody = null;
+        } else {
+            held = false;
+        }
+        materials = 0;
+        for (int i = 0; i < NEED.length; i++) if (!items.getStackInSlot(i).isEmpty()) materials |= 1 << i;
+        skin = printing() ? client : held ? lastClient : null;
+        boolean waiting = printing() && progress >= TICKS;
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (waiting) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
+        else if (printing()) lamp = now - starvedAt < 20 ? com.coolfreeze23.headinajar.machine.MachineLamp.LOW : com.coolfreeze23.headinajar.machine.MachineLamp.WORK;
+        else lamp = energy.getEnergyStored() > 0 ? com.coolfreeze23.headinajar.machine.MachineLamp.READY : com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        kit.level(BodyPrinterBlock.SALINE, com.coolfreeze23.headinajar.machine.MachineLamp.step(saline.getFluidAmount(), saline.getCapacity()));
+        kit.tick(lamp, advanced, printing(), printing() ? Math.min(progress, TICKS) : 0);
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (materials != 0) tag.putByte("mats", (byte) materials);
+        if (held) tag.putBoolean("held", true);
+        if (skin != null) tag.putUUID("skin", skin);
+        if (printing() && progress >= TICKS) tag.putBoolean("waits", true);
+    }
+
+    /** Client: the finished body waits in the vat (its owner has a body on); it is drawn standing in the open doorway. */
+    private boolean waits;
+
+    public boolean waits() {
+        return waits;
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        materials = tag.getByte("mats");
+        held = tag.getBoolean("held");
+        skin = tag.hasUUID("skin") ? tag.getUUID("skin") : null;
+        waits = tag.getBoolean("waits");
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return kit.syncTag();
+    }
+
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+        kit.read(packet.getTag());
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    /** Client: the carriage's whirr while printing. */
+    @Override
+    public void clientTick() {
+        com.coolfreeze23.headinajar.client.MachineLoopSound.follow(this, com.coolfreeze23.headinajar.machine.MachineSounds.PRINTER_WHIRR,
+                kit.advancing() ? kit.rate() / 4f : 0, 0.8f + 0.05f * kit.rate());
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations.printer(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
     }
 
     public Buffer energy() {
@@ -250,6 +404,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        kit.startOpen(player);
         return new BodyPrinterMenu(id, inventory, items, data, worldPosition);
     }
 }

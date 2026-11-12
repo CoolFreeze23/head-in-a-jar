@@ -1,20 +1,39 @@
 {
-  "variants": {
-    "facing=north": {
-      "model": "headinajar:block/cerebral_array",
-      "y": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array"
+      }
     },
-    "facing=east": {
-      "model": "headinajar:block/cerebral_array",
-      "y": 90
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array",
+        "y": 90
+      }
     },
-    "facing=south": {
-      "model": "headinajar:block/cerebral_array",
-      "y": 180
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array",
+        "y": 180
+      }
     },
-    "facing=west": {
-      "model": "headinajar:block/cerebral_array",
-      "y": 270
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/cerebral_array",
+        "y": 270
+      }
     }
-  }
+  ]
 }

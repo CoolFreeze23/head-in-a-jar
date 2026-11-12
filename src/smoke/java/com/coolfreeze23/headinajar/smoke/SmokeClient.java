@@ -80,6 +80,7 @@ public class SmokeClient {
     public SmokeClient(net.neoforged.bus.api.IEventBus modBus) {
         if (Boolean.getBoolean("headinajar.smoke")) {
             GeckoProbe.register(modBus);
+            MachineProbe.register(modBus);
             NeoForge.EVENT_BUS.addListener(this::onTick);
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
             NeoForge.EVENT_BUS.addListener(frames::onFrame);
@@ -130,6 +131,7 @@ public class SmokeClient {
         if (state == 2) {
             harness.tick();
             frames.tick();
+            MachineProbe.PERF.tick();
             observer.tick(mc);
         }
         if (burstLeft > 0) {
@@ -213,10 +215,28 @@ public class SmokeClient {
         String[] parts = line.split(" ", 2);
         // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
         if (!java.util.Set.of("wait", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
-                "frames", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap").contains(parts[0])) {
+                "frames", "perf", "flip", "machdebug", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap").contains(parts[0])) {
             observer.setup(line);
         }
         switch (parts[0]) {
+            case "perf" -> {
+                // perf NAME TICKS: frame times over TICKS ticks, no capture; the frame cap is lifted; the script carries on
+                String[] args = parts[1].split(" ");
+                MachineProbe.PERF.start(report, args[0], Integer.parseInt(args[1]));
+                wait = 1;
+            }
+            case "machdebug" -> {
+                // machdebug N: what the kit machines' renderer leaves out (1 contents, 2 everything it draws, 4 sparks
+                // and wisps), to measure each part's cost; 0 draws all
+                com.coolfreeze23.headinajar.client.MachineRenderers.debugOff = Integer.parseInt(parts[1].trim());
+                report.add("machdebug " + parts[1].trim());
+                wait = 1;
+            }
+            case "flip" -> {
+                // flip sync|stagger PERIOD X1 Y1 Z1 X2 Y2 Z2, or flip off: cycles lamp_probe blocks on the server
+                report.add(MachineProbe.flip(mc.getSingleplayerServer(), parts[1].split(" ")) + " (" + MachineProbe.flipCount() + " blocks before this scan)");
+                wait = 2;
+            }
             case "frames" -> {
                 // frames NAME TICKS: every rendered frame for TICKS ticks, into $SMOKE_FRAMES_DIR; the script carries on
                 String[] args = parts[1].split(" ");
@@ -292,11 +312,6 @@ public class SmokeClient {
                     report.add("hostcopy -> " + e);
                 }
             }
-            case "perf" -> {
-                // perf NAME TICKS: frame times over TICKS ticks (mean, median, p99); the script carries on
-                String[] args = parts[1].split(" ");
-                Perf.start(args[0], Integer.parseInt(args[1]), report::add);
-            }
             case "camlog" -> {
                 // camlog NAME TICKS: every frame's camera kick and field-of-view pull from the effect kit
                 String[] args = parts[1].split(" ");
@@ -313,12 +328,19 @@ public class SmokeClient {
                 report.add("guiscale " + parts[1].trim() + " -> " + mc.getWindow().getGuiScaledWidth() + "x" + mc.getWindow().getGuiScaledHeight());
             }
             case "lang" -> {
-                // lang CODE: switch the game's language (en_us, pt_br, ...) and reload the translations only
-                mc.options.languageCode = parts[1].trim();
-                mc.getLanguageManager().setSelected(parts[1].trim());
-                mc.getLanguageManager().onResourceManagerReload(mc.getResourceManager());
+                // lang CODE: switch the game's language (en_us, pt_br, ...) and reload the translations only;
+                // lang CODE full: reload every resource, as the language screen does (textures drawn per language too)
+                String[] lang = parts[1].trim().split("\\s+");
+                mc.options.languageCode = lang[0];
+                mc.getLanguageManager().setSelected(lang[0]);
+                if (lang.length > 1 && lang[1].equals("full")) {
+                    mc.reloadResourcePacks();
+                    wait = 200;
+                } else {
+                    mc.getLanguageManager().onResourceManagerReload(mc.getResourceManager());
+                    wait = 5;
+                }
                 report.add("lang -> " + mc.getLanguageManager().getSelected());
-                wait = 5;
             }
             case "report" -> report.add(parts[1]);
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its
@@ -497,7 +519,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -685,6 +707,40 @@ public class SmokeClient {
                             var pos = new net.minecraft.core.BlockPos(Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
                             report.add("dock -> " + (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity c
                                     && FormActions.dockCarried(player, c)));
+                        }
+                        case "mastroute", "jam" -> {
+                            // mastroute X Y Z TX TY TZ: the mast at X Y Z carries a link toward TX TY TZ (as NeuroLink routes it);
+                            // jam X Y Z: the jammer at X Y Z has just cut a link
+                            String[] a = parts[1].trim().split(" +");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
+                            boolean ok = player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.PowerBlockEntities.Station;
+                            if (ok) {
+                                var st = (com.coolfreeze23.headinajar.block.PowerBlockEntities.Station) player.serverLevel().getBlockEntity(pos);
+                                long now = player.serverLevel().getGameTime();
+                                if (parts[0].equals("jam")) st.jammed(now);
+                                else st.route(new net.minecraft.core.BlockPos(Integer.parseInt(a[3]), Integer.parseInt(a[4]), Integer.parseInt(a[5])), now);
+                            }
+                            report.add(parts[0] + " -> " + ok);
+                        }
+                        case "cradlehead" -> {
+                            // cradlehead X Y Z N [compact]: the Cradle at X Y Z holds the head of made-up player N (offline), as a
+                            // dock leaves it: docked there and recorded in the head registry, so the Cradle keeps it
+                            String[] xyz = parts[1].trim().split(" +");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
+                            int n = Integer.parseInt(xyz[3]);
+                            boolean ok = player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity;
+                            if (ok) {
+                                var c = (com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity) player.serverLevel().getBlockEntity(pos);
+                                java.util.UUID id = new java.util.UUID(0x5EEDL, n);
+                                c.dock(id, "Guest" + n, net.minecraft.world.item.ItemStack.EMPTY);
+                                c.setCompact(xyz.length > 4 && xyz[4].equals("compact"));
+                                // cradlehead ... upside: the head floats upside down for a minute, as a botched cut leaves it
+                                if (java.util.Arrays.asList(xyz).contains("upside")) c.setUpsideDown(1200);
+                                com.coolfreeze23.headinajar.form.HeadRegistry.get(server).setHead(id, new com.coolfreeze23.headinajar.form.HeadRegistry.Head(
+                                        com.coolfreeze23.headinajar.form.HeadRegistry.Where.CRADLE,
+                                        new com.coolfreeze23.headinajar.form.HeadRegistry.Spot(player.serverLevel().dimension(), net.minecraft.world.phys.Vec3.atBottomCenterOf(pos)), null));
+                            }
+                            report.add("cradlehead " + n + " -> " + ok);
                         }
                         case "locker" -> {
                             // locker X Y Z: the Body Locker at X Y Z stores the nearest host within 3 blocks (or releases what it holds)
@@ -892,6 +948,7 @@ public class SmokeClient {
             harness.releaseAll();
             observer.flush(mc);
             frames.stop();
+            MachineProbe.PERF.stop();
             Frames.drain();
             var server = mc.getSingleplayerServer();
             if (server != null && Bystander.present()) server.executeBlocking(() -> Bystander.remove(server));

@@ -1,0 +1,29 @@
+# The Body Printer refused to a jar short of a whole print's power: the player becomes a jar away from the machine (its
+# body stays there), rolls to the printer, opens its screen and presses Print
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+/setblock 0 -60 0 headinajar:body_printer[facing=south]
+/data merge block 0 -60 0 {Energy:100000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+/tp @s 6.5 -60 6.5 180 0
+jar
+wait 20
+/tp @s 0.5 -60 2.0 180 0
+lookpos 0.5 -59.6 0.5
+wait 10
+frames printer_refuse_jar_near 100
+key use
+wait 15
+widgets
+widget Print
+wait 10
+shot printer_refuse_jar_screen
+wait 20
+closegui
+wait 50
+inspect block 0 -60 0
+report printer done

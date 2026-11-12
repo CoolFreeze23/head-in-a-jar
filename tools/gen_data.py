@@ -144,6 +144,8 @@ import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
 import gen_p14_effects; gen_p14_effects.run(EN, PT, write, shaped)  # the effect kit, Telekinesis, swap, laser, arcs
 import gen_p17_release3; gen_p17_release3.run(EN, PT, write, shaped)  # the 0.3.0 release's own fixes
+import gen_p18_machines; gen_p18_machines.run(EN, PT, write, shaped)  # the machine line on the kit
+import gen_p25_machines5; gen_p25_machines5.run(EN, PT, write, shaped)  # the machine line, fifth batch
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

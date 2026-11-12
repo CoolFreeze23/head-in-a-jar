@@ -1,0 +1,118 @@
+# The Gene Splicer filmed again with the second player back beside it, not in front: near, refusal, brown-out, ten blocks
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+bystander spawn -2 -60 2 225
+bystander tp -2 -60 2 225 0
+# --- the Gene Splicer: a second player opens it, is refused (no genes), a splice start to finish
+/setblock 0 -60 0 headinajar:gene_splicer[facing=south]
+/data merge block 0 -60 0 {Energy:40000,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+/tp @s 2.8 -59 3.6 143 10
+wait 20
+frames splicer2_screen_second_player_near 70
+wait 5
+bystander useblock 0 -60 0 north
+wait 35
+bystander close
+wait 35
+observe 40
+frames splicer2_refuse_near 60
+wait 3
+bystander useblock 0 -60 0 north
+bystander button 1
+bystander packets actionbar|chat|refus
+wait 30
+bystander close
+wait 30
+/data merge block 0 -60 0 {Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0}
+frames splicer2_job_start_near 200
+wait 205
+/data merge block 0 -60 0 {Progress:1120}
+frames splicer2_job_end_near 200
+wait 205
+inspect block 0 -60 0
+# the brown-out: a second run, its power cut, then given back a tick at a time
+/data merge block 0 -60 0 {Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]},Running:1b,Progress:300}
+wait 30
+/data merge block 0 -60 0 {Energy:0}
+frames splicer2_brownout_near 180
+wait 60
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:17}
+wait 2
+/data merge block 0 -60 0 {Energy:40000}
+wait 60
+inspect block 0 -60 0
+# ten blocks: the run carried to its end
+/tp @s 7.3 -58.6 7.4 135 8
+/data merge block 0 -60 0 {Progress:1000}
+wait 5
+frames splicer2_far 260
+wait 265
+report splicer done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+wait 20
+# --- the Printer's start again (its lamp goes straight to work, no power blink at the start)
+/setblock 0 -60 0 headinajar:body_printer[facing=south]
+/data merge block 0 -60 0 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+bystander tp -2 -60 2 225 0
+bystander form jar
+/tp @s 2.8 -59 3.6 143 10
+wait 20
+frames printer2_job_start_near 160
+wait 5
+bystander useblock 0 -60 0 north
+bystander button 0
+wait 5
+bystander close
+wait 150
+inspect block 0 -60 0
+report printer2 done
+
+/fill -3 -60 -3 16 -56 16 minecraft:air
+/kill @e[type=item]
+/kill @e[type=headinajar:headless_body]
+wait 20
+# --- the Cradle at ten blocks, a head docked (an offline player's, registered as a dock leaves it), breathing
+/setblock 0 -60 0 headinajar:life_support_cradle[facing=south]
+/data merge block 0 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 0 -60 0 1
+bystander tp -2 -60 -3 225 0
+/tp @s 7.3 -58.6 7.4 135 8
+wait 60
+inspect block 0 -60 0
+frames cradle2_far 160
+wait 165
+report cradle2 done

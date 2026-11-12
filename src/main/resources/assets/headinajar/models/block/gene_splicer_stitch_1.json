@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "stitch": "headinajar:block/machine/gene_splicer_stitch_1",
+    "particle": "headinajar:block/machine/gene_splicer"
+  },
+  "elements": [
+    {
+      "name": "strand",
+      "from": [
+        6,
+        14,
+        7
+      ],
+      "to": [
+        14,
+        15,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            2,
+            5,
+            3
+          ],
+          "texture": "#stitch"
+        },
+        "east": {
+          "uv": [
+            0,
+            2,
+            1,
+            3
+          ],
+          "texture": "#stitch"
+        },
+        "south": {
+          "uv": [
+            6,
+            2,
+            10,
+            3
+          ],
+          "texture": "#stitch"
+        },
+        "west": {
+          "uv": [
+            5,
+            2,
+            6,
+            3
+          ],
+          "texture": "#stitch"
+        },
+        "up": {
+          "uv": [
+            5,
+            2,
+            1,
+            0
+          ],
+          "texture": "#stitch"
+        },
+        "down": {
+          "uv": [
+            9,
+            0,
+            5,
+            2
+          ],
+          "texture": "#stitch"
+        }
+      }
+    }
+  ]
+}

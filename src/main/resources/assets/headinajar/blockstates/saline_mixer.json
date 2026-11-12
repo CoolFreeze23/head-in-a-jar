@@ -1,20 +1,624 @@
 {
-  "variants": {
-    "facing=north": {
-      "model": "headinajar:block/saline_mixer",
-      "y": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer"
+      }
     },
-    "facing=east": {
-      "model": "headinajar:block/saline_mixer",
-      "y": 90
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_off"
+      }
     },
-    "facing=south": {
-      "model": "headinajar:block/saline_mixer",
-      "y": 180
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_ready"
+      }
     },
-    "facing=west": {
-      "model": "headinajar:block/saline_mixer",
-      "y": 270
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "water": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "water": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "water": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "water": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "water": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "water": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "water": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "water": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "water": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "water": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "water": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "water": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "water": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "water": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "water": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_lamp_fault",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "water": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "water": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "water": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "water": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "water": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_water_4",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "saline": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/saline_mixer_saline_4",
+        "y": 270
+      }
     }
-  }
+  ]
 }

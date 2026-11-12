@@ -1,0 +1,70 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/saline_mixer",
+    "particle": "headinajar:block/machine/saline_mixer"
+  },
+  "elements": [
+    {
+      "name": "saline_1_hi",
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        1,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.25,
+            12.555556,
+            12.25,
+            12.666667
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            12.555556,
+            11.25,
+            12.666667
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            13,
+            12.555556,
+            14,
+            12.666667
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            12.25,
+            12.555556,
+            13,
+            12.666667
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            12.25,
+            12.555556,
+            11.25,
+            11.888889
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

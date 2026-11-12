@@ -1,0 +1,80 @@
+# Batch two, first look: the Life Support Cradle (a head docked), the Body Printer (printing), the Gene Splicer (sewing)
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:life_support_cradle[facing=south]
+/setblock 3 -60 0 headinajar:body_printer[facing=south]
+/setblock 6 -60 0 headinajar:gene_splicer[facing=south]
+/data merge block 0 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+/data merge block 3 -60 0 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+/data merge block 6 -60 0 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+hud off
+/tp @s 3.5 -58.6 6.5 180 8
+wait 30
+shot look2_rest_row
+/tp @s 1.5 -58.6 3.5 200 10
+wait 5
+shot look2_rest_3q
+# the head docked: the player takes their head off with goggles and collar, carries it and docks it
+/give @s headinajar:head_satchel
+/tp @s 0.5 -60 3.2 180 25
+separate
+wait 10
+pickup
+wait 10
+key use
+wait 40
+inspect block 0 -60 0
+inspect block 0 -59 0
+/tp @s 3.5 -58.6 6.5 180 8
+wait 10
+shot look2_docked_row
+/tp @s -1.5 -59 3.5 210 12
+wait 5
+shot look2_cradle_close
+frames cradle_breathe 80
+wait 85
+# the print: started by the stand-in as a jar, then moved on near its end
+bystander spawn 4 -60 3 180
+bystander form jar
+wait 10
+bystander useblock 3 -60 0 north
+wait 5
+bystander mark
+bystander button 0
+wait 5
+bystander packets actionbar|chat|refus
+bystander close
+wait 40
+inspect block 3 -60 0
+/tp @s 4.8 -59 3.6 143 12
+wait 5
+shot look2_printer_start
+/data merge block 3 -60 0 {Progress:500}
+wait 30
+shot look2_printer_500
+/data merge block 3 -60 0 {Progress:1050}
+wait 30
+shot look2_printer_develop
+/data merge block 3 -60 0 {Progress:1170}
+frames printer_deliver 80
+wait 85
+shot look2_printer_out
+# the splice
+/data merge block 6 -60 0 {Running:1b,Progress:0}
+/tp @s 7.8 -59 3.6 143 12
+wait 30
+shot look2_splicer_work
+frames splicer_work 60
+wait 65
+/data merge block 6 -60 0 {Progress:1190}
+frames splicer_finish 90
+wait 95
+shot look2_splicer_done
+inspect block 6 -60 0
+/tp @s 3.5 -57 12 180 10
+wait 5
+shot look2_row_10
+report look2 done

@@ -1,0 +1,64 @@
+# The baked rest pose: each machine at rest drawn by the chunk against the same pose drawn by its renderer (stills,
+# compared pixel by pixel), then the hand-overs (to the chunk at rest, back to the renderer as it wakes) filmed at 60
+# and at 20 frames a second, near
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+bystander spawn 6 -60 4 180
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 2 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 4 -60 0 headinajar:centrifuge[facing=south]
+/setblock 6 -60 0 headinajar:life_support_cradle[facing=south]
+/setblock 8 -60 0 headinajar:body_printer[facing=east]
+/setblock 10 -60 0 headinajar:gene_splicer[facing=west]
+/data merge block 4 -60 0 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2}]}}
+/data merge block 10 -60 0 {Gene0:"spider_climb",Gene1:"golem_frame",Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+/tp @s 5.5 -58.6 5.5 180 12
+wait 80
+shot rest_baked
+machdebug 64
+wait 10
+shot rest_drawn
+machdebug 0
+wait 10
+shot rest_baked_again
+# from behind and the sides: the turned machines' halves meet at the cell line
+/tp @s 5.5 -57.4 -4.5 0 18
+wait 10
+shot rest_baked_back
+machdebug 64
+wait 10
+shot rest_drawn_back
+machdebug 0
+wait 10
+# the hand-overs at 60: the Centrifuge's drawer out for a second player's screen and back in, the Pile fed one piece
+/tp @s 5.2 -58.9 3.2 200 18
+wait 20
+frames handover60_drawer 720
+wait 5
+bystander useblock 4 -60 0 north
+wait 60
+bystander close
+wait 200
+/tp @s 1.6 -58.9 2.6 200 18
+wait 10
+frames handover60_pile 900
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:1}]}}
+wait 330
+# the same at 20 frames a second
+fpscap 20
+wait 20
+/tp @s 5.2 -58.9 3.2 200 18
+wait 10
+frames handover20_drawer 230
+wait 5
+bystander useblock 4 -60 0 north
+wait 60
+bystander close
+wait 140
+fpscap 260
+inspect block 0 -60 0
+report handover done

@@ -1,7 +1,195 @@
 {
-  "variants": {
-    "": {
-      "model": "headinajar:block/leyden_jar"
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "level": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "level": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "level": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "level": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "level": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "level": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "level": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "level": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "level": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "level": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "level": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "level": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "level": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "level": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "level": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "level": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/leyden_jar_level_4",
+        "y": 270
+      }
     }
-  }
+  ]
 }

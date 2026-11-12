@@ -1,0 +1,214 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.leech_jar",
+        "texture_width": 128,
+        "texture_height": 144,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3,
+        "visible_bounds_offset": [
+          0,
+          1,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "carrier",
+          "pivot": [
+            0,
+            13,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                15,
+                -8
+              ],
+              "size": [
+                4,
+                4,
+                1
+              ],
+              "uv": [
+                0,
+                50
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leech",
+          "parent": "carrier",
+          "pivot": [
+            0,
+            19,
+            -1
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                19,
+                -2
+              ],
+              "size": [
+                4,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                82
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                19,
+                -2
+              ],
+              "size": [
+                2,
+                1,
+                2
+              ],
+              "uv": [
+                12,
+                82
+              ]
+            },
+            {
+              "origin": [
+                0,
+                21,
+                -2
+              ],
+              "size": [
+                2,
+                1,
+                2
+              ],
+              "uv": [
+                22,
+                19
+              ]
+            }
+          ]
+        },
+        {
+          "name": "nozzle",
+          "parent": "carrier",
+          "pivot": [
+            0,
+            17,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                16,
+                -10
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                48,
+                39
+              ]
+            },
+            {
+              "origin": [
+                -0.5,
+                16.5,
+                -8
+              ],
+              "size": [
+                1,
+                1,
+                2
+              ],
+              "uv": [
+                0,
+                47
+              ]
+            }
+          ],
+          "locators": {
+            "nozzle": [
+              0,
+              17,
+              -10
+            ]
+          }
+        },
+        {
+          "name": "crank",
+          "pivot": [
+            -7,
+            9,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -7,
+                8,
+                -1
+              ],
+              "size": [
+                1,
+                2,
+                2
+              ],
+              "uv": [
+                56,
+                39
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                9,
+                -1
+              ],
+              "size": [
+                1,
+                4,
+                2
+              ],
+              "uv": [
+                34,
+                39
+              ]
+            },
+            {
+              "origin": [
+                -9,
+                13,
+                -1
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                58,
+                55
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

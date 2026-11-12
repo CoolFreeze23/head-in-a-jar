@@ -1,0 +1,153 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.body_locker",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3,
+        "visible_bounds_offset": [
+          0,
+          1,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "shutter",
+          "pivot": [
+            0,
+            21,
+            -1.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                21,
+                -1
+              ],
+              "size": [
+                8,
+                8,
+                1
+              ],
+              "uv": [
+                60,
+                49
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                21,
+                -2
+              ],
+              "size": [
+                8,
+                1,
+                1
+              ],
+              "uv": [
+                60,
+                64
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                23,
+                -2
+              ],
+              "size": [
+                8,
+                1,
+                1
+              ],
+              "uv": [
+                78,
+                64
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                25,
+                -2
+              ],
+              "size": [
+                8,
+                1,
+                1
+              ],
+              "uv": [
+                96,
+                64
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                27,
+                -2
+              ],
+              "size": [
+                8,
+                1,
+                1
+              ],
+              "uv": [
+                0,
+                67
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ticket",
+          "pivot": [
+            -5,
+            20,
+            -4.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.5,
+                19,
+                -5
+              ],
+              "size": [
+                1,
+                1,
+                1
+              ],
+              "uv": [
+                28,
+                67
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                15,
+                -5
+              ],
+              "size": [
+                2,
+                4,
+                1
+              ],
+              "uv": [
+                0,
+                97
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

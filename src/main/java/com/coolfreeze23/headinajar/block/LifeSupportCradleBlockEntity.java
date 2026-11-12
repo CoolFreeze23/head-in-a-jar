@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 /** Holds one player's head, safe from harm, while they walk around in their body. */
-public class LifeSupportCradleBlockEntity extends BlockEntity {
+public class LifeSupportCradleBlockEntity extends BlockEntity implements com.coolfreeze23.headinajar.machine.KitMachine, software.bernie.geckolib.animatable.GeoBlockEntity {
     private UUID owner;
     private String ownerName = "";
     private ItemStack goggles = ItemStack.EMPTY;
@@ -47,6 +47,124 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
 
     public LifeSupportCradleBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.CRADLE_BE.get(), pos, state);
+    }
+
+    // --- the machine kit: what the chair shows ---------------------------------------------------------------
+
+    private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
+    /** When the head was docked (game time; the dock clip runs from it), whether there is power to breathe on, when it last topped the head up. */
+    private long dockedAt = Long.MIN_VALUE / 2, lastTopUp = Long.MIN_VALUE / 2;
+    private boolean powered, toppingUp;
+    /** Client: the shape of the jar last docked, kept for the undock after the server has cleared it. */
+    private boolean lastCompact;
+
+    @Override
+    public com.coolfreeze23.headinajar.machine.MachineKit kit() {
+        return kit;
+    }
+
+    /** The docked head is in a Compact Jar. */
+    public boolean compact() {
+        return compact;
+    }
+
+    public boolean lastCompact() {
+        return lastCompact;
+    }
+
+    public long dockedAt() {
+        return dockedAt;
+    }
+
+    public boolean powered() {
+        return powered;
+    }
+
+    /** The server's tick, then what the chair shows: the lamp, the bag's level, the few things a client draws. */
+    public static void kitTick(Level level, BlockPos pos, BlockState state, LifeSupportCradleBlockEntity cradle) {
+        serverTick(level, pos, state, cradle);
+        cradle.show(level);
+    }
+
+    private void show(Level level) {
+        long now = level.getGameTime();
+        powered = energy.getEnergyStored() > 0;
+        toppingUp = owner != null && now - lastTopUp < 40;
+        boolean wantsSaline = false;
+        if (owner != null && level.getServer() != null) {
+            var head = level.getServer().getPlayerList().getPlayer(owner);
+            if (head != null) {
+                var jar = head.getData(ModRegistry.JAR_STATE);
+                wantsSaline = jar.form().isDecapitated() && jar.saline() < jar.maxSaline();
+            }
+        }
+        com.coolfreeze23.headinajar.machine.MachineLamp lamp;
+        if (owner == null) lamp = powered ? com.coolfreeze23.headinajar.machine.MachineLamp.READY : com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
+        else if (!powered) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.LOW;
+        else if (wantsSaline && saline.getFluidAmount() == 0) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
+        else if (toppingUp) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WORK;
+        else lamp = com.coolfreeze23.headinajar.machine.MachineLamp.READY;
+        kit.level(LifeSupportCradleBlock.SALINE, com.coolfreeze23.headinajar.machine.MachineLamp.step(saline.getFluidAmount(), saline.getCapacity()));
+        kit.tick(lamp, toppingUp, false, 0);
+    }
+
+    @Override
+    public void writeSync(CompoundTag tag) {
+        if (owner == null) return;
+        tag.putUUID("Owner", owner);
+        tag.putString("OwnerName", ownerName);
+        if (!goggles.isEmpty() && level != null) tag.put("Goggles", goggles.save(level.registryAccess()));
+        if (compact) tag.putBoolean("Compact", true);
+        if (powered) tag.putBoolean("Powered", true);
+        if (toppingUp) tag.putBoolean("Topping", true);
+        tag.putLong("DockedAt", dockedAt);
+        // a botched head floats upside down for a while: watchers draw it so until then
+        if (upsideDownUntil > 0) tag.putLong("UpsideDownUntil", upsideDownUntil);
+    }
+
+    @Override
+    public void readSync(CompoundTag tag) {
+        owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
+        ownerName = tag.getString("OwnerName");
+        goggles = level == null || !tag.contains("Goggles") ? ItemStack.EMPTY : ItemStack.parseOptional(level.registryAccess(), tag.getCompound("Goggles"));
+        compact = tag.getBoolean("Compact");
+        if (owner != null) lastCompact = compact;
+        powered = tag.getBoolean("Powered");
+        toppingUp = tag.getBoolean("Topping");
+        dockedAt = tag.contains("DockedAt") ? tag.getLong("DockedAt") : Long.MIN_VALUE / 2;
+        upsideDownUntil = tag.getLong("UpsideDownUntil");
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
+        kit.read(tag);
+    }
+
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+        kit.read(packet.getTag());
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        return kit.triggerEvent(id, param);
+    }
+
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache = software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+        com.coolfreeze23.headinajar.client.MachineAnimations.cradle(this, controllers);
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public double getTick(Object blockEntity) {
+        return com.coolfreeze23.headinajar.client.MachineAnimations.now(this);
     }
 
     /** The Cradle the player stands on (or in), if any. */
@@ -94,6 +212,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         this.owner = owner;
         this.ownerName = name;
         this.goggles = goggles.copy();
+        if (level != null) dockedAt = level.getGameTime();
         changed();
     }
 
@@ -161,12 +280,14 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         if (want > 0) {
             int got = saline.drain(want, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE).getAmount();
             state.setSaline(state.saline() + got);
+            if (got > 0) lastTopUp = time;
         }
         int room = state.chargeCapacity() - state.charge();
         int moved = Math.min(Math.min(10_000, room), energy.getEnergyStored());
         if (moved > 0) {
             energy.set(energy.getEnergyStored() - moved);
             state.setCharge(state.charge() + moved);
+            lastTopUp = time;
         }
         if (time % 200 == 0 && state.integrity() < state.maxIntegrity()) state.setIntegrity(state.integrity() + 1);
     }
@@ -222,11 +343,10 @@ public class LifeSupportCradleBlockEntity extends BlockEntity {
         upsideDownUntil = tag.getLong("UpsideDownUntil");
     }
 
+    /** Only what a client draws (never the save); never empty: an empty update is skipped by the client, which would keep drawing a head that left. */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = new CompoundTag();
-        saveAdditional(tag, registries);
-        // never empty: an empty update is skipped by the client, which would keep drawing a head that left
+        CompoundTag tag = kit.syncTag();
         tag.putBoolean("Synced", true);
         return tag;
     }

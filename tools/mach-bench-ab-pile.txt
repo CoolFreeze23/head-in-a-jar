@@ -1,0 +1,380 @@
+# The machine line bench as an A/B in one session (written by tools/mach_bench_ab.py).
+@observe 1
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+gamerule doMobSpawning false
+time set noon
+weather clear
+hud off
+tp @s 0.5 -54 -6.5
+look 0 14
+setblock -7 -60 18 headinajar:cerebral_array
+setblock -5 -60 18 headinajar:cerebral_array
+setblock -3 -60 18 headinajar:turret_pedestal
+setblock -1 -60 18 headinajar:turret_pedestal
+setblock 1 -60 18 headinajar:turret_pedestal
+setblock 3 -60 18 headinajar:turret_pedestal
+setblock 5 -60 18 headinajar:neural_socket
+setblock 7 -60 18 headinajar:neural_socket
+setblock -9 -60 18 headinajar:neural_socket
+setblock 9 -60 18 headinajar:neural_socket
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 6 headinajar:galvanic_pile
+data merge block -3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 6 headinajar:galvanic_pile
+data merge block -1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 6 headinajar:galvanic_pile
+data merge block 1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 6 headinajar:galvanic_pile
+data merge block 7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 6 headinajar:galvanic_pile
+data merge block -9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 6 headinajar:galvanic_pile
+data merge block 9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 10 headinajar:galvanic_pile
+data merge block -7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 10 headinajar:galvanic_pile
+data merge block -5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 10 headinajar:galvanic_pile
+data merge block -3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 10 headinajar:galvanic_pile
+data merge block -1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 10 headinajar:galvanic_pile
+data merge block 1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 10 headinajar:galvanic_pile
+data merge block 3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 10 headinajar:galvanic_pile
+data merge block 5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 10 headinajar:galvanic_pile
+data merge block 7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 10 headinajar:galvanic_pile
+data merge block -9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 10 headinajar:galvanic_pile
+data merge block 9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 14 headinajar:galvanic_pile
+data merge block -7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 14 headinajar:galvanic_pile
+data merge block -5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 14 headinajar:galvanic_pile
+data merge block -3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 14 headinajar:galvanic_pile
+data merge block -1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 14 headinajar:galvanic_pile
+data merge block 1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 14 headinajar:galvanic_pile
+data merge block 3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 14 headinajar:galvanic_pile
+data merge block 5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 14 headinajar:galvanic_pile
+data merge block 7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 14 headinajar:galvanic_pile
+data merge block -9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 14 headinajar:galvanic_pile
+data merge block 9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+wait 100
+shot ab_machines
+perf warmup 1200
+wait 1205
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 6 headinajar:galvanic_pile
+data merge block -3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 6 headinajar:galvanic_pile
+data merge block -1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 6 headinajar:galvanic_pile
+data merge block 1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 6 headinajar:galvanic_pile
+data merge block 7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 6 headinajar:galvanic_pile
+data merge block -9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 6 headinajar:galvanic_pile
+data merge block 9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 10 headinajar:galvanic_pile
+data merge block -7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 10 headinajar:galvanic_pile
+data merge block -5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 10 headinajar:galvanic_pile
+data merge block -3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 10 headinajar:galvanic_pile
+data merge block -1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 10 headinajar:galvanic_pile
+data merge block 1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 10 headinajar:galvanic_pile
+data merge block 3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 10 headinajar:galvanic_pile
+data merge block 5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 10 headinajar:galvanic_pile
+data merge block 7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 10 headinajar:galvanic_pile
+data merge block -9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 10 headinajar:galvanic_pile
+data merge block 9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 14 headinajar:galvanic_pile
+data merge block -7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 14 headinajar:galvanic_pile
+data merge block -5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 14 headinajar:galvanic_pile
+data merge block -3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 14 headinajar:galvanic_pile
+data merge block -1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 14 headinajar:galvanic_pile
+data merge block 1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 14 headinajar:galvanic_pile
+data merge block 3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 14 headinajar:galvanic_pile
+data merge block 5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 14 headinajar:galvanic_pile
+data merge block 7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 14 headinajar:galvanic_pile
+data merge block -9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 14 headinajar:galvanic_pile
+data merge block 9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+kill @e[type=item]
+wait 100
+perf machines_1 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock 7 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock 9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock 7 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock 9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock 7 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock 9 -60 14 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_1 200
+wait 205
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 6 headinajar:galvanic_pile
+data merge block -3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 6 headinajar:galvanic_pile
+data merge block -1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 6 headinajar:galvanic_pile
+data merge block 1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 6 headinajar:galvanic_pile
+data merge block 7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 6 headinajar:galvanic_pile
+data merge block -9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 6 headinajar:galvanic_pile
+data merge block 9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 10 headinajar:galvanic_pile
+data merge block -7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 10 headinajar:galvanic_pile
+data merge block -5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 10 headinajar:galvanic_pile
+data merge block -3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 10 headinajar:galvanic_pile
+data merge block -1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 10 headinajar:galvanic_pile
+data merge block 1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 10 headinajar:galvanic_pile
+data merge block 3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 10 headinajar:galvanic_pile
+data merge block 5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 10 headinajar:galvanic_pile
+data merge block 7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 10 headinajar:galvanic_pile
+data merge block -9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 10 headinajar:galvanic_pile
+data merge block 9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 14 headinajar:galvanic_pile
+data merge block -7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 14 headinajar:galvanic_pile
+data merge block -5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 14 headinajar:galvanic_pile
+data merge block -3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 14 headinajar:galvanic_pile
+data merge block -1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 14 headinajar:galvanic_pile
+data merge block 1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 14 headinajar:galvanic_pile
+data merge block 3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 14 headinajar:galvanic_pile
+data merge block 5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 14 headinajar:galvanic_pile
+data merge block 7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 14 headinajar:galvanic_pile
+data merge block -9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 14 headinajar:galvanic_pile
+data merge block 9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+kill @e[type=item]
+wait 100
+perf machines_2 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock 7 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock 9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock 7 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock 9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock 7 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock 9 -60 14 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_2 200
+wait 205
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 6 headinajar:galvanic_pile
+data merge block -3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 6 headinajar:galvanic_pile
+data merge block -1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 6 headinajar:galvanic_pile
+data merge block 1 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 6 headinajar:galvanic_pile
+data merge block 7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 6 headinajar:galvanic_pile
+data merge block -9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 6 headinajar:galvanic_pile
+data merge block 9 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 10 headinajar:galvanic_pile
+data merge block -7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 10 headinajar:galvanic_pile
+data merge block -5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 10 headinajar:galvanic_pile
+data merge block -3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 10 headinajar:galvanic_pile
+data merge block -1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 10 headinajar:galvanic_pile
+data merge block 1 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 10 headinajar:galvanic_pile
+data merge block 3 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 10 headinajar:galvanic_pile
+data merge block 5 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 10 headinajar:galvanic_pile
+data merge block 7 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 10 headinajar:galvanic_pile
+data merge block -9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 10 headinajar:galvanic_pile
+data merge block 9 -60 10 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -7 -60 14 headinajar:galvanic_pile
+data merge block -7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -5 -60 14 headinajar:galvanic_pile
+data merge block -5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -3 -60 14 headinajar:galvanic_pile
+data merge block -3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -1 -60 14 headinajar:galvanic_pile
+data merge block -1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 1 -60 14 headinajar:galvanic_pile
+data merge block 1 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 3 -60 14 headinajar:galvanic_pile
+data merge block 3 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 5 -60 14 headinajar:galvanic_pile
+data merge block 5 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 7 -60 14 headinajar:galvanic_pile
+data merge block 7 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock -9 -60 14 headinajar:galvanic_pile
+data merge block -9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+setblock 9 -60 14 headinajar:galvanic_pile
+data merge block 9 -60 14 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000}
+kill @e[type=item]
+wait 100
+perf machines_3 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock -3 -60 6 minecraft:furnace
+setblock -1 -60 6 minecraft:furnace
+setblock 1 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock 7 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock 9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock -3 -60 10 minecraft:furnace
+setblock -1 -60 10 minecraft:furnace
+setblock 1 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock 7 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock 9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock -3 -60 14 minecraft:furnace
+setblock -1 -60 14 minecraft:furnace
+setblock 1 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock 7 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock 9 -60 14 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_3 200
+wait 205
+shot ab_cubes
+report ab done

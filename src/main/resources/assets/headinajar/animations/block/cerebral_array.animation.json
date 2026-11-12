@@ -1,0 +1,1433 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "vote": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 3,
+      "bones": {
+        "gavel": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                -55
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                -58
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "0.55": {
+              "vector": [
+                0,
+                0,
+                -6
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_1": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.9": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_2": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.05": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_3": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.2": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_4": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.15": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.35": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_5": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_6": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.45": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.65": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_7": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.6": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.8": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_8": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.95": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_9": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.9": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "2.1": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.7": {
+          "effect": "headinajar:array.card|0.3|0.93"
+        },
+        "0.85": {
+          "effect": "headinajar:array.card|0.3|0.95"
+        },
+        "1.0": {
+          "effect": "headinajar:array.card|0.3|0.98"
+        },
+        "1.15": {
+          "effect": "headinajar:array.card|0.3|1.00"
+        },
+        "1.3": {
+          "effect": "headinajar:array.card|0.3|1.02"
+        },
+        "1.45": {
+          "effect": "headinajar:array.card|0.3|1.05"
+        },
+        "1.6": {
+          "effect": "headinajar:array.card|0.3|1.07"
+        },
+        "1.75": {
+          "effect": "headinajar:array.card|0.3|1.10"
+        },
+        "1.9": {
+          "effect": "headinajar:array.card|0.3|1.12"
+        },
+        "2.65": {
+          "effect": "headinajar:array.cards_down|0.5|1.05"
+        },
+        "2.75": {
+          "effect": "headinajar:array.cards_down|0.5|0.95"
+        }
+      },
+      "particle_effects": {
+        "0.5": {
+          "effect": "minecraft:poof",
+          "locator": "gavel"
+        }
+      }
+    },
+    "vote_anyway": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 3,
+      "bones": {
+        "gavel": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                -55
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                -58
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "0.55": {
+              "vector": [
+                0,
+                0,
+                -6
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "1.9": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "2.1": {
+              "vector": [
+                0,
+                0,
+                -55
+              ],
+              "easing": "easeOutCubic"
+            },
+            "2.15": {
+              "vector": [
+                0,
+                0,
+                -58
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.25": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "2.3": {
+              "vector": [
+                0,
+                0,
+                -6
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.35": {
+              "vector": [
+                0,
+                0,
+                -55
+              ],
+              "easing": "easeOutCubic"
+            },
+            "2.4": {
+              "vector": [
+                0,
+                0,
+                -58
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "2.55": {
+              "vector": [
+                0,
+                0,
+                -6
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.6": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_1": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.9": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_2": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.05": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_3": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.2": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.6": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.8": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.85": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_4": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.15": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.35": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_5": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_6": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.45": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.65": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.55": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.7": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.75": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.8": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_7": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.6": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.8": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_8": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.95": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        },
+        "card_9": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "1.9": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "2.1": {
+              "vector": [
+                90,
+                0,
+                0
+              ],
+              "easing": "easeOutBack",
+              "easingArgs": [
+                0.5
+              ]
+            },
+            "2.5": {
+              "vector": [
+                90,
+                0,
+                0
+              ]
+            },
+            "2.65": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "2.7": {
+              "vector": [
+                6,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "2.75": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.7": {
+          "effect": "headinajar:array.card|0.3|0.93"
+        },
+        "0.85": {
+          "effect": "headinajar:array.card|0.3|0.95"
+        },
+        "1.0": {
+          "effect": "headinajar:array.card|0.3|0.98"
+        },
+        "1.15": {
+          "effect": "headinajar:array.card|0.3|1.00"
+        },
+        "1.3": {
+          "effect": "headinajar:array.card|0.3|1.02"
+        },
+        "1.45": {
+          "effect": "headinajar:array.card|0.3|1.05"
+        },
+        "1.6": {
+          "effect": "headinajar:array.card|0.3|1.07"
+        },
+        "1.75": {
+          "effect": "headinajar:array.card|0.3|1.10"
+        },
+        "1.9": {
+          "effect": "headinajar:array.card|0.3|1.12"
+        },
+        "2.25": {
+          "effect": "headinajar:array.gavel|1.0|0.95"
+        },
+        "2.5": {
+          "effect": "headinajar:array.gavel|1.0|1.08"
+        },
+        "2.65": {
+          "effect": "headinajar:array.cards_down|0.5|1.05"
+        },
+        "2.75": {
+          "effect": "headinajar:array.cards_down|0.5|0.95"
+        }
+      },
+      "particle_effects": {
+        "0.5": {
+          "effect": "minecraft:poof",
+          "locator": "gavel"
+        },
+        "2.3": {
+          "effect": "minecraft:poof",
+          "locator": "gavel"
+        },
+        "2.55": {
+          "effect": "minecraft:poof",
+          "locator": "gavel"
+        }
+      }
+    },
+    "refuse": {
+      "animation_length": 0.4,
+      "bones": {
+        "gavel": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                0,
+                -30
+              ],
+              "easing": "easeOutCubic"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                -30
+              ],
+              "easing": "easeOutCubic"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:machine.rattle|0.4|1.0"
+        },
+        "0.2": {
+          "effect": "headinajar:array.gavel|0.4|1.4"
+        },
+        "0.4": {
+          "effect": "headinajar:array.gavel|0.4|1.5"
+        }
+      }
+    }
+  }
+}

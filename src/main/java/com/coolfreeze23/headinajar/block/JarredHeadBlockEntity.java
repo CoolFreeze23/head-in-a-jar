@@ -23,8 +23,17 @@ import net.minecraft.world.level.block.state.BlockState;
  * A placed jarred head. A villager's head keeps its whole villager record, so it can trade: using the jar opens the
  * normal trading screen with a stand-in villager that is saved back when trading ends. It restocks twice a day.
  */
-public class JarredHeadBlockEntity extends BlockEntity {
+public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze23.headinajar.feedback.Refuser {
+    /** Block events: the head shakes no (a refusal), the bell (trading opens), a nod (a trade done). */
+    public static final int EV_REFUSE = 1, EV_BELL = 2, EV_NOD = 3;
+    /** The head looks at the nearest player this close (client only). */
+    public static final double LOOK = 6;
     private String type = "";
+    /** While trading: the stand-in's offers' total uses, to see a trade go through. */
+    private int uses = -1;
+    /** Client: the head's turn and nod toward the nearest player (degrees), and last tick's; when each moment was seen. */
+    public float yaw, yawPrev, pitch, pitchPrev;
+    private final long[] seen = {Long.MIN_VALUE / 2, Long.MIN_VALUE / 2, Long.MIN_VALUE / 2, Long.MIN_VALUE / 2};
     private CompoundTag entity = new CompoundTag();
     private long lastRestock;
     private Villager trader;
@@ -99,10 +108,79 @@ public class JarredHeadBlockEntity extends BlockEntity {
         }
         trader.setTradingPlayer(player);
         trader.openTradingScreen(player, trader.getDisplayName(), trader.getVillagerData().getLevel());
+        uses = uses(trader);
+        // the push bell on the plinth's front
+        level.blockEvent(worldPosition, getBlockState().getBlock(), EV_BELL, 0);
         return true;
     }
 
+    private static int uses(Villager trader) {
+        int n = 0;
+        for (var offer : trader.getOffers()) n += offer.getUses();
+        return n;
+    }
+
+    /** The house refusal at a placed head: it shakes its head (the line and the sound come from the refusal). */
+    @Override
+    public net.minecraft.world.phys.Vec3 refusalOrigin() {
+        return net.minecraft.world.phys.Vec3.atCenterOf(worldPosition).add(0, 0.3, 0);
+    }
+
+    @Override
+    public void showRefusal(ServerPlayer player, String reason) {
+        if (level != null) level.blockEvent(worldPosition, getBlockState().getBlock(), EV_REFUSE, 0);
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        if (id < 1 || id > 3) return false;
+        if (level != null && level.isClientSide) {
+            seen[id] = level.getGameTime();
+            if (id == EV_BELL) {
+                // the push bell, at the plinth's front (the model's bell at (5, 4, -8) px, turned with the head)
+                var p = net.minecraft.world.phys.Vec3.atBottomCenterOf(worldPosition)
+                        .add(new net.minecraft.world.phys.Vec3(5 / 16.0, 4 / 16.0, -8 / 16.0).yRot((float) Math.toRadians(-getBlockState().getValue(JarredHeadBlock.FACING).toYRot())));
+                level.playLocalSound(p.x, p.y, p.z, net.minecraft.sounds.SoundEvents.BELL_BLOCK, net.minecraft.sounds.SoundSource.BLOCKS, 0.3f, 2.0f, false);
+            }
+        }
+        return true;
+    }
+
+    /** Ticks (with the partial tick) since moment {@code id} was seen on this client. */
+    public double since(int id, double now) {
+        return now - seen[id];
+    }
+
+    /**
+     * Client: the head turns to the nearest player within {@link #LOOK} blocks (and back to the front when none),
+     * chased a little each tick so it looks round rather than snaps.
+     */
+    public void clientTick() {
+        yawPrev = yaw;
+        pitchPrev = pitch;
+        if (level == null) return;
+        float wantYaw = 0, wantPitch = 0;
+        var c = net.minecraft.world.phys.Vec3.atBottomCenterOf(worldPosition).add(0, 12.5 / 16.0, 0);
+        net.minecraft.world.entity.player.Player p = level.getNearestPlayer(c.x, c.y, c.z, LOOK, false);
+        if (p != null) {
+            var eye = p.getEyePosition();
+            double dx = eye.x - c.x, dy = eye.y - c.y, dz = eye.z - c.z;
+            float to = (float) Math.toDegrees(Math.atan2(-dx, dz));
+            // relative to the way the jar faces, clockwise from above as a player's head turns
+            wantYaw = net.minecraft.util.Mth.clamp(net.minecraft.util.Mth.wrapDegrees(to - getBlockState().getValue(JarredHeadBlock.FACING).getOpposite().toYRot()), -75, 75);
+            wantPitch = (float) net.minecraft.util.Mth.clamp(-Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))), -20, 20);
+        }
+        yaw += (wantYaw - yaw) * 0.2f;
+        pitch += (wantPitch - pitch) * 0.2f;
+    }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, JarredHeadBlockEntity head) {
+        // a trade went through: the head nods
+        if (head.trader != null) {
+            int now = uses(head.trader);
+            if (head.uses >= 0 && now > head.uses) level.blockEvent(pos, state.getBlock(), EV_NOD, 0);
+            head.uses = now;
+        }
         // trading has ended: keep what changed (uses, experience) and drop the stand-in
         if (head.trader != null && head.trader.getTradingPlayer() == null) {
             CompoundTag tag = new CompoundTag();

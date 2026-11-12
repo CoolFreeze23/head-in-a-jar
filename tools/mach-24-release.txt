@@ -1,0 +1,215 @@
+# What the 0.3.0 merge touched, through the real click paths: a Tesla pair linked with the wrench and sending (the
+# effect kit's arc between the balls, the ball's light, the ring's kick); a guardian turret locking, firing and losing
+# its target; a Cradle with an upside-down head; the Body Printer's power refusal and the Splicer's load line; the
+# Charging Dock's and the Body Locker's refusals. Each near, then at about ten blocks.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -3 -60 3 225
+# --- the Tesla pair: linked with the wrench (use the sender, then the receiver), the receiver drained as a load would
+/setblock 0 -60 0 headinajar:tesla_node[facing=south]
+/setblock 0 -60 8 headinajar:tesla_node[facing=north]
+/data merge block 0 -60 0 {Energy:10000}
+/give @s headinajar:surgical_wrench
+hotbar 1
+/tp @s 2.5 -60 0.5 90 0
+wait 10
+lookpos 0.5 -59.5 0.5
+wait 3
+key use
+wait 20
+/tp @s 2.5 -60 8.5 90 0
+wait 10
+lookpos 0.5 -59.5 8.5
+wait 3
+key use
+wait 20
+inspect block 0 -60 0
+/clear @s
+/tp @s 6 -58.4 4.5 90 0
+lookpos 0.5 -59 4.5
+wait 10
+frames rel_tesla_near 160
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/tp @s 10.5 -58.6 4.5 90 0
+lookpos 0.5 -59.2 4.5
+wait 5
+frames rel_tesla_ten_blocks 160
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+shot rel_tesla_arc_still
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+/data merge block 0 -60 0 {Energy:10000}
+wait 18
+/data merge block 0 -60 8 {Energy:0}
+wait 20
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the guardian turret: a zombie walks into its sight (the lock, the beam from the muzzle, the shot); a second one is
+# pulled out of range halfway through its lock (lost)
+/setblock 0 -60 0 headinajar:turret_pedestal[facing=south]
+/data merge block 0 -60 0 {Energy:40000}
+headblock 0 -60 0 guardian
+/tp @s 3.5 -58.6 4.5 150 10
+wait 40
+frames rel_turret_lock_near 200
+/summon minecraft:zombie 0 -60 -7 {NoAI:1b}
+wait 120
+/kill @e[type=minecraft:zombie]
+/summon minecraft:zombie -4 -60 -6 {NoAI:1b}
+wait 22
+/tp @e[type=minecraft:zombie] -4 -60 -40
+wait 60
+/kill @e[type=minecraft:zombie]
+/tp @s 7.3 -58.6 7.4 135 8
+wait 20
+frames rel_turret_ten_blocks 200
+/summon minecraft:zombie 0 -60 -7 {NoAI:1b}
+wait 120
+/kill @e[type=minecraft:zombie]
+/summon minecraft:zombie -4 -60 -6 {NoAI:1b}
+wait 22
+/tp @e[type=minecraft:zombie] -4 -60 -40
+wait 60
+/kill @e[type=minecraft:zombie]
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- a Cradle holding a head upside down (a botched cut)
+/setblock 0 -60 0 headinajar:life_support_cradle[facing=south]
+/data merge block 0 -60 0 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:3000}}}
+cradlehead 0 -60 0 1 upside
+/tp @s 2.8 -59 3.6 143 12
+wait 20
+inspect block 0 -60 0
+frames rel_cradle_upside_near 80
+wait 85
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel_cradle_upside_ten_blocks 80
+wait 85
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Body Printer: stocked but short of a print's power; the Print button refused (nothing taken)
+/setblock 0 -60 0 headinajar:body_printer[facing=south]
+/data merge block 0 -60 0 {Energy:100000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:2000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+/tp @s 0.5 -60 2.5 180 0
+lookpos 0.5 -59.5 0.5
+wait 10
+frames rel_printer_refuse_near 100
+key use
+wait 15
+widgets
+widget Print
+wait 10
+shot rel_printer_refuse_screen
+wait 20
+closegui
+wait 50
+inspect block 0 -60 0
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel_printer_refuse_ten_blocks 80
+bystander tp -1 -60 2 200 0
+bystander useblock 0 -60 0 north
+bystander button 0
+bystander packets actionbar|chat|refus
+bystander close
+wait 80
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Gene Splicer: its screen says what a load fits
+/setblock 0 -60 0 headinajar:gene_splicer[facing=south]
+/tp @s 0.5 -60 2.5 180 0
+lab
+lookpos 0.5 -59.5 0.5
+wait 10
+key use
+wait 15
+widgets
+shot rel_splicer_load_screen
+closegui
+wait 10
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Charging Dock, empty: the player's click and the second player's, refused
+/setblock 0 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 0 -60 0 {Energy:0}
+/tp @s 0.5 -60 2.5 180 0
+lookpos 0.5 -59.75 0.5
+wait 10
+frames rel_dock_refuse_near 60
+key use
+wait 60
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel_dock_refuse_ten_blocks 60
+bystander tp -2 -60 3 225 0
+bystander useblock 0 -60 0 up
+bystander packets actionbar|chat|refus
+wait 60
+/fill -3 -60 -3 16 -56 16 minecraft:air
+wait 20
+# --- the Body Locker: a husk checked in by the player's click; the second player's click refused; the owner's lets it out
+/setblock 0 -60 0 headinajar:body_locker[facing=south]
+hostify minecraft:husk 0 -60 2
+/kill @e[type=item]
+/tp @s 2.5 -60 2.5 135 0
+lookpos 0.5 -59.5 0.5
+wait 10
+frames rel_locker_near 200
+key use
+wait 60
+bystander tp -2 -60 2 225 0
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 60
+key use
+wait 75
+hostify minecraft:husk 0 -60 2
+/kill @e[type=item]
+locker 0 -60 0
+/tp @s 7.3 -58.6 7.4 135 8
+wait 10
+frames rel_locker_refuse_ten_blocks 80
+bystander useblock 0 -60 0 north
+bystander packets actionbar|chat|refus
+wait 80
+report release done

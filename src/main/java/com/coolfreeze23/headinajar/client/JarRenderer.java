@@ -82,6 +82,14 @@ public final class JarRenderer {
             bodyYaw = Mth.rotLerp(partialTick, host.yBodyRotO, host.yBodyRot);
         }
         float headYaw = Mth.rotLerp(partialTick, player.yHeadRotO, player.yHeadRot);
+        // plugged into a Neural Socket the jar stands square to it; only the head inside looks round
+        if (state.form() == com.coolfreeze23.headinajar.form.Form.SOCKET
+                && player.level().getBlockState(player.blockPosition().below()).getBlock() instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlock) {
+            float square = player.level().getBlockState(player.blockPosition().below()).getValue(com.coolfreeze23.headinajar.block.MachineBlock.FACING).toYRot();
+            float turn = shape(state.compact()).turn();
+            headYaw = square + Mth.clamp(Mth.wrapDegrees(headYaw - square), -turn, turn);
+            bodyYaw = square;
+        }
         float pitch = Mth.lerp(partialTick, player.xRotO, player.getXRot());
         pose.pushPose();
         pose.mulPose(Axis.YP.rotationDegrees(180.0f - bodyYaw));

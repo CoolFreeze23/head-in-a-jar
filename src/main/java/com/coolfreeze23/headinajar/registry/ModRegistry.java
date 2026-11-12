@@ -91,9 +91,14 @@ public final class ModRegistry {
     public static final DeferredBlock<SeparationChairBlock> SEPARATION_CHAIR = BLOCKS.register("separation_chair",
             () -> new SeparationChairBlock(steel().noOcclusion().explosionResistance(1200f)));
     public static final DeferredBlock<LifeSupportCradleBlock> CRADLE = BLOCKS.register("life_support_cradle",
-            () -> new LifeSupportCradleBlock(steel().noOcclusion().lightLevel(s -> 5)));
+            () -> new LifeSupportCradleBlock(steel().noOcclusion().dynamicShape().lightLevel(s -> 5)));
     public static final DeferredBlock<GalvanicPileBlock> GALVANIC_PILE = BLOCKS.register("galvanic_pile",
-            () -> new GalvanicPileBlock(steel().noOcclusion().lightLevel(s -> s.getValue(GalvanicPileBlock.LIT) ? 6 : 0)));
+            () -> new GalvanicPileBlock(steel().noOcclusion().lightLevel(s -> s.getValue(GalvanicPileBlock.LAMP) == com.coolfreeze23.headinajar.machine.MachineLamp.WORK ? 6 : 0)));
+    /** The upper cell of a tall machine (no item; it draws the machine's upper half, the machine below answers for it). */
+    public static final DeferredBlock<com.coolfreeze23.headinajar.machine.MachineTopBlock> MACHINE_TOP = BLOCKS.register("machine_top",
+            () -> new com.coolfreeze23.headinajar.machine.MachineTopBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0f, 6.0f)
+                    .sound(SoundType.METAL).noOcclusion().noLootTable().dynamicShape().pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)
+                    .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false)));
     public static final DeferredBlock<ChargingDockBlock> CHARGING_DOCK = BLOCKS.register("charging_dock",
             () -> new ChargingDockBlock(steel().lightLevel(s -> 4).noOcclusion()));
 
@@ -102,34 +107,26 @@ public final class ModRegistry {
         return Block.box(x0, y0, z0, x1, y1, z1);
     }
 
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.SalineMixerBlockEntity>> SALINE_MIXER =
-            BLOCKS.register("saline_mixer", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.MIXER_BE.get(), com.coolfreeze23.headinajar.block.SalineMixerBlockEntity::new,
-                    com.coolfreeze23.headinajar.block.SalineMixerBlockEntity::serverTick, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.BodyPrinterBlockEntity>> BODY_PRINTER =
-            BLOCKS.register("body_printer", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.PRINTER_BE.get(), com.coolfreeze23.headinajar.block.BodyPrinterBlockEntity::new,
-                    com.coolfreeze23.headinajar.block.BodyPrinterBlockEntity::serverTick, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.PowerBlock<com.coolfreeze23.headinajar.block.PowerBlockEntities.LeydenJar>> LEYDEN_JAR =
-            BLOCKS.register("leyden_jar", () -> new com.coolfreeze23.headinajar.block.PowerBlock<>(steel().noOcclusion().lightLevel(s -> 3),
-                    () -> ModRegistry.LEYDEN_BE.get(), com.coolfreeze23.headinajar.block.PowerBlockEntities.LeydenJar::new,
-                    com.coolfreeze23.headinajar.block.PowerBlockEntities.LeydenJar::tick, box(3, 0, 3, 13, 15, 13)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.PowerBlock<com.coolfreeze23.headinajar.block.PowerBlockEntities.TeslaNode>> TESLA_NODE =
-            BLOCKS.register("tesla_node", () -> new com.coolfreeze23.headinajar.block.PowerBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.TESLA_BE.get(), com.coolfreeze23.headinajar.block.PowerBlockEntities.TeslaNode::new,
-                    com.coolfreeze23.headinajar.block.PowerBlockEntities.TeslaNode::tick, box(4, 0, 4, 12, 16, 12)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.PowerBlock<com.coolfreeze23.headinajar.block.PowerBlockEntities.Station>> RELAY_MAST =
-            BLOCKS.register("relay_mast", () -> new com.coolfreeze23.headinajar.block.PowerBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.MAST_BE.get(), com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::mast,
-                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::tick, box(5, 0, 5, 11, 16, 11)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.PowerBlock<com.coolfreeze23.headinajar.block.PowerBlockEntities.Station>> RELAY_MAST_MK2 =
-            BLOCKS.register("relay_mast_mk2", () -> new com.coolfreeze23.headinajar.block.PowerBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.MAST2_BE.get(), com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::mast2,
-                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::tick, box(5, 0, 5, 11, 16, 11)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.PowerBlock<com.coolfreeze23.headinajar.block.PowerBlockEntities.Station>> SIGNAL_JAMMER =
-            BLOCKS.register("signal_jammer", () -> new com.coolfreeze23.headinajar.block.PowerBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.JAMMER_BE.get(), com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::jammer,
-                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::tick, box(2, 0, 2, 14, 12, 14)));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.SalineMixerBlock> SALINE_MIXER =
+            BLOCKS.register("saline_mixer", () -> new com.coolfreeze23.headinajar.block.SalineMixerBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.BodyPrinterBlock> BODY_PRINTER =
+            BLOCKS.register("body_printer", () -> new com.coolfreeze23.headinajar.block.BodyPrinterBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.LeydenJarBlock> LEYDEN_JAR =
+            BLOCKS.register("leyden_jar", () -> new com.coolfreeze23.headinajar.block.LeydenJarBlock(steel().noOcclusion().lightLevel(s -> 3)));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.TeslaNodeBlock> TESLA_NODE =
+            BLOCKS.register("tesla_node", () -> new com.coolfreeze23.headinajar.block.TeslaNodeBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.StationBlock> RELAY_MAST =
+            BLOCKS.register("relay_mast", () -> new com.coolfreeze23.headinajar.block.StationBlock(steel().noOcclusion(), () -> ModRegistry.MAST_BE.get(),
+                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::mast, net.minecraft.world.phys.shapes.Shapes.or(box(2, 0, 2, 14, 5, 14), box(7, 5, 7, 9, 16, 9)),
+                    box(7, 0, 7, 9, 16, 9), com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind.RELAY_MAST, true));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.StationBlock> RELAY_MAST_MK2 =
+            BLOCKS.register("relay_mast_mk2", () -> new com.coolfreeze23.headinajar.block.StationBlock(steel().noOcclusion(), () -> ModRegistry.MAST2_BE.get(),
+                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::mast2, box(6, 0, 6, 10, 16, 10),
+                    box(7, 0, 7, 9, 12, 9), com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind.RELAY_MAST_MK2, false));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.StationBlock> SIGNAL_JAMMER =
+            BLOCKS.register("signal_jammer", () -> new com.coolfreeze23.headinajar.block.StationBlock(steel().noOcclusion(), () -> ModRegistry.JAMMER_BE.get(),
+                    com.coolfreeze23.headinajar.block.PowerBlockEntities.Station::jammer, box(1, 0, 1, 15, 16, 15),
+                    null, com.coolfreeze23.headinajar.machine.MachineTopBlock.Kind.RELAY_MAST, false));
     public static final DeferredBlock<com.coolfreeze23.headinajar.block.SafetyPlacardBlock> SAFETY_PLACARD = BLOCKS.register("safety_placard",
             () -> new com.coolfreeze23.headinajar.block.SafetyPlacardBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
                     .strength(0.5f).sound(SoundType.METAL).noCollission()));
@@ -138,24 +135,8 @@ public final class ModRegistry {
     public static final DeferredBlock<com.coolfreeze23.headinajar.block.JarredHeadBlock> JARRED_HEAD_BLOCK = BLOCKS.register("jarred_head",
             () -> new com.coolfreeze23.headinajar.block.JarredHeadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.6f)
                     .sound(SoundType.GLASS).noOcclusion()));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.BodyLockerBlockEntity>> BODY_LOCKER =
-            BLOCKS.register("body_locker", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(),
-                    () -> ModRegistry.LOCKER_BE.get(), com.coolfreeze23.headinajar.block.BodyLockerBlockEntity::new, null, null) {
-                @Override
-                protected net.minecraft.world.InteractionResult useWithoutItem(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level,
-                                                                              net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
-                                                                              net.minecraft.world.phys.BlockHitResult hit) {
-                    if (!level.isClientSide && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity locker) locker.use(player);
-                    return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
-                }
-
-                @Override
-                protected void onRemove(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos,
-                                        net.minecraft.world.level.block.state.BlockState newState, boolean moved) {
-                    if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.BodyLockerBlockEntity locker) locker.releaseOnBreak();
-                    super.onRemove(state, level, pos, newState, moved);
-                }
-            });
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.BodyLockerBlock> BODY_LOCKER =
+            BLOCKS.register("body_locker", () -> new com.coolfreeze23.headinajar.block.BodyLockerBlock(steel().noOcclusion()));
 
     // P4: Mecha Division
     public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity>> ASSEMBLY_GANTRY =
@@ -164,44 +145,25 @@ public final class ModRegistry {
                     Block.box(0, 0, 0, 16, 6, 16)));
 
     // P5: Genetics Department
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Centrifuge>> CENTRIFUGE = BLOCKS.register("centrifuge",
-            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(), () -> ModRegistry.CENTRIFUGE_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Centrifuge::new,
-                    com.coolfreeze23.headinajar.block.LabMachines.Centrifuge::serverTick, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Sequencer>> DNA_SEQUENCER = BLOCKS.register("dna_sequencer",
-            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion().lightLevel(s -> 4), () -> ModRegistry.SEQUENCER_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Sequencer::new,
-                    com.coolfreeze23.headinajar.block.LabMachines.Sequencer::serverTick, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.Splicer>> GENE_SPLICER = BLOCKS.register("gene_splicer",
-            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion().lightLevel(s -> 6), () -> ModRegistry.SPLICER_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.Splicer::new,
-                    com.coolfreeze23.headinajar.block.LabMachines.Splicer::serverTick, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LabMachines.InjectionRig>> INJECTION_RIG = BLOCKS.register("injection_rig",
-            () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion(), () -> ModRegistry.RIG_BE.get(), com.coolfreeze23.headinajar.block.LabMachines.InjectionRig::new,
-                    null, null));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.LeechJarBlockEntity>> LEECH_JAR =
-            BLOCKS.register("leech_jar", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.6f)
-                    .sound(SoundType.GLASS).noOcclusion(), () -> ModRegistry.LEECH_JAR_BE.get(), com.coolfreeze23.headinajar.block.LeechJarBlockEntity::new,
-                    com.coolfreeze23.headinajar.block.LeechJarBlockEntity::serverTick, Block.box(4, 0, 4, 12, 10, 12)) {
-                @Override
-                protected net.minecraft.world.InteractionResult useWithoutItem(net.minecraft.world.level.block.state.BlockState state, net.minecraft.world.level.Level level,
-                                                                              net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
-                                                                              net.minecraft.world.phys.BlockHitResult hit) {
-                    if (!level.isClientSide && level.getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LeechJarBlockEntity jar) jar.empty(player);
-                    return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
-                }
-            });
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.CentrifugeBlock> CENTRIFUGE = BLOCKS.register("centrifuge",
+            () -> new com.coolfreeze23.headinajar.block.CentrifugeBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.SequencerBlock> DNA_SEQUENCER = BLOCKS.register("dna_sequencer",
+            () -> new com.coolfreeze23.headinajar.block.SequencerBlock(steel().noOcclusion().lightLevel(s -> 4)));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.GeneSplicerBlock> GENE_SPLICER = BLOCKS.register("gene_splicer",
+            () -> new com.coolfreeze23.headinajar.block.GeneSplicerBlock(steel().noOcclusion().lightLevel(s -> 6)));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.InjectionRigBlock> INJECTION_RIG = BLOCKS.register("injection_rig",
+            () -> new com.coolfreeze23.headinajar.block.InjectionRigBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.LeechJarBlock> LEECH_JAR =
+            BLOCKS.register("leech_jar", () -> new com.coolfreeze23.headinajar.block.LeechJarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).strength(0.6f)
+                    .sound(SoundType.GLASS).noOcclusion()));
 
     // P6: Board of Directors
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.HeadHolderBlock<com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity>> TURRET_PEDESTAL =
-            BLOCKS.register("turret_pedestal", () -> new com.coolfreeze23.headinajar.block.HeadHolderBlock<>(steel().noOcclusion(), () -> ModRegistry.TURRET_BE.get(),
-                    com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity::new, com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity::serverTick,
-                    Block.box(2, 0, 2, 14, 10, 14)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.HeadHolderBlock<com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity>> EMPLOYEE_MOUNT =
-            BLOCKS.register("employee_mount", () -> new com.coolfreeze23.headinajar.block.HeadHolderBlock<>(steel().noOcclusion(), () -> ModRegistry.MOUNT_BE.get(),
-                    com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity::new, com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity::serverTick,
-                    Block.box(3, 0, 3, 13, 12, 13)));
-    public static final DeferredBlock<com.coolfreeze23.headinajar.block.MachineBlock<com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity>> CEREBRAL_ARRAY =
-            BLOCKS.register("cerebral_array", () -> new com.coolfreeze23.headinajar.block.MachineBlock<>(steel().noOcclusion().lightLevel(s -> 7),
-                    () -> ModRegistry.ARRAY_BE.get(), com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity::new,
-                    com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity::serverTick, null));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.TurretPedestalBlock> TURRET_PEDESTAL =
+            BLOCKS.register("turret_pedestal", () -> new com.coolfreeze23.headinajar.block.TurretPedestalBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.EmployeeMountBlock> EMPLOYEE_MOUNT =
+            BLOCKS.register("employee_mount", () -> new com.coolfreeze23.headinajar.block.EmployeeMountBlock(steel().noOcclusion()));
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.CerebralArrayBlock> CEREBRAL_ARRAY =
+            BLOCKS.register("cerebral_array", () -> new com.coolfreeze23.headinajar.block.CerebralArrayBlock(steel().noOcclusion().lightLevel(s -> 7)));
 
     public static final DeferredBlock<com.coolfreeze23.headinajar.block.NeuralSocketBlock> NEURAL_SOCKET = BLOCKS.register("neural_socket",
             () -> new com.coolfreeze23.headinajar.block.NeuralSocketBlock(steel().noOcclusion().lightLevel(s -> 5)));
@@ -215,6 +177,13 @@ public final class ModRegistry {
 
     private static DeferredItem<Item> plain(String name) {
         return item(name, () -> new Item(new Item.Properties()));
+    }
+
+    /** A machine two cells tall: placed only with headroom for its hidden top cell. */
+    private static DeferredItem<BlockItem> tallItem(DeferredBlock<? extends Block> block) {
+        DeferredItem<BlockItem> item = ITEMS.register(block.getId().getPath(), () -> new com.coolfreeze23.headinajar.machine.TallMachineItem(block.get(), new Item.Properties()));
+        TAB_ORDER.add(item);
+        return item;
     }
 
     private static DeferredItem<BlockItem> blockItem(DeferredBlock<? extends Block> block) {
@@ -232,15 +201,15 @@ public final class ModRegistry {
     public static final DeferredItem<Item> BOOTH_CONSOLE = plain("booth_console");
     public static final DeferredItem<BlockItem> SURGICAL_STEEL_BLOCK_ITEM = blockItem(SURGICAL_STEEL_BLOCK);
     public static final DeferredItem<BlockItem> SEPARATION_CHAIR_ITEM = blockItem(SEPARATION_CHAIR);
-    public static final DeferredItem<BlockItem> CRADLE_ITEM = blockItem(CRADLE);
-    public static final DeferredItem<BlockItem> GALVANIC_PILE_ITEM = blockItem(GALVANIC_PILE);
-    public static final DeferredItem<BlockItem> CHARGING_DOCK_ITEM = blockItem(CHARGING_DOCK);
-    public static final DeferredItem<BlockItem> SALINE_MIXER_ITEM = blockItem(SALINE_MIXER);
-    public static final DeferredItem<BlockItem> BODY_PRINTER_ITEM = blockItem(BODY_PRINTER);
-    public static final DeferredItem<BlockItem> LEYDEN_JAR_ITEM = blockItem(LEYDEN_JAR);
-    public static final DeferredItem<BlockItem> TESLA_NODE_ITEM = blockItem(TESLA_NODE);
-    public static final DeferredItem<BlockItem> RELAY_MAST_ITEM = blockItem(RELAY_MAST);
-    public static final DeferredItem<BlockItem> RELAY_MAST_MK2_ITEM = blockItem(RELAY_MAST_MK2);
+    public static final DeferredItem<BlockItem> CRADLE_ITEM = tallItem(CRADLE);
+    public static final DeferredItem<BlockItem> GALVANIC_PILE_ITEM = tallItem(GALVANIC_PILE);
+    public static final DeferredItem<BlockItem> CHARGING_DOCK_ITEM = tallItem(CHARGING_DOCK);
+    public static final DeferredItem<BlockItem> SALINE_MIXER_ITEM = tallItem(SALINE_MIXER);
+    public static final DeferredItem<BlockItem> BODY_PRINTER_ITEM = tallItem(BODY_PRINTER);
+    public static final DeferredItem<BlockItem> LEYDEN_JAR_ITEM = tallItem(LEYDEN_JAR);
+    public static final DeferredItem<BlockItem> TESLA_NODE_ITEM = tallItem(TESLA_NODE);
+    public static final DeferredItem<BlockItem> RELAY_MAST_ITEM = tallItem(RELAY_MAST);
+    public static final DeferredItem<BlockItem> RELAY_MAST_MK2_ITEM = tallItem(RELAY_MAST_MK2);
     public static final DeferredItem<BlockItem> SIGNAL_JAMMER_ITEM = blockItem(SIGNAL_JAMMER);
     public static final DeferredItem<BlockItem> SAFETY_PLACARD_ITEM = blockItem(SAFETY_PLACARD);
     public static final DeferredItem<Item> SYNAPSE_CHIP = plain("synapse_chip");
@@ -248,7 +217,7 @@ public final class ModRegistry {
     public static final DeferredItem<com.coolfreeze23.headinajar.item.SurgicalWrenchItem> SURGICAL_WRENCH = item("surgical_wrench",
             () -> new com.coolfreeze23.headinajar.item.SurgicalWrenchItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> REPLACEMENT_BLADE = plain("replacement_blade");
-    public static final DeferredItem<BlockItem> BODY_LOCKER_ITEM = blockItem(BODY_LOCKER);
+    public static final DeferredItem<BlockItem> BODY_LOCKER_ITEM = tallItem(BODY_LOCKER);
     public static final DeferredItem<com.coolfreeze23.headinajar.item.SurgicalSawItem> SURGICAL_SAW = item("surgical_saw",
             () -> new com.coolfreeze23.headinajar.item.SurgicalSawItem(new Item.Properties().durability(200)));
     public static final DeferredItem<Item> EMBALMING_FLUID = item("embalming_fluid", () -> new Item(new Item.Properties().stacksTo(16)));
@@ -279,11 +248,11 @@ public final class ModRegistry {
     public static final DeferredItem<SutureKitItem> SUTURE_KIT = item("suture_kit", () -> new SutureKitItem(new Item.Properties().stacksTo(16)));
 
     // P5
-    public static final DeferredItem<BlockItem> CENTRIFUGE_ITEM = blockItem(CENTRIFUGE);
-    public static final DeferredItem<BlockItem> DNA_SEQUENCER_ITEM = blockItem(DNA_SEQUENCER);
-    public static final DeferredItem<BlockItem> GENE_SPLICER_ITEM = blockItem(GENE_SPLICER);
-    public static final DeferredItem<BlockItem> INJECTION_RIG_ITEM = blockItem(INJECTION_RIG);
-    public static final DeferredItem<BlockItem> LEECH_JAR_ITEM = blockItem(LEECH_JAR);
+    public static final DeferredItem<BlockItem> CENTRIFUGE_ITEM = tallItem(CENTRIFUGE);
+    public static final DeferredItem<BlockItem> DNA_SEQUENCER_ITEM = tallItem(DNA_SEQUENCER);
+    public static final DeferredItem<BlockItem> GENE_SPLICER_ITEM = tallItem(GENE_SPLICER);
+    public static final DeferredItem<BlockItem> INJECTION_RIG_ITEM = tallItem(INJECTION_RIG);
+    public static final DeferredItem<BlockItem> LEECH_JAR_ITEM = tallItem(LEECH_JAR);
     public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> SYRINGE = item("syringe",
             () -> new com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem(com.coolfreeze23.headinajar.genetics.BloodType.WARM, 30, 60, false, false, new Item.Properties().durability(32)));
     public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem> PRECISION_SYRINGE = item("precision_syringe",
@@ -304,9 +273,9 @@ public final class ModRegistry {
     public static final DeferredItem<com.coolfreeze23.headinajar.item.GeneticsItems.GeneWashItem> GENE_WASH = item("gene_wash", () -> new com.coolfreeze23.headinajar.item.GeneticsItems.GeneWashItem(new Item.Properties().stacksTo(16)));
 
     // P6
-    public static final DeferredItem<BlockItem> TURRET_PEDESTAL_ITEM = blockItem(TURRET_PEDESTAL);
+    public static final DeferredItem<BlockItem> TURRET_PEDESTAL_ITEM = tallItem(TURRET_PEDESTAL);
     public static final DeferredItem<BlockItem> EMPLOYEE_MOUNT_ITEM = blockItem(EMPLOYEE_MOUNT);
-    public static final DeferredItem<BlockItem> CEREBRAL_ARRAY_ITEM = blockItem(CEREBRAL_ARRAY);
+    public static final DeferredItem<BlockItem> CEREBRAL_ARRAY_ITEM = tallItem(CEREBRAL_ARRAY);
     public static final DeferredItem<BlockItem> NEURAL_SOCKET_ITEM = blockItem(NEURAL_SOCKET);
     public static final DeferredItem<Item> QUANTUM_KNOT = item("quantum_knot", () -> new Item(new Item.Properties().rarity(Rarity.RARE)));
     public static final DeferredItem<LifeSupportJarItem> EXECUTIVE_JAR = item("executive_life_support_jar",
@@ -552,6 +521,16 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, TURRET_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, ARRAY_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ARRAY_BE.get(), (be, side) -> be.automation(side));
+        // a tall machine's top cell is the machine for hoppers, pipes and cables: the same side, the machine's handler
+        event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, be, side) ->
+                com.coolfreeze23.headinajar.machine.MachineTopBlock.machine(level, pos) == null ? null
+                        : level.getCapability(Capabilities.ItemHandler.BLOCK, pos.below(), side), MACHINE_TOP.get());
+        event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, be, side) ->
+                com.coolfreeze23.headinajar.machine.MachineTopBlock.machine(level, pos) == null ? null
+                        : level.getCapability(Capabilities.FluidHandler.BLOCK, pos.below(), side), MACHINE_TOP.get());
+        event.registerBlock(Capabilities.EnergyStorage.BLOCK, (level, pos, state, be, side) ->
+                com.coolfreeze23.headinajar.machine.MachineTopBlock.machine(level, pos) == null ? null
+                        : level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), side), MACHINE_TOP.get());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ARRAY_BE.get(), (be, side) -> be.broth());
     }
 

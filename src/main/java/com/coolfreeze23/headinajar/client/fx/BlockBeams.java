@@ -81,7 +81,10 @@ public final class BlockBeams {
     }
 
     private static void tesla(Beams.Frame f, PowerBlockEntities.TeslaNode node, long now) {
-        Vec3 a = teslaTip(node.getBlockPos()), b = teslaTip(node.target());
+        // from the sender's ball (its face toward its aim) to the receiver's ball, both as drawn this frame
+        Vec3 a = node.arcStart(f.partialTick());
+        Vec3 b = node.getLevel() != null && node.getLevel().getBlockEntity(node.target()) instanceof PowerBlockEntities.TeslaNode other
+                ? other.arcStart(f.partialTick()) : teslaTip(node.target());
         if (!f.visible(a, b)) return;
         boolean flowing = node.flowing();
         // the shape crackles, its brightness stays steady: idle re-rolls every 10 ticks, transferring every 2
@@ -98,7 +101,8 @@ public final class BlockBeams {
     }
 
     private static void lock(Beams.Frame f, TurretPedestalBlockEntity turret, Entity target, long now) {
-        Vec3 from = Vec3.atCenterOf(turret.getBlockPos()).add(0, 0.45, 0);
+        // from the bore's mouth as the turret was drawn this frame: the beam follows the cradle as it slews
+        Vec3 from = com.coolfreeze23.headinajar.client.MachineRenderers4.muzzle(turret);
         Vec3 to = target.getPosition(f.partialTick()).add(0, target.getBbHeight() * 0.6, 0);
         if (!f.visible(from, to)) return;
         float progress = Mth.clamp((now - turret.lockStart() + f.partialTick()) / 40f, 0, 1);

@@ -36,7 +36,8 @@ public class SurgicalWrenchItem extends Item {
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
+        // a node's upper half is the node
+        BlockPos pos = com.coolfreeze23.headinajar.machine.MachineTopBlock.machineAt(level, context.getClickedPos());
         boolean node = level.getBlockEntity(pos) instanceof PowerBlockEntities.TeslaNode;
         CustomData data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         boolean pending = data.contains(FROM);
@@ -63,6 +64,7 @@ public class SurgicalWrenchItem extends Item {
                 tag.putString(FROM_DIM, level.dimension().location().toString());
             });
             player.displayClientMessage(Component.translatable("message.headinajar.tesla_from"), true);
+            here.perk();
             return InteractionResult.CONSUME;
         }
         var tag = data.getUnsafe();

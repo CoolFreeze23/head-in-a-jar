@@ -1,0 +1,110 @@
+# Centrifuge, whole job: the drawer answering a second player's screen, a balanced spin-up, an unevenly loaded spin
+# (the wobble and the sign), the coast-down, the rack filling and the flag, a refusal, a brown-out; near, then far
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/setblock 0 -60 0 headinajar:centrifuge[facing=south]
+/setblock 0 -60 10 headinajar:centrifuge[facing=south]
+hud off
+/tp @s 2.8 -59 3.6 143 15
+bystander spawn -2 -60 2 225
+wait 20
+observe 30
+frames centrifuge_screen_near 70
+wait 5
+bystander useblock 0 -60 0 north
+wait 35
+bystander close
+wait 35
+# four samples: balanced; after 100 ticks two are taken out (unbalanced: it wobbles and asks for balance)
+/data merge block 0 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:4}]}}
+frames centrifuge_job_near 420
+wait 100
+/data merge block 0 -60 0 {Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:2}]}}
+wait 330
+# a refusal: the Surgical Wrench has no use on it (sneak and use)
+/give @s headinajar:surgical_wrench 1
+hotbar 1
+wait 5
+sneak down
+observe 40
+frames centrifuge_refuse_near 50
+wait 3
+key use
+wait 45
+sneak up
+/clear @s
+# a brown-out: power for every other tick only
+/data merge block 0 -60 0 {Energy:0,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:4}]}}
+frames centrifuge_brownout_near 120
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+/data merge block 0 -60 0 {Energy:19}
+wait 1
+inspect block 0 -60 0
+wait 40
+# far: about ten blocks, the second centrifuge
+/tp @s 7.3 -58.6 17.4 135 10
+wait 10
+/data merge block 0 -60 10 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:2}]}}
+frames centrifuge_job_far 400
+wait 400
+report centrifuge done

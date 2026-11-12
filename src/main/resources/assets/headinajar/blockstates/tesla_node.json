@@ -1,7 +1,273 @@
 {
-  "variants": {
-    "": {
-      "model": "headinajar:block/tesla_node"
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_off"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_ready"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_wait"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_work"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_low"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_fault"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_off",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_ready",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_wait",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_work",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_low",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_fault",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_off",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_ready",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_wait",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_work",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_low",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_fault",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "off"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_off",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "ready"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_ready",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "wait"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_wait",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "work"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_work",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "low"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_low",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lamp": "fault"
+      },
+      "apply": {
+        "model": "headinajar:block/tesla_node_lamp_fault",
+        "y": 270
+      }
     }
-  }
+  ]
 }

@@ -12,7 +12,7 @@ splice genes from the creatures you sample, and put other people's heads to work
 *The operation, seen by a colleague (shown at double speed). Sit down with **Use** and hold **Sign**.*
 
 Fully playable in **English** and **Brazilian Portuguese** (every line of text, the handbook, the advancements and
-DOLORES's voice). This page describes release **0.3.0**.
+DOLORES's voice). This page describes release **0.4.0**.
 
 ## Requirements
 
@@ -82,9 +82,10 @@ nether quartz, gold, lapis, diamonds, ender pearls, netherite scrap, obsidian an
 ### Day 2: power and saline
 
 - **Galvanic Pile**: six copper ingots, two wires and one rotten flesh (copper ring, wire above and below the flesh).
-  **Use** meat on it to feed it: rotten flesh gives 4,000 FE, a spider eye 6,000, any raw meat or fish 3,000. It burns
-  at 20 FE a tick and shares its power evenly among every machine touching it, taking turns over who goes first.
-  **Use** it with an empty hand to see its stock. Hoppers can feed it.
+  It stands two blocks tall, so leave the block above it free. **Use** meat on it to feed it: rotten flesh gives
+  4,000 FE, a spider eye 6,000, any raw meat or fish 3,000. It burns at 20 FE a tick and shares its power evenly among
+  every machine touching its lower half, taking turns over who goes first. **Use** it with an empty hand to see its
+  stock. Hoppers can feed it.
 - **Cranial Saline**: a water bottle, sugar, kelp and redstone, shapeless, make **two** bottles. You need **four** for
   the operation. A few spares are wise.
 
@@ -422,13 +423,26 @@ respawn with a body." The jar is not returned.
 
 ### The Body Printer
 
+![The Body Printer finishing a print: the booth door swings open and a new body steps out](docs/images/body_printer.gif)
+
+*The end of a print: press **Print** as a jar with everything loaded.*
+
 Lost your body for good? The **Body Printer** prints a new one, Collar Cam fitted. Recipe: ingot, glass, ingot; servo,
-piston, servo; ingot, redstone block, ingot. Load 16 rotten flesh, 8 bone blocks, 4 redstone blocks, 8 slime balls and
-2,000 mB of saline (bottles, buckets or pipes), store 200,000 FE (it takes up to 5,000 FE a tick), then press **Print**
-as a jar. A minute later the body stands in front of the printer: "Your new body is ready. It is a little damp." The new
-body replaces your old one; an old standing body falls down. Refusals: "Bodies are for heads in jars. Come back
-decapitated.", "Short 4 slime ball. Load it and press Print again.", "A print takes 200 kFE stored". If you have a
-body on when it finishes, the new one waits in the vat until you are a jar.
+piston, servo; ingot, redstone block, ingot. It is a photo booth two blocks tall.
+
+Load 16 rotten flesh, 8 bone blocks, 4 redstone blocks, 8 slime balls and 2,000 mB of saline (bottles, buckets or
+pipes; the tank holds 4,000), store 200,000 FE (it holds 250,000 and takes up to 5,000 FE a tick), then press **Print**
+as a jar. Nothing is taken until the whole print's power is stored. A minute later the body stands in front of the
+printer: "Your new body is ready. It is a little damp." The new body replaces your old one; an old standing body falls
+down. If you have a body on when it finishes, the new one waits in the vat until you are a jar.
+
+While it prints, the print bar travels down the booth and the body takes shape beneath it, then colours in from the
+top down; at the end the door swings open and the body steps out. With all four materials loaded the print head waits
+in the middle. Short of power mid-print, the bar sags and the lamp dims.
+
+Refusals: "Bodies are for heads in jars. Come back decapitated.", "Short 4 Slime Ball. Load it and press Print
+again.", "A print takes 200 kFE stored; it has 100. Feed its Galvanic Pile first.", "Printing already, 40 s to go.
+Wait for the body."
 
 ---
 
@@ -514,36 +528,210 @@ their charge, mecha half their battery, turrets go dark. Shielded Housing protec
 
 ## Power and life-support blocks
 
-![Life-support and power blocks standing in a field](docs/images/life_support.png)
+![The company machines standing in a row by day, the Separation Chair nearest, the rest running away into the distance](docs/images/machine_row.png)
 
-**Use** any of these with an empty hand to see what it holds.
+Every Noggin & Sons machine is a working machine now: parts that move when it works, sounds of its own (all
+subtitled), and a **lamp** on its front that tells you how it is getting on.
 
-**Powering things.** Every Noggin & Sons machine takes FE (Forge Energy) from any side: a Galvanic Pile, Leyden Jar
-or unlinked Tesla Node touching it, a linked Tesla Node, or another mod's cables. 1 kFE is 1,000 FE; mB is a
-thousandth of a bucket.
+| Lamp | Means |
+|---|---|
+| Dark | Off: no power, or nothing to do (**Use** it with an empty hand to see which) |
+| Green | Ready |
+| Amber | Waiting for something you can fix: an output full, an input missing, a jar full |
+| Amber, pulsing | Working |
+| Dim amber, pulsing | Working short of power |
+| Red, for two seconds | It has just refused you |
 
-![Two Tesla Nodes joined by a crackling arc, a bright bead running along it from one to the other](docs/images/tesla.gif)
+A refusal also says why in one line, plays "Noggin & Sons declines" and rattles the part it concerns.
 
-*Linked Tesla Nodes passing power: link them with the Surgical Wrench (**Use** the sender, then the receiver).*
+**Powering things.** Every machine takes FE (Forge Energy) from any side, its upper half included: a Galvanic Pile,
+Leyden Jar or unlinked Tesla Node touching it, a linked Tesla Node, or another mod's cables. Those three push power out
+only from their lower half; a cable can draw from either half. 1 kFE is 1,000 FE; mB is a thousandth of a bucket. **Use** a power block with an empty
+hand to see its charge.
 
-| Block | Recipe | What it does |
-|---|---|---|
-| **Galvanic Pile** | six copper ingots, two wires, one rotten flesh | Burns meat into 20 FE a tick: rotten flesh 4,000 FE, spider eye 6,000, raw meat or fish 3,000. Holds 50,000. Shares its power evenly among every machine touching it. **Use** meat on it to feed it (a jar can't). Its fuel slot takes one stack of one kind of meat at a time. "The pile is full of rotten flesh. Let it burn some first." |
-| **Leyden Jar** | wire; glass, copper block, glass; glass, ingot, glass | A 250,000 FE battery. Takes and gives 2,000 FE a tick, to every neighbour except other Leyden Jars |
-| **Tesla Node** | lightning rod; wire, copper block, wire; three ingots | Sends up to 2,000 FE a tick to the node it is linked to, up to 16 blocks away, losing 5%. Unlinked, it feeds its neighbours. A crackling arc joins linked nodes and brightens while power flows |
-| **Surgical Wrench** | a diagonal of three ingots with a wire | Links Tesla Nodes: **Use** the sending node, then the receiving one. **Sneak** and **Use** a node to unlink it. "Too far: nodes reach 16 blocks. Put one closer." |
-| **Relay Mast** | lens; wire, ingot, wire; ingot | Relays your link 96 blocks. Holds 100,000 FE and uses 1 FE a tick (about 83 minutes on a full charge), even while its chunk is unloaded |
-| **Relay Mast Mk II** | Synapse Chip; wire, Relay Mast, wire; gold block | As the Mast, 192 blocks |
-| **Signal Jammer** | wire, Synapse Chip, wire; amethyst, ingot, amethyst; wire, redstone block, wire | Cuts other people's link to 30% within 16 blocks. Whoever placed it, those they trust and their team are spared. Uses 4 FE a tick |
-| **Saline Mixer** | ingot, bucket, ingot; wire, cauldron, wire; ingot, redstone, ingot | 1,000 mB water + sugar + kelp (or dried kelp) + redstone + 2,000 FE over 10 seconds = 1,000 mB saline. Fills glass bottles (250 mB each) and buckets. Holds 4,000 mB of each |
-| **Cranial Saline** | bottle: water bottle, sugar, kelp, redstone (makes 2); **Bucket of Cranial Saline**: an empty bucket on the Saline Mixer | 250 mB a bottle, 1,000 a bucket. A bottle tops up a jar; buckets and bottles fill the Cradle and the Body Printer. Poured out, it is a teal liquid you can swim in |
-| **Life Support Cradle** | glass, gap, glass; wire, gap, wire; three ingots | Holds one docked head, safe from all harm. Each second it refills the head's saline from its 4,000 mB tank, gives up to 10,000 FE of charge (it uses 100 FE a second while occupied) and, every 10 seconds, mends a point of glass. The saline and glass work without power; the charge needs it. A docked head drinks no saline. Broken, it sets the head down. It does not change the link |
-| **Charging Dock** | copper ingot, wire, copper ingot; ingot, redstone block, ingot | Charges a jar standing on its plate at 500 FE a tick, or your head set down on it. Holds 20,000 FE. "Charging Dock: your jar is fully charged." |
-| **Safety Placard** | yellow dye, black dye, yellow dye; yellow dye, ingot, yellow dye (makes 4) | Hangs on a wall. **Use** it to read the next of twelve company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "DOLORES IS LISTENING" |
+### Two blocks tall
 
-**Docking a head in a Cradle**: carrying your head, **Use** the empty Cradle. As a jar, **Use** it to climb in, then
-**Swap**: your head stays docked. Or have one within 3 blocks of the Separation Chair when you are operated on. To take
-the head out, **Use** the Cradle with a Head Satchel on you.
+Most machines stand two blocks tall. Of the twenty-two rebuilt machines only the Signal Jammer, the Employee Mount, the Neural Socket, the Safety Placard
+and a placed Jarred Head fit in one. A tall machine needs the block above it free when you place it: "No headroom.
+Needs two blocks of height." Its upper half (a block of its own, **Machine (upper half)**) is part of the machine: clicking it clicks the machine, breaking it breaks
+the machine (which drops as usual), and hoppers, pipes and cables connect to either half.
+
+**Machines from an older world.** A machine placed before 0.4.0 takes the block above it on its first tick, if that
+block is empty (air, grass, a snow layer). If anything else is there, nothing is replaced: the machine stays one block
+high and works as before, but only its lower half is drawn. On the Life Support Cradle, Charging Dock, Body Printer,
+Cerebral Array, Leyden Jar and Relay Mast the lamp is in the upper half and is not drawn either. Break the block above
+and the machine takes its upper half within two seconds. Machines that had no facing before (the Galvanic Pile, Life
+Support Cradle, Charging Dock, Tesla Node, both Relay Masts, Signal Jammer and Leyden Jar) now face north. Everything
+they held is kept.
+
+### Galvanic Pile
+
+![A Galvanic Pile at work: the press screw turning a quarter at a time, sparks at the terminals, the lamp pulsing amber](docs/images/galvanic_pile.gif)
+
+*The Galvanic Pile at work after meat goes in: **Use** rotten flesh on it.*
+
+**Galvanic Pile**: six copper ingots, two Neuro-Copper Wires and one rotten flesh (copper ring, wire above and below
+the flesh). A Volta press over a glass pan of meat.
+
+- **Use** meat on it to feed it (a jar can't): rotten flesh gives 4,000 FE, a spider eye 6,000, any raw meat or fish
+  3,000. It says how much went in and how much it has left to burn. Its slot takes one stack of one kind of meat.
+  Hoppers can feed it.
+- It burns 20 FE a tick into its own 50,000 FE store, and shares it evenly, up to 1,000 FE a tick each, among the
+  machines touching its lower half. **Use** it with an empty hand to see its charge and fuel.
+- At work the handle turns the press screw a quarter at a time, a spark jumps the terminals, the meat smokes a little
+  and now and then twitches. The press sinks as each piece burns. A new piece winds the handle back; the last one
+  leaves the press with a sigh.
+- Refusals: "The pile is full of Rotten Flesh. Let it burn some first." and, for food it doesn't burn, "The Galvanic
+  Pile burns Rotten Flesh and Spider Eye, not Cooked Beef." (raw meat and fish burn too).
+
+### Leyden Jar
+
+![A Leyden Jar beside a Galvanic Pile, the charge cells in its windows lighting as it fills](docs/images/leyden_jar.gif)
+
+*A Leyden Jar filling from the pile behind it: its cells light up as the charge rises.*
+
+**Leyden Jar**: wire on top; glass, copper block, glass; glass, ingot, glass. A glass battery in a carrying cage.
+
+- Holds 250,000 FE. Takes up to 2,000 FE a tick, and gives up to 2,000 FE a tick to every machine touching its lower
+  half. It never feeds another Leyden Jar standing beside it.
+- Nothing on it moves. Its charge shows as lit cells in three windows, in four steps; the lamp pulses while it fills,
+  and a spark snaps from the knob when it is full.
+
+### Tesla Node
+
+![Two linked Tesla Nodes facing each other, a crackling arc running between their balls](docs/images/tesla_node.gif)
+
+*Two linked Tesla Nodes passing power: link them with the Surgical Wrench, sender first.*
+
+**Tesla Node**: lightning rod; wire, copper block, wire; three ingots. A small Tesla coil with a ball riding its ring.
+
+- Holds 10,000 FE and takes up to 2,000 FE a tick. Linked, it sends up to 2,000 FE a tick to the node it is linked to,
+  up to 16 blocks away, losing 5%. Unlinked, it feeds the machines touching its lower half (but not other nodes); so does the
+  receiving node of a linked pair.
+- **Surgical Wrench** (shaped: an ingot top middle; a wire in the centre with an ingot to its right; an
+  ingot bottom left): **Use** the sending node ("Sending node chosen: now
+  use the receiving node"; the node looks round for its partner), then the receiving one ("Tesla Nodes linked").
+  **Sneak** and **Use** a node to unlink it. Either half of a node will do.
+- Each node's ball turns to face its partner. While power flows the sender's ring spins, a crackling arc joins the two
+  balls with a bead running toward the receiver, and once a second the ring kicks and the ball lights up. The
+  `photosensitive` option in the client config turns the kick and the light off.
+- Refusals: "Too far: nodes reach 16 blocks. Put one closer.", "A node can't send to itself. Use a second node.",
+  "This node sends nowhere. Unlink it at the sending node." The wrench on any other company block: "The wrench only
+  links each Tesla Node. Nothing to adjust here."
+
+### Charging Dock
+
+![A head in its jar on a Charging Dock: the knife switch closes and the dial needle climbs](docs/images/charging_dock.gif)
+
+*A head set down on a Charging Dock: carrying your head, **Use** the dock.*
+
+**Charging Dock**: copper ingot, wire, copper ingot; ingot, redstone block, ingot. A charging plate with a knife
+switch and a dial.
+
+- Holds 20,000 FE and takes up to 2,000 FE a tick. It charges a jar standing on its plate at 500 FE a tick, or your
+  own head set down on it while you are out in your body: carrying your head, **Use** the dock and the head goes onto
+  the plate. "Charging Dock: charging, 40%." and, when it is done, "Charging Dock: your jar is fully charged."
+- When a jar or a head is on the plate the switch closes and the needle follows its charge from E to F; sparks fly
+  while it charges and a bell rings when it is full. With nothing left to give, the switch drops open and the needle
+  sinks below E.
+- **Use** it with an empty hand to see its charge. With no charge at all it refuses: "The Charging Dock is empty.
+  Feed it from a Galvanic Pile or a cable."
+
+### Relay Mast
+
+![A Relay Mast turning its dish round](docs/images/relay_mast.gif)
+
+*A Relay Mast turning its dish along the link it carries.*
+
+**Relay Mast**: lens; wire, ingot, wire; ingot. A pole with a dish.
+
+- Relays your link 96 blocks (see [Link quality](#link-quality)). Holds 100,000 FE, takes up to 2,000 FE a tick and
+  uses 1 FE a tick (about 83 minutes on a full charge), even while its chunk is unloaded. A Cartographer on staff adds
+  half again to its reach.
+- While it carries a link, the dish turns toward the next mast in the chain (the last one toward your body) and the
+  lamp pulses. Its aviation lamp is lit while it has power. Without power the dish droops. It flinches at a lightning
+  strike within 32 blocks while it rains.
+
+### Relay Mast Mk II
+
+![A Relay Mast Mk II turning its dish round on its tripod](docs/images/relay_mast_mk2.gif)
+
+*A Relay Mast Mk II turning its dish to a new hop.*
+
+**Relay Mast Mk II**: Synapse Chip; wire, Relay Mast, wire; gold block. As the Mast, 192 blocks. Its lamp stage rises
+over the dish while it carries a link, and its beacon glows while it has power.
+
+### Signal Jammer
+
+![A powered Signal Jammer, its turbine spinning on top](docs/images/signal_jammer.gif)
+
+*A powered Signal Jammer, its turbine turning.*
+
+**Signal Jammer**: wire, Synapse Chip, wire; amethyst, ingot, amethyst; wire, redstone block, wire. One block tall,
+with a turbine on top.
+
+- Cuts other people's link to 30% within 16 blocks. Whoever placed it, those they trust and their team are spared. A
+  jammer placed by a command has no owner and spares nobody. Holds 100,000 FE and uses 4 FE a tick.
+- Powered, its turbine idles round. When it cuts someone's link the turbine spins up hard, it crackles, and the grille
+  fills with static.
+
+### Saline Mixer
+
+![A Saline Mixer at work, the canister caps lifting and saline bubbling in the tank](docs/images/saline_mixer.gif)
+
+*The Saline Mixer mixing a batch: it starts by itself once water and ingredients are in.*
+
+**Saline Mixer**: ingot, bucket, ingot; wire, cauldron, wire; ingot, redstone, ingot. A soda fountain.
+
+- 1,000 mB water + sugar + kelp (or dried kelp) + redstone + 2,000 FE over 10 seconds = 1,000 mB saline. It starts by
+  itself once everything is in; a batch that runs short waits where it stopped. A Fisherman on staff mixes 25% faster.
+- Holds 4,000 mB of water, 4,000 mB of saline and 20,000 FE (up to 1,000 FE a tick). **Use** it to open its screen.
+  **Use** a water bucket on it to pour the water in, an empty bucket to take 1,000 mB of saline out. Glass bottles in
+  its bottle slot fill at 250 mB each. Pipes put water in and take saline out.
+- Mixing, the caps on the sugar, kelp and redstone canisters lift in turn and drop a dose, the paddle turns and the
+  saline bubbles. Bottling, the tap is pulled and saline runs into the bottle. A flag goes up when bottles are ready.
+  The tank and the water sight glass show how full they are.
+- Refusals: "Not enough Cranial Saline in the Saline Mixer to fill a Bucket." and, for the wrong liquid, "The Saline
+  Mixer doesn't take Lava. Check what it runs on."
+
+**Cranial Saline**: a bottle is a water bottle, sugar, kelp and redstone, shapeless (makes 2); a **Bucket of Cranial Saline**
+ comes from an empty bucket on the Saline Mixer. 250 mB a bottle, 1,000 a bucket. A bottle tops up a jar;
+buckets and bottles fill the Cradle and the Body Printer. Poured out, it is a teal liquid you can swim in.
+
+### Life Support Cradle
+
+![A head docked in a Life Support Cradle: the blanket laid over it and the bellows on the back rising](docs/images/life_support_cradle.gif)
+
+*A head docked in the Cradle: carrying your head, **Use** the empty Cradle.*
+
+**Life Support Cradle**: glass, gap, glass; wire, gap, wire; three ingots. A wingback armchair that keeps a head
+alive.
+
+- Holds one docked head, safe from all harm. Each second it refills the head's saline from its 4,000 mB tank, gives up
+  to 10,000 FE of charge and uses 100 FE; every 10 seconds it mends a point of glass. The saline and glass work without
+  power; the charge needs it. A docked head drinks no saline. It holds 50,000 FE (up to 2,000 FE a tick). Broken, it
+  sets the head down. It does not change the link.
+- **Docking a head**: carrying your head, **Use** the empty Cradle. As a jar, **Use** it to climb onto its cushion
+  ("You settle into the Cradle. Swap now and your head stays docked."), then **Swap**. Or have one within 3 blocks of
+  the Separation Chair when you are operated on. To take the head out, **Use** the Cradle with a Head Satchel on you.
+- Docking, the hose swings onto the jar's valve and a blanket is laid over its lap. With power, the bellows on its back
+  breathes slowly for as long as the head is there. Undocking puts hose and blanket back. The saline bag shows its
+  level.
+- Anyone else who uses it hears whose head it holds and, if it lacks power or saline, what to bring: "This Cradle has
+  no power and keeps nothing topped up. Put a Galvanic Pile beside it." Other refusals: "The Cradle is empty. Carry
+  your head here in a Head Satchel and use it.", "Your head is docked here. Bring a Head Satchel to take it out.", "The
+  Cradle's tank is full. Keep the bottle.", "The Cradle takes Cranial Saline only.", "No room to climb in. Clear the
+  space above the Cradle."
+
+### Safety Placard
+
+![A Safety Placard on a stone wall, its notice changing each time it is used](docs/images/safety_placard.gif)
+
+*A Safety Placard changing notices: **Use** it.*
+
+**Safety Placard**: yellow dye, black dye, yellow dye; yellow dye, ingot, yellow dye (makes 4). Hangs on a wall.
+**Use** it to show the next of twelve company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "DOLORES IS
+LISTENING". The notice is painted on the board in your game's language, and read out above your hotbar.
 
 ### Materials
 
@@ -826,13 +1014,20 @@ Gold Nugget). **Use** it on a host at **50% sync or more**: freshness back to 10
 "Neural Lace grafted: this body will never decay". Under 50%: "The lace needs at least 50% sync to take", and you keep
 the lace. Once a body is laced, Embalming Fluid does nothing more for it, so do not spend one.
 
+![A Body Locker letting a headless body step out in front of it](docs/images/body_locker.gif)
+
+*A body checked out of the Body Locker: **Use** the locker.*
+
 **Body Locker** (shaped: Surgical Steel Ingot, Iron Door, Surgical Steel Ingot / Surgical Steel Ingot, Glass, Surgical
-Steel Ingot / Surgical Steel Ingot, Packed Ice, Surgical Steel Ingot). **Use** it to put the nearest unridden host
-within 3 blocks in storage, where time stops for it: "Cow stored. It will keep." **Use** it again and the body steps
-out in front: "Cow released". Break the locker and the body walks out. It holds one body, takes shells and your own
-mechas, and will not take someone else's mecha or pet: "That body belongs to someone else. The locker won't take it."
-Nothing in range: "No host body within 3 blocks". A jar can work it. It needs no power; FE piped in has no effect in
-this release.
+Steel Ingot / Surgical Steel Ingot, Packed Ice, Surgical Steel Ingot). A theatre cloakroom, two blocks tall. **Use** it
+to check in the nearest unridden host within 3 blocks, where time stops for it: "Cow stored. It will keep." The shutter
+rolls down, the ticket clinks and the body's portrait appears in the header. **Use** it again and the body steps out in
+front at once, "Cow released", while the bell rings and the shutter rolls back up. The body goes back only to whoever
+checked it in, or to someone they trust (`/headoffice trust`, or their team). Anyone else: "That body is someone
+else's. Its owner can trust you with /headoffice trust." A body stored before 0.4.0 carries no owner on its ticket, and
+anyone can take it out. It holds one body, takes shells and your own mechas, and will not take someone else's mecha, or
+a pet whose owner doesn't trust you (the same line). Break the locker and the body walks out. Nothing in range: "No
+host body within 3 blocks". A jar can work it. It needs no power; FE piped in has no effect in this release.
 
 ### The host HUD
 
@@ -1012,16 +1207,19 @@ None of them has a **Secondary**.
 
 ## Jarred heads
 
-![Jarred heads at work: a turret, a Cerebral Array and a villager on an Employee Mount](docs/images/heads_at_work.png)
+![A placed jarred villager head in its jar while a player walks past behind it and comes up to trade](docs/images/jarred_head.gif)
+
+*A placed jarred head turning to watch a player walk past.*
 
 Saw a creature with an empty Life Support Jar in your **off hand** and you keep its head: a **Jarred Head**, named for
 its owner ("Jarred Villager Head"). It keeps everything the creature was.
 
-- **Place it:** **Use** it on any surface, with hands (not as a bare jar). It needs nothing under it.
-- **Use the placed head** (a jar can do this): a jarred villager opens its usual trading screen with all its trades,
-  keeps the uses and experience you give it, and restocks if 10 minutes have passed since it last did. If someone else
-  is trading: "This head is with another customer. Come back shortly." Any other head: "A jarred Cow head. It looks at
-  you."
+- **Place it:** **Use** it on any surface, with hands (not as a bare jar). It needs nothing under it. It stands in its
+  jar on a small plinth with a push bell, and the head turns to look at the nearest player within 6 blocks.
+- **Use the placed head** (a jar can do this): a jarred villager opens its usual trading screen with all its trades
+  (the bell rings), keeps the uses and experience you give it, nods at each trade, and restocks if 10 minutes have
+  passed since it last did. If someone else is trading, it shakes its head: "This head is with another customer. Come
+  back shortly." Any other head: "A jarred Cow head. It looks at you."
 - **Break it** to get the item back with everything in it, mid-trade included.
 - Only villagers trade. Other heads have work to do: see [Heads at work](#board-of-directors-heads-at-work).
 
@@ -1368,8 +1566,6 @@ The work runs in five steps:
 4. **Splice** up to three genes into a **Serum Cassette** at the **Gene Splicer**.
 5. **Inject** the serum: into your own body at the **Injection Rig**, or by hand into a host or a mecha with Gene Ports.
 
-![The four lab machines in a row](docs/images/lab.png)
-
 **Read this before you splice.** Every gene has a **load**. A serum's load is the sum of its genes' loads, and each
 target has a limit:
 
@@ -1423,26 +1619,48 @@ from creatures whose blood does not match the target's (see Injecting).
 
 ### Leech Jar
 
+![A Leech Jar seen from the front, a cow behind it flashing red as a sample is drawn, the crank turning](docs/images/leech_jar.gif)
+
+*The Leech Jar sampling a cow beside it, every 30 seconds by itself.*
+
 The **Leech Jar** (glass all round, a Surgical Steel Ingot on top, a slime ball in the middle) is a mob farm's blood
-bank. Every 30 seconds it draws a sample from one creature standing on it, beside it or just under it, for 0.5 damage
-(a quarter of a heart). Its samples are small: quality 15-35 before the health rule. It never samples players, thick
-hides or the bloodless. It holds nine samples and then stops. **Use** it to empty it into your inventory ("9
-samples"), or pull them out with a hopper.
+bank: a gumball machine two blocks tall with a leech in the globe. Every 30 seconds it draws a sample from one
+creature standing on it, beside it or just under it, for 0.5 damage (a quarter of a heart). Its samples are small:
+quality 15-35 before the health rule. It never samples players, thick hides or the bloodless. It holds nine samples and
+then stops. **Use** it to empty it into your inventory ("9 samples"), or pull them out with a hopper. It needs no
+power.
+
+When a creature stands beside it the leech wakes, turns to face it and presses against the glass. Each sample pops the
+nozzle out, turns the crank and drops a vial into the window under the globe. Emptied, the crank turns twice and the
+vials clatter out. Full, the leech sulks.
 
 Unlike the syringes, the leeches do not stop at a creature's last point of health. Keep the farm well fed.
 
 ### Centrifuge
 
-**Centrifuge:** four Surgical Steel Ingots, Neuro-Copper Wire, two copper ingots, a Servo and redstone.
+![A Centrifuge spinning, its four hangers swinging out under the striped canopy](docs/images/centrifuge.gif)
+
+*The Centrifuge spinning samples: put Blood Samples in.*
+
+**Centrifuge:** four Surgical Steel Ingots, Neuro-Copper Wire, two copper ingots, a Servo and redstone. Two blocks tall.
 
 Put a Blood Sample in. Eight seconds and about 3,000 FE later you have a **DNA Fraction** of the same creature and
 quality, and a **Plasma Vial**. Dragon's Breath spins into an Ender Dragon DNA Fraction of quality 60 and an empty
-bottle. It holds 20,000 FE. A full output or a flicker of power pauses it ("Paused: output full", "Paused: no
-power"); it carries on where it stopped. Hoppers can feed and empty it.
+bottle. It holds 20,000 FE (up to 1,000 FE a tick). A full output or a flicker of power pauses it ("Paused: output
+full", "Paused: no power"); it carries on where it stopped. Hoppers can feed and empty it.
+
+The rotor spins up and its four hangers swing out as it gathers speed. Load one to three samples and it runs lopsided,
+wobbling, with "PLEASE BALANCE ROTOR" on its side; four run smooth. The drawer slides out while its screen is open, and
+a flag goes up when there is something to collect.
 
 ### DNA Sequencer
 
-**DNA Sequencer:** four Surgical Steel Ingots, a Lens, two copper ingots, a Synapse Chip and redstone. Holds 40,000 FE.
+![A DNA Sequencer ringing up bases: keys pressed one by one and the call flag changing colour](docs/images/dna_sequencer.gif)
+
+*An auto-read: put a DNA Fraction in and press **Auto**.*
+
+**DNA Sequencer:** four Surgical Steel Ingots, a Lens, two copper ingots, a Synapse Chip and redstone. A cash register,
+two blocks tall. Holds 40,000 FE (up to 2,000 FE a tick).
 
 Put a DNA Fraction in. There are two ways to read it, and each read uses up the fraction:
 
@@ -1452,6 +1670,10 @@ Put a DNA Fraction in. There are two ways to read it, and each read uses up the 
   **G** and **T** buttons (the same letters on the keyboard work while the screen is open). When the twelfth is in,
   the read happens at once for 4,000 FE: accuracy 50%, plus 50% scaled by how many you called right. "Called 11 of 12
   bases". A jar fitted with a **Cortex Coprocessor** gets one miscall forgiven.
+
+Each base read rings up on the register: its key goes down, the crank turns and the call flag shows the base, and the
+receipt grows. A read you call tallies its tabs, right and wrong. At the end the receipt is torn off and the cash drawer
+rings. Anyone watching sees the keys you strike in the screen.
 
 **How the library grows.** Each read adds, to every gene the creature carries:
 
@@ -1477,12 +1699,21 @@ fraction out." (a fraction from a mod that is not installed; nothing is spent).
 
 ### Gene Splicer
 
-**Gene Splicer:** two Lenses, a Synapse Chip, four Surgical Steel Ingots, a brewing stand and redstone. Holds 40,000 FE.
+![A Gene Splicer at work: the wheel turning and the needle stitching](docs/images/gene_splicer.gif)
+
+*A splice under way: pick genes, load gel and a bottle, press **Splice**.*
+
+**Gene Splicer:** two Lenses, a Synapse Chip, four Surgical Steel Ingots, a brewing stand and redstone. A sewing
+machine, two blocks tall. Holds 40,000 FE (up to 2,000 FE a tick).
 
 The screen has three strand rows. **Use** the arrows on each row to cycle through every gene your library holds at
 Draft or better; names are coloured by band. Load the slots: an optional **catalyst**, a **Bio-Gel**, a glass
 bottle. Read the numbers, then press **Splice**. A splice takes 60 seconds and about 20,000 FE, uses one catalyst, one
 Bio-Gel and the bottle, and makes a **Serum Cassette**. The first earns **Splice of Life**.
+
+Each gene picked lifts its spool, threaded in the gene's colour. Splicing, the wheel turns, the needle stitches and the
+spools turn; a riskier strand makes the stitch catch now and then, and a bell rings at each quarter. At the end the
+wheel coasts, hiccups once or twice for a risky strand, and the cassette pops up.
 
 - **Stability** starts at 100. Each gene costs its stability cost times its band's factor. Conflicting pairs cost 15
   more, synergy pairs give 10 back, the catalyst adds its bonus. It stays between 0 and 100.
@@ -1509,16 +1740,21 @@ Take it out first.", "Splicing in progress. Wait for the cassette." Taking the g
 
 The cassette's tooltip lists each gene and its strength, then "Stability, load, mutation".
 
-![The Gene Splicer screen with a strand of genes, stability and load](docs/images/splicer.png)
-
 ### Injecting
 
-**Your own body: the Injection Rig.** Six Surgical Steel Ingots around a Syringe, a Servo below. Holds 20,000 FE.
-Put the cassette in, stand at the rig with your body on (**body** or **linked**), press **Inject**. Each injection
-costs 5,000 FE and 1 damage, and returns the glass bottle. Serums cannot be injected by hand into yourself: "No
-self-injection by hand. Use the Injection Rig."
+![An Injection Rig swinging its syringe arm out and back](docs/images/injection_rig.gif)
+
+*The rig's arm swinging out: press **Inject** standing at the rig with your body on.*
+
+**Your own body: the Injection Rig.** Six Surgical Steel Ingots around a Syringe, a Servo below. Two blocks tall.
+Holds 20,000 FE (up to 1,000 FE a tick). Put the cassette in, stand at the rig with your body on (**body** or
+**linked**), press **Inject**. The arm swings the syringe out to you and the shot lands a second and a half later; move
+more than a block in that time and it is called off: "Hold still: the shot was called off. Nothing was used." Each
+injection costs 5,000 FE and 1 damage, and returns the glass bottle. Serums cannot be injected by hand into yourself:
+"No self-injection by hand. Use the Injection Rig."
 Refusals: "The rig injects bodies. Put your head back on, or link.", "Too heavy for this body. Splice a lighter
-serum." (load over 3), "No room for another serum. A Gene Wash clears the body." (two already in).
+serum." (load over 3), "No room for another serum. A Gene Wash clears the body." (two already in), "The rig is giving
+a shot. Wait for it."
 
 **A host.** **Use** the cassette on a host, with your body on. One serum, load up to 6. A host's passive genes work in
 it while it lives. Its active genes cannot be fired: while **hosted**, **Ability** and **Secondary** run the host's
@@ -1629,21 +1865,22 @@ A head is too valuable to waste. Saw one off with an empty jar in your other han
 **Jarred Head** finds work here. **Use** a block while holding the head to fit it; **Use** with an empty hand to take
 it back.
 
-![A jarred guardian head on a Turret Pedestal turns, locks a beam on a zombie and fires](docs/images/guardian.gif)
-
-*A guardian turret locking on: fit a jarred guardian head and give the pedestal power.*
-
 ### Turret Pedestal
 
+![A Turret Pedestal swinging round onto a zombie standing nearby](docs/images/turret_pedestal.gif)
+
+*A Turret Pedestal swinging onto a zombie: fit a jarred mob head and give it power.*
+
 **Turret Pedestal:** a hopper between two gold ingots, a dispenser between Surgical Steel Ingots, redstone at the
-bottom between two more ingots.
+bottom between two more ingots. A brass gun mount, two blocks tall.
 
 Fit a jarred mob head and the pedestal guards 16 blocks around it the way that mob fought. It runs on FE: 1 FE/t while
-it watches, 10 FE/t while it has a target. It holds 40,000 FE. With no head it draws nothing.
+it watches, 10 FE/t while it has a target. It holds 40,000 FE (up to 2,000 FE a tick). With no head it draws nothing.
+
 
 | Head | Attack | Every |
 |---|---|---|
-| Skeleton | arrow; needs arrows in a chest or other container touching the pedestal (not on top) | 1 s |
+| Skeleton | arrow; needs arrows in a chest or other container touching the pedestal's lower half | 1 s |
 | Stray | arrow with slowness (10 s) | 1 s |
 | Bogged | arrow with poison (5 s) | 1 s |
 | Blaze | fireball | 1.5 s |
@@ -1658,21 +1895,28 @@ It shoots only hostile mobs, the nearest first. It never aims at its owner (whoe
 the server sets `pvpTurrets`, then only players not on the owner's team), tame pets, villagers, iron golems or the
 owner's team. Explosions, splashes and fangs are less particular about who is standing near the target.
 
-The head turns to follow the nearest hostile. A guardian's lock shows as a guardian beam from the pedestal to its
-target, warming from cold purple to yellow over the two seconds while brackets close on the target, amber, then red;
-a ring flashes when the laser lands.
+The head's jar sits on the mount's cradle. With nothing to shoot it sweeps 60 degrees either side of its front; given a
+target it swings round onto it and tilts to aim; without power it droops. Each shot kicks the barrel back, and each
+head has its own: the blaze winds up with a flame at the muzzle, the zombie headbutts, the creeper hisses, the evoker
+nods. A guardian's lock shows as a guardian beam from the muzzle to its target, warming from cold purple to yellow over
+the two seconds while brackets close on the target, amber, then red; a ring flashes when the laser lands.
 
-Refusals: "A turret needs a brain. Fit a Jarred Head.", "That head (Pig) has nothing to shoot with. Try a skeleton.",
-"This turret has its head (Skeleton). Take it out by hand first."
+Refusals (the mount shakes its head): "A turret needs a brain. Fit a Jarred Head.", "That head (Pig) has nothing to
+shoot with. Try a skeleton.", "This turret has its head (Skeleton). Take it out by hand first."
 
 ### Cerebral Array
 
+![A Cerebral Array with its rack of heads, the gavel on the desk lifting and dropping](docs/images/cerebral_array.gif)
+
+*A fed Cerebral Array at work, the chairman's gavel lifting.*
+
 **Cerebral Array:** a Life Support Jar between two Surgical Steel Ingots, Synapse Chips above and below, Neuro-Copper
-Wire in the corners.
+Wire in the corners. A jury box of nine specimen jars with the chairman's desk on top, two blocks tall.
 
 Up to nine jarred heads make FE by thinking very hard about broth. **Use** it to open the rack: nine head slots and a
 tenth for the **Board Room Core**. Heads and the Core go in by hand only. Each head drinks 1 mB of **Nutrient Broth**
-a second; **Use** a broth bucket on the Array or pipe it in (tank 8,000 mB). No broth, no power.
+a second; **Use** a broth bucket on the Array or pipe it in (tank 8,000 mB, shown on the urn). No broth, no power.
+
 
 | Head | FE/t |
 |---|---|
@@ -1685,12 +1929,14 @@ a second; **Use** a broth bucket on the Array or pipe it in (tank 8,000 mB). No 
 | Any other jarred mob | 10 |
 | Dragon Head (with the Board Room Core) | 300 |
 
-- Five or more heads hold a **Board Meeting**: output +10%, and every five minutes a vote is announced to everyone
-  within 32 blocks: "[Board Meeting] Motion: dental cover. Carried 4 to 1." The Board can be heard murmuring.
+- Fed, the heads sit up and bob a little and the chairman lifts his gavel every few seconds; unfed, they sag.
+- Five or more heads hold a **Board Meeting**: output +10%, and every five minutes a vote: the gavel comes down, the
+  jurors' cards flip up one by one, and the result is announced to everyone within 32 blocks: "[Board Meeting] Motion:
+  dental cover. Carried 4 to 1." The Board can be heard murmuring.
 - The **Dragon Head** is the vanilla one. It makes nothing without a Board Room Core, and only one sits at the head of
   the table: a second makes nothing.
-- The Array holds 500,000 FE and pushes power into every neighbour that takes it. The screen shows broth, FE/t and
-  heads.
+- The Array holds 500,000 FE and pushes power into every machine touching its lower half. The screen shows broth, FE/t
+  and heads.
 - Advancements: **Board Meeting** (five heads at work) and **Brain Trust** (500 FE/t).
 
 **Board Room Core:** four gold blocks, four Synapse Chips and a Nether Star. It does one thing: lets the Dragon Head
@@ -1698,21 +1944,25 @@ take the chair.
 
 **Nutrient Broth Bucket:** a water bucket, beetroot soup, mushroom stew and sugar, shapeless.
 
-![The Cerebral Array screen with nine heads](docs/images/array.png)
-
 ### Employee Mount
 
+![An Employee Mount seen from its own side: payday, an emerald on the tray with green sparkles](docs/images/employee_mount.gif)
+
+*Payday at an Employee Mount: an emerald from the chest beside it.*
+
 **Employee Mount:** four Surgical Steel Ingots and two iron ingots: a steel ingot in each top corner, an iron ingot
-between two steel ones in the middle row, an iron ingot at the bottom centre.
+between two steel ones in the middle row, an iron ingot at the bottom centre. A small cubicle, one block tall.
 
-Place it against a machine (or on top of one) and **Use** it with a jarred villager. The villager works for that
-machine, for one emerald a day, taken from any chest or container touching the mount (not the machine). **Use** the
-mount to check on them ("Librarian: on the job, paid up"); **Sneak** and **Use** with an empty hand to take them
-down. Only villagers apply: "Staff positions are for a jarred Villager only." The first hire earns **Employee of the
-Month**.
+Place it against a machine and **Use** it with a jarred villager. The villager works for that machine, for one emerald
+a day, taken from any chest or container touching the mount (not the machine). **Use** the mount to check on them
+("Librarian: on the job, paid up"); **Sneak** and **Use** with an empty hand to take them down. Only villagers apply:
+"Staff positions are for a jarred Villager only." The first hire earns **Employee of the Month**.
 
-Unpaid staff give half the bonus and complain every two minutes ("I was promised dental."). Nitwits do nothing, are
-never paid, and complain anyway.
+Paid staff stamp forms at their desk, glance about now and then, and keep the day's emerald on the tray; payday comes
+with a clink. Unpaid staff give half the bonus, hang their heads, and every two minutes pick up the phone to complain
+("I was promised dental."). Three days unpaid and they face the wall. Nitwits do nothing, are never paid, and complain
+anyway.
+
 
 | Profession | Works at | Paid | Unpaid |
 |---|---|---|---|
@@ -1726,12 +1976,22 @@ never paid, and complain anyway.
 | Fisherman | Saline Mixer | 25% faster | 12.5% |
 | Cartographer | Relay Mast | range +50% | +25% |
 
-Shepherds and leatherworkers have no post in the company. A machine can take a mount on each side.
+Shepherds and leatherworkers have no post in the company. A machine can take a mount on each side. On a two-block
+machine the mount must touch a side of its lower half: one on top of the machine, or against its upper half, is not
+counted. The Separation Chair and the Assembly Gantry, which were not rebuilt, also take one on top.
 
 ### Neural Socket
 
+![A jar stepping onto a Neural Socket: the clamps close round it and the channel bars light](docs/images/neural_socket.gif)
+
+*A jar plugging into a Neural Socket: as a jar, **Use** the socket.*
+
 **Neural Socket:** redstone in the corners, Synapse Chips above and below, Neuro-Copper Wire either side of a Surgical
-Steel Ingot. It needs no power.
+Steel Ingot. One block tall. It needs no power.
+
+Its six redstone channels show as lit bars, one per face: on its four sides, a band under its cap (up) and its foot
+(down). When a jar plugs in, or a head is fitted, the clamps rise round the jar, the jack plugs up into it and the bars
+light once in turn.
 
 **Plug yourself in.** In **jar** form, **Use** the empty socket. You sit on top in **socket** form and drive six
 redstone channels, one per face:
@@ -1747,6 +2007,7 @@ key to unplug first." If the socket is broken or you are moved away: "The socket
 
 **Or let a mob head run it.** A jarred head runs a fixed program on all six faces:
 
+
 | Head | Program |
 |---|---|
 | Zombie, Husk, Drowned | a 1 Hz clock: on half a second, off half a second |
@@ -1754,9 +2015,8 @@ key to unplug first." If the socket is broken or you are moved away: "The socket
 | Enderman | full signal while any player within 16 blocks looks straight at it |
 
 Other heads have no program: "That head (Pig) has no program. Try a zombie, villager or enderman." A socket with
-someone plugged in: "Steve is plugged in. Wait until they unplug."
-
-![The Neural Socket HUD while a jar is plugged in](docs/images/socket.png)
+someone plugged in: "Steve is plugged in. Wait until they unplug." Refused, the open clamps hop, or the shut ones
+chatter.
 
 ## Controls
 
@@ -1968,12 +2228,37 @@ The mod brings its own sounds, all with subtitles:
   `doloresVoice` in the client config turns her off; her lines still show on screen;
 - the link breaking, swapping between body and head, Telekinesis taking hold, humming, throwing, letting go and
   fizzling, the Lacrimal Laser, arcing Tesla Nodes;
+- every company machine at work, from the Galvanic Pile's press to the Cloakroom's bell, and its refusal rattle;
 - a mecha powering up, genes splicing, something mutating, the Board murmuring, staff complaining;
 - answers: "Noggin & Sons declines" when something is refused, a tap on the glass when a bare jar reaches for
   something, a gurgle in the jar when a key has no module behind it, and, heard only by you, "Management coughs" for a
   warning and "Alarm sounds" when the next knock may be the last.
 
 ## Release notes
+
+The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
+
+### What's new in 0.4.0
+
+- **The machine line, rebuilt.** All twenty-two company machines, from the Galvanic Pile to the Leech Jar, are working
+  machines now: presses, paddles, dishes, shutters and spools move when they work, each has its own sounds, and a lamp
+  on its front says ready, working, waiting or short of power.
+- **Most machines are two blocks tall.** Leave the block above free when you place one ("No headroom. Needs two
+  blocks of height."). Clicks, hoppers, pipes and cables work on either half. A machine from an older world under a
+  ceiling keeps working at one block and takes its upper half within two seconds of the block above being cleared.
+- **Every refusal shows on the machine**: a red lamp for two seconds and a rattle of the part concerned, with the line
+  that says why. New lines: an empty Charging Dock, cooked food at the Galvanic Pile, an empty bucket at a Saline
+  Mixer with too little saline.
+- **The Body Locker keeps a body for its owner.** A body checked in from now on goes back only to whoever checked it
+  in, or to someone they trust (`/headoffice trust`). Bodies already stored go to anyone, as before.
+- **The Injection Rig takes a moment.** The shot lands a second and a half after **Inject**; step away and it is
+  called off, with nothing used.
+- **Machines that watch you.** Relay Masts turn their dishes along the link they carry, the Signal Jammer's turbine
+  spins up when it cuts a link, a Turret Pedestal patrols and swings onto its target, and a placed Jarred Head turns to
+  look at you.
+- **Tesla Nodes face each other.** Each node's ball turns to its partner, the arc runs ball to ball, and a pair linked
+  in an older world finds its sender on the first tick.
+- **The Safety Placard's notices are painted on the board**, in English or Brazilian Portuguese with your game.
 
 <details><summary>What changed in 0.3.0 and 0.2.0</summary>
 

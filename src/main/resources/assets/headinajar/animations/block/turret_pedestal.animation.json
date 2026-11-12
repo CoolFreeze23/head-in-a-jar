@@ -1,0 +1,408 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "fire": {
+      "animation_length": 0.5,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                0,
+                0,
+                -0.3
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.15": {
+              "vector": [
+                0,
+                0,
+                3
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                -0.3
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "particle_effects": {
+        "0.15": {
+          "effect": "minecraft:smoke",
+          "locator": "muzzle"
+        }
+      }
+    },
+    "charge": {
+      "animation_length": 1,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                -0.3,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0.3,
+                0,
+                0
+              ]
+            },
+            "0.15": {
+              "vector": [
+                -0.3,
+                0,
+                0
+              ]
+            },
+            "0.2": {
+              "vector": [
+                0.3,
+                0,
+                0
+              ]
+            },
+            "0.25": {
+              "vector": [
+                -0.3,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0.3,
+                0,
+                0
+              ]
+            },
+            "0.35": {
+              "vector": [
+                -0.3,
+                0,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                0.3,
+                0,
+                0
+              ]
+            },
+            "0.45": {
+              "vector": [
+                -0.3,
+                0,
+                0
+              ]
+            },
+            "0.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.6": {
+              "vector": [
+                0,
+                0,
+                2
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.95": {
+              "vector": [
+                0,
+                0,
+                -0.2
+              ],
+              "easing": "easeInOutSine"
+            },
+            "1.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.05": {
+          "effect": "headinajar:turret.windup|0.5|1.0"
+        }
+      },
+      "particle_effects": {
+        "0.6": {
+          "effect": "minecraft:flame",
+          "locator": "muzzle"
+        }
+      }
+    },
+    "lunge": {
+      "animation_length": 0.6,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.15": {
+              "vector": [
+                0,
+                0,
+                0.5
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                -2.5
+              ],
+              "easing": "easeOutCubic"
+            },
+            "0.35": {
+              "vector": [
+                0,
+                0,
+                -2.5
+              ]
+            },
+            "0.55": {
+              "vector": [
+                0,
+                0,
+                0.2
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.6": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.3": {
+          "effect": "headinajar:turret.lunge|0.5|1.0"
+        }
+      }
+    },
+    "pulse": {
+      "animation_length": 0.5,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.15": {
+              "vector": [
+                0,
+                0,
+                -1
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.25": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "0.35": {
+              "vector": [
+                0,
+                0,
+                -0.6
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.45": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInQuad"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:turret.hiss|0.6|1.0"
+        }
+      }
+    },
+    "lob": {
+      "animation_length": 0.6,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                0,
+                -0.5,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.25": {
+              "vector": [
+                0,
+                1,
+                0.5
+              ],
+              "easing": "easeOutCubic"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                -0.1,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.6": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "particle_effects": {
+        "0.25": {
+          "effect": "minecraft:witch",
+          "locator": "muzzle"
+        }
+      }
+    },
+    "refuse": {
+      "animation_length": 0.4,
+      "bones": {
+        "recoil": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.1": {
+              "vector": [
+                -0.5,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.2": {
+              "vector": [
+                0.5,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.3": {
+              "vector": [
+                -0.5,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "sound_effects": {
+        "0.0": {
+          "effect": "headinajar:machine.rattle|0.4|1.0"
+        }
+      }
+    }
+  }
+}

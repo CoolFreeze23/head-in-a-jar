@@ -1,0 +1,36 @@
+# Machines placed before they were two cells tall, as an old world has them: under glass (the cut seen through it) and
+# under stone, at rest and working; beside them the same machines with room (their top cell put on at the first tick)
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+/setblock 0 -59 0 minecraft:glass
+/setblock 2 -59 0 minecraft:glass
+/setblock 4 -59 0 minecraft:glass
+/setblock 6 -59 0 minecraft:stone
+/setblock 0 -60 0 headinajar:galvanic_pile[facing=south]
+/setblock 2 -60 0 headinajar:saline_mixer[facing=south]
+/setblock 4 -60 0 headinajar:tesla_node[facing=south]
+/setblock 6 -60 0 headinajar:centrifuge[facing=south]
+/setblock 0 -60 4 headinajar:galvanic_pile[facing=south]
+/setblock 2 -60 4 headinajar:saline_mixer[facing=south]
+/setblock 4 -60 4 headinajar:tesla_node[facing=south]
+/setblock 6 -60 4 headinajar:centrifuge[facing=south]
+/tp @s 3.5 -58.4 9 180 10
+wait 40
+shot old_ceiling_rest
+/data merge block 0 -60 0 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 0 -60 4 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:12}]}}
+/data merge block 6 -60 0 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+/data merge block 6 -60 4 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:16}]}}
+wait 60
+shot old_ceiling_work
+frames old_ceiling_work 80
+wait 85
+/tp @s 3.5 -59.2 2.6 180 -5
+wait 10
+shot old_ceiling_close
+report oldceiling done

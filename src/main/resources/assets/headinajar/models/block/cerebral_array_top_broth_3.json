@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "broth": "headinajar:block/machine/cerebral_array_broth_3",
+    "particle": "headinajar:block/machine/cerebral_array"
+  },
+  "elements": [
+    {
+      "name": "broth_face",
+      "from": [
+        2,
+        12,
+        13
+      ],
+      "to": [
+        4,
+        15,
+        14
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            3,
+            4
+          ],
+          "texture": "#broth"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            4
+          ],
+          "texture": "#broth"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            6,
+            4
+          ],
+          "texture": "#broth"
+        },
+        "west": {
+          "uv": [
+            3,
+            1,
+            4,
+            4
+          ],
+          "texture": "#broth"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            1,
+            0
+          ],
+          "texture": "#broth"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "texture": "#broth"
+        }
+      }
+    }
+  ]
+}

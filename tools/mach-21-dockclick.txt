@@ -1,0 +1,39 @@
+# The Charging Dock's silent click, traced: the second player's head steps off the dock and goes back on its body (a
+# teleport); its next click is dropped by the server while the teleport waits for a client to confirm it ("raw": the
+# harness does not confirm). The same steps with the teleport confirmed, as a real client does: refused.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+/clear @s
+bystander spawn -2 -60 2 225
+/setblock 0 -60 0 headinajar:charging_dock[facing=south]
+/data merge block 0 -60 0 {Energy:20000}
+/tp @s 2.8 -59 3.6 143 12
+bystander form jar
+wait 20
+bystander tp 0 -59.7 0 180 0
+wait 40
+/data merge block 0 -60 0 {Energy:0}
+wait 60
+bystander tp -2 -60 3 225 0
+bystander form body raw
+wait 20
+inspect block 0 -60 0
+bystander useblock 0 -60 0 up
+bystander packets actionbar|chat|refus
+wait 60
+# again, confirmed
+bystander form jar
+wait 20
+bystander tp 0 -59.7 0 180 0
+wait 40
+bystander tp -2 -60 3 225 0
+bystander form body
+wait 20
+bystander useblock 0 -60 0 up
+bystander packets actionbar|chat|refus
+wait 60
+report dockclick done

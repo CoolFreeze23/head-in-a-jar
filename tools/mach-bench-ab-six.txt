@@ -1,0 +1,436 @@
+# The machine line bench as an A/B in one session (written by tools/mach_bench_ab.py).
+@observe 1
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+gamerule doMobSpawning false
+time set noon
+weather clear
+hud off
+tp @s 0.5 -54 -6.5
+look 0 14
+setblock -7 -60 18 headinajar:cerebral_array
+setblock -5 -60 18 headinajar:cerebral_array
+setblock -3 -60 18 headinajar:turret_pedestal
+setblock -1 -60 18 headinajar:turret_pedestal
+setblock 1 -60 18 headinajar:turret_pedestal
+setblock 3 -60 18 headinajar:turret_pedestal
+setblock 5 -60 18 headinajar:neural_socket
+setblock 7 -60 18 headinajar:neural_socket
+setblock -9 -60 18 headinajar:neural_socket
+setblock 9 -60 18 headinajar:neural_socket
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 26 headinajar:life_support_cradle
+data merge block -7 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -7 -60 26 1
+setblock -5 -60 26 headinajar:life_support_cradle
+data merge block -5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -5 -60 26 2 compact
+setblock 3 -60 26 headinajar:life_support_cradle
+data merge block 3 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock 5 -60 26 headinajar:life_support_cradle
+data merge block 5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock -9 -60 26 headinajar:life_support_cradle
+cradlehead -9 -60 26 9
+setblock -7 -60 22 headinajar:body_printer
+data merge block -7 -60 22 {Energy:250000,Progress:100,Client:[I;9,9,9,0],ClientName:"Dev"}
+setblock -5 -60 22 headinajar:body_printer
+data merge block -5 -60 22 {Energy:250000,Progress:250,Client:[I;9,9,9,1],ClientName:"Dev"}
+setblock 3 -60 22 headinajar:body_printer
+data merge block 3 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock 5 -60 22 headinajar:body_printer
+data merge block 5 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock -9 -60 22 headinajar:body_printer
+setblock -7 -60 2 headinajar:gene_splicer
+data merge block -7 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock -5 -60 2 headinajar:gene_splicer
+data merge block -5 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:100,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock 3 -60 2 headinajar:gene_splicer
+data merge block 3 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock 5 -60 2 headinajar:gene_splicer
+data merge block 5 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock -9 -60 2 headinajar:gene_splicer
+wait 100
+shot ab_machines
+perf warmup 1200
+wait 600
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 26 headinajar:life_support_cradle
+data merge block -7 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -7 -60 26 1
+setblock -5 -60 26 headinajar:life_support_cradle
+data merge block -5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -5 -60 26 2 compact
+setblock 3 -60 26 headinajar:life_support_cradle
+data merge block 3 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock 5 -60 26 headinajar:life_support_cradle
+data merge block 5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock -9 -60 26 headinajar:life_support_cradle
+cradlehead -9 -60 26 9
+setblock -7 -60 22 headinajar:body_printer
+data merge block -7 -60 22 {Energy:250000,Progress:100,Client:[I;9,9,9,0],ClientName:"Dev"}
+setblock -5 -60 22 headinajar:body_printer
+data merge block -5 -60 22 {Energy:250000,Progress:250,Client:[I;9,9,9,1],ClientName:"Dev"}
+setblock 3 -60 22 headinajar:body_printer
+data merge block 3 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock 5 -60 22 headinajar:body_printer
+data merge block 5 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock -9 -60 22 headinajar:body_printer
+setblock -7 -60 2 headinajar:gene_splicer
+data merge block -7 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock -5 -60 2 headinajar:gene_splicer
+data merge block -5 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:100,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock 3 -60 2 headinajar:gene_splicer
+data merge block 3 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock 5 -60 2 headinajar:gene_splicer
+data merge block 5 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock -9 -60 2 headinajar:gene_splicer
+wait 605
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 26 headinajar:life_support_cradle
+data merge block -7 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -7 -60 26 1
+setblock -5 -60 26 headinajar:life_support_cradle
+data merge block -5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -5 -60 26 2 compact
+setblock 3 -60 26 headinajar:life_support_cradle
+data merge block 3 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock 5 -60 26 headinajar:life_support_cradle
+data merge block 5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock -9 -60 26 headinajar:life_support_cradle
+cradlehead -9 -60 26 9
+setblock -7 -60 22 headinajar:body_printer
+data merge block -7 -60 22 {Energy:250000,Progress:100,Client:[I;9,9,9,0],ClientName:"Dev"}
+setblock -5 -60 22 headinajar:body_printer
+data merge block -5 -60 22 {Energy:250000,Progress:250,Client:[I;9,9,9,1],ClientName:"Dev"}
+setblock 3 -60 22 headinajar:body_printer
+data merge block 3 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock 5 -60 22 headinajar:body_printer
+data merge block 5 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock -9 -60 22 headinajar:body_printer
+setblock -7 -60 2 headinajar:gene_splicer
+data merge block -7 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock -5 -60 2 headinajar:gene_splicer
+data merge block -5 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:100,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock 3 -60 2 headinajar:gene_splicer
+data merge block 3 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock 5 -60 2 headinajar:gene_splicer
+data merge block 5 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock -9 -60 2 headinajar:gene_splicer
+kill @e[type=item]
+wait 100
+perf machines_1 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock -7 -60 26 minecraft:furnace
+setblock -5 -60 26 minecraft:furnace
+setblock 3 -60 26 minecraft:furnace
+setblock 5 -60 26 minecraft:furnace
+setblock -9 -60 26 minecraft:furnace
+setblock -7 -60 22 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+setblock -9 -60 22 minecraft:furnace
+setblock -7 -60 2 minecraft:furnace
+setblock -5 -60 2 minecraft:furnace
+setblock 3 -60 2 minecraft:furnace
+setblock 5 -60 2 minecraft:furnace
+setblock -9 -60 2 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_1 200
+wait 205
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 26 headinajar:life_support_cradle
+data merge block -7 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -7 -60 26 1
+setblock -5 -60 26 headinajar:life_support_cradle
+data merge block -5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -5 -60 26 2 compact
+setblock 3 -60 26 headinajar:life_support_cradle
+data merge block 3 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock 5 -60 26 headinajar:life_support_cradle
+data merge block 5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock -9 -60 26 headinajar:life_support_cradle
+cradlehead -9 -60 26 9
+setblock -7 -60 22 headinajar:body_printer
+data merge block -7 -60 22 {Energy:250000,Progress:100,Client:[I;9,9,9,0],ClientName:"Dev"}
+setblock -5 -60 22 headinajar:body_printer
+data merge block -5 -60 22 {Energy:250000,Progress:250,Client:[I;9,9,9,1],ClientName:"Dev"}
+setblock 3 -60 22 headinajar:body_printer
+data merge block 3 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock 5 -60 22 headinajar:body_printer
+data merge block 5 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock -9 -60 22 headinajar:body_printer
+setblock -7 -60 2 headinajar:gene_splicer
+data merge block -7 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock -5 -60 2 headinajar:gene_splicer
+data merge block -5 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:100,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock 3 -60 2 headinajar:gene_splicer
+data merge block 3 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock 5 -60 2 headinajar:gene_splicer
+data merge block 5 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock -9 -60 2 headinajar:gene_splicer
+kill @e[type=item]
+wait 100
+perf machines_2 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock -7 -60 26 minecraft:furnace
+setblock -5 -60 26 minecraft:furnace
+setblock 3 -60 26 minecraft:furnace
+setblock 5 -60 26 minecraft:furnace
+setblock -9 -60 26 minecraft:furnace
+setblock -7 -60 22 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+setblock -9 -60 22 minecraft:furnace
+setblock -7 -60 2 minecraft:furnace
+setblock -5 -60 2 minecraft:furnace
+setblock 3 -60 2 minecraft:furnace
+setblock 5 -60 2 minecraft:furnace
+setblock -9 -60 2 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_2 200
+wait 205
+setblock -7 -60 6 headinajar:galvanic_pile
+data merge block -7 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock -5 -60 6 headinajar:galvanic_pile
+data merge block -5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]}}
+setblock 3 -60 6 headinajar:galvanic_pile
+data merge block 3 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock 5 -60 6 headinajar:galvanic_pile
+data merge block 5 -60 6 {Fuel:{Size:1,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:64}]},Energy:50000,Burning:2000}
+setblock -9 -60 6 headinajar:galvanic_pile
+setblock -7 -60 10 headinajar:saline_mixer
+data merge block -7 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock -5 -60 10 headinajar:saline_mixer
+data merge block -5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:20000}
+setblock 3 -60 10 headinajar:saline_mixer
+data merge block 3 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock 5 -60 10 headinajar:saline_mixer
+data merge block 5 -60 10 {Items:{Size:5,Items:[{Slot:0b,id:"minecraft:sugar",count:64},{Slot:1b,id:"minecraft:kelp",count:64},{Slot:2b,id:"minecraft:redstone",count:64}]},Water:{Fluid:{id:"minecraft:water",amount:4000}},Energy:0,Progress:60}
+setblock -9 -60 10 headinajar:saline_mixer
+data merge block -9 -60 10 {Items:{Size:5,Items:[{Slot:4b,id:"headinajar:saline_bottle",count:6}]}}
+setblock -7 -60 14 headinajar:centrifuge
+data merge block -7 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock -5 -60 14 headinajar:centrifuge
+data merge block -5 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:64}]}}
+setblock 3 -60 14 headinajar:centrifuge
+data merge block 3 -60 14 {Energy:20000,Items:{Size:3,Items:[{Slot:0b,id:"minecraft:dragon_breath",count:3}]}}
+setblock 5 -60 14 headinajar:centrifuge
+data merge block 5 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -9 -60 14 headinajar:centrifuge
+data merge block -9 -60 14 {Items:{Size:3,Items:[{Slot:1b,id:"headinajar:dna_fraction",count:2},{Slot:2b,id:"headinajar:plasma_vial",count:2}]}}
+setblock -7 -60 26 headinajar:life_support_cradle
+data merge block -7 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -7 -60 26 1
+setblock -5 -60 26 headinajar:life_support_cradle
+data merge block -5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+cradlehead -5 -60 26 2 compact
+setblock 3 -60 26 headinajar:life_support_cradle
+data merge block 3 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock 5 -60 26 headinajar:life_support_cradle
+data merge block 5 -60 26 {Energy:40000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}}}
+setblock -9 -60 26 headinajar:life_support_cradle
+cradlehead -9 -60 26 9
+setblock -7 -60 22 headinajar:body_printer
+data merge block -7 -60 22 {Energy:250000,Progress:100,Client:[I;9,9,9,0],ClientName:"Dev"}
+setblock -5 -60 22 headinajar:body_printer
+data merge block -5 -60 22 {Energy:250000,Progress:250,Client:[I;9,9,9,1],ClientName:"Dev"}
+setblock 3 -60 22 headinajar:body_printer
+data merge block 3 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock 5 -60 22 headinajar:body_printer
+data merge block 5 -60 22 {Energy:250000,Saline:{Fluid:{id:"headinajar:cranial_saline",amount:4000}},Items:{Size:4,Items:[{Slot:0b,id:"minecraft:rotten_flesh",count:16},{Slot:1b,id:"minecraft:bone_block",count:8},{Slot:2b,id:"minecraft:redstone_block",count:4},{Slot:3b,id:"minecraft:slime_ball",count:8}]}}
+setblock -9 -60 22 headinajar:body_printer
+setblock -7 -60 2 headinajar:gene_splicer
+data merge block -7 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:0,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock -5 -60 2 headinajar:gene_splicer
+data merge block -5 -60 2 {Energy:40000,Gene0:"spider_climb",Gene1:"golem_frame",Running:1b,Progress:100,Items:{Size:4,Items:[{Slot:0b,id:"minecraft:glowstone_dust",count:2},{Slot:1b,id:"headinajar:bio_gel",count:2},{Slot:2b,id:"minecraft:glass_bottle",count:2}]}}
+setblock 3 -60 2 headinajar:gene_splicer
+data merge block 3 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock 5 -60 2 headinajar:gene_splicer
+data merge block 5 -60 2 {Items:{Size:4,Items:[{Slot:3b,id:"headinajar:serum_cassette",count:1}]}}
+setblock -9 -60 2 headinajar:gene_splicer
+kill @e[type=item]
+wait 100
+perf machines_3 200
+wait 205
+setblock -7 -60 6 minecraft:furnace
+setblock -5 -60 6 minecraft:furnace
+setblock 3 -60 6 minecraft:furnace
+setblock 5 -60 6 minecraft:furnace
+setblock -9 -60 6 minecraft:furnace
+setblock -7 -60 10 minecraft:furnace
+setblock -5 -60 10 minecraft:furnace
+setblock 3 -60 10 minecraft:furnace
+setblock 5 -60 10 minecraft:furnace
+setblock -9 -60 10 minecraft:furnace
+setblock -7 -60 14 minecraft:furnace
+setblock -5 -60 14 minecraft:furnace
+setblock 3 -60 14 minecraft:furnace
+setblock 5 -60 14 minecraft:furnace
+setblock -9 -60 14 minecraft:furnace
+setblock -7 -60 26 minecraft:furnace
+setblock -5 -60 26 minecraft:furnace
+setblock 3 -60 26 minecraft:furnace
+setblock 5 -60 26 minecraft:furnace
+setblock -9 -60 26 minecraft:furnace
+setblock -7 -60 22 minecraft:furnace
+setblock -5 -60 22 minecraft:furnace
+setblock 3 -60 22 minecraft:furnace
+setblock 5 -60 22 minecraft:furnace
+setblock -9 -60 22 minecraft:furnace
+setblock -7 -60 2 minecraft:furnace
+setblock -5 -60 2 minecraft:furnace
+setblock 3 -60 2 minecraft:furnace
+setblock 5 -60 2 minecraft:furnace
+setblock -9 -60 2 minecraft:furnace
+kill @e[type=item]
+wait 100
+perf cubes_3 200
+wait 205
+shot ab_cubes
+report ab done
