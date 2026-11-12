@@ -522,7 +522,9 @@ their charge, mecha half their battery, turrets go dark. Shielded Housing protec
 or unlinked Tesla Node touching it, a linked Tesla Node, or another mod's cables. 1 kFE is 1,000 FE; mB is a
 thousandth of a bucket.
 
-<!-- PIC: tesla | x -->
+![Two Tesla Nodes joined by a crackling arc, a bright bead running along it from one to the other](docs/images/tesla.gif)
+
+*Linked Tesla Nodes passing power: link them with the Surgical Wrench (**Use** the sender, then the receiver).*
 
 | Block | Recipe | What it does |
 |---|---|---|
@@ -593,7 +595,7 @@ A head in a jar is a head. Modules are how Noggin & Sons makes it an employee ag
 
 ### Telekinesis
 
-![Seen from behind, a jar lifts a cow, swings it round on a glowing line and throws it](docs/images/telekinesis.gif)
+![Seen from behind and to one side, a jar lifts a cow on a glowing line, swings it round in front of itself and throws it](docs/images/telekinesis.gif)
 
 *Telekinesis: **Ability** to grab, look to move it, **Attack** to throw.*
 
