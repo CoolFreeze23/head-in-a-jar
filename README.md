@@ -663,7 +663,7 @@ over the dish while it carries a link, and its beacon glows while it has power.
 
 ### Signal Jammer
 
-![A powered Signal Jammer, its turbine spinning on top](docs/images/signal_jammer.gif)
+![A whole Signal Jammer with sky above it, its turbine spinning on top](docs/images/signal_jammer.gif)
 
 *A powered Signal Jammer, its turbine turning.*
 
@@ -1014,7 +1014,7 @@ Gold Nugget). **Use** it on a host at **50% sync or more**: freshness back to 10
 "Neural Lace grafted: this body will never decay". Under 50%: "The lace needs at least 50% sync to take", and you keep
 the lace. Once a body is laced, Embalming Fluid does nothing more for it, so do not spend one.
 
-![A Body Locker letting a headless body step out in front of it](docs/images/body_locker.gif)
+![A Body Locker letting a headless husk step out in front of it, its feet and the ground in frame, a player standing beside](docs/images/body_locker.gif)
 
 *A body checked out of the Body Locker: **Use** the locker.*
 
