@@ -142,7 +142,22 @@ public final class FormActions {
         if (corpse) body.becomeCorpse(player);
         moveGenes(player, body);
         level.addFreshEntity(body);
+        if (!corpse) moveNausea(player, body);
         return body;
+    }
+
+    /**
+     * Nausea (from the chair or the Suture Kit) is the body's: it stays with the body when the mind leaves it, and comes
+     * back when the mind steps in again. A jar keeping it drew the effect's purple motes inside its own small box, at its
+     * eye, as large flat shapes over the view. On the body it gives off no motes: a jar woken from a carried head starts
+     * inside its body's box, where the body's motes would be born at the jar's eye just the same.
+     */
+    public static void moveNausea(net.minecraft.world.entity.LivingEntity from, net.minecraft.world.entity.LivingEntity to) {
+        MobEffectInstance nausea = from.getEffect(MobEffects.CONFUSION);
+        if (nausea == null) return;
+        from.removeEffect(MobEffects.CONFUSION);
+        to.addEffect(new MobEffectInstance(nausea.getEffect(), nausea.getDuration(), nausea.getAmplifier(), nausea.isAmbient(),
+                !(to instanceof HeadlessBody), nausea.showIcon()));
     }
 
     /** Genes belong to the body: they move with it between the player entity and a Headless Body. */
@@ -278,6 +293,7 @@ public final class FormActions {
             body.setItemSlot(slot, ItemStack.EMPTY);
         }
         moveGenes(body, player);
+        moveNausea(body, player);
         state.setBody(null);
         registry(player).setBody(player.getUUID(), null);
         body.discard();
@@ -587,6 +603,7 @@ public final class FormActions {
         player.refreshDimensions();
         player.teleportTo(player.serverLevel(), body.getX(), body.getY(), body.getZ(), body.getYRot(), player.getXRot());
         moveGenes(body, player);
+        moveNausea(body, player);
         body.discard();
         Network.sync(player);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.REATTACH.get(), SoundSource.PLAYERS, 1.0f, 0.7f);

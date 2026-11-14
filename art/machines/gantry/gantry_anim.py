@@ -1334,7 +1334,7 @@ class Builder:
     # -- one contact: approach, press home, the weld (or the arc) ---------------------------------------------------
     def weld(self, pl, tau, cur, t_target, locname, arcname, after_turn=False, press=2):
         """Come to the approach pose, press home on t_target (or as soon after as the arm can), weld on the next tick,
-        the sound on the one after. Returns (tau, pose, contact tau)."""
+        the sound on the one after. Returns (tau, pose, contact tau, tau the arm is at the approach pose)."""
         tr, fr = self.tr, self.fr
         n0 = len(tr.poses)
         due = t_target + LEAD
@@ -1388,7 +1388,7 @@ class Builder:
         tr.at(tc + 1, pl['pose'], None)                     # held through the weld
         if self.last_ok and sweep(fr, tr, t_app, tc + 1):
             self.last_ok = False                # met late, the frame has moved on into the tool's way
-        return tc + 1, pl['pose'], tc
+        return tc + 1, pl['pose'], tc, t_app
 
     def press(self, t0, p0, t1, p1, ease):
         """The press home (or the strike): the tool's tip straight along its line, else a plain joint-space key."""
@@ -1626,9 +1626,9 @@ class Builder:
                         LOCATORS.update(kept[2])
                         ARCS.clear()
                         ARCS.update(kept[3])
-            tau, cur, tc = res
+            tau, cur, tc, t_arr = res
             after_turn = False
-            self.contacts.append({'slot': slot, 'seat': S, 'contact': tc - LEAD, 'late': tc - LEAD - S,
+            self.contacts.append({'slot': slot, 'seat': S, 'contact': tc - LEAD, 'late': tc - LEAD - S, 'arrive': t_arr - LEAD,
                                   'locator': 'w_%s_%s' % (name, slot), 'reach': bool(pl['reach']),
                                   'socket': pl.get('sock'), 'theta': round(th, 1),
                                   'arc': None if pl['reach'] else 'arc_%s_%s' % (name, slot),
@@ -1703,7 +1703,7 @@ class Builder:
             locname = 'plate_%s_%d' % (name, plated + 1)
             target = t_plate - LEAD + 3 if plated == 0 else 0
             snap = (copy.deepcopy(tr.__dict__), list(self.notes), dict(LOCATORS), dict(ARCS))
-            tau2, cur2, tc = self.weld(pl, tau, cur, target, locname, 'arc_%s_plate_%d' % (name, plated + 1), press=3)
+            tau2, cur2, tc, _ = self.weld(pl, tau, cur, target, locname, 'arc_%s_plate_%d' % (name, plated + 1), press=3)
             if not self.last_ok:
                 # no clean way onto it from where the arm is: that plate is left out
                 tr.__dict__.update(snap[0])
@@ -2313,7 +2313,7 @@ def main():
             'length': r.length, 'build_length': r.build_length,
             'turn': [[t, round(a, 3), e] for (t, a, e) in r.turn_keys],
             'present': r.present,
-            'contacts': [dict({kk: c[kk] for kk in ('slot', 'seat', 'contact', 'late', 'locator', 'reach')},
+            'contacts': [dict({kk: c[kk] for kk in ('slot', 'seat', 'contact', 'late', 'arrive', 'locator', 'reach')},
                               **({} if c['reach'] else {'arc': c['arc']})) for c in r.contacts],
             'disassemble': 60, 'repair': lnr,
             'repair_turn': [[t, round(a, 3), e] for (t, a, e) in trp.turn],
@@ -2354,8 +2354,8 @@ def main():
                 len(r.so_bad), max(x[2] for x in r.so_bad))))
         print('   turn %s; present %s' % ([(t, round(a, 1)) for (t, a, e) in r.turn_keys], r.present))
         for c in r.contacts:
-            print('   %-9s seat %3d contact %3d late %2d theta %6.1f %s%s' % (
-                c['slot'], c['seat'], c['contact'], c['late'], c['theta'], 'reach' if c['reach'] else 'ARC',
+            print('   %-9s seat %3d arrive %3d contact %3d late %2d theta %6.1f %s%s' % (
+                c['slot'], c['seat'], c['arrive'], c['contact'], c['late'], c['theta'], 'reach' if c['reach'] else 'ARC',
                 '' if c['reach'] else ' (%s, %.1f px)' % (c['arc'], c['arc_length'])))
         print('   scan at tau %s, stamp at tau %s; telescope sounds %d' % (r.scan, r.stamp_tick, r.strokes))
         print('   swivel: fastest %d deg/tick; swings over 90 deg (from, to, deg, peak deg/tick): %s' % (r.swing[0], r.swing[1]))

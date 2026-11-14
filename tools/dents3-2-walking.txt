@@ -1,0 +1,1852 @@
+# dents3: every frame walking (driven east by the player, a jar), seen from every side at 5 and 8 blocks by a camera
+# riding beside it (watch follow), stages 0 to 3 struck from that side. Default profile, flat world.
+# Shots: walk_<frame>_<side>_s<stage>_<5|8>b.png
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+# --- hopper
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha hopper 0 -60 0 hydraulic_legs
+wait 30
+aimat headinajar:hopper
+wait 3
+key use
+wait 80
+riding hopper
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 5
+wait 3
+shot walk_hopper_front_s0_5b
+watch follow 8 1.62 0 90 3
+wait 3
+shot walk_hopper_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 5
+wait 3
+shot walk_hopper_right_s0_5b
+watch follow 0 1.62 8 180 3
+wait 3
+shot walk_hopper_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 5
+wait 3
+shot walk_hopper_back_s0_5b
+watch follow -8 1.62 0 -90 3
+wait 3
+shot walk_hopper_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 5
+wait 3
+shot walk_hopper_left_s0_5b
+watch follow 0 1.62 -8 0 3
+wait 3
+shot walk_hopper_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 5
+wait 3
+shot walk_hopper_front_s1_5b
+watch follow 8 1.62 0 90 3
+wait 3
+shot walk_hopper_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 5
+wait 3
+shot walk_hopper_right_s1_5b
+watch follow 0 1.62 8 180 3
+wait 3
+shot walk_hopper_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 5
+wait 3
+shot walk_hopper_back_s1_5b
+watch follow -8 1.62 0 -90 3
+wait 3
+shot walk_hopper_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 5
+wait 3
+shot walk_hopper_left_s1_5b
+watch follow 0 1.62 -8 0 3
+wait 3
+shot walk_hopper_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:26.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 5
+wait 3
+shot walk_hopper_front_s2_5b
+watch follow 8 1.62 0 90 3
+wait 3
+shot walk_hopper_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:26.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 5
+wait 3
+shot walk_hopper_right_s2_5b
+watch follow 0 1.62 8 180 3
+wait 3
+shot walk_hopper_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:26.4f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 5
+wait 3
+shot walk_hopper_back_s2_5b
+watch follow -8 1.62 0 -90 3
+wait 3
+shot walk_hopper_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:26.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 5
+wait 3
+shot walk_hopper_left_s2_5b
+watch follow 0 1.62 -8 0 3
+wait 3
+shot walk_hopper_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:9.9f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 5
+wait 3
+shot walk_hopper_front_s3_5b
+watch follow 8 1.62 0 90 3
+wait 3
+shot walk_hopper_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:9.9f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 5
+wait 3
+shot walk_hopper_right_s3_5b
+watch follow 0 1.62 8 180 3
+wait 3
+shot walk_hopper_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:9.9f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 5
+wait 3
+shot walk_hopper_back_s3_5b
+watch follow -8 1.62 0 -90 3
+wait 3
+shot walk_hopper_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:9.9f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 5
+wait 3
+shot walk_hopper_left_s3_5b
+watch follow 0 1.62 -8 0 3
+wait 3
+shot walk_hopper_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:hopper]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- bulwark
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha bulwark 0 -60 0 hydraulic_legs
+wait 30
+aimat headinajar:bulwark
+wait 3
+key use
+wait 80
+riding bulwark
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s0_5b
+watch follow 8 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 0
+wait 3
+shot walk_bulwark_right_s0_5b
+watch follow 0 1.62 8 180 0
+wait 3
+shot walk_bulwark_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s0_5b
+watch follow -8 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 0
+wait 3
+shot walk_bulwark_left_s0_5b
+watch follow 0 1.62 -8 0 0
+wait 3
+shot walk_bulwark_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:92.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s1_5b
+watch follow 8 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:92.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 0
+wait 3
+shot walk_bulwark_right_s1_5b
+watch follow 0 1.62 8 180 0
+wait 3
+shot walk_bulwark_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:92.4f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s1_5b
+watch follow -8 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:92.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 0
+wait 3
+shot walk_bulwark_left_s1_5b
+watch follow 0 1.62 -8 0 0
+wait 3
+shot walk_bulwark_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:61.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s2_5b
+watch follow 8 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:61.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 0
+wait 3
+shot walk_bulwark_right_s2_5b
+watch follow 0 1.62 8 180 0
+wait 3
+shot walk_bulwark_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:61.6f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s2_5b
+watch follow -8 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:61.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 0
+wait 3
+shot walk_bulwark_left_s2_5b
+watch follow 0 1.62 -8 0 0
+wait 3
+shot walk_bulwark_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:23.1f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s3_5b
+watch follow 8 1.62 0 90 0
+wait 3
+shot walk_bulwark_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:23.1f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 0
+wait 3
+shot walk_bulwark_right_s3_5b
+watch follow 0 1.62 8 180 0
+wait 3
+shot walk_bulwark_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:23.1f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s3_5b
+watch follow -8 1.62 0 -90 0
+wait 3
+shot walk_bulwark_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:23.1f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 0
+wait 3
+shot walk_bulwark_left_s3_5b
+watch follow 0 1.62 -8 0 0
+wait 3
+shot walk_bulwark_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:bulwark]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- colossus
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha colossus 0 -60 0 hydraulic_legs
+wait 30
+aimat headinajar:colossus
+wait 3
+key use
+wait 80
+riding colossus
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_colossus_front_s0_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_colossus_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_colossus_right_s0_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_colossus_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_colossus_back_s0_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_colossus_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_colossus_left_s0_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_colossus_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:198.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_colossus_front_s1_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_colossus_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:198.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_colossus_right_s1_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_colossus_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:198.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_colossus_back_s1_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_colossus_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:198.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_colossus_left_s1_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_colossus_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_colossus_front_s2_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_colossus_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_colossus_right_s2_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_colossus_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_colossus_back_s2_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_colossus_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_colossus_left_s2_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_colossus_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:49.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_colossus_front_s3_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_colossus_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:49.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_colossus_right_s3_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_colossus_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:49.5f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_colossus_back_s3_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_colossus_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:49.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_colossus_left_s3_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_colossus_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:colossus]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- executive
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha executive 0 -60 0 hydraulic_legs
+wait 30
+aimat headinajar:executive
+wait 3
+key use
+wait 80
+riding executive
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_executive_front_s0_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_executive_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_executive_right_s0_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_executive_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_executive_back_s0_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_executive_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_executive_left_s0_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_executive_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:237.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_executive_front_s1_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_executive_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:237.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_executive_right_s1_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_executive_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:237.6f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_executive_back_s1_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_executive_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:237.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_executive_left_s1_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_executive_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:158.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_executive_front_s2_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_executive_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:158.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_executive_right_s2_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_executive_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:158.4f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_executive_back_s2_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_executive_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:158.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_executive_left_s2_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_executive_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 -7
+wait 3
+shot walk_executive_front_s3_5b
+watch follow 8 1.62 0 90 -4
+wait 3
+shot walk_executive_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 -7
+wait 3
+shot walk_executive_right_s3_5b
+watch follow 0 1.62 8 180 -4
+wait 3
+shot walk_executive_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 -7
+wait 3
+shot walk_executive_back_s3_5b
+watch follow -8 1.62 0 -90 -4
+wait 3
+shot walk_executive_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 -7
+wait 3
+shot walk_executive_left_s3_5b
+watch follow 0 1.62 -8 0 -4
+wait 3
+shot walk_executive_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:executive]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- wheelhouse
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha wheelhouse 0 -60 0
+wait 30
+aimat headinajar:wheelhouse
+wait 3
+key use
+wait 80
+riding wheelhouse
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_wheelhouse_front_s0_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_wheelhouse_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_wheelhouse_right_s0_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_wheelhouse_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_wheelhouse_back_s0_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_wheelhouse_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_wheelhouse_left_s0_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_wheelhouse_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_wheelhouse_front_s1_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_wheelhouse_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_wheelhouse_right_s1_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_wheelhouse_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_wheelhouse_back_s1_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_wheelhouse_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:59.4f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_wheelhouse_left_s1_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_wheelhouse_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_wheelhouse_front_s2_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_wheelhouse_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_wheelhouse_right_s2_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_wheelhouse_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_wheelhouse_back_s2_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_wheelhouse_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:39.6f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_wheelhouse_left_s2_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_wheelhouse_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:14.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_wheelhouse_front_s3_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_wheelhouse_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:14.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_wheelhouse_right_s3_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_wheelhouse_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:14.8f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_wheelhouse_back_s3_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_wheelhouse_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:14.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_wheelhouse_left_s3_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_wheelhouse_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:wheelhouse]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- chimera
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha chimera 0 -60 0 hydraulic_legs
+wait 30
+aimat headinajar:chimera
+wait 3
+key use
+wait 80
+riding chimera
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 3
+wait 3
+shot walk_chimera_front_s0_5b
+watch follow 8 1.62 0 90 2
+wait 3
+shot walk_chimera_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 3
+wait 3
+shot walk_chimera_right_s0_5b
+watch follow 0 1.62 8 180 2
+wait 3
+shot walk_chimera_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 3
+wait 3
+shot walk_chimera_back_s0_5b
+watch follow -8 1.62 0 -90 2
+wait 3
+shot walk_chimera_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 3
+wait 3
+shot walk_chimera_left_s0_5b
+watch follow 0 1.62 -8 0 2
+wait 3
+shot walk_chimera_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:79.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 3
+wait 3
+shot walk_chimera_front_s1_5b
+watch follow 8 1.62 0 90 2
+wait 3
+shot walk_chimera_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:79.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 3
+wait 3
+shot walk_chimera_right_s1_5b
+watch follow 0 1.62 8 180 2
+wait 3
+shot walk_chimera_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:79.2f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 3
+wait 3
+shot walk_chimera_back_s1_5b
+watch follow -8 1.62 0 -90 2
+wait 3
+shot walk_chimera_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:79.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 3
+wait 3
+shot walk_chimera_left_s1_5b
+watch follow 0 1.62 -8 0 2
+wait 3
+shot walk_chimera_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:52.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 3
+wait 3
+shot walk_chimera_front_s2_5b
+watch follow 8 1.62 0 90 2
+wait 3
+shot walk_chimera_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:52.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 3
+wait 3
+shot walk_chimera_right_s2_5b
+watch follow 0 1.62 8 180 2
+wait 3
+shot walk_chimera_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:52.8f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 3
+wait 3
+shot walk_chimera_back_s2_5b
+watch follow -8 1.62 0 -90 2
+wait 3
+shot walk_chimera_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:52.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 3
+wait 3
+shot walk_chimera_left_s2_5b
+watch follow 0 1.62 -8 0 2
+wait 3
+shot walk_chimera_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:19.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 3
+wait 3
+shot walk_chimera_front_s3_5b
+watch follow 8 1.62 0 90 2
+wait 3
+shot walk_chimera_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:19.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 3
+wait 3
+shot walk_chimera_right_s3_5b
+watch follow 0 1.62 8 180 2
+wait 3
+shot walk_chimera_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:19.8f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 3
+wait 3
+shot walk_chimera_back_s3_5b
+watch follow -8 1.62 0 -90 2
+wait 3
+shot walk_chimera_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:19.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 3
+wait 3
+shot walk_chimera_left_s3_5b
+watch follow 0 1.62 -8 0 2
+wait 3
+shot walk_chimera_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:chimera]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- skitter
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha skitter 0 -60 0
+wait 30
+aimat headinajar:skitter
+wait 3
+key use
+wait 80
+riding skitter
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_skitter_front_s0_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_skitter_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_skitter_right_s0_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_skitter_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_skitter_back_s0_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_skitter_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_skitter_left_s0_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_skitter_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_skitter_front_s1_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_skitter_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_skitter_right_s1_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_skitter_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_skitter_back_s1_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_skitter_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:66.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_skitter_left_s1_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_skitter_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:44.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_skitter_front_s2_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_skitter_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:44.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_skitter_right_s2_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_skitter_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:44.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_skitter_back_s2_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_skitter_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:44.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_skitter_left_s2_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_skitter_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:16.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 9
+wait 3
+shot walk_skitter_front_s3_5b
+watch follow 8 1.62 0 90 6
+wait 3
+shot walk_skitter_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:16.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 9
+wait 3
+shot walk_skitter_right_s3_5b
+watch follow 0 1.62 8 180 6
+wait 3
+shot walk_skitter_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:16.5f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 9
+wait 3
+shot walk_skitter_back_s3_5b
+watch follow -8 1.62 0 -90 6
+wait 3
+shot walk_skitter_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:16.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 9
+wait 3
+shot walk_skitter_left_s3_5b
+watch follow 0 1.62 -8 0 6
+wait 3
+shot walk_skitter_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:skitter]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- kite
+/tp @s 0.5 -60 4.5 180 0
+wait 10
+mecha kite 0 -60 0
+wait 30
+aimat headinajar:kite
+wait 3
+key use
+wait 80
+riding kite
+look -90 0
+wait 10
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 7
+wait 3
+shot walk_kite_front_s0_5b
+watch follow 8 1.62 0 90 4
+wait 3
+shot walk_kite_front_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 7
+wait 3
+shot walk_kite_right_s0_5b
+watch follow 0 1.62 8 180 4
+wait 3
+shot walk_kite_right_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 7
+wait 3
+shot walk_kite_back_s0_5b
+watch follow -8 1.62 0 -90 4
+wait 3
+shot walk_kite_back_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 7
+wait 3
+shot walk_kite_left_s0_5b
+watch follow 0 1.62 -8 0 4
+wait 3
+shot walk_kite_left_s0_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:46.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 7
+wait 3
+shot walk_kite_front_s1_5b
+watch follow 8 1.62 0 90 4
+wait 3
+shot walk_kite_front_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:46.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 7
+wait 3
+shot walk_kite_right_s1_5b
+watch follow 0 1.62 8 180 4
+wait 3
+shot walk_kite_right_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:46.2f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 7
+wait 3
+shot walk_kite_back_s1_5b
+watch follow -8 1.62 0 -90 4
+wait 3
+shot walk_kite_back_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:46.2f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 7
+wait 3
+shot walk_kite_left_s1_5b
+watch follow 0 1.62 -8 0 4
+wait 3
+shot walk_kite_left_s1_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:30.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 7
+wait 3
+shot walk_kite_front_s2_5b
+watch follow 8 1.62 0 90 4
+wait 3
+shot walk_kite_front_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:30.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 7
+wait 3
+shot walk_kite_right_s2_5b
+watch follow 0 1.62 8 180 4
+wait 3
+shot walk_kite_right_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:30.8f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 7
+wait 3
+shot walk_kite_back_s2_5b
+watch follow -8 1.62 0 -90 4
+wait 3
+shot walk_kite_back_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:30.8f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 7
+wait 3
+shot walk_kite_left_s2_5b
+watch follow 0 1.62 -8 0 4
+wait 3
+shot walk_kite_left_s2_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:11.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 5 1.62 0 90 7
+wait 3
+shot walk_kite_front_s3_5b
+watch follow 8 1.62 0 90 4
+wait 3
+shot walk_kite_front_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:11.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 5 180 7
+wait 3
+shot walk_kite_right_s3_5b
+watch follow 0 1.62 8 180 4
+wait 3
+shot walk_kite_right_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:11.5f}
+look -90 0
+walk 1
+wait 14
+watch follow -5 1.62 0 -90 7
+wait 3
+shot walk_kite_back_s3_5b
+watch follow -8 1.62 0 -90 4
+wait 3
+shot walk_kite_back_s3_8b
+walk 0
+watch off
+wait 6
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:11.5f}
+look -90 0
+walk 1
+wait 14
+watch follow 0 1.62 -5 0 7
+wait 3
+shot walk_kite_left_s3_5b
+watch follow 0 1.62 -8 0 4
+wait 3
+shot walk_kite_left_s3_8b
+walk 0
+watch off
+wait 6
+dents
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/kill @e[type=headinajar:kite]
+wait 10
+/kill @e[type=item]
+wait 10

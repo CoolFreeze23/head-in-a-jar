@@ -1,0 +1,2234 @@
+# dents3: every frame and shell from every side (front, right, back, left), parked, at 5 and 8 blocks in daylight,
+# stages 0 to 3. One machine at a time at 0 -60 0 facing north (nothing else in shot); for each side three blows from
+# that side are set as remembered (HitBearings) and its health set inside each stage (100, 60, 40, 15% of its health
+# with the +10% a machine is given). Default profile, flat world. Shots: <name>_<side>_s<stage>_<5|8>b.png
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- hopper
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha hopper 0 -60 0 hydraulic_legs
+wait 40
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s0_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s1_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:26.4f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s2_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:9.9f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_front_s3_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s0_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:39.6f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s1_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:26.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s2_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:4210752L,Health:9.9f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_right_s3_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s0_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s1_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:26.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s2_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:8421504L,Health:9.9f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_back_s3_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s0_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:39.6f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s1_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:26.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s2_8b
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:9.9f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_left_s3_8b
+/kill @e[type=headinajar:hopper]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- bulwark
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha bulwark 0 -60 0 hydraulic_legs
+wait 40
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s0_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:92.4f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s1_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:61.6f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s2_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:65793L,Health:23.1f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_front_s3_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s0_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:92.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s1_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:61.6f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s2_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:23.1f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_right_s3_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s0_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:92.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s1_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:61.6f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s2_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:8421504L,Health:23.1f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_back_s3_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:0L,Health:154.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s0_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:92.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s1_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:61.6f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s2_8b
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:23.1f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_left_s3_8b
+/kill @e[type=headinajar:bulwark]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- colossus
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha colossus 0 -60 0 hydraulic_legs
+wait 40
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s0_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:198.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s1_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:132.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s2_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:65793L,Health:49.5f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_front_s3_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s0_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:198.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s1_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:132.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s2_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:4210752L,Health:49.5f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_right_s3_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s0_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:198.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s1_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:132.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s2_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:49.5f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_back_s3_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:0L,Health:330.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s0_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:198.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s1_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:132.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s2_8b
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:49.5f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_left_s3_8b
+/kill @e[type=headinajar:colossus]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- executive
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha executive 0 -60 0 hydraulic_legs
+wait 40
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s0_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:237.6f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s1_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:158.4f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s2_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:65793L,Health:59.4f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_front_s3_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s0_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:237.6f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s1_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:158.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s2_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:4210752L,Health:59.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_right_s3_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s0_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:237.6f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s1_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:158.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s2_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:8421504L,Health:59.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_back_s3_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:0L,Health:396.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s0_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:237.6f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s1_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:158.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s2_8b
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:59.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_left_s3_8b
+/kill @e[type=headinajar:executive]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- wheelhouse
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha wheelhouse 0 -60 0
+wait 40
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s0_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:59.4f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s1_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s2_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:14.8f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_front_s3_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s0_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:59.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s1_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:39.6f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s2_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:4210752L,Health:14.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_right_s3_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s0_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:59.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s1_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s2_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:8421504L,Health:14.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_back_s3_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:0L,Health:99.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s0_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:59.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s1_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:39.6f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s2_8b
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:14.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_left_s3_8b
+/kill @e[type=headinajar:wheelhouse]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- chimera
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha chimera 0 -60 0 hydraulic_legs
+wait 40
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s0_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:79.2f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s1_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:52.8f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s2_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:65793L,Health:19.8f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_front_s3_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s0_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:79.2f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s1_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:52.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s2_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:19.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_right_s3_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s0_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:79.2f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s1_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:52.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s2_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:8421504L,Health:19.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_back_s3_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:0L,Health:132.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s0_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:79.2f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s1_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:52.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s2_8b
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:19.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_left_s3_8b
+/kill @e[type=headinajar:chimera]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- skitter
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha skitter 0 -60 0
+wait 40
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s0_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:66.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s1_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:44.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s2_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:65793L,Health:16.5f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_front_s3_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s0_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:66.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s1_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:44.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s2_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:4210752L,Health:16.5f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_right_s3_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s0_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:66.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s1_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:44.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s2_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:16.5f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_back_s3_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:0L,Health:110.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s0_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:66.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s1_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:44.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s2_8b
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:16.5f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_left_s3_8b
+/kill @e[type=headinajar:skitter]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- kite
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+mecha kite 0 -60 0
+wait 40
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s0_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:46.2f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s1_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:30.8f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s2_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:65793L,Health:11.5f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_front_s3_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s0_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:46.2f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s1_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:30.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s2_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:4210752L,Health:11.5f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_right_s3_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s0_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:46.2f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s1_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:30.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s2_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:8421504L,Health:11.5f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_back_s3_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:0L,Health:77.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s0_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:46.2f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s1_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:30.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s2_8b
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:11.5f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_left_s3_8b
+/kill @e[type=headinajar:kite]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- lunk
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+/summon headinajar:lunk 0.5 -60 0.5 {Rotation:[180f,0f],NoAI:1b}
+wait 40
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:0L,Health:66.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s0_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:65793L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s1_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:65793L,Health:26.4f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s2_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:65793L,Health:9.9f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_front_s3_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s0_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:4210752L,Health:39.6f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s1_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:4210752L,Health:26.4f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s2_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:4210752L,Health:9.9f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_right_s3_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s0_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:8421504L,Health:39.6f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s1_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:8421504L,Health:26.4f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s2_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:8421504L,Health:9.9f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_back_s3_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:0L,Health:66.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s0_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:39.6f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s1_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:26.4f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s2_8b
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:9.9f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_left_s3_8b
+/kill @e[type=headinajar:lunk]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- rover
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+/summon headinajar:rover 0.5 -60 0.5 {Rotation:[180f,0f],NoAI:1b}
+wait 40
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:0L,Health:33.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s0_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:65793L,Health:19.8f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s1_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:65793L,Health:13.2f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s2_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:65793L,Health:5.0f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_front_s3_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s0_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:4210752L,Health:19.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s1_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:4210752L,Health:13.2f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s2_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:4210752L,Health:5.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_right_s3_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s0_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:8421504L,Health:19.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s1_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:8421504L,Health:13.2f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s2_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:8421504L,Health:5.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_back_s3_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s0_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:19.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s1_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:13.2f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s2_8b
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:5.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_left_s3_8b
+/kill @e[type=headinajar:rover]
+wait 10
+/kill @e[type=item]
+wait 10
+# --- spider_walker
+/tp @s 0.5 -60 -7.5 0 0
+wait 10
+/summon headinajar:spider_walker 0.5 -60 0.5 {Rotation:[180f,0f],NoAI:1b}
+wait 40
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:0L,Health:33.0f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s0_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s0_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:65793L,Health:19.8f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s1_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s1_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:65793L,Health:13.2f}
+wait 12
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s2_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s2_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:65793L,Health:5.0f}
+wait 12
+dents
+/tp @s 0.5 -60 -4.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s3_5b
+/tp @s 0.5 -60 -7.5 0 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_front_s3_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s0_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s0_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:4210752L,Health:19.8f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s1_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s1_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:4210752L,Health:13.2f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s2_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s2_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:4210752L,Health:5.0f}
+wait 12
+/tp @s 5.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s3_5b
+/tp @s 8.5 -60 0.5 90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_right_s3_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s0_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s0_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:8421504L,Health:19.8f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s1_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s1_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:8421504L,Health:13.2f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s2_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s2_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:8421504L,Health:5.0f}
+wait 12
+/tp @s 0.5 -60 5.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s3_5b
+/tp @s 0.5 -60 8.5 180 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_back_s3_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:0L,Health:33.0f}
+wait 100
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s0_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:19.8f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s1_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:13.2f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s2_8b
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:5.0f}
+wait 12
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_left_s3_8b
+/kill @e[type=headinajar:spider_walker]
+wait 10
+/kill @e[type=item]
+wait 10
+parkstats

@@ -135,18 +135,20 @@ def eject():
 BUILD_SLOTS = [('legs', 44, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l', 'socket_shin_r']),
                ('back', 52, ['socket_back']), ('back_1', 57, ['socket_back_1']),
                ('core', 62, ['socket_core']), ('core_1', 67, ['socket_core_1']),
-               ('torso_0', 74, ['socket_torso_0']), ('torso_1', 79, ['socket_torso_1']),
-               ('torso_2', 84, ['socket_torso_2']), ('torso_3', 89, ['socket_torso_3']),
-               ('torso_4', 94, ['socket_torso_4']),
-               # each arm, then the shoulder hardpoint above it (the Gantry's arm welds one side, then the other)
-               ('arm_l', 101, ['socket_arm_l']), ('arm_2', 106, ['socket_arm_2']),
-               ('arm_r', 111, ['socket_arm_r']), ('arm_3', 116, ['socket_arm_3']),
-               ('sensor', 123, ['socket_sensor']), ('sensor_1', 128, ['socket_sensor_1'])]
+               # the middle plate, one side's plates, arm and the shoulder hardpoint above it, the two sensors on top,
+               # then the other side's: the Gantry's arm crosses the frame twice instead of at nearly every part
+               ('torso_0', 79, ['socket_torso_0']), ('torso_1', 113, ['socket_torso_1']),
+               ('torso_2', 74, ['socket_torso_2']), ('torso_3', 84, ['socket_torso_3']),
+               ('torso_4', 118, ['socket_torso_4']),
+               ('arm_l', 89, ['socket_arm_l']), ('arm_2', 94, ['socket_arm_2']),
+               ('arm_r', 124, ['socket_arm_r']), ('arm_3', 129, ['socket_arm_3']),
+               ('sensor', 103, ['socket_sensor']), ('sensor_1', 108, ['socket_sensor_1'])]
 
 
 def build():
     """The fitting (240 ticks): delivered standing, arms held out level like a client being measured (the tailor's
-    pose), lamps dark; the modules are fitted by slot (44-133, each from 8 px out with a 1 px bounce, a tailor's
+    pose), lamps dark; the modules are fitted by slot (46-134, each 4 px out one tick before its seat, as the Gantry's
+    tool comes to it, with a 1 px bounce, a tailor's
     'tuck' sound); the vials are filled one by one (150-168, gene:pulse); the arms come down (172-184); it checks
     itself (a turn left and right, 186-204), adjusts its tie (205-227), the premium jingle (230), and parks."""
     arm = [k(0, R(z=-82)), k(140, R(z=-82)), k(146, R(z=-84), 'easeOutQuad'), k(150, R(z=-82), 'easeInOutSine'),
@@ -180,8 +182,8 @@ def build():
         for sb in socks:
             o = outward(sb)
             ch = bones.setdefault(sb, {})
-            ch['scale'] = [k(0, S(0), interp='step'), k(T0, S(1), interp='step')]
-            ch['position'] = [k(0, P(*[8 * c for c in o])), k(T0, P(*[8 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            ch['scale'] = [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')]
+            ch['position'] = [k(0, P(*[4 * c for c in o])), k(T0 + 2, P(*[4 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                               k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 240, 'loop': 'hold', 'native': True, 'feet': BA.planted(), 'bones': bones, 'effects': effects,

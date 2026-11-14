@@ -1227,8 +1227,9 @@ def destroyed():
     }
 
 
-# Build: each slot's socket bone is hidden (scale 0) until its module arrives, appears 4 px out along its own -Z and
-# seats with easeInQuad over 3 ticks. Slot order from MechaFrame (legs, back, core, torso, arm, sensor).
+# Build: each slot's socket bone is hidden (scale 0) until its module arrives, appears 3 px out along its own -Z one tick
+# before its seat, as the Gantry's tool comes to it, and seats with easeInQuad. Slot order from MechaFrame (legs, back,
+# core, torso, arm, sensor).
 BUILD_SLOTS = [('legs', 62, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l', 'socket_shin_r']),
                ('back', 73, ['socket_back']), ('core', 84, ['socket_core']), ('torso_0', 95, ['socket_torso_0']),
                ('torso_1', 106, ['socket_torso_1']), ('arm_l', 117, ['socket_arm_l']), ('arm_r', 128, ['socket_arm_r']),
@@ -1283,9 +1284,9 @@ def build():
     for slot, T0, socks in BUILD_SLOTS:
         for sb in socks:
             o = outward(sb)
-            out = [6 * c for c in o]
-            bones[sb] = {'scale': [k(0, S(0), interp='step'), k(T0, S(1), interp='step')],
-                         'position': [k(0, P(*out)), k(T0, P(*out)), k(T0 + 3, P(), 'easeInQuad'),
+            out = [3 * c for c in o]
+            bones[sb] = {'scale': [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')],
+                         'position': [k(0, P(*out)), k(T0 + 2, P(*out)), k(T0 + 3, P(), 'easeInQuad'),
                                       k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]}
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 200, 'loop': 'hold', 'feet': planted(), 'bones': bones, 'effects': effects, 'pilot': False}

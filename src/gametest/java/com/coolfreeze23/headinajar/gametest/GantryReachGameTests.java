@@ -15,14 +15,13 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * The Assembly Gantry's arm reaches every frame: its upper arm and forearm telescope for the tall frames, so the tool
  * meets the Colossus's and the Executive's sockets up to their shoulders instead of striking an arc from the knees;
- * the contacts are on their seat ticks but for the few listed; the telescopes are home at the end of every clip and in
- * every held pose.
+ * every contact is on its seat tick and no module shows before the arm has come to it; the telescopes are home at the
+ * end of every clip and in every held pose.
  */
 @GameTestHolder(HeadInAJar.MOD_ID)
 @PrefixGameTestTemplate(false)
@@ -33,33 +32,69 @@ public class GantryReachGameTests {
      * standing off) in time, where the arc lands on time instead.
      */
     static final Set<String> ARCS = Set.of("hopper_core", "bulwark_back", "bulwark_back_1", "bulwark_core", "bulwark_torso_2",
-            "colossus_legs", "colossus_back", "colossus_back_1", "executive_back", "wheelhouse_back_1", "wheelhouse_core",
-            "skitter_back", "skitter_core", "skitter_arm_l", "kite_arm_l", "chimera_back");
+            "colossus_torso_3", "executive_back", "wheelhouse_back_1", "wheelhouse_core", "skitter_back", "skitter_core",
+            "kite_arm_l", "chimera_back");
 
     /**
-     * Contacts that still come after their seat, and at most how many ticks: after a turn, or where the only way on time
-     * would swing the arm round faster than it may (the Skitter's left arm). The Colossus lands its left shoulder last,
-     * after the turntable has turned that shoulder to the arm, and the Executive each shoulder after its arm, so the
-     * heavies' shoulders are met on time.
+     * Every contact of every frame meets its seat tick: the weld lands as the part does, not after it. The frames' own
+     * builds leave the arm the time: the Colossus lands its left shoulder last, after the turntable has turned that
+     * shoulder to the arm; the Executive fits one side, the sensors on top, then the other side; the Skitter turns a
+     * little at a time, its sensors before its second side plate and its arm last.
      */
-    static final Map<String, Integer> LATE = Map.ofEntries(Map.entry("colossus_torso_4", 1), Map.entry("executive_arm_r", 1),
-            Map.entry("bulwark_core", 1), Map.entry("skitter_torso_1", 4), Map.entry("skitter_arm_l", 9),
-            Map.entry("skitter_sensor", 5), Map.entry("skitter_sensor_1", 3), Map.entry("kite_sensor", 1),
-            Map.entry("chimera_torso_0", 2), Map.entry("chimera_torso_1", 3));
-
-    /** Every other contact of every frame meets its seat tick: the weld lands as the part does, not after it. */
     @GameTest(template = "platform")
     public static void everyContactIsOnItsSeat(GameTestHelper h) {
         for (MechaFrame frame : MechaFrame.values()) {
             GantryPlan.Frame plan = GantryPlan.of(frame);
             h.assertTrue(plan != null, frame + " has no plan");
             for (GantryPlan.Contact c : plan.contacts()) {
-                int late = LATE.getOrDefault(frame.id() + "_" + c.slot(), 0);
-                h.assertTrue(c.contact() >= c.seat() && c.contact() <= c.seat() + late,
+                h.assertTrue(c.contact() == c.seat(),
                         frame + " " + c.slot() + ": seat " + c.seat() + ", contact " + c.contact());
             }
         }
         h.succeed();
+    }
+
+    /**
+     * No module shows before the arm has come to it: in every frame's own build clip (the file the game plays) each
+     * socket stays hidden until the tick the plan's arm is at its approach, a few pixels off the part, and the part
+     * seats as the tool presses it home.
+     */
+    @GameTest(template = "platform")
+    public static void noModuleShowsBeforeTheArmComes(GameTestHelper h) {
+        for (MechaFrame frame : MechaFrame.values()) {
+            JsonObject bones;
+            try (InputStream in = GantryReachGameTests.class.getResourceAsStream("/assets/headinajar/animations/entity/mecha/" + frame.id() + ".animation.json")) {
+                h.assertTrue(in != null, frame + ": its clips are missing");
+                bones = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonObject("animations")
+                        .getAsJsonObject("build").getAsJsonObject("bones");
+            } catch (java.io.IOException e) {
+                throw new IllegalStateException(e);
+            }
+            for (GantryPlan.Contact c : GantryPlan.of(frame).contacts()) {
+                String[] sockets = c.slot().equals("legs") ? new String[]{"socket_thigh_l", "socket_thigh_r", "socket_shin_l", "socket_shin_r"}
+                        : new String[]{"socket_" + c.slot()};
+                h.assertTrue(c.arrive() < c.contact(), frame + " " + c.slot() + ": arm at " + c.arrive() + ", contact " + c.contact());
+                for (String socket : sockets) {
+                    if (!bones.has(socket)) continue;
+                    double shown = shown(bones.getAsJsonObject(socket));
+                    h.assertTrue(shown >= c.arrive() - 1e-6, frame + " " + socket + ": shows at " + shown + ", the arm comes at " + c.arrive());
+                }
+            }
+        }
+        h.succeed();
+    }
+
+    /** The tick a socket's scale first leaves 0 (its module shows). */
+    private static double shown(JsonObject bone) {
+        JsonElement scale = bone.get("scale");
+        if (scale == null || !scale.isJsonObject()) return 0;
+        double first = Double.MAX_VALUE;
+        for (var k : scale.getAsJsonObject().entrySet()) {
+            JsonElement v = k.getValue();
+            if (v.isJsonObject()) v = v.getAsJsonObject().get(v.getAsJsonObject().has("vector") ? "vector" : "post");
+            if (v.getAsJsonArray().get(0).getAsDouble() > 0) first = Math.min(first, Double.parseDouble(k.getKey()) * 20);
+        }
+        return first;
     }
 
     /**

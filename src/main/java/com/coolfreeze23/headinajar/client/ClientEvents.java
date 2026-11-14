@@ -265,6 +265,11 @@ public final class ClientEvents {
         if (player != null && event.getName().equals(VanillaGuiLayers.FOOD_LEVEL) && state(player).form().isJarred()) {
             event.setCanceled(true);
         }
+        // a jar's glass bar is its health while the glass holds: the head's hearts and armour show once they matter
+        if (player != null && (event.getName().equals(VanillaGuiLayers.PLAYER_HEALTH) || event.getName().equals(VanillaGuiLayers.ARMOR_LEVEL))
+                && state(player).form().isJarred() && !com.coolfreeze23.headinajar.form.JarPeril.lifeShown(player, state(player))) {
+            event.setCanceled(true);
+        }
     }
 
     private ClientEvents() {

@@ -44,6 +44,17 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
         return info != null ? info.getSkin() : DefaultPlayerSkin.get(body.ownerId());
     }
 
+    /**
+     * Not drawn round a first-person camera inside it: a jar woken from a carried head starts where its body stands,
+     * and saw the inside of the body's legs as a dark screen until it moved out. Seen from outside it is drawn as ever.
+     */
+    @Override
+    public boolean shouldRender(HeadlessBody body, net.minecraft.client.renderer.culling.Frustum frustum, double x, double y, double z) {
+        var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        if (camera.isInitialized() && !camera.isDetached() && body.getBoundingBox().contains(camera.getPosition())) return false;
+        return super.shouldRender(body, frustum, x, y, z);
+    }
+
     @Override
     public void render(HeadlessBody body, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
         model = skin(body).model() == PlayerSkin.Model.SLIM ? slim : wide;

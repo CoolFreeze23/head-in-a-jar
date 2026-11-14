@@ -727,11 +727,11 @@ BUILD_SLOTS = [('legs', 124, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l
                ('core', 144, ['socket_core']), ('core_1', 150, ['socket_core_1']),
                ('torso_0', 156, ['socket_torso_0']), ('torso_1', 162, ['socket_torso_1']),
                ('torso_2', 168, ['socket_torso_2']), ('torso_3', 174, ['socket_torso_3']),
-               ('torso_4', 180, ['socket_torso_4']),
-               ('arm_l', 186, ['socket_arm_l']), ('arm_r', 192, ['socket_arm_r']),
-               ('arm_3', 198, ['socket_arm_3']),
-               ('sensor', 204, ['socket_sensor']), ('sensor_1', 210, ['socket_sensor_1']),
-               ('arm_2', 228, ['socket_arm_2'])]
+               ('torso_4', 183, ['socket_torso_4']),
+               ('arm_l', 189, ['socket_arm_l']), ('arm_r', 195, ['socket_arm_r']),
+               ('arm_3', 201, ['socket_arm_3']),
+               ('sensor', 207, ['socket_sensor']), ('sensor_1', 213, ['socket_sensor_1']),
+               ('arm_2', 230, ['socket_arm_2'])]
 
 
 def outward(bone):
@@ -754,8 +754,8 @@ def outward(bone):
 def build():
     """The Gantry's commissioning (320 ticks): delivered kneeling in its Siege crouch, arms folded, weapons folded
     back, lamps dark. It stands in two heaves with a groan between (40-80), brings its boots in (82-96), unfolds the
-    shoulder weapons one then the other (100-118); sixteen modules arrive by slot (124-216, each from 8 px out with a
-    1.4 px bounce); inspection: lamps, a vent test, a look at the empty seat; then the ribbon: the left fist rises and
+    shoulder weapons one then the other (100-118); sixteen modules arrive by slot (126-235, each 4 px out one tick before its
+    seat, as the Gantry's tool comes to it, with a 1.4 px bounce); inspection: lamps, a vent test, a look at the empty seat; then the ribbon: the left fist rises and
     the grip snips twice (258, 262); clamps close over the empty collar, weapons fold, it settles parked."""
     feet = {s: [k(0, SIEGED), k(40, SIEGED)] + roll_keys(40, 74, 24, 0, 2)[1:] +
             [k(t0, STEP_OUT), k(t0 + 4, LIFT, 'easeOutCubic'), k(t0 + 8, REST, 'easeInQuad'), k(320, REST)]
@@ -818,8 +818,8 @@ def build():
         for sb in socks:
             o = outward(sb)
             ch = bones.setdefault(sb, {})
-            ch['scale'] = [k(0, S(0), interp='step'), k(T0, S(1), interp='step')]
-            ch['position'] = [k(0, P(*[8 * c for c in o])), k(T0, P(*[8 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            ch['scale'] = [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')]
+            ch['position'] = [k(0, P(*[4 * c for c in o])), k(T0 + 2, P(*[4 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                               k(T0 + 4, P(*[1.4 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 320, 'loop': 'hold', 'native': True, 'feet': feet, 'splay': splay, 'bones': bones,

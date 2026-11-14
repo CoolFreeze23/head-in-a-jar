@@ -1,0 +1,85 @@
+# The Assembly Gantry for 0.5.3, every rendered frame by day, real presses by the stand-in second player (its use
+# packet on the Gantry's front opens the screen, its button packet presses Assemble), each capture started before the
+# press so the frame's first appearance on the pad is in it:
+#  1. a Bulwark from the front-right three-quarter, about six blocks off (the README take);
+#  2. a Colossus from seven blocks, pitched up (the README take: the right shoulder, the turn, the left shoulder);
+#  3. an Executive side on from the arm's side (east), nine blocks (its swings from side to side);
+#  4. a Skitter from the front-right (its new order: back plates, side plate, sensors, the other side plate, the arm).
+# The observe window covers each build, so the report lists the sounds it started.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+gantry 0 -60 0 bulwark
+/tp @s 4.8 -59.4 -3.8 45 -1.7
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames g3_bulwark_build 240
+wait 4
+observe 240
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 250
+/kill @e[type=headinajar:bulwark]
+wait 20
+gantry 0 -60 0 colossus
+/tp @s 5.6 -59.0 -4.6 45 -13.9
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames g3_colossus_build 360
+wait 4
+observe 350
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 370
+/kill @e[type=headinajar:colossus]
+wait 20
+gantry 0 -60 0 executive
+/tp @s 9.5 -58.8 0.5 90 -12
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames g3_executive_side 280
+wait 4
+observe 270
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 290
+/kill @e[type=headinajar:executive]
+wait 20
+gantry 0 -60 0 skitter
+/tp @s 4.8 -59.4 -3.8 45 -1.7
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames g3_skitter 230
+wait 4
+observe 220
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 240
+report gantry3 films done

@@ -224,7 +224,7 @@ public final class MechaRig {
      * blocks a tick (walk) and 0.0713 (limp). It is drawn up to 2.6 blocks over its hitbox: a load held overhead.
      */
     public static final MechaRig BULWARK = new MechaRig("bulwark", Verb.LIFT, 0.2376, 0.0713,
-            new int[]{65, 73, 80, 87, 94, 101, 108, 115, 122, 129, 136},
+            new int[]{65, 73, 80, 88, 94, 101, 108, 115, 122, 129, 136},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor"},
             Set.of("lamp_core", "lamp_tail"), 1.3, 2.6,
             new Object[][]{{1, "clamp_release", 1f}, {6, "servo", 1f}, {18, "clamp_close", 1f}}, true,
@@ -247,7 +247,7 @@ public final class MechaRig {
      * arm reach it). It borrows the Bulwark's sounds where it has none of its own.
      */
     public static final MechaRig COLOSSUS = new MechaRig("colossus", Verb.SIEGE, 0.1944, 0.0583,
-            new int[]{127, 135, 141, 147, 153, 159, 165, 171, 177, 183, 189, 195, 231, 201, 207, 213},
+            new int[]{127, 135, 141, 147, 153, 159, 165, 171, 177, 186, 192, 198, 233, 204, 210, 216},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor",
                     "shin_l", "shin_r", "socket_arm_2", "socket_arm_3"},
             Set.of("lamp_core", "lamp_tail"), 1.4, 1.8,
@@ -273,7 +273,7 @@ public final class MechaRig {
      * one side, then the other.
      */
     public static final MechaRig EXECUTIVE = new MechaRig("executive", Verb.JINGLE, 0.216, 0.0648,
-            new int[]{47, 55, 60, 65, 70, 77, 82, 87, 92, 97, 104, 114, 109, 119, 126, 131},
+            new int[]{47, 55, 60, 65, 70, 82, 116, 77, 87, 121, 92, 127, 97, 132, 106, 111},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor",
                     "gene_port_0", "gene_port_1", "gene_port_2", "gene_port_3"},
             Set.of("lamp_core", "lamp_tail"), 1.2, 1.8,
@@ -346,7 +346,7 @@ public final class MechaRig {
      * forearm ({@code idle_tic_r} is the left one's mirror). It has no Pogo: its drive key is the Graft's.
      */
     public static final MechaRig CHIMERA = new MechaRig("chimera", Verb.GRAFT, 0.259, 0.0778,
-            new int[]{107, 115, 122, 129, 136, 143, 150, 157, 164},
+            new int[]{107, 115, 122, 131, 140, 148, 155, 162, 169},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "restraint", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor",
                     "growth", "gene_port_0", "gene_port_1", "gene_port_2", "shin_l", "shin_r"},
             Set.of("lamp_core", "lamp_l", "lamp_r", "lamp_sensor"), 0.8, 0.7,
@@ -384,7 +384,7 @@ public final class MechaRig {
      * own: each clip sound borrows the nearest take.
      */
     public static final MechaRig SKITTER = new MechaRig("skitter", Verb.DRAGLINE, 0.2592, 0.0778,
-            new int[]{65, 73, 81, 89, 97, 105, 113},
+            new int[]{65, 73, 81, 111, 123, 91, 101},
             new String[]{"root", "body", "shin_fl", "shin_fr", "shin_rl", "shin_rr", "vent_l", "vent_r", "restraint", "jar_anchor",
                     "socket_arm_l", "forearm_l", "sensor", "lamp_core", "lamp_tail", "launcher"},
             Set.of("lamp_core", "lamp_tail"), 1.3, 1.4,
@@ -424,7 +424,7 @@ public final class MechaRig {
      */
     public static final MechaRig KITE = new MechaRig("kite", Verb.TALON, 0.2592, 0.0778,
             // the build clip's own seat keys (build:seat:<slot>), as every frame's are
-            new int[]{65, 73, 81, 89, 97, 105},
+            new int[]{65, 73, 81, 89, 97, 108},
             new String[]{"foot_l", "foot_r", "restraint", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor", "hips",
                     "wing_l", "wing_r", "wingtip_l", "wingtip_r", "tail"},
             Set.of("lamp_core", "lamp_nav_l", "lamp_nav_r"), 1.5, 1.8,

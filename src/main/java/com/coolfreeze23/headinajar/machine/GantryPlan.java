@@ -32,7 +32,11 @@ public final class GantryPlan {
     public record Key(double t, double angle, boolean eased) {
     }
 
-    public record Contact(String slot, int seat, int contact, String locator, boolean reach) {
+    /**
+     * One part's weld: the tick its module seats (the frame's own build clip), the tick the arm comes to it (its tool on
+     * the approach, a few pixels off, from which it presses home) and the tick it touches (frame clock).
+     */
+    public record Contact(String slot, int seat, int arrive, int contact, String locator, boolean reach) {
     }
 
     public record Frame(int length, int buildLength, List<Key> turn, double presentFrom, double presentTo, List<Contact> contacts,
@@ -61,7 +65,8 @@ public final class GantryPlan {
                 List<Contact> contacts = new ArrayList<>();
                 for (JsonElement c : f.getAsJsonArray("contacts")) {
                     JsonObject o = c.getAsJsonObject();
-                    contacts.add(new Contact(o.get("slot").getAsString(), o.get("seat").getAsInt(), o.get("contact").getAsInt(),
+                    contacts.add(new Contact(o.get("slot").getAsString(), o.get("seat").getAsInt(), o.get("arrive").getAsInt(),
+                            o.get("contact").getAsInt(),
                             o.get("locator").getAsString(), o.get("reach").getAsBoolean()));
                 }
                 JsonArray present = f.getAsJsonArray("present");

@@ -769,8 +769,8 @@ def build():
     for slot, T0, socks in BUILD_SLOTS:
         for sb in socks:
             o = outward(sb)
-            b[sb] = {'scale': [k(0, S(0), interp='step'), k(T0, S(1), interp='step')],
-                     'position': [k(0, P(*[6 * c for c in o])), k(T0, P(*[6 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            b[sb] = {'scale': [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')],
+                     'position': [k(0, P(*[3 * c for c in o])), k(T0 + 2, P(*[3 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                                   k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]}
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 200, 'loop': 'hold', 'bones': b, 'effects': effects, 'pilot': False}

@@ -890,7 +890,7 @@ def destroyed():
 
 
 BUILD_SLOTS = [('legs', 62, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l', 'socket_shin_r']),
-               ('back', 70, ['socket_back']), ('back_1', 77, ['socket_back_1']), ('core', 84, ['socket_core']),
+               ('back', 70, ['socket_back']), ('back_1', 77, ['socket_back_1']), ('core', 85, ['socket_core']),
                ('torso_0', 91, ['socket_torso_0']), ('torso_1', 98, ['socket_torso_1']), ('torso_2', 105, ['socket_torso_2']),
                ('arm_l', 112, ['socket_arm_l']), ('arm_r', 119, ['socket_arm_r']),
                ('sensor', 126, ['socket_sensor']), ('sensor_1', 133, ['socket_sensor_1'])]
@@ -908,7 +908,8 @@ def outward(bone):
 
 def build():
     """The Gantry's assembly (200 ticks): delivered folded on its haunches, arms crossed, clamps open; stands 42-60;
-    the modules arrive by slot (62-140, each from 6 px out, seating with a 1 px bounce); inspection; it settles parked
+    the modules arrive by slot (64-138, each 3 px out one tick before its seat, as the Gantry's
+    tool comes to it, seating with a 1 px bounce); inspection; it settles parked
     with the clamps closed over the empty collar."""
     bones = dict({
         'hips': {'position': [k(0, P(y=-11)), k(42, P(y=-11)), k(44, P(y=-11.6), 'easeOutQuad'), k(56, P(y=0.6), 'easeInOutCubic'),
@@ -932,8 +933,8 @@ def build():
     for slot, T0, socks in BUILD_SLOTS:
         for sb in socks:
             o = outward(sb)
-            bones[sb] = {'scale': [k(0, S(0), interp='step'), k(T0, S(1), interp='step')],
-                         'position': [k(0, P(*[6 * c for c in o])), k(T0, P(*[6 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            bones[sb] = {'scale': [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')],
+                         'position': [k(0, P(*[3 * c for c in o])), k(T0 + 2, P(*[3 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                                       k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]}
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 200, 'loop': 'hold', 'feet': planted(), 'bones': bones, 'effects': effects, 'pilot': False}

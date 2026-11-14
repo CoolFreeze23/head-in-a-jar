@@ -200,16 +200,16 @@ def graft_refused():
 # ---- build: grown, then issued a hard hat ---------------------------------------------------------------------------
 BUILD_SLOTS = [('legs', 104, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l', 'socket_shin_r']),
                ('back', 112, ['socket_back']), ('core', 119, ['socket_core']),
-               ('torso_0', 126, ['socket_torso_0']), ('torso_1', 133, ['socket_torso_1']),
-               ('torso_2', 140, ['socket_torso_2']), ('arm_l', 147, ['socket_arm_l']), ('arm_r', 154, ['socket_arm_r']),
-               ('sensor', 161, ['socket_sensor'])]
+               ('torso_0', 128, ['socket_torso_0']), ('torso_1', 137, ['socket_torso_1']),
+               ('torso_2', 145, ['socket_torso_2']), ('arm_l', 152, ['socket_arm_l']), ('arm_r', 159, ['socket_arm_r']),
+               ('sensor', 166, ['socket_sensor'])]
 
 
 def build():
     """Grown more than built (220 ticks): delivered as an empty cage on folded legs, the growth a seed inside it, the
     forearms hanging limp, the hard hat held up and back. The Gantry feeds it Bio-Gel and it grows in four gulps
     (10-80, each an overshoot and a settle); it stands and lifts its forearms (82-100); the modules arrive by slot
-    (104-166); the gills fill one by one (180-188); then health and safety: the hard hat comes down onto the empty
+    (106-171); the gills fill one by one (180-188); then health and safety: the hard hat comes down onto the empty
     collar (196-206, build:hat), it looks up at it, and parks."""
     PH = HA.PARK_HIPS * HA.SC
     grow = [k(0, S(0.15))]
@@ -241,8 +241,8 @@ def build():
         for sb in socks:
             o = HA.outward(sb)
             ch = bones.setdefault(sb, {})
-            ch['scale'] = [k(0, S(0), interp='step'), k(T0, S(1), interp='step')]
-            ch['position'] = [k(0, P(*[6 * c for c in o])), k(T0, P(*[6 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            ch['scale'] = [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')]
+            ch['position'] = [k(0, P(*[3 * c for c in o])), k(T0 + 2, P(*[3 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                               k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     effects += pulses(180, 4)

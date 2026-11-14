@@ -329,8 +329,10 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
             pending.moveTo(deck.x, deck.y, deck.z, frontYaw(), 0);
             pending.setYBodyRot(frontYaw());
             pending.setYHeadRot(frontYaw());
-            level.addFreshEntity(pending);
+            // its build clock first, so the packet that shows it to the players carries it: started after, it reached
+            // them a tick later and the frame stood finished on the deck for a frame before its build folded it
             pending.startBuild();
+            level.addFreshEntity(pending);
             jobMecha = pending.getUUID();
             pending = null;
             setChanged();

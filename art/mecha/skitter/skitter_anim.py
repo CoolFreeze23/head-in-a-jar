@@ -682,9 +682,12 @@ def destroyed():
                     (33, 'particle', 'large_smoke', 'fx_hull')]}
 
 
+# The slots in MechaFrame order with the tick each module arrives: the back plates first, then the side plate, the two
+# sensors on top and the other side plate, the arm last, so the Gantry's turntable turns the frame a little at a time
+# (15 to 30 degrees, ten ticks a part) and its arm meets each part as it lands.
 BUILD_SLOTS = [('back', 62, ['socket_back']), ('core', 70, ['socket_core']), ('torso_0', 78, ['socket_torso_0']),
-               ('torso_1', 86, ['socket_torso_1']), ('arm_l', 94, ['socket_arm_l']), ('sensor', 102, ['socket_sensor']),
-               ('sensor_1', 110, ['socket_sensor_1'])]
+               ('torso_1', 108, ['socket_torso_1']), ('arm_l', 120, ['socket_arm_l']), ('sensor', 88, ['socket_sensor']),
+               ('sensor_1', 98, ['socket_sensor_1'])]
 
 
 def outward(bone):
@@ -699,7 +702,7 @@ def outward(bone):
 
 def build():
     """The Gantry's assembly: delivered folded on its belly, the cage up; it rises and steps its legs out in the ripple
-    (44-60); the modules arrive by slot (62-115); a shrug; inspection; the cage comes down (193); parked."""
+    (44-60); the modules arrive by slot (64-125); a shrug; inspection; the cage comes down (193); parked."""
     tables = {}
     for c, t0 in RIPPLE:
         a, b = park_foot(c), FOOT0[c]
@@ -723,8 +726,8 @@ def build():
     for slot, T0, socks in BUILD_SLOTS:
         for sb in socks:
             o = outward(sb)
-            b[sb] = {'scale': [k(0, S(0), interp='step'), k(T0, S(1), interp='step')],
-                     'position': [k(0, P(*[6 * c for c in o])), k(T0, P(*[6 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
+            b[sb] = {'scale': [k(0, S(0), interp='step'), k(T0 + 2, S(1), interp='step')],
+                     'position': [k(0, P(*[3 * c for c in o])), k(T0 + 2, P(*[3 * c for c in o])), k(T0 + 3, P(), 'easeInQuad'),
                                   k(T0 + 4, P(*[1.0 * c for c in o]), 'easeOutQuad'), k(T0 + 5, P(), 'easeInQuad')]}
         effects.append((T0 + 3, 'timeline', 'build:seat:%s' % slot, None))
     return {'length': 200, 'loop': 'hold', 'feet': keyed(tables), 'bones': b, 'effects': effects, 'pilot': False}

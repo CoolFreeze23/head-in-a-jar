@@ -49,6 +49,16 @@ public final class JarPeril {
     private JarPeril() {
     }
 
+    /**
+     * Whether a jar's HUD shows the head's own hearts and armour row. The glass soaks every hit first; only what gets
+     * past it reaches the head's health (and only that is softened by armour), so while the glass is above {@link #LOW}
+     * and the head is whole they say nothing the glass bar doesn't. They come back once the glass is low (when the
+     * warnings call the next knock deadly) or the head itself is hurt or has extra hearts.
+     */
+    public static boolean lifeShown(net.minecraft.world.entity.player.Player player, JarState state) {
+        return state.integrity() <= LOW || player.getHealth() < player.getMaxHealth() || player.getAbsorptionAmount() > 0;
+    }
+
     private static ResourceKey<DamageType> key(String name) {
         return ResourceKey.create(Registries.DAMAGE_TYPE, HeadInAJar.id(name));
     }

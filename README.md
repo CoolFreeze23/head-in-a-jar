@@ -440,16 +440,18 @@ is out of charge. Recharge at a Charging Dock."
 
 ### The jar's gauges
 
-![The HUD at GUI scale 3 while riding an enderman: the host panel at the top left, the jar's three marked bars and their numbers at the bottom right](docs/images/hud.png)
+![The HUD at GUI scale 3 while riding an enderman: the host panel at the top left; by the hotbar the enderman's two rows of hearts and under them the jar's three marked bars with their numbers, glass 10/10, charge 17%; no hearts or armour row of the jar's own](docs/images/hud.png)
 
-*The HUD at GUI scale 3, a jar riding an enderman on low charge: the side column at the top left, the jar's bars by
-the hotbar, the low charge bar red and hatched.*
+*The HUD at GUI scale 3, a jar riding an enderman on low charge: the side column at the top left, the enderman's
+hearts and the jar's bars by the hotbar. The glass is whole, so the jar's own hearts and armour stay hidden.*
 
 As a jar (riding, piloting or plugged in included), three bars sit where your hunger bar would be: charge at the
 bottom, marked with a bolt; saline above it, a drop; Jar Integrity on top, a pane of glass. A bar under 15% turns red
 and is hatched, so low reads without the colour. The numbers (charge in percent, saline in mB, glass as points left)
 appear just right of their bars for three seconds after any of them changes, while any is under a quarter, and while
-you hold **Sneak**; `hudNumbers = true` in the client config keeps them up all the time.
+you hold **Sneak**; `hudNumbers = true` in the client config keeps them up all the time. The glass takes every hit
+before your head does, so your hearts and armour row stay hidden while it holds above 3 points and your head is
+unhurt; they come back once the glass is down to 3 or less, or as soon as your head itself is hurt.
 
 Everything else the mod tells you sits in one column at the top left, never wider than a third of the screen: the
 host panel while you ride, the mecha's panel in a cockpit, and your active genes with their keys. A long line wraps.
@@ -971,7 +973,7 @@ hit or miss, and the laser needs 1 second between shots.
 
 *No wheels: **Drive** tips the jar over and it rolls, very slowly.*
 
-![A jar lying on its side on the grass, seen from two blocks off and a little above, its lid to the left; on screen the line "You tip the jar over. Roll, very slowly. Press V again to sit up." above the jar's bars](docs/images/tipped_jar.png)
+![A jar lying on its side on the grass, seen from two blocks off and a little above, its lid towards you; on screen the line "You tip the jar over. Roll, very slowly. Press V again to sit up." above the jar's bars](docs/images/tipped_jar.png)
 
 *A bare jar tipped over: **Drive** tips it and sits it up again.*
 
@@ -2721,6 +2723,43 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.5.3
+
+- **Dents from every side.** A damaged machine now shows its dents about as plainly from its front, its back and
+  either flank as the Bulwark does along its left, from five and eight blocks, parked or on the move. The Hopper, the
+  Chimera and the Kite's flanks now worsen plainly at half health, the Wheelhouse's and the Executive's flanks show
+  their first dents at three quarters, and the Executive's black paint chips to bare steel round a dent instead of
+  blurring into a mottle. The Chimera's flesh takes wear of its own: purple bruises, then tears, at the last torn to
+  the bone, and its bone cracks. The Utility Shells' fainter sides dent more too; the Rover's front and back (mostly
+  lamps, tyres and thin rails) and the Kite's back still show less.
+- **The Assembly Gantry's arm meets every part as it lands.** Each module now shows on the frame only once the arm's
+  welder has come to it, a few pixels off, and seats as the tool presses it home; before, it often showed alone for a
+  moment first (most plainly on a Colossus's right shoulder). Every weld now lands on time on every frame: a Skitter
+  fits its sensors before its second side plate and its arm last, the turntable turning it a little at a time, instead
+  of welding four parts up to half a second late, and a Chimera, a Kite, a Bulwark and a Colossus take a tick or a few
+  longer over some parts. An Executive fits its middle plate, one side, the two sensors on top and then the other
+  side, so the arm crosses it once instead of swinging from side to side across it five times. A Colossus's legs and
+  back plates and a Skitter's arm are now welded by the tool instead of an arc; the thirteen parts the tool still
+  cannot get to show with the welder aimed at them and get an arc as they seat. A newly built frame no longer stands
+  finished on the pad for a moment before it folds up to be built.
+- **A clean view when you swap into your jar.** Swapping into your jar soon after your head was put back on could
+  cover the view with large flat purple squares: the Nausea of the stitch went with you into the jar, and a jar is so
+  small that the effect's motes were born at its eye. The Nausea now stays with your body, giving off no motes there,
+  and comes back to you when you swap into the body again. A jar woken from the head you were carrying, which starts
+  where your body stands, no longer looks out through the inside of your body: the body is not drawn around a
+  first-person view inside it. A mote already in the air as you swap can still show for a moment.
+- **The action bar steps up over chat.** While chat lines are showing under it (a memo from DOLORES arriving as she
+  says something, say), the action bar sits just above them instead of across them; with no chat in the way it stays
+  where it was.
+- **A jar's hearts and armour show when they matter.** The glass takes every hit before your head does, so while it
+  holds above 3 points and your head is unhurt a jar's HUD shows only its three bars; the hearts and the armour row
+  come back once the glass is down to 3 or less, or as soon as your head itself is hurt.
+- **Setting up a Utility Shell is heard:** a Lunk, a Rover or a Spider Walker set up from its chassis makes the
+  machines' "Servo settles" where it stands.
+- 0.5.2 and 0.5.3 connect to each other, either way round.
+
+<details><summary>What changed in 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.5.2
 
 - **Dents that read on every frame.** The Hopper (parked too), the Kite, the Skitter and the Chimera showed their
@@ -2759,8 +2798,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   entry and the README say so.
 - **The Gantry's wall refusal is shorter**, so it fits the action bar at GUI scale 3: "The frame's head would be in the
   blocks beside the pad. Clear them."
-
-<details><summary>What changed in 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.1
 
