@@ -136,7 +136,8 @@ def solve_legs(clip):
     hpos = sorted(hips.get('position', [k(0, P())]), key=lambda x: x[0])
     hrot = sorted(hips.get('rotation', [k(0, R())]), key=lambda x: x[0])
     rel = clip.get('feet_rel', False)
-    out = {s: {'leg': [], 'shin': [], 'foot': []} for s in 'lr'}
+    level = clip.get('level_legs', False)
+    out = {s: {'leg': [], 'shin': [], 'foot': [], 'roll': []} for s in 'lr'}
     for t in range(0, int(until) + 1):
         hp = value_at(hpos, t)
         pitch = value_at(hrot, t)[0]
@@ -147,7 +148,12 @@ def solve_legs(clip):
             else:
                 z, y, ang = value_at(sorted(feet[s], key=lambda x: x[0]), t)
             ank = (hip[0] + z, hip[1] + y) if rel else (z, y)
-            t1, t2 = G.ik(hip, ank)
+            if level:
+                ank, hip_s, roll = level_hip(hip, ank, s, value_at(hrot, t)[2], rel)
+                out[s]['roll'].append((t, -roll))
+                t1, t2 = G.ik(hip_s, ank)
+            else:
+                t1, t2 = G.ik(hip, ank)
             leg = t1 - pitch
             shin = t2 - t1
             foot = ang - t2
@@ -157,7 +163,31 @@ def solve_legs(clip):
     for s in 'lr':
         for part in ('leg', 'shin', 'foot'):
             keys = thin(out[s][part], clip.get('loop') == 'loop')
+            if level and part == 'leg':
+                clip['bones'].setdefault('leg_' + s, {})['rotation'] = level_keys(out[s]['leg'], out[s]['roll'],
+                                                                                  clip.get('loop') == 'loop')
+                continue
             clip['bones'].setdefault('%s_%s' % (part, s), {})['rotation'] = [k(t, R(x=round(v, 3))) for t, v in keys]
+
+
+def level_hip(hip, ank, s, roll, rel, geo=None):
+    """For a clip whose hips roll (rotation z) with the legs kept level under them (level_legs): the hip joint of side
+    s rises or drops with the roll (it sits HIP_X out from the hips' pivot) and the thigh is counter-rolled by the same
+    angle, so the leg swings in a vertical plane and a planted foot does not slide sideways or lift. Returns the ankle
+    target, that side's hip joint and the roll (geo: the frame's rig module, this script's by default)."""
+    hx = (geo or G).HIP_X
+    dy = (-hx if s == 'l' else hx) * math.sin(math.radians(roll))
+    hip_s = (hip[0], hip[1] + dy)
+    if rel:
+        ank = (ank[0], ank[1] + dy)
+    return ank, hip_s, roll
+
+
+def level_keys(leg, roll, loop):
+    """A thigh's x keys (the solve) and z keys (the counter-roll) on the ticks either needs."""
+    xs, zs = dict(leg), dict(roll)
+    ts = sorted(set(t for t, _ in thin(leg, loop)) | set(t for t, _ in thin(roll, loop)))
+    return [k(t, R(x=round(xs[t], 3), z=round(zs[t], 3))) for t in ts]
 
 
 def thin(keys, loop):
@@ -529,6 +559,216 @@ def limp():
         }, **lamps([(0, 0)], [(0, 1)], [(0, 0)])),
         'effects': [(0, 'timeline', 'step:l_drag', None), (12, 'timeline', 'step:r', None),
                     (16, 'sound', snd('servo_catch', 0.4, 0.8), None)],
+    }
+
+
+# ---- the damage limp: limp_l and limp_r (the side whose leg drags) ---------------------------------------------------
+# Powered but badly damaged (the game plays it below a quarter of health in place of walk): authored at the walk's
+# design speed on the walk's own cycle, so it plays through the walk's phase at the walk's playback rate and the feet
+# do not slide. The bad leg is rolled onto its toe and dragged through late, the toe scraping, and planted flat; the
+# good leg does the work. The hips dip and roll onto the bad leg as it takes the weight and are caught, and hitch up
+# on that side before the drag; the torso follows a tick or two later; the bad arm hangs and hardly swings. The legs
+# are counter-rolled under the rolling hips (level_legs). limp_r is limp_l mirrored and half a cycle on, so each
+# foot plants on its own beat of the walk (the bad left foot on tick 0, the bad right foot on n / 2).
+#
+# Ticks are fractions of the cycle; lengths are Hopper px (times the frame's scale).
+LIMP_GAIT = dict(
+    sb=0.33, ho=0.17,               # the bad foot: down from 0 to sb, the heel lifting from ho (rolled onto the toe)
+    pg=0.25, sg=0.58,               # the good foot: heel strike at pg (hurried off the bad leg), down for sg
+    drag_lift=1.4, clear=0.5,       # the dragged foot: the ankle 1.4 px up on the toe, the toe tip at most 0.5 px up
+    late=1.8,                       # how late the dragged foot swings through (1: even)
+    hs=5.0, to=16.0, heel=4.0,      # the good foot's heel strike and toe-off (degrees), ankle to heel (px)
+    lift=5.0,                       # the good foot's swing height
+    crouch=2.5,                     # the hips carried this much lower than at rest
+    dip_bad=2.4, dip_good=1.2,      # the drop into each plant (the bad one deeper), caught
+    vault=0.8, hike=0.6,            # the rise over the good leg; the hitch up before the drag
+    roll=5.0, hitch=1.2, lag=1,     # the roll onto the bad leg (degrees), the wind-up the other way, the torso's lag
+    list=3.0, roll_w=2.6,           # leaning onto the bad leg all the while (degrees); how long the roll is held (ticks)
+    surge=0.5,                      # the body slows over the bad leg and is pushed on by the good one (px)
+    fwd_bad=1.0, fwd_good=-1.5,     # where each foot's stride is centred (px ahead of the rest ankle)
+    lean=-5.0,                      # the torso's forward lean (the walk's is -4)
+    arm_hang=-10.0, arm_in=3.0,     # the bad arm: hanging 10 degrees lower than the walk's, 3 in
+    arm_bad=2.5, arm_good=12.0,     # swing amplitudes (the walk's 10)
+)
+
+
+def bump(t, c, w, n):
+    """A periodic bump of height 1 centred on tick c, about w ticks wide, on a cycle of n ticks."""
+    return sum(math.exp(-((t - c + j * n) / float(w)) ** 2) for j in (-1, 0, 1))
+
+
+def smooth(u):
+    return u * u * (3 - 2 * u)
+
+
+def limp_ticks(n, g):
+    """The gait's fractions of the cycle as whole ticks."""
+    return dict(g, **{kk: int(n * g[kk] + 0.5) for kk in ('sb', 'ho', 'pg', 'sg')})
+
+
+def drag_foot(s, n, v, z0, sb, ho, drag, clear, late, toe, ankle_h):
+    """The damaged leg's ankle (z, y, sole angle) through a cycle of n ticks, planted flat at s = 0 with the ankle at
+    z0 and carried back at v a tick. Flat until ho; then the heel lifts and the foot rolls about its toe tip, which
+    stays put on the ground, to `drag` degrees toe-down at sb. Then it is dragged: held back and swung through late
+    (late > 1), the toe tip scraping no more than `clear` px off the ground, the sole flattening, and it lands flat on
+    the next s = 0 (no heel strike)."""
+    s %= n
+    if s <= ho:
+        return (z0 + v * s, ankle_h, 0.0)
+    if s <= sb:
+        a = drag * ((s - ho) / float(sb - ho)) ** 1.3
+        tip = z0 - toe + v * s
+    else:
+        u = (s - sb) / float(n - sb)
+        tip0 = z0 - toe + v * sb
+        tip = tip0 + (z0 - toe - tip0) * smooth(u ** late)
+        a = drag * (1 - u) ** 1.5
+        ankle_h = ankle_h + clear * math.sin(math.pi * u)
+    r = math.radians(a)
+    return (tip + toe * math.cos(r), ankle_h + toe * math.sin(r), -a)
+
+
+def step_foot(s, n, v, z0, st, hs, flat, ho, to, lift, toe, heel, ankle_h):
+    """The good leg's ankle (z, y, sole angle) through a cycle of n ticks, a heel-and-toe step: the heel strikes at
+    s = 0 toe-up hs degrees with the flat-foot ankle at z0, the foot rolls flat about the heel by `flat`, stays flat,
+    from ho rolls about its toe tip to `to` degrees, leaves the ground at st; the planted heel or toe moves back at v a
+    tick (no sliding). Then the swing, lifted `lift` px, from toe-down to toe-up."""
+    s %= n
+
+    def contact(t):
+        if t < flat:
+            a = hs * (1 - t / float(flat)) ** 1.5
+            hz = z0 + heel + v * t
+            return (hz - heel * math.cos(math.radians(a)), ankle_h + heel * math.sin(math.radians(a)), a)
+        if t <= ho:
+            return (z0 + v * t, ankle_h, 0.0)
+        a = to * ((t - ho) / float(st - ho)) ** 1.4
+        tip = z0 - toe + v * t
+        return (tip + toe * math.cos(math.radians(a)), ankle_h + toe * math.sin(math.radians(a)), -a)
+    if s <= st:
+        return contact(s)
+    u = (s - st) / float(n - st)
+    a0, a1 = contact(st), contact(0)
+    e = (1 - math.cos(math.pi * u)) / 2
+    sm = smooth(u)
+    return (a0[0] + (a1[0] - a0[0]) * e, a0[1] + (a1[1] - a0[1]) * u + lift * math.sin(math.pi * u ** 0.8),
+            a0[2] + (a1[2] - a0[2]) * sm)
+
+
+def limp_motion(n, g, sc):
+    """The body's curves for a limp of n ticks (g: limp_ticks), per tick: the hips' height (dropping into each plant,
+    the bad one deeper, caught with a small rebound; rising over the good leg; the hitch before the drag), their roll
+    (onto the bad leg 2 ticks after it lands, a small overshoot back as it is caught, the hitch the other way before
+    the drag), the surge (slowed over the bad leg), the torso's roll a beat behind the hips, and a time warp that puts
+    the good foot's plant at half the cycle (for swings written as the walk's)."""
+    pg, sb = g['pg'], g['sb']
+
+    def hy(t):
+        return sc * (-g['crouch'] - g['dip_bad'] * bump(t, 1.5, 1.2, n) + 0.3 * g['dip_bad'] * bump(t, 3.6, 1.0, n)
+                     - g['dip_good'] * bump(t, pg + 1.2, 1.1, n) + g['vault'] * bump(t, pg + g['sg'] * 0.45, 1.6, n)
+                     + g['hike'] * bump(t, sb + 0.5, 1.2, n))
+
+    def roll(t):
+        # a standing list onto the bad leg, the roll onto it as it lands held a while, the catch, the hitch before the drag
+        return (g.get('list', 0.0) + g['roll'] * bump(t, 2.0, g.get('roll_w', 1.5), n) - 0.12 * g['roll'] * bump(t, 4.2, 1.0, n)
+                - g['hitch'] * bump(t, sb + 0.5, 1.2, n))
+
+    def surge(t):
+        return sc * g['surge'] * math.sin(2 * math.pi * (t - (0.8 * sb - n / 4.0)) / n)
+
+    def warp(t):
+        t %= n
+        return t * (n / 2.0) / pg if t <= pg else n / 2.0 + (t - pg) * (n / 2.0) / (n - pg)
+    return dict(hy=hy, roll=roll, surge=surge, warp=warp,
+                torso_roll=lambda t: roll(t - g['lag']) - roll(t), torso_world=lambda t: roll(t - g['lag']))
+
+
+def mirror_clip(clip, shift=0):
+    """The other side's version of a whole-body loop: bones _l and _r swapped, rotation y and z and position x negated,
+    the feet's sides swapped, step:l and step:r swapped, and everything moved on by `shift` ticks (every channel keyed
+    on every tick of the cycle)."""
+    n = clip['length']
+    swap = lambda b: b[:-2] + ('_r' if b.endswith('_l') else '_l') if b[-2:] in ('_l', '_r') else b
+    bones = {}
+    for bone, chans in clip['bones'].items():
+        nb = {}
+        for ch, keys in chans.items():
+            keys = mirror_keys(sorted(keys, key=lambda x: x[0]), ch)
+            if shift:
+                assert [kk[0] for kk in keys] == list(range(n + 1)), (bone, ch, 'not keyed every tick')
+                keys = [(t,) + keys[(t - shift) % n][1:] for t in range(n + 1)]
+            nb[ch] = keys
+        bones[swap(bone)] = nb
+    c = dict(clip, bones=bones)
+    feet = clip['feet']
+    c['feet'] = lambda s, t: feet('r' if s == 'l' else 'l', t - shift)
+
+    def side(e):
+        if e.startswith('step:') and e[5:6] in 'lr':
+            return 'step:' + ('r' if e[5] == 'l' else 'l') + e[6:]
+        return e
+    c['effects'] = [((t + shift) % n, kind, side(eff) if kind == 'timeline' else eff, loc)
+                    for (t, kind, eff, loc) in clip['effects']]
+    return c
+
+
+def check_reach(name, clip, geo=None):
+    """A limp's legs stay within reach on every tick (the solver straightens a leg that cannot reach, and the foot
+    would float or slide). geo: the frame's rig module, this script's by default."""
+    G = geo or globals()['G']
+    hips = clip['bones'].get('hips', {})
+    hpos = sorted(hips.get('position', [k(0, P())]), key=lambda x: x[0])
+    hrot = sorted(hips.get('rotation', [k(0, R())]), key=lambda x: x[0])
+    worst = 0.0
+    for t in range(clip['length'] + 1):
+        hp = value_at(hpos, t)
+        for s in 'lr':
+            z, y, _ = clip['feet'](s, t)
+            ank, hip_s, _ = level_hip((hp[2], G.HIP_Y + hp[1]), (z, y), s, value_at(hrot, t)[2], False, G)
+            worst = max(worst, math.hypot(ank[0] - hip_s[0], ank[1] - hip_s[1]) / (G.THIGH + G.SHIN))
+    if worst > 0.995:
+        sys.exit('%s: a leg is asked to reach %.3f of its length' % (name, worst))
+    return worst
+
+
+def limp_l():
+    """The damage limp, left leg dragging (limp_r is its mirror). Lamps and sensor as in the walk (powered)."""
+    n = WALK_N
+    g = limp_ticks(n, LIMP_GAIT)
+    v, sc = V_WALK, SC
+    rz = REST_FOOT_T[0]
+    z0b = rz - v * g['sb'] / 2.0 - g['fwd_bad'] * sc
+    z0g = rz - v * g['sg'] / 2.0 - g['fwd_good'] * sc
+    drag = math.degrees(math.asin(min(0.9, g['drag_lift'] * sc / TOE)))
+    gf = dict(st=g['sg'], hs=g['hs'], flat=2, ho=g['sg'] - 2, to=g['to'], lift=g['lift'] * sc, toe=TOE,
+              heel=g['heel'] * sc, ankle_h=G.ANKLE_H)
+
+    def feet(side, t):
+        if side == 'l':
+            return drag_foot(t, n, v, z0b, g['sb'], g['ho'], drag, g['clear'] * sc, g['late'], TOE, G.ANKLE_H)
+        return step_foot(t - g['pg'], n, v, z0g, **gf)
+    m = limp_motion(n, g, sc)
+    w = m['warp']
+    c = lambda t, ph: math.cos(2 * math.pi * (w(t) - ph) / n)
+    ticks = range(0, n + 1)
+    r3 = lambda x: round(x, 3)
+    pg = g['pg']
+    return {
+        'length': n, 'loop': 'loop', 'feet': feet, 'native': True, 'level_legs': True,
+        'bones': {
+            'hips': {'position': [k(t, P(y=r3(m['hy'](t)), z=r3(m['surge'](t)))) for t in ticks],
+                     'rotation': [k(t, R(z=r3(m['roll'](t)))) for t in ticks]},
+            'torso': {'rotation': [k(t, R(x=r3(g['lean'] + 0.5 * (m['hy'](t - g['lag']) / sc + g['crouch'])),
+                                          z=r3(m['torso_roll'](t)))) for t in ticks]},
+            'restraint': {'rotation': [k(t, R(x={1: 0.8, 2: 0.3, pg + 1: 0.4}.get(t, 0))) for t in ticks]},
+            'arm_l': {'rotation': [k(t, R(x=r3(g['arm_hang'] - g['arm_bad'] * c(t, 2)),
+                                          z=r3(g['arm_in'] - 0.6 * m['torso_world'](t - 1)))) for t in ticks]},
+            'forearm_l': {'rotation': [k(t, R(x=r3(-3 - 2 * c(t, 4)))) for t in ticks]},
+            'arm_r': {'rotation': [k(t, R(x=r3(g['arm_good'] * c(t, 1)))) for t in ticks]},
+            'forearm_r': {'rotation': [k(t, R(x=r3(6 * c(t, 3)))) for t in ticks]},
+        },
+        'effects': [(0, 'timeline', 'step:l_drag', None), (2, 'sound', snd('servo_catch', 0.4, 0.8), None),
+                    (pg, 'timeline', 'step:r', None)],
     }
 
 
@@ -1054,6 +1294,7 @@ def build():
 def clips():
     out = [('parked', parked()), ('board', board()), ('boot', boot()), ('boot_legs', boot_legs()),
            ('shutdown', shutdown()), ('idle', idle()), ('idle_tic', idle_tic()), ('walk', walk()), ('limp', limp()),
+           ('limp_l', limp_l()), ('limp_r', mirror_clip(limp_l(), WALK_N // 2)),
            ('turn_l', turn('l')), ('turn_r', turn('r')), ('jump', jump()), ('fall', fall()), ('land', land(False)),
            ('land_heavy', land(True)), ('pogo_crouch', pogo_crouch()), ('pogo_hold', pogo_hold()),
            ('pogo_leap', pogo_leap()), ('pogo_land', pogo_land())]
@@ -1103,6 +1344,8 @@ def build_anims(model, baked=False):
     for name, clip in clips():
         clip = copy.deepcopy(clip)
         scale_positions(clip)
+        if clip.get('level_legs'):
+            check_reach(name, clip)
         solve_legs(clip)
         vents_to_z(clip)
         animators = {}

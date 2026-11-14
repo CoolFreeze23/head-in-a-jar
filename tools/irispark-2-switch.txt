@@ -1,0 +1,42 @@
+# Under a shader pack: a kept Hopper with the pack switched off and on again (its look is kept again in the game's own
+# layout, then the pack's), then boarded, driven a little, got out of and left to park, filmed every frame from beside it
+# with its shadow on the ground in view. Run with SMOKE_MODS=sodium,iris SMOKE_SHADER=BSLClassic_v10.0.zip.
+@observe 20
+wait 60
+/time set 1500
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/weather clear
+hud off
+jar
+charge 100000
+mecha hopper 100 -60 100 hydraulic_legs,drill,night_optics
+/tp @s 100.5 -60 96 0 0
+wait 300
+parkstats
+shot w_kept
+irisshaders off
+wait 100
+parkstats
+shot w_shaders_off
+irisshaders on
+wait 300
+parkstats
+shot w_shaders_on
+lookat headinajar:hopper
+key use
+wait 80
+riding hopper
+parkstats
+key forward hold 20
+wait 20
+watch at 3 1.5 -1 70 15
+frames f_hopper_park 300
+wait 5
+sneak down
+key jar_menu hold 25
+sneak up
+wait 300
+parkstats
+watch off

@@ -1,0 +1,179 @@
+# The row of parked frames under a shader pack: each view drawn the ordinary way (off, twice, for the pack's own
+# frame-to-frame change) and from kept geometry (on); the views from above and beside the row also with kept machines
+# casting no shadow (noshadow), to show those views see a missing shadow. Run with SMOKE_MODS=sodium,iris and
+# SMOKE_SHADER=BSLClassic_v10.0.zip or ComplementaryReimagined_r5.5.1.zip, and in the default client and Sodium alone.
+@observe 20
+wait 60
+/time set 1500
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/weather clear
+hud off
+/gamemode spectator
+mecha hopper -21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+/tp @s 0.5 -60 -24 0 4
+wait 300
+parkstats
+/tp @s 0.5 -60 -24 0 4
+wait 20
+parkcache off
+wait 10
+shot s_day_whole_off_a
+parkcache on
+wait 10
+shot s_day_whole_on
+parkcache off
+wait 10
+shot s_day_whole_off_b
+parkcache on
+/tp @s -12.5 -60 -10 0 4
+wait 20
+parkcache off
+wait 10
+shot s_day_left_off_a
+parkcache on
+wait 10
+shot s_day_left_on
+parkcache off
+wait 10
+shot s_day_left_off_b
+parkcache on
+/tp @s -6 -59 -5 -20 15
+wait 20
+parkcache off
+wait 10
+shot s_close_off_a
+parkcache on
+wait 10
+shot s_close_on
+parkcache off
+wait 10
+shot s_close_off_b
+parkcache on
+/tp @s 0.5 -32 0.5 0 90
+wait 20
+parkcache off
+wait 10
+shot s_above_off_a
+parkcache on
+wait 10
+shot s_above_on
+parkcache off
+wait 10
+shot s_above_off_b
+parkcache noshadow
+wait 10
+shot s_above_noshadow
+parkcache on
+/tp @s -33 -50 0.5 0 90
+wait 20
+parkcache off
+wait 10
+shot s_west_off_a
+parkcache on
+wait 10
+shot s_west_on
+parkcache off
+wait 10
+shot s_west_off_b
+parkcache noshadow
+wait 10
+shot s_west_noshadow
+parkcache on
+/tp @s 34 -50 0.5 0 90
+wait 20
+parkcache off
+wait 10
+shot s_east_off_a
+parkcache on
+wait 10
+shot s_east_on
+parkcache off
+wait 10
+shot s_east_off_b
+parkcache noshadow
+wait 10
+shot s_east_noshadow
+parkcache on
+/tp @s 0.5 -50 -11 0 90
+wait 20
+parkcache off
+wait 10
+shot s_north_off_a
+parkcache on
+wait 10
+shot s_north_on
+parkcache off
+wait 10
+shot s_north_off_b
+parkcache noshadow
+wait 10
+shot s_north_noshadow
+parkcache on
+/tp @s 0.5 -50 12 0 90
+wait 20
+parkcache off
+wait 10
+shot s_south_off_a
+parkcache on
+wait 10
+shot s_south_on
+parkcache off
+wait 10
+shot s_south_off_b
+parkcache noshadow
+wait 10
+shot s_south_noshadow
+parkcache on
+/tp @s 0.5 -52 -16 0 30
+wait 20
+parkcache off
+wait 10
+shot s_slant_off_a
+parkcache on
+wait 10
+shot s_slant_on
+parkcache off
+wait 10
+shot s_slant_off_b
+parkcache noshadow
+wait 10
+shot s_slant_noshadow
+parkcache on
+parkstats
+/time set 18000
+/tp @s 0.5 -60 -24 0 4
+wait 20
+parkcache off
+wait 10
+shot s_night_whole_off_a
+parkcache on
+wait 10
+shot s_night_whole_on
+parkcache off
+wait 10
+shot s_night_whole_off_b
+parkcache on
+/fill -23 -60 -2 23 -60 -2 minecraft:torch
+wait 40
+/tp @s -12.5 -60 -10 0 4
+wait 20
+parkcache off
+wait 10
+shot s_torch_left_off_a
+parkcache on
+wait 10
+shot s_torch_left_on
+parkcache off
+wait 10
+shot s_torch_left_off_b
+parkcache on
+parkstats

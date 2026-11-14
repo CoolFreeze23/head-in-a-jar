@@ -28,6 +28,7 @@ import copy
 import json
 import math
 import os
+import pickle
 import sys
 
 import numpy as np
@@ -48,6 +49,10 @@ WELD = {'tool_weld': EXT}
 TWIST_MAX = 80.0               # the wrist twists up to 80 degrees either way
 PRESENT = 9                    # ticks the turntable takes to present the frame to its owner
 STATIC_LOCATORS = ('lamp', 'klaxon', 'deck', 'reel', 'cradle', 'swivel', 'tool_tip')
+# the arm's extensions tried for a reach, (upper, forearm), the shortest first: the forearm telescopes before the upper
+E_STEPS = ((0.0, 0.0), (0.0, 8.0), (0.0, 16.0), (0.0, 24.0), (0.0, 32.0), (0.0, geo.EMAX), (8.0, 32.0),
+           (8.0, geo.EMAX), (geo.UMAX, 32.0), (geo.UMAX, geo.EMAX))
+ESPEED = 10.0                  # px a telescope runs out or in in one tick
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Forward kinematics of a .bbmodel (keyframe rotations add to the rest rotation on every axis; positions direct; Euler
@@ -274,7 +279,7 @@ class Solid:
 # ---------------------------------------------------------------------------------------------------------------------
 REST = geo.rest_pose()
 REST_ABS = {'yaw': REST['swivel'], 'a': REST['upper'], 'b': REST['upper'] + REST['fore'],
-            'c': REST['upper'] + REST['fore'] + REST['head'], 'hy': 0.0}
+            'c': REST['upper'] + REST['fore'] + REST['head'], 'hy': 0.0, 'e': 0.0, 'u': 0.0}
 AX = np.array([geo.AXIS[0], geo.HINGE_Y, geo.AXIS[1]])
 CENTRE_DIR = np.array([-1.0, 0.0, -1.0]) / math.sqrt(2)     # from the arm's axis towards the pad's centre
 DECKV = np.array([0.0, geo.DECK, 0.0])
@@ -297,9 +302,19 @@ def to_keys(p, prev=None):
     return kv
 
 
-def key_rot(kv, hy=0.0):
+def key_rot(kv, hy=0.0, e=0.0, u=0.0):
+    t1, t2 = stages(e)
     return {'swivel': {'rotation': [0, kv['swivel'], 0]}, 'upper': {'rotation': [kv['upper'], 0, 0]},
-            'fore': {'rotation': [kv['fore'], 0, 0]}, 'head': {'rotation': [kv['head'], hy, 0]}}
+            'fore': {'rotation': [kv['fore'], 0, 0]}, 'head': {'rotation': [kv['head'], hy, 0]},
+            'upper_t': {'position': [0, max(0.0, min(geo.UMAX, u)), 0]},
+            'fore_t1': {'position': [0, t1, 0]}, 'fore_t2': {'position': [0, t2, 0]}}
+
+
+def stages(e):
+    """The forearm's extension shared by its two telescoping stages (the bar up its rod, the head's rod out of the
+    bar), in proportion to their strokes."""
+    e = max(0.0, min(geo.EMAX, float(e)))
+    return e * geo.EXT1 / geo.EMAX, e * geo.EXT2 / geo.EMAX
 
 
 def in_dir(yaw):
@@ -308,10 +323,11 @@ def in_dir(yaw):
     return np.array([-math.sin(s), 0.0, -math.cos(s)])
 
 
-def solve(tip, d, prev_yaw=45.0, elbow_out=True):
+def solve(tip, d, prev_yaw=45.0, elbow_out=True, e=0.0, u=0.0):
     """Pose whose extended tool tip lands at `tip` pointing exactly along `d`: the head pivot is TOOL px back along d;
-    the swivel turns the arm's plane through it; the shoulder and elbow reach it (planar IK); the head pitches (X) and
-    twists about the forearm (Y) to aim the tool. Returns (pose, twist in degrees, reach shortfall)."""
+    the swivel turns the arm's plane through it; the shoulder and elbow reach it (planar IK, the forearm telescoped out
+    by e and the upper arm by u); the head pitches (X) and twists about the forearm (Y) to aim the tool. Returns
+    (pose, twist in degrees, reach shortfall)."""
     d = np.array(d, float) / np.linalg.norm(d)
     piv = np.array(tip, float) - geo.TOOL * d
     v = np.array([piv[0] - AX[0], 0, piv[2] - AX[2]])
@@ -331,10 +347,9 @@ def solve(tip, d, prev_yaw=45.0, elbow_out=True):
             if abs(der) < 1e-9:
                 break
             yaw -= err / der
-    u = in_dir(yaw)
-    q = float(v @ u)
+    q = float(v @ in_dir(yaw))
     h = float(piv[1] - AX[1])
-    a, b = geo.ik(q, h, elbow_out)
+    a, b = geo.ik(q, h, elbow_out, e, u)
     # the tool's direction in the forearm's frame: w = Rx(-b) Ry(-yaw) d; face = Ry(hy) Rx(g) (0,0,-1)
     wv = rmat(-b, 0, 0) @ rmat(0, -yaw, 0) @ d
     g = math.degrees(math.asin(max(-1.0, min(1.0, float(wv[1])))))
@@ -342,15 +357,15 @@ def solve(tip, d, prev_yaw=45.0, elbow_out=True):
     if abs(hy) > 90:                        # the same aim with the head pitched over instead of twisted round
         hy = hy - 180 if hy > 0 else hy + 180
         g = 180 - g
-    short = max(0.0, math.hypot(q, h) - (geo.LU + geo.LF))
-    return {'yaw': yaw, 'a': a, 'b': b, 'c': b + g, 'hy': hy}, abs(hy), short
+    short = max(0.0, math.hypot(q, h) - (geo.LU + geo.LF + e + u))
+    return {'yaw': yaw, 'a': a, 'b': b, 'c': b + g, 'hy': hy, 'e': float(e), 'u': float(u)}, abs(hy), short
 
 
 def standoff_pose(b=8.0, a=90.0, yaw=45.0):
     """Stood off: the plane on the diagonal, the upper arm flat out over the cell behind (y 16.5-19.5, under the
     frame's feet at 20), the forearm `b` degrees out from upright, the head looking in and down. The default is the
     loaded pose (and every small frame's)."""
-    return {'yaw': yaw, 'a': a, 'b': b, 'c': b - 33.0, 'hy': 0.0}
+    return {'yaw': yaw, 'a': a, 'b': b, 'c': b - 33.0, 'hy': 0.0, 'e': 0.0, 'u': 0.0}
 
 
 STANDOFF = standoff_pose()
@@ -371,7 +386,7 @@ def _arm_elements():
         if e.get('type', 'cube') != 'cube':
             continue
         anc = G.anc(u)
-        if not anc or anc[0] not in ('upper', 'fore', 'head') + TOOLS:
+        if not anc or anc[0] not in ('upper', 'upper_t', 'fore', 'fore_t1', 'fore_t2', 'head') + TOOLS:
             continue
         f, t = np.array(e['from'], float), np.array(e['to'], float)
         Re, oe = rmat(*(e.get('rotation') or [0, 0, 0])), np.array(e.get('origin', [0, 0, 0]), float)
@@ -385,7 +400,7 @@ STATIC = Solid([b for b in G.boxes(G.mats()) if b[1] in ('static', 'turntable', 
 
 
 def pose_keys(pose, tools=None):
-    keys = key_rot(to_keys(pose), pose.get('hy', 0.0))
+    keys = key_rot(to_keys(pose), pose.get('hy', 0.0), pose.get('e', 0.0), pose.get('u', 0.0))
     for tl in TOOLS:
         keys[tl] = {'position': [0, 0, (tools or {}).get(tl, 0.0)]}
     return keys
@@ -488,8 +503,9 @@ BACK = 4.0                      # the approach pose stands this far back along t
 
 def approach_dir(n, tilt=25.0, lean=0.0):
     """The tool's direction onto a socket with outward normal n. Side sockets: in and `tilt` degrees down (pressing the
-    module's plate from above its working end). Up/down sockets: straight down/up, leaning `tilt` degrees towards the
-    pad's centre (turned `lean` degrees round from it), so the head stays outside the frame's outline."""
+    module's plate from above its working end), turned `lean` degrees round the upright from straight in (to come at
+    a socket beside a part that stands in front of it). Up/down sockets: straight down/up, leaning `tilt` degrees
+    towards the pad's centre (turned `lean` degrees round from it), so the head stays outside the frame's outline."""
     n = np.array(n, float)
     up = np.array([0, 1.0, 0])
     s = math.radians(tilt)
@@ -497,7 +513,7 @@ def approach_dir(n, tilt=25.0, lean=0.0):
         d = -np.sign(n[1]) * up * math.cos(s) + (ry(lean) @ CENTRE_DIR) * math.sin(s)
         return d / np.linalg.norm(d)
     h = np.array([n[0], 0, n[2]])
-    h /= np.linalg.norm(h)
+    h = ry(lean) @ (h / np.linalg.norm(h))
     d = -h * math.cos(s) - up * math.sin(s)
     return d / np.linalg.norm(d)
 
@@ -520,7 +536,7 @@ def pose_clean(fr, pose, app, t, theta, tools, tip=None, d=None):
         return False
     if tip is not None:
         for r in (BACK + 4.0, BACK + 9.0):
-            q, err, short = solve(tip - d * r, d, pose['yaw'])
+            q, err, short = solve(tip - d * r, d, pose['yaw'], e=pose.get('e', 0.0), u=pose.get('u', 0.0))
             if short > 0.2 or not natural(q):
                 break
             pq = arm_parts(q, tools)
@@ -543,10 +559,11 @@ def path_ok(fr, so, app, tip, d, t, theta, tools):
     if clean([blend(so, app, f) for f in (0.2, 0.4, 0.6, 0.8)]):
         return True
     for r in (8.0, 14.0):
-        q, err, short = solve(tip - d * (BACK + r), d, app['yaw'])
+        q, err, short = solve(tip - d * (BACK + r), d, app['yaw'], e=app.get('e', 0.0), u=app.get('u', 0.0))
         if short > 0.2 or not natural(q):
             continue
-        line = [solve(tip - d * (BACK + r * f), d, app['yaw'])[0] for f in (0.33, 0.66)]
+        line = [solve(tip - d * (BACK + r * f), d, app['yaw'], e=app.get('e', 0.0), u=app.get('u', 0.0))[0]
+                for f in (0.33, 0.66)]
         if clean([blend(so, q, f) for f in (0.25, 0.5, 0.75)] + [q] + line):
             return True
     return False
@@ -562,28 +579,36 @@ def plan_point(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=Non
     """The cleanest reach onto frame point p (outward normal n) at frame time t and turntable angle theta: tool tilts,
     offsets off the point and both elbows; the least twisted head wins. None if nothing reaches cleanly."""
     pw, nw = to_world(theta, p), ry(theta) @ np.array(n, float)
-    clean = []
-    leans = (0.0, 45.0, -45.0, 90.0, -90.0) if abs(nw[1]) > 0.7 else (0.0,)
-    for tilt, lean in [(tl, ln) for ln in leans for tl in TILTS]:
-        d = approach_dir(nw, tilt, lean)
-        for off in OFFS:
-            for eo in (True,):
+    leans = (0.0, 45.0, -45.0, 90.0, -90.0) if abs(nw[1]) > 0.7 else (0.0, 30.0, -30.0, 55.0, -55.0, 80.0, -80.0)
+    # first with a way out straight back along the tool; then, at full stretch (a high socket met side on under the
+    # top of a tall frame), leaving the way it came in, to the approach pose
+    for way_out, (u, e) in [(True, ue) for ue in E_STEPS] + [(False, ue) for ue in E_STEPS if ue[1] >= 32.0]:
+        if e + u > 0 and np.linalg.norm(pw - AX) - geo.TOOL > geo.LU + geo.LF + e + u + 4.0:
+            continue
+        clean = []
+        for tilt, lean in [(tl, ln) for ln in leans for tl in TILTS]:
+            d = approach_dir(nw, tilt, lean)
+            for off in OFFS:
                 tip = pw - d * off
-                pose, err, short = solve(tip, d, prev_yaw, eo)
+                pose, err, short = solve(tip, d, prev_yaw, True, e, u)
                 if short > 0.2 or err > TWIST_MAX or not natural(pose):
                     continue
-                app = solve(tip - d * BACK, d, pose['yaw'], eo)[0]
-                if not pose_clean(fr, pose, app, t, theta, tools, tip, d):
+                app = solve(tip - d * BACK, d, pose['yaw'], True, e, u)[0]
+                if not pose_clean(fr, pose, app, t, theta, tools, tip if way_out else None, d):
                     continue
                 if so is not None and not path_ok(fr, so, app, tip, d, t, theta, tools):
                     continue
                 clean.append({'tip': tip, 'dir': d, 'pose': pose, 'approach': app, 'err': err, 'tilt': tilt,
-                              'off': off, 'reach': True, 'theta': theta, 'point': pw, 'label': label})
-        if any(q['err'] < 20 for q in clean):
-            break
-    if not clean:
-        return None
-    return min(clean, key=lambda q: (q['err'] > 45, q['off'], q['err']))
+                              'off': off, 'reach': True, 'theta': theta, 'point': pw, 'label': label,
+                              'way_out': way_out})
+            if any(q['err'] < 20 for q in clean):
+                break
+        if clean:
+            clean.sort(key=lambda q: (q['err'] > 45, q['off'], q['err']))
+            best = dict(clean[0])
+            best['alts'] = clean[1:8]           # other clean reaches, for a quicker way from where the arm is
+            return best
+    return None
 
 
 def _arc_dirs():
@@ -602,6 +627,14 @@ ARC_DISTS = np.arange(6.0, 58.0, 2.0)
 def plan_arc(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=None, los=True):
     """The nearest clean pose with the welder aimed straight at frame point p, and a clear line from the tool's tip to
     the point (the arc). Tried first from in front of the socket's face, then from wider round."""
+    for u, e in ((0.0, 0.0), (0.0, geo.EMAX / 2.0), (0.0, geo.EMAX), (geo.UMAX, geo.EMAX)):
+        pl = _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u)
+        if pl is not None:
+            return pl
+    return None
+
+
+def _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u):
     pw, nw = to_world(theta, p), ry(theta) @ np.array(n, float)
     solid = fr.solid(t)
     Rt = ry(theta)
@@ -613,13 +646,14 @@ def plan_arc(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=None,
         tips = pw[None, None, :] + U[:, None, :] * ARC_DISTS[None, :, None]
         piv = tips + U[:, None, :] * geo.TOOL
         dist = np.linalg.norm(piv - AX[None, None, :], axis=2)
-        ok = (dist < geo.LU + geo.LF + 0.1) & (dist > abs(geo.LU - geo.LF) + 1) & (tips[:, :, 1] > 15)
+        ok = (dist < geo.LU + geo.LF + e + u + 0.1) & (dist > abs(geo.LU + u - geo.LF - e) + 1) & \
+            (tips[:, :, 1] > 15)
         order = sorted(zip(*np.nonzero(ok)), key=lambda ij: ARC_DISTS[ij[1]])
         tried = 0
         for i, j in order:
-            u, dd = U[i], ARC_DISTS[j]
-            tip, d = pw + u * dd, -u
-            pose, err, short = solve(tip, d, prev_yaw, True)
+            w, dd = U[i], ARC_DISTS[j]
+            tip, d = pw + w * dd, -w
+            pose, err, short = solve(tip, d, prev_yaw, True, e, u)
             if short > 0.2 or err > TWIST_MAX or not natural(pose):
                 continue
             tried += 1
@@ -629,7 +663,7 @@ def plan_arc(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=None,
             seg = tip[None, :] + d[None, :] * np.arange(0.0, max(0.0, dd - 1.5), 0.5)[:, None]
             if los and len(seg) and solid.contains_any(seg, Rt, DECKV):
                 continue
-            app = solve(tip - d * 3.0, d, pose['yaw'], True)[0]
+            app = solve(tip - d * 3.0, d, pose['yaw'], True, e, u)[0]
             if not pose_clean(fr, pose, app, t, theta, tools, tip, d):
                 continue
             if so is not None and not path_ok(fr, so, app, tip, d, t, theta, tools):
@@ -669,7 +703,8 @@ def plan_slot(fr, slot, socks, t, theta, tools=WELD, arcs=True, so=None, los=Tru
         p, n = fr.socket(sk, t)
         pl = plan_point(fr, p, n, t, theta, tools, label=sk, so=so)
         if pl:
-            pl['sock'] = sk
+            for q in [pl] + pl['alts']:
+                q['sock'] = sk
             return pl
     if not arcs:
         return None
@@ -688,8 +723,8 @@ def plan_score(pl):
         return None
     extra = (6.0 if pl.get('no_way_in') else 0.0) + (4.0 if pl.get('hidden') else 0.0)
     if pl['reach']:
-        return extra + pl['err'] / 40.0
-    return extra + 12.0 + 0.25 * pl['off']
+        return extra + pl['err'] / 40.0 + (pl['pose'].get('e', 0.0) + pl['pose'].get('u', 0.0)) / 40.0
+    return extra + 40.0 + 0.25 * pl['off']
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -760,6 +795,12 @@ class Track:
             rot['head'].append(k(tau, R(x=round(kv['head'], 3), y=round(p.get('hy', 0.0), 3)), e))
         for b, ks in rot.items():
             bones[b] = {'rotation': ks}
+        if any(p.get('e', 0.0) > 1e-6 for _, p, _ in self.poses):
+            for i, b in enumerate(('fore_t1', 'fore_t2')):
+                bones[b] = {'position': [k(tau, R(y=round(stages(p.get('e', 0.0))[i], 3)), e)
+                                         for tau, p, e in self.poses]}
+        if any(p.get('u', 0.0) > 1e-6 for _, p, _ in self.poses):
+            bones['upper_t'] = {'position': [k(tau, R(y=round(p.get('u', 0.0), 3)), e) for tau, p, e in self.poses]}
         for tl, ks in self.tools.items():
             if len(ks) > 1 or ks[0][1] != 0:
                 bones[tl] = {'position': [k(t, R(z=v), e) for (t, v, e) in ks]}
@@ -811,10 +852,21 @@ def sweep(fr, tr, tau0, tau1, step=0.5):
 
 
 SPEED = 30.0                     # degrees a joint may turn in one tick
+SPEED_FAST = 60.0                # ... and in a hurry (a heavy frame's parts landing five ticks apart, side to side)
+ESPEED_FAST = 14.0               # px a telescope runs in one tick in a hurry
+
+
+def travel_ticks(p, q, fast=False):
+    """Ticks the arm needs from pose p to pose q at its joint speeds (or its hurried ones)."""
+    ang = max(abs(unwrap(q[kk], p[kk]) - p[kk]) for kk in ('yaw', 'a', 'b', 'c', 'hy'))
+    lin = max(abs(q.get('e', 0.0) - p.get('e', 0.0)), abs(q.get('u', 0.0) - p.get('u', 0.0)))
+    return int(math.ceil(max(ang / (SPEED_FAST if fast else SPEED), lin / (ESPEED_FAST if fast else ESPEED)) - 1e-9))
 
 
 def joint_travel(p, q):
-    return max(abs(unwrap(q[kk], p[kk]) - p[kk]) for kk in ('yaw', 'a', 'b', 'c', 'hy'))
+    return max([abs(unwrap(q[kk], p[kk]) - p[kk]) for kk in ('yaw', 'a', 'b', 'c', 'hy')] +
+               [abs(q.get('e', 0.0) - p.get('e', 0.0)) * SPEED / ESPEED,
+                abs(q.get('u', 0.0) - p.get('u', 0.0)) * SPEED / ESPEED])
 
 
 def tool_dir(pose):
@@ -844,7 +896,8 @@ def cart_path(tr, t0, p0, t1, p1, lift, ease):
         d = da + (db - da) * f
         if np.linalg.norm(d) < 1e-3:
             return False
-        pose, err, short = solve(tip, d, prev['yaw'])
+        pose, err, short = solve(tip, d, prev['yaw'], e=p0.get('e', 0.0) + (p1.get('e', 0.0) - p0.get('e', 0.0)) * f,
+                                 u=p0.get('u', 0.0) + (p1.get('u', 0.0) - p0.get('u', 0.0)) * f)
         if short > 0.2 or err > TWIST_MAX + 10:
             return False
         if any(abs(unwrap(pose[kk], prev[kk]) - prev[kk]) > 40 for kk in ('yaw', 'a', 'b', 'c', 'hy')):
@@ -859,13 +912,13 @@ def cart_path(tr, t0, p0, t1, p1, lift, ease):
     return True
 
 
-def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
+def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None, fast=False):
     """Key p1 at t1 (the arm being at p0 at t0) by the first path whose sweep is clean: straight in joint space; the
     tool's tip along a line (straight or bowed); through a via pose (pulled back out along the arm, or carried out from
     the pad along the tool's line `cart` = (tip, dir)); through two vias out by the stood-off pose; out to the stood-off
     pose and in along a line. If none is clean, the least bad is kept. Returns (t1 used, clean)."""
     n0 = len(tr.poses)
-    t1 = max(t1, t0 + int(math.ceil(joint_travel(p0, p1) / SPEED)))
+    t1 = max(t1, t0 + travel_ticks(p0, p1, fast))
 
     def direct(t_end):
         tr.at(t_end, p1, ease)
@@ -880,6 +933,8 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
         return True
 
     def two(f, t_end):
+        if t_end - t0 < 5:
+            return False
         tr.at(t0 + 2, blend(p0, so, f), 'easeInOutSine')
         tr.at(t_end - 2, blend(p1, so, f), 'easeInOutSine')
         tr.at(t_end, p1, ease)
@@ -888,8 +943,8 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
     def retreat(r, lift, t_end):
         """Back out along the tool, across, and in along the next tool's line."""
         tip0, d0, tip1, d1 = tip_of(p0), tool_dir(p0), tip_of(p1), tool_dir(p1)
-        r0, e0, s0 = solve(tip0 - d0 * r, d0, p0['yaw'])
-        r1, e1, s1 = solve(tip1 - d1 * r, d1, p1['yaw'])
+        r0, e0, s0 = solve(tip0 - d0 * r, d0, p0['yaw'], e=p0.get('e', 0.0), u=p0.get('u', 0.0))
+        r1, e1, s1 = solve(tip1 - d1 * r, d1, p1['yaw'], e=p1.get('e', 0.0), u=p1.get('u', 0.0))
         if s0 > 0.2 or s1 > 0.2 or not natural(r0) or not natural(r1):
             return False
         ta = t0 + max(1, (t_end - t0) // 4)
@@ -907,7 +962,7 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
     def line_in(r, t_end):
         """Onto the next tool's line r px further back, then in along it."""
         tip1, d1 = tip_of(p1), tool_dir(p1)
-        q, e, sh = solve(tip1 - d1 * r, d1, p1['yaw'])
+        q, e, sh = solve(tip1 - d1 * r, d1, p1['yaw'], e=p1.get('e', 0.0), u=p1.get('u', 0.0))
         if sh > 0.2 or not natural(q):
             return False
         tq = t_end - max(1, (t_end - t0) // 3)
@@ -924,7 +979,7 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
             tr.at(t_mid, so, 'easeInOutSine')
         return cart_path(tr, t_mid, so, t_end, p1, lift, ease)
 
-    t4, t6 = max(t1, t0 + 4), max(t1, t0 + 6)
+    t4, t6 = (max(t1, t0 + 3), max(t1, t0 + 4)) if fast else (max(t1, t0 + 4), max(t1, t0 + 6))
     attempts = [(direct, (t1,))] + [(line, (lift, t1)) for lift in LIFTS]
     mids = [blend(blend(p0, p1, 0.5), so, f) for f in (0.35, 0.6, 0.85)]
     for da, db, dc in ((10, 0, 0), (0, 12, 0), (12, 12, 0), (-10, 0, 0), (0, -12, 0), (18, 18, 0),
@@ -939,7 +994,8 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
         outv = -in_dir(p1['yaw'])
         for kk in (8.0, 12.0, 16.0):
             for hh in (0.0, -4.0, 4.0):
-                mids.append(solve(tip - d * 4.0 + outv * kk + np.array([0, hh, 0]), d, p1['yaw'])[0])
+                mids.append(solve(tip - d * 4.0 + outv * kk + np.array([0, hh, 0]), d, p1['yaw'],
+                                  e=p1.get('e', 0.0), u=p1.get('u', 0.0))[0])
     attempts += [(line_in, (r, t4)) for r in (8.0, 14.0)]
     attempts += [(retreat, (r, lift, t4)) for r in (5.0, 9.0, 13.0) for lift in ((0.0, 0.0), (6.0, 0.0), (0.0, 6.0))]
     attempts += [(via, (mm, t4)) for mm in mids if mm['a'] <= 95]
@@ -962,7 +1018,7 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None):
     # last: via poses scattered round the straight path (a fixed seed: the same clips every run), one or two of them,
     # each clear of the frame where it stands
     rng = np.random.default_rng(7)
-    t8 = max(t1, t0 + 8)
+    t8 = max(t1, t0 + (5 if fast else 8))
 
     def clear_at(tau, q):
         parts = arm_parts(q, tr.tools_at(tau))
@@ -1044,7 +1100,8 @@ def choose_standoff(fr):
 THETAS = list(range(-180, 180, 15))
 T_READY = 36 - LEAD              # frame clock when the arm is free after the look-over
 CYCLE_SAME = 5                   # contact to next contact at one angle: hold 1, approach 2, press 2
-CYCLE_TURN = 8                   # hold 1, stand off 3, (the turn, from 2 ticks early), approach 4, press 2
+CYCLE_TURN = 10                  # hold 1, stand off 3, (the turn, from 2 ticks early), approach 4, press 2, and spare
+CYCLE_TURN_SMALL = 4             # a turn of 30 degrees or less with the arm only backed off along its tool
 
 
 _FRAMES = {}
@@ -1085,8 +1142,9 @@ def _table_task(job):
 
 
 def angle_tables(names, pool, sos):
-    """Every slot of every frame planned at every turntable angle: reaches first; then, where an angle has no reach,
-    arcs (at every 30 degrees for a socket no angle reaches, every 45 for the rest). A slot left with no plan at all
+    """Every slot of every frame planned at every turntable angle: reaches first (from the stood-off pose, then from
+    anywhere); then, where an angle has no reach, arcs (the sequencing may need one at any angle to stay on time). A
+    slot left with no plan at all
     is planned again with less asked of it: first an arc whose line may cross a part of the frame, then plans clean
     where they stand but with no clean way in from the stood-off pose (the moves between slots find their own), and
     last the welder aimed at the socket from close to the stood-off pose."""
@@ -1101,10 +1159,12 @@ def angle_tables(names, pool, sos):
     def empty(n, i):
         return not any(tables[n].get((i, th)) for th in THETAS)
     run([(n, i, th, False, sos[n], True) for n, i in slots for th in THETAS], 4)
+    # a reach the arm cannot come into straight from the stood-off pose is still a reach: the builder comes into it from
+    # the contact before
+    run([(n, i, th, False, None, True) for n, i in slots for th in THETAS if tables[n].get((i, th)) is None], 4)
     jobs = []
     for n, i in slots:
-        step = 30 if empty(n, i) else 45
-        jobs += [(n, i, th, True, sos[n], True) for th in THETAS if th % step == 0 and tables[n].get((i, th)) is None]
+        jobs += [(n, i, th, True, sos[n], True) for th in THETAS if tables[n].get((i, th)) is None]
     run(jobs)
     for so_of, los in ((lambda n: sos[n], False), (lambda n: None, True), (lambda n: None, False)):
         run([(n, i, th, True, so_of(n), los) for n, i in slots if empty(n, i) for th in THETAS if th % 30 == 0])
@@ -1113,7 +1173,7 @@ def angle_tables(names, pool, sos):
 
 
 def choose_angles(fr, table):
-    """Dynamic programme over the slots: cost = ticks late + each plan's score + 2 per turn."""
+    """Dynamic programme over the slots: cost = 5 per tick late + each plan's score (an arc 40) + 2 per turn."""
     states = {0: [(0.0, T_READY - CYCLE_SAME + 2, None)]}     # theta -> [(cost, contact t, back-pointer)]
     hist = []
     for i, (slot, socks, S) in enumerate(fr.slots):
@@ -1130,9 +1190,10 @@ def choose_angles(fr, table):
                         turns = 0
                     else:
                         dth = abs(unwrap(th, pth) - pth)
-                        cnew = max(S, (c + CYCLE_TURN if i else T_READY + 6) + turn_ticks(dth))
+                        cyc = CYCLE_TURN_SMALL if dth <= 30 else CYCLE_TURN
+                        cnew = max(S, (c + cyc if i else T_READY + 6) + turn_ticks(dth))
                         turns = 1
-                    cands.append((cost + (cnew - S) + sc + 2 * turns, cnew, (pth, j)))
+                    cands.append((cost + 5 * (cnew - S) + sc + 2 * turns, cnew, (pth, j)))
             cands.sort()
             keep = []
             for cd in cands:
@@ -1183,12 +1244,25 @@ class Builder:
         the sound on the one after. Returns (tau, pose, contact tau)."""
         tr, fr = self.tr, self.fr
         n0 = len(tr.poses)
-        for reach in ((2, 3, 4) if after_turn else (2,)):
-            del tr.poses[n0:]
-            t_app = max(t_target + LEAD - press, tau + reach)
-            t_app, ok = move(fr, tr, tau, cur, t_app, pl['approach'], self.so, cart=(pl['tip'], pl['dir']))
-            if ok:
+        due = t_target + LEAD
+        best = None
+        # at the joints' ordinary speed with a two-tick press; if that is late, a one-tick press; then in a hurry
+        for pr, fast in ((press, False), (1, False), (1, True)):
+            for reach in ((2, 3, 4) if after_turn else (2,)):
+                del tr.poses[n0:]
+                t_app = max(due - pr, tau + reach)
+                t_app, ok = move(fr, tr, tau, cur, t_app, pl['approach'], self.so, cart=(pl['tip'], pl['dir']),
+                                 fast=fast)
+                if ok:
+                    break
+            key = (not ok, max(0, t_app + pr - due))
+            if best is None or key < best[0]:
+                best = (key, list(tr.poses[n0:]), t_app, ok, pr)
+            if ok and t_app + pr <= due:
                 break
+        del tr.poses[n0:]
+        tr.poses.extend(best[1])
+        t_app, ok, press = best[2], best[3], best[4]
         if not ok and cur is not self.so:
             # out to the stood-off pose and in from there (the way in every plan was checked for)
             kept = list(tr.poses[n0:])
@@ -1219,6 +1293,8 @@ class Builder:
             self.notes.append('%s %s: weld particle moved to %d (effect clash)' % (self.name, locname, fx_tick))
         tr.fx(tc + 2, 'sound', SND('weld', 0.5, 1.0), locname)
         tr.at(tc + 1, pl['pose'], None)                     # held through the weld
+        if self.last_ok and sweep(fr, tr, t_app, tc + 1):
+            self.last_ok = False                # met late, the frame has moved on into the tool's way
         return tc + 1, pl['pose'], tc
 
     def press(self, t0, p0, t1, p1, ease):
@@ -1238,6 +1314,28 @@ class Builder:
         new = unwrap(new, theta)
         dur = turn_ticks(new - theta)
         n_p, n_t, n_e = len(tr.poses), len(tr.turn), len(tr.effects)
+        if cur is not so and last_pl is not None:
+            # quickest: the arm backs off along its tool and holds there while the frame turns past it
+            tip, d = last_pl['tip'], last_pl['dir']
+            for r in (8.0, 12.0, 16.0):
+                del tr.poses[n_p:], tr.turn[n_t:], tr.effects[n_e:]
+                q, err, short = solve(tip - d * r, d, cur['yaw'], e=cur.get('e', 0.0), u=cur.get('u', 0.0))
+                if short > 0.2 or err > TWIST_MAX or not natural(q):
+                    continue
+                t_q, ok = move(fr, tr, tau, cur, tau + 2, q, so, 'easeOutQuad')
+                if not ok:
+                    continue
+                t_start = max(t_q - 1, T_READY + LEAD)
+                t0 = t_start - LEAD
+                if tr.turn[-1][0] < t0:
+                    tr.turn.append((t0, theta, None))
+                tr.turn.append((t0 + dur, new, 'easeInOutSine'))
+                tr.fx(t_start, 'sound', SND('turntable', 0.6, 1.0), 'deck')
+                t_end = t_start + dur
+                if tr.poses[-1][0] < t_end:
+                    tr.at(t_end, q, None)
+                if not sweep(fr, tr, tau, t_end):
+                    return t_end, q
         for back, early in ((False, 2), (False, 1), (False, 0), (True, 1), (True, 0)):
             del tr.poses[n_p:], tr.turn[n_t:], tr.effects[n_e:]
             t = tau
@@ -1314,16 +1412,70 @@ class Builder:
                 tau, cur = self.turn_to(th, tau, cur, last_pl)
                 after_turn = True
             th = tr.turn[-1][1]
+            if cur is so and S + LEAD - tau > 14:
+                # stood off with time in hand: wait there (the frame unfolds meanwhile) and come in shortly before
+                tr.at(S + LEAD - 12, so, None)
+                tau = S + LEAD - 12
             pl = table[(i, int(seq[i]))]
+            cands = [pl] + list(pl.get('alts', ()))
             # planned on the seat tick; if the arm can only be there later, planned again for that tick
             t_est = max(S + LEAD - 2, tau + (4 if after_turn else 2)) + 2 - LEAD
             if t_est > S:
                 pl2 = plan_slot(fr, slot, socks, t_est, th, so=self.so)
                 if pl2 is not None and (pl2['reach'] or not pl['reach']):
-                    pl = pl2
-            pl = self.at_theta(pl, th)
+                    cands = [pl2] + list(pl2.get('alts', ())) + cands
+            if not any(c['reach'] for c in cands):
+                # the table has only an arc here (no reach it could come into from the stood-off pose): a reach the
+                # arm comes into from where it is, if there is one
+                for sk in socks:
+                    p_, n_ = fr.socket(sk, S)
+                    q = plan_point(fr, p_, n_, S, th, label=sk)
+                    if q is not None:
+                        for c in [q] + q['alts']:
+                            c['sock'] = sk
+                        cands = [q] + q['alts'] + cands
+                        break
+            # the reaches first, the nearest to where the arm is first; the first met on time with a clean way in is
+            # taken (a reach before an arc), else the least late
+            cands = sorted(cands, key=lambda c: (not c['reach'], joint_travel(cur, c['approach'])))[:5]
+            arcs_tried = any(not c['reach'] for c in cands)
             saved = (copy.deepcopy(tr), list(self.notes), dict(LOCATORS), dict(ARCS))
-            res = self.weld(pl, tau, cur, S, 'w_%s_%s' % (name, slot), 'arc_%s_%s' % (name, slot), after_turn)
+            best = None
+            kc = -1
+            while kc + 1 < len(cands):
+                kc += 1
+                cand = cands[kc]
+                if kc:
+                    self.tr, self.notes = copy.deepcopy(saved[0]), list(saved[1])
+                    tr = self.tr
+                    LOCATORS.clear()
+                    LOCATORS.update(saved[2])
+                    ARCS.clear()
+                    ARCS.update(saved[3])
+                cand = self.at_theta(cand, th)
+                res = self.weld(cand, tau, cur, S, 'w_%s_%s' % (name, slot), 'arc_%s_%s' % (name, slot), after_turn)
+                key = (not self.last_ok, res[2] - LEAD > S, not cand['reach'], max(0, res[2] - LEAD - S), kc)
+                if best is None or key < best[0]:
+                    best = (key, (copy.deepcopy(tr), list(self.notes), dict(LOCATORS), dict(ARCS)), cand, res,
+                            self.last_ok)
+                if self.last_ok and res[2] - LEAD <= S:
+                    break
+                if kc == len(cands) - 1 and not arcs_tried:
+                    # no reach can be met on time from where the arm is: an arc struck on time, the nearest first
+                    arcs_tried = True
+                    for sk in socks:
+                        p_, n_ = fr.socket(sk, S)
+                        a_ = plan_arc(fr, p_, n_, S, th, label=sk)
+                        if a_ is not None:
+                            a_['sock'] = sk
+                            cands.append(a_)
+            self.tr, self.notes = best[1][0], best[1][1]
+            tr = self.tr
+            LOCATORS.clear()
+            LOCATORS.update(best[1][2])
+            ARCS.clear()
+            ARCS.update(best[1][3])
+            pl, res, self.last_ok = best[2], best[3], best[4]
             if not self.last_ok and pl['reach']:
                 # no clean way onto the socket: aim at it from close to the stood-off pose instead, if that is clean
                 aim = None
@@ -1425,13 +1577,26 @@ class Builder:
         # ---- the plating pass: the welder goes back over chest sockets --------------------------------------------
         t_plate = tau + 3 + max(0, min(spare, 150 + LEAD - tau - 3))
         pls = self.plate_targets(t_plate - LEAD + 3, theta) if n_plate else []
-        for j, pl in enumerate(pls[:n_plate]):
-            locname = 'plate_%s_%d' % (name, j + 1)
-            target = t_plate - LEAD + 3 if j == 0 else 0
-            tau, cur, tc = self.weld(pl, tau, cur, target, locname, 'arc_%s_plate_%d' % (name, j + 1), press=3)
+        plated = 0
+        for pl in pls[:n_plate]:
+            locname = 'plate_%s_%d' % (name, plated + 1)
+            target = t_plate - LEAD + 3 if plated == 0 else 0
+            snap = (copy.deepcopy(tr.__dict__), list(self.notes), dict(LOCATORS), dict(ARCS))
+            tau2, cur2, tc = self.weld(pl, tau, cur, target, locname, 'arc_%s_plate_%d' % (name, plated + 1), press=3)
+            if not self.last_ok:
+                # no clean way onto it from where the arm is: that plate is left out
+                tr.__dict__.update(snap[0])
+                self.notes[:] = snap[1]
+                LOCATORS.clear()
+                LOCATORS.update(snap[2])
+                ARCS.clear()
+                ARCS.update(snap[3])
+                continue
+            tau, cur = tau2, cur2
             self.press(tau, pl['pose'], tau + 3, pl['approach'], 'easeOutQuad')
             tau += 3
             cur = pl['approach']
+            plated += 1
         # ---- inspection: the arm stands back and up, the head lamp sweeps the frame bottom to top ------------------
         # the head cranes in and down to look at the feet, then up and out to look at the top (the forearm swings 30
         # degrees: the head moves about 12 px, outside the frame's outline)
@@ -1516,7 +1681,8 @@ class Builder:
             dh = np.array([pl['dir'][0], 0.0, pl['dir'][2]])
             dh = dh / max(1e-6, np.linalg.norm(dh))
             for back in (9.0, 7.0, 5.0):
-                sa, err, short = solve(pl['tip'] - dh * back - np.array([0, 1.0, 0]), pl['dir'], pl['pose']['yaw'])
+                sa, err, short = solve(pl['tip'] - dh * back - np.array([0, 1.0, 0]), pl['dir'], pl['pose']['yaw'],
+                                       e=pl['pose'].get('e', 0.0), u=pl['pose'].get('u', 0.0))
                 if short < 0.2 and not collide(fr, sa, t - 3, theta, tools) and not collide(fr, sa, t - 6, theta, tools):
                     return pl, sa
         return None, None
@@ -1652,7 +1818,8 @@ def front_row(fr, t, theta, tools, so=None):
                     dm = q['dir'] + pl['dir']
                     dm = dm / np.linalg.norm(dm)
                     for f in (0.25, 0.5, 0.75):
-                        mid, err, short = solve(q['tip'] + (pl['tip'] - q['tip']) * f, dm, q['pose']['yaw'])
+                        mid, err, short = solve(q['tip'] + (pl['tip'] - q['tip']) * f, dm, q['pose']['yaw'],
+                                                e=q['pose'].get('e', 0.0), u=q['pose'].get('u', 0.0))
                         if short > 0.2 or collide(fr, mid, t, theta, tools) or \
                                 collide(fr, blend(q['pose'], pl['pose'], f), t, theta, tools):
                             pl = None
@@ -1803,7 +1970,8 @@ def press_line(fr, tr, t0, p0, t1, p1, ease):
         tip = (tip_of(p0) + tip_of(p1)) / 2.0
         d = tool_dir(p0) + tool_dir(p1)
         d = d / np.linalg.norm(d)
-        mid, err, short = solve(tip - d * 1.5, d, p0['yaw'])
+        mid, err, short = solve(tip - d * 1.5, d, p0['yaw'], e=(p0.get('e', 0.0) + p1.get('e', 0.0)) / 2.0,
+                                u=(p0.get('u', 0.0) + p1.get('u', 0.0)) / 2.0)
         if short < 0.2:
             tr.at(t0 + (t1 - t0) // 2, mid, 'easeInOutSine')
             tr.at(t1, p1, 'easeInOutSine')
@@ -1945,11 +2113,21 @@ def main():
     import multiprocessing
     ap = argparse.ArgumentParser()
     ap.add_argument('--review', metavar='DIR', help='also write review copies (turntable keyed, frame stand-ins) here')
+    ap.add_argument('--tables', metavar='FILE', help='keep the stood-off poses and angle tables in FILE, and read them '
+                    'from it when it exists (for trying the build sequencing only: delete it after any change to the '
+                    'geometry or the planning of a contact)')
     args = ap.parse_args()
 
     with multiprocessing.Pool() as pool:
-        sos = dict(pool.imap_unordered(_standoff_task, FRAME_NAMES))
-        tables = angle_tables(FRAME_NAMES, pool, {n: sos[n][0] for n in FRAME_NAMES})
+        if args.tables and os.path.exists(args.tables):
+            with open(args.tables, 'rb') as fh:
+                sos, tables = pickle.load(fh)
+        else:
+            sos = dict(pool.imap_unordered(_standoff_task, FRAME_NAMES))
+            tables = angle_tables(FRAME_NAMES, pool, {n: sos[n][0] for n in FRAME_NAMES})
+            if args.tables:
+                with open(args.tables, 'wb') as fh:
+                    pickle.dump((sos, tables), fh)
         print('angle tables done', flush=True)
         res = {r.name: r for r in pool.imap_unordered(_frame_task, [(n, tables[n], sos[n]) for n in FRAME_NAMES])}
     res = {n: res[n] for n in FRAME_NAMES}

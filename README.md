@@ -1084,7 +1084,8 @@ that flies off is the creature's own model head; under such a pack it may be the
   its own voice, low and groggy. The collar stays for as long as you ride.
 - **Get off:** **Sneak**. On a flier more than three blocks up, sneak does not drop you: "Too high to get off Bat.
   Hold (your **Sneak** key) to fly down and off." Keep holding it and the flier sinks; within three blocks of the
-  ground or water you get off by yourself. If the host dies
+  ground or water you get off by yourself. Getting off a flier puts you on the ground beside it (under it if there is
+  no room), not on top of it to fall from there. If the host dies
   or rots away you are a plain jar again at once. However you come off, the seal lets go ("Jar unlocks"), the legs
   buckle a little, and the body mumbles itself back to sleep.
 
@@ -1450,7 +1451,8 @@ and many modules, and it is how a mecha is patched (see *Damage and repair*).
   adjust. Pick another module."
 - **Assemble** spends 10,000 FE: a klaxon, the arm swings back to stand off, and half a second later the mecha
   **builds itself on top of the Gantry** while the arm reaches in and welds each module home with a spray of sparks
-  (the tallest frames' high sockets get an arc from the welder). The turntable turns the frame to reach its far side,
+  as it lands (for a Colossus or an Executive the arm telescopes, its upper arm and forearm sliding out along steel
+  rods to reach their shoulders). The turntable turns the frame to reach its far side,
   then turns it to face whoever pressed Assemble: ten seconds for most
   frames, eleven for a Chimera, twelve for an Executive and sixteen for a Colossus, each fitted module clunking home in turn ("Module clunks home"). You are its owner.
   Its battery starts with whatever is left in the Gantry after the 10,000 FE, up to the battery's size, so a new mecha
@@ -1477,6 +1479,7 @@ What the Gantry says when it won't:
 | no frame | "No frame to build on. Put one in the frame slot." |
 | a press while it is still working | "The Gantry is at work. Wait for its arm to stand off." |
 | blocks in the space over the pad | "Something blocks the space over the pad. Clear it for the frame." |
+| blocks beside the pad where the frame's head would be (a frame may overhang anything lower) | "The frame would stand with its head in the blocks beside the pad. Clear them up to its head height." |
 | a mecha already on the pad | "Something stands on the Gantry. Clear its top first." |
 | a frame that needs legs has none that walk | "This frame can't walk. Fit walking legs, like Hydraulic Legs." (Arachnid Legs, Stilts, a Hover Skirt and Lava Treads walk too) |
 | under 10,000 FE | "Assembly needs 10 kFE. Feed the Gantry power." |
@@ -1496,6 +1499,10 @@ Frames and modules used in the air say they go in the Gantry.
 ![From the front-right, a Bulwark unfolds itself on the Assembly Gantry's turntable while the Gantry's arm reaches in to weld each part home; the turntable turns it round and it stands finished, the arm standing off beside it](docs/images/gantry_build.gif)
 
 *Assemble: the frame builds itself on the pad while the arm welds each module home.*
+
+![From the front-right, a Colossus builds itself on the Assembly Gantry; the arm's upper arm and forearm slide out along steel rods until its head stands at the Colossus's chest and shoulders, welding each part home as it lands, then fold back](docs/images/gantry_colossus.gif)
+
+*For a Colossus or an Executive the arm telescopes to reach their shoulders.*
 
 ### Your first mecha
 
@@ -1582,15 +1589,15 @@ The details, and what each frame says when it won't:
 
 - **Hopper:** it needs walking legs, solid ground and two blocks clear overhead. "Not enough charge to jump. Recharge at
   the Assembly Gantry.", "Already airborne. Land first, then jump.", "No headroom for a jump. Find open sky.", "Venting
-  heat. The springs wait for it to cool." The landing moves other players only if they trust you, and the Hopper takes
-  no fall damage from its own leap.
+  heat. The springs wait for it to cool." The landing moves other players only if they trust you (teammates count), and
+  the Hopper takes no fall damage from its own leap.
 - **Bulwark:** the grab looks where you look, and the body turns to it while the fists reach. While its fists are full,
   the arms wait: "Hands full. Throw the load or set it down first." It refuses with "Nothing within reach to lift. Walk
   right up to it.", "... is over the lifting limit. Try something cow-sized.", "... is not freight. Find another load."
-  (bosses), "... has not authorised handling. Ask them to trust you." (a player who does not trust you), "No room
-  overhead to carry Cow. Find open sky." It lets go by itself with "Load released: the ceiling is too low to carry it.",
-  "Load released: no charge left to hold it." or "Load released: the fists vent with the rest." Blocks follow the
-  Telekinesis rules, and a thrown block can hurt what it lands on.
+  (bosses), "... has not authorised handling. Ask them to trust you." (a player who has not trusted you and is not on
+  your team), "No room overhead to carry Cow. Find open sky." It lets go by itself with "Load released: the ceiling is
+  too low to carry it.", "Load released: no charge left to hold it." or "Load released: the fists vent with the rest."
+  Blocks follow the Telekinesis rules, and a thrown block can hurt what it lands on.
 - **Colossus:** "Siege starts from a standstill. Stop first.", "No footing for Siege. Land first.", "Planning refuses a
   site under water. Find dry ground.", "The ground won't take the spades. Find solid ground.", "No room behind for the
   outriggers. Find open ground behind." (it needs 2.4 blocks clear to each side and 3.5 behind), "Not enough charge
@@ -1602,7 +1609,8 @@ The details, and what each frame says when it won't:
 - **Wheelhouse:** dirt and grass, sand, snow, gravel, leaves and mud are off-road: "OFF-ROAD: no right of way on dirt.
   Find a road." Otherwise: "COOLING DOWN: right of way again in N s.", "NO POWER for Rush Hour. Recharge at the Assembly
   Gantry.", "VENTING: right of way suspended. Wait for it to cool." The ram hurts each creature once a run (4 to 8, more
-  the faster you go) and moves a player only if they trust you; it leaves machines and anything being ridden alone.
+  the faster you go) and moves a player only if they trust you (teammates count); it leaves machines and anything being
+  ridden alone.
 - **Skitter:** "Nothing to fix the line to within 24 blocks. Aim at a wall.", "Not enough charge for the Dragline.
   Recharge at the Assembly Gantry." The line runs 32 blocks at most: "Line parted: too far from the anchor." or "Line
   lost: the anchor gave way." The Skitter also walks up walls and holds on to them where it stops; **Sneak** lets go. On
@@ -1610,8 +1618,9 @@ The details, and what each frame says when it won't:
   Gantry." or "Venting heat: the legs let go of the wall."
 - **Kite:** "Talons work from the air. Take off first.", "Nothing below to pick up. Fly low over it.", "... is over
   the airmail limit. Try something sheep-sized.", "... is not airmail. Find another
-  parcel." A parcel that touches the ground is set down there; one that snags on a block is let go ("Parcel released: it
-  caught on something.").
+  parcel.", "... has not authorised handling. Ask them to trust you." (a player who has not trusted you and is not on
+  your team). A parcel that touches the ground is set down there; one that snags on a block is let go ("Parcel
+  released: it caught on something.").
 - **Chimera:** "Nothing tasted lately. Hit something, then graft.", "... tastes of nothing useful. Try another
   creature.", "... is above our pay grade. Graft something ordinary." (Legendary genes), "No Bio-Gel aboard. Carry some
   in the hold or on you.", "A graft is still taking (N s). Let it wear off." The HUD shows "Grafted: ... (N s)" while
@@ -1682,8 +1691,9 @@ stops: "Battery flat. Park it on the Assembly Gantry to charge." Plain jumping a
 Coolant Loop). Shedding is three times faster under water, half as fast again in rain, and half as fast in the Nether.
 Lava adds 10 heat a tick, burning adds 3 (not with Fire Suppression). From 60% the heat bar turns yellow, Radiator
 Fins open, the vents glow a dark amber and the hot metal ticks; from 85% the glow is amber, and red while venting. From 85% most arms work at 70%. At 100% it **vents**: 5 seconds of shutdown in a cloud of steam that blinds
-anyone within 3 blocks; heat drops to half at once and keeps falling while it vents. The steam also scalds the cockpit
-for 2 damage (which the mecha takes, like any hit on the pilot) unless the jar has a Heat Shield. While venting it
+and scalds anyone within 3 blocks (2 damage a second, 10 over a full vent: stand back from a hot machine); heat drops
+to half at once and keeps falling while it vents. The steam also scalds the cockpit once, for 2 damage (which the
+mecha takes, like any hit on the pilot), unless the jar has a Heat Shield. While venting it
 cannot walk, jump, fire or use anything, though one already in the air keeps flying and steering, and a Rocket Pack
 still lifts: "Venting heat. Everything comes back once it cools."
 **A parked mecha makes no heat of its own and never vents by itself**: walk up to one with a Fusion Bottle and it stands quiet. An
@@ -1700,8 +1710,17 @@ still lifts: "Venting heat. Everything comes back once it cools."
 
 ### Damage and repair
 
-- Damage shows: below half health sparks spit from the seams; below a quarter the hull smokes, every blow crackles,
-  and the machine limps (at its usual speed). A flat battery limps too.
+- **Dents.** Every machine keeps a note of where its last eight blows landed. At three quarters, half and a quarter of
+  its health the panels on the side it was hit from most buckle a stage further; a side that took two of those blows
+  besides is one stage behind. A machine not hit since it was last whole shows none, whatever its health (one parked
+  before this policy came in starts with a clean record). **Repair** at the Gantry knocks them out as the plates go on,
+  and the record is closed once the machine is whole. Cosmetic damage is not covered by the warranty.
+- Damage shows otherwise too: below half health sparks spit from the seams; below a quarter the hull smokes, every blow
+  crackles, and a walking frame limps at its usual speed: the leg on the side it was hit from more drags its toe and
+  plants flat and late, the hips roll onto it and the arm on that side hangs. A flat battery limps too, slowly. The
+  Skitter keeps its trot (its feet find the ground by themselves) and the Wheelhouse has no legs to favour.
+
+![From the front, a Bulwark dented along its left flank limps towards you, its left boot dragging and its left arm hanging](docs/images/limp.gif)
 - A hit aimed at the pilot lands on the mecha. A pilot cannot hurt their own mecha. Falls of up to 6 blocks do nothing.
 - **Wrecked** (0 health in one go): the Golden Parachute fires (below) and the glass takes one knock (never the last
   one): "Hopper wrecked, you're clear. Glass N/M." (your glass, now and at most). The
@@ -1743,7 +1762,8 @@ stays behind, empty.
 A mecha belongs to whoever assembled it. The owner, the players they trust with `/headoffice trust add <player>`, and
 the owner's teammates (while the owner is online) may pilot it, open its hold, patch it with plating, inject it, rename
 it with a Name Tag, and take it apart or repair it at a Gantry. Nobody else's Tractor Beam can pick it up. A lead does
-not go on a machine. A mecha's lifts, landings and rams move another player only if that player trusts the pilot.
+not go on a machine. A mecha's lifts, landings and rams, its Tractor Beam and its Grapple Hook move another player only
+if that player trusts the pilot (`/headoffice trust add`) or is on the pilot's team.
 
 ### Gene Ports
 
@@ -1790,8 +1810,10 @@ All eight frames are animated: each builds itself on the pad, boots when you cli
 works its arms, vents, lets you out, and collapses when wrecked, with the real jar in its seat and every module on its
 socket. Each has its own sounds, from the Bulwark's "Mecha cracks its neck" to the Executive's "Shoe taps impatiently",
 every one with a subtitle. A parked mecha (standing still, nobody aboard) is drawn from a kept copy of its look, so a
-yard full of parked machines costs about a tenth of the drawing time it used to; with an Iris shader pack in use they are
-drawn as before.
+yard full of parked machines costs about a tenth of the drawing time it used to. With Iris 1.8.12 and the shader pack BSL
+Classic v10.0 or Complementary Reimagined r5.5.1 the copy is drawn through the pack's own programs, shadow included, and
+a parked machine costs a fifth or less of what it did; under any other pack or Iris version parked machines are drawn as
+before.
 
 ### Modules
 
@@ -1874,8 +1896,8 @@ something." and "That arm is still cycling. One moment." apply throughout.
 | **Drill Arm** | 70 kg | 3 Diamond, 1 Iron Block, 1 Servo | Mines the block within 6 as an iron pickaxe would, 50 FE and 1 heat a block, into the Cargo Hold if fitted. "This ground is protected. Dig somewhere else." | hold | Torque: speed; from 50% a 3x3 head at half speed |
 | **Chainsaw Arm** | 60 kg | 3 Iron Ingot, 2 Shears, 1 Servo | On a creature within 4: 8 damage, 40 FE. Held on a log for under a second: fells the whole tree (up to 128 logs), 40 FE and 0.5 heat a log. "The chainsaw wants a creature or a log. Aim at one." | press, hold | none |
 | **Hydraulic Fist** | 90 kg | 5 Piston, 1 Servo | On a creature within 4.5: 10 to 22 damage and knockback. 300 to 1,500 FE, up to 4 heat. Once every 0.6 seconds. | press | Force: damage, knockback and cost |
-| **Grapple Hook** | 30 kg | 2 Tripwire Hook, 1 Servo | A creature within 32 is yanked to you; otherwise you are pulled to the block you aim at. 800 FE a throw, hit or miss, once a second. | press | none |
-| **Tractor Beam** | 50 kg | 1 Telekinesis Module, 1 Servo | Grab a creature or a loose block within 24, hold to carry it, let go to drop it. 80 FE a tick. "The beam won't take that. It isn't yours to move." | press, hold | none |
+| **Grapple Hook** | 30 kg | 2 Tripwire Hook, 1 Servo | A creature within 32 is yanked to you; otherwise you are pulled to the block you aim at. 800 FE a throw, hit or miss, once a second. A player is yanked only if they trust you (teammates count); otherwise the hook stays put and costs nothing: "... has not authorised handling. Ask them to trust you." | press | none |
+| **Tractor Beam** | 50 kg | 1 Telekinesis Module, 1 Servo | Grab a creature or a loose block within 24, hold to carry it, let go to drop it. 80 FE a tick. "The beam won't take that. It isn't yours to move." A player is taken only if they trust you (teammates count): "... has not authorised handling. Ask them to trust you." | press, hold | none |
 | **Rivet Gun** | 45 kg | 2 Iron Ingot, 1 Crossbow, 1 Servo | Five rivets a second, one Iron Nugget (Cargo Hold or inventory), 30 FE and 0.5 heat each. "Out of rivets. Carry iron nuggets." | hold | none |
 | **Riot Shield** | 80 kg | 5 Mecha Plating, 1 Shield | Hits from the front do a fifth of their damage. | hold | none |
 | **Manipulator Hand** | 30 kg | 3 Iron Ingot, 1 Servo | Uses your selected hotbar item like a hand on a block within 6 or in the air; a creature within 6 is hit with it. 50 FE. | press | none |
@@ -2609,7 +2631,7 @@ None is needed. Each hook turns on only when its mod is there.
 - **Curios:** the **Head Satchel** can be worn in the belt slot and counts as carried there. Goggles count only on
   your jar, so the mod offers no Curios head slot for them (goggles left in one from an older world come back to
   you when you join: into your inventory, or your Ender Chest if it is full, or at your feet, where they never
-  despawn; a line in chat says where).
+  despawn and wait, in creative too, until you have room; a line in chat says where).
 - **Patchouli** (any version): the Employee Handbook as a Patchouli book, with recipe pages, and DOLORES's memos link to it.
 - **Entity Model Features**, and packs built on it such as **Fresh Animations** (player extension): they keep
   animating you while you carry your head; only your arms stay on the jar. They do not animate a headless body, which
@@ -2687,6 +2709,38 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.5.1
+
+- **Wear and tear you can read from across the yard.** A damaged mecha's panels dent on the side it was hit from
+  most, a stage further at three quarters, half and a quarter of its health, and the dents come out again as the
+  Assembly Gantry puts the plates on. Below a quarter of its health a walking frame limps at its usual speed, dragging
+  the leg on the side it was hit from more, the arm on that side hanging. A 0.5.0 game and a 0.5.1 server (or the
+  other way round) now decline to connect, the game's disconnect screen naming Head in a Jar's channels as the
+  mismatch, rather than disagree about what a mecha is doing.
+- **One rule for handling a player.** The Bulwark's lift, the Kite's talons, the Tractor Beam and the Grapple Hook take
+  a player only if that player trusts you or is on your team, as the Lunk's toss does; the Hopper's landing and the
+  Wheelhouse's ram move players by the same rule. Anyone else: "... has not authorised handling. Ask them to trust
+  you." A refused hook costs nothing.
+- **Getting off a flier puts you on the ground** beside it, instead of on its back to fall from there (four blocks from
+  a ghast, and a knock on the glass).
+- **Old goggles wait for you.** Goggles coming back from the old Curios head slot to a creative player with no room
+  anywhere stay at their feet, as they do for everyone else, instead of vanishing at the first touch.
+- **Parked mecha are cheap to draw under shader packs too.** With Iris 1.8.12 and BSL Classic v10.0 or
+  Complementary Reimagined r5.5.1, a parked machine is drawn from its kept look through the pack's own programs, its
+  shadow included, for a fifth or less of what it cost, and looks the same; any other pack or Iris version draws it as
+  before.
+- **The Assembly Gantry reaches the tall frames.** Its arm telescopes: for a Colossus or an Executive the upper arm
+  and the forearm slide out along steel rods, so the welder reaches their shoulders instead of striking an arc from
+  the knees, and most welds now land on the tick their part does. A few of the highest still come a moment late or
+  as an arc.
+- **Power beside the Gantry no longer stops a build.** A frame wider than the pad may now overhang what stands beside
+  it, such as the Galvanic Pile that powers the Gantry. Before, a pile set beside it, as its tooltip says, made
+  Assemble answer that something blocks the space over the pad. The space straight over the pad must still be clear,
+  and so must the blocks beside it at the frame's head height: "The frame would stand with its head in the blocks beside the pad. Clear them up to its head height."
+- Client and server must both be on 0.5.1.
+
+<details><summary>What changed in 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.5.0
 
 - **The mecha line, rebuilt.** All eight frames and the three Utility Shells are fully animated, from the build on
@@ -2760,8 +2814,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   half under the ground; a renamed Head Satchel counts; a dud serum says it was a dud; `/headoffice status` speaks
   your language, and `/headoffice trust` says when nothing changed.
 - Client and server must both be on 0.5.0.
-
-<details><summary>What changed in 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.4.0
 

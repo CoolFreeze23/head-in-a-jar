@@ -1,0 +1,236 @@
+# Cost of a working Assembly Gantry against the frame it builds: eight Gantries ten blocks ahead building a Colossus
+# each (the arm at work, the frame playing its build), then the same eight Colossi standing on the pads drawn the
+# ordinary way (parkcache off: a mecha's own animated drawing, the arm held) and kept as parked (on), interleaved,
+# against the empty scene. Run alone (GAME_EXCLUSIVE=1).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+bystander spawn 0 -60 -14 0
+wait 200
+bench start empty1
+wait 200
+bench stop
+bench start empty2
+wait 200
+bench stop
+/setblock -11 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -8 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -5 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -2 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 1 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 4 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 7 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 10 -60 0 headinajar:assembly_gantry[facing=north]
+gantry -11 -60 0 colossus
+gantry -8 -60 0 colossus
+gantry -5 -60 0 colossus
+gantry -2 -60 0 colossus
+gantry 1 -60 0 colossus
+gantry 4 -60 0 colossus
+gantry 7 -60 0 colossus
+gantry 10 -60 0 colossus
+wait 40
+bystander tp -11 -60 -2 0
+wait 1
+bystander useblock -11 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -8 -60 -2 0
+wait 1
+bystander useblock -8 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -5 -60 -2 0
+wait 1
+bystander useblock -5 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -2 -60 -2 0
+wait 1
+bystander useblock -2 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 1 -60 -2 0
+wait 1
+bystander useblock 1 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 4 -60 -2 0
+wait 1
+bystander useblock 4 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 7 -60 -2 0
+wait 1
+bystander useblock 7 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 10 -60 -2 0
+wait 1
+bystander useblock 10 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 0 -60 -14 0
+wait 20
+bench start build1
+wait 200
+bench stop
+wait 140
+parkstats
+parkcache on
+wait 20
+bench start pad_on1
+wait 150
+bench stop
+parkcache off
+wait 20
+bench start pad_off1
+wait 150
+bench stop
+parkcache on
+wait 20
+bench start pad_on1
+wait 150
+bench stop
+parkcache off
+wait 20
+bench start pad_off1
+wait 150
+bench stop
+parkcache on
+/kill @e[type=headinajar:colossus]
+wait 20
+gantry -11 -60 0 colossus
+gantry -8 -60 0 colossus
+gantry -5 -60 0 colossus
+gantry -2 -60 0 colossus
+gantry 1 -60 0 colossus
+gantry 4 -60 0 colossus
+gantry 7 -60 0 colossus
+gantry 10 -60 0 colossus
+wait 40
+bystander tp -11 -60 -2 0
+wait 1
+bystander useblock -11 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -8 -60 -2 0
+wait 1
+bystander useblock -8 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -5 -60 -2 0
+wait 1
+bystander useblock -5 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -2 -60 -2 0
+wait 1
+bystander useblock -2 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 1 -60 -2 0
+wait 1
+bystander useblock 1 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 4 -60 -2 0
+wait 1
+bystander useblock 4 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 7 -60 -2 0
+wait 1
+bystander useblock 7 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 10 -60 -2 0
+wait 1
+bystander useblock 10 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 0 -60 -14 0
+wait 20
+bench start build2
+wait 200
+bench stop
+wait 140
+parkstats
+parkcache on
+wait 20
+bench start pad_on2
+wait 150
+bench stop
+parkcache off
+wait 20
+bench start pad_off2
+wait 150
+bench stop
+parkcache on
+wait 20
+bench start pad_on2
+wait 150
+bench stop
+parkcache off
+wait 20
+bench start pad_off2
+wait 150
+bench stop
+parkcache on
+/kill @e[type=headinajar:colossus]
+/setblock -11 -60 0 air
+/setblock -8 -60 0 air
+/setblock -5 -60 0 air
+/setblock -2 -60 0 air
+/setblock 1 -60 0 air
+/setblock 4 -60 0 air
+/setblock 7 -60 0 air
+/setblock 10 -60 0 air
+wait 60
+bench start empty3
+wait 200
+bench stop
+bench start empty4
+wait 200
+bench stop
+report reach bench 2 done

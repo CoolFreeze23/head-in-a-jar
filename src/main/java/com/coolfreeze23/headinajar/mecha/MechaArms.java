@@ -81,9 +81,15 @@ public final class MechaArms {
             }
             case GRAPPLE_HOOK -> {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
-                if (!pressed || s.cooldown > 0 || !m.spend(800)) return;
-                s.cooldown = 20;
+                if (!pressed || s.cooldown > 0) return;
                 Entity target = MechaLogic.lookEntity(pilot, m, 32);
+                // a player is yanked only if they trust the pilot (the lifts' rule)
+                if (target instanceof net.minecraft.world.entity.player.Player other && !Hopper.trusts(other, pilot)) {
+                    refuse(m, pilot, s, "mecha.lift.untrusted", other.getDisplayName());
+                    return;
+                }
+                if (!m.spend(800)) return;
+                s.cooldown = 20;
                 if (target != null) {
                     Vec3 pull = m.position().subtract(target.position()).normalize().scale(1.4);
                     target.setDeltaMovement(pull.add(0, 0.3, 0));
@@ -525,7 +531,10 @@ public final class MechaArms {
                     }
                 }
             }
-            if (target != null && !mayGrab(pilot, target)) {
+            if (target instanceof net.minecraft.world.entity.player.Player other && !Hopper.trusts(other, pilot)) {
+                refuse(m, pilot, s, "mecha.lift.untrusted", other.getDisplayName());
+                target = null;
+            } else if (target != null && !mayGrab(pilot, target)) {
                 refuse(m, pilot, s, "mecha.arm.beam_refused");
                 target = null;
             } else if (target == null) {
@@ -552,9 +561,9 @@ public final class MechaArms {
         m.setHeat(m.heat() + 3 * 0.05f);
     }
 
-    /** What the beam may pick up: not a player this pilot may not hurt, not someone's ride, not another person's mecha. */
+    /** What the beam may pick up: a player who trusts the pilot (said apart), not someone's ride, not another person's mecha. */
     private static boolean mayGrab(ServerPlayer pilot, Entity target) {
-        if (target instanceof net.minecraft.world.entity.player.Player other) return pilot.canHarmPlayer(other);
+        if (target instanceof net.minecraft.world.entity.player.Player other) return Hopper.trusts(other, pilot);
         if (target.hasPassenger(e -> e instanceof net.minecraft.world.entity.player.Player)) return false;
         return !(target instanceof MechaEntity other) || other.isOwnedBy(pilot);
     }

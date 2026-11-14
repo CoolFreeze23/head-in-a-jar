@@ -1,0 +1,129 @@
+# Wear, second take: the dents knocked out by a Gantry repair, and the limp from the side with nobody else in shot
+# (default profile, flat world). The stand-in builds a Hopper on an Assembly Gantry, strikes it three times from its
+# right, it is brought to a fifth of its health, and the stand-in presses Repair: the dents step down over the weld pass,
+# filmed at the front-right three-quarter. Then a Bulwark and a Hopper, struck from their left and brought to a fifth,
+# are piloted west by the real player and filmed from their left.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- the repair
+/tp @s 44 -60 -4 45 0
+wait 20
+/setblock 40 -60 0 headinajar:assembly_gantry[facing=north]
+bystander spawn 40 -60 -2 0
+wait 20
+gantry 40 -60 0 hopper hydraulic_legs
+bystander useblock 40 -60 0 north
+wait 3
+bystander button 1
+bystander close
+wait 240
+inspect near hopper 4
+bystander hold minecraft:iron_sword
+bystander tp 43 -60 1 90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:12f}
+bystander tp 40 -60 -2 0 0
+bystander hold minecraft:air
+wait 30
+dents
+/tp @s 43.5 -59.6 -2.5 45 10
+wait 3
+lookat headinajar:hopper 1.0
+wait 5
+shot repair_before
+bystander useblock 40 -60 0 north
+wait 5
+observe 80
+frames repair_dents 80
+wait 4
+bystander button 3
+wait 2
+bystander close
+wait 12
+dents
+wait 20
+dents
+wait 40
+observe 10
+dents
+shot repair_after
+bystander remove
+# --- the limp, a Bulwark (struck from its left)
+mecha bulwark 0 -60 0 hydraulic_legs
+mecha hopper 0 -60 -24 hydraulic_legs
+/tp @s 0.5 -60 6 180 0
+wait 20
+bystander spawn -3 -60 1 -90
+bystander hold minecraft:iron_sword
+wait 3
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander tp -3 -60 -23 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander remove
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:30f}
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:13f}
+wait 10
+dents
+jar
+charge 100000
+/tp @s 0.5 -60 4.5 180 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 80
+riding bulwark
+look 90 6
+wait 20
+watch follow 0 2.2 7.5 180 6
+wait 4
+report bulwark limp from its left, alone
+frames limp_bulwark_alone 90
+wait 2
+key forward hold 80
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 30
+/tp @s 0.5 -60 -19.5 180 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 80
+riding hopper
+look 90 6
+wait 20
+watch follow 0 1.8 5.5 180 6
+wait 4
+report hopper limp from its left, alone
+frames limp_hopper_alone 80
+wait 2
+key forward hold 70
+wait 10
+watch off
+dents

@@ -542,8 +542,10 @@ public class ReleaseFiveGameTests {
      */
     @GameTest(template = "platform", timeoutTicks = 160)
     public static void theLunkTossesAPlayerOnlyWithTheirTrust(GameTestHelper h) {
-        ServerPlayer p = player(h, FLOOR.west(3));
-        ServerPlayer q = player(h, FLOOR.south(2));
+        // named players: a team holds names, and every plain mock player has the same one (a team of two of them took in
+        // every mock player of every test running alongside)
+        ServerPlayer p = TestPlayers.at(h, "rider", FLOOR.west(3));
+        ServerPlayer q = TestPlayers.at(h, "mate", FLOOR.south(2));
         com.coolfreeze23.headinajar.entity.ShellEntity l = h.spawn(ModRegistry.LUNK.get(), FLOOR);
         l.setYRot(0);
         l.setYBodyRot(0);
@@ -572,7 +574,7 @@ public class ReleaseFiveGameTests {
                 "an untrusting player was picked up"));
         // teammates count as trusted
         h.runAfterDelay(40, () -> {
-            var team = board.addPlayerTeam("lunk_crew");
+            var team = board.addPlayerTeam("lunk_crew_" + q.getId());
             board.addPlayerToTeam(p.getScoreboardName(), team);
             board.addPlayerToTeam(q.getScoreboardName(), team);
             press.run();
@@ -582,7 +584,7 @@ public class ReleaseFiveGameTests {
         h.runAfterDelay(52, () -> h.assertValueEqual(l.tossHeldId(), q.getId(), "the teammate in the fists"));
         // and so does a player who trusts the rider
         h.runAfterDelay(100, () -> {
-            board.removePlayerTeam(board.getPlayerTeam("lunk_crew"));
+            board.removePlayerTeam(board.getPlayerTeam("lunk_crew_" + q.getId()));
             HeadRegistry.get(h.getLevel().getServer()).setTrust(q.getUUID(), p.getUUID(), true);
             press.run();
             h.assertTrue((l.tossAt() & 3) == com.coolfreeze23.headinajar.entity.ShellEntity.TOSS && l.tossAt() / 4 == start[0],

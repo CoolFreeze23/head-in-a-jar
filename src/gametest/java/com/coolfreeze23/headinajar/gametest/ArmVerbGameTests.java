@@ -315,6 +315,76 @@ public class ArmVerbGameTests {
     }
 
     /**
+     * The Tractor Beam and the Grapple Hook go by the one rule for handling a player: a player who has not trusted the
+     * pilot is neither held nor yanked, and the pilot hears the handling line; once that player shares the pilot's team
+     * (nothing on their trust list), the beam holds them and the hook yanks them toward the machine.
+     */
+    @GameTest(template = "platform", timeoutTicks = 120)
+    public static void theBeamAndTheHookTakeAPlayerOnlyWithTheirTrust(GameTestHelper h) {
+        // named players: a team holds names, and every plain mock player has the same one
+        ServerPlayer p = TestPlayers.at(h, "pilot", FLOOR);
+        MechaEntity m = mecha(h, MechaFrame.HOPPER, FLOOR.east(3), p.getUUID(), MechaModule.HYDRAULIC_LEGS, MechaModule.TRACTOR_BEAM,
+                MechaModule.GRAPPLE_HOOK);
+        board(h, p, m);
+        h.assertTrue(m.arm(0) == MechaModule.TRACTOR_BEAM && m.arm(1) == MechaModule.GRAPPLE_HOOK, "the arms are not beam left, hook right");
+        BlockPos stand = FLOOR.east(3).south(5);
+        ServerPlayer q = TestPlayers.at(h, "mate", stand);
+        var board = h.getLevel().getScoreboard();
+        String name = "arm_crew_" + q.getId();
+        Runnable aim = () -> {
+            Vec3 v = h.absoluteVec(Vec3.atBottomCenterOf(stand));
+            q.teleportTo(v.x, v.y, v.z);
+            q.setDeltaMovement(Vec3.ZERO);
+            p.lookAt(EntityAnchorArgument.Anchor.EYES, q.getBoundingBox().getCenter());
+        };
+        int[] battery = new int[1];
+        // a stranger: the beam takes nothing
+        h.runAfterDelay(2, () -> {
+            aim.run();
+            Network.arms(p, 1);
+        });
+        h.runAfterDelay(5, () -> {
+            h.assertTrue(m.beamHeld(0) == -1, "the beam holds a player who has not trusted the pilot");
+            h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "mecha.lift.untrusted", "the beam's answer");
+            Network.arms(p, 0);
+        });
+        // nor does the hook, and the throw costs nothing
+        h.runAfterDelay(20, () -> {
+            aim.run();
+            battery[0] = m.battery();
+            Network.arms(p, 2);
+        });
+        h.runAfterDelay(23, () -> {
+            h.assertTrue(q.getDeltaMovement().lengthSqr() < 0.01, "the hook yanked a player who has not trusted the pilot: " + q.getDeltaMovement());
+            h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "mecha.lift.untrusted", "the hook's answer");
+            h.assertTrue(battery[0] - m.battery() < 800, "a refused throw was paid for");
+            Network.arms(p, 0);
+            var team = board.addPlayerTeam(name);
+            board.addPlayerToTeam(p.getScoreboardName(), team);
+            board.addPlayerToTeam(q.getScoreboardName(), team);
+        });
+        // a teammate: held by the beam, then yanked by the hook
+        h.runAfterDelay(26, () -> {
+            aim.run();
+            Network.arms(p, 1);
+        });
+        h.runAfterDelay(29, () -> {
+            h.assertTrue(m.beamHeld(0) == q.getId(), "the beam did not take a teammate: " + com.coolfreeze23.headinajar.feedback.Refusals.delivered(p));
+            Network.arms(p, 0);
+        });
+        h.runAfterDelay(32, () -> {
+            aim.run();
+            Network.arms(p, 2);
+        });
+        h.runAfterDelay(35, () -> {
+            h.assertTrue(q.getDeltaMovement().z < -0.5, "the hook did not yank a teammate toward the machine: " + q.getDeltaMovement());
+            Network.arms(p, 0);
+            board.removePlayerTeam(board.getPlayerTeam(name));
+            done(h, p, q);
+        });
+    }
+
+    /**
      * Each arm tool is worked with the verb of its kind; held, the frame plays that verb's clip (a lance and a
      * flamethrower are held braced, not kicked); a blow landing on a raised Riot Shield jolts the arm back.
      */
@@ -368,7 +438,8 @@ public class ArmVerbGameTests {
             double t = now(h) + 200;
             h.assertValueEqual(clip(HopperAnimation.main(m, v, t)), "walk", "a sound machine's walk");
             m.setHealth(m.getMaxHealth() * 0.2f);
-            h.assertValueEqual(clip(HopperAnimation.main(m, v, t)), "limp", "a machine at a fifth of its health");
+            // never struck from either side: the left leg drags (the side the clips are authored for)
+            h.assertValueEqual(clip(HopperAnimation.main(m, v, t)), "limp_l", "a machine at a fifth of its health");
             done(h, p);
         });
     }

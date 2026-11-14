@@ -29,8 +29,6 @@ REFUSALS = {
     'mecha.talon.too_heavy': ('%s is over the airmail limit. Try something sheep-sized.',
                               '%s passa do limite aéreo. Tente algo do porte de uma ovelha.'),
     'mecha.talon.boss': ('%s is not airmail. Find another parcel.', '%s não é correio aéreo. Procure outra encomenda.'),
-    'mecha.talon.untrusted': ('%s has not authorised handling. Ask them to trust you.',
-                              '%s não autorizou o manuseio. Peça que confie em você.'),
     'mecha.talon.exempt': ('%s is exempt from handling. Find another parcel.', '%s está isento de manuseio. Procure outra encomenda.'),
     'mecha.talon.occupied': ('%s is riding or ridden. Unload it first.', '%s está montado ou com carona. Desembarque antes.'),
     'mecha.talon.no_power': ('Not enough charge to grab. Recharge at the %s.', 'Carga insuficiente para agarrar. Recarregue no %s.'),

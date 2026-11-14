@@ -31,6 +31,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'hopper'))
 import bulwark_geo as G  # noqa: E402
 import hopper_anim as HA  # noqa: E402  (helpers and the shared arm-verb tables)
 from hopper_anim import k, R, P, S, lamp, const, value_at, thin, keyframe, bake, mirror_keys, side_clip, snd, nid  # noqa
+from hopper_anim import level_hip, mirror_clip  # noqa: E402
 
 MODEL = os.path.join(HERE, 'bulwark.bbmodel')
 T = 20.0
@@ -61,6 +62,7 @@ def solve_legs(clip):
     hrot = sorted(hips.get('rotation', [k(0, R())]), key=lambda x: x[0])
     rel = clip.get('feet_rel', False)
     splay = clip.get('splay')        # optional {'l': keys, 'r': keys}: each leg rolled out by that many degrees
+    level = clip.get('level_legs')   # the legs counter-rolled under rolling hips (hopper_anim.level_hip)
     out = {s: {'leg': [], 'shin': [], 'foot': [], 'roll': []} for s in 'lr'}
     for t in range(0, int(until) + 1):
         hp = value_at(hpos, t)
@@ -74,13 +76,21 @@ def solve_legs(clip):
                 sg = value_at(sorted(splay[s], key=lambda x: x[0]), t)[0]
                 ank = (ank[0], hip[1] + (ank[1] - hip[1]) / math.cos(math.radians(sg)))
                 out[s]['roll'].append((t, sg if s == 'r' else -sg))
-            t1, t2 = G.ik(hip, ank)
+            if level:
+                ank, hip_s, roll = level_hip(hip, ank, s, value_at(hrot, t)[2], rel, G)
+                out[s]['roll'].append((t, -roll))
+                t1, t2 = G.ik(hip_s, ank)
+            else:
+                t1, t2 = G.ik(hip, ank)
             out[s]['leg'].append((t, t1 - pitch - G.REST_THIGH))
             out[s]['shin'].append((t, t2 - t1 - G.REST_SHIN))
             out[s]['foot'].append((t, ang - t2 - G.REST_FOOT))
     loop = clip.get('loop') == 'loop'
     for s in 'lr':
         for part in ('leg', 'shin', 'foot'):
+            if level and part == 'leg':
+                clip['bones'].setdefault('leg_' + s, {})['rotation'] = HA.level_keys(out[s]['leg'], out[s]['roll'], loop)
+                continue
             if splay and part == 'leg':
                 xs, zs = dict(out[s]['leg']), dict(out[s]['roll'])
                 ts = sorted(set(t for t, _ in thin(out[s]['leg'], loop)) | set(t for t, _ in thin(out[s]['roll'], loop)))
@@ -445,16 +455,18 @@ def check_legs(name, clip):
         return []
     hips = clip['bones'].get('hips', {})
     hpos = sorted(hips.get('position', [k(0, P())]), key=lambda x: x[0])
+    hrot = sorted(hips.get('rotation', [k(0, R())]), key=lambda x: x[0])
     bad, worst = [], (90.0, 99.0)
     for t in range(0, int(clip.get('ik_until', clip['length'])) + 1):
         hp = value_at(hpos, t)
-        hip = (hp[2], G.HIP_Y + hp[1])
+        hip0 = (hp[2], G.HIP_Y + hp[1])
         for side in 'lr':
             z, y, ang = feet(side, t) if callable(feet) else value_at(sorted(feet[side], key=lambda x: x[0]), t)
             if clip.get('feet_rel'):
                 continue
             if contact_of(z, y, ang) > 0.3:
                 continue
+            hip = level_hip(hip0, (z, y), side, value_at(hrot, t)[2], False, G)[1] if clip.get('level_legs') else hip0
             t1, t2 = G.ik(hip, (z, y))
             a1 = math.radians(t1)
             kz, ky = hip[0] - G.THIGH * math.sin(a1), hip[1] - G.THIGH * math.cos(a1)
@@ -572,6 +584,65 @@ def limp():
             }, **lamps([(0, 0)], [(0, 1)])),
             'effects': [(0, 'timeline', 'step:l_drag', None), (16, 'timeline', 'step:r_%s' % STEP, None),
                         (22, 'sound', snd('servo_catch', 0.5, 0.7), None)]}
+
+
+# ---- the damage limp: limp_l and limp_r (the shared gait, art/mecha/hopper/hopper_anim.py, on the heavy legs) --------
+# On walk_c's cycle at the walk's speed. The good boot steps as in walk_c (the same heel strike, stance and toe-off),
+# its toe-off falling on the bad boot's landing; the bad boot is down one tick longer than the good one's swing, then
+# dragged. The hips ride 1.5 px (times the scale) under walk_c's height: the legs stay in reach (walk_c is at 0.99 of
+# their length) and the leg check holds (a lower hip lays the shin down at toe-off). They roll 5 degrees onto the bad
+# leg; no surge (it would carry the boots past their reach at plant and toe-off).
+LIMP_HEAVY = dict(HA.LIMP_GAIT, list=1.5, crouch=2.0, dip_bad=2.6, dip_good=1.2, vault=0.6, hike=0.6, hitch=1.4, lag=2,
+                  surge=0.0, fwd_bad=-1.0, arm_hang=-10.0, arm_in=2.0, arm_bad=2.0, arm_good=1.2)
+
+
+def limp_l():
+    """The damage limp, left boot dragging (limp_r is its mirror). Lamps and sensor as in walk_c (powered)."""
+    W = F['walk_c']
+    n, v, sc = W['n'], V_WALK, SC
+    pg = n - W['stance']
+    g = dict(LIMP_HEAVY, pg=pg, sg=W['stance'], sb=pg + 1, ho=int(0.55 * (pg + 1) + 0.5))
+    z0b = REST_FOOT_T[0] - v * g['sb'] / 2.0 - g['fwd_bad'] * sc
+    drag = math.degrees(math.asin(min(0.9, g['drag_lift'] * sc / TOE)))
+    gf = dict(st=W['stance'], hs=W['hs'], flat=W['flat'], ho=W['ho'], to=W['to'], lift=W['lift'], toe=TOE, heel=HEEL,
+              ankle_h=G.ANKLE_H)
+
+    def feet(side, t):
+        if side == 'l':
+            return HA.drag_foot(t, n, v, z0b, g['sb'], g['ho'], drag, g['clear'] * sc, g['late'], TOE, G.ANKLE_H)
+        return HA.step_foot(t - pg, n, v, W['plant_z'], **gf)
+    m = HA.limp_motion(n, g, sc)
+    w = m['warp']
+    c = lambda t, ph: math.cos(2 * math.pi * (w(t) - ph) / n)
+    ticks = range(0, n + 1)
+    r3 = lambda x: round(x, 3)
+    a, f = W['arm'], W['fore']
+    bones = {
+        'hips': {'position': [k(t, P(y=r3(W['h_up'] + m['hy'](t)), z=r3(m['surge'](t)))) for t in ticks],
+                 'rotation': [k(t, R(z=r3(m['roll'](t)))) for t in ticks]},
+        'torso': {'rotation': [k(t, R(x=r3(1.5 * W['lean'] + W['torso_bob'] * (m['hy'](t - g['lag']) / sc + g['crouch'])),
+                                      z=r3(m['torso_roll'](t)))) for t in ticks]},
+        'clamp_l': {'rotation': [k(t, R(z={W['clamp_tick']: 1.6 * W['clamp'], pg + W['clamp_tick']: W['clamp']}.get(t, 0)))
+                                 for t in ticks]},
+    }
+    dangle = lambda t: -0.6 * m['torso_world'](t - 1)
+    if W.get('arm_hold'):
+        # the hands held behind the back: the bad one sags 10 degrees in the clasp, the good one keeps the walk's
+        (ax, az), fx = W['arm_hold'], W['fore_hold']
+        bones['arm_l'] = {'rotation': [k(t, R(x=r3(ax - 0.3 * a * c(t, W['arm_ph'] + 1)),
+                                              z=r3(az + g['arm_hang'] + dangle(t)))) for t in ticks]}
+        bones['forearm_l'] = {'rotation': [k(t, R(x=r3(fx - 0.3 * f * c(t, W['fore_ph'] + 1)))) for t in ticks]}
+        bones['arm_r'] = {'rotation': [k(t, R(x=r3(ax + a * c(t, W['arm_ph'])), z=-az)) for t in ticks]}
+        bones['forearm_r'] = {'rotation': [k(t, R(x=r3(fx + f * c(t, W['fore_ph'])))) for t in ticks]}
+    else:
+        bones['arm_l'] = {'rotation': [k(t, R(x=r3(g['arm_hang'] - g['arm_bad'] * c(t, W['arm_ph'] + 1)),
+                                              z=r3(g['arm_in'] + dangle(t)))) for t in ticks]}
+        bones['forearm_l'] = {'rotation': [k(t, R(x=r3(-3 - 0.4 * f * c(t, W['fore_ph'] + 1)))) for t in ticks]}
+        bones['arm_r'] = {'rotation': [k(t, R(x=r3(g['arm_good'] * a * c(t, W['arm_ph'])))) for t in ticks]}
+        bones['forearm_r'] = {'rotation': [k(t, R(x=r3(f * c(t, W['fore_ph'])))) for t in ticks]}
+    return {'length': n, 'loop': 'loop', 'feet': feet, 'native': True, 'level_legs': True, 'bones': bones,
+            'effects': [(0, 'timeline', 'step:l_drag', None), (3, 'sound', snd('servo_catch', 0.5, 0.7), None),
+                        (pg, 'timeline', 'step:r_%s' % STEP, None)]}
 
 
 def turn(direction):
@@ -963,7 +1034,7 @@ def clips():
     out = [('parked', parked()), ('board', board()), ('boot', boot()), ('boot_legs', boot_legs()), ('shutdown', shutdown()),
            ('idle', idle()), ('idle_tic', idle_tic()), ('walk', walk()), ('carry_walk', walk(carry=True)), ('walk_b', walk_b()),
            ('carry_walk_b', walk_b(carry=True)), ('walk_c', walk_c()), ('carry_walk_c', walk_c(carry=True)),
-           ('limp', limp()),
+           ('limp', limp()), ('limp_l', limp_l()), ('limp_r', mirror_clip(limp_l(), F['walk_c']['n'] // 2)),
            ('turn_l', turn('l')), ('turn_r', turn('r')), ('jump', jump()), ('fall', fall()), ('land', land(False)),
            ('land_heavy', land(True)), ('grab', grab()), ('hold', hold()), ('throw', throw()), ('grab_refused', grab_refused())]
     if MODEL == BULWARK_FRAME['model']:
@@ -1000,6 +1071,8 @@ def build_anims(model, baked=False):
         if clip.get('feet') is not None and any(w in name for w in ('walk', 'limp', 'turn')):
             bad, worst = check_legs(name, clip)
             CHECKED[name] = (bad, worst)
+        if clip.get('level_legs'):
+            HA.check_reach(name, clip, G)
         solve_legs(clip)
         vents_to_z(clip)
         animators = {}

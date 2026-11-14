@@ -209,7 +209,7 @@ public final class MechaRig {
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "restraint", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso"},
             Set.of("lamp_core", "lamp_l", "lamp_r", "lamp_sensor"), 0.75, 0.9,
             new Object[][]{{1, "bar_unlatch", 1f}, {6, "servo", 1.1f}, {18, "bar_latch", 1f}}, false,
-            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 20, idle 60L, walk 12L, limp 24L, turn_l 12L, turn_r 12L, jump 10,"
+            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 20, idle 60L, walk 12L, limp 24L, limp_l 12L, limp_r 12L, turn_l 12L, turn_r 12L, jump 10,"
                     + " fall 16L, land 12, land_heavy 20, pogo_crouch 30, pogo_hold 10L, pogo_leap 12, pogo_land 24, vent 100, hurt 8, eject 30,"
                     + " destroyed 40, build 200, idle_tic 20, dry_fire_l 18, dry_fire_r 18",
             new Object[][]{
@@ -228,7 +228,7 @@ public final class MechaRig {
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor"},
             Set.of("lamp_core", "lamp_tail"), 1.3, 2.6,
             new Object[][]{{1, "clamp_release", 1f}, {6, "servo", 1f}, {18, "clamp_close", 1f}}, true,
-            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 24, idle 60L, idle_tic 40, walk_c 16L, limp 32L, turn_l 16L,"
+            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 24, idle 60L, idle_tic 40, walk_c 16L, limp 32L, limp_l 16L, limp_r 16L, turn_l 16L,"
                     + " turn_r 16L, jump 12, fall 16L, land 16, land_heavy 24, grab_high 24, hold_high 40L, carry_walk_high 16L, throw_high 19,"
                     + " grab_refused 26, vent 100, hurt 10, eject 30, destroyed 40, build 200, dry_fire_l 18, dry_fire_r 18",
             new Object[][]{
@@ -250,7 +250,7 @@ public final class MechaRig {
                     "shin_l", "shin_r", "socket_arm_2", "socket_arm_3"},
             Set.of("lamp_core", "lamp_tail"), 1.4, 1.8,
             new Object[][]{{1, "clamp_release", 1f}, {6, "servo", 1f}, {18, "clamp_close", 1f}}, true,
-            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 24, idle 60L, idle_tic 48, walk_c 26L, limp 32L, turn_l 16L, turn_r 16L,"
+            "parked 80L, board 22, boot 40, boot_legs 40, shutdown 24, idle 60L, idle_tic 48, walk_c 26L, limp 32L, limp_l 26L, limp_r 26L, turn_l 16L, turn_r 16L,"
                     + " jump 12, fall 16L, land 16, land_heavy 24, dry_fire_l 18, dry_fire_r 18, vent 100, hurt 10, eject 30, destroyed 40,"
                     + " build 320, siege_in 40, siege 60L, siege_out 40, siege_refused 26",
             new Object[][]{
@@ -274,7 +274,7 @@ public final class MechaRig {
                     "gene_port_0", "gene_port_1", "gene_port_2", "gene_port_3"},
             Set.of("lamp_core", "lamp_tail"), 1.2, 1.8,
             new Object[][]{{1, "clamp_release", 1f}, {6, "servo", 1f}, {18, "clamp_close", 1f}}, true,
-            "parked 80L, board 22, boot 42, boot_legs 40, shutdown 24, idle 60L, idle_tic 30, walk_c 22L, limp 32L, turn_l 16L, turn_r 16L,"
+            "parked 80L, board 22, boot 42, boot_legs 40, shutdown 24, idle 60L, idle_tic 30, walk_c 22L, limp 32L, limp_l 22L, limp_r 22L, turn_l 16L, turn_r 16L,"
                     + " jump 12, fall 16L, land 16, land_heavy 24, dry_fire_l 18, dry_fire_r 18, vent 100, hurt 10, eject 30, destroyed 40,"
                     + " build 240, drive_jingle 30",
             new Object[][]{
@@ -347,7 +347,7 @@ public final class MechaRig {
                     "growth", "gene_port_0", "gene_port_1", "gene_port_2", "shin_l", "shin_r"},
             Set.of("lamp_core", "lamp_l", "lamp_r", "lamp_sensor"), 0.8, 0.7,
             new Object[][]{{1, "bar_unlatch", 1f}, {6, "servo", 1.1f}, {18, "bar_latch", 1f}}, true,
-            "parked 80L, board 22, boot 42, boot_legs 40, shutdown 20, idle 60L, idle_tic 30, idle_tic_r 30, walk 14L, limp 24L, turn_l 12L,"
+            "parked 80L, board 22, boot 42, boot_legs 40, shutdown 20, idle 60L, idle_tic 30, idle_tic_r 30, walk 14L, limp 24L, limp_l 14L, limp_r 14L, turn_l 12L,"
                     + " turn_r 12L, jump 10, fall 16L, land 12, land_heavy 20, vent 100, hurt 8, eject 30, destroyed 40, build 220,"
                     + " dry_fire_l 18, dry_fire_r 18, graft_l 40, graft_r 40, graft_refused 26",
             new Object[][]{
@@ -427,7 +427,7 @@ public final class MechaRig {
             new Object[][]{{1, "floor_release", 1f}, {7, "cable_winch", 1f}, {20, "floor_latch", 1f}}, true,
             "parked 80L, board 22, boot 40, boot_legs 30, shutdown 20, idle 60L, idle_tic 36, walk 16L, turn_l 16L, turn_r 16L,"
                     + " takeoff 16, flap 16L, hover 12L, glide 40L, bank_l 8, bank_r 8, flare 14, land 18, land_heavy 22, stall 34,"
-                    + " stall_loop 16L, fall 16L, talon_grab 16, talon_carry 20L, talon_drop 12, talon_refused 30, hurt 10, limp 24L,"
+                    + " stall_loop 16L, fall 16L, talon_grab 16, talon_carry 20L, talon_drop 12, talon_refused 30, hurt 10, limp 24L, limp_l 16L, limp_r 16L,"
                     + " vent 100, eject 30, destroyed 40, build 200, dry_fire_l 18, dry_fire_r 18",
             new Object[][]{
                     {"fx_step_l", "foot_l", -12.5, -3.0, -2.0}, {"fx_step_r", "foot_r", 12.5, -3.0, -2.0},

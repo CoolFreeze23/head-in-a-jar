@@ -66,6 +66,11 @@ public class HopperRenderer extends GeoEntityRenderer<MechaEntity> {
         // the first version's glow, the whole model again through the glow mask: only when LEAN is off
         addRenderLayer(new AutoGlowingGeoLayer<>(this) {
             @Override
+            protected ResourceLocation getTextureResource(MechaEntity m) {
+                return MODELS.get(m.frame()).sheet();
+            }
+
+            @Override
             public void render(PoseStack pose, MechaEntity m, BakedGeoModel model, RenderType type, MultiBufferSource buffers, VertexConsumer buffer,
                                float partialTick, int light, int overlay) {
                 if (!LEAN) super.render(pose, m, model, type, buffers, buffer, partialTick, light, overlay);
@@ -85,6 +90,16 @@ public class HopperRenderer extends GeoEntityRenderer<MechaEntity> {
 
     @Override
     public void render(MechaEntity entity, float entityYaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+        // the time spent here is counted for the harness's figures (ParkedDraw.timing)
+        long start = System.nanoTime();
+        try {
+            draw(entity, entityYaw, partialTick, pose, buffers, light);
+        } finally {
+            ParkedDraw.spent(System.nanoTime() - start);
+        }
+    }
+
+    private void draw(MechaEntity entity, float entityYaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
         // a parked machine is drawn from what was kept of it when it parked (ParkedDraw); only its name tag and lead here
         MultiBufferSource source = ParkedDraw.begin(this, entity, partialTick, pose, buffers, light);
         if (source == null) {
@@ -295,8 +310,14 @@ public class HopperRenderer extends GeoEntityRenderer<MechaEntity> {
             return geo;
         }
 
+        /** The frame's sheet, dented on the sides it was hit from as badly as it is damaged ({@link MechaDents}). */
         @Override
         public ResourceLocation getTextureResource(MechaEntity animatable) {
+            return animatable == null ? texture : MechaDents.sheet(animatable, texture);
+        }
+
+        /** The frame's own sheet, undented: what its glow mask belongs to. */
+        ResourceLocation sheet() {
             return texture;
         }
 
@@ -503,7 +524,8 @@ public class HopperRenderer extends GeoEntityRenderer<MechaEntity> {
             else if (name.equals("jar_anchor")) jar(pose, m, bone, buffers, partialTick, light);
             else if (LEAN && !m.view.still && com.coolfreeze23.headinajar.mecha.MechaRig.of(m.frame()).lamps.contains(name) && bone.getScaleY() > 0.01f && !bone.isHidden()) {
                 // the lit cap again through the glow mask (the first version drew the whole model a second time for this)
-                RenderType glow = AutoGlowingTexture.getRenderType(getTextureResource(m));
+                // the glow mask belongs to the frame's own sheet (a dented one is made from it and has none)
+                RenderType glow = AutoGlowingTexture.getRenderType(MODELS.get(m.frame()).sheet());
                 getRenderer().renderCubesOfBone(pose, bone, buffers.getBuffer(glow), 0xF000F0, overlay, 0xFFFFFFFF);
             }
         }

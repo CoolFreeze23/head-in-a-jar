@@ -243,4 +243,71 @@ public class ParkedDrawGameTests {
         h.assertFalse(busy.resting(at + ParkedLook.Schedule.REST), "it rests for ever");
         h.succeed();
     }
+
+    @GameTest(template = "platform", timeoutTicks = 60)
+    public static void aLookKeptUnderOneShaderPackIsANewLookUnderAnother(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR);
+        MechaEntity m = mecha(h, MechaFrame.HOPPER, FLOOR.east(3), p.getUUID(), MechaModule.HYDRAULIC_LEGS);
+        h.runAfterDelay(5, () -> {
+            int light = ParkedLook.light(m);
+            ParkedLook.Key none = ParkedLook.key(m, light, 0, m.yBodyRot, 0, 0, 0);
+            ParkedLook.Key bsl = ParkedLook.key(m, light, 0, m.yBodyRot, 0, 0, 0, "BSLClassic_v10.0.zip");
+            ParkedLook.Key complementary = ParkedLook.key(m, light, 0, m.yBodyRot, 0, 0, 0, "ComplementaryReimagined_r5.5.1.zip");
+            h.assertTrue(none.matches(ParkedLook.key(m, light, 0, m.yBodyRot, 0, 0, 0, null)), "the same look without a pack does not match itself");
+            h.assertTrue(bsl.matches(ParkedLook.key(m, light, 0, m.yBodyRot, 0, 0, 0, "BSLClassic_v10.0.zip")), "the same look under BSL does not match itself");
+            h.assertFalse(bsl.matches(none), "a look kept without a shader pack is used under BSL (the pack's vertices are longer)");
+            h.assertFalse(complementary.matches(bsl), "a look kept under BSL is used under Complementary (another pack's entity ids)");
+            h.assertTrue("shader pack".equals(bsl.differs(none)), "the change of pack is reported as " + bsl.differs(none));
+            done(h, p);
+        });
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 20)
+    public static void onlyTheIrisAndShaderPacksItWasCheckedWithKeepParkedMachines(GameTestHelper h) {
+        h.assertTrue(ParkedLook.ShaderPacks.knownIris("1.8.12-snapshot+mc1.21.1-local"), "the Iris jar of the pack (1.8.12) is not known");
+        h.assertTrue(ParkedLook.ShaderPacks.knownIris("1.8.12+mc1.21.1"), "Iris 1.8.12 as Modrinth names it is not known");
+        for (String v : new String[]{"1.8.11+mc1.21.1", "1.8.13", "1.8.1", "1.8.120", "1.9.0", "", null})
+            h.assertFalse(ParkedLook.ShaderPacks.knownIris(v), "Iris " + v + " counts as checked");
+        h.assertTrue(ParkedLook.ShaderPacks.knownPack("BSLClassic_v10.0.zip"), "BSL is not known");
+        h.assertTrue(ParkedLook.ShaderPacks.knownPack("ComplementaryReimagined_r5.5.1.zip"), "Complementary is not known");
+        for (String pack : new String[]{"BSLClassic_v8.4.01.2.zip", "ComplementaryReimagined_r5.4.zip", "BSLClassic_v10.0", "bslclassic_v10.0.zip",
+                "Sildur's Enhanced Default v1.171 Fast.zip", "(internal)", "", null})
+            h.assertFalse(ParkedLook.ShaderPacks.knownPack(pack), "the pack " + pack + " counts as checked");
+        h.succeed();
+    }
+
+    @GameTest(template = "platform", timeoutTicks = 20)
+    public static void aCheckComparesEveryByteAShaderPackAddsToAVertex(GameTestHelper h) {
+        // two quads' worth of vertices in Iris's entity layout: the game's 36 bytes, then the entity ids, the middle of the
+        // texture and the tangent (54 bytes a vertex)
+        int size = 54;
+        java.nio.ByteBuffer a = java.nio.ByteBuffer.allocate(size * 8).order(java.nio.ByteOrder.nativeOrder());
+        java.util.Random r = new java.util.Random(7);
+        for (int v = 0; v < 8; v++) {
+            for (int c = 0; c < 3; c++) a.putFloat(v * size + 4 * c, r.nextFloat() * 4 - 2);
+            for (int b = 12; b < size; b++) a.put(v * size + b, (byte) r.nextInt(256));
+        }
+        a.putFloat(5 * size, 0.5f);
+        long kept = ParkedLook.hash(a.duplicate().order(a.order()), size);
+        java.util.function.Function<java.util.function.Consumer<java.nio.ByteBuffer>, Long> changed = change -> {
+            java.nio.ByteBuffer b = java.nio.ByteBuffer.allocate(a.capacity()).order(a.order());
+            b.put(a.duplicate().order(a.order())).flip();
+            change.accept(b);
+            return ParkedLook.hash(b, size);
+        };
+        h.assertTrue(changed.apply(b -> { }) == kept, "the same vertices hash differently");
+        h.assertTrue(changed.apply(b -> b.put(3 * size + 35, (byte) 99)) == kept, "the padding byte (never written) counts");
+        h.assertTrue(changed.apply(b -> b.putFloat(5 * size, b.getFloat(5 * size) + 2e-6f)) == kept, "a millionth of a block counts");
+        h.assertFalse(changed.apply(b -> b.putShort(2 * size + 36, (short) 10101)) == kept, "another entity id is not seen");
+        h.assertFalse(changed.apply(b -> b.putFloat(6 * size + 42, 0.25f)) == kept, "another middle of the texture is not seen");
+        h.assertFalse(changed.apply(b -> b.put(7 * size + 52, (byte) (b.get(7 * size + 52) + 1))) == kept, "another tangent is not seen");
+        h.assertFalse(changed.apply(b -> b.put(size + 33, (byte) (b.get(size + 33) + 1))) == kept, "another normal is not seen");
+        // the game's own layout: what was compared before shader packs (nothing after the 36th byte is read)
+        java.nio.ByteBuffer game = java.nio.ByteBuffer.allocate(36 * 4).order(a.order());
+        for (int v = 0; v < 4; v++) for (int b = 0; b < 36; b++) game.put(v * 36 + b, a.get(v * size + b));
+        long gameHash = ParkedLook.hash(game.duplicate().order(a.order()), 36);
+        game.put(35, (byte) 1);
+        h.assertTrue(ParkedLook.hash(game.duplicate().order(a.order()), 36) == gameHash, "the game's padding byte counts");
+        h.succeed();
+    }
 }

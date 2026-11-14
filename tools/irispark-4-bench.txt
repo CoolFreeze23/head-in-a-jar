@@ -1,0 +1,410 @@
+# The cost of parked machines on the render thread: as park-2-bench (eight parked machines of each frame, drawn the
+# ordinary way and from kept geometry, interleaved), with the time the renderer spends on them each frame (parktime) for
+# each window, which a frame time bound by the graphics card (a shader pack) does not show.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+parktime
+bench start empty1
+wait 200
+bench stop
+parktime
+parktime
+bench start empty2
+wait 200
+bench stop
+parktime
+mecha hopper -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha hopper 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_hopper_off
+parkcache on
+wait 10
+shot bench_hopper_on
+parkcache off
+wait 20
+parktime
+bench start hopper_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start hopper_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start hopper_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start hopper_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:hopper]
+wait 20
+mecha bulwark -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_bulwark_off
+parkcache on
+wait 10
+shot bench_bulwark_on
+parkcache off
+wait 20
+parktime
+bench start bulwark_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start bulwark_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start bulwark_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start bulwark_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:bulwark]
+wait 20
+mecha colossus -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_colossus_off
+parkcache on
+wait 10
+shot bench_colossus_on
+parkcache off
+wait 20
+parktime
+bench start colossus_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start colossus_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start colossus_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start colossus_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:colossus]
+wait 20
+mecha executive -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_executive_off
+parkcache on
+wait 10
+shot bench_executive_on
+parkcache off
+wait 20
+parktime
+bench start executive_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start executive_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start executive_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start executive_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:executive]
+wait 20
+mecha wheelhouse -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_wheelhouse_off
+parkcache on
+wait 10
+shot bench_wheelhouse_on
+parkcache off
+wait 20
+parktime
+bench start wheelhouse_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start wheelhouse_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start wheelhouse_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start wheelhouse_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:wheelhouse]
+wait 20
+mecha skitter -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_skitter_off
+parkcache on
+wait 10
+shot bench_skitter_on
+parkcache off
+wait 20
+parktime
+bench start skitter_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start skitter_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start skitter_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start skitter_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:skitter]
+wait 20
+mecha kite -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_kite_off
+parkcache on
+wait 10
+shot bench_kite_on
+parkcache off
+wait 20
+parktime
+bench start kite_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start kite_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start kite_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start kite_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:kite]
+wait 20
+mecha chimera -11 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera -8 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera -5 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera -2 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 1 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 4 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 7 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 10 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+wait 100
+parkstats
+parkcache off
+wait 10
+shot bench_chimera_off
+parkcache on
+wait 10
+shot bench_chimera_on
+parkcache off
+wait 20
+parktime
+bench start chimera_off1
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start chimera_on1
+wait 200
+bench stop
+parktime
+parkcache off
+wait 20
+parktime
+bench start chimera_off2
+wait 200
+bench stop
+parktime
+parkcache on
+wait 20
+parktime
+bench start chimera_on2
+wait 200
+bench stop
+parktime
+parkstats
+/kill @e[type=headinajar:chimera]
+wait 20
+parktime
+bench start empty3
+wait 200
+bench stop
+parktime
+parktime
+bench start empty4
+wait 200
+bench stop
+parktime
+parkstats

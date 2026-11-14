@@ -1,0 +1,279 @@
+# Wear: dents by the side hit most, the damaged limp, and the dents knocked out by a Gantry repair, seen from outside
+# (default profile, flat world). A Hopper (z 0) and a Bulwark (z 8) parked facing north, so their left is west. A
+# stand-in player strikes each from its left with a sword; each is then brought below a stage's health and struck once
+# more. Close stills of each from its left (the dented side) at every stage, from its right at the last; a film of one
+# blow. Then the real player pilots each at a fifth of its health and walks it west, filmed from its left; last, the
+# stand-in builds a Hopper on an Assembly Gantry, strikes it from its right, and presses Repair: the dents go over the
+# weld pass, filmed at the front-right three-quarter.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper 0 -60 0 hydraulic_legs
+mecha bulwark 0 -60 8 hydraulic_legs
+wait 20
+bystander spawn -3 -60 1 -90
+bystander hold minecraft:iron_sword
+# --- three blows on each machine's left
+bystander tp -3 -60 1 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander tp -3 -60 9 -90 0
+wait 3
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander tp 20 -60 30 0 0
+wait 10
+dents
+# --- stage 0: struck, still above three quarters
+/tp @s -3.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s0_left
+/tp @s -4.2 -60 8.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s0_left
+/tp @s 4.0 -60 0.5 90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s0_right
+/tp @s 5.2 -60 8.5 90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s0_right
+/tp @s -3.0 -60 -3.0 -135 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s0_3q
+/tp @s -3.8 -60 4.6 -135 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s0_3q
+# --- stage 1
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:49.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:113.0f}
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:48.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:112.0f}
+bystander tp -3 -60 9 -90 0
+wait 3
+bystander attack nearest bulwark
+wait 22
+bystander tp -3 -60 1 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander tp 20 -60 30 0 0
+wait 30
+dents
+/tp @s -3.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s1_left
+/tp @s -4.2 -60 8.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s1_left
+# --- stage 2
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:32.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:73.0f}
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:31.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:72.0f}
+/tp @s -3.8 -60 4.6 -135 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 5
+bystander tp -3 -60 9 -90 0
+wait 3
+observe 30
+frames s2_blow_bulwark 30
+wait 3
+bystander attack nearest bulwark
+wait 30
+observe 10
+bystander tp -3 -60 1 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander tp 20 -60 30 0 0
+wait 30
+dents
+/tp @s -3.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s2_left
+/tp @s -4.2 -60 8.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s2_left
+# --- stage 3
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:14.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:31.0f}
+/data merge entity @e[type=headinajar:hopper,limit=1] {Health:13.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:30.0f}
+bystander tp -3 -60 9 -90 0
+wait 3
+bystander attack nearest bulwark
+wait 22
+bystander tp -3 -60 1 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander tp 20 -60 30 0 0
+wait 30
+dents
+/tp @s -3.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s3_left
+/tp @s -4.2 -60 8.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s3_left
+/tp @s 4.0 -60 0.5 90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s3_right
+/tp @s 5.2 -60 8.5 90 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s3_right
+/tp @s -3.0 -60 -3.0 -135 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 8
+shot hopper_s3_3q
+/tp @s -3.8 -60 4.6 -135 0
+wait 3
+lookat headinajar:bulwark 1.5
+wait 8
+shot bulwark_s3_3q
+parkstats
+# --- the limp: the Hopper, then the Bulwark, piloted west, filmed from the left (south)
+jar
+charge 100000
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 80
+riding hopper
+look 90 8
+wait 20
+watch follow 0 1.6 4.5 180 8
+wait 4
+report hopper limp from its left
+frames limp_hopper_side 70
+wait 2
+key forward hold 60
+wait 10
+watch off
+dents
+sneak down
+key jar_menu hold 25
+sneak up
+wait 30
+/tp @s 0.5 -60 12.5 180 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 80
+riding bulwark
+look 90 8
+wait 20
+watch follow 0 2.0 6.5 180 8
+wait 4
+report bulwark limp from its left
+frames limp_bulwark_side 80
+wait 2
+key forward hold 70
+wait 10
+watch off
+dents
+# and the same Bulwark walking whole, for comparison
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Health:154f}
+look -90 8
+wait 30
+watch follow 0 2.0 -6.5 0 8
+wait 4
+report bulwark walk whole, from its left (north; walking east)
+frames walk_bulwark_side 60
+wait 2
+key forward hold 50
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 30
+# --- the repair: a Hopper built on a Gantry by the stand-in, struck from its right, mended
+/setblock 40 -60 0 headinajar:assembly_gantry[facing=north]
+/tp @s 44 -60 -4 45 0
+bystander spawn 40 -60 -2 0
+wait 20
+gantry 40 -60 0 hopper hydraulic_legs
+bystander useblock 40 -60 0 north
+wait 3
+bystander button 1
+bystander close
+wait 240
+inspect near hopper 4
+bystander hold minecraft:iron_sword
+bystander tp 42 -60 1 90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+/data merge entity @e[type=headinajar:hopper,x=40.5,y=-59,z=0.5,distance=..2,limit=1] {Health:12f}
+bystander tp 40 -60 -2 0 0
+bystander hold minecraft:air
+wait 20
+dents
+lookat headinajar:hopper 1.2
+wait 5
+shot repair_before
+bystander useblock 40 -60 0 north
+wait 5
+observe 80
+frames repair_dents 75
+wait 4
+bystander button 3
+wait 2
+bystander close
+wait 30
+dents
+wait 45
+observe 10
+dents
+shot repair_after

@@ -30,7 +30,6 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix4f;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -49,13 +48,24 @@ import java.util.Map;
  * <p>
  * The kept geometry is used while {@link ParkedLook.Key} stays the same and is rebuilt (by drawing the ordinary way once
  * more) the frame it changes; it is checked against the ordinary drawing every few seconds and dropped when the machine
- * is boarded, unloads or is not drawn for a while. Whenever it cannot be used (a shader pack, the outline of a glowing
- * machine, a screen's preview, a machine in motion) the machine is drawn the ordinary way, never not at all.
+ * is boarded, unloads or is not drawn for a while. Whenever it cannot be used (a shader pack it was not checked with, the
+ * outline of a glowing machine, a screen's preview, a machine in motion) the machine is drawn the ordinary way, never not
+ * at all.
+ * <p>
+ * Under an Iris shader pack it was checked with ({@link IrisParked}) the kept vertices are the pack's (Iris writes its
+ * longer layout into every entity buffer while a pack is on, ours included) and they are drawn through the pack's own
+ * programs, the ones the render type sets up: in the main view queued like the rest, and in the pack's shadow pass queued
+ * with the shadow pass's own pose and drawn as that pass draws its entities (only a look kept in the main view and still
+ * the same is drawn there; the shadow pass never keeps or checks one).
  */
 @EventBusSubscriber(modid = HeadInAJar.MOD_ID, value = Dist.CLIENT)
 public final class ParkedDraw {
     /** Parked machines from their kept geometry (on), or every machine the ordinary way (off, for measuring). */
     public static boolean ON = true;
+    /** For the harness only: under a shader pack, kept machines cast no shadow (to show a missing shadow is seen). */
+    public static boolean NO_SHADOW;
+    /** For the harness only: under a shader pack, kept machines drawn the ordinary way in the shadow pass (to time each pass). */
+    public static boolean MAIN_ONLY;
     /** Frames a kept machine may go undrawn (out of view) before its geometry is let go. */
     static final int IDLE_FRAMES = 1200;
 
@@ -90,15 +100,44 @@ public final class ParkedDraw {
     }
 
     private static final List<Queued> QUEUE = new ArrayList<>();
+
+    /** A draw waiting for the shadow pass to draw its entities: a part and the model-view it is drawn with there. */
+    private record ShadowQueued(Part part, Matrix4f at, int order) {
+    }
+
+    private static final List<ShadowQueued> SHADOW_QUEUE = new ArrayList<>();
+    /** The frame the shadow pass's buffers were last asked for {@link #SHADOW_FLUSH}. */
+    private static long shadowAsked = -1;
+    /** Set if queued shadow draws were ever left undrawn: machines then cast their shadows the ordinary way. */
+    private static boolean shadowBroken;
+
+    /**
+     * Asked for from the shadow pass's own buffers when a kept machine is queued there, so that when the shadow pass draws
+     * its entities (all together, at its end) it also draws this; setting it up draws every queued machine, each type's
+     * program and state set once, as the main view's are. Its one quad is a speck far outside the shadow's view.
+     */
+    private static final RenderType SHADOW_FLUSH = new RenderType("headinajar_parked_shadows", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS,
+            256, false, false, () -> {
+        flushShadows();
+        RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getRendertypeEntityCutoutNoCullShader);
+    }, () -> {
+    }) {
+    };
     private static long frame;
     /** Inside the level's entity pass (after the sky, before the entities' end), where queued draws will be flushed. */
     private static boolean entityPass;
     /** Set if queued draws were ever left unflushed (another renderer of the level): parked machines are then always drawn the ordinary way. */
     private static boolean broken;
     private static ShaderInstance cutout, translucent;
+    /** The shader pack the kept geometry may be drawn under this frame (null: none on), or that it may not (see {@link #pack}). */
+    private static String pack;
+    private static long packFrame = -1;
+    /** The pack's programs stand in for the game's entity programs in this frame's main view (checked as it starts). */
+    private static boolean packPrograms;
+    private static final String NO_PACK = null, UNKNOWN_PACK = new String("unknown pack");
 
     // the harness's figures
-    static int builds, kept, verified, changed, dropped;
+    static int builds, kept, verified, changed, dropped, shadowKept;
     /** When the last look was kept: game time with the partial tick. */
     static double lastBuild = -1;
     /** Why kept looks were drawn the ordinary way again, by what changed ("check": the regular comparison). */
@@ -269,15 +308,25 @@ public final class ParkedDraw {
         Cache cache = CACHES.get(m);
         var mc = Minecraft.getInstance();
         double now = m.level().getGameTime() + partial;
-        if (!usable(m, now, pose, buffers, mc)) {
-            // boarded, moving, glowing, under a shader pack, in a screen: the ordinary way; a boarded machine's geometry goes
-            if (cache != null && !ParkedLook.parked(m, now)) drop(m, cache);
+        String pack = pack();
+        boolean shadow = pack != NO_PACK && IrisParked.shadowPass();
+        if (!usable(m, now, pose, buffers, mc, pack, shadow)) {
+            // boarded, moving, glowing, under a pack not checked, in a screen: the ordinary way; a boarded machine's geometry goes
+            if (cache != null && !shadow && !ParkedLook.parked(m, now)) drop(m, cache);
             return buffers;
         }
         Matrix4f at = pose.last().pose();
         float x = at.m30(), y = at.m31(), z = at.m32();
         ParkedLook.Key key = ParkedLook.key(m, light, renderer.getPackedOverlay(m, 0, partial), Mth.rotLerp(partial, m.yBodyRotO, m.yBodyRot),
-                m.view.roll, m.view.pitch, extra(m));
+                m.view.roll, m.view.pitch, extra(m), com.coolfreeze23.headinajar.mecha.Wear.packed(MechaDents.shown(m)), pack);
+        if (shadow) {
+            // the pack's shadow pass (drawn before the main view): the look kept in the main view, if it is still the same,
+            // through the shadow programs with the shadow pass's own pose; else the ordinary way, as the main view will be
+            if (MAIN_ONLY || shadowBroken || cache == null || cache.parts == null || !key.matches(cache.key)) return buffers;
+            if (!NO_SHADOW) queueShadow(cache.parts, at, buffers);
+            shadowKept++;
+            return null;
+        }
         if (cache != null && cache.parts != null && key.matches(cache.key) && !ParkedLook.Schedule.verifyDue(m.getId(), frame)) {
             cache.lastFrame = frame;
             m.view.still = true;
@@ -334,7 +383,8 @@ public final class ParkedDraw {
             if (mesh == null) continue;
             meshes.add(mesh);
             from.add(r);
-            hash = hash * 1_000_003L + hash(mesh.vertexBuffer()) + r.order;
+            // under a shader pack the buffer was built in the pack's longer layout: each vertex is hashed whole
+            hash = hash * 1_000_003L + ParkedLook.hash(mesh.vertexBuffer(), mesh.drawState().format().getVertexSize()) + r.order;
         }
         if (cache.parts != null && cache.hash == hash && tee.key.matches(cache.key)) {
             // checked: what is kept is exactly what the ordinary path drew
@@ -353,7 +403,7 @@ public final class ParkedDraw {
             if (at < 0) continue;
             MeshData mesh = meshes.get(at);
             int vertices = mesh.drawState().vertexCount();
-            bytes += vertices * DefaultVertexFormat.NEW_ENTITY.getVertexSize();
+            bytes += vertices * mesh.drawState().format().getVertexSize();
             VertexBuffer vbo = new VertexBuffer(VertexBuffer.Usage.STATIC);
             vbo.bind();
             vbo.upload(mesh);
@@ -372,24 +422,6 @@ public final class ParkedDraw {
         if (cache.schedule.built(frame)) drop(m, cache);
     }
 
-    /**
-     * What the vertices say, to compare a check with what is kept: each place to a 64th of a pixel (where the camera
-     * stood when they were written moves them by a few millionths of a block), everything else exactly, the format's
-     * padding byte left out (it is never written).
-     */
-    private static long hash(ByteBuffer b) {
-        int size = DefaultVertexFormat.NEW_ENTITY.getVertexSize();
-        long h = 1;
-        for (int v = b.position(); v + size <= b.limit(); v += size) {
-            for (int c = 0; c < 3; c++) h = h * 31 + Math.round(b.getFloat(v + 4 * c) * 1024);
-            h = h * 31 + b.getLong(v + 12);
-            h = h * 31 + b.getLong(v + 20);
-            h = h * 31 + b.getInt(v + 28);
-            for (int c = 32; c < 35; c++) h = h * 31 + b.get(v + c);
-        }
-        return h;
-    }
-
     /** What the client's own module motion still holds on a parked machine (a drill's resting angle, the jets' spent lamps). */
     private static int extra(MechaEntity m) {
         int h = 0;
@@ -400,17 +432,37 @@ public final class ParkedDraw {
     }
 
     /** Whether this machine may be drawn from kept geometry in this draw. */
-    private static boolean usable(MechaEntity m, double now, PoseStack pose, MultiBufferSource buffers, Minecraft mc) {
-        if (!entityPass || cutout == null || translucent == null || buffers != mc.renderBuffers().bufferSource() || shaderPack()) return false;
+    private static boolean usable(MechaEntity m, double now, PoseStack pose, MultiBufferSource buffers, Minecraft mc, String pack, boolean shadow) {
+        if (pack == UNKNOWN_PACK) return false;
+        if (pack == NO_PACK) {
+            if (!entityPass || cutout == null || translucent == null || buffers != mc.renderBuffers().bufferSource()) return false;
+        } else if (shadow ? !IrisParked.shadowBuffers(buffers) : !entityPass || !packPrograms || !IrisParked.levelBuffers(buffers, mc)) {
+            return false;
+        }
         if (!ParkedLook.parked(m, now) || m.isCurrentlyGlowing() || m.isPassenger() || m.isFullyFrozen()) return false;
         if (com.coolfreeze23.headinajar.mecha.Skitter.out(m) || m.view.drillSpeed != 0 || m.view.jetAt >= 0 && now - m.view.jetAt <= 6) return false;
         HopperRenderer.FrameModel model = HopperRenderer.MODELS.get(m.frame());
         if (model == null || !model.settled()) return false;
-        // in the level the pose is only the move from the camera to the machine; anything else (a screen's preview) is drawn the ordinary way
+        // in the level the pose is only the move from the camera to the machine; anything else (a screen's preview) is drawn the
+        // ordinary way. In a shadow pass it starts from the shadow's view: a turn and a move, nothing scaled or skewed
         Matrix4f p = pose.last().pose();
+        if (shadow) return rigid(p);
         return Math.abs(p.m00() - 1) < 1e-6f && Math.abs(p.m11() - 1) < 1e-6f && Math.abs(p.m22() - 1) < 1e-6f && Math.abs(p.m01()) < 1e-6f
                 && Math.abs(p.m02()) < 1e-6f && Math.abs(p.m10()) < 1e-6f && Math.abs(p.m12()) < 1e-6f && Math.abs(p.m20()) < 1e-6f
                 && Math.abs(p.m21()) < 1e-6f && p.m03() == 0 && p.m13() == 0 && p.m23() == 0 && p.m33() == 1;
+    }
+
+    /** A turn and a move only: the three axes of unit length and square to each other, nothing projected. */
+    private static boolean rigid(Matrix4f p) {
+        if (p.m03() != 0 || p.m13() != 0 || p.m23() != 0 || p.m33() != 1) return false;
+        float xx = p.m00() * p.m00() + p.m01() * p.m01() + p.m02() * p.m02();
+        float yy = p.m10() * p.m10() + p.m11() * p.m11() + p.m12() * p.m12();
+        float zz = p.m20() * p.m20() + p.m21() * p.m21() + p.m22() * p.m22();
+        float xy = p.m00() * p.m10() + p.m01() * p.m11() + p.m02() * p.m12();
+        float xz = p.m00() * p.m20() + p.m01() * p.m21() + p.m02() * p.m22();
+        float yz = p.m10() * p.m20() + p.m11() * p.m21() + p.m12() * p.m22();
+        return Math.abs(xx - 1) < 1e-4f && Math.abs(yy - 1) < 1e-4f && Math.abs(zz - 1) < 1e-4f && Math.abs(xy) < 1e-4f && Math.abs(xz) < 1e-4f
+                && Math.abs(yz) < 1e-4f && p.determinant3x3() > 0;
     }
 
     private static void drop(MechaEntity m, Cache cache) {
@@ -422,12 +474,19 @@ public final class ParkedDraw {
 
     // --- drawing the kept machines -------------------------------------------------------------------------------
 
-    /** Every queued machine, by render type: each type's state and shader set once, then one draw per machine. */
+    /**
+     * Every queued machine, by render type: each type's state and shader set once, then one draw per machine. Without a
+     * shader pack the shader is ours (the game's entity program with the machine's place from the camera as an offset);
+     * under one it is the pack's program the render type sets up, with the place in the model-view, as the pack's entity
+     * programs read positions only through it.
+     */
     private static void flush() {
         if (QUEUE.isEmpty()) return;
         QUEUE.sort(java.util.Comparator.comparingInt(Queued::order).thenComparingInt(q -> System.identityHashCode(q.part().type())));
         Matrix4f view = RenderSystem.getModelViewMatrix(), projection = RenderSystem.getProjectionMatrix();
         var window = Minecraft.getInstance().getWindow();
+        boolean packed = pack != NO_PACK;
+        Matrix4f at = new Matrix4f();
         RenderType type = null;
         ShaderInstance shader = null;
         for (Queued q : QUEUE) {
@@ -439,11 +498,23 @@ public final class ParkedDraw {
                 }
                 type = p.type();
                 type.setupRenderState();
-                shader = p.translucent() ? translucent : cutout;
-                shader.setDefaultUniforms(VertexFormat.Mode.QUADS, view, projection, window);
-                shader.apply();
+                shader = packed ? RenderSystem.getShader() : p.translucent() ? translucent : cutout;
+                if (packed && !IrisParked.packProgram(shader)) {
+                    // never expected (the programs were checked as the frame's entities began): drawn with ours rather than not at all
+                    if (!broken) HeadInAJar.LOGGER.warn("Parked machines will be drawn the ordinary way: the shader pack's entity program was not in place");
+                    broken = true;
+                    packed = false;
+                    shader = p.translucent() ? translucent : cutout;
+                }
+                if (!packed) {
+                    shader.setDefaultUniforms(VertexFormat.Mode.QUADS, view, projection, window);
+                    shader.apply();
+                }
             }
-            if (shader.CHUNK_OFFSET != null) {
+            if (packed) {
+                shader.setDefaultUniforms(VertexFormat.Mode.QUADS, at.set(view).translate(q.x(), q.y(), q.z()), projection, window);
+                shader.apply();
+            } else if (shader.CHUNK_OFFSET != null) {
                 shader.CHUNK_OFFSET.set(q.x(), q.y(), q.z());
                 shader.CHUNK_OFFSET.upload();
             }
@@ -456,13 +527,82 @@ public final class ParkedDraw {
         QUEUE.clear();
     }
 
+    /** A kept machine for the shadow pass, drawn when that pass draws its entities ({@link #SHADOW_FLUSH}). */
+    private static void queueShadow(Part[] parts, Matrix4f pose, MultiBufferSource buffers) {
+        if (shadowAsked != frame) {
+            shadowAsked = frame;
+            VertexConsumer speck = buffers.getBuffer(SHADOW_FLUSH);
+            float[][] corners = {{0, 0}, {1e-3f, 0}, {1e-3f, 1e-3f}, {0, 1e-3f}};
+            for (float[] c : corners) speck.addVertex(c[0], -1e5f, c[1], -1, 0, 0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0, 0, 1, 0);
+        }
+        Matrix4f at = new Matrix4f(RenderSystem.getModelViewMatrix()).mul(pose);
+        for (Part p : parts) SHADOW_QUEUE.add(new ShadowQueued(p, at, p.translucent() ? 1 : 0));
+    }
+
+    /**
+     * Every machine queued in the shadow pass, as that pass draws its entities: each part through the program its render
+     * type sets up there (the pack's shadow program), with the pose the shadow pass gave the machine, as that pass's own
+     * batch draws what the ordinary path writes. The cull switch the shadow pass left (it turns culling off for its
+     * draws) is put back after, so nothing drawn after it in that pass changes.
+     */
+    private static void flushShadows() {
+        if (SHADOW_QUEUE.isEmpty()) return;
+        long start = System.nanoTime();
+        boolean cull = org.lwjgl.opengl.GL11.glIsEnabled(org.lwjgl.opengl.GL11.GL_CULL_FACE);
+        SHADOW_QUEUE.sort(java.util.Comparator.comparingInt(ShadowQueued::order).thenComparingInt(q -> System.identityHashCode(q.part().type())));
+        Matrix4f projection = RenderSystem.getProjectionMatrix();
+        var window = Minecraft.getInstance().getWindow();
+        RenderType type = null;
+        ShaderInstance shader = null;
+        for (ShadowQueued q : SHADOW_QUEUE) {
+            Part p = q.part();
+            if (p.type() != type) {
+                if (type != null) {
+                    if (shader != null) shader.clear();
+                    type.clearRenderState();
+                }
+                type = p.type();
+                type.setupRenderState();
+                shader = RenderSystem.getShader();
+                if (!IrisParked.packProgram(shader)) {
+                    shader = null;
+                    if (!shadowBroken) HeadInAJar.LOGGER.warn("Parked machines will cast their shadows the ordinary way: the shader pack's shadow program was not in place");
+                    shadowBroken = true;
+                }
+            }
+            if (shader == null) continue;
+            shader.setDefaultUniforms(VertexFormat.Mode.QUADS, q.at(), projection, window);
+            shader.apply();
+            p.vbo().bind();
+            p.vbo().draw();
+        }
+        if (shader != null) shader.clear();
+        type.clearRenderState();
+        VertexBuffer.unbind();
+        if (cull) RenderSystem.enableCull();
+        else RenderSystem.disableCull();
+        SHADOW_QUEUE.clear();
+        flushNanos += System.nanoTime() - start;
+    }
+
     @SubscribeEvent
     public static void stage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
             entityPass = true;
+            if (!SHADOW_QUEUE.isEmpty()) {
+                // the shadow pass ended without drawing what was queued in it: shadows the ordinary way from now on
+                shadowBroken = true;
+                SHADOW_QUEUE.clear();
+                HeadInAJar.LOGGER.warn("Parked machines will cast their shadows the ordinary way: the shadow pass did not draw them");
+            }
+            // under a shader pack, its programs must be the ones the render types set up for the entities
+            String now = pack();
+            packPrograms = now != NO_PACK && now != UNKNOWN_PACK && IrisParked.entityPrograms();
         } else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
             entityPass = false;
+            long start = System.nanoTime();
             flush();
+            flushNanos += System.nanoTime() - start;
         }
     }
 
@@ -505,31 +645,46 @@ public final class ParkedDraw {
 
     // --- shader packs ------------------------------------------------------------------------------------------
 
-    private static java.lang.reflect.Method irisInUse;
-    private static Object iris;
-    private static boolean irisLooked;
-
-    /** An Iris shader pack is on: its own programs draw entities (and their shadows), so parked machines are drawn the ordinary way. */
-    static boolean shaderPack() {
-        if (!irisLooked) {
-            irisLooked = true;
-            try {
-                Class<?> api = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
-                iris = api.getMethod("getInstance").invoke(null);
-                irisInUse = api.getMethod("isShaderPackInUse");
-            } catch (ReflectiveOperationException | LinkageError e) {
-                iris = null;
+    /**
+     * The shader pack this frame (asked once a frame): {@link #NO_PACK} when none is on, its name when it is one the kept
+     * geometry may be drawn under with this Iris, else {@link #UNKNOWN_PACK} (every machine the ordinary way, its shadow
+     * included, as before).
+     */
+    static String pack() {
+        if (packFrame != frame) {
+            packFrame = frame;
+            if (!IrisParked.packInUse()) pack = NO_PACK;
+            else {
+                String name = IrisParked.knownPack();
+                pack = name != null ? name : UNKNOWN_PACK;
             }
         }
-        if (iris == null) return false;
-        try {
-            return (boolean) irisInUse.invoke(iris);
-        } catch (ReflectiveOperationException e) {
-            return true;
-        }
+        return pack;
     }
 
     // --- the harness's figures ---------------------------------------------------------------------------------
+
+    private static long spentNanos, flushNanos, timedFrom = -1;
+
+    /** Time the renderer spent on machines (either way of drawing them, both passes), for the harness's figures. */
+    static void spent(long nanos) {
+        spentNanos += nanos;
+    }
+
+    /**
+     * The render thread's time on machines a frame since the last call (the renderer's own time, both passes, and the
+     * kept draws' flush), and starts counting again. The ordinary path's vertices are then still to be sent to the
+     * graphics card by the level's batch, which is not counted here.
+     */
+    public static String timing() {
+        long frames = frame - timedFrom;
+        String out = timedFrom < 0 || frames <= 0 ? "parktime: counting from now"
+                : String.format(java.util.Locale.ROOT, "parktime: %.4f ms a frame drawing machines (renderer %.4f, kept draws' flush %.4f) over %d frames",
+                (spentNanos + flushNanos) / 1e6 / frames, spentNanos / 1e6 / frames, flushNanos / 1e6 / frames, frames);
+        spentNanos = flushNanos = 0;
+        timedFrom = frame;
+        return out;
+    }
 
     /** How many machines are kept, their memory, and what happened since the game started. */
     public static String describe() {
@@ -541,8 +696,10 @@ public final class ParkedDraw {
             for (Part p : c.parts) vertices += p.vertices();
         }
         return String.format(java.util.Locale.ROOT, "parked: %s, %d kept (%d vertices, %.1f KB, %.1f KB each), %d builds, %d kept draws, %d checks the same, "
-                        + "%d changed outside the key, %d dropped, last kept at tick %.2f, redrawn for %s%s%s", ON ? "on" : "off", n, vertices, bytes / 1024.0, n == 0 ? 0 : bytes / 1024.0 / n,
-                builds, kept, verified, changed, dropped, lastBuild, REASONS, broken ? ", BROKEN (entity pass unannounced)" : "", shaderPack() ? ", shader pack on (ordinary drawing)" : "");
+                        + "%d changed outside the key, %d dropped, %d kept shadow draws, last kept at tick %.2f, redrawn for %s%s%s%s", ON ? "on" : "off", n, vertices, bytes / 1024.0,
+                n == 0 ? 0 : bytes / 1024.0 / n, builds, kept, verified, changed, dropped, shadowKept, lastBuild, REASONS,
+                broken ? ", BROKEN (entity pass unannounced, or a shader pack's program not in place)" : "",
+                shadowBroken ? ", SHADOWS ORDINARY (the shadow pass did not draw kept machines)" : "", IrisParked.describe());
     }
 
     @EventBusSubscriber(modid = HeadInAJar.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)

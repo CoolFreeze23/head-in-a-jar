@@ -68,6 +68,9 @@ public class SmokeClient {
     // world directives ("@world survival", "@keep NAME", "@seed N", "@gamemode MODE", "@difficulty LEVEL", "@observe N")
     private String worldMode = "flat";
     private String keep;
+    /** "@join HOST:PORT": connect to that server instead of making a world, and report how the connection ended. */
+    private String join;
+    private int joinTicks;
     private long seed = 12345L;
     private GameType gameMode;
     private Difficulty difficulty;
@@ -166,6 +169,10 @@ public class SmokeClient {
                 wait = 40;
             }
             case 1 -> {
+                if (join != null) {
+                    joinTick(mc);
+                    return;
+                }
                 if (mc.level == null || mc.player == null || mc.getSingleplayerServer() == null) {
                     wait = 20;
                     return;
@@ -313,11 +320,36 @@ public class SmokeClient {
                 }
             }
             case "parkcache" -> {
-                // parkcache on|off: parked frames drawn from geometry kept when they parked, or the ordinary way (for measuring both)
-                com.coolfreeze23.headinajar.client.ParkedDraw.ON = parts[1].trim().equals("on");
+                // parkcache on|off: parked frames drawn from geometry kept when they parked, or the ordinary way (for measuring both);
+                // noshadow: kept, but under a shader pack casting no shadow (to show that the shadow views see a missing one)
+                com.coolfreeze23.headinajar.client.ParkedDraw.ON = !parts[1].trim().equals("off");
+                com.coolfreeze23.headinajar.client.ParkedDraw.NO_SHADOW = parts[1].trim().equals("noshadow");
+                com.coolfreeze23.headinajar.client.ParkedDraw.MAIN_ONLY = parts[1].trim().equals("mainonly");
                 report.add("parkcache " + parts[1].trim());
             }
             case "parkstats" -> report.add(com.coolfreeze23.headinajar.client.ParkedDraw.describe());
+            case "parktime" -> report.add(com.coolfreeze23.headinajar.client.ParkedDraw.timing());
+            case "irisshaders" -> {
+                // irisshaders on|off: the shader pack switched on or off as Iris's own settings screen does (its public API)
+                try {
+                    Class<?> api = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+                    Object config = api.getMethod("getConfig").invoke(api.getMethod("getInstance").invoke(null));
+                    Class.forName("net.irisshaders.iris.api.v0.IrisApiConfig").getMethod("setShadersEnabledAndApply", boolean.class).invoke(config, parts[1].trim().equals("on"));
+                    report.add("irisshaders " + parts[1].trim());
+                } catch (ReflectiveOperationException | LinkageError e) {
+                    report.add("irisshaders: no Iris (" + e + ")");
+                }
+            }
+            case "dents" -> {
+                // dents: every machine within 32 blocks, the dent stage it shows on each side, its health and remembered blows
+                StringBuilder sb = new StringBuilder("dents ->");
+                for (var e : mc.level.entitiesForRendering()) {
+                    if (e instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && e.distanceTo(mc.player) < 32) {
+                        sb.append(" [").append(m.frame().id()).append(": ").append(com.coolfreeze23.headinajar.client.MechaDents.describe(m)).append("]");
+                    }
+                }
+                report.add(sb.toString());
+            }
             case "facing" -> {
                 // facing TYPE: every entity of TYPE within 32 blocks, its yaw, body yaw and head yaw on this client and on the server
                 String type = parts[1].trim();
@@ -1081,6 +1113,7 @@ public class SmokeClient {
             switch (a[0]) {
                 case "world" -> worldMode = a[1];
                 case "keep" -> keep = a[1];
+                case "join" -> join = a[1];
                 case "seed" -> seed = Long.parseLong(a[1]);
                 case "gamemode" -> gameMode = GameType.byName(a[1]);
                 case "difficulty" -> difficulty = Difficulty.byName(a[1]);
@@ -1095,7 +1128,44 @@ public class SmokeClient {
         }
     }
 
+    /**
+     * While joining a server: waits for the connection to end on a screen other than the connecting one (refused) or
+     * in a world (joined), then reports the screen's title and every line of text on it, takes a screenshot and stops.
+     */
+    private void joinTick(Minecraft mc) throws IOException {
+        joinTicks++;
+        var screen = mc.screen;
+        boolean joined = mc.level != null && mc.player != null;
+        boolean waiting = screen instanceof net.minecraft.client.gui.screens.ConnectScreen || screen == null && !joined;
+        if (waiting && joinTicks < 1200) {
+            wait = 5;
+            return;
+        }
+        report.add("join " + join + " after " + joinTicks * 5 + " ticks: " + (joined ? "joined, in a world" : "screen "
+                + (screen == null ? "none" : screen.getClass().getSimpleName())));
+        if (screen != null) {
+            report.add("join screen title: " + screen.getTitle().getString());
+            for (var child : screen.children()) {
+                if (child instanceof net.minecraft.client.gui.components.AbstractWidget w) {
+                    report.add("join screen text: [" + w.getClass().getSimpleName() + "] " + w.getMessage().getString().replace('\n', '|'));
+                }
+            }
+        }
+        Screenshot.grab(dir.toFile(), "join_result.png", mc.getMainRenderTarget(), m -> {
+        });
+        if (joined && mc.getConnection() != null) mc.getConnection().getConnection().disconnect(net.minecraft.network.chat.Component.literal("smoke join check done"));
+        finish(mc);
+    }
+
     private void createWorld(Minecraft mc) {
+        if (join != null) {
+            report.add("joining server " + join);
+            net.minecraft.client.gui.screens.ConnectScreen.startConnecting(mc.screen, mc,
+                    net.minecraft.client.multiplayer.resolver.ServerAddress.parseString(join),
+                    new net.minecraft.client.multiplayer.ServerData("smoke", join, net.minecraft.client.multiplayer.ServerData.Type.OTHER),
+                    false, null);
+            return;
+        }
         String name = keep != null ? keep : WORLD;
         if (keep != null && mc.getLevelSource().levelExists(keep)) {
             report.add("kept world " + keep + " opened (its own game mode, difficulty and seed apply)");

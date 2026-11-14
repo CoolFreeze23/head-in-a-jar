@@ -256,19 +256,24 @@ public class MechaLineGameTests {
         });
     }
 
-    @GameTest(template = "platform", timeoutTicks = 40)
+    /**
+     * A head just beyond the goggles' reach is reached through a machine with a Signal Booster standing between, and not
+     * once its battery is flat. The machine stands on this test's own platform (not out in the space between tests,
+     * where another test's structure, chunk or clean-up decides whether it is still there), and the test runs in a batch
+     * of its own, so no other test's machine, Relay Mast or Signal Jammer is ever near the link.
+     */
+    @GameTest(template = "platform", timeoutTicks = 40, batch = "signal_booster")
     public static void aSignalBoosterCarriesTheLinkLikeAMast(GameTestHelper h) {
-        ServerPlayer p = player(h, FLOOR);
+        ServerPlayer p = player(h, FLOOR.west(6));
         FormActions.detach(p, 3);
         JarState state = FormActions.state(p);
         state.setGoggles(new ItemStack(ModRegistry.RELAY_GOGGLES.get()));
         state.setCollar(new ItemStack(ModRegistry.COLLAR_CAM.get()));
         double range = NeuroLink.range(state);
-        // the head beyond the goggles' reach, a machine with a Signal Booster half way, within reach of both
-        var head = new HeadRegistry.Spot(p.level().dimension(), p.position().add(range + 12, 0, 0));
+        // the head a block beyond the goggles' reach; the machine at the platform's far edge, 12 blocks toward the head
+        var head = new HeadRegistry.Spot(p.level().dimension(), p.position().add(range + 1, 0, 0));
         h.assertTrue(NeuroLink.quality(p, state, head) == 0, "the head was in reach without a relay");
-        MechaEntity m = mecha(h, MechaFrame.HOPPER, FLOOR.east((int) ((range + 12) / 2)), p.getUUID(), MechaModule.HYDRAULIC_LEGS,
-                MechaModule.SIGNAL_BOOSTER);
+        MechaEntity m = mecha(h, MechaFrame.HOPPER, FLOOR.east(6), p.getUUID(), MechaModule.HYDRAULIC_LEGS, MechaModule.SIGNAL_BOOSTER);
         h.runAfterDelay(2, () -> {
             int relayed = NeuroLink.quality(p, state, head);
             h.assertTrue(relayed > NeuroLink.QUALITY_TO_LINK, "the Signal Booster carried no link: " + relayed);

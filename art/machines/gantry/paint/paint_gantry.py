@@ -4,7 +4,7 @@
     python -I art/machines/gantry/paint/paint_gantry.py --preview DIR  # also DIR/gantry_rest.png (stand-ins filled)
 Then: python -I tools/tex/tex.py adopt block/machine/gantry.png
 
-One sheet, 128x144, for the baked pedestal and the ten GeckoLib bones.
+One sheet for the baked pedestal and the thirteen GeckoLib bones.
 
 The value plan (110 px first). It stands under a Hopper or a Bulwark (ivory, brass, dark steel) and must not fight
 them, so the pedestal is quiet and the mecha stays the subject:
@@ -104,6 +104,14 @@ def arm(S):
     joint(S, 'cheek_r', ('west', 'east'))
     K.pale_link(S, 'upper_bar')
     K.pale_link(S, 'fore_bar')
+    # the telescopes' steel rods (out only for the tall frames): polished, a lit arris on the north and west faces
+    for n in ('upper_rod', 'fore_rod_lo', 'fore_rod_hi'):
+        for f in S.faces(n, K.SIDES):
+            f.fill('s3')
+            if f.side in ('north', 'west'):
+                f.col(0, 's4')
+        S.face(n, 'up').fill('s4')
+        S.face(n, 'down').fill('s2')
     joint(S, 'elbow', ('west', 'east'))
     K.coil(S, 'spring')
     for n in ('standoff_1', 'standoff_2'):

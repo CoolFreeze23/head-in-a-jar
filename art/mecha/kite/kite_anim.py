@@ -51,7 +51,8 @@ def solve_legs(clip):
     hips = clip['bones'].get('hips', {})
     hpos = sorted(hips.get('position', [k(0, P())]), key=lambda x: x[0])
     hrot = sorted(hips.get('rotation', [k(0, R())]), key=lambda x: x[0])
-    out = {s: {'leg': [], 'shin': [], 'foot': []} for s in 'lr'}
+    level = clip.get('level_legs')   # the legs counter-rolled under rolling hips (hopper_anim.level_hip)
+    out = {s: {'leg': [], 'shin': [], 'foot': [], 'roll': []} for s in 'lr'}
     for t in range(0, int(clip.get('ik_until', clip['length'])) + 1):
         hp = value_at(hpos, t)
         pitch = value_at(hrot, t)[0]
@@ -61,7 +62,12 @@ def solve_legs(clip):
             rel = len(f) == 4
             z, y, ang = f[0], f[1], f[2]
             ank = (hip[0] + z, hip[1] + y) if rel else (z, y)
-            t1, t2 = G.ik(hip, ank)
+            if level:
+                ank, hip_s, roll = HA.level_hip(hip, ank, s, value_at(hrot, t)[2], rel, G)
+                out[s]['roll'].append((t, -roll))
+                t1, t2 = G.ik(hip_s, ank)
+            else:
+                t1, t2 = G.ik(hip, ank)
             out[s]['leg'].append((t, t1 - pitch - G.REST_THIGH))
             out[s]['shin'].append((t, t2 - t1 - G.REST_SHIN))
             out[s]['foot'].append((t, ang - t2 - G.REST_FOOT))
@@ -69,6 +75,10 @@ def solve_legs(clip):
     for s in 'lr':
         for part in ('leg', 'shin', 'foot'):
             keys = thin(out[s][part], clip.get('loop') == 'loop')
+            if part == 'leg' and level:
+                clip['bones'].setdefault('leg_' + s, {})['rotation'] = HA.level_keys(out[s]['leg'], out[s]['roll'],
+                                                                                     clip.get('loop') == 'loop')
+                continue
             if part == 'leg' and splay:
                 sg = -1 if s == 'l' else 1
                 keys = [(t, v) for t, v in out[s][part]]
@@ -576,6 +586,57 @@ def limp():
             'effects': [(0, 'timeline', 'step:l_drag', None), (12, 'timeline', 'step:r', None), (16, 'sound', snd('wing_scrape', 0.3, 0.9), None)]}
 
 
+# The damage limp (limp_l, limp_r: the side whose leg drags), the light bipeds' gait (art/mecha/hopper/hopper_anim.py)
+# on the Kite's legs at the walk's speed and cycle. The Kite's walk asks more of its legs than they reach, so the limp
+# goes 3 px lower (the lantern under the body clears the ground by a pixel at the deepest dip) and keeps each foot down
+# for less of the cycle: the good leg hops it along, the bad toe dragging through the hop. The bad wing sags out of its
+# fold and hardly bounces; the tail balances against the roll.
+LIMP_KITE = dict(HA.LIMP_GAIT, sb=0.375, ho=0.19, pg=0.31, sg=0.44, crouch=3.0, dip_bad=1.5, dip_good=0.8, heel=3.0,
+                 lift=4.0, fwd_good=-2.0)
+
+
+def limp_l():
+    """The damage limp, left leg dragging (limp_r is its mirror). Lamps as in the walk (powered)."""
+    n = WALK_N
+    g = HA.limp_ticks(n, LIMP_KITE)
+    rz, pg = G.REST_ANKLE[0], g['pg']
+    z0b = rz - V * g['sb'] / 2.0 - g['fwd_bad']
+    z0g = rz - V * g['sg'] / 2.0 - g['fwd_good']
+    drag = math.degrees(math.asin(min(0.9, g['drag_lift'] / TOE)))
+    gf = dict(st=g['sg'], hs=g['hs'], flat=2, ho=g['sg'] - 2, to=g['to'], lift=g['lift'], toe=TOE, heel=g['heel'],
+              ankle_h=G.ANKLE_H)
+
+    def feet(side, t):
+        if side == 'l':
+            return HA.drag_foot(t, n, V, z0b, g['sb'], g['ho'], drag, g['clear'], g['late'], TOE, G.ANKLE_H)
+        return HA.step_foot(t - pg, n, V, z0g, **gf)
+    m = HA.limp_motion(n, g, 1.0)
+    w = m['warp']
+    c = lambda t, ph: math.cos(2 * math.pi * (w(t) - ph) / n)
+    bump = lambda t, ctr, wd: HA.bump(t, ctr, wd, n)
+    ticks = range(n + 1)
+    r3 = lambda x: round(x, 3)
+    head = lambda t: -2.0 * bump(t, 1.5, 1.0) + 1.0 * bump(t, 4.0, 1.5) - 1.0 * bump(t, pg + 1.5, 1.0) + 0.6 * bump(t, pg + 4, 1.5)
+    good_wing = [k(t, R(y=85, z=r3(-28 + 2.5 * (bump(t, 2.5, 1.0) + bump(t, pg + 2.5, 1.0))))) for t in ticks]
+    b = merge(
+        hips([k(t, P(y=r3(m['hy'](t)), z=r3(m['surge'](t)))) for t in ticks], [k(t, R(z=r3(m['roll'](t)))) for t in ticks]),
+        torso([k(t, R(x=r3(-3 + 0.4 * (m['hy'](t - g['lag']) + g['crouch'])), z=r3(m['torso_roll'](t)))) for t in ticks]),
+        {'sensor': {'position': [k(t, P(z=r3(head(t)))) for t in ticks]},
+         'tail': {'rotation': [k(t, R(z=r3(-0.5 * m['torso_world'](t - 2)))) for t in ticks]},
+         'wing_l': {'rotation': [k(t, R(y=85, z=r3(-22 + 1.0 * bump(t, 3.0, 1.4)))) for t in ticks]},
+         'wingtip_l': {'rotation': [k(t, FOLD['tip']) for t in ticks]},
+         'wing_r': {'rotation': mirror_keys(good_wing, 'rotation')},
+         'wingtip_r': {'rotation': mirror_keys([k(t, FOLD['tip']) for t in ticks], 'rotation')},
+         'arm_l': {'rotation': [k(t, R(x=r3(g['arm_hang'] - g['arm_bad'] * c(t, 2)),
+                                       z=r3(g['arm_in'] - 0.6 * m['torso_world'](t - 1)))) for t in ticks]},
+         'forearm_l': {'rotation': [k(t, R(x=r3(-3 - 2 * c(t, 4)))) for t in ticks]},
+         'arm_r': {'rotation': [k(t, R(x=r3(6 * c(t, 1)))) for t in ticks]},
+         'forearm_r': {'rotation': [k(t, R(x=r3(4 * c(t, 3)))) for t in ticks]}})
+    return {'length': n, 'loop': 'loop', 'feet': feet, 'level_legs': True, 'bones': b,
+            'effects': [(0, 'timeline', 'step:l_drag', None), (2, 'sound', snd('servo_catch', 0.4, 0.9), None),
+                        (pg, 'timeline', 'step:r', None)]}
+
+
 def vent():
     """Overheat: the wings fan open as radiators (3), the body slumps and pants, the wings beating slowly to shed
     heat (one 20-tick fan stroke at a time), steam off the wing roots, the kettle whistle; the wings fold back (82-88)."""
@@ -688,7 +749,8 @@ def clips():
     for name, c in verbs().items():
         out.append(('%s_l' % name, c))
         out.append(('%s_r' % name, side_clip(c)))
-    out += [('hurt', hurt()), ('limp', limp()), ('vent', vent()), ('eject', eject()), ('destroyed', destroyed()), ('build', build())]
+    out += [('hurt', hurt()), ('limp', limp()), ('limp_l', limp_l()), ('limp_r', HA.mirror_clip(limp_l(), WALK_N // 2)),
+            ('vent', vent()), ('eject', eject()), ('destroyed', destroyed()), ('build', build())]
     return out
 
 
@@ -697,6 +759,8 @@ def build_anims(model, baked=False):
     anims = []
     for name, clip in clips():
         clip = copy.deepcopy(clip)
+        if clip.get('level_legs'):
+            HA.check_reach(name, clip, G)
         solve_legs(clip)
         animators = {}
         for bone, chans in clip['bones'].items():

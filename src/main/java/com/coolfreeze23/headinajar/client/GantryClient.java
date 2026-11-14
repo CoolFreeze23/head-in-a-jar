@@ -241,8 +241,8 @@ public final class GantryClient {
 
     static class Renderer extends MachineRenderers.Base<AssemblyGantryBlockEntity> {
         Renderer() {
-            // the arm stood off reaches about 31 px out, reaching in it stands up to 67 px; a heavy frame's arcs to 102
-            super("gantry", -34, 0, -34, 34, 80, 34);
+            // the arm reaches up to 59 px out from the block's centre and, telescoped for a tall frame, 113 px up
+            super("gantry", -60, 0, -60, 60, 120, 60);
         }
 
         @Override
@@ -291,6 +291,7 @@ public final class GantryClient {
                 bone.setRotX(s.getRotX() + (float) Math.toRadians(v[0]));
                 bone.setRotY(s.getRotY() + (float) Math.toRadians(v[1]));
                 bone.setRotZ(s.getRotZ() + (float) Math.toRadians(v[2]));
+                bone.setPosY(s.getOffsetY() + v[4]);
                 bone.setPosZ(s.getOffsetZ() + v[5]);
             }
         }

@@ -81,9 +81,22 @@ public final class HopperAnimation {
     private HopperAnimation() {
     }
 
-    /** The walk is the limp (one leg dragged): a flat battery, or a machine below a quarter of its health. */
+    /**
+     * The walk is a limp (one leg dragged): a flat battery (the slow limp, {@code limp}), or a walker below a quarter of
+     * its health with power ({@code limp_l} or {@code limp_r}, at the walk's own speed: {@link #hurtLimp}).
+     */
     public static boolean limps(MechaEntity m) {
-        return m.battery() <= 0 || m.getHealth() < m.getMaxHealth() * 0.25f;
+        return m.battery() <= 0 || hurtLimp(m) != null;
+    }
+
+    /**
+     * The damaged walker's limp: the clip that drags the leg on the side it was hit from more, or null (not damaged
+     * enough, a flat battery, or a frame with no such clip: the Skitter's feet are placed by code on the ground, so it
+     * keeps its trot, and wheels have no legs to drag).
+     */
+    public static String hurtLimp(MechaEntity m) {
+        if (!Wear.hurtLimp(m) || !rig(m).has("limp_l")) return null;
+        return Wear.limpSide(m.hitBearings()) == 1 ? "limp_r" : "limp_l";
     }
 
     public static boolean piloted(MechaEntity m) {
@@ -199,7 +212,10 @@ public final class HopperAnimation {
             if (t >= 0 && t < clip.length()) return new Choice(clip, t, 1);
         }
         if (v.speed > HopperView.WALKING) {
-            if (limps(m)) return at(rig, "limp", v.limpPhase(), 4);
+            if (m.battery() <= 0) return at(rig, "limp", v.limpPhase(), 4);
+            // badly damaged: the same pace as the walk with one leg dragged (authored at the walk's speed: its phase)
+            String hobble = hurtLimp(m);
+            if (hobble != null) return at(rig, hobble, v.walkPhase(), rig.walkBlend);
             // backing, on a frame with its own backing gait
             if (v.forward < -HopperView.WALKING && rig.has("walk_back")) return at(rig, "walk_back", v.backPhase, 4);
             return new Choice(rig.walk(false), v.walkPhase(), rig.walkBlend);

@@ -1,7 +1,8 @@
 #!/bin/bash
 # Runs the dev GameTests on the hub and summarises what really happened (hubtest exit 0 can hide a crash).
 # HUB_NAME: the test name on the hub (default headjar-tests); give each checkout its own when several run at once.
+# HUBTEST: the hub tool to run (default: hubtest on the PATH); may point at the tool itself.
 cd "$(dirname "$0")/.."
-/c/Homework/Sessions/Japan/hubtest/hubtest gradle "${HUB_NAME:-headjar-tests}" . --key headinajar "$@" -- ${GRADLE_ARGS:+--} runGameTestServer ${GRADLE_ARGS:-} > build/hub-gametest.log 2>&1
+"${HUBTEST:-hubtest}" gradle "${HUB_NAME:-headjar-tests}" . --key headinajar "$@" -- ${GRADLE_ARGS:+--} runGameTestServer ${GRADLE_ARGS:-} > build/hub-gametest.log 2>&1
 echo "hubtest exit $?"
 grep -vE 'Missing translations|Ambiguity between' build/hub-gametest.log | grep -nE 'ERROR|FATAL|Exception|Caused by|error:|BUILD|required tests|optional tests|test\(s\)|failed|RESULT' | cut -c1-240 | head -${LINES_MAX:-50}

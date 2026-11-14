@@ -68,6 +68,20 @@ def walk():
     return c
 
 
+def limp(side):
+    """The damage limp (the shared limp_l, or its mirror for limp_r): the growth jolts on each landing of the bad leg
+    and breathes again over the good one."""
+    c = HA.limp_l()
+    n = c['length']
+    shift = 0 if side == 'l' else n // 2
+    if shift:
+        c = HA.mirror_clip(c, shift)
+    pg = HA.limp_ticks(n, HA.LIMP_GAIT)['pg']
+    swell = lambda t: 1 + 0.04 * HA.bump(t, 2.5, 1.6, n) + 0.015 * HA.bump(t, pg + 2, 1.5, n)
+    c['bones']['growth'] = {'scale': [k(t, S(round(swell(t - shift), 4))) for t in range(n + 1)]}
+    return c
+
+
 def boot():
     """Controller "cockpit": it yawns. The cockpit tilts back, the growth expands, the right arm stretches up and out,
     a shiver, the lamps come on (the eye last, blinking), the gills light in turn."""
@@ -240,7 +254,8 @@ def build():
 
 # ==================================================================================================================
 def clips():
-    own = {'idle': idle, 'parked': parked, 'walk': walk, 'boot': boot, 'idle_tic': idle_tic, 'build': build}
+    own = {'idle': idle, 'parked': parked, 'walk': walk, 'boot': boot, 'idle_tic': idle_tic, 'build': build,
+           'limp_l': lambda: limp('l'), 'limp_r': lambda: limp('r')}
     out = [(name, own[name]() if name in own else c) for name, c in SHARED() if name not in DROP]
     out += [('graft_l', graft('l')), ('graft_r', graft('r')), ('graft_refused', graft_refused())]
     return out

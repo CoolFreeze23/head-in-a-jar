@@ -197,9 +197,12 @@ public final class Hopper {
         }
     }
 
-    /** Has {@code other} trusted the pilot (only then may the pilot's landing move them)? */
-    static boolean trusts(Player other, Player pilot) {
-        return other.getServer() != null && com.coolfreeze23.headinajar.form.HeadRegistry.get(other.getServer()).trusts(other.getUUID(), pilot.getUUID());
+    /**
+     * Has {@code other} trusted the pilot (only then may a mecha's landing, ram, lift or grab move them)? The one rule
+     * for handling a player: their trust list, or a shared team ({@link com.coolfreeze23.headinajar.form.HeadRegistry#trusts(java.util.UUID, Player)}).
+     */
+    public static boolean trusts(Player other, Player pilot) {
+        return other.getServer() != null && com.coolfreeze23.headinajar.form.HeadRegistry.get(other.getServer()).trusts(other.getUUID(), pilot);
     }
 
     /** The collapse: on its face at tick 27, with dust. The destruction itself follows at 40. */

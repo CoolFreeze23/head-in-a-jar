@@ -1,0 +1,31 @@
+# The Assembly Gantry builds a Bulwark with the arm telescoping where it must. The stand-in second player opens the Gantry
+# by a use packet on its front and presses Assemble (the screen's button packet), then steps away; the build is filmed
+# whole side on from the arm's side (east), by day.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+gantry 0 -60 0 bulwark
+/tp @s 7.5 -59.2 0.5 90 -6
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames r3_bulwark_side 252
+wait 4
+bystander button 1
+wait 2
+bystander close
+bystander tp -6 -60 -8 0
+inspect block 0 -60 0
+wait 106
+inspect near bulwark 4
+wait 142
+inspect near bulwark 4
+report gantry bulwark build done

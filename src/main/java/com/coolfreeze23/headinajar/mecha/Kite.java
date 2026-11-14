@@ -195,7 +195,7 @@ public final class Kite {
         if (e instanceof MechaEntity) return "mecha.talon.too_heavy";
         if (e instanceof Player p) {
             if (p.getAbilities().instabuild || p.isSpectator()) return "mecha.talon.exempt";
-            if (!Hopper.trusts(p, pilot)) return "mecha.talon.untrusted";
+            if (!Hopper.trusts(p, pilot)) return "mecha.lift.untrusted";
         }
         if (e.isPassenger() || e.isVehicle()) return "mecha.talon.occupied";
         if (weight(e) > MAX_WEIGHT || e.getBbHeight() > MAX_HEIGHT) return "mecha.talon.too_heavy";

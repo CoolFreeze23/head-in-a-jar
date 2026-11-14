@@ -373,6 +373,50 @@ public class WingedGameTests {
         });
     }
 
+    /**
+     * The talons go by the one rule for handling a player: refused with the handling line until the player shares the
+     * pilot's team, then taken, with nothing on the player's trust list.
+     */
+    @GameTest(template = "platform", timeoutTicks = 140)
+    public static void theTalonsTakeATeammateWithoutTheTrustList(GameTestHelper h) {
+        // named players: a team holds names, and every plain mock player has the same one
+        ServerPlayer p = TestPlayers.at(h, "pilot", FLOOR);
+        BlockPos at = FLOOR.east(3);
+        MechaEntity m = kite(h, at, p.getUUID());
+        board(h, p, m);
+        ServerPlayer mate = TestPlayers.at(h, "mate", at.south(3));
+        var board = h.getLevel().getScoreboard();
+        String name = "kite_crew_" + mate.getId();
+        Vec3[] where = {null};
+        boolean[] up = {false};
+        aloft(h, m, where, up, 120);
+        h.runAfterDelay(1, () -> {
+            where[0] = over(mate);
+            up[0] = true;
+        });
+        h.runAfterDelay(3, () -> {
+            long t = now(h);
+            press(p);
+            h.assertTrue(kind(m) == Kite.REFUSED && m.liftAt() / 4 == t, "a player who has not trusted the pilot was taken");
+            h.assertTrue(count(p, "mecha.lift.untrusted") == 1, "the refusal was not the handling line: " + Refusals.delivered(p));
+            var team = board.addPlayerTeam(name);
+            board.addPlayerToTeam(p.getScoreboardName(), team);
+            board.addPlayerToTeam(mate.getScoreboardName(), team);
+        });
+        h.runAfterDelay(5 + Kite.REFUSED_TICKS, () -> {
+            h.assertFalse(com.coolfreeze23.headinajar.form.HeadRegistry.get(h.getLevel().getServer()).trusted(mate.getUUID()).contains(p.getUUID()),
+                    "the mate trusts the pilot by list");
+            long t = now(h);
+            press(p);
+            h.assertTrue(kind(m) == Kite.GRAB && m.liftAt() / 4 == t, "a teammate was refused: " + Refusals.delivered(p));
+        });
+        h.runAfterDelay(5 + Kite.REFUSED_TICKS + Kite.GRAB_CLOSE + 2, () -> {
+            h.assertTrue(m.heldId() == mate.getId(), "the talons did not take the teammate: " + m.heldId());
+            board.removePlayerTeam(board.getPlayerTeam(name));
+            done(h, p, mate);
+        });
+    }
+
     @GameTest(template = "platform", timeoutTicks = 260)
     public static void everyRefusedTalonPressSaysWhy(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);
@@ -383,7 +427,7 @@ public class WingedGameTests {
         Vec3[] where = {null};
         boolean[] up = {false};
         aloft(h, m, where, up, 240);
-        String[] steps = {"mecha.talon.grounded", "mecha.talon.untrusted", "mecha.talon.too_heavy", "mecha.talon.nothing", "mecha.talon.venting",
+        String[] steps = {"mecha.talon.grounded", "mecha.lift.untrusted", "mecha.talon.too_heavy", "mecha.talon.nothing", "mecha.talon.venting",
                 "mecha.talon.no_power"};
         Entity[] cow = new Entity[1];
         for (int i = 0; i < steps.length; i++) {

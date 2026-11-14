@@ -49,6 +49,8 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
     /** The last hit (time x 2 + 1 when it came from the machine's right) and the last ordinary landing (time x 2 + 1 heavy). */
     private static final EntityDataAccessor<Long> HIT = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Long> LAND = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.LONG);
+    /** The bearings of the last blows, a byte each, newest lowest ({@link com.coolfreeze23.headinajar.mecha.Wear}): the dents' sides. Saved. */
+    private static final EntityDataAccessor<Long> BEARINGS = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.LONG);
     /** Heavy Lifting: the last lift moment (time x 4 + grab, refused, throw or set down) and the held load's id (-1 none). */
     private static final EntityDataAccessor<Long> LIFT = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Integer> HELD = SynchedEntityData.defineId(MechaEntity.class, EntityDataSerializers.INT);
@@ -189,6 +191,7 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
         builder.define(HELD, -1);
         builder.define(ACT, -1L);
         builder.define(BEAMS, 0L);
+        builder.define(BEARINGS, 0L);
         builder.define(PORTS, (byte) 0);
         builder.define(LINE, -1L);
         builder.define(ANCHOR_BLOCK, net.minecraft.core.BlockPos.ZERO);
@@ -248,6 +251,22 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
 
     public void setEjectedAt(long time) {
         entityData.set(EJECTED, time);
+    }
+
+    /** The bearings of the last few blows ({@link com.coolfreeze23.headinajar.mecha.Wear}); 0 when it has not been hit since it was last whole. */
+    public long hitBearings() {
+        return entityData.get(BEARINGS);
+    }
+
+    public void setHitBearings(long bearings) {
+        entityData.set(BEARINGS, bearings);
+    }
+
+    /** Mended to full (the Gantry's plates, a welding torch): the blows are forgotten with the dents. */
+    @Override
+    public void setHealth(float health) {
+        super.setHealth(health);
+        if (level() != null && !level().isClientSide && getHealth() >= getMaxHealth() && hitBearings() != 0) setHitBearings(0);
     }
 
     public long hitAt() {
@@ -751,6 +770,8 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
             boolean right = from != null && from.subtract(position()).dot(Vec3.directionFromRotation(0, yBodyRot + 90)) > 0;
             entityData.set(HIT, level().getGameTime() * 2 + (right ? 1 : 0));
         }
+        // where the blow came from, for the dents on that side and the leg a badly damaged walker drags
+        if (hurt && !level().isClientSide && isAlive()) entityData.set(BEARINGS, com.coolfreeze23.headinajar.mecha.Wear.push(hitBearings(), com.coolfreeze23.headinajar.mecha.Wear.bearing(this, source)));
         if (hurt && !level().isClientSide) MechaLogic.afterDamage(this);
         return hurt;
     }
@@ -863,6 +884,8 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
         tag.put("Cargo", cargo.createTag(registryAccess()));
         tag.putInt("Battery", battery());
         tag.putFloat("Heat", heat());
+        // written only once it has been hit, so a machine never hit saves as before
+        if (hitBearings() != 0) tag.putLong("HitBearings", hitBearings());
         if (owner != null) tag.putUUID("Owner", owner);
     }
 
@@ -875,6 +898,8 @@ public class MechaEntity extends PathfinderMob implements software.bernie.geckol
         cargo.fromTag(tag.getList("Cargo", Tag.TAG_COMPOUND), registryAccess());
         setBattery(tag.getInt("Battery"));
         setHeat(tag.getFloat("Heat"));
+        // a machine saved before the blows were remembered has none: it shows no dents, whatever its health
+        setHitBearings(tag.getLong("HitBearings"));
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
         HostData data = Hosts.data(this);
         data.host = true;

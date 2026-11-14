@@ -1,0 +1,17 @@
+# A shader pack parked machines were not checked with (or no pack): every machine is drawn the ordinary way, shadows
+# included (parkstats: 0 kept, 0 kept shadow draws). Run with SMOKE_MODS=sodium,iris and SMOKE_SHADER set to another pack.
+@observe 20
+wait 60
+/time set 1500
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+mecha hopper 100 -60 100 hydraulic_legs,drill,night_optics
+mecha bulwark 104 -60 100 hydraulic_legs,missile_pod
+/tp @s 102 -60 94 0 4
+wait 300
+parkstats
+shot o_row
+wait 100
+parkstats

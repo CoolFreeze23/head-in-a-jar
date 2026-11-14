@@ -9,7 +9,7 @@ import net.minecraft.world.level.LightLayer;
  * shows one settled pose, so a client may draw it from geometry kept since it last changed; this says when it is parked
  * and what its look depends on, so the kept geometry is used exactly while the look is the same and rebuilt the moment
  * any of it changes: the fitted modules, its light, its facing, the battery's lamps, its Gene Ports' vials, the Chimera's
- * grafted veins. Nothing here is saved or sent.
+ * grafted veins, its dents, and the shader pack it is drawn under. Nothing here is saved or sent.
  */
 public final class ParkedLook {
     private ParkedLook() {
@@ -43,20 +43,22 @@ public final class ParkedLook {
     /**
      * Everything the parked look depends on. {@code light} and {@code overlay} are what the renderer is given; {@code yaw},
      * {@code roll} and {@code pitch} the machine's facing as drawn; {@code extra} whatever the client's own module motion
-     * still holds (the drill's resting angle, the jets' spent lamps).
+     * still holds (the drill's resting angle, the jets' spent lamps); {@code pack} the shader pack it is drawn under (null:
+     * none), since a pack writes more into each vertex than the game does (its entity ids among it) and in another layout.
      */
     public record Key(Object modules, MechaFrame frame, int light, int overlay, float yaw, float roll, float pitch, float scale, int lamps,
-                      long ports, int graft, int extra) {
+                      long ports, int graft, int extra, int dents, String pack) {
         /** The same look: equal in everything, the angles within a thousandth of a degree. */
         public boolean matches(Key o) {
             return o != null && modules == o.modules && frame == o.frame && light == o.light && overlay == o.overlay && close(yaw, o.yaw)
                     && close(roll, o.roll) && close(pitch, o.pitch) && scale == o.scale && lamps == o.lamps && ports == o.ports && graft == o.graft
-                    && extra == o.extra;
+                    && extra == o.extra && dents == o.dents && java.util.Objects.equals(pack, o.pack);
         }
 
         /** The first thing that differs from another look, by name (for the harness's figures), or null if the same. */
         public String differs(Key o) {
             if (o == null) return "none kept";
+            if (!java.util.Objects.equals(pack, o.pack)) return "shader pack";
             if (modules != o.modules) return "modules";
             if (frame != o.frame) return "frame";
             if (light != o.light) return "light";
@@ -66,6 +68,7 @@ public final class ParkedLook {
             if (lamps != o.lamps) return "lamps";
             if (ports != o.ports) return "gene ports";
             if (graft != o.graft) return "graft";
+            if (dents != o.dents) return "dents";
             return extra != o.extra ? "client motion or name" : null;
         }
 
@@ -75,6 +78,18 @@ public final class ParkedLook {
     }
 
     public static Key key(MechaEntity m, int light, int overlay, float yaw, float roll, float pitch, int extra) {
+        return key(m, light, overlay, yaw, roll, pitch, extra, Wear.packed(m), null);
+    }
+
+    public static Key key(MechaEntity m, int light, int overlay, float yaw, float roll, float pitch, int extra, String pack) {
+        return key(m, light, overlay, yaw, roll, pitch, extra, Wear.packed(m), pack);
+    }
+
+    /**
+     * The look with the dents as drawn ({@link Wear#packed}: on the Gantry they step down as the client shows the repair)
+     * and the shader pack it is drawn under (null: none).
+     */
+    public static Key key(MechaEntity m, int light, int overlay, float yaw, float roll, float pitch, int extra, int dents, String pack) {
         long ports = 0;
         for (int n = 0; n < Math.min(4, m.genePorts()); n++) {
             // each vial: its fill in hundredths, its serum's colour and whether its gene rests
@@ -83,7 +98,58 @@ public final class ParkedLook {
             ports = ports * 31 + (Executive.resting(m, n) ? 1 : 0);
         }
         int graft = Chimera.grafted(m) == null ? -1 : Chimera.tint(m) & 0xFFFFFF;
-        return new Key(m.modulesKey(), m.frame(), light, overlay, yaw, roll, pitch, m.getScale(), lamps(m), ports, graft, extra);
+        return new Key(m.modulesKey(), m.frame(), light, overlay, yaw, roll, pitch, m.getScale(), lamps(m), ports, graft, extra, dents, pack);
+    }
+
+    /**
+     * What a kept look's vertices say, to compare a check with what is kept. {@code size} is the bytes a vertex (36 for
+     * the game's entity layout; a shader pack's is longer). Each place to a 1024th of a block (where the camera stood
+     * when they were written moves them by a few millionths), everything else exactly: colour, the two texture
+     * coordinates, the light, the normal and whatever a shader pack adds after the game's 36 bytes (its entity ids, the
+     * middle of the texture, the tangent); the game's padding byte (35, never written) left out.
+     */
+    public static long hash(java.nio.ByteBuffer b, int size) {
+        long h = 1;
+        for (int v = b.position(); v + size <= b.limit(); v += size) {
+            for (int c = 0; c < 3; c++) h = h * 31 + Math.round(b.getFloat(v + 4 * c) * 1024);
+            h = h * 31 + b.getLong(v + 12);
+            h = h * 31 + b.getLong(v + 20);
+            h = h * 31 + b.getInt(v + 28);
+            for (int c = 32; c < 35; c++) h = h * 31 + b.get(v + c);
+            for (int c = 36; c < size; c++) h = h * 31 + b.get(v + c);
+        }
+        return h;
+    }
+
+    /**
+     * The Iris versions and shader packs under which parked machines are drawn from kept geometry through the pack's own
+     * programs, main view and shadows: only those it was checked with, by eye and pixel by pixel. Any other version or
+     * pack (or one renamed) is drawn the ordinary way.
+     */
+    public static final class ShaderPacks {
+        public static final java.util.Set<String> IRIS = java.util.Set.of("1.8.12");
+        public static final java.util.Set<String> PACKS = java.util.Set.of("BSLClassic_v10.0.zip", "ComplementaryReimagined_r5.5.1.zip");
+
+        private ShaderPacks() {
+        }
+
+        /** A known Iris: its version up to the first '-' or '+' ("1.8.12-snapshot+mc1.21.1-local" is 1.8.12). */
+        public static boolean knownIris(String version) {
+            if (version == null) return false;
+            int end = version.length();
+            for (int i = 0; i < version.length(); i++) {
+                char c = version.charAt(i);
+                if (c == '-' || c == '+') {
+                    end = i;
+                    break;
+                }
+            }
+            return IRIS.contains(version.substring(0, end));
+        }
+
+        public static boolean knownPack(String name) {
+            return name != null && PACKS.contains(name);
+        }
     }
 
     /**

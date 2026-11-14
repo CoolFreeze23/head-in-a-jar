@@ -37,25 +37,30 @@ LF = 25.0                  # elbow to head pivot
 TOOL = 6.5                 # head pivot to the extended tool's tip, along the head's face (local -Z)
 DECK = 20.0                # the turntable's deck (the mecha's feet)
 REST_YAW = 90.0            # swivel rest yaw: the arm's plane along the back edge, "in" = -X
+EXT1 = 21.0                # the forearm telescopes for the tall frames: its bar slides up a steel rod out of the elbow
+EXT2 = 22.0                # by up to EXT1, and a second rod out of the bar's top carries the head up to EXT2 further
+EMAX = EXT1 + EXT2         # (the stages share an extension in proportion: e * EXT1 / EMAX and e * EXT2 / EMAX)
+UMAX = 15.0                # the upper arm's bar slides out along a steel rod from the shoulder by up to UMAX
 LAT = -3.0                 # the forearm and head run 3 px beside the upper arm (local -X), like an Anglepoise's
                            # paired rods, so the folded arm never passes through itself
 CRADLE = (-6.5, 9.5)       # the head's parking place (x, z); the head pivot rests at y 19.5
 HEAD_REST_Y = 19.5
 
 
-def ik(q, h, elbow_out=True):
+def ik(q, h, elbow_out=True, e=0.0, u=0.0):
     """Planar two-link IK in the arm's plane. q: distance from the shoulder axis towards IN, h: height above the
-    shoulder pin. Returns (a, b): the upper arm's and the forearm's absolute angles from vertical, positive OUT
-    (outliner rotX convention: +X tips +Y towards +Z, and +Z is OUT)."""
+    shoulder pin; e: the forearm's extension, u the upper arm's. Returns (a, b): the upper arm's and the forearm's
+    absolute angles from vertical, positive OUT (outliner rotX convention: +X tips +Y towards +Z, and +Z is OUT)."""
+    lf, lu = LF + e, LU + u
     d = math.hypot(q, h)
-    d = min(d, LU + LF - 1e-6)
-    c = (LU * LU + d * d - LF * LF) / (2 * LU * d)
+    d = min(d, lu + lf - 1e-6)
+    c = (lu * lu + d * d - lf * lf) / (2 * lu * d)
     c = max(-1.0, min(1.0, c))
     alpha = math.degrees(math.acos(c))
     # direction to target, measured from vertical towards IN
     phi_in = math.degrees(math.atan2(q, h))
     a_in = phi_in - alpha if elbow_out else phi_in + alpha     # the upper arm, towards IN
-    ex, ey = LU * math.sin(math.radians(a_in)), LU * math.cos(math.radians(a_in))
+    ex, ey = lu * math.sin(math.radians(a_in)), lu * math.cos(math.radians(a_in))
     b_in = math.degrees(math.atan2(q - ex, h - ey))
     return -a_in, -b_in
 
@@ -76,7 +81,7 @@ def rest_pose():
 
 
 def model():
-    m = kit.Model('gantry', budget=10)
+    m = kit.Model('gantry', budget=13)
 
     # ---- plinth and feet (the plinth 1 px inside both crossed boxes of the body above it) ------------------------
     kit.plinth(m, -5, 5, -5, 5)
@@ -144,7 +149,8 @@ def model():
     m.box('reel_boss', [-8, 7, -1], [-7, 9, 1], 'dsteel')
 
     # =================================================================================================================
-    # Bones (10): turntable, swivel, upper, fore, head, tool_weld, tool_wrench, tool_grip, stamp, reel
+    # Bones (13): turntable, swivel, upper, upper_t, fore, fore_t1, fore_t2, head, tool_weld, tool_wrench, tool_grip,
+    # stamp, reel
     # =================================================================================================================
     pose = rest_pose()
 
@@ -170,25 +176,37 @@ def model():
     # stood-off pose it lies beside the bar at the bar's height, under the mecha's feet (on the IN side it stood up
     # into a Bulwark's boots).
     m.bone('upper', [ax, HINGE_Y, az], 'swivel', rot=[pose['upper'], 0, 0])
-    m.box('upper_bar', [5, 17, 5], [8, 35, 8], 'enamel', 'upper', part='upper')
+    # it telescopes like the forearm: the bar with the elbow and the spring (upper_t) slides out along a 2x2 steel rod
+    # fixed in the shoulder, inside the bar at rest
+    m.box('upper_rod', [5.5, 17.5, 5.5], [7.5, 33.5, 7.5], 'steel', 'upper', part='upper_rod')
+    m.bone('upper_t', [ax, HINGE_Y, az], 'upper')
+    m.box('upper_bar', [5, 17, 5], [8, 35, 8], 'enamel', 'upper_t', part='upper')
     # the elbow: a slim brass knuckle round the elbow pin, kept small so that the brass focal point is the head (a big
     # brass block at the top of the zig-zag reads as the lamp's head)
-    m.box('elbow', [1.5, 34.5, 4.5], [8.5, 37.5, 8.5], 'brass', 'upper', part='upper_elbow')     # the elbow pin, 6 wide
-    m.box('spring', [9, 19, 6], [11, 27, 8], 'copper', 'upper', part='spring')
-    m.box('standoff_1', [8, 21, 6], [9, 22, 7], 'dsteel', 'upper', part='spring')
-    m.box('standoff_2', [8, 25, 6], [9, 26, 7], 'dsteel', 'upper', part='spring')
+    m.box('elbow', [1.5, 34.5, 4.5], [8.5, 37.5, 8.5], 'brass', 'upper_t', part='upper_elbow')     # the elbow pin, 6 wide
+    m.box('spring', [9, 19, 6], [11, 27, 8], 'copper', 'upper_t', part='spring')
+    m.box('standoff_1', [8, 21, 6], [9, 22, 7], 'dsteel', 'upper_t', part='spring')
+    m.box('standoff_2', [8, 25, 6], [9, 26, 7], 'dsteel', 'upper_t', part='spring')
 
-    # forearm (keyed pitch). Enamel bar 3x3 from the elbow to the head; a rubber cable along its OUT side.
+    # forearm (keyed pitch). Enamel bar 3x3 from the elbow to the head; a rubber cable along its OUT side. It
+    # telescopes for the tall frames (keyed positions along it): the bar (fore_t1) slides up a 2x2 steel rod fixed in
+    # the elbow, and a second 2x2 rod (fore_t2) slides out of the bar's top carrying the head. At rest both rods are
+    # inside the bar and the arm is as it was; the rods never show at once in the same place (one below the bar, one
+    # above it).
     ey = HINGE_Y + LU
-    m.bone('fore', [ax, ey, az], 'upper', rot=[pose['fore'], 0, 0])
-    m.box('fore_bar', [2, 35, 5], [5, 59, 8], 'enamel', 'fore', part='fore')
-    m.box('fore_cable', [3, 40, 8], [4, 57, 9], 'rubber', 'fore', part='fore_cable')
+    m.bone('fore', [ax, ey, az], 'upper_t', rot=[pose['fore'], 0, 0])
+    m.box('fore_rod_lo', [2.5, 35.5, 5.5], [4.5, 57.5, 7.5], 'steel', 'fore', part='fore_rod_lo')
+    m.bone('fore_t1', [ax, ey, az], 'fore')
+    m.box('fore_bar', [2, 35, 5], [5, 59, 8], 'enamel', 'fore_t1', part='fore')
+    m.box('fore_cable', [3, 40, 8], [4, 57, 9], 'rubber', 'fore_t1', part='fore_cable')
+    m.bone('fore_t2', [ax, ey, az], 'fore_t1')
+    m.box('fore_rod_hi', [2.5, 36, 5.5], [4.5, 60, 7.5], 'steel', 'fore_t2', part='fore_rod_hi')
 
     # head (keyed pitch). A brass shade 5x5x4 round the head pivot (y 61), its face on local -Z with the lamp lens
     # (3x1x1) above the tool port; the tools retract inside the shade and slide out 4 px along -Z.
     hy = ey + LF
     hx = ax + LAT
-    m.bone('head', [hx, hy, az], 'fore', rot=[pose['head'], 0, 0])
+    m.bone('head', [hx, hy, az], 'fore_t2', rot=[pose['head'], 0, 0])
     m.box('shade', [1, hy - 2.5, 4], [6, hy + 2.5, 9], 'brass', 'head', part='shade')
     m.box('shade_back', [2, hy - 1.5, 9], [5, hy + 1.5, 10], 'dsteel', 'head', part='shade_back')
     m.box('head_lens', [2, hy + 1, 3], [5, hy + 2, 4], 'lens', 'head', part='head_lens')

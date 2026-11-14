@@ -2,6 +2,36 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.5.1 (2026-11-14)
+
+- **Wear and tear you can read from across the yard.** A damaged mecha's panels dent on the side it was hit from
+  most, a stage further at three quarters, half and a quarter of its health, and the dents come out again as the
+  Assembly Gantry puts the plates on. Below a quarter of its health a walking frame limps at its usual speed, dragging
+  the leg on the side it was hit from more, the arm on that side hanging. A 0.5.0 game and a 0.5.1 server (or the
+  other way round) now decline to connect, the game's disconnect screen naming Head in a Jar's channels as the
+  mismatch, rather than disagree about what a mecha is doing.
+- **One rule for handling a player.** The Bulwark's lift, the Kite's talons, the Tractor Beam and the Grapple Hook take
+  a player only if that player trusts you or is on your team, as the Lunk's toss does; the Hopper's landing and the
+  Wheelhouse's ram move players by the same rule. Anyone else: "... has not authorised handling. Ask them to trust
+  you." A refused hook costs nothing.
+- **Getting off a flier puts you on the ground** beside it, instead of on its back to fall from there (four blocks from
+  a ghast, and a knock on the glass).
+- **Old goggles wait for you.** Goggles coming back from the old Curios head slot to a creative player with no room
+  anywhere stay at their feet, as they do for everyone else, instead of vanishing at the first touch.
+- **Parked mecha are cheap to draw under shader packs too.** With Iris 1.8.12 and BSL Classic v10.0 or
+  Complementary Reimagined r5.5.1, a parked machine is drawn from its kept look through the pack's own programs, its
+  shadow included, for a fifth or less of what it cost, and looks the same; any other pack or Iris version draws it as
+  before.
+- **The Assembly Gantry reaches the tall frames.** Its arm telescopes: for a Colossus or an Executive the upper arm
+  and the forearm slide out along steel rods, so the welder reaches their shoulders instead of striking an arc from
+  the knees, and most welds now land on the tick their part does. A few of the highest still come a moment late or
+  as an arc.
+- **Power beside the Gantry no longer stops a build.** A frame wider than the pad may now overhang what stands beside
+  it, such as the Galvanic Pile that powers the Gantry. Before, a pile set beside it, as its tooltip says, made
+  Assemble answer that something blocks the space over the pad. The space straight over the pad must still be clear,
+  and so must the blocks beside it at the frame's head height: "The frame would stand with its head in the blocks beside the pad. Clear them up to its head height."
+- Client and server must both be on 0.5.1.
+
 ## 0.5.0 (2026-11-14)
 
 - **The mecha line, rebuilt.** All eight frames and the three Utility Shells are fully animated, from the build on

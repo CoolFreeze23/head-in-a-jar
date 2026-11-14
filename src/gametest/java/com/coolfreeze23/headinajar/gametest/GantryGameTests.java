@@ -326,6 +326,37 @@ public class GantryGameTests {
         });
     }
 
+    /** A Galvanic Pile beside the Gantry, where its tooltip says the power goes, and a low wall beside it do not stop a
+    *  Colossus, the widest frame, from being built: only the space straight over the pad must be clear. */
+    @GameTest(template = "tall_platform", timeoutTicks = 100)
+    public static void powerBesideThePadDoesNotBlockTheBuild(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR.south(3));
+        var gantry = gantry(h, 100_000);
+        stock(gantry, MechaFrame.COLOSSUS);
+        h.setBlock(FLOOR.east(), ModRegistry.GALVANIC_PILE.get());
+        for (int y = 0; y < 3; y++) h.setBlock(FLOOR.west().above(y), Blocks.STONE);
+        h.runAfterDelay(50, () -> {
+            h.assertTrue(press(p, gantry, AssemblyGantryMenu.ASSEMBLE), "the pile or the wall beside the pad blocked the build: " + Refusals.lastDelivered(p));
+            h.assertTrue(gantry.job() == AssemblyGantryBlockEntity.JOB_BUILD, "no build started");
+            done(h, p);
+        });
+    }
+
+    /** A wall beside the pad as high as a Colossus's head is refused: built there, it would suffocate parked on the pad. */
+    @GameTest(template = "tall_platform", timeoutTicks = 60)
+    public static void aWallAtTheFramesHeadIsRefused(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR.south(3));
+        var gantry = gantry(h, 100_000);
+        stock(gantry, MechaFrame.COLOSSUS);
+        for (int y = 0; y < 7; y++) h.setBlock(FLOOR.west().above(y), Blocks.STONE);
+        h.runAfterDelay(12, () -> {
+            h.assertFalse(press(p, gantry, AssemblyGantryMenu.ASSEMBLE), "built with its head in the wall");
+            h.assertValueEqual(Refusals.lastDelivered(p), "gantry.pad_walled", "walled line");
+            h.assertTrue(gantry.frame() == MechaFrame.COLOSSUS, "a refused build took the frame");
+            done(h, p);
+        });
+    }
+
     // --- the lamp, the pad, the update tag ----------------------------------------------------------------------
 
     /** A frame on the pad with room in its battery charges (the lamp works, the clients are told); full, it waits. */

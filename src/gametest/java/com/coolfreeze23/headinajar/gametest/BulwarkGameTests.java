@@ -404,6 +404,44 @@ public class BulwarkGameTests {
         });
     }
 
+    /**
+     * The lift goes by the one rule for handling a player (the Lunk's toss uses it too): a player who has not trusted
+     * the pilot is refused with the handling line; once they share a team, the same player is lifted, with nothing on
+     * their trust list.
+     */
+    @GameTest(template = "platform", timeoutTicks = 120)
+    public static void aTeammateIsLiftedWithoutTheTrustList(GameTestHelper h) {
+        // named players: a team holds names, and every plain mock player has the same one
+        ServerPlayer p = TestPlayers.at(h, "pilot", FLOOR);
+        BlockPos at = FLOOR.east(3);
+        ServerPlayer mate = TestPlayers.at(h, "mate", at.south(2));
+        mate.setPose(net.minecraft.world.entity.Pose.SWIMMING);
+        mate.refreshDimensions();
+        MechaEntity m = bulwark(h, at, p.getUUID(), MechaModule.HYDRAULIC_LEGS);
+        board(h, p, m);
+        var board = h.getLevel().getScoreboard();
+        String name = "bulwark_crew_" + mate.getId();
+        h.runAfterDelay(2, () -> {
+            press(p);
+            h.assertTrue(kind(m) == Bulwark.REFUSED, "a player who has not trusted the pilot was lifted");
+            h.assertTrue(count(p, "mecha.lift.untrusted") == 1, "the refusal was not the handling line: " + Refusals.delivered(p));
+            var team = board.addPlayerTeam(name);
+            board.addPlayerToTeam(p.getScoreboardName(), team);
+            board.addPlayerToTeam(mate.getScoreboardName(), team);
+        });
+        h.runAfterDelay(4 + Bulwark.REFUSED_TICKS, () -> {
+            h.assertFalse(HeadRegistry.get(h.getLevel().getServer()).trusted(mate.getUUID()).contains(p.getUUID()), "the mate trusts the pilot by list");
+            press(p);
+            h.assertTrue(kind(m) == Bulwark.GRAB, "a teammate was refused: " + Refusals.delivered(p));
+        });
+        h.runAfterDelay(4 + Bulwark.REFUSED_TICKS + Bulwark.GRAB_HELD + 4, () -> {
+            h.assertTrue(m.heldId() == mate.getId(), "the teammate was not taken");
+            Network.action(p, new Network.JarAction(Network.Action.EJECT));
+            board.removePlayerTeam(board.getPlayerTeam(name));
+            done(h, p, mate);
+        });
+    }
+
     @GameTest(template = "platform", timeoutTicks = 200)
     public static void theHoldEndsOnEveryWayOut(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);

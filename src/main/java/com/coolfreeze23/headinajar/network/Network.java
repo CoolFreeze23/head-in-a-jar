@@ -167,8 +167,16 @@ public final class Network {
         }
     }
 
+    /**
+     * The version of the mod's payloads. A client and a server with different versions are refused at the handshake with
+     * NeoForge's reason ("The client wants the payload to be version: 4, but the server wants it to be version: 5!"),
+     * before they can disagree about anything else. Raised whenever what is sent changes shape, including a mecha's synced
+     * data (5: the remembered blows, which move the later fields' ids).
+     */
+    public static final String VERSION = "5";
+
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("4");
+        var registrar = event.registrar(VERSION);
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
         registrar.playToServer(JarAction.TYPE, JarAction.CODEC, Network::onAction);
         registrar.playToClient(HostSync.TYPE, HostSync.CODEC, (msg, ctx) -> {

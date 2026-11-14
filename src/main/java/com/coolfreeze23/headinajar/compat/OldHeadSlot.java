@@ -6,12 +6,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.LinkedHashMap;
@@ -23,7 +26,8 @@ import java.util.Map;
  * inventory, dropping what does not fit at the player's feet, where a bare jar cannot pick it up and it would despawn.
  * So the hand-back is run here, as the player logs in: what fits goes into the inventory as Curios puts it, what does
  * not goes into the Ender Chest, and only what fits in neither is dropped, and then it never despawns. The player is
- * told where their goggles went.
+ * told where their goggles went. A creative player whose inventory is still full leaves the dropped goggles lying
+ * (vanilla destroys whatever such a player touches and has no room for), so they wait at the feet in every game mode.
  */
 @EventBusSubscriber(modid = HeadInAJar.MOD_ID)
 public final class OldHeadSlot {
@@ -32,6 +36,8 @@ public final class OldHeadSlot {
 
     /** The player whose items are being handed back right now (the hand-back runs on the server thread, at once). */
     private static ServerPlayer giving;
+    /** Marks an item dropped by a hand-back: it never despawns, and a touch that would destroy it does not pick it up. */
+    public static final String KEPT = HeadInAJar.MOD_ID + ":handed_back";
     /** Goggles put in the Ender Chest, and dropped, during the current hand-back. */
     private static final Map<Item, Integer> TO_CHEST = new LinkedHashMap<>(), TO_FLOOR = new LinkedHashMap<>();
 
@@ -78,7 +84,27 @@ public final class OldHeadSlot {
         }
         drop.setItem(rest);
         drop.setUnlimitedLifetime();
+        drop.getPersistentData().putBoolean(KEPT, true);
         if (rest.getItem() instanceof RelayGogglesItem) TO_FLOOR.merge(rest.getItem(), 1, Integer::sum);
+    }
+
+    /**
+     * A player with infinite materials (creative) who touches an item none of which fits in their inventory destroys it
+     * (vanilla {@code Inventory.add}). A handed-back item is not picked up by such a touch: it stays where it lies
+     * until there is room for it.
+     */
+    @SubscribeEvent
+    public static void touched(ItemEntityPickupEvent.Pre event) {
+        ItemEntity drop = event.getItemEntity();
+        Player player = event.getPlayer();
+        if (drop.getPersistentData().getBoolean(KEPT) && player.hasInfiniteMaterials() && !fits(player.getInventory(), drop.getItem())) {
+            event.setCanPickup(TriState.FALSE);
+        }
+    }
+
+    /** Whether any of this stack would go into the inventory (where vanilla's pickup puts it). */
+    static boolean fits(Inventory inventory, ItemStack stack) {
+        return inventory.getFreeSlot() >= 0 || !stack.isDamaged() && inventory.getSlotWithRemainingSpace(stack) >= 0;
     }
 
     private static Map<Item, Integer> goggles(Inventory inventory) {

@@ -407,8 +407,14 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
                 if (mecha == null) return say(player, "failed");
                 Vec3 deck = deck();
                 mecha.moveTo(deck.x, deck.y, deck.z, frontYaw(), 0);
-                // the frame's box over the deck must be clear of blocks (it would stand inside them)
-                if (!level.noBlockCollision(mecha, mecha.getBoundingBox().deflate(0.02))) return say(player, "pad_blocked");
+                // the space over the deck must be clear of blocks (the frame would stand inside them); a frame wider than
+                // the pad may overhang what stands beside it, such as the Galvanic Pile that powers the Gantry
+                AABB frameBox = mecha.getBoundingBox().deflate(0.02);
+                AABB column = new AABB(worldPosition.getX() + 0.02, frameBox.minY, worldPosition.getZ() + 0.02,
+                        worldPosition.getX() + 0.98, frameBox.maxY, worldPosition.getZ() + 0.98);
+                if (!level.noBlockCollision(mecha, frameBox.intersect(column))) return say(player, "pad_blocked");
+                // ...but not where its head would be in a wall: it would suffocate standing parked on the pad
+                if (mecha.isInWall()) return say(player, "pad_walled");
                 List<ItemStack> modules = new ArrayList<>();
                 for (int i = 0; i < frame.totalSlots(); i++) modules.add(items.extractItem(FIRST_MODULE + i, 1, false));
                 mecha.setModules(modules);

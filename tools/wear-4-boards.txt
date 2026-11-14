@@ -1,0 +1,248 @@
+# Wear, third take: the bolder dents at every stage from 2.5, 5 and 8 blocks on the struck side, and the limp of a
+# Hopper and a Bulwark at a fifth of their health from the side (whole cage in shot) and from behind (the hip roll),
+# with the Bulwark's sound walk from behind to compare and its limp from the side (default profile, flat world). Both machines face north and are
+# struck three times from their left (west) by the stand-in, who then leaves; health is set below each stage.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper 0 -60 0 hydraulic_legs
+mecha bulwark 0 -60 12 hydraulic_legs
+wait 20
+bystander spawn -3 -60 1 -90
+bystander hold minecraft:iron_sword
+bystander tp -3 -60 1 -90 0
+wait 3
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander attack nearest hopper
+wait 22
+bystander tp -3 -60 13 -90 0
+wait 3
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander attack nearest bulwark
+wait 22
+bystander remove
+wait 10
+# --- stage 0
+wait 20
+dents
+/tp @s -2.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s0_2_5b
+/tp @s -4.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s0_8b
+/tp @s -2.0 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s0_2_5b
+/tp @s -4.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s0_5b
+/tp @s -7.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s0_8b
+# --- stage 1
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest,x=0.5,y=-60,z=0.5] {Health:48.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest,x=0.5,y=-60,z=12.5] {Health:112.0f}
+wait 20
+dents
+/tp @s -2.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s1_2_5b
+/tp @s -4.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s1_8b
+/tp @s -2.0 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s1_2_5b
+/tp @s -4.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s1_5b
+/tp @s -7.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s1_8b
+# --- stage 2
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest,x=0.5,y=-60,z=0.5] {Health:31.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest,x=0.5,y=-60,z=12.5] {Health:72.0f}
+wait 20
+dents
+/tp @s -2.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s2_2_5b
+/tp @s -4.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s2_8b
+/tp @s -2.0 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s2_2_5b
+/tp @s -4.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s2_5b
+/tp @s -7.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s2_8b
+# --- stage 3
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest,x=0.5,y=-60,z=0.5] {Health:13.0f}
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest,x=0.5,y=-60,z=12.5] {Health:30.0f}
+wait 20
+dents
+/tp @s -2.0 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s3_2_5b
+/tp @s -4.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 3
+lookat headinajar:hopper 1.0
+wait 6
+shot hopper_s3_8b
+/tp @s -2.0 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s3_2_5b
+/tp @s -4.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s3_5b
+/tp @s -7.5 -60 12.5 -90 0
+wait 3
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s3_8b
+parkstats
+# --- the limp: Hopper, from its left (south) at 9 blocks, then from behind
+jar
+charge 100000
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 80
+riding hopper
+look 90 4
+wait 20
+watch follow 0 2.0 9 180 6
+wait 4
+report hopper limp from its left at nine blocks
+frames limp_hopper_side9 80
+wait 2
+key forward hold 70
+wait 10
+watch off
+look -90 4
+wait 30
+watch follow -7 2.6 0 -90 10
+wait 4
+report hopper limp from behind (walking east)
+frames limp_hopper_behind 70
+wait 2
+key forward hold 60
+wait 10
+watch off
+dents
+sneak down
+key jar_menu hold 25
+sneak up
+wait 30
+# --- the Bulwark: limp from behind, then whole from behind to compare
+/tp @s 0.5 -60 16.5 180 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 80
+riding bulwark
+look 90 4
+wait 20
+watch follow 8 3.2 0 90 10
+wait 4
+report bulwark limp from behind (walking west)
+frames limp_bulwark_behind 80
+wait 2
+key forward hold 70
+wait 10
+watch off
+look -90 4
+wait 30
+watch follow 0 2.2 -7.5 0 6
+wait 4
+report bulwark limp from its left (walking east)
+frames limp_bulwark_side 90
+wait 2
+key forward hold 80
+wait 10
+watch off
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Health:154f}
+look 90 4
+wait 30
+watch follow 8 3.2 0 90 10
+wait 4
+report bulwark walk whole from behind (walking west)
+frames walk_bulwark_behind 70
+wait 2
+key forward hold 60
+wait 10
+watch off
+dents
