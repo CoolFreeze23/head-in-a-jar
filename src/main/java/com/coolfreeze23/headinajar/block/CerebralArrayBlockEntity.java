@@ -208,6 +208,8 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
 
     @Override
     public void clientTick() {
+        // the broth urn steams faintly while the heads are fed
+        com.coolfreeze23.headinajar.client.MachineLoopSound.follow(this, com.coolfreeze23.headinajar.machine.MachineSounds.ARRAY_STEAM, fedShown ? 1 : 0, 1);
     }
 
     @Override

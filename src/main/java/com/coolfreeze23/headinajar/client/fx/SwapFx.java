@@ -107,7 +107,13 @@ public final class SwapFx {
      * when the swap's wipe would play, keeps the last frame of the old view to crossfade from.
      */
     public static void formChanging(com.coolfreeze23.headinajar.form.Form from, com.coolfreeze23.headinajar.form.Form to) {
-        if (Comfort.photosensitive() && (from.isDecapitated() || to.isDecapitated())) captureForCrossfade();
+        // the last frame of the old view: crossfaded from under the photosensitive option, else pulled back from
+        if (from.isDecapitated() || to.isDecapitated()) captureForCrossfade();
+    }
+
+    /** The old view's last frame, kept as the form changed (null before the first swap). */
+    public static RenderTarget lastFrame() {
+        return last;
     }
 
     /** Keeps the last frame of the old view to fade out of. */

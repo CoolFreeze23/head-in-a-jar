@@ -1,0 +1,96 @@
+# Bulwark, second pass, default profile: the build seen closer; walk_b (the stand-in's machine) against walk_c (the
+# pilot's) side by side in one shot, from behind and from the side at hull height; the chest carry (stand-in) against
+# the overhead carry (pilot) from the pilot's chase view and from a bystander's place
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- 01 the build, about 4.5 blocks off at 45 degrees -----------------------------------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 bulwark
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 3.6 -58.2 3.6 135 16
+wait 2
+frames s01_build_closer 230
+wait 140
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:bulwark
+wait 90
+bystander remove
+/kill @e[type=headinajar:bulwark]
+wait 5
+# --- two machines: the stand-in's (walk_b, chest carry) and the pilot's (walk_c, overhead carry) ----------------------
+mecha bulwark -4 -60 30 hydraulic_legs,drill
+mecha bulwark 0 -60 30 hydraulic_legs,drill
+bystander spawn -4 -60 28 0
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:bulwark
+wait 5
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.4 0 -25
+wait 5
+key use
+wait 70
+riding bulwark
+look 0 8
+wait 15
+bulwarkwalk b bystander
+bulwarkwalk c nearest
+bystander look 0 0
+bystander pace -4 0 0
+wait 5
+# --- 02 walk_b (left) and walk_c (right) from behind, between them ----------------------------------------------------
+watch follow -2 2.4 -10 0 6
+frames s02_walk_b_left_walk_c_right_behind 110
+key forward hold 100
+wait 15
+# --- 03 the same from the side at hull height: walk_c near, walk_b beyond and ahead -----------------------------------
+bystander pace -4 0 5
+wait 3
+watch follow 10 1.8 2.5 90 2
+frames s03_walk_c_near_walk_b_far_side 110
+key forward hold 100
+wait 15
+inspect near headinajar:bulwark 30
+# --- carries: the pilot carries overhead, the stand-in at the chest -----------------------------------------------------
+bulwarkcarry high nearest
+bystander pace -4 0 0
+wait 3
+execute at @e[type=headinajar:bulwark,limit=2] run summon minecraft:cow ~ ~ ~2.8
+wait 3
+watch off
+view 1
+look 0 8
+frames s04_carries_pilot_chase_overhead_vs_chest 200
+key drive
+bystander drive tap
+wait 32
+key forward hold 80
+wait 10
+frames s05_carries_bystander_place 140
+watch at 7 1.6 7 135 4
+wait 3
+key forward hold 60
+wait 10
+key drive
+bystander drive tap
+wait 50
+watch off
+inspect near minecraft:cow 40
+report second done

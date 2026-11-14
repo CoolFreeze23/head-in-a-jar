@@ -1,0 +1,10 @@
+# What Entity Model Features hands the head-hiding hook for a host cow (owner's settings, Fresh Animations).
+wait 40
+/time set 6000
+hud off
+view 0
+/tp @s 0.5 -60 -3.5 0 15
+/summon cow 0.5 -60 1.5 {Rotation:[90f,0f],"neoforge:attachments":{"headinajar:host":{host:1b,freshness:90f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 40
+emfhost
+shot emf_cow_host

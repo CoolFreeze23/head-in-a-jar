@@ -81,7 +81,7 @@ public class MechaGameTests {
         return m;
     }
 
-    @GameTest(template = "platform")
+    @GameTest(template = "platform", timeoutTicks = 320)
     public static void gantryAssembles(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR.east(3));
         h.setBlock(FLOOR, ModRegistry.ASSEMBLY_GANTRY.get());
@@ -93,13 +93,22 @@ public class MechaGameTests {
         h.assertFalse(gantry.items().isItemValid(AssemblyGantryBlockEntity.FIRST_MODULE + legs, module(MechaModule.DRILL, 50)), "a drill fits a leg slot");
         gantry.energy().set(20_000);
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assembly refused");
-        MechaEntity m = h.getEntities(ModRegistry.HOPPER.get()).get(0);
-        h.assertTrue(m.has(MechaModule.HYDRAULIC_LEGS) && m.arm(0) == MechaModule.HYDRAULIC_FIST, "modules lost in assembly");
-        h.assertTrue(p.getUUID().equals(m.owner()), "no owner");
         h.assertTrue(gantry.items().getStackInSlot(AssemblyGantryBlockEntity.SLOT_FRAME).isEmpty(), "frame not used");
-        h.assertTrue(gantry.button(p, AssemblyGantryMenu.DISASSEMBLE), "could not take it apart");
-        h.assertTrue(m.isRemoved() && !gantry.items().getStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + arm).isEmpty(), "modules not back in the gantry");
-        done(h, p);
+        // the frame stands on the pad once the arm has stood off
+        h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.LEAD + 1, () -> {
+            MechaEntity m = h.getEntities(ModRegistry.HOPPER.get()).get(0);
+            h.assertTrue(m.has(MechaModule.HYDRAULIC_LEGS) && m.arm(0) == MechaModule.HYDRAULIC_FIST, "modules lost in assembly");
+            h.assertTrue(p.getUUID().equals(m.owner()), "no owner");
+        });
+        // the arm is busy until the build's clip ends; then a take-apart is its 60 ticks
+        h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.of(MechaFrame.HOPPER).length() + 2, () -> {
+            MechaEntity m = h.getEntities(ModRegistry.HOPPER.get()).get(0);
+            h.assertTrue(gantry.button(p, AssemblyGantryMenu.DISASSEMBLE), "could not take it apart");
+            h.runAfterDelay(61, () -> {
+                h.assertTrue(m.isRemoved() && !gantry.items().getStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + arm).isEmpty(), "modules not back in the gantry");
+                done(h, p);
+            });
+        });
     }
 
     @GameTest(template = "platform")

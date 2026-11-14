@@ -1,55 +1,114 @@
 {
   "booth_cut": {
     "sounds": [
-      "headinajar:booth_cut"
+      {
+        "name": "headinajar:house/booth_cut_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/booth_cut_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/booth_cut_3",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.booth_cut"
   },
   "booth_oopsie": {
     "sounds": [
-      "headinajar:booth_oopsie"
+      {
+        "name": "headinajar:house.jingle_botch",
+        "type": "event"
+      }
     ],
     "subtitle": "subtitles.headinajar.booth_oopsie"
   },
   "link_lost": {
     "sounds": [
-      "headinajar:link_lost"
+      {
+        "name": "headinajar:house/link_lost_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/link_lost_2",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.link_lost"
   },
   "link_restored": {
     "sounds": [
-      "headinajar:link_restored"
+      {
+        "name": "headinajar:house/link_restored_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/link_restored_2",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.link_restored"
   },
   "mecha_boot": {
     "sounds": [
-      "headinajar:mecha_boot"
+      {
+        "name": "headinajar:house/mecha_boot_1",
+        "attenuation_distance": 48
+      }
     ],
     "subtitle": "subtitles.headinajar.mecha_boot"
   },
   "gene_splice": {
     "sounds": [
-      "headinajar:gene_splice"
+      {
+        "name": "headinajar:house/gene_splice_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/gene_splice_2",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.gene_splice"
   },
   "gene_mutation": {
     "sounds": [
-      "headinajar:gene_mutation"
+      {
+        "name": "headinajar:house/gene_mutation_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/gene_mutation_2",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.gene_mutation"
   },
   "array_murmur": {
     "sounds": [
-      "headinajar:array_murmur"
+      {
+        "name": "headinajar:array.murmur",
+        "type": "event"
+      }
     ],
     "subtitle": "subtitles.headinajar.array_murmur"
   },
   "staff_complain": {
     "sounds": [
-      "headinajar:staff_complain"
+      {
+        "name": "headinajar:house/staff_complain_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/staff_complain_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:house/staff_complain_3",
+        "attenuation_distance": 16
+      }
     ],
     "subtitle": "subtitles.headinajar.staff_complain"
   },
@@ -149,7 +208,8 @@
         "name": "minecraft:block/bubble_column/bubble3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.jar.glug"
   },
   "chair.servo_barrier": {
     "sounds": [
@@ -216,7 +276,8 @@
         "name": "headinajar:chair/barrier_settle_3",
         "attenuation_distance": 16
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.chair.barrier_latch"
   },
   "chair.hood_nod": {
     "sounds": [
@@ -279,7 +340,8 @@
         "name": "headinajar:chair/servo_tick_4",
         "attenuation_distance": 16
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.chair.servo_tick"
   },
   "chair.scan_chirp": {
     "sounds": [
@@ -364,7 +426,8 @@
         "name": "headinajar:chair/plonk_3",
         "attenuation_distance": 16
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.chair.plonk"
   },
   "chair.ding": {
     "sounds": [
@@ -623,7 +686,8 @@
         "name": "headinajar:chair/tap_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.chair.tap"
   },
   "chair.drawer_out": {
     "sounds": [
@@ -665,7 +729,8 @@
         "name": "headinajar:chair/drawer_stop_3",
         "attenuation_distance": 16
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.chair.drawer_stop"
   },
   "chair.servo_hiccup": {
     "sounds": [
@@ -1410,7 +1475,8 @@
         "name": "headinajar:machine/drawer_stop_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.machine.drawer_stop"
   },
   "machine.drawer_shut": {
     "sounds": [
@@ -1507,7 +1573,8 @@
         "name": "headinajar:machine/rattle_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.feedback.refused"
   },
   "pile.crackle": {
     "sounds": [
@@ -1694,7 +1761,8 @@
         "name": "headinajar:cradle/hose_swing_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.cradle.hose_swing"
   },
   "cradle.hose_click": {
     "sounds": [
@@ -1727,7 +1795,8 @@
         "name": "headinajar:cradle/blanket_whoosh_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.cradle.blanket_whoosh"
   },
   "cradle.flump": {
     "sounds": [
@@ -1989,7 +2058,8 @@
         "name": "headinajar:printer/door_swing_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.printer.door_swing"
   },
   "printer.door_shut": {
     "sounds": [
@@ -2164,7 +2234,8 @@
         "name": "headinajar:splicer/seat_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.splicer.thread"
   },
   "splicer.bell": {
     "sounds": [
@@ -2310,7 +2381,8 @@
         "name": "headinajar:mount/stamp_lift_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.mount.stamp_lift"
   },
   "mount.stamp_thump": {
     "sounds": [
@@ -2365,7 +2437,8 @@
         "name": "headinajar:mount/bell_ting_1",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.feedback.refused"
   },
   "mount.sigh": {
     "sounds": [
@@ -2494,7 +2567,8 @@
         "name": "headinajar:rig/prime_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.rig.prime"
   },
   "rig.plunge": {
     "sounds": [
@@ -2614,7 +2688,8 @@
         "name": "headinajar:tesla/look_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.tesla.look"
   },
   "tesla.settle": {
     "sounds": [
@@ -2639,7 +2714,8 @@
         "name": "headinajar:tesla/swing_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.tesla.swing"
   },
   "tesla.link_zap": {
     "sounds": [
@@ -2780,7 +2856,8 @@
         "name": "headinajar:dock/spark_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.dock.spark"
   },
   "mast.swing": {
     "sounds": [
@@ -2934,7 +3011,8 @@
         "name": "headinajar:turret/servo_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.turret.servo"
   },
   "turret.lock": {
     "sounds": [
@@ -3028,7 +3106,8 @@
         "name": "headinajar:locker/portrait_on_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.locker.portrait_on"
   },
   "locker.portrait_off": {
     "sounds": [
@@ -3040,7 +3119,8 @@
         "name": "headinajar:locker/portrait_off_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.locker.portrait_off"
   },
   "locker.ticket_clink": {
     "sounds": [
@@ -3065,7 +3145,98 @@
         "name": "headinajar:locker/ticket_rattle_2",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.feedback.refused"
+  },
+  "dock.lever": {
+    "sounds": [
+      {
+        "name": "headinajar:dock/lever_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:dock/lever_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:dock/lever_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.dock.lever"
+  },
+  "dock.unclack": {
+    "sounds": [
+      {
+        "name": "headinajar:dock/unclack_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:dock/unclack_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:dock/unclack_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.dock.unclack"
+  },
+  "dock.tap": {
+    "sounds": [
+      {
+        "name": "headinajar:dock/tap_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:dock/tap_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:dock/tap_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.dock.tap"
+  },
+  "rig.cancel": {
+    "sounds": [
+      {
+        "name": "headinajar:rig/cancel_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:rig/cancel_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.rig.cancel"
+  },
+  "rig.fill": {
+    "sounds": [
+      {
+        "name": "headinajar:rig/fill_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:rig/fill_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.rig.fill"
+  },
+  "rig.drain": {
+    "sounds": [
+      {
+        "name": "headinajar:rig/drain_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:rig/drain_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.rig.drain"
   },
   "leech.stir": {
     "sounds": [
@@ -3183,7 +3354,8 @@
         "name": "headinajar:socket/servo_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.socket.servo"
   },
   "socket.clamp": {
     "sounds": [
@@ -3250,7 +3422,8 @@
         "name": "headinajar:socket/drop_3",
         "attenuation_distance": 8
       }
-    ]
+    ],
+    "subtitle": "subtitles.headinajar.socket.drop"
   },
   "leyden.full": {
     "sounds": [
@@ -3268,5 +3441,4701 @@
       }
     ],
     "subtitle": "subtitles.headinajar.leyden.full"
+  },
+  "socket.relay_up": {
+    "sounds": [
+      {
+        "name": "headinajar:socket/relay_up_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:socket/relay_up_2",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.relay_up"
+  },
+  "socket.relay_down": {
+    "sounds": [
+      {
+        "name": "headinajar:socket/relay_down_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:socket/relay_down_2",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.relay_down"
+  },
+  "socket.channel_on": {
+    "sounds": [
+      {
+        "name": "headinajar:socket/channel_on_1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:socket/channel_on_2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:socket/channel_on_3",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.channel_on"
+  },
+  "socket.channel_off": {
+    "sounds": [
+      {
+        "name": "headinajar:socket/channel_off_1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:socket/channel_off_2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:socket/channel_off_3",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.channel_off"
+  },
+  "socket.metronome": {
+    "sounds": [
+      {
+        "name": "headinajar:socket/metronome_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:socket/metronome_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:socket/metronome_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:socket/metronome_4",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.metronome"
+  },
+  "leech.bite": {
+    "sounds": [
+      {
+        "name": "headinajar:leech/bite_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:leech/bite_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:leech/bite_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.leech.bite"
+  },
+  "mecha.bulwark.motor": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/motor_1",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.motor"
+  },
+  "mecha.bulwark.step_heavy": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/step_heavy_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_heavy_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_heavy_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.step_heavy"
+  },
+  "mecha.bulwark.step": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/step_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.step"
+  },
+  "mecha.bulwark.step_drag": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/step_drag_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_drag_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/step_drag_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.step_drag"
+  },
+  "mecha.bulwark.stomp": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/stomp_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/stomp_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.stomp"
+  },
+  "mecha.bulwark.land_light": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/land_light_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/land_light_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/land_light_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.land_light"
+  },
+  "mecha.bulwark.land_heavy": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/land_heavy_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/bulwark/land_heavy_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.land_heavy"
+  },
+  "mecha.bulwark.servo": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/servo_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.servo"
+  },
+  "mecha.bulwark.servo_settle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/servo_settle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_settle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_settle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.servo_settle"
+  },
+  "mecha.bulwark.servo_sag": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/servo_sag_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_sag_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_sag_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.servo_sag"
+  },
+  "mecha.bulwark.servo_catch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/servo_catch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_catch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_catch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.servo_catch"
+  },
+  "mecha.bulwark.servo_fail": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/servo_fail_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/servo_fail_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.servo_fail"
+  },
+  "mecha.bulwark.hydraulic_stand": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_stand_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_stand_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_stand_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.hydraulic_stand"
+  },
+  "mecha.bulwark.hydraulic_lift": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_lift_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_lift_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_lift_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.hydraulic_lift"
+  },
+  "mecha.bulwark.hydraulic_strain": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_strain_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_strain_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hydraulic_strain_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.hydraulic_strain"
+  },
+  "mecha.bulwark.clamp_release": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/clamp_release_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/clamp_release_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/clamp_release_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.clamp_release"
+  },
+  "mecha.bulwark.clamp_close": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/clamp_close_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/clamp_close_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/clamp_close_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.clamp_close"
+  },
+  "mecha.bulwark.clamp_blow": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/clamp_blow_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/clamp_blow_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.clamp_blow"
+  },
+  "mecha.bulwark.jar_seat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/jar_seat_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/jar_seat_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/jar_seat_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.jar_seat"
+  },
+  "mecha.bulwark.grip_clack": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/grip_clack_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grip_clack_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grip_clack_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.grip_clack"
+  },
+  "mecha.bulwark.grab_close": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/grab_close_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grab_close_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grab_close_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.grab_close"
+  },
+  "mecha.bulwark.grab_dry": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/grab_dry_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grab_dry_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/grab_dry_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.grab_dry"
+  },
+  "mecha.bulwark.shrug_hiss": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/shrug_hiss_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/shrug_hiss_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.shrug_hiss"
+  },
+  "mecha.bulwark.whoosh": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/whoosh_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/whoosh_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.throw_release"
+  },
+  "mecha.bulwark.throw_release": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/throw_release_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/throw_release_2",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.throw_release"
+  },
+  "mecha.bulwark.set_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/set_down_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/set_down_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/bulwark/set_down_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.set_down"
+  },
+  "mecha.bulwark.neck_crack": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/neck_crack_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/neck_crack_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/neck_crack_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.neck_crack"
+  },
+  "mecha.bulwark.vent_blast": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/vent_blast_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/vent_blast_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.vent_blast"
+  },
+  "mecha.bulwark.vent_clank": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/vent_clank_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/vent_clank_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/vent_clank_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.vent_clank"
+  },
+  "mecha.bulwark.collapse": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/collapse_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/bulwark/collapse_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.collapse"
+  },
+  "mecha.bulwark.hurt": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/hurt_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hurt_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bulwark/hurt_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.hurt"
+  },
+  "mecha.bulwark.dry_fire": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/dry_fire_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/dry_fire_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/dry_fire_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.dry_fire"
+  },
+  "mecha.bulwark.rattle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/rattle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/rattle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/rattle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.rattle"
+  },
+  "mecha.bulwark.sigh": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/sigh_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/sigh_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.sigh"
+  },
+  "mecha.bulwark.power_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bulwark/power_down_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bulwark/power_down_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bulwark.power_down"
+  },
+  "mecha.colossus.planning_chime": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/planning_chime_1",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.planning_chime"
+  },
+  "mecha.colossus.permit_denied": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/permit_denied_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/permit_denied_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.permit_denied"
+  },
+  "mecha.colossus.hydraulic_sink": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_sink_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_sink_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_sink_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.hydraulic_sink"
+  },
+  "mecha.colossus.hydraulic_groan": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_groan_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_groan_2",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.hydraulic_groan"
+  },
+  "mecha.colossus.hydraulic_hiss": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_hiss_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_hiss_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/hydraulic_hiss_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.hydraulic_hiss"
+  },
+  "mecha.colossus.latch_clunk": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/latch_clunk_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/latch_clunk_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/latch_clunk_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.latch_clunk"
+  },
+  "mecha.colossus.turret_whir": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/turret_whir_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/turret_whir_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/colossus/turret_whir_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.turret_whir"
+  },
+  "mecha.colossus.siege_hum": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/siege_hum_1",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.siege_hum"
+  },
+  "mecha.colossus.snip": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/snip_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/colossus/snip_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/colossus/snip_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.snip"
+  },
+  "mecha.colossus.step_quake": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/step_quake_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/colossus/step_quake_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/colossus/step_quake_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.step_quake"
+  },
+  "mecha.colossus.siege_anchor": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/colossus/siege_anchor_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/colossus/siege_anchor_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.colossus.siege_anchor"
+  },
+  "mecha.executive.premium_jingle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/premium_jingle_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.premium_jingle"
+  },
+  "mecha.executive.cloth_tug": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/cloth_tug_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/executive/cloth_tug_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/executive/cloth_tug_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.cloth_tug"
+  },
+  "mecha.executive.shoe_tap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/shoe_tap_1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:mecha/executive/shoe_tap_2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:mecha/executive/shoe_tap_3",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.shoe_tap"
+  },
+  "mecha.executive.watch_tick": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/watch_tick_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:mecha/executive/watch_tick_2",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:mecha/executive/watch_tick_3",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.watch_tick"
+  },
+  "mecha.executive.sunroof_motor": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/sunroof_motor_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/executive/sunroof_motor_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.sunroof_motor"
+  },
+  "mecha.executive.sunroof_shut": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/sunroof_shut_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/executive/sunroof_shut_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/executive/sunroof_shut_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.sunroof_shut"
+  },
+  "mecha.executive.step_quiet": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/executive/step_quiet_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/executive/step_quiet_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/executive/step_quiet_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.executive.step_quiet"
+  },
+  "mecha.wheelhouse.motor": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/motor_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.motor"
+  },
+  "mecha.wheelhouse.engine_rev": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_rev_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_rev_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_rev_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.engine_rev"
+  },
+  "mecha.wheelhouse.engine_catch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_catch_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_catch_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_catch_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.engine_catch"
+  },
+  "mecha.wheelhouse.starter_whirr": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/starter_whirr_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/starter_whirr_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/starter_whirr_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.starter_whirr"
+  },
+  "mecha.wheelhouse.engine_stop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_stop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_stop_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.engine_stop"
+  },
+  "mecha.wheelhouse.engine_misfire": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.engine_misfire"
+  },
+  "mecha.wheelhouse.backfire_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/backfire_pop_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/backfire_pop_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/backfire_pop_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.backfire_pop"
+  },
+  "mecha.wheelhouse.exhaust_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/exhaust_pop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/exhaust_pop_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/exhaust_pop_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_wind_down"
+  },
+  "mecha.wheelhouse.rush_go": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_go_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_go_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_go"
+  },
+  "mecha.wheelhouse.rush_ram": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_ram_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_ram_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_ram_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_ram"
+  },
+  "mecha.wheelhouse.rush_refused": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_refused_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_refused_2",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_refused"
+  },
+  "mecha.wheelhouse.rush_wind_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_wind_down_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/rush_wind_down_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_wind_down"
+  },
+  "mecha.wheelhouse.flag_snap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_snap_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_snap_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_snap_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.flag_snap"
+  },
+  "mecha.wheelhouse.flag_fold": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_fold_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_fold_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_fold_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.flag_fold"
+  },
+  "mecha.wheelhouse.flag_flop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_flop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flag_flop_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.rush_refused"
+  },
+  "mecha.wheelhouse.flap_clank": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/flap_clank_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flap_clank_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/flap_clank_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.flap_clank"
+  },
+  "mecha.wheelhouse.buffer_spring": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/buffer_spring_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/buffer_spring_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/buffer_spring_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.buffer_spring"
+  },
+  "mecha.wheelhouse.brake_squeal": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_squeal_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_squeal_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_squeal_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.brake_squeal"
+  },
+  "mecha.wheelhouse.brake_hiss": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_hiss_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_hiss_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/brake_hiss_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.brake_hiss"
+  },
+  "mecha.wheelhouse.tyre_scrub": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_scrub_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_scrub_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_scrub_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.tyre_scrub"
+  },
+  "mecha.wheelhouse.tyre_skid": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_skid_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_skid_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/tyre_skid_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.tyre_skid"
+  },
+  "mecha.wheelhouse.suspension_clunk": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_clunk_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_clunk_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_clunk_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.suspension_clunk"
+  },
+  "mecha.wheelhouse.suspension_creak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_creak_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_creak_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_creak_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.suspension_creak"
+  },
+  "mecha.wheelhouse.suspension_rise": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_rise_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/suspension_rise_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.suspension_rise"
+  },
+  "mecha.wheelhouse.steer_servo": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/steer_servo_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/steer_servo_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/steer_servo_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.steer_servo"
+  },
+  "mecha.wheelhouse.ring_latch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_latch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_latch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_latch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.ring_latch"
+  },
+  "mecha.wheelhouse.catch_release": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/catch_release_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/catch_release_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/catch_release_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.catch_release"
+  },
+  "mecha.wheelhouse.ring_blow": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_blow_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_blow_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.ring_blow"
+  },
+  "mecha.wheelhouse.ring_clank": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_clank_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ring_clank_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.ring_blow"
+  },
+  "mecha.wheelhouse.jar_seat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/jar_seat_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/jar_seat_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/jar_seat_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.jar_seat"
+  },
+  "mecha.wheelhouse.ram_stroke": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/ram_stroke_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ram_stroke_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/ram_stroke_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.ram_stroke"
+  },
+  "mecha.wheelhouse.wheel_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_pop_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_pop_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_pop_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.wheel_pop"
+  },
+  "mecha.wheelhouse.wheel_clatter": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_clatter_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_clatter_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/wheel_clatter_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.wheel_clatter"
+  },
+  "mecha.wheelhouse.horn": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/horn_1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.horn"
+  },
+  "mecha.wheelhouse.reverse_beep": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/reverse_beep_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.reverse_beep"
+  },
+  "mecha.wheelhouse.cooling_tick": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/cooling_tick_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/cooling_tick_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/cooling_tick_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.wheelhouse.cooling_tick"
+  },
+  "mecha.chimera.yawn": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/yawn_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/chimera/yawn_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.yawn"
+  },
+  "mecha.chimera.joint_crack": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/joint_crack_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/joint_crack_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/joint_crack_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.joint_crack"
+  },
+  "mecha.chimera.shiver": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/shiver_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/shiver_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/shiver_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.shiver"
+  },
+  "mecha.chimera.twitch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/twitch_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/twitch_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/twitch_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.twitch"
+  },
+  "mecha.chimera.tut": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/tut_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/chimera/tut_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/chimera/tut_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.tut"
+  },
+  "mecha.chimera.sniff": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/sniff_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/sniff_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/sniff_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.sniff"
+  },
+  "mecha.chimera.squelch_gulp": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/squelch_gulp_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/chimera/squelch_gulp_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/chimera/squelch_gulp_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.squelch_gulp"
+  },
+  "mecha.chimera.retch_dry": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/retch_dry_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/retch_dry_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/retch_dry_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.retch_dry"
+  },
+  "mecha.chimera.cough": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/cough_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/cough_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/cough_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.cough"
+  },
+  "mecha.chimera.stand_creak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/stand_creak_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/stand_creak_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/stand_creak_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.stand_creak"
+  },
+  "mecha.chimera.hard_hat_clonk": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/chimera/hard_hat_clonk_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/hard_hat_clonk_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/chimera/hard_hat_clonk_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.chimera.hard_hat_clonk"
+  },
+  "mecha.lunk.drawer_slide": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/drawer_slide_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/drawer_slide_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/drawer_slide_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.drawer_slide"
+  },
+  "mecha.lunk.drawer_slam": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/drawer_slam_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/lunk/drawer_slam_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/lunk/drawer_slam_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.drawer_slam"
+  },
+  "mecha.lunk.drawers_burst": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/drawers_burst_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/lunk/drawers_burst_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.drawers_burst"
+  },
+  "mecha.lunk.bulldog_clip": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/bulldog_clip_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/bulldog_clip_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/bulldog_clip_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.bulldog_clip"
+  },
+  "mecha.lunk.pat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/pat_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/pat_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/pat_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.pat"
+  },
+  "mecha.lunk.servo_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/servo_down_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/servo_down_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/servo_down_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.servo_down"
+  },
+  "mecha.lunk.servo_wind_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/servo_wind_down_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/servo_wind_down_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.servo_wind_down"
+  },
+  "mecha.lunk.strain": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/strain_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/strain_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/lunk/strain_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.strain"
+  },
+  "mecha.lunk.clunk": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/clunk_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/lunk/clunk_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/lunk/clunk_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.clunk"
+  },
+  "mecha.lunk.knuckle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/knuckle_1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:mecha/lunk/knuckle_2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:mecha/lunk/knuckle_3",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "headinajar:mecha/lunk/knuckle_4",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.knuckle"
+  },
+  "mecha.lunk.step_lunk": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/lunk/step_lunk_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/step_lunk_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/step_lunk_3",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/lunk/step_lunk_4",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.lunk.step_lunk"
+  },
+  "mecha.kite.wingbeat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wingbeat_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wingbeat"
+  },
+  "mecha.kite.wingbeat_light": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wingbeat_light_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_light_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_light_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wingbeat_light"
+  },
+  "mecha.kite.wingbeat_heavy": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wingbeat_heavy_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_heavy_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_heavy_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wingbeat_heavy"
+  },
+  "mecha.kite.wingbeat_weak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wingbeat_weak_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_weak_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wingbeat_weak_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wingbeat_weak"
+  },
+  "mecha.kite.wing_unfurl": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_unfurl_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_unfurl_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_unfurl_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_unfurl"
+  },
+  "mecha.kite.wing_fold": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_fold_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_fold_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_fold_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_fold"
+  },
+  "mecha.kite.wing_brake": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_brake_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_brake_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_brake_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_brake"
+  },
+  "mecha.kite.wing_shrug": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_shrug_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_shrug_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_shrug_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_shrug"
+  },
+  "mecha.kite.wing_scrape": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_scrape_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_scrape_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_scrape_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_scrape"
+  },
+  "mecha.kite.wing_slump": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wing_slump_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_slump_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wing_slump_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wing_slump"
+  },
+  "mecha.kite.feather_ruffle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/feather_ruffle_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/kite/feather_ruffle_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:mecha/kite/feather_ruffle_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.feather_ruffle"
+  },
+  "mecha.kite.wind_rush": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/wind_rush_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wind_rush_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/wind_rush_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.wind_rush"
+  },
+  "mecha.kite.floor_release": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/floor_release_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/floor_release_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/floor_release_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.floor_release"
+  },
+  "mecha.kite.floor_latch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/floor_latch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/floor_latch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/floor_latch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.floor_latch"
+  },
+  "mecha.kite.floor_blow": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/floor_blow_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/kite/floor_blow_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.floor_blow"
+  },
+  "mecha.kite.cable_winch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/cable_winch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/cable_winch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/kite/cable_winch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.cable_winch"
+  },
+  "mecha.kite.talon_snap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/talon_snap_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_snap_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_snap_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.talon_snap"
+  },
+  "mecha.kite.talon_close": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/talon_close_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_close_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_close_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.talon_close"
+  },
+  "mecha.kite.talon_open": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/kite/talon_open_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_open_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/kite/talon_open_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.kite.talon_open"
+  },
+  "mecha.envelope_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/envelope_pop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/envelope_pop_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/envelope_pop_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.envelope_pop"
+  },
+  "mecha.pilot_whoosh": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/pilot_whoosh_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/pilot_whoosh_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/pilot_whoosh_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.envelope_pop"
+  },
+  "mecha.brocade_stream": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_stream_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_stream_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_stream_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_stream"
+  },
+  "mecha.brocade_breathe": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_breathe_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_breathe_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_breathe_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_breathe"
+  },
+  "mecha.brocade_spill": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_spill_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_spill_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_spill_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_spill"
+  },
+  "mecha.brocade_flare": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_flare_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flare_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flare_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_flare"
+  },
+  "mecha.brocade_flump": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_flump_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flump_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flump_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_flump"
+  },
+  "mecha.brocade_rustle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_rustle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_rustle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_rustle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_rustle"
+  },
+  "mecha.brocade_slide": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_slide_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_slide_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_slide_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_slide"
+  },
+  "mecha.brocade_slap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_slap_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_slap_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_slap_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_slap"
+  },
+  "mecha.gold_sink": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/gold_sink_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/gold_sink_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/gold_sink_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.gold_sink"
+  },
+  "mecha.brocade_flap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/brocade_flap_1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flap_2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "headinajar:mecha/parachute/brocade_flap_3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_flap"
+  },
+  "mecha.tassel_jingle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/tassel_jingle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/tassel_jingle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/tassel_jingle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.tassel_jingle"
+  },
+  "mecha.cords_creak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/cords_creak_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/cords_creak_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/cords_creak_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.brocade_flare"
+  },
+  "mecha.cords_slack": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute/cords_slack_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/cords_slack_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute/cords_slack_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.cords_slack"
+  },
+  "mecha.motor": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/motor_1",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.motor"
+  },
+  "mecha.step": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/step_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/step_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/step_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/step_4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.step"
+  },
+  "mecha.step_light": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/step_light_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/step_light_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/step_light_3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/step_light_4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.step_light"
+  },
+  "mecha.step_heavy": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/step_heavy_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/step_heavy_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/step_heavy_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.step_heavy"
+  },
+  "mecha.step_drag": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/step_drag_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/step_drag_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/step_drag_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.step_drag"
+  },
+  "mecha.tap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/tap_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/tap_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/tap_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.tap"
+  },
+  "mecha.land_light": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/land_light_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/land_light_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/land_light_3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.land_light"
+  },
+  "mecha.servo": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo"
+  },
+  "mecha.servo_tick": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_tick_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/servo_tick_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/servo_tick_3",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_tick"
+  },
+  "mecha.servo_chord": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_chord_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_chord"
+  },
+  "mecha.servo_settle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_settle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_settle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_settle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_settle"
+  },
+  "mecha.servo_sag": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_sag_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_sag_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_sag_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_sag"
+  },
+  "mecha.servo_catch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_catch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_catch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_catch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_catch"
+  },
+  "mecha.servo_fail": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/servo_fail_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/servo_fail_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.servo_fail"
+  },
+  "mecha.relay_click": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/relay_click_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/relay_click_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/relay_click_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:mecha/relay_click_4",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.relay_click"
+  },
+  "mecha.relay_tick": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/relay_tick_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:mecha/relay_tick_2",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:mecha/relay_tick_3",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.relay_tick"
+  },
+  "mecha.standby_blip": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/standby_blip_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:mecha/standby_blip_2",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.standby_blip"
+  },
+  "mecha.hydraulic_stand": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/hydraulic_stand_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/hydraulic_stand_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/hydraulic_stand_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.hydraulic_stand"
+  },
+  "mecha.pogo_charge": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_charge_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_charge_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.pogo_charge"
+  },
+  "mecha.pogo_ratchet": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_ratchet_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.pogo_ratchet"
+  },
+  "mecha.pogo_launch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_launch_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/pogo_launch_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.pogo_launch"
+  },
+  "mecha.whoosh": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/whoosh_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/whoosh_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.pogo_launch"
+  },
+  "mecha.bar_unlatch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bar_unlatch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_unlatch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_unlatch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bar_unlatch"
+  },
+  "mecha.bar_latch": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bar_latch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_latch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_latch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bar_latch"
+  },
+  "mecha.clamp_close": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/clamp_close_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/clamp_close_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/clamp_close_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.clamp_close"
+  },
+  "mecha.jar_seat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/jar_seat_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/jar_seat_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/jar_seat_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.jar_seat"
+  },
+  "mecha.bar_blow": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bar_blow_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/bar_blow_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bar_blow"
+  },
+  "mecha.bar_clank": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bar_clank_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_clank_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.bar_clank"
+  },
+  "mecha.dry_fire": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/dry_fire_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/dry_fire_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/dry_fire_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.dry_fire"
+  },
+  "mecha.hurt": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/hurt_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/hurt_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/hurt_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/hurt_4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.hurt"
+  },
+  "mecha.collapse": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/collapse_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/collapse_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.collapse"
+  },
+  "mecha.vent_blast": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/vent_blast_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/vent_blast_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.vent_blast"
+  },
+  "mecha.vent_clank": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/vent_clank_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/vent_clank_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/vent_clank_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.vent_clank"
+  },
+  "mecha.vent_whistle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/vent_whistle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/vent_whistle_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.vent_whistle"
+  },
+  "mecha.klaxon": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/klaxon_1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.klaxon"
+  },
+  "mecha.eject_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/eject_pop_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:mecha/eject_pop_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.eject_pop"
+  },
+  "mecha.parachute_pop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute_pop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute_pop_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.parachute_pop"
+  },
+  "mecha.parachute_fold": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/parachute_fold_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/parachute_fold_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.parachute_fold"
+  },
+  "mecha.sigh": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/sigh_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/sigh_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.sigh"
+  },
+  "mecha.power_down": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/power_down_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/power_down_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.power_down"
+  },
+  "mecha.rattle": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/rattle_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/rattle_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/rattle_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rattle"
+  },
+  "mecha.build_seat": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/build_seat_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/build_seat_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/build_seat_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.build_seat"
+  },
+  "mecha.scan_chirp": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/scan_chirp_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.scan_chirp"
+  },
+  "mecha.ding": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/ding_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.ding"
+  },
+  "mecha.skitter.line_charge": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_charge_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_charge_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.line_charge"
+  },
+  "mecha.skitter.reel": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_ratchet_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.reel"
+  },
+  "mecha.skitter.line_fire": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_launch_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:mecha/pogo_launch_2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.line_fire"
+  },
+  "mecha.skitter.line_cough": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.line_cough"
+  },
+  "mecha.skitter.line_cut": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/bar_unlatch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_unlatch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/bar_unlatch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.line_cut"
+  },
+  "mecha.spider_walker.key_wind": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_ratchet_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_ratchet_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.key_wind"
+  },
+  "mecha.spider_walker.gland_squeeze": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/pogo_charge_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/pogo_charge_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.gland_squeeze"
+  },
+  "mecha.spider_walker.nozzle_cough": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:mecha/wheelhouse/engine_misfire_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.nozzle_cough"
+  },
+  "mecha.rover.reverse_beep": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/wheelhouse/reverse_beep_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.reverse_beep"
+  },
+  "mecha.rover.bell": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha/ding_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.bell"
+  },
+  "arms.arc_charge": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/arc_charge_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:arms/arc_charge_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.arc_charge"
+  },
+  "arms.arc_crack": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/arc_crack_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:arms/arc_crack_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:arms/arc_crack_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.arc_crack"
+  },
+  "arms.arc_hop": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/arc_hop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/arc_hop_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/arc_hop_3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/arc_hop_4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.arc_hop"
+  },
+  "arms.lance_ignite": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/lance_ignite_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:arms/lance_ignite_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.lance_ignite"
+  },
+  "arms.lance_hum": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/lance_hum_1",
+        "attenuation_distance": 24,
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.lance_hum"
+  },
+  "arms.lance_out": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/lance_out_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/lance_out_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.lance_out"
+  },
+  "arms.flame_ignite": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/flame_ignite_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/flame_ignite_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.flame_ignite"
+  },
+  "arms.flame_roar": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/flame_roar_1",
+        "attenuation_distance": 24,
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.flame_roar"
+  },
+  "arms.tractor_hum": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/tractor_hum_1",
+        "attenuation_distance": 16,
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.tractor_hum"
+  },
+  "arms.fist_hiss": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/fist_hiss_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/fist_hiss_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/fist_hiss_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.fist_hiss"
+  },
+  "arms.fist_strike": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/fist_strike_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:arms/fist_strike_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:arms/fist_strike_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.fist_strike"
+  },
+  "arms.rivet_pak": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/rivet_pak_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:arms/rivet_pak_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:arms/rivet_pak_3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:arms/rivet_pak_4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.rivet_pak"
+  },
+  "arms.weld_hiss": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/weld_hiss_1",
+        "attenuation_distance": 16,
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.weld_hiss"
+  },
+  "arms.hand_grip": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/hand_grip_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/hand_grip_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:arms/hand_grip_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.hand_grip"
+  },
+  "arms.thermal_tink": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/thermal_tink_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:arms/thermal_tink_2",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:arms/thermal_tink_3",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:arms/thermal_tink_4",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.thermal_tink"
+  },
+  "arms.spark_fizz": {
+    "sounds": [
+      {
+        "name": "headinajar:arms/spark_fizz_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:arms/spark_fizz_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:arms/spark_fizz_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.arms.spark_fizz"
+  },
+  "gantry.klaxon": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/klaxon_1",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.klaxon"
+  },
+  "gantry.servo": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/servo_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/servo_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/servo_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.servo"
+  },
+  "gantry.servo_stop": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/servo_stop_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/servo_stop_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/servo_stop_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.servo_stop"
+  },
+  "gantry.tool_out": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/tool_out_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/tool_out_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/tool_out_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.tool_out"
+  },
+  "gantry.weld": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/weld_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/weld_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/weld_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.weld"
+  },
+  "gantry.arc": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/arc_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/arc_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.arc"
+  },
+  "gantry.turntable": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/turntable_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/turntable_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.turntable"
+  },
+  "gantry.scan": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/scan_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/scan_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.scan"
+  },
+  "gantry.stamp": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/stamp_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "headinajar:gantry/stamp_2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.stamp"
+  },
+  "gantry.park": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/park_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/park_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/park_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.park"
+  },
+  "gantry.charge_tick": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/charge_tick_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/charge_tick_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/charge_tick_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.charge_tick"
+  },
+  "gantry.tap": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/tap_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/tap_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.tap"
+  },
+  "gantry.ratchet": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/ratchet_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/ratchet_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/ratchet_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.ratchet"
+  },
+  "gantry.patch": {
+    "sounds": [
+      {
+        "name": "headinajar:gantry/patch_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/patch_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:gantry/patch_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.patch"
+  },
+  "body.cork": {
+    "sounds": [
+      {
+        "name": "headinajar:body/cork_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:body/cork_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:body/cork_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.cork"
+  },
+  "body.bayonet": {
+    "sounds": [
+      {
+        "name": "headinajar:body/bayonet_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:body/bayonet_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:body/bayonet_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.bayonet"
+  },
+  "body.unseat": {
+    "sounds": [
+      {
+        "name": "headinajar:body/unseat_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:body/unseat_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:body/unseat_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.unseat"
+  },
+  "body.note": {
+    "sounds": [
+      {
+        "name": "headinajar:body/note_1",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.note"
+  },
+  "body.miss": {
+    "sounds": [
+      {
+        "name": "headinajar:body/miss_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:body/miss_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.miss"
+  },
+  "body.power_down": {
+    "sounds": [
+      {
+        "name": "headinajar:body/power_down_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:body/power_down_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.power_down"
+  },
+  "body.power_up": {
+    "sounds": [
+      {
+        "name": "headinajar:body/power_up_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:body/power_up_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.power_up"
+  },
+  "body.snick": {
+    "sounds": [
+      {
+        "name": "headinajar:body/snick_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:body/snick_2",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:body/snick_3",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:body/snick_4",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.snick"
+  },
+  "body.plip": {
+    "sounds": [
+      {
+        "name": "headinajar:body/plip_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:body/plip_2",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:body/plip_3",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.plip"
+  },
+  "jar.crack": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/crack_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/crack_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/crack_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.crack"
+  },
+  "jar.crack_long": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/crack_long_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:jar/crack_long_2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.crack_long"
+  },
+  "jar.drip": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/drip_1",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:jar/drip_2",
+        "attenuation_distance": 6
+      },
+      {
+        "name": "headinajar:jar/drip_3",
+        "attenuation_distance": 6
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.drip"
+  },
+  "house.jingle": {
+    "sounds": [
+      {
+        "name": "headinajar:house/jingle_1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.headinajar.house.jingle"
+  },
+  "house.jingle_shutdown": {
+    "sounds": [
+      {
+        "name": "headinajar:house/jingle_shutdown_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.house.jingle_shutdown"
+  },
+  "house.jingle_botch": {
+    "sounds": [
+      {
+        "name": "headinajar:house/jingle_botch_1",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.headinajar.house.jingle_botch"
+  },
+  "house.desk_ding": {
+    "sounds": [
+      {
+        "name": "headinajar:house/desk_ding_1",
+        "attenuation_distance": 8
+      },
+      {
+        "name": "headinajar:house/desk_ding_2",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.headinajar.house.desk_ding"
+  },
+  "jar.wheels_down": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/wheels_down_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/wheels_down_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/wheels_down_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.wheels_down"
+  },
+  "jar.wheels_up": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/wheels_up_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/wheels_up_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/wheels_up_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.wheels_up"
+  },
+  "jar.drive": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/drive_1",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.drive"
+  },
+  "jar.tip_over": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/tip_over_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/tip_over_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/tip_over_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.tip_over"
+  },
+  "jar.sit_up": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/sit_up_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/sit_up_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/sit_up_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.sit_up"
+  },
+  "jar.roll": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/roll_1",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.roll"
+  },
+  "jar.hop": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/hop_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/hop_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/hop_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.hop"
+  },
+  "jar.hop_land": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/hop_land_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/hop_land_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/hop_land_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.hop_land"
+  },
+  "jar.propeller": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/propeller_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.propeller"
+  },
+  "jar.shock_lid": {
+    "sounds": [
+      {
+        "name": "headinajar:jar/shock_lid_1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/shock_lid_2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "headinajar:jar/shock_lid_3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.shock_lid"
+  },
+  "link.static_faint": {
+    "sounds": [
+      {
+        "name": "headinajar:link/static_faint_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.link.static_faint"
+  },
+  "link.static": {
+    "sounds": [
+      {
+        "name": "headinajar:link/static_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.link.static"
+  },
+  "link.static_heavy": {
+    "sounds": [
+      {
+        "name": "headinajar:link/static_heavy_1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.link.static_heavy"
+  },
+  "module.arc_cannon": {
+    "sounds": [
+      {
+        "name": "headinajar:module/arc_cannon_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:module/arc_cannon_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "headinajar:module/arc_cannon_3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.arc_cannon"
+  },
+  "module.tesla_coil": {
+    "sounds": [
+      {
+        "name": "headinajar:module/tesla_coil_1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:module/tesla_coil_2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "headinajar:module/tesla_coil_3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.tesla_coil"
+  },
+  "memo.beep": {
+    "sounds": [
+      {
+        "name": "headinajar:chair.beep",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.memo.beep"
+  },
+  "body.reattach": {
+    "sounds": [
+      {
+        "name": "headinajar:body.bayonet",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.reattach"
+  },
+  "body.embalm": {
+    "sounds": [
+      {
+        "name": "headinajar:chair.hiss",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.embalm"
+  },
+  "gantry.strip": {
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gantry.strip"
+  },
+  "socket.zombie_groan": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.zombie.ambient",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.socket.zombie_groan"
+  },
+  "body.flies": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.bee.loop",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.flies"
+  },
+  "body.syringe_jab": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.bee.sting",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.syringe_jab"
+  },
+  "body.snip": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.sheep.shear",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.snip"
+  },
+  "body.clothes": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_leather",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.clothes"
+  },
+  "body.slump": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.step",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.slump"
+  },
+  "body.suture": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.suture"
+  },
+  "body.detach": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.detach"
+  },
+  "body.lace": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.body.lace"
+  },
+  "jar.knock": {
+    "sounds": [
+      {
+        "name": "minecraft:block.glass.hit",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.knock"
+  },
+  "jar.shatter": {
+    "sounds": [
+      {
+        "name": "minecraft:block.glass.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.shatter"
+  },
+  "jar.patch": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.patch"
+  },
+  "jar.bagged": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_leather",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.bagged"
+  },
+  "jar.goggles": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_leather",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.goggles"
+  },
+  "jar.plug_in": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.jar.plug_in"
+  },
+  "gene.accepted": {
+    "sounds": [
+      {
+        "name": "minecraft:block.brewing_stand.brew",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gene.accepted"
+  },
+  "gene.rejected": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.slime.hurt",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gene.rejected"
+  },
+  "gene.regrowth": {
+    "sounds": [
+      {
+        "name": "minecraft:item.totem.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gene.regrowth"
+  },
+  "gene.frost": {
+    "sounds": [
+      {
+        "name": "minecraft:block.powder_snow.step",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.gene.frost"
+  },
+  "centrifuge.settle": {
+    "sounds": [
+      {
+        "name": "minecraft:block.brewing_stand.brew",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.centrifuge.settle"
+  },
+  "sequencer.read": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.sequencer.read"
+  },
+  "courier.booked": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.courier.booked"
+  },
+  "turret.dry_click": {
+    "sounds": [
+      {
+        "name": "minecraft:block.dispenser.fail",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.turret.dry_click"
+  },
+  "turret.thump": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.zombie.attack_wooden_door",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.turret.thump"
+  },
+  "turret.fit": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_iron",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.turret.fit"
+  },
+  "dock.charging": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.power_select",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.dock.charging"
+  },
+  "emp.burst": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.emp.burst"
+  },
+  "emp.throw": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.snowball.throw",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.emp.throw"
+  },
+  "chair.new_blade": {
+    "sounds": [
+      {
+        "name": "minecraft:block.smithing_table.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.chair.new_blade"
+  },
+  "chair.pipe_away": {
+    "sounds": [
+      {
+        "name": "minecraft:block.piston.contract",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.chair.pipe_away"
+  },
+  "collar.install": {
+    "sounds": [
+      {
+        "name": "minecraft:block.smithing_table.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.collar.install"
+  },
+  "quantum.entangle": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.resonate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.quantum.entangle"
+  },
+  "printer.squelch": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.slime.squish",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.printer.squelch"
+  },
+  "mount.work": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.villager.work_librarian",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mount.work"
+  },
+  "mecha.fist_strike": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.iron_golem.attack",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.fist_strike"
+  },
+  "module.grapple_fire": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.throw",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.grapple_fire"
+  },
+  "module.rivet_fire": {
+    "sounds": [
+      {
+        "name": "minecraft:item.crossbow.shoot",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.rivet_fire"
+  },
+  "module.chainsaw": {
+    "sounds": [
+      {
+        "name": "minecraft:item.axe.strip",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.chainsaw"
+  },
+  "mecha.jets": {
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.jets"
+  },
+  "mecha.vent_steam": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lava.extinguish",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.vent_steam"
+  },
+  "module.medical": {
+    "sounds": [
+      {
+        "name": "minecraft:block.brewing_stand.brew",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.medical"
+  },
+  "module.mortar": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.launch",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.mortar"
+  },
+  "module.missiles": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.launch",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.missiles"
+  },
+  "module.ore_scan": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.module.ore_scan"
+  },
+  "mecha.cargo_open": {
+    "sounds": [
+      {
+        "name": "minecraft:block.iron_trapdoor.open",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.cargo_open"
+  },
+  "mecha.shell_crash": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.iron_golem.damage",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.shell_crash"
+  },
+  "mecha.line_shot": {
+    "sounds": [
+      {
+        "name": "minecraft:item.crossbow.shoot",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.line_shot"
+  },
+  "mecha.line_anchor": {
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.line_anchor"
+  },
+  "mecha.line_snip": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.sheep.shear",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.line_snip"
+  },
+  "mecha.spider_walker.tin_scrape": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.wheelhouse.tyre_scrub",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.tin_scrape"
+  },
+  "mecha.spider_walker.tin_clatter": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.wheelhouse.wheel_clatter",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.tin_clatter"
+  },
+  "mecha.spider_walker.tin_creak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.wheelhouse.suspension_creak",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.tin_creak"
+  },
+  "mecha.spider_walker.key_rundown": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.servo_fail",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.key_rundown"
+  },
+  "mecha.spider_walker.nozzle_tap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.tap",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.spider_walker.nozzle_tap"
+  },
+  "mecha.rover.drawer_knock": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.vent_clank",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.drawer_knock"
+  },
+  "mecha.rover.drawer_slam": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.bar_clank",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.drawer_slam"
+  },
+  "mecha.rover.drawer_slide": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.servo",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.drawer_slide"
+  },
+  "mecha.rover.motor_rev": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.servo_chord",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.motor_rev"
+  },
+  "mecha.rover.jar_hop": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.servo_tick",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.jar_hop"
+  },
+  "mecha.rover.castor_squeak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.servo_tick",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.castor_squeak"
+  },
+  "mecha.rover.strap_slap": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.rattle",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.rover.strap_slap"
+  },
+  "mecha.skitter.line_creak": {
+    "sounds": [
+      {
+        "name": "headinajar:mecha.wheelhouse.suspension_creak",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.headinajar.mecha.skitter.line_creak"
   }
 }

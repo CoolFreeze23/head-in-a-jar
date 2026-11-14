@@ -1,0 +1,35 @@
+# The Lunk on natural ground (a survival world's terrain at its spawn, seed 12345, creative): the Lunk walked over
+# whatever is there for ten seconds each, from behind and from the side, feet and fists on steps and slopes.
+@world survival
+@gamemode creative
+@observe 20
+wait 60
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/time set 6000
+hud off
+jar
+charge 100000
+wait 5
+/tp @s ~3 ~ ~
+wait 5
+execute at @s run summon headinajar:lunk ~ ~ ~2.4 {Rotation:[0f,0f]}
+wait 10
+lookat headinajar:lunk
+key use
+wait 40
+riding lunk
+look 0 15
+view 1
+frames t03_lunk_terrain_behind 220
+key forward hold 200
+wait 10
+look 90 10
+wait 5
+watch follow -6 0.6 0 -90 4
+frames t04_lunk_terrain_side 220
+key forward hold 200
+wait 10
+watch off
+report done

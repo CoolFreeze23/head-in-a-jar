@@ -1,0 +1,177 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_cargo_hold_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8,
+                -6,
+                -2
+              ],
+              "size": [
+                16,
+                12,
+                2
+              ],
+              "uv": [
+                0,
+                20
+              ]
+            },
+            {
+              "origin": [
+                -10,
+                -10,
+                -18
+              ],
+              "size": [
+                20,
+                18,
+                16
+              ],
+              "uv": [
+                0,
+                80
+              ]
+            },
+            {
+              "origin": [
+                -11,
+                2,
+                -19
+              ],
+              "size": [
+                22,
+                2,
+                18
+              ],
+              "uv": [
+                0,
+                40
+              ]
+            },
+            {
+              "origin": [
+                -11,
+                -7,
+                -19
+              ],
+              "size": [
+                22,
+                2,
+                18
+              ],
+              "uv": [
+                0,
+                60
+              ]
+            },
+            {
+              "origin": [
+                9,
+                -11,
+                -19
+              ],
+              "size": [
+                2,
+                2,
+                18
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -11,
+                -11,
+                -19
+              ],
+              "size": [
+                2,
+                2,
+                18
+              ],
+              "uv": [
+                40,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_hold": [
+              0,
+              8,
+              -10
+            ]
+          }
+        },
+        {
+          "name": "lid",
+          "parent": "mount",
+          "pivot": [
+            0,
+            8,
+            -2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -11,
+                8,
+                -19
+              ],
+              "size": [
+                22,
+                2,
+                18
+              ],
+              "uv": [
+                36,
+                20
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                10,
+                -12
+              ],
+              "size": [
+                8,
+                2,
+                4
+              ],
+              "uv": [
+                80,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

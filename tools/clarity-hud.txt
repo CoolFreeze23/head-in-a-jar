@@ -1,0 +1,272 @@
+@world flat
+@gamemode survival
+@observe 10
+wait 40
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 9999 4 true
+/tp @s 0.5 -60 0.5 0 10
+report == S0 first join: hotbar and chat
+guiscale 2
+lang en_us
+wait 4
+shot s0_join_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s0_join_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s0_join_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s0_join_g3_pt
+lang en_us
+guiscale 2
+report == S1 a bare jar: marked bars, numbers, the no-hands memo
+jar
+wait 10
+guiscale 2
+lang en_us
+wait 4
+shot s1_jar_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s1_jar_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s1_jar_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s1_jar_g3_pt
+lang en_us
+guiscale 2
+report == S1b numbers while sneaking
+wait 70
+sneak down
+guiscale 2
+lang en_us
+wait 4
+shot s1b_jar_sneak_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s1b_jar_sneak_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s1b_jar_sneak_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s1b_jar_sneak_g3_pt
+lang en_us
+guiscale 2
+sneak up
+report == S2 a low jar: hatching, numbers, the charge memo
+charge 12000
+wait 30
+guiscale 2
+lang en_us
+wait 4
+shot s2_jar_low_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s2_jar_low_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s2_jar_low_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s2_jar_low_g3_pt
+lang en_us
+guiscale 2
+report == S3 the jar menu
+key jar_menu
+wait 10
+mouse 0 0
+guiscale 2
+lang en_us
+wait 4
+shot s3_jarmenu_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s3_jarmenu_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s3_jarmenu_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s3_jarmenu_g3_pt
+lang en_us
+guiscale 2
+mouse rel 60 62
+guiscale 2
+lang en_us
+wait 4
+mouse rel 60 62
+wait 2
+shot s3b_jarmenu_charge_hover_g2_en
+guiscale 3
+lang en_us
+wait 4
+mouse rel 60 62
+wait 2
+shot s3b_jarmenu_charge_hover_g3_en
+guiscale 2
+lang pt_br
+wait 4
+mouse rel 60 62
+wait 2
+shot s3b_jarmenu_charge_hover_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+mouse rel 60 62
+wait 2
+shot s3b_jarmenu_charge_hover_g3_pt
+lang en_us
+guiscale 2
+mouse rel 88 36
+guiscale 2
+lang en_us
+wait 4
+mouse rel 88 36
+wait 2
+shot s3c_jarmenu_shut_slot_hover_g2_en
+guiscale 3
+lang en_us
+wait 4
+mouse rel 88 36
+wait 2
+shot s3c_jarmenu_shut_slot_hover_g3_en
+guiscale 2
+lang pt_br
+wait 4
+mouse rel 88 36
+wait 2
+shot s3c_jarmenu_shut_slot_hover_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+mouse rel 88 36
+wait 2
+shot s3c_jarmenu_shut_slot_hover_g3_pt
+lang en_us
+guiscale 2
+press escape
+wait 5
+report == S4 a host: ability names
+hostify enderman 3 -60 0
+wait 5
+view 1
+mount
+wait 3
+guiscale 1
+wait 2
+shot hs_handshake_g1_en
+guiscale 2
+wait 2
+shot hs_handshake_g2_en
+guiscale 3
+wait 2
+shot hs_handshake_g3_en
+guiscale 4
+wait 2
+shot hs_handshake_g4_en
+guiscale 2
+wait 100
+sneak tap
+wait 10
+/kill @e[type=minecraft:enderman]
+wait 5
+hostify enderman 3 -60 3
+wait 5
+lang pt_br
+mount
+wait 3
+guiscale 1
+wait 2
+shot hs_handshake_g1_pt
+guiscale 2
+wait 2
+shot hs_handshake_g2_pt
+guiscale 3
+wait 2
+shot hs_handshake_g3_pt
+guiscale 4
+wait 2
+shot hs_handshake_g4_pt
+guiscale 2
+lang en_us
+wait 100
+sync 60
+wait 30
+view 1
+guiscale 2
+lang en_us
+wait 4
+shot s4_host_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s4_host_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s4_host_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s4_host_g3_pt
+lang en_us
+guiscale 2
+sneak tap
+wait 10
+view 0
+wait 60
+sneak tap
+wait 10
+/kill @e[type=minecraft:enderman]
+wait 10
+inspect me
+report == S5 a mecha: battery, arms by control
+mecha HOPPER 4 -60 4 hydraulic_legs,hydraulic_fist
+wait 5
+/tp @s 4.5 -60 2.5 0 10
+wait 5
+mount
+wait 20
+view 1
+guiscale 2
+lang en_us
+wait 4
+shot s5_pilot_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot s5_pilot_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot s5_pilot_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot s5_pilot_g3_pt
+lang en_us
+guiscale 2
+view 0
+inspect me
+report == end

@@ -1,0 +1,30 @@
+{
+  "parent": "headinajar:root",
+  "criteria": {
+    "got": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "headinajar:saline_bottle"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:saline_bottle"
+    },
+    "title": {
+      "translate": "advancements.headinajar.saline.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.saline.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

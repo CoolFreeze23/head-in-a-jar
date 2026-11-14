@@ -47,6 +47,30 @@ public final class JarRenderer {
      */
     public static final Shape COMPACT = new Shape(1.0f, 1.0f, 22.8f, 6, 3, 0.34f, 168, 0.41f);
 
+    /**
+     * What the jar shows of the life support inside it: the saline level (0 dry to 1 full), the charge (0 flat to 1), the
+     * crack stage of its glass (0 whole to 3), whether it is being topped up, and what its slosh follows: the id of the
+     * entity whose motion moves it (-1 for none) and the yaw the caller has turned the pose by before drawing (degrees,
+     * as in {@code Axis.YP.rotationDegrees(yaw)}).
+     */
+    public record Vitals(float saline, float charge, int cracks, boolean filling, int sloshId, float yaw) {
+        /** A jar as it has always been drawn where nothing is known: full, charged, whole, still. */
+        public static final Vitals FULL = new Vitals(1, 1, 0, false, -1, 0);
+
+        /** A jar from its owner's state. */
+        public static Vitals of(JarState state, int sloshId, float yaw) {
+            return new Vitals(state.saline() / (float) Math.max(1, state.maxSaline()), state.charge() / (float) Math.max(1, state.chargeCapacity()),
+                    com.coolfreeze23.headinajar.client.body.JarLife.stage(state.integrity() / (float) Math.max(1, state.maxIntegrity())),
+                    com.coolfreeze23.headinajar.client.body.JarLife.filling(sloshId, state.saline()), sloshId, yaw);
+        }
+
+        /** A placed head, from what its entity shows (see {@code HeadJarEntity.vitals}). */
+        public static Vitals packed(int v, int sloshId, float yaw) {
+            return new Vitals((v & 127) / 100f, (v >> 7 & 127) / 100f, com.coolfreeze23.headinajar.client.body.JarLife.stage((v >> 14 & 127) / 100f),
+                    (v >> 21 & 1) != 0, sloshId, yaw);
+        }
+    }
+
     public static Shape shape(boolean compact) {
         return compact ? COMPACT : WIDE;
     }
@@ -64,6 +88,8 @@ public final class JarRenderer {
     public static void reset() {
         jar = null;
         wheelParts = null;
+        com.coolfreeze23.headinajar.client.body.CollarRing.reset();
+        com.coolfreeze23.headinajar.client.body.JarLife.reset();
     }
 
     /** A player's skin by id: their live skin if they are online, else the default for that id. */
@@ -106,8 +132,21 @@ public final class JarRenderer {
             pose.translate(0, 3.5f / 16f, 0);
             drawWheels(pose, buffers, light, walked, shape);
         }
+        // on a host, the bayonet collar round the base: drawn around the seat, the jar itself unchanged
+        if (state.form() == com.coolfreeze23.headinajar.form.Form.HOSTED && player.getVehicle() != null && !state.tipped()) {
+            com.coolfreeze23.headinajar.client.body.CollarRing.render(pose, buffers, light, player.getVehicle(), state.compact(), partialTick);
+        }
+        // the saline, the charge light, the cracks and the slosh, from the state every watcher already has
         draw(pose, buffers, light, LivingEntityRenderer.getOverlayCoords(player, 0), player.getSkin().texture(),
-                headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty(), shape);
+                headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty(), shape, false,
+                Vitals.of(state, player.getId(), 180.0f - bodyYaw));
+        helmet(player, state, pose, buffers, light);
+        pose.popPose();
+        speech(state, pose, buffers, light);
+    }
+
+    /** The Hat Mount's helmet on a jar whose base is at the pose's origin, facing -Z (wherever the jar is drawn). */
+    public static void helmet(net.minecraft.world.entity.player.Player player, JarState state, PoseStack pose, MultiBufferSource buffers, int light) {
         var helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
         if (state.fitted(com.coolfreeze23.headinajar.module.ModuleType.HAT_MOUNT) && !helmet.isEmpty()) {
             pose.pushPose();
@@ -117,7 +156,10 @@ public final class JarRenderer {
                     OverlayTexture.NO_OVERLAY, pose, buffers, player.level(), player.getId());
             pose.popPose();
         }
-        pose.popPose();
+    }
+
+    /** The Speaker Grille's words over a jar whose base is at the pose's origin. */
+    public static void speech(JarState state, PoseStack pose, MultiBufferSource buffers, int light) {
         String speech = state.speech();
         if (!speech.isEmpty()) bubble(pose, buffers, light, speech);
     }
@@ -141,7 +183,20 @@ public final class JarRenderer {
     /** As above; {@code upsideDown} turns the head over about its own centre (a botched cut), nothing else changes. */
     public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
                             float headYaw, float pitch, float age, boolean charged, boolean withGoggles, Shape shape, boolean upsideDown) {
+        draw(pose, buffers, light, overlay, skin, headYaw, pitch, age, charged, withGoggles, shape, upsideDown,
+                charged ? Vitals.FULL : new Vitals(1, 0, 0, false, -1, 0));
+    }
+
+    /**
+     * The whole jar with what it shows of its life support ({@link Vitals}): the saline level with its slosh and bubbles,
+     * the lamp on the lid, and the cracks in the glass. Everything that draws a jar comes through here.
+     */
+    public static void draw(PoseStack pose, MultiBufferSource buffers, int light, int overlay, ResourceLocation skin,
+                            float headYaw, float pitch, float age, boolean charged, boolean withGoggles, Shape shape, boolean upsideDown,
+                            Vitals vitals) {
         if (jar == null) bake();
+        // a leaking jar standing still leaves a wet patch in front of its chip (switched off in JarLife)
+        com.coolfreeze23.headinajar.client.body.JarLife.puddle(pose, buffers, light, vitals, age - (int) age);
         // the head turns as far as the glass lets it; the rest of the turn turns the jar
         float turn = Mth.wrapDegrees(headYaw);
         float inside = Mth.clamp(turn, -shape.turn(), shape.turn());
@@ -152,6 +207,8 @@ public final class JarRenderer {
         pose.translate(0.0f, -1.501f, 0.0f);
         scaled(pose, shape);
         jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+        // the charge lamp, set flush into the lid's top face
+        com.coolfreeze23.headinajar.client.body.JarLife.lamp(pose, buffers, light, vitals, age);
         pose.popPose();
 
         // the head bobs a little in the fluid and looks where it is told
@@ -171,8 +228,12 @@ public final class JarRenderer {
 
         int fluid = charged ? 0xFFFFFFFF : 0xFF707070;
         scaled(pose, shape);
-        jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay, fluid);
+        // the saline stands at its level (the full jar is the fluid as it always was), sloshing with the jar's motion
+        com.coolfreeze23.headinajar.client.body.JarLife.contents(pose, buffers, light, overlay, fluid, jar.fluid(), vitals,
+                vitals.yaw() - (turn - inside), age);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        // marks on failing glass (switched off in JarLife)
+        com.coolfreeze23.headinajar.client.body.JarLife.glassMarks(pose, buffers, light, overlay, jar.glass(), vitals);
         pose.popPose();
         pose.popPose();
         pose.popPose();

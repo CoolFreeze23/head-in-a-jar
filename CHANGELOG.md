@@ -2,6 +2,80 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.5.0 (2026-11-14)
+
+- **The mecha line, rebuilt.** All eight frames and the three Utility Shells are fully animated, from the build on
+  the Assembly Gantry, module by module, to the collapse when wrecked, with your jar in the seat and every module on
+  its socket. **Drive** in a cockpit is each frame's own move: the Hopper's Pogo Protocol, the Bulwark's Heavy Lifting,
+  the Colossus's Siege, the Executive's premium jingle, the Wheelhouse's Rush Hour, the Skitter's Dragline, the Kite's
+  Talon Lift and the Chimera's Graft. The Lunk holds what it tosses overhead first.
+- **The Golden Parachute is a real parachute**: a klaxon, the restraint blown open, a gold canopy (or a tangle, with no
+  room overhead) and a letter from the company.
+- **Mecha modules that now do what they say**: the Signal Booster carries your link like a walking Relay Mast, the
+  Bio-Scanner reads out the creature under your crosshair, Anchor Clamps grip the ground against knock-back, and
+  shoulder hardpoints fire with the arm below them (alone in Siege). The Gantry and the HUD say when a mecha is built
+  over its load lock; parked mecha no longer vent at passers-by; servers that forbid flight no longer kick pilots of
+  flying, swinging or leaping mecha.
+- **Every sound says what it is.** Every sound the mod plays has its own subtitle in both languages, and none borrows
+  another thing's: the company jingle ends an operation and a printed body (no more level-up ding), a desk bell after
+  the saw, a jar's wheels, roll, propeller and Hop Springs are heard, a weak link is static in your head that worsens
+  with it, the Neural Socket clicks like a switchboard, and the Arc Cannon cracks instead of thundering. A room full of
+  machines is heard as at most six sounds, identical machines together as one.
+- **Parked mecha cost a tenth to draw**, kept as a copy of their look while nobody is aboard; boarding shows only the
+  mod's own climb-out line, never the game's "Press ... to Dismount".
+- **The Assembly Gantry, rebuilt.** A turntable and a welding arm: the arm welds each module home as the frame builds
+  itself, the turntable presents the finished machine to whoever pressed Assemble, Repair ends with a weld pass and a
+  charge lead from the reel, and Take apart is the arm's work with a wrench. Its lamp says ready, waiting, working,
+  short of power or no.
+- **Arms at work.** Every beam leaves its tool's muzzle and lands where you aim: the Plasma Lance (with a dimming
+  visor), the Arc Cannon's jumping bolt, the Tractor Beam's ribbons, the Flamethrower's jet, the Welding Torch's arc.
+  Each tool spins, kicks, braces, strikes or guards as it should, a fist's blow lands when the arm gets there, and the
+  Manipulator Hand shows what it holds. A hot mecha's vents glow and its metal ticks; a damaged one sparks, smokes and
+  limps.
+- **DOLORES pages you.** The first time something important happens (your first day, your first moment as a jar
+  with no hands, your head left out to dry, low charge, your first host, your first mecha), a memo arrives in chat
+  with a beep, naming your keys and, with Patchouli, linking to the handbook page. `memos` in the client config turns
+  them off.
+- **A career ladder.** Twelve new advancements lead from your first ingot to your first mecha, each saying what to do
+  next; **Orientation Day** is yours the moment you arrive.
+- **The Employee Handbook, Second Edition.** Ten chapters in the order you need them, with the company's forms, memos
+  and incident reports. Without Patchouli the written book has the same text page for page, with a contents page you
+  can click. The first-day copy goes into your hotbar, not your hand.
+- **A clearer screen.** The jar's three bars carry their own marks, a low bar is hatched as well as red, and the
+  numbers show when they matter (`hudNumbers` keeps them up). The link bar points to your other half. The host, mecha
+  and gene panels share one column at the top left, clear of chat, and the Neural Handshake's ring sits above the
+  jar. Tooltips name the keys as you bound them, the Jar menu explains its slots, JEI has pages for some thirty more
+  items, and Jade shows a host's abilities and your own head's saline and glass.
+- **Taking a body, made visible.** The saw pops a head like a cork, the body shakes itself or pats the air where its
+  head was, a jar locks onto a host with a brass bayonet collar, the handshake plays the company jingle, and sync
+  shows as rings down the body.
+- **The Commute.** Swapping pulls the old view away, with a teal band up into the body or down into the jar; the body
+  powers down and up with three beeps.
+- **Your body waits for you**: at attention, then fidgeting, then sitting down; it turns to you, waves and holds out its
+  arms. A body that dies falls over, HR sends a card, and your own corpse sends up a flare only you can see.
+- **Ripe hosts slump, sway, stumble and draw flies.** Embalming goes in with a sparkle.
+- **Every jar shows its life support**: the saline stands at its level in the glass, a lamp on the lid shows the
+  charge, and failing glass is heard to crack.
+- **New default keys: Swap is Home, Secondary is mouse button 5**, so neither shares a key with Curios any more.
+  Keys you set yourself are kept.
+- **Fliers fly.** A ridden bat takes off now (it used to stay asleep), and high up on any flier, holding **Sneak**
+  flies you down and lets you off near the ground instead of dropping you.
+- **The Body Locker guards what it holds.** A locker with someone's body in it breaks only for its owner or someone
+  they trust, and it no longer takes power from cables. The Curios head slot for goggles is gone: goggles count only on
+  the jar, and goggles left in it come back to your inventory, Ender Chest or feet.
+- **Every key answers.** **Swap** and **Drive** with your head on and gene keys that cannot fire all say why; a host's active genes fire with **Sneak**; a key another mod also uses is named once when you
+  join.
+- **One set of rules.** The Lacrimal Laser stops at walls. Lifting someone's mecha, or anything they ride, needs their
+  trust. The Shock Lid zaps with no glass left, the Saline Recycler works for a set-down head, and a jar resting in an
+  empty Cradle is topped up. Flat wheels fold away and say so. The Leech Jar never takes the last point of health.
+  Turrets need to see their target, and their shots and blasts spare whoever they would never aim at. A Neural
+  Socket's hotbar keys reach level 1 and leave your hotbar alone. Employee Mounts count on either half of a tall
+  machine. A laced body refuses Embalming Fluid and a second lace, and keeps them.
+- **Fixed:** a host's head stays hidden under Fresh Animations and other re-modelling packs; a corpse no longer lies
+  half under the ground; a renamed Head Satchel counts; a dud serum says it was a dud; `/headoffice status` speaks
+  your language, and `/headoffice trust` says when nothing changed.
+- Client and server must both be on 0.5.0.
+
 ## 0.4.0 (2026-11-12)
 
 - **The machine line, rebuilt.** All twenty-two company machines, from the Galvanic Pile to the Leech Jar, are working

@@ -25,6 +25,13 @@ public final class HostControl {
         return new Vec3(strafe, 0, forward);
     }
 
+    /**
+     * Whether the rider holds sneak. On the rider's own client this is the key itself (set by the client): a rider's
+     * sneak input is cleared every ridden tick, and its flag by the server each time it refuses a dismount (a flier too
+     * high up), either of which would stop sneak ever flying a flier down. Elsewhere, the flag.
+     */
+    public static java.util.function.Predicate<Player> sneakHeld = Player::isShiftKeyDown;
+
     public static void tickRidden(LivingEntity host, Player pilot) {
         if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) {
             com.coolfreeze23.headinajar.mecha.MechaLogic.tickRidden(m, pilot);
@@ -39,8 +46,11 @@ public final class HostControl {
         boolean flier = def != null && def.has("flight");
         boolean jumping = pilot.jumping;
         if (flier) {
+            // a bat is made hanging asleep (vanilla's own start), which pins it in place every tick; its waking is AI a
+            // host never runs, so a ridden bat is woken here or it never leaves the spot
+            if (host instanceof net.minecraft.world.entity.ambient.Bat bat && bat.isResting()) bat.setResting(false);
             Vec3 v = host.getDeltaMovement();
-            double y = jumping ? 0.25 : pilot.isShiftKeyDown() ? -0.25 : Math.max(v.y, -0.04);
+            double y = jumping ? 0.25 : sneakHeld.test(pilot) ? -0.25 : Math.max(v.y, -0.04);
             host.setDeltaMovement(v.x, y, v.z);
             host.fallDistance = 0;
         } else if (jumping && host.onGround() && (def == null || !def.drawbacks().contains("no_jump"))) {
@@ -97,6 +107,8 @@ public final class HostControl {
     /** Where the jar sits: the host's neck, turned with its body. */
     public static Vec3 ridingPosition(LivingEntity host) {
         Vec3 neck = Hosts.neck(host);
+        // the Colossus's seat goes down with its torso as it kneels into Siege, and back up as it rises
+        if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) neck = neck.add(com.coolfreeze23.headinajar.mecha.Siege.seatOffset(m));
         return host.position().add(neck.yRot(-host.yBodyRot * ((float) Math.PI / 180f)));
     }
 }

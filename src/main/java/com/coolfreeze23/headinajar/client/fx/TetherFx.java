@@ -458,7 +458,10 @@ public final class TetherFx {
         JarState s = me.getData(ModRegistry.JAR_STATE);
         preview = null;
         if (s.form() != Form.JAR || s.heldEntity() >= 0 || !s.fitted(ModuleType.TELEKINESIS)) return;
-        double range = 16;
+        // the server's own reach and hardness limit (its config is sent to every client that joins)
+        boolean loaded = com.coolfreeze23.headinajar.Config.SPEC.isLoaded();
+        double range = loaded ? com.coolfreeze23.headinajar.Config.TELEKINESIS_RANGE.get() : 16;
+        double hardest = loaded ? com.coolfreeze23.headinajar.Config.TELEKINESIS_MAX_HARDNESS.get() : 50;
         Vec3 eye = me.getEyePosition(), look = me.getLookAngle(), end = eye.add(look.scale(range));
         var blockHit = mc.level.clip(new net.minecraft.world.level.ClipContext(eye, end, net.minecraft.world.level.ClipContext.Block.OUTLINE,
                 net.minecraft.world.level.ClipContext.Fluid.NONE, me));
@@ -476,7 +479,7 @@ public final class TetherFx {
             var state = mc.level.getBlockState(pos);
             if (state.isAir()) return;
             float hard = state.getDestroySpeed(mc.level, pos);
-            previewOk = !state.hasBlockEntity() && hard >= 0 && hard <= 50
+            previewOk = !state.hasBlockEntity() && hard >= 0 && hard <= hardest
                     && !state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF)
                     && !state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.BED_PART);
             var shape = state.getShape(mc.level, pos);

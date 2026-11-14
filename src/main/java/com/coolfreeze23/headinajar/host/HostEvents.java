@@ -63,7 +63,12 @@ public final class HostEvents {
 
     @SubscribeEvent
     public static void startTracking(PlayerEvent.StartTracking event) {
-        if (Hosts.isHost(event.getTarget()) && event.getEntity() instanceof ServerPlayer viewer) Network.syncHostTo(viewer, event.getTarget());
+        if (Hosts.isHost(event.getTarget()) && event.getEntity() instanceof ServerPlayer viewer) {
+            Network.syncHostTo(viewer, event.getTarget());
+            if (event.getTarget() instanceof Mob mob && mob.level().getGameTime() < Hosts.data(mob).embalmedUntil) {
+                com.coolfreeze23.headinajar.body.BodyServer.embalmedSeen(viewer, mob);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -87,9 +92,7 @@ public final class HostEvents {
             float perTick = (def == null ? 2f : def.decayPerMinute()) / 1200f;
             if (time < data.embalmedUntil) perTick /= 2;
             data.freshness -= perTick;
-            if (data.freshness <= 25 && time % 20 == 0 && host.level() instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.MYCELIUM, host.getX(), host.getY() + host.getBbHeight(), host.getZ(), 3, 0.3, 0.3, 0.3, 0);
-            }
+            // a ripe host's flies and sag are drawn by each client from the freshness it is sent: no particle packets
             if (data.freshness <= 0) {
                 // it falls apart: normal loot, and the jar pops out
                 host.ejectPassengers();

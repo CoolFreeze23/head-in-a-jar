@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "headinajar:block/machine/gantry"
+  },
+  "elements": [
+    {
+      "name": "lamp_lens",
+      "from": [
+        10,
+        8,
+        -1
+      ],
+      "to": [
+        12,
+        10,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            3,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "east": {
+          "uv": [
+            0,
+            1,
+            1,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            6,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "west": {
+          "uv": [
+            3,
+            1,
+            4,
+            3
+          ],
+          "texture": "#lens"
+        },
+        "up": {
+          "uv": [
+            3,
+            1,
+            1,
+            0
+          ],
+          "texture": "#lens"
+        },
+        "down": {
+          "uv": [
+            5,
+            0,
+            3,
+            1
+          ],
+          "texture": "#lens"
+        }
+      }
+    }
+  ]
+}

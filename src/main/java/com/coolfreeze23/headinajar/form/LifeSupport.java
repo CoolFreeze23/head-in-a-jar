@@ -25,7 +25,9 @@ public final class LifeSupport {
 
     public static int drainTicks(JarState state) {
         int seconds = Config.SPEC.isLoaded() ? Config.SALINE_DRAIN_SECONDS.get() : 12;
-        return seconds * 20 * (state.has(ModuleType.SALINE_RECYCLER) ? 2 : 1);
+        // the recycler is in the jar, so it works wherever the head is (worn or set down), on any charge left
+        boolean recycling = state.form().isDecapitated() && state.fitted(ModuleType.SALINE_RECYCLER) && state.charge() > 0;
+        return seconds * 20 * (recycling ? 2 : 1);
     }
 
     /** Whether the head is drying out: it's the player, or a Head Jar standing in the world. */
@@ -68,20 +70,21 @@ public final class LifeSupport {
 
     /** Integrity soaks up damage to a jar first. */
     public static void absorb(Player player, JarState state, LivingIncomingDamageEvent event) {
-        if (state.integrity() <= 0 || event.getAmount() <= 0) return;
-        float absorbed = Math.min(state.integrity(), event.getAmount());
-        if (!player.level().isClientSide) {
-            state.setIntegrity(state.integrity() - (int) Math.ceil(absorbed));
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.1f);
-        }
-        event.setAmount(event.getAmount() - absorbed);
-        // the Shock Lid zaps whoever hit the jar in melee
+        if (event.getAmount() <= 0) return;
+        // the Shock Lid zaps whoever hit the jar in melee, glass or no glass
         if (state.has(ModuleType.SHOCK_LID) && event.getSource().getDirectEntity() instanceof LivingEntity attacker
                 && event.getSource().getDirectEntity() == event.getSource().getEntity() && state.spend(500)) {
             attacker.hurt(player.damageSources().lightningBolt(), 3);
             attacker.knockback(0.6, player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEE_STING, SoundSource.PLAYERS, 1, 0.5f);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.SHOCK_LID.get(), SoundSource.PLAYERS, 1, 0.94f + player.getRandom().nextFloat() * 0.12f);
         }
+        if (state.integrity() <= 0) return;
+        float absorbed = Math.min(state.integrity(), event.getAmount());
+        if (!player.level().isClientSide) {
+            state.setIntegrity(state.integrity() - (int) Math.ceil(absorbed));
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_KNOCK.get(), SoundSource.PLAYERS, 1, 1.1f);
+        }
+        event.setAmount(event.getAmount() - absorbed);
     }
 
     /** Uses one refill item on this player's jar: a saline bottle (+250 mB) or a glass patch (+5 integrity). */
@@ -95,7 +98,7 @@ public final class LifeSupport {
         }
         if (item == ModRegistry.GLASS_PATCH.get() && state.integrity() < state.maxIntegrity()) {
             state.setIntegrity(state.integrity() + 5);
-            player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 1.4f);
+            player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_PATCH.get(), SoundSource.PLAYERS, 1, 1.4f);
             return true;
         }
         return false;

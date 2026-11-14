@@ -1,15 +1,17 @@
 {
   "name": "Quando Dá Errado",
-  "icon": "headinajar:suture_kit",
+  "icon": "headinajar:glass_patch",
   "category": "headinajar:separation",
+  "sortnum": 3,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Se seu corpo morrer, ele vira um $(l)cadáver$() que guarda suas coisas, e você acorda na sua cabeça. Como pote, use um $(item)Kit de Sutura$() no cadáver para voltar a ele, ou imprima um corpo novo."
+      "text": "DE: DOLORES$(br)PARA: Todos os Funcionários$(br)ASSUNTO: Sem Soro$(br2)Sem soro, a cabeça pousada perde 1 de vidro a cada 30 s; sem vidro, é morte de verdade. Pote cheio: 3 h 20 min, e mais 5 min de avisos.",
+      "title": "MEMORANDO"
     },
     {
       "type": "patchouli:text",
-      "text": "Se sua cabeça for destruída enquanto você passeia, é morte de verdade. Proteja-a. Um $(item)Bloqueador de Sinal$() perto dos inimigos faz maravilhas."
+      "text": "$(l)Não é morte:$() perder a conexão, ou o corpo morrer (o cadáver guarda suas coisas).$(br2)$(l)Morte de verdade:$() a cabeça pousada quebrar ou secar enquanto você anda, ou morrer sendo o pote. Módulos caem; você renasce com cabeça."
     }
   ]
 }

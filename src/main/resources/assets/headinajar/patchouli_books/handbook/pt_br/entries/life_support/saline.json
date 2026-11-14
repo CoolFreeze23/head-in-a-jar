@@ -1,15 +1,21 @@
 {
   "name": "Soro Craniano",
-  "icon": "headinajar:saline_mixer",
+  "icon": "headinajar:saline_bottle",
   "category": "headinajar:life_support",
+  "sortnum": 0,
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "Uma cabeça solta no mundo usa 1 mB de soro a cada 12 segundos. Uma cabeça no berço ou carregada não usa nada. Um pote seco perde $(l)Integridade$(), e a integridade é o vidro entre você e o mundo."
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:saline_bottle",
+      "text": "Feito à mão: dois frascos de 250 mB cada. A cadeira pede quatro."
     },
     {
       "type": "patchouli:text",
-      "text": "O $(item)Misturador de Soro$() transforma água, açúcar, alga e redstone em soro e engarrafa. Use frascos na sua cabeça, coloque no menu do pote ou canalize soro para um Berço."
+      "text": "Um pote guarda 1.000 mB. A cabeça gasta 1 mB a cada 12 s quando você é o pote ou ela está pousada: 3 h 20 min o pote cheio. Levada na bolsa ou no Berço, nada.$(br2)Reponha: frasco na cabeça pousada, ou no espaço de recarga."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O $(item)Misturador de Soro$(): 1.000 mB de água, um açúcar, uma alga, uma redstone e 2.000 FE dão 1.000 mB em 10 s. Água por balde ou cano.$(br2)Enche garrafas no espaço. Um balde vazio tira um balde cheio, para Berço e Impressora."
     }
   ]
 }

@@ -56,6 +56,7 @@ public class SurgicalWrenchItem extends Item {
             if (here.target() == null) return deny(player, here, "wrench.not_linked");
             here.link(null);
             player.displayClientMessage(Component.translatable("message.headinajar.tesla_unlinked"), true);
+            com.coolfreeze23.headinajar.body.BodyServer.tool(player, null, com.coolfreeze23.headinajar.fx.Fx.TOOL_WRENCH);
             return InteractionResult.CONSUME;
         }
         if (!pending) {
@@ -65,6 +66,7 @@ public class SurgicalWrenchItem extends Item {
             });
             player.displayClientMessage(Component.translatable("message.headinajar.tesla_from"), true);
             here.perk();
+            com.coolfreeze23.headinajar.body.BodyServer.tool(player, null, com.coolfreeze23.headinajar.fx.Fx.TOOL_WRENCH);
             return InteractionResult.CONSUME;
         }
         var tag = data.getUnsafe();
@@ -79,6 +81,7 @@ public class SurgicalWrenchItem extends Item {
         }
         sender.link(pos);
         player.displayClientMessage(Component.translatable("message.headinajar.tesla_linked"), true);
+        com.coolfreeze23.headinajar.body.BodyServer.tool(player, null, com.coolfreeze23.headinajar.fx.Fx.TOOL_WRENCH);
         return InteractionResult.CONSUME;
     }
 

@@ -1,5 +1,6 @@
 package com.coolfreeze23.headinajar.client.fx;
 
+import com.coolfreeze23.headinajar.fx.LoopMix;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -15,72 +16,91 @@ import java.util.Map;
 
 /**
  * Client loops that follow a synced value. A caller asks every tick with {@link #want(Object, SoundEvent, SoundSource,
- * Vec3, float, float)}: a key (the thing making the sound), where it is, and the volume and pitch it should be at now.
- * Each loop is one tickable instance, created once, that starts from silence and eases toward its targets (volume by
- * 0.2 a tick, pitch at most 0.05 a tick), and fades out to 0.01 before it stops when its key stops asking. Identical
- * sounds within 16 blocks of each other are grouped into one instance at their mean position; at most six loops are
- * audible, the loudest-and-nearest first; the rest ease out.
+ * Vec3, float, float)} (or {@link #inHead} for a sound in the player's own head): a key (the thing making the sound),
+ * where it is, and the volume and pitch it should be at now. The mix ({@link LoopMix}) groups identical loops within 16
+ * blocks into one at their mean position and lets at most six be heard, the loudest-and-nearest first. Each heard
+ * group is one tickable instance, created once, that starts from silence and eases toward its targets (volume by 0.2 a
+ * tick, pitch at most 0.05 a tick), with a fixed pitch offset of its own so two never phase; a group no longer wanted
+ * or no longer among the six fades out before it stops.
  */
 public final class SoundLoops {
-    public static final int MAX_AUDIBLE = 6;
+    public static final int MAX_AUDIBLE = LoopMix.MAX_AUDIBLE;
 
-    private record Want(SoundEvent sound, SoundSource source, Vec3 at, float volume, float pitch) {
+    private record Want(SoundEvent sound, SoundSource source, Vec3 at, float volume, float pitch, boolean relative) {
     }
 
     private static final Map<Object, Want> WANTED = new HashMap<>();
     private static final List<Loop> PLAYING = new ArrayList<>();
+    private static long made;
+    private static int audible;
+    /** A signature moment heard nearby pulls the machine loops around it down 6 dB for its length (LoopMix.ducked). */
+    private static Vec3 duckAt;
+    private static int duckTicks;
+
+    /** Every sound the client starts: a signature stinger (the jingles, a mecha booting, the cut) ducks the machines near it. */
+    public static void heard(net.neoforged.neoforge.client.event.sound.PlaySoundEvent event) {
+        var sound = event.getSound();
+        if (sound == null || sound.isRelative()) return;
+        int ticks = LoopMix.duckTicks(sound.getLocation().toString());
+        if (ticks <= 0) return;
+        duckAt = new Vec3(sound.getX(), sound.getY(), sound.getZ());
+        duckTicks = Math.max(duckTicks, ticks);
+    }
 
     /** Call every client tick while the thing should be heard. */
     public static void want(Object key, SoundEvent sound, SoundSource source, Vec3 at, float volume, float pitch) {
-        WANTED.put(key, new Want(sound, source, at, Mth.clamp(volume, 0, 1), Mth.clamp(pitch, 0.5f, 2f)));
+        WANTED.put(key, new Want(sound, source, at, Mth.clamp(volume, 0, 1), Mth.clamp(pitch, 0.5f, 2f), false));
     }
 
-    /** Groups this tick's wants, assigns them to loops, then forgets them (so a key that stops asking fades out). */
+    /** As {@link #want}, for a sound heard in the listener's own head (not placed in the world). */
+    public static void inHead(Object key, SoundEvent sound, SoundSource source, float volume, float pitch) {
+        WANTED.put(key, new Want(sound, source, Vec3.ZERO, Mth.clamp(volume, 0, 1), Mth.clamp(pitch, 0.5f, 2f), true));
+    }
+
+    /** Mixes this tick's wants, gives each heard group its loop, then forgets them (so a key that stops asking fades out). */
     public static void tick() {
         var mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) {
+            PLAYING.forEach(Loop::end);
             PLAYING.clear();
             WANTED.clear();
+            audible = 0;
             return;
         }
         Vec3 ear = mc.gameRenderer.getMainCamera().getPosition();
-        // group identical sounds that are near each other
-        List<Group> groups = new ArrayList<>();
+        Map<SoundEvent, SoundSource> sources = new HashMap<>();
+        List<LoopMix.Want> wants = new ArrayList<>();
         for (Want w : WANTED.values()) {
-            Group into = null;
-            for (Group g : groups) {
-                if (g.sound == w.sound && g.mean().distanceToSqr(w.at) < 16 * 16) {
-                    into = g;
-                    break;
-                }
-            }
-            if (into == null) groups.add(into = new Group(w.sound, w.source));
-            into.add(w);
+            sources.putIfAbsent(w.sound, w.source);
+            wants.add(new LoopMix.Want(w.sound, w.at.x, w.at.y, w.at.z, w.volume, w.pitch, w.relative));
         }
-        groups.sort((x, y) -> Double.compare(y.priority(ear), x.priority(ear)));
         List<Loop> used = new ArrayList<>();
-        for (int i = 0; i < groups.size(); i++) {
-            Group g = groups.get(i);
-            boolean audible = i < MAX_AUDIBLE;
+        audible = 0;
+        for (LoopMix.Group g : LoopMix.plan(wants, ear.x, ear.y, ear.z)) {
+            SoundEvent sound = (SoundEvent) g.sound;
+            Vec3 at = new Vec3(g.x(), g.y(), g.z());
             Loop loop = null;
             for (Loop l : PLAYING) {
-                if (!used.contains(l) && l.sound == g.sound && !l.isStopped() && l.position().distanceToSqr(g.mean()) < 24 * 24) {
+                if (!used.contains(l) && l.sound == sound && l.relative == g.relative && l.bucket == g.bucket && !l.isStopped()
+                        && (g.relative || l.at.distanceToSqr(at) < 24 * 24)) {
                     loop = l;
                     break;
                 }
             }
             if (loop == null) {
-                if (!audible) continue;
-                loop = new Loop(g.sound, g.source, g.mean());
+                if (!g.audible()) continue;
+                loop = new Loop(sound, sources.get(sound), at, g.relative, g.bucket, LoopMix.offset(++made));
                 PLAYING.add(loop);
                 mc.getSoundManager().play(loop);
             }
             used.add(loop);
-            loop.target(g.mean(), audible ? g.volume() : 0, g.pitch());
+            if (g.audible()) audible++;
+            float duck = duckTicks > 0 && !g.relative && sources.get(sound) == SoundSource.BLOCKS && duckAt.distanceToSqr(at) < 16 * 16 ? LoopMix.DUCK : 1;
+            loop.target(at, g.audible() ? g.volume() * duck : 0, g.pitch());
         }
         for (Loop l : PLAYING) {
             if (!used.contains(l)) {
-                l.target(l.position(), 0, l.pitchTarget);
+                l.target(l.at, 0, l.pitchTarget);
                 // a loop the sound engine never ticks (sound off, no free channel) is let go here instead
                 if (++l.unused > 20) l.end();
             } else {
@@ -89,79 +109,57 @@ public final class SoundLoops {
         }
         PLAYING.removeIf(Loop::isStopped);
         WANTED.clear();
+        if (duckTicks > 0) duckTicks--;
     }
 
-    /** How many loops are playing now (for the harness and tests). */
+    /** How many loop instances are playing now, fading ones included (for the harness and tests). */
     public static int playing() {
         return PLAYING.size();
     }
 
-    private static final class Group {
-        final SoundEvent sound;
-        final SoundSource source;
-        double x, y, z, volume, pitch;
-        int count;
-
-        Group(SoundEvent sound, SoundSource source) {
-            this.sound = sound;
-            this.source = source;
-        }
-
-        void add(Want w) {
-            x += w.at.x;
-            y += w.at.y;
-            z += w.at.z;
-            volume = Math.max(volume, w.volume);
-            pitch += w.pitch;
-            count++;
-        }
-
-        Vec3 mean() {
-            return new Vec3(x / count, y / count, z / count);
-        }
-
-        float volume() {
-            // several identical sources are a little louder than one, never more than full volume
-            return (float) Math.min(1, volume * Math.min(1.6, 0.8 + 0.2 * count));
-        }
-
-        float pitch() {
-            return (float) (pitch / count);
-        }
-
-        double priority(Vec3 ear) {
-            return volume / (1 + mean().distanceTo(ear));
-        }
+    /** How many groups were heard this tick (never more than {@link #MAX_AUDIBLE}). */
+    public static int audible() {
+        return audible;
     }
 
     private static final class Loop extends AbstractTickableSoundInstance {
         final SoundEvent sound;
-        float volumeTarget, pitchTarget;
+        final boolean relative;
+        final int bucket;
+        final float offset;
+        float volumeTarget, pitchTarget = 1;
         Vec3 at;
         boolean started;
         int unused;
 
-        void end() {
-            stop();
-        }
-
-        Loop(SoundEvent sound, SoundSource source, Vec3 at) {
+        Loop(SoundEvent sound, SoundSource source, Vec3 at, boolean relative, int bucket, float offset) {
             super(sound, source, SoundInstance.createUnseededRandom());
             this.sound = sound;
+            this.relative = relative;
+            this.bucket = bucket;
+            this.offset = relative ? 1 : offset;
             this.looping = true;
             this.delay = 0;
             this.volume = 0.01f;
-            this.pitch = 1;
+            this.pitch = this.offset;
             this.at = at;
-            this.x = at.x;
-            this.y = at.y;
-            this.z = at.z;
-            // a fixed offset per instance, so two loops never phase
-            this.pitchTarget = 1;
+            if (relative) {
+                this.attenuation = SoundInstance.Attenuation.NONE;
+                this.x = this.y = this.z = 0;
+            } else {
+                this.x = at.x;
+                this.y = at.y;
+                this.z = at.z;
+            }
         }
 
-        Vec3 position() {
-            return at;
+        @Override
+        public boolean isRelative() {
+            return relative;
+        }
+
+        void end() {
+            stop();
         }
 
         void target(Vec3 at, float volume, float pitch) {
@@ -178,11 +176,15 @@ public final class SoundLoops {
 
         @Override
         public void tick() {
-            x = at.x;
-            y = at.y;
-            z = at.z;
-            volume += Mth.clamp((volumeTarget - volume) * 0.2f, -0.2f, 0.2f);
-            pitch += Mth.clamp(pitchTarget - pitch, -0.05f, 0.05f);
+            if (!relative) {
+                x = at.x;
+                y = at.y;
+                z = at.z;
+            }
+            // a sound in the head (the link's static) follows at once, so its swell keeps time with the stutter
+            float chase = relative ? 0.6f : 0.2f;
+            volume += Mth.clamp((volumeTarget - volume) * chase, -chase, chase);
+            pitch += Mth.clamp(pitchTarget * offset - pitch, -0.05f, 0.05f);
             if (started && volumeTarget <= 0 && volume <= 0.01f) stop();
         }
     }

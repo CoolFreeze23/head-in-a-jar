@@ -55,6 +55,7 @@ public final class JarState {
         buf.writeFloat(s.bodyHealth);
         buf.writeFloat(s.bodyMaxHealth);
         buf.writeUtf(s.speech);
+        buf.writeVarInt(s.speechCount);
         buf.writeBoolean(s.wheels);
         buf.writeBoolean(s.tipped);
         buf.writeBoolean(s.compact);
@@ -74,6 +75,7 @@ public final class JarState {
         s.bodyHealth = buf.readFloat();
         s.bodyMaxHealth = buf.readFloat();
         s.speech = buf.readUtf();
+        s.speechCount = buf.readVarInt();
         s.wheels = buf.readBoolean();
         s.tipped = buf.readBoolean();
         s.compact = buf.readBoolean();
@@ -100,6 +102,8 @@ public final class JarState {
     private float bodyHealth, bodyMaxHealth;
     /** The last thing the jar said through its Speaker Grille. Not saved. */
     private String speech = "";
+    /** How many lines it has said: a line said twice is still said twice. Not saved. */
+    private int speechCount;
     /** Wheels module deployed, or the bare jar tipped on its side to roll: how a jar gets about without legs. */
     private boolean wheels, tipped;
     /** The head is in a Compact Jar: head-sized, the head facing its front. Saved. */
@@ -158,8 +162,9 @@ public final class JarState {
         integrity = other.integrity;
         bodyHealth = other.bodyHealth;
         bodyMaxHealth = other.bodyMaxHealth;
-        if (!other.speech.isEmpty() && !other.speech.equals(speech)) speechUntil = System.currentTimeMillis() + 5000;
+        if (!other.speech.isEmpty() && (!other.speech.equals(speech) || other.speechCount != speechCount)) speechUntil = System.currentTimeMillis() + 5000;
         speech = other.speech;
+        speechCount = other.speechCount;
         wheels = other.wheels;
         tipped = other.tipped;
         compact = other.compact;
@@ -256,6 +261,7 @@ public final class JarState {
 
     public void say(String text) {
         speech = text.length() > 60 ? text.substring(0, 60) + "..." : text;
+        speechCount++;
         dirty = true;
     }
 

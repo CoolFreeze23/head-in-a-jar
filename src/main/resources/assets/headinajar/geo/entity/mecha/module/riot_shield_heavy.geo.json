@@ -1,0 +1,161 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_riot_shield_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                -6,
+                -2
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -4,
+                -8
+              ],
+              "size": [
+                6,
+                8,
+                6
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "shield",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -12,
+                -16,
+                -12
+              ],
+              "size": [
+                24,
+                32,
+                4
+              ],
+              "uv": [
+                52,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -13,
+                16,
+                -13
+              ],
+              "size": [
+                26,
+                2,
+                6
+              ],
+              "uv": [
+                28,
+                36
+              ]
+            },
+            {
+              "origin": [
+                -13,
+                -18,
+                -13
+              ],
+              "size": [
+                26,
+                2,
+                6
+              ],
+              "uv": [
+                0,
+                44
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                6,
+                -13
+              ],
+              "size": [
+                12,
+                6,
+                2
+              ],
+              "uv": [
+                0,
+                36
+              ]
+            },
+            {
+              "origin": [
+                -11,
+                -12,
+                -13
+              ],
+              "size": [
+                22,
+                4,
+                2
+              ],
+              "uv": [
+                64,
+                44
+              ]
+            }
+          ],
+          "locators": {
+            "fx_face": [
+              0,
+              0,
+              -13
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

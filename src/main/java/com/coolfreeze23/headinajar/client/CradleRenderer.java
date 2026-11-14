@@ -20,7 +20,9 @@ public class CradleRenderer implements BlockEntityRenderer<LifeSupportCradleBloc
         pose.scale(0.9f, 0.9f, 0.9f);
         // a botched head floats upside down here as it would have on the chair's tray
         JarRenderer.draw(pose, buffers, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, JarRenderer.skin(cradle.owner()), 0, 0, age, true,
-                !cradle.goggles().isEmpty(), JarRenderer.WIDE, cradle.upsideDown());
+                !cradle.goggles().isEmpty(), JarRenderer.WIDE, cradle.upsideDown(),
+                // on its Cradle the jar is kept full and charged, and is being topped up
+                new JarRenderer.Vitals(1, 1, 0, true, -1, 0));
         pose.popPose();
     }
 

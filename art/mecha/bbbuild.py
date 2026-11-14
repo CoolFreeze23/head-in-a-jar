@@ -1,8 +1,8 @@
 """Writes a GeckoLib-format .bbmodel (Blockbench 5.0 file layout) from a generator's bones, cubes and locators.
 
-Shared by the frame and module generators under art/mecha/. The file is the same shape the Blockbench tool server
-writes (bbmodel_create + bbmodel_edit add_group/add_cube/add_locator + bbmodel_add_texture); the result is checked
-with bbmodel_validate afterwards. UUIDs are derived from the node names, so a rebuild keeps every animation's bone
+Shared by the frame and module generators under art/mecha/. The file is the same shape Blockbench
+writes (groups, cubes, locators and the texture); the result is checked
+with a model validator afterwards. UUIDs are derived from the node names, so a rebuild keeps every animation's bone
 references valid. Existing animations in the target file are kept unless replaced by the caller.
 
 bones:    [(name, pivot, parent or None, rest rotation or None)]

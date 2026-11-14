@@ -61,6 +61,13 @@ public final class MechaLogic {
         int cooldown;
         /** This press has already been refused (one refusal per press, however long it is held). */
         boolean refused;
+        /** A tap tool's blow or shot waiting for its arm clip's contact (game time, -1 for none), and its strength. */
+        long contactAt = -1;
+        float contactPower;
+        /** The Arc Cannon's chain: the creatures it has jumped to so far, and when its next jump goes (-1: none). */
+        java.util.List<LivingEntity> chain;
+        long hopAt = -1;
+        float hopDamage;
     }
 
     // --- weight ---------------------------------------------------------------------------------------
@@ -94,12 +101,17 @@ public final class MechaLogic {
     public static Vec3 riddenInput(MechaEntity m, Player pilot) {
         boolean swimming = m.isInWater() && m.has(MechaModule.AQUA_FINS);
         if (!canWalk(m) && !swimming && !(canFly(m) && !m.onGround())) return Vec3.ZERO;
-        if (m.load() > 1.25f || m.vent() > 0 && m.onGround()) return Vec3.ZERO;
-        if (m.has(MechaModule.ANCHOR_CLAMPS) && pilot.isShiftKeyDown()) return Vec3.ZERO;
+        if (m.load() > LOAD_LOCK || m.vent() > 0 && m.onGround()) return Vec3.ZERO;
+        // crouched on its springs for a pogo, or planted while the Bulwark's fists reach, throw or set down
+        // (and while the Colossus kneels into, holds or leaves Siege, or the Executive plays its jingle)
+        if (m.pogoAt() >= 0 || Bulwark.rooted(m) || Siege.rooted(m) || Executive.rooted(m) || Chimera.rooted(m)) return Vec3.ZERO;
         float strafe = pilot.xxa * 0.5f, forward = pilot.zza;
         if (forward <= 0) forward *= 0.4f;
         return new Vec3(strafe, 0, forward);
     }
+
+    /** Over this share of its load rating a machine's servos lock: it cannot walk, turn on its legs or jump. */
+    public static final float LOAD_LOCK = 1.25f;
 
     /** The Legs modules that carry a frame built on legs. */
     public static final java.util.List<MechaModule> WALKING_LEGS = java.util.List.of(MechaModule.HYDRAULIC_LEGS, MechaModule.ARACHNID_LEGS,
@@ -133,6 +145,8 @@ public final class MechaLogic {
         if (m.isInWater() && m.has(MechaModule.AQUA_FINS)) speed *= 2;
         int servos = m.indexOf(MechaModule.SPRINT_SERVOS);
         if (servos >= 0 && m.battery() > 0) speed *= 1 + 0.8 * m.sliderAt(servos) / 100.0;
+        // the Wheelhouse's Rush Hour, from its synced moment (the pilot's client moves it, so both sides must agree)
+        speed *= Wheelhouse.boost(m, m.level().getGameTime());
         return (float) speed;
     }
 
@@ -149,14 +163,44 @@ public final class MechaLogic {
                 || com.coolfreeze23.headinajar.genetics.GeneEffects.has(m, com.coolfreeze23.headinajar.genetics.Gene.DRACONIC_WINGS);
     }
 
+    /**
+     * Whether a piloted machine is in the air by its own means, as it is meant to be: a winged frame flying, hovering or
+     * gliding on charge; anything that can lift itself (thrust over its mass, Draconic Wings); a Rocket Pack, Jump Jets,
+     * a Hover Skirt or Glider Wings fitted; a Hopper on its pogo arc; a Skitter hanging, swinging or reeling on its
+     * Dragline. A server without allow-flight would otherwise disconnect its pilot after about four seconds
+     * ({@link Aloft}).
+     */
+    public static boolean aloft(MechaEntity m) {
+        if (m.onGround() || Hosts.pilot(m) == null) return false;
+        if (m.pogoFlight || Skitter.out(m)) return true;
+        boolean live = m.battery() > 0;
+        if (live && (m.frame().locomotion == MechaFrame.Locomotion.WINGS || canFly(m))) return true;
+        if (live && (m.has(MechaModule.ROCKET_PACK) || m.has(MechaModule.JUMP_JETS) || m.has(MechaModule.HOVER_SKIRT))) return true;
+        return m.has(MechaModule.GLIDER_WINGS);
+    }
+
+    /** How fast an animated frame's body turns after its pilot's look, degrees a tick. */
+    public static final float BODY_TURN = 15;
+
     public static void tickRidden(MechaEntity m, Player pilot) {
-        m.setYRot(pilot.getYRot());
-        m.yRotO = m.getYRot();
-        m.yBodyRot = m.getYRot();
-        m.yHeadRot = m.getYRot();
-        boolean jump = pilot.jumping && m.frame().locomotion != MechaFrame.Locomotion.TREADS;
+        if (m.frame().animated()) {
+            // the body turns after the pilot (its sensor takes the look at once); a crouched or venting machine holds still
+            m.yRotO = m.getYRot();
+            if (m.pogoAt() < 0 && m.vent() == 0 && (!Bulwark.rooted(m) || Bulwark.turnsToGrab(m)) && !Siege.rooted(m) && !Executive.rooted(m) && !Chimera.rooted(m)) m.setYRot(net.minecraft.util.Mth.approachDegrees(m.getYRot(), pilot.getYRot(), BODY_TURN));
+            m.yBodyRot = m.getYRot();
+            m.yHeadRot = pilot.getYRot();
+        } else {
+            m.setYRot(pilot.getYRot());
+            m.yRotO = m.getYRot();
+            m.yBodyRot = m.getYRot();
+            m.yHeadRot = m.getYRot();
+        }
+        // while the Dragline holds a machine off the ground, the jump key pays the line out and does nothing else
+        boolean jump = pilot.jumping && m.frame().locomotion != MechaFrame.Locomotion.TREADS && !Siege.rooted(m) && !Skitter.lineHolds(m);
         Vec3 v = m.getDeltaMovement();
-        if (jump && canFly(m)) {
+        boolean fly = jump && canFly(m);
+        // the Kite leaves the ground on its takeoff clip's push, after the crouch (Kite.mayLift)
+        if (fly && Kite.mayLift(m)) {
             double lift = m.frame().locomotion == MechaFrame.Locomotion.WINGS && thrust(m) <= m.mass() ? 0.08 : 0.12;
             m.setDeltaMovement(v.x, Math.min(0.45, v.y + lift), v.z);
             m.fallDistance = 0;
@@ -164,7 +208,7 @@ public final class MechaLogic {
         }
         if (m.onGround()) {
             m.jetsLeft = 3;
-            if (jump && m.load() <= 1.0f && m.vent() == 0) {
+            if (jump && !fly && m.load() <= 1.0f && m.vent() == 0) {
                 int heels = m.indexOf(MechaModule.SPRING_HEELS);
                 double power = heels < 0 ? 0.5 : 0.6 + 0.6 * m.sliderAt(heels) / 100.0;
                 m.setDeltaMovement(v.x, power * loadJump(m.load()), v.z);
@@ -184,6 +228,10 @@ public final class MechaLogic {
             int grip = m.indexOf(MechaModule.ARACHNID_LEGS);
             m.setDeltaMovement(m.getDeltaMovement().x, grip < 0 ? 0.2 : 0.12 + 0.16 * m.sliderAt(grip) / 100.0, m.getDeltaMovement().z);
             m.fallDistance = 0;
+        } else if (Skitter.clings(m, pilot)) {
+            // a frame that climbs holds on to its wall where it is while the pilot gives no input against it
+            m.setDeltaMovement(m.getDeltaMovement().x, 0, m.getDeltaMovement().z);
+            m.fallDistance = 0;
         }
         MechaSystems.riddenMovement(m);
     }
@@ -197,6 +245,18 @@ public final class MechaLogic {
         return null;
     }
 
+    /**
+     * A push on a ridden mecha. Its pilot's client moves it, and vanilla zeroes a ridden mob's velocity on the server
+     * every tick and sends that zero back, so a velocity set here alone is lost: the pilot's client is told to apply it.
+     * Without a pilot on a connected client it is set here, as for any mob.
+     */
+    public static void impulse(MechaEntity m, Vec3 velocity) {
+        m.lastImpulse = velocity;
+        if (Hosts.pilot(m) instanceof ServerPlayer sp && HopperNet.push(sp, m, velocity)) return;
+        m.setDeltaMovement(velocity);
+        m.hurtMarked = true;
+    }
+
     /** Jump Jets: a mid-air burst (the client asks; the server spends). */
     public static boolean jet(MechaEntity m) {
         if (!m.has(MechaModule.JUMP_JETS) || m.onGround() || m.jetsLeft <= 0 || m.vent() > 0) return false;
@@ -204,10 +264,12 @@ public final class MechaLogic {
         m.jetsLeft--;
         m.setHeat(m.heat() + 15);
         Vec3 v = m.getDeltaMovement();
-        m.setDeltaMovement(v.x, 0.65, v.z);
-        m.hurtMarked = true;
+        // the Thrust slider sets the lift: 0.45 to 0.85 (0.65, as before, at the default 50%)
+        impulse(m, new Vec3(v.x, 0.45 + 0.4 * m.sliderAt(m.indexOf(MechaModule.JUMP_JETS)) / 100.0, v.z));
         m.fallDistance = 0;
-        m.playSound(SoundEvents.FIRECHARGE_USE, 1, 0.8f);
+        m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.JETS.get(), 1, 0.8f);
+        // the jets' own burst on an animated frame (each client plays it at the socket)
+        if (m.frame().animated()) m.level().broadcastEntityEvent(m, MechaEntity.JET_BURST);
         return true;
     }
 
@@ -231,13 +293,15 @@ public final class MechaLogic {
         }
         if (overloaded(m)) drain *= 1.5f;
         if (pilot == null) drain = 0.5f;
+        // a parked machine's cores and tools make no heat: nobody is running them (it never vents parked)
+        if (pilot == null) heat = 0;
         // nobody aboard holds a button (an eject, the Golden Parachute or a logout mid-press leaves none held)
         if (pilot == null) m.armsHeld = 0;
         // power in
         int gain = 0;
         if (m.has(MechaModule.GALVANIC_STACK)) gain += 10;
         if (m.has(MechaModule.SOLAR_SKIN) && level.isDay() && level.canSeeSky(m.blockPosition().above((int) m.getBbHeight()))) gain += 15;
-        if (m.has(MechaModule.COMBUSTION_KERNEL)) gain += burnFuel(m);
+        if (m.has(MechaModule.COMBUSTION_KERNEL)) gain += burnFuel(m, pilot != null);
         if (m.has(MechaModule.ROCKET_PACK) && !m.onGround() && m.getDeltaMovement().y > 0 && pilot != null) {
             drain += 120 + 1.8f * m.sliderAt(m.indexOf(MechaModule.ROCKET_PACK));
             heat += 6;
@@ -259,6 +323,7 @@ public final class MechaLogic {
             m.setBattery(m.battery() + net);
         }
         MechaSystems.serverTick(m, pilot);
+        if (pilot instanceof ServerPlayer flier) Aloft.vehicle(m, flier);
         // Bio-Gel in a Chimera's veins: 1 HP every 5 s while it lasts
         var data = m.getPersistentData();
         int veins = data.getInt(VEINS);
@@ -270,23 +335,38 @@ public final class MechaLogic {
         // arms
         if (pilot instanceof ServerPlayer sp) {
             boolean live = m.vent() == 0 && m.battery() > 0;
+            // the Bulwark's fists are on a load: the arm buttons wait for them, and say so
+            boolean full = Bulwark.handsBusy(m, level.getGameTime());
+            // the Colossus's forearms are planted on the ground in Siege: its arms wait (the shoulder weapons still fire)
+            boolean planted = Siege.rooted(m);
             int armed = 0;
             for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) {
-                int bit = 1 << (side % 2);
+                // each arm slot has its own bit (the shoulders' are set from their side's button: Network.arms)
+                int bit = 1 << side;
                 boolean held = (m.armsHeld & bit) != 0, before = (m.armsBefore & bit) != 0;
-                if (m.arm(side) != null) armed |= bit;
-                if (live) {
+                if (m.arm(side) != null) armed |= 1 << (side % 2);
+                if (full) {
+                    MechaArms.release(m, side);
+                    if (held && !before) Refusals.deny(sp, Refuser.at(m), "mecha.arm.hands_full");
+                } else if (planted && side < 2) {
+                    MechaArms.release(m, side);
+                    if (held && !before && m.arm(side) != null) Refusals.deny(sp, Refuser.at(m), "mecha.siege.arms_planted");
+                } else if (live) {
+                    m.armActing = side;
                     MechaArms.tick(m, sp, side, held, held && !before, !held && before);
+                    m.armActing = -1;
                 } else {
                     MechaArms.release(m, side);
                     if (held && !before && m.arm(side) != null) {
+                        m.dryFire(side);
                         Refusals.deny(sp, Refuser.at(m), m.vent() > 0 ? "mecha.arm.venting" : "mecha.arm.no_power",
                                 Component.translatable("block.headinajar.assembly_gantry"));
                     }
                 }
             }
             // a button with no arm behind it on this frame
-            int pressed = m.armsHeld & ~m.armsBefore & ~armed;
+            int pressed = full ? 0 : m.armsHeld & ~m.armsBefore & ~armed & 3;
+            if (pressed != 0) m.dryFire((pressed & 1) != 0 ? 0 : 1);
             if (pressed != 0) Refusals.deny(sp, Refuser.at(m), "mecha.arm.empty", Component.translatable("block.headinajar.assembly_gantry"));
         } else {
             for (int side = 0; side < m.frame().slots(MechaModule.Slot.ARM); side++) MechaArms.release(m, side);
@@ -299,6 +379,8 @@ public final class MechaLogic {
         else if (level.isRainingAt(m.blockPosition().above())) env = 1.5;
         if (level.dimensionType().ultraWarm()) env *= 0.5;
         float dissipation = m.frame().dissipation + (m.has(MechaModule.RADIATOR_FINS) ? 4 : 0) + (m.has(MechaModule.COOLANT_LOOP) ? 6 : 0);
+        // anchored in Siege, the back vents stand open: half as much heat again goes out
+        if (Siege.locked(m)) dissipation *= Siege.DISSIPATION;
         if (m.isInLava()) heat += 10;
         if (m.isOnFire() && !m.has(MechaModule.FIRE_SUPPRESSION)) heat += 3;
         m.setHeat((float) (m.heat() + heat - dissipation * env));
@@ -308,11 +390,12 @@ public final class MechaLogic {
             if (m.vent() % 4 == 0) {
                 level.sendParticles(ParticleTypes.CLOUD, m.getX(), m.getY() + m.getBbHeight() * 0.6, m.getZ(), 6, 0.8, 0.6, 0.8, 0.02);
                 for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, m.getBoundingBox().inflate(3), e -> e != m && e != pilot)) {
-                    if (m.tickCount % 20 == 0) e.hurt(level.damageSources().hotFloor(), 2);
+                    // once a second of the vent's own count (the machine's age would line up with it in one vent of four)
+                    if (m.vent() % 20 == 0) e.hurt(level.damageSources().hotFloor(), 2);
                     e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40));
                 }
             }
-        } else if (m.heat() >= m.frame().heatCap) {
+        } else if (m.heat() >= m.frame().heatCap && pilot != null) {
             vent(m, pilot);
         }
 
@@ -328,13 +411,14 @@ public final class MechaLogic {
                 pilot.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, false, false));
             }
             if (m.has(MechaModule.FIRE_SUPPRESSION)) {
+                if (pilot.isOnFire()) m.act(MechaModule.FIRE_SUPPRESSION);
                 m.clearFire();
                 pilot.clearFire();
             }
         }
     }
 
-    private static int burnFuel(MechaEntity m) {
+    private static int burnFuel(MechaEntity m, boolean piloted) {
         var data = m.getPersistentData();
         int fuel = data.getInt("headinajar_fuel");
         if (fuel <= 0) {
@@ -351,7 +435,7 @@ public final class MechaLogic {
         if (fuel <= 0) return 0;
         int out = Math.min(80, fuel);
         data.putInt("headinajar_fuel", fuel - out);
-        m.setHeat(m.heat() + 0.05f * out / 20f);
+        if (piloted) m.setHeat(m.heat() + 0.05f * out / 20f);
         return out;
     }
 
@@ -359,7 +443,8 @@ public final class MechaLogic {
     public static void vent(MechaEntity m, Player pilot) {
         m.setVent(VENT_TICKS);
         m.setHeat(m.frame().heatCap * 0.5f);
-        m.playSound(SoundEvents.LAVA_EXTINGUISH, 2, 0.6f);
+        // an animated frame's blast comes with its clip's tick 3 (Hopper.serverTick)
+        if (!m.frame().animated()) m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.VENT_STEAM.get(), 2, 0.6f);
         if (pilot != null && !FormActions.state(pilot).has(ModuleType.HEAT_SHIELD)) {
             pilot.hurt(m.serverLevel().damageSources().hotFloor(), 2);
         }
@@ -392,14 +477,7 @@ public final class MechaLogic {
     /** Golden Parachute: under 10% health the pilot is thrown clear with slow falling. */
     public static void afterDamage(MechaEntity m) {
         Player pilot = Hosts.pilot(m);
-        if (pilot instanceof ServerPlayer sp && m.getHealth() < m.getMaxHealth() * 0.1f && m.isAlive()) {
-            eject(m, sp);
-            com.coolfreeze23.headinajar.Advance.grant(sp, "parachute");
-            sp.setDeltaMovement(0, 1.2, 0);
-            sp.hurtMarked = true;
-            sp.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 200));
-            sp.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.headinajar.parachute"), true);
-        }
+        if (pilot instanceof ServerPlayer sp && m.getHealth() < m.getMaxHealth() * 0.1f && m.isAlive()) GoldenParachute.eject(m, sp);
     }
 
     public static void eject(MechaEntity m, ServerPlayer pilot) {
@@ -412,21 +490,32 @@ public final class MechaLogic {
     }
 
     /**
-     * Destroyed: a puff with no block damage, half the modules drop, the rest is scrap. The cockpit protects its jar to
-     * the end: the pilot is thrown clear before the blast, which spares whoever was aboard, and the glass takes one
-     * knock (never the last point), as in a shell's crash. The pilot is told what happened and what is left.
+     * A wrecked mecha's cockpit protects its jar to the end: the pilot is thrown clear under the Golden Parachute before
+     * anything else happens (an animated frame's collapse plays over an empty collar), and the glass takes one knock
+     * (never the last point), as in a shell's crash. The pilot is told what happened and what is left. Everyone aboard
+     * now is spared the blast that follows, whenever it comes.
      */
-    public static void destroyed(MechaEntity m) {
+    public static void throwClear(MechaEntity m) {
         ServerLevel level = m.serverLevel();
-        java.util.List<Entity> aboard = new java.util.ArrayList<>(m.getPassengers());
+        m.spared.addAll(m.getPassengers());
         if (Hosts.pilot(m) instanceof ServerPlayer pilot) {
-            eject(m, pilot);
+            GoldenParachute.eject(m, pilot);
             var state = FormActions.state(pilot);
             if (state.integrity() > 1) state.setIntegrity(state.integrity() - 1);
-            level.playSound(null, pilot.getX(), pilot.getY(), pilot.getZ(), SoundEvents.GLASS_HIT, net.minecraft.sounds.SoundSource.PLAYERS, 1, 0.9f);
+            level.playSound(null, pilot.getX(), pilot.getY(), pilot.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_KNOCK.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1, 0.9f);
             com.coolfreeze23.headinajar.feedback.Warnings.danger(pilot, 1, "mecha.wrecked", m.getDisplayName(), state.integrity(), state.maxIntegrity(),
                     net.minecraft.network.chat.Component.translatable("item.headinajar.glass_patch"));
         }
+    }
+
+    /**
+     * Destroyed: a puff with no block damage, half the modules drop, the rest is scrap. Whoever is still aboard is thrown
+     * clear first ({@link #throwClear}); the blast spares everyone who was.
+     */
+    public static void destroyed(MechaEntity m) {
+        ServerLevel level = m.serverLevel();
+        throwClear(m);
+        java.util.Set<Entity> aboard = m.spared;
         var spare = new net.minecraft.world.level.ExplosionDamageCalculator() {
             @Override
             public boolean shouldDamageEntity(net.minecraft.world.level.Explosion explosion, Entity entity) {

@@ -1,0 +1,17 @@
+{
+  "name": "Link Range",
+  "icon": "headinajar:relay_goggles",
+  "category": "headinajar:getting_home",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Goggles reach $(l)48$() blocks (Mk I), $(l)160$() (Mk II), $(l)640$() (Mk III) or the whole dimension (Quantum). Signal is full to half the range, gone at the edge; near another's powered Signal Jammer (16 blocks), 30%%. Going back into your body needs over 20%%."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:relay_mast",
+      "text": "A powered mast passes the link on: head to mast in goggle range, then mast to mast and on to the body within $(l)96$() blocks ($(l)192$() for Mk II). Each mast costs 3%%. It draws 1 FE/t."
+    }
+  ]
+}

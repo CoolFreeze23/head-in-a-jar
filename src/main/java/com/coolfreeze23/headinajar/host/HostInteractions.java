@@ -100,6 +100,8 @@ public final class HostInteractions {
         // as always: Embalming Fluid and Neural Lace act whoever holds them
         if (held.is(ModRegistry.EMBALMING_FLUID.get())) {
             if (data.shell) return refuse(player, host, "host.embalm_shell", held.getHoverName());
+            // a laced body never decays: the fluid would be poured away for nothing
+            if (data.laced) return refuse(player, host, "host.embalm_laced", held.getHoverName());
             if (player != null) {
                 data.freshness = 100;
                 data.embalmedUntil = host.level().getGameTime() + 24000;
@@ -108,11 +110,13 @@ public final class HostInteractions {
                 host.playSound(SoundEvents.BOTTLE_EMPTY, 1, 0.8f);
                 player.displayClientMessage(Component.translatable("message.headinajar.embalmed"), true);
                 Network.syncHost(host);
+                com.coolfreeze23.headinajar.body.BodyServer.embalmed(host);
             }
             return InteractionResult.SUCCESS;
         }
         if (held.is(ModRegistry.NEURAL_LACE.get())) {
             if (data.shell) return refuse(player, host, "host.lace_shell", held.getHoverName());
+            if (data.laced) return refuse(player, host, "host.lace_again", held.getHoverName());
             if (player != null) {
                 if (data.sync < 50) {
                     player.displayClientMessage(Component.translatable("message.headinajar.lace_needs_sync"), true);
@@ -120,7 +124,7 @@ public final class HostInteractions {
                     data.laced = true;
                     data.freshness = 100;
                     held.consume(1, player);
-                    host.playSound(SoundEvents.SLIME_BLOCK_PLACE, 1, 1.4f);
+                    host.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.LACE.get(), 1, 1.4f);
                     player.displayClientMessage(Component.translatable("message.headinajar.laced"), true);
                     Network.syncHost(host);
                 }
@@ -142,7 +146,7 @@ public final class HostInteractions {
             // a plate patches 20 HP, as at the Gantry
             held.consume(1, player);
             mecha.heal(20);
-            host.playSound(SoundEvents.ANVIL_USE, 0.6f, 1.4f);
+            host.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.GANTRY_PATCH.get(), 1, com.coolfreeze23.headinajar.fx.HouseSounds.pitch(host.getRandom()));
             player.displayClientMessage(Component.translatable("message.headinajar.mecha_status", mecha.battery() / 1000,
                     Math.round(mecha.getHealth()), Math.round(mecha.getMaxHealth())), true);
             return InteractionResult.SUCCESS;

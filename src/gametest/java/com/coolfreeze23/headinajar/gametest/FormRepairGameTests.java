@@ -355,11 +355,19 @@ public class FormRepairGameTests {
         state(p).setBody(id);
         HeadRegistry.get(p).setBody(p.getUUID(), new HeadRegistry.Body(id, HeadRegistry.Spot.of(far), false));
         boolean[] booked = {false};
-        // the player tick's countdown, once booked (registered up front: a test can't add tick tasks while they run). A
-        // test server ticks as fast as it can, so a tick here is far shorter than the disk takes to load the body's
-        // entities; the countdown waits for them, as thirty real seconds would
+        // the player tick's countdown, once booked (registered up front: a test can't add tick tasks while they run). It
+        // runs down whether or not the far body happens to be loaded (its chunk may be dropped at any moment); at the
+        // delivery the courier holds the body's chunk and looks again each tick. A test server ticks far faster than the
+        // disk loads the body's entities, so after that first look the countdown waits for them, as real seconds would.
+        boolean[] looked = {false};
         h.onEachTick(() -> {
-            if (booked[0] && level.getEntity(id) != null) Courier.tick(p);
+            if (!booked[0]) return;
+            boolean loaded = level.getEntity(id) != null;
+            int left = p.getPersistentData().getInt(Courier.KEY);
+            if (left > 1 || loaded || !looked[0]) {
+                if (left == 1 && !loaded) looked[0] = true;
+                Courier.tick(p);
+            }
         });
         h.runAfterDelay(100, () -> {
             new JarMenu(1, p.getInventory()).clickMenuButton(p, JarMenu.BUTTON_COURIER);

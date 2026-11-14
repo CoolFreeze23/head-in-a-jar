@@ -1,0 +1,79 @@
+# Frame time (the Hopper's method): uncapped, a row of eight parked Chimeras 10 blocks north of the camera, a row of
+# eight parked Lunks 10 blocks south, and the empty view west; three 15-second windows of each, interleaved by turning
+# the camera so drift falls on all three. Run with GAME_EXCLUSIVE=1, in the default client and with SMOKE_MODS=sodium.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+mecha chimera -10 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera -7 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera -4 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera -1 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera 2 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera 5 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera 8 -60 -10 hydraulic_legs,hydraulic_fist
+mecha chimera 11 -60 -10 hydraulic_legs,hydraulic_fist
+/summon headinajar:lunk -10 -60 10
+/summon headinajar:lunk -7 -60 10
+/summon headinajar:lunk -4 -60 10
+/summon headinajar:lunk -1 -60 10
+/summon headinajar:lunk 2 -60 10
+/summon headinajar:lunk 5 -60 10
+/summon headinajar:lunk 8 -60 10
+/summon headinajar:lunk 11 -60 10
+/tp @s 0.5 -59 0.5 180 5
+wait 200
+shot bench_row_chimera
+look 0 5
+wait 20
+shot bench_row_lunk
+look 90 5
+wait 40
+bench start empty1
+wait 300
+bench stop
+look 180 5
+wait 40
+bench start chimera1
+wait 300
+bench stop
+look 0 5
+wait 40
+bench start lunk1
+wait 300
+bench stop
+look 90 5
+wait 40
+bench start empty2
+wait 300
+bench stop
+look 180 5
+wait 40
+bench start chimera2
+wait 300
+bench stop
+look 0 5
+wait 40
+bench start lunk2
+wait 300
+bench stop
+look 90 5
+wait 40
+bench start empty3
+wait 300
+bench stop
+look 180 5
+wait 40
+bench start chimera3
+wait 300
+bench stop
+look 0 5
+wait 40
+bench start lunk3
+wait 300
+bench stop
+report done

@@ -1,0 +1,30 @@
+# The Assembly Gantry builds a Skitter. The stand-in second player opens the Gantry by a use packet on its front and
+# presses Assemble (the screen's button packet); the build is filmed whole from a bystander's place about six blocks
+# off at the front three-quarter on the arm's side, by day.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+gantry 0 -60 0 skitter
+/tp @s 4.8 -59.4 -3.8 45 -1.7
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames g6_skitter_build 252
+wait 4
+bystander button 1
+wait 2
+bystander close
+inspect block 0 -60 0
+wait 106
+inspect near skitter 4
+wait 142
+inspect near skitter 4
+report gantry skitter build done

@@ -1,0 +1,29 @@
+# The corpse: one summoned already dead (as a late joiner sees it), and one that dies in view (the 24-tick fall), then
+# opened and closed by its owner (its hands part and fold again); seen from the side at 3 blocks.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+hud off
+view 0
+/summon headinajar:headless_body -2.5 -60 0.5 {Corpse:1b,Rotation:[90f,0f]}
+bystander spawn 2 -60 1 90
+bystander tick on
+bystander form jar
+bystander tp 2 -60 3 0 0
+/tp @s 4.5 -60 -2.5 45 20
+wait 20
+shot corpse_summoned_and_body_standing
+frames b23_corpse_dies 60
+wait 2
+/damage @e[type=headinajar:headless_body,limit=1,sort=nearest] 1000 minecraft:generic
+wait 60
+frames b23_corpse_opened 60
+bystander tp 1 -60 2 0 0
+wait 5
+bystander useentity nearest headless_body
+wait 30
+bystander close
+wait 30
+shot corpse_after

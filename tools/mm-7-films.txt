@@ -1,0 +1,118 @@
+# Films not yet made: the Bulwark lifting a cow overhead with a full back loadout, the Wheelhouse ramming a cow
+# that can move, the Rover's right-hand get-off, the Hopper and the Bulwark walking away and turning back.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+jar
+charge 100000
+mecha bulwark 0 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,hydraulic_fist,hydraulic_fist,ore_scanner
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 60
+riding bulwark
+look 0 20
+view 1
+execute at @e[type=headinajar:bulwark,limit=1] run summon minecraft:cow ~1.2 ~ ~-2.6 {NoAI:1b}
+wait 10
+lookat minecraft:cow 0.6
+wait 2
+frames f01_bulwark_full_back_lifts_cow_behind 140
+key drive
+wait 60
+key forward hold 50
+wait 20
+watch at 6 2 0 90 10
+wait 5
+frames f02_bulwark_full_back_cow_overhead_side_6 60
+wait 62
+shot f02_overhead_side
+watch off
+key drive
+wait 40
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+mecha wheelhouse 40 -60 0 drill
+/tp @s 40.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:wheelhouse
+key use
+wait 60
+riding wheelhouse
+look 180 5
+view 1
+execute at @e[type=headinajar:wheelhouse,limit=1] run summon minecraft:cow ~ ~ ~-9
+wait 10
+watch at 7 1.5 -6 90 8
+wait 3
+frames f03_wheelhouse_rams_a_cow_side 120
+key drive
+key forward hold 80
+wait 30
+inspect near cow 20
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/summon headinajar:rover 80 -60 0 {Rotation:[0f,0f]}
+/tp @s 80.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:rover
+key use
+wait 40
+riding rover
+/fill 79 -60 -2 81 -58 -2 minecraft:stone_bricks
+wait 5
+watch 80.5 -58.2 6 180 12
+wait 3
+frames f04_rover_right_hand_get_off_front 60
+sneak hold 3
+wait 50
+riding rover_after
+inspect me
+watch off
+mecha hopper 120 -60 0 hydraulic_legs
+/tp @s 120.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:hopper
+key use
+wait 60
+look 180 15
+view 1
+wait 10
+frames f05_hopper_walk_away_turn_back_chase 200
+key forward hold 60
+turn 180 0 30
+key forward hold 60
+wait 20
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+mecha bulwark 160 -60 0 hydraulic_legs
+/tp @s 160.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 60
+look 180 15
+view 1
+wait 10
+frames f06_bulwark_walk_away_turn_back_chase 220
+key forward hold 70
+turn 180 0 30
+key forward hold 70
+wait 20
+watch at 6 2 0 90 8
+wait 3
+frames f07_bulwark_turn_on_the_spot_side 80
+turn 120 0 40
+wait 30
+watch off

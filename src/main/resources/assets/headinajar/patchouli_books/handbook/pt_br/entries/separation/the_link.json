@@ -1,19 +1,16 @@
 {
-  "name": "A Neuroconexão",
+  "name": "A Conexão Neural",
   "icon": "headinajar:relay_goggles",
   "category": "headinajar:separation",
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Depois do corte você anda no seu próprio corpo sem cabeça e enxerga pela $(item)Câmera de Colarinho$(). Sua cabeça usa os óculos e envia o sinal. Quanto mais longe, pior a imagem."
+      "text": "Conectado, você anda no corpo e enxerga pela câmera. A barra mostra LINK %%, atraso, qual ponta você é e a distância.$(br2)O sinal é pleno até metade do alcance dos óculos, 0 no limite. Com a cabeça na bolsa: 100%%."
     },
     {
       "type": "patchouli:text",
-      "text": "Água, rocha, tempestades, portais e o Warden prejudicam o sinal. Com sinal zero por cinco segundos, você acorda na sua cabeça. Aperte $(k:key.headinajar.swap) para trocar entre corpo e cabeça você mesmo."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "Leve sua cabeça numa $(item)Bolsa de Cabeça$() para uma conexão perfeita, ou deixe-a num $(item)Berço de Suporte Vital$(). $(item)Mastros Retransmissores$() passam o sinal adiante: alcançam uns aos outros e o seu corpo dentro do raio."
+      "text": "Água, rocha funda, trovoada, portais e Escuridão enfraquecem. Abaixo de 20%%, cliques se perdem; 5 s em 0%% e você acorda na cabeça.$(br)A tecla de troca, $(k:key.headinajar.swap), leva do corpo à cabeça sempre, mas de volta só acima de 20%%."
     }
   ]
 }

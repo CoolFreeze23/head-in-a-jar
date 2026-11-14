@@ -1,0 +1,49 @@
+# Bulwark, second pass, the owner's settings (SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling):
+# in his shoulder view (three presses of his perspective key from first person), the chest carry, then the overhead
+# carry: grab, walk, throw
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha bulwark 0 -60 3 hydraulic_legs,drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+view 0
+look 0 8
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 20
+shot pk2_shoulder_view
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.8
+wait 3
+frames s06_shoulder_chest_carry 200
+key drive
+wait 30
+shot pk2_shoulder_chest_holding
+key forward hold 60
+wait 5
+key drive
+wait 60
+bulwarkcarry high
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.8
+wait 3
+frames s07_shoulder_overhead_carry 200
+key drive
+wait 30
+shot pk2_shoulder_overhead_holding
+key forward hold 60
+wait 5
+key drive
+wait 60
+report pack2 done

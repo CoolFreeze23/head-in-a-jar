@@ -1,0 +1,40 @@
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/tp @s 0.5 -60 0.5 -90 0
+report == K7 Telekinesis at a stranger's parked mecha: refused with the owner's name, nothing lifted
+mecha HOPPER 5 -60 0 hydraulic_legs
+/data merge entity @e[type=headinajar:hopper,limit=1] {Owner:[I;11,22,33,44]}
+/tp @s -10.5 -60 -10.5
+jar
+wait 5
+/tp @s 0.5 -60 0.5 -90 0
+fit telekinesis
+charge 100000
+wait 10
+look -90 0
+view 1
+key ability
+wait 3
+shot k7_tk_mecha
+inspect near hopper 10
+report == K8 a jar rests in an empty Cradle: glass and saline go up
+/kill @e[type=headinajar:hopper]
+/setblock 0 -60 2 headinajar:life_support_cradle
+charge 100000
+/damage @s 3 minecraft:generic
+wait 5
+/tp @s 0.5 -60 0.5 0 0
+look 0 0
+view 0
+key use
+wait 10
+inspect me
+wait 230
+inspect me
+view 1
+shot k8_cradle_rest

@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:separated",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "reattached"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:suture_kit"
+    },
+    "title": {
+      "translate": "advancements.headinajar.reattached.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.reattached.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

@@ -72,10 +72,15 @@ public final class HeadJobs {
      */
     public static float staff(Level level, BlockPos machine, String... professions) {
         float best = 0;
-        for (Direction d : Direction.values()) {
-            if (!(level.getBlockEntity(machine.relative(d)) instanceof EmployeeMountBlockEntity mount) || !mount.facesInto(machine)) continue;
-            String job = mount.profession();
-            for (String p : professions) if (p.equals(job)) best = Math.max(best, mount.paid() ? 1f : 0.5f);
+        // a two-cell machine is staffed from either half: a mount on its upper half's sides, or on top of it, counts
+        BlockPos top = machine.above();
+        boolean tall = level.getBlockState(top).getBlock() instanceof com.coolfreeze23.headinajar.machine.MachineTopBlock;
+        for (BlockPos cell : tall ? new BlockPos[]{machine, top} : new BlockPos[]{machine}) {
+            for (Direction d : Direction.values()) {
+                if (!(level.getBlockEntity(cell.relative(d)) instanceof EmployeeMountBlockEntity mount) || !mount.facesInto(cell)) continue;
+                String job = mount.profession();
+                for (String p : professions) if (p.equals(job)) best = Math.max(best, mount.paid() ? 1f : 0.5f);
+            }
         }
         return best;
     }

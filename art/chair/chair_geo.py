@@ -4,10 +4,10 @@ Source of truth for the chair's cubes. Coordinates are
 Blockbench/GeckoLib block space in pixels: origin at the block's bottom centre, x -8..8, z -8..8, y up; the chair faces
 -Z (north at rest), the patient's right is +X.
 
-    python art/chair/chair_geo.py            # writes chair_placeholder.png and prints the bbmodel_edit operations
+    python art/chair/chair_geo.py            # writes chair_placeholder.png and prints the model's cube operations
 
-The operations are applied to a freshly created separation_chair.bbmodel with the Blockbench tool server
-(bbmodel_create + bbmodel_edit), and the PNG is added with bbmodel_add_texture. Animations are written by
+The operations are applied to a freshly created separation_chair.bbmodel in Blockbench's file layout
+(groups and cubes), and the PNG is added as its texture. Animations are written by
 chair_anim.py. Placeholder colours are flat mid-tones from house palette A (art/palette.json).
 """
 import json

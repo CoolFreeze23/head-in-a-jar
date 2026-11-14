@@ -47,7 +47,7 @@ public final class ClientEvents {
     /** A host's head is gone: skip its head part while it draws. */
     @SubscribeEvent
     public static void renderHostPre(net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<?, ?> event) {
-        if (com.coolfreeze23.headinajar.host.Hosts.isHost(event.getEntity())) HostHeads.hide(event.getRenderer().getModel());
+        if (com.coolfreeze23.headinajar.client.body.HostFx.headHidden(event.getEntity())) HostHeads.hide(event.getRenderer().getModel());
     }
 
     @SubscribeEvent
@@ -102,7 +102,7 @@ public final class ClientEvents {
             // a weak signal makes the body stutter
             int q = state.quality();
             long t = player.level().getGameTime();
-            if (q < 20 && t % 20 < 4 || q < 40 && t % 40 < 2) stop(input, true);
+            if (com.coolfreeze23.headinajar.fx.LinkStatic.stutter(q, t)) stop(input, true);
         } else if (state.form() == Form.JAR) {
             // in a boat or a minecart the vehicle does the moving
             if (player.getAbilities().flying || player.isPassenger()) return;
@@ -232,7 +232,10 @@ public final class ClientEvents {
         }
         while (ClientSetup.SECONDARY.consumeClick()) {
             if (state.form() == Form.SOCKET) SocketClient.nextFace();
-            else if (state.form() == Form.HOSTED || state.form() == Form.BODY || state.form() == Form.LINKED || state.form() == Form.PILOT || state.form() == Form.JAR) {
+            // on foot, a key another mod also uses and no gene to fire: the press was the other mod's
+            else if ((state.form() == Form.BODY || state.form() == Form.LINKED) && KeyShare.withAnother(ClientSetup.SECONDARY)
+                    && com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mc.player).isEmpty()) {
+            } else if (state.form() == Form.HOSTED || state.form() == Form.BODY || state.form() == Form.LINKED || state.form() == Form.PILOT || state.form() == Form.JAR) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SECONDARY));
             }
         }
@@ -241,13 +244,17 @@ public final class ClientEvents {
         while (ClientSetup.DRIVE.consumeClick()) {
             if (state.form() == Form.JAR) PacketDistributor.sendToServer(new Network.JarAction(Network.Action.DRIVE));
             else if (state.form() == Form.LINKED) ClientRefusals.deny("drive.linked", null);
-            else if (state.form() == Form.HOSTED || state.form() == Form.PILOT) ClientRefusals.deny(com.coolfreeze23.headinajar.host.HostEvents.GET_DOWN, null);
+            // in an animated frame's cockpit the drive key is the frame's signature (HopperClient reads it held)
+            else if (state.form() == Form.HOSTED || state.form() == Form.PILOT && HopperClient.piloting() == null) ClientRefusals.deny(com.coolfreeze23.headinajar.host.HostEvents.GET_DOWN, null);
+            else if (state.form() == Form.SOCKET) ClientRefusals.deny(com.coolfreeze23.headinajar.form.ItemAnswers.SOCKET_HANDS, null);
+            else if (state.form() == Form.BODY && !KeyShare.withAnother(ClientSetup.DRIVE)) ClientRefusals.deny(com.coolfreeze23.headinajar.form.KeyAnswers.DRIVE_BODY, null);
         }
         while (ClientSetup.SWAP.consumeClick()) {
             // in a mecha's cockpit the swap key opens the Cargo Hold; on a host it is refused out loud by the server
             if (state.form() == Form.LINKED || state.form() == Form.JAR || state.form() == Form.PILOT || state.form() == Form.HOSTED) {
                 PacketDistributor.sendToServer(new Network.JarAction(Network.Action.SWAP));
             } else if (state.form().isJarred()) ClientRefusals.deny("swap.riding", null);
+            else if (state.form() == Form.BODY && !KeyShare.withAnother(ClientSetup.SWAP)) ClientRefusals.deny(com.coolfreeze23.headinajar.form.KeyAnswers.SWAP_BODY, null);
         }
         LinkHud.tick(mc.player);
     }

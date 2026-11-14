@@ -1,0 +1,188 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_arc_cannon",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -3,
+                -1
+              ],
+              "size": [
+                6,
+                6,
+                1
+              ],
+              "uv": [
+                0,
+                13
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -3,
+                -8
+              ],
+              "size": [
+                6,
+                6,
+                7
+              ],
+              "uv": [
+                92,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                -3.5,
+                -5
+              ],
+              "size": [
+                7,
+                7,
+                1
+              ],
+              "uv": [
+                60,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                -3.5,
+                -7.5
+              ],
+              "size": [
+                7,
+                7,
+                1
+              ],
+              "uv": [
+                76,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_arc": [
+              0,
+              0,
+              -17.5
+            ]
+          }
+        },
+        {
+          "name": "prong_l",
+          "parent": "mount",
+          "pivot": [
+            2,
+            0,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                -1,
+                -17
+              ],
+              "size": [
+                2,
+                2,
+                9
+              ],
+              "uv": [
+                16,
+                0
+              ]
+            },
+            {
+              "origin": [
+                0.5,
+                -1.5,
+                -18
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "prong_r",
+          "parent": "mount",
+          "pivot": [
+            -2,
+            0,
+            -8
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -1,
+                -17
+              ],
+              "size": [
+                2,
+                2,
+                9
+              ],
+              "uv": [
+                38,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                -1.5,
+                -18
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                8,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

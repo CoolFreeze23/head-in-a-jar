@@ -1,0 +1,244 @@
+# every module drawn at its socket, parked (rest pose), on ten Hoppers and ten Bulwarks; front and back
+@observe 5
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper -27 -60 0 anchor_clamps,battery_rack,bio_reactor_core,armor_plating,bio_integration_port,arc_cannon,chainsaw,bio_scanner
+report hopper 0 at -27: anchor_clamps,battery_rack,bio_reactor_core,armor_plating,bio_integration_port,arc_cannon,chainsaw,bio_scanner
+mecha hopper -21 -60 0 aqua_fins,cargo_hold,capacitor_bank,coolant_loop,energy_shield,drill,excavator_scoop,night_optics
+report hopper 1 at -21: aqua_fins,cargo_hold,capacitor_bank,coolant_loop,energy_shield,drill,excavator_scoop,night_optics
+mecha hopper -15 -60 0 arachnid_legs,ender_satchel,combustion_kernel,fire_suppression,life_support_recycler,flamethrower,grapple_hook,ore_scanner
+report hopper 2 at -15: arachnid_legs,ender_satchel,combustion_kernel,fire_suppression,life_support_recycler,flamethrower,grapple_hook,ore_scanner
+mecha hopper -9 -60 0 hover_skirt,glider_wings,fusion_bottle,medical_injector,reactive_armour,harvester,hemo_syringe,target_lock
+report hopper 3 at -9: hover_skirt,glider_wings,fusion_bottle,medical_injector,reactive_armour,harvester,hemo_syringe,target_lock
+mecha hopper -3 -60 0 hydraulic_legs,jump_jets,galvanic_stack,signal_booster,solar_skin,hydraulic_fist,manipulator_hand,thermal_imaging
+report hopper 4 at -3: hydraulic_legs,jump_jets,galvanic_stack,signal_booster,solar_skin,hydraulic_fist,manipulator_hand,thermal_imaging
+mecha hopper 3 -60 0 lava_treads,missile_pod,bio_reactor_core,stealth_field,tesla_coil,plasma_lance,riot_shield,bio_scanner
+report hopper 5 at 3: lava_treads,missile_pod,bio_reactor_core,stealth_field,tesla_coil,plasma_lance,riot_shield,bio_scanner
+mecha hopper 9 -60 0 spring_heels,passenger_pod,capacitor_bank,thorn_plating,workbench,rivet_gun,tractor_beam,night_optics
+report hopper 6 at 9: spring_heels,passenger_pod,capacitor_bank,thorn_plating,workbench,rivet_gun,tractor_beam,night_optics
+mecha hopper 15 -60 0 sprint_servos,radiator_fins,combustion_kernel,armor_plating,bio_integration_port,welding_torch,arc_cannon,ore_scanner
+report hopper 7 at 15: sprint_servos,radiator_fins,combustion_kernel,armor_plating,bio_integration_port,welding_torch,arc_cannon,ore_scanner
+mecha hopper 21 -60 0 stilts,rocket_pack,fusion_bottle,coolant_loop,energy_shield,chainsaw,drill,target_lock
+report hopper 8 at 21: stilts,rocket_pack,fusion_bottle,coolant_loop,energy_shield,chainsaw,drill,target_lock
+mecha hopper 27 -60 0 anchor_clamps,smoke_mortar,galvanic_stack,fire_suppression,life_support_recycler,excavator_scoop,flamethrower,thermal_imaging
+report hopper 9 at 27: anchor_clamps,smoke_mortar,galvanic_stack,fire_suppression,life_support_recycler,excavator_scoop,flamethrower,thermal_imaging
+mecha bulwark -27 -60 30 anchor_clamps,battery_rack,cargo_hold,bio_reactor_core,armor_plating,bio_integration_port,coolant_loop,arc_cannon,chainsaw,bio_scanner,night_optics
+report bulwark 0 at -27: anchor_clamps,battery_rack,cargo_hold,bio_reactor_core,armor_plating,bio_integration_port,coolant_loop,arc_cannon,chainsaw,bio_scanner,night_optics
+mecha bulwark -21 -60 30 aqua_fins,ender_satchel,glider_wings,capacitor_bank,energy_shield,fire_suppression,life_support_recycler,drill,excavator_scoop,ore_scanner,target_lock
+report bulwark 1 at -21: aqua_fins,ender_satchel,glider_wings,capacitor_bank,energy_shield,fire_suppression,life_support_recycler,drill,excavator_scoop,ore_scanner,target_lock
+mecha bulwark -15 -60 30 arachnid_legs,jump_jets,missile_pod,combustion_kernel,medical_injector,reactive_armour,signal_booster,flamethrower,grapple_hook,thermal_imaging,bio_scanner
+report bulwark 2 at -15: arachnid_legs,jump_jets,missile_pod,combustion_kernel,medical_injector,reactive_armour,signal_booster,flamethrower,grapple_hook,thermal_imaging,bio_scanner
+mecha bulwark -9 -60 30 hover_skirt,passenger_pod,radiator_fins,fusion_bottle,solar_skin,stealth_field,tesla_coil,harvester,hemo_syringe,night_optics,ore_scanner
+report bulwark 3 at -9: hover_skirt,passenger_pod,radiator_fins,fusion_bottle,solar_skin,stealth_field,tesla_coil,harvester,hemo_syringe,night_optics,ore_scanner
+mecha bulwark -3 -60 30 hydraulic_legs,rocket_pack,smoke_mortar,galvanic_stack,thorn_plating,workbench,armor_plating,hydraulic_fist,manipulator_hand,target_lock,thermal_imaging
+report bulwark 4 at -3: hydraulic_legs,rocket_pack,smoke_mortar,galvanic_stack,thorn_plating,workbench,armor_plating,hydraulic_fist,manipulator_hand,target_lock,thermal_imaging
+mecha bulwark 3 -60 30 lava_treads,battery_rack,cargo_hold,bio_reactor_core,bio_integration_port,coolant_loop,energy_shield,plasma_lance,riot_shield,bio_scanner,night_optics
+report bulwark 5 at 3: lava_treads,battery_rack,cargo_hold,bio_reactor_core,bio_integration_port,coolant_loop,energy_shield,plasma_lance,riot_shield,bio_scanner,night_optics
+mecha bulwark 9 -60 30 spring_heels,ender_satchel,glider_wings,capacitor_bank,fire_suppression,life_support_recycler,medical_injector,rivet_gun,tractor_beam,ore_scanner,target_lock
+report bulwark 6 at 9: spring_heels,ender_satchel,glider_wings,capacitor_bank,fire_suppression,life_support_recycler,medical_injector,rivet_gun,tractor_beam,ore_scanner,target_lock
+mecha bulwark 15 -60 30 sprint_servos,jump_jets,missile_pod,combustion_kernel,reactive_armour,signal_booster,solar_skin,welding_torch,arc_cannon,thermal_imaging,bio_scanner
+report bulwark 7 at 15: sprint_servos,jump_jets,missile_pod,combustion_kernel,reactive_armour,signal_booster,solar_skin,welding_torch,arc_cannon,thermal_imaging,bio_scanner
+mecha bulwark 21 -60 30 stilts,passenger_pod,radiator_fins,fusion_bottle,stealth_field,tesla_coil,thorn_plating,chainsaw,drill,night_optics,ore_scanner
+report bulwark 8 at 21: stilts,passenger_pod,radiator_fins,fusion_bottle,stealth_field,tesla_coil,thorn_plating,chainsaw,drill,night_optics,ore_scanner
+mecha bulwark 27 -60 30 anchor_clamps,rocket_pack,smoke_mortar,galvanic_stack,workbench,armor_plating,bio_integration_port,excavator_scoop,flamethrower,target_lock,thermal_imaging
+report bulwark 9 at 27: anchor_clamps,rocket_pack,smoke_mortar,galvanic_stack,workbench,armor_plating,bio_integration_port,excavator_scoop,flamethrower,target_lock,thermal_imaging
+wait 60
+modulesseen
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -23.9 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_0_front34
+/effect clear @s
+/tp @s -28.7 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_0_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -17.9 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_1_front34
+/effect clear @s
+/tp @s -22.7 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_1_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -11.9 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_2_front34
+/effect clear @s
+/tp @s -16.7 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_2_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -5.9 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_3_front34
+/effect clear @s
+/tp @s -10.7 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_3_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 0.10000000000000009 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_4_front34
+/effect clear @s
+/tp @s -4.7 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_4_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 6.1 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_5_front34
+/effect clear @s
+/tp @s 1.2999999999999998 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_5_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 12.1 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_6_front34
+/effect clear @s
+/tp @s 7.3 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_6_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 18.1 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_7_front34
+/effect clear @s
+/tp @s 13.3 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_7_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 24.1 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_8_front34
+/effect clear @s
+/tp @s 19.3 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_8_back34
+execute as @e[type=headinajar:hopper] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 30.1 -58.2 -3.1 36 12
+wait 4
+shot g_hopper_9_front34
+/effect clear @s
+/tp @s 25.3 -57.8 3.9 -147 18
+wait 4
+shot g_hopper_9_back34
+/tp @s 0.5 -57.5 -13.5 0 8
+wait 6
+shot g_hopper_row_front_14
+/tp @s 0.5 -57.5 14.5 180 8
+wait 6
+shot g_hopper_row_back_14
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -23.9 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_0_front34
+/effect clear @s
+/tp @s -28.7 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_0_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -17.9 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_1_front34
+/effect clear @s
+/tp @s -22.7 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_1_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -11.9 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_2_front34
+/effect clear @s
+/tp @s -16.7 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_2_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s -5.9 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_3_front34
+/effect clear @s
+/tp @s -10.7 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_3_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 0.10000000000000009 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_4_front34
+/effect clear @s
+/tp @s -4.7 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_4_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 6.1 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_5_front34
+/effect clear @s
+/tp @s 1.2999999999999998 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_5_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 12.1 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_6_front34
+/effect clear @s
+/tp @s 7.3 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_6_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 18.1 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_7_front34
+/effect clear @s
+/tp @s 13.3 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_7_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 24.1 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_8_front34
+/effect clear @s
+/tp @s 19.3 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_8_back34
+execute as @e[type=headinajar:bulwark] run data merge entity @s {Heat:0f}
+/effect clear @s
+/tp @s 30.1 -57.8 26.9 36 12
+wait 4
+shot g_bulwark_9_front34
+/effect clear @s
+/tp @s 25.3 -57.2 33.9 -147 18
+wait 4
+shot g_bulwark_9_back34
+/tp @s 0.5 -56.9 16.5 0 8
+wait 6
+shot g_bulwark_row_front_14
+/tp @s 0.5 -56.9 44.5 180 8
+wait 6
+shot g_bulwark_row_back_14
+modulesseen
+report gallery done (the machines face south: front34 shots show the back, back34 the front)

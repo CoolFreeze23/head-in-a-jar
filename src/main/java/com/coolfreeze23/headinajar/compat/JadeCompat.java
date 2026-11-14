@@ -27,15 +27,19 @@ import snownee.jade.api.config.IPluginConfig;
 @WailaPlugin
 public class JadeCompat implements IWailaPlugin {
     static final ResourceLocation MECHA = HeadInAJar.id("mecha"), HOST = HeadInAJar.id("host"), BODY = HeadInAJar.id("body"),
-            GENES = HeadInAJar.id("genes"), HEADS = HeadInAJar.id("heads");
+            GENES = HeadInAJar.id("genes"), HEADS = HeadInAJar.id("heads"), OWN_HEAD = HeadInAJar.id("own_head");
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerEntityComponent(new Mecha(), MechaEntity.class);
         registration.registerEntityComponent(new Host(), Mob.class);
         registration.registerEntityComponent(new Body(), HeadlessBody.class);
+        registration.registerEntityComponent(new OwnHead(), com.coolfreeze23.headinajar.entity.HeadJarEntity.class);
         registration.registerEntityComponent(new Genes(), LivingEntity.class);
         registration.registerBlockComponent(new Heads(), Block.class);
+        // where Jade's box is drawn, so the link bar at the top centre can stand under it
+        registration.addAfterRenderCallback((box, rect, graphics, accessor) -> com.coolfreeze23.headinajar.client.OverlayRoom.seen(
+                rect.rect.getX(), rect.rect.getY(), rect.rect.getWidth(), rect.rect.getHeight()));
     }
 
     static class Mecha implements IEntityComponentProvider {
@@ -58,6 +62,15 @@ public class JadeCompat implements IWailaPlugin {
             var data = Hosts.data(mob);
             if (data.shell) return;
             tooltip.add(Component.translatable("jade.headinajar.host", Math.round(data.freshness), Math.round(data.effectiveSync())).withStyle(ChatFormatting.GRAY));
+            // what riding it would give, and at what sync
+            var def = Hosts.definition(mob);
+            if (def != null && (def.primary().isPresent() || def.secondary().isPresent())) {
+                Component first = def.primary().map(a -> (Component) Component.translatable("jade.headinajar.clarity.ability",
+                        Component.translatable("ability.headinajar." + a.type()), 50)).orElse(Component.empty());
+                Component second = def.secondary().map(a -> (Component) Component.translatable("jade.headinajar.clarity.ability",
+                        com.coolfreeze23.headinajar.client.HostHud.secondName(def), 75)).orElse(Component.empty());
+                tooltip.add(Component.translatable("jade.headinajar.clarity.abilities", first, second).withStyle(ChatFormatting.GRAY));
+            }
         }
 
         @Override
@@ -76,6 +89,25 @@ public class JadeCompat implements IWailaPlugin {
         @Override
         public ResourceLocation getUid() {
             return BODY;
+        }
+    }
+
+    /** Your own set-down head: its saline and glass, which only you are shown (your client has them; nobody else's does). */
+    static class OwnHead implements IEntityComponentProvider {
+        @Override
+        public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+            if (!(accessor.getEntity() instanceof com.coolfreeze23.headinajar.entity.HeadJarEntity head)) return;
+            var me = net.minecraft.client.Minecraft.getInstance().player;
+            if (me == null || !me.getUUID().equals(head.ownerId())) return;
+            var state = me.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE);
+            if (state.form() != com.coolfreeze23.headinajar.form.Form.LINKED) return;
+            tooltip.add(Component.translatable("jade.headinajar.clarity.own_head", state.saline(), state.maxSaline(),
+                    state.integrity(), state.maxIntegrity()).withStyle(ChatFormatting.AQUA));
+        }
+
+        @Override
+        public ResourceLocation getUid() {
+            return OWN_HEAD;
         }
     }
 

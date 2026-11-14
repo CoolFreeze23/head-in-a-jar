@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:separated",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "shell"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:rover_chassis"
+    },
+    "title": {
+      "translate": "advancements.headinajar.shell.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.shell.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

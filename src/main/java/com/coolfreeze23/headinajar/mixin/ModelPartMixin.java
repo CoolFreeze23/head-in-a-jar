@@ -15,5 +15,6 @@ public abstract class ModelPartMixin {
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V", at = @At("HEAD"), cancellable = true)
     private void headinajar$hideHostHead(PoseStack pose, VertexConsumer buffer, int light, int overlay, int color, CallbackInfo ci) {
         if (HostHeads.hidden((ModelPart) (Object) this)) ci.cancel();
+        else HostHeads.applyArm((ModelPart) (Object) this);
     }
 }

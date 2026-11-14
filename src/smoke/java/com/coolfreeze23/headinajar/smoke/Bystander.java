@@ -104,6 +104,26 @@ final class Bystander {
         }
     }
 
+    private static Vec3 pace;
+    private static boolean pacing;
+
+    /** The mecha the stand-in rides, or null. */
+    static Entity vehicle(MinecraftServer server) {
+        return present() ? player.getVehicle() : null;
+    }
+
+    private static void pace(MinecraftServer server) {
+        if (pace == null || !present() || !(player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mine)) return;
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            if (p == player || !(p.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity lead) || lead.level() != mine.level()) continue;
+            mine.setPos(lead.getX() + pace.x, lead.getY() + pace.y, lead.getZ() + pace.z);
+            mine.setYRot(lead.getYRot());
+            mine.setYBodyRot(lead.yBodyRot);
+            mine.setOnGround(lead.onGround());
+            return;
+        }
+    }
+
     /**
      * The server ticks a real player from its connection, which the stand-in's recording connection is not; with
      * {@code bystander tick on} it is ticked here instead, once a server tick, so what happens in a player's own tick
@@ -264,6 +284,47 @@ final class Bystander {
                 var action = Network.Action.valueOf(a[2].toUpperCase(Locale.ROOT));
                 player.connection.handleCustomPayload(new ServerboundCustomPayloadPacket(new Network.JarAction(action)));
                 return "bystander key " + action + " -> form " + form() + ", vehicle " + vehicle();
+            }
+            case "arms" -> {
+                // arms N: the arm buttons it holds (bit 0 left, bit 1 right), as its client's arm input payload
+                int held = Integer.parseInt(a[2]);
+                player.connection.handleCustomPayload(new ServerboundCustomPayloadPacket(new Network.ArmInput(held)));
+                return "bystander arms " + held + " -> vehicle " + vehicle();
+            }
+            case "lookat" -> {
+                // lookat me|nearest TYPE [DY]: turns its look onto the thing (its middle, or DY above its feet), as its mouse would
+                Entity e = target(a, 2);
+                if (e == null) return "bystander lookat -> nothing";
+                int dyAt = a[2].equals("me") ? 3 : 4;
+                double dy = a.length > dyAt ? Double.parseDouble(a[dyAt]) : e.getBbHeight() / 2;
+                Vec3 eye = player.getEyePosition(), to = new Vec3(e.getX(), e.getY() + dy, e.getZ());
+                double dx = to.x - eye.x, dyy = to.y - eye.y, dz = to.z - eye.z;
+                player.setYRot((float) Math.toDegrees(Math.atan2(-dx, dz)));
+                player.setXRot((float) -Math.toDegrees(Math.atan2(dyy, Math.sqrt(dx * dx + dz * dz))));
+                player.setYHeadRot(player.getYRot());
+                return String.format(Locale.ROOT, "bystander lookat %s yaw %.0f pitch %.0f", BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()), player.getYRot(), player.getXRot());
+            }
+            case "pace" -> {
+                // pace DX DY DZ | pace off: every server tick, the stand-in's mecha is put at the real player's mecha plus this
+                // offset, facing the same way (the stand-in has no client to drive it: this walks it beside the pilot, at the
+                // pilot's own speed, so each machine's clips play from its own measured speed)
+                if (a[2].equals("off")) {
+                    pace = null;
+                    return "bystander pace off";
+                }
+                pace = new Vec3(Double.parseDouble(a[2]), Double.parseDouble(a[3]), Double.parseDouble(a[4]));
+                if (!pacing) {
+                    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) -> pace(e.getServer()));
+                    pacing = true;
+                }
+                return "bystander pace " + pace;
+            }
+            case "drive" -> {
+                // drive down|up|tap: the drive key in an animated mecha's cockpit (the pogo payload its client sends)
+                String how = a.length > 2 ? a[2] : "tap";
+                if (!how.equals("up")) player.connection.handleCustomPayload(new ServerboundCustomPayloadPacket(new com.coolfreeze23.headinajar.mecha.HopperNet.Pogo(true)));
+                if (!how.equals("down")) player.connection.handleCustomPayload(new ServerboundCustomPayloadPacket(new com.coolfreeze23.headinajar.mecha.HopperNet.Pogo(false)));
+                return "bystander drive " + how + " -> vehicle " + vehicle();
             }
             case "chair", "operate" -> {
                 // chair X Y Z: stock the chair (jar, goggles, collar, saline, power) and sit in it by a right-click

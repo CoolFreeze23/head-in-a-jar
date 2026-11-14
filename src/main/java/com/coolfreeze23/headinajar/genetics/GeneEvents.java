@@ -98,7 +98,7 @@ public final class GeneEvents {
                     data.putLong(REGROWTH_READY, now + REGROWTH_COOLDOWN);
                     event.setAmount(0);
                     victim.setHealth(victim.getMaxHealth() * 0.3f);
-                    victim.level().playSound(null, victim.blockPosition(), net.minecraft.sounds.SoundEvents.TOTEM_USE, victim.getSoundSource(), 0.6f, 1.4f);
+                    victim.level().playSound(null, victim.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.GENE_REGROWTH.get(), victim.getSoundSource(), 0.6f, 1.4f);
                     return;
                 }
             }

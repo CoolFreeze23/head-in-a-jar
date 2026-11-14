@@ -1,0 +1,46 @@
+# Hopper beside an iron golem, a minecart and the Separation Chair, with a jar in its collar: day, night, torchlight
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon minecraft:iron_golem -2.5 -60 0.5 {NoAI:1b,Rotation:[0f,0f]}
+/setblock 3 -60 0 minecraft:rail
+/summon minecraft:minecart 3.5 -60 0.5
+/setblock 6 -60 0 headinajar:separation_chair[facing=south]
+mecha hopper 0 -60 0 hydraulic_legs,jump_jets,drill
+bystander spawn 1 -60 1 0
+headoffice trust add Bystander
+bystander form jar
+wait 10
+bystander useentity nearest headinajar:hopper
+bystander look 0 0
+wait 90
+/tp @s 2 -59 8 180 8
+wait 10
+shot st_day_row
+/tp @s 0.5 -58.2 2.4 180 30
+wait 5
+shot st_day_jar_close
+/tp @s 2.2 -57.6 1.9 135 35
+wait 5
+shot st_day_jar_3q
+/time set 18000
+/tp @s 2 -59 8 180 8
+wait 10
+shot st_night_row
+/setblock 1 -60 2 minecraft:torch
+/setblock -1 -60 2 minecraft:torch
+/setblock 4 -60 2 minecraft:torch
+wait 10
+shot st_torch_row
+/tp @s 0.5 -58.2 2.4 180 30
+wait 5
+shot st_torch_jar_close
+/time set 6000
+/tp @s 0.5 -59 -4 0 8
+wait 5
+shot st_day_front
+report stills done

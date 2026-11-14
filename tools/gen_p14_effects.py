@@ -17,7 +17,7 @@ REFUSALS = {
 PARTICLES = {'mote': 4, 'spark': 3, 'bubble': 7, 'puff': 8, 'ring': 4, 'static': 4}
 
 # The kit's sound events: (files, attenuation, subtitle en, subtitle pt). The files and their measurements come from
-# tools/snd/recipes_fx.py (events.json); nobody has listened to them. Played at volume 1.0 by the code.
+# tools/snd/recipes_fx.py (events.json). Played at volume 1.0 by the code.
 FX_SOUNDS = {
     'fx.tk.grab': (3, 16, 'Telekinesis takes hold', 'Telecinese agarra'),
     'fx.tk.hold': (1, 10, 'Telekinesis hums', 'Telecinese zumbe'),

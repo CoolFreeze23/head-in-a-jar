@@ -1,0 +1,391 @@
+# re-takes: sessions 8 and 9 (mortar, missile pod) and the legs dressings 5-8 on light machines
+@observe 10
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/fill -6 -60 16 6 -56 16 minecraft:stone
+/tp @s 6.5 -60 30.5 0 0
+jar
+wait 10
+# --- h8: smoke_mortar,capacitor_bank
+mecha hopper 0 -60 30 smoke_mortar,capacitor_bank
+report h8 smoke_mortar,capacitor_bank
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst h8_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h8_back_smoke_mortar_bn 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h8_back_smoke_mortar_b10 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h8_back_smoke_mortar_fn 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h8_back_smoke_mortar_f10 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+# --- h9: missile_pod,fusion_bottle
+mecha hopper 0 -60 30 missile_pod,fusion_bottle
+report h9 missile_pod,fusion_bottle
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst h9_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h9_back_missile_pod_bn 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h9_back_missile_pod_b10 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h9_back_missile_pod_fn 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch at 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key ability
+burst h9_back_missile_pod_f10 14
+wait 30
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+# --- hL_stilts: stilts,galvanic_stack
+mecha hopper 0 -60 30 stilts,galvanic_stack
+report hL_stilts stilts,galvanic_stack
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst hL_stilts_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_stilts_legs_stilts_bn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_stilts_legs_stilts_b10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_stilts_legs_stilts_fn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_stilts_legs_stilts_f10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+# --- hL_arachnid_legs: arachnid_legs,combustion_kernel
+mecha hopper 0 -60 30 arachnid_legs,combustion_kernel
+report hL_arachnid_legs arachnid_legs,combustion_kernel
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst hL_arachnid_legs_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_arachnid_legs_legs_arachnid_legs_bn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_arachnid_legs_legs_arachnid_legs_b10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_arachnid_legs_legs_arachnid_legs_fn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_arachnid_legs_legs_arachnid_legs_f10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+# --- hL_hover_skirt: hover_skirt,bio_reactor_core
+mecha hopper 0 -60 30 hover_skirt,bio_reactor_core
+report hL_hover_skirt hover_skirt,bio_reactor_core
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst hL_hover_skirt_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_hover_skirt_legs_hover_skirt_bn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_hover_skirt_legs_hover_skirt_b10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_hover_skirt_legs_hover_skirt_fn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_hover_skirt_legs_hover_skirt_f10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+# --- hL_lava_treads: lava_treads,capacitor_bank
+mecha hopper 0 -60 30 lava_treads,capacitor_bank
+report hL_lava_treads lava_treads,capacitor_bank
+/tp @s 0.5 -60 28.0 0 -25
+/clear @s
+/effect clear @s
+wait 5
+key use
+wait 2
+watch at 2.1 1.4 -3.4 32 14
+burst hL_lava_treads_board_fn 30
+wait 20
+look 180 6
+wait 10
+watch off
+view 1
+look 180 8
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_lava_treads_legs_lava_treads_bn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 0 3.7 10 180 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_lava_treads_legs_lava_treads_b10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 2.1 1.4 -3.4 32 14
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_lava_treads_legs_lava_treads_fn 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch follow 5.2 2.5 -8.6 31 6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+wait 3
+key forward down
+burst hL_lava_treads_legs_lava_treads_f10 8
+key forward up
+wait 12
+/tp @e[type=headinajar:hopper,limit=1,sort=nearest] 0.5 -60 30.5 180 0
+look 180 6
+wait 6
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+/kill @e[type=item]
+/kill @e[type=minecraft:arrow]
+report done

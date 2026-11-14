@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:separated",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "first_module"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:wheels"
+    },
+    "title": {
+      "translate": "advancements.headinajar.first_module.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.first_module.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

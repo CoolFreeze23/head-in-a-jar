@@ -1,0 +1,66 @@
+# The Chimera and the Lunk in the owner's settings (SMOKE_PROFILE=pack, his mods), in his Shoulder Surfing view (his
+# perspective key pressed three times from first person): boarding, walking, a fist then the Graft with the HUD on;
+# then the Lunk walking and tossing a cow. Also run with SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip for BSL.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha chimera 0 -60 0 hydraulic_legs,hydraulic_fist,hydraulic_fist
+/tp @s 5.5 -60 -3.5 0 0
+jar
+/give @s headinajar:bio_gel 4
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:chimera
+key use
+wait 70
+riding chimera
+look 0 10
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+shot p01_chimera_shoulder_view
+frames p02_chimera_walk_shoulder 70
+key forward hold 60
+wait 10
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:chicken ~ ~ ~2.2 {NoAI:1b,Health:40f,attributes:[{id:"minecraft:generic.max_health",base:40}]}
+wait 5
+lookat minecraft:chicken 0.3
+frames p03_chimera_fist_then_graft_shoulder 110
+key attack
+wait 20
+key drive
+wait 70
+shot p03_chimera_grafted_hud
+/kill @e[type=minecraft:chicken]
+sneak
+wait 40
+/summon headinajar:lunk 6 -60 6 {Rotation:[0f,0f]}
+wait 5
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run tp @s ~ ~ ~-2.4 0 -20
+wait 5
+lookat headinajar:lunk
+charge 100000
+key use
+wait 40
+riding lunk
+look 0 10
+shot p04_lunk_shoulder_view
+frames p05_lunk_walk_shoulder 70
+key forward hold 60
+wait 10
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2
+wait 5
+lookat minecraft:cow 0.7
+frames p06_lunk_toss_shoulder 60
+key ability
+wait 50
+report done

@@ -1,0 +1,150 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "burst": {
+      "animation_length": 0.3,
+      "bones": {
+        "bell_l": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                20,
+                0,
+                -12
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "bell_r": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                20,
+                0,
+                12
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "mount": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                0,
+                -3,
+                0
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "timeline": {
+        "0.0": "rocket:burst;"
+      }
+    },
+    "sustain": {
+      "loop": true,
+      "animation_length": 0.2,
+      "bones": {
+        "bell_l": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                12,
+                0,
+                -6
+              ]
+            },
+            "0.1": {
+              "vector": [
+                16,
+                -3,
+                -9
+              ]
+            },
+            "0.2": {
+              "vector": [
+                12,
+                0,
+                -6
+              ]
+            }
+          }
+        },
+        "bell_r": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                12,
+                0,
+                6
+              ]
+            },
+            "0.1": {
+              "vector": [
+                16,
+                3,
+                9
+              ]
+            },
+            "0.2": {
+              "vector": [
+                12,
+                0,
+                6
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

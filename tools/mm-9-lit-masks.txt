@@ -1,0 +1,28 @@
+# The lit module masks drawn on the block atlas, at night, on a piloted machine (a parked one is shut down): run in the
+# default client and under Iris with BSL, and compare.
+@observe 20
+wait 60
+/time set 18000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+jar
+charge 100000
+mecha bulwark 0 -60 0 hydraulic_legs,capacitor_bank,fusion_bottle,ender_satchel,coolant_loop,night_optics
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 120
+view 1
+look 0 10
+hud off
+wait 10
+shot lit_back_night
+watch at 3 2.5 3 135 15
+wait 10
+shot lit_front_3q_night
+watch at -3 2.5 -3 -45 15
+wait 10
+shot lit_back_3q_night
+watch off

@@ -1,0 +1,196 @@
+# Bulwark, everything in the default profile, in watching order: the Gantry's build and a bystander's boarding, a
+# bystander's grab and throw seen from 6 blocks, stills beside the Hopper (day, night, torchlight), then the pilot's own
+# boot, both walks behind and beside, grab/carry/throw, refusals, drill, vent, limp, eject and collapse, first person
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+bulwarkwalk b
+# --- 01 the build, from a bystander's place about 7 blocks off at 45 degrees ----------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 bulwark
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 6.2 -57.4 6.2 135 14
+wait 2
+frames v01_build_and_boarding_bystander 240
+wait 140
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:bulwark
+wait 95
+inspect near headinajar:bulwark 8
+# --- 05 a bystander pilots it: grab, hold and throw a cow, seen from 6.5 blocks to the side ----------------------
+bystander look 270 0
+/summon minecraft:cow 3.4 -60 0.5
+/tp @s 0.8 -58.6 7.2 180 8
+wait 5
+bystander mark
+frames v05_grab_throw_cow_from_bystander_6 150
+wait 5
+bystander drive tap
+wait 45
+bystander look 270 -20
+bystander drive tap
+wait 95
+bystander packets sound
+inspect near minecraft:cow 30
+# --- stills: beside a Hopper, an iron golem and the chair; with the bystander's jar in the collar -------------------
+/kill @e[type=minecraft:cow]
+mecha hopper 4 -60 0 hydraulic_legs,jump_jets,drill
+/summon minecraft:iron_golem -3 -60 0.5 {NoAI:1b,Rotation:[0f,0f]}
+/setblock 7 -60 0 headinajar:separation_chair[facing=south]
+bystander look 0 0
+wait 40
+/tp @s 2 -58.3 10 180 6
+wait 10
+shot st_day_row
+/tp @s 0.5 -56.6 3.4 180 30
+wait 5
+shot st_day_jar_close
+/tp @s 3.2 -56.8 3.2 135 30
+wait 5
+shot st_day_jar_3q
+/tp @s 0.5 -58 -6 0 6
+wait 5
+shot st_day_back_6
+/tp @s 0.5 -55.5 -20 0 7
+wait 5
+shot st_day_back_20
+/time set 18000
+/tp @s 2 -58.3 10 180 6
+wait 10
+shot st_night_row
+/setblock 1 -60 2 minecraft:torch
+/setblock -1 -60 2 minecraft:torch
+/setblock 4 -60 3 minecraft:torch
+wait 10
+shot st_torch_row
+/tp @s 0.5 -56.6 3.4 180 30
+wait 5
+shot st_torch_jar_close
+/time set 6000
+bystander remove
+wait 5
+# --- the pilot's own Bulwark, away from the row ---------------------------------------------------------------------
+mecha bulwark 0 -60 30 hydraulic_legs,drill
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.4 0 -25
+wait 5
+view 1
+frames v02_board_and_boot_behind 80
+key use
+wait 80
+riding bulwark
+look 0 10
+# --- 03 the two walks at the same speed: behind (chase camera), then riding along beside ---------------------------
+bulwarkwalk a
+frames v03a_walk_a_12tick_behind 110
+key forward hold 100
+wait 15
+bulwarkwalk b
+frames v03b_walk_b_9tick_behind 110
+key forward hold 100
+wait 15
+bulwarkwalk a
+watch follow -7.5 0.3 0 -90 4
+frames v03c_walk_a_12tick_side 110
+key forward hold 100
+wait 15
+bulwarkwalk b
+frames v03d_walk_b_9tick_side 110
+key forward hold 100
+wait 15
+watch off
+view 1
+look 0 10
+# --- 04 grab, carry and throw a cow, from behind -------------------------------------------------------------------
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.7
+wait 3
+frames v04_grab_carry_throw_cow_behind 230
+key drive
+wait 32
+key forward hold 70
+wait 5
+look 0 -12
+key drive
+wait 100
+inspect near minecraft:cow 40
+look 0 10
+# --- 06 refused grabs: nothing in reach, then an untrusting player in front (front three-quarter) -------------------
+watch follow 4.5 0.6 5.5 141 12
+wait 5
+frames v06_refused_grab_nothing_then_untrusted 110
+key drive
+wait 40
+bystander spawn 0 -60 0 180
+cmdout execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run tp Bystander ~ ~ ~2.6 180 0
+wait 3
+key drive
+wait 50
+bystander remove
+# --- 07 the drill, against a wall ----------------------------------------------------------------------------------
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run fill ~-2 ~ ~3 ~2 ~3 ~3 minecraft:stone
+look 0 20
+frames v07_arm_drill_front_3q 100
+key attack hold 70
+wait 25
+watch off
+view 1
+look 0 10
+# --- 08 vent, from the side ------------------------------------------------------------------------------------------
+watch follow -7 0.3 0 -90 4
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Heat:950f}
+frames v08_vent_side 115
+wait 115
+# --- 09 limp on a flat battery, from the side --------------------------------------------------------------------
+look 180 10
+wait 15
+watch follow 7 0.3 0 90 4
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Battery:0}
+frames v09_limp_flat_battery_side 100
+key forward hold 90
+wait 12
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Battery:1000000}
+watch off
+# --- 11 first person: walk, grab, carry, throw ------------------------------------------------------------------
+view 0
+look 0 25
+wait 15
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.7
+wait 5
+frames v11_first_person_grab_walk_throw 200
+key drive
+wait 30
+key forward hold 50
+look 0 -10
+key drive
+wait 90
+# --- 10 the Golden Parachute, then the empty machine destroyed: from a fixed place 9 blocks to the side ----------
+view 1
+look 0 10
+wait 10
+watch at -9 0.6 1.5 -99 4
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Health:15f}
+frames v10_golden_parachute_then_collapse 280
+/damage @e[type=headinajar:bulwark,limit=1,sort=nearest] 4 minecraft:generic
+wait 130
+inspect me
+/damage @e[type=headinajar:bulwark,limit=1,sort=nearest] 100 minecraft:generic
+wait 150
+watch off
+inspect near headinajar:bulwark 30
+report all done

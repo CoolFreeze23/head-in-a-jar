@@ -48,6 +48,8 @@ public class HeadlessBody extends LivingEntity {
     private static final EntityDataAccessor<String> OWNER_NAME = SynchedEntityData.defineId(HeadlessBody.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> COLLAR = SynchedEntityData.defineId(HeadlessBody.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CORPSE = SynchedEntityData.defineId(HeadlessBody.class, EntityDataSerializers.BOOLEAN);
+    /** Someone has the corpse's things open: its hands unfold off its chest (shown, never saved). */
+    private static final EntityDataAccessor<Boolean> OPEN = SynchedEntityData.defineId(HeadlessBody.class, EntityDataSerializers.BOOLEAN);
     public static final int CORPSE_SLOTS = 54;
 
     private final NonNullList<ItemStack> armor = NonNullList.withSize(4, ItemStack.EMPTY);
@@ -57,6 +59,20 @@ public class HeadlessBody extends LivingEntity {
         @Override
         public boolean stillValid(Player player) {
             return HeadlessBody.this.isAlive() && player.distanceToSqr(HeadlessBody.this) < 64;
+        }
+
+        private int viewers;
+
+        @Override
+        public void startOpen(Player player) {
+            viewers++;
+            entityData.set(OPEN, true);
+        }
+
+        @Override
+        public void stopOpen(Player player) {
+            viewers = Math.max(0, viewers - 1);
+            if (viewers == 0) entityData.set(OPEN, false);
         }
     };
 
@@ -75,6 +91,7 @@ public class HeadlessBody extends LivingEntity {
         builder.define(OWNER_NAME, "");
         builder.define(COLLAR, false);
         builder.define(CORPSE, false);
+        builder.define(OPEN, false);
     }
 
     public void setOwner(UUID id, String name) {
@@ -102,10 +119,27 @@ public class HeadlessBody extends LivingEntity {
         return entityData.get(CORPSE);
     }
 
-    /** The body has died: it lies down and keeps its things. */
+    /** Whether someone has the corpse's things open right now. */
+    public boolean isOpened() {
+        return entityData.get(OPEN);
+    }
+
+    /** The body has died: it lies down and keeps its things. Its owner gets HR's card. */
     public void becomeCorpse(Player from) {
+        becomeCorpse(from, true);
+    }
+
+    /** As above; {@code card} false when the owner has just been told another way (their linked body died under them). */
+    public void becomeCorpse(Player from, boolean card) {
         if (from != null) takeInventory(from);
+        boolean was = isCorpse();
         entityData.set(CORPSE, true);
+        // it lies down where everyone near can see it, once it is in the world (a body spawned dead is added after this)
+        if (!was && level() instanceof net.minecraft.server.level.ServerLevel server) {
+            com.coolfreeze23.headinajar.body.BodyServer.later(server, 1, () -> {
+                if (isAlive()) com.coolfreeze23.headinajar.body.BodyServer.corpse(this, card);
+            });
+        }
         setHealth(getMaxHealth());
         clearFire();
     }

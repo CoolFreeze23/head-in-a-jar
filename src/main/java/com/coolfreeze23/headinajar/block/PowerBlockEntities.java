@@ -32,7 +32,8 @@ public final class PowerBlockEntities {
         java.util.List<net.neoforged.neoforge.energy.IEnergyStorage> takers = new java.util.ArrayList<>(6);
         for (Direction dir : Direction.values()) {
             BlockPos at = pos.relative(dir);
-            if (exclude != null && exclude.isInstance(level.getBlockEntity(at))) continue;
+            // a two-cell machine's upper half answers for the machine below it: its kind is the machine's
+            if (exclude != null && exclude.isInstance(level.getBlockEntity(com.coolfreeze23.headinajar.machine.MachineTopBlock.machineAt(level, at)))) continue;
             var target = level.getCapability(Capabilities.EnergyStorage.BLOCK, at, dir.getOpposite());
             if (target != null && target.canReceive() && target.receiveEnergy(1, true) > 0) takers.add(target);
         }
@@ -261,6 +262,9 @@ public final class PowerBlockEntities {
             spinPrev = spin;
             aimPrev = aim;
             float rate = sending ? kit.rate() : 0;
+            // the coil hums while power goes over the link, louder and higher the more it sends
+            com.coolfreeze23.headinajar.client.MachineLoopSound.follow(this, com.coolfreeze23.headinajar.machine.MachineSounds.TESLA_HUM,
+                    rate / 4, 0.85f + 0.15f * rate / 4);
             spinSpeed += (9 * rate / 4 - spinSpeed) * 0.0625f;
             if (!sending && spinSpeed < 0.05f) spinSpeed = 0;
             spin += spinSpeed;

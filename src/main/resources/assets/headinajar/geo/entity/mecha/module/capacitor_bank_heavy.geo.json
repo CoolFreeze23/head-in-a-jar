@@ -1,0 +1,192 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_capacitor_bank_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                -6,
+                -2
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                32,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -8
+              ],
+              "size": [
+                10,
+                10,
+                6
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                5,
+                -9
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                7,
+                -8
+              ],
+              "size": [
+                6,
+                2,
+                6
+              ],
+              "uv": [
+                104,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                -7,
+                -6
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                60,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bar_0",
+          "parent": "mount",
+          "pivot": [
+            0,
+            9,
+            -7
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2,
+                9,
+                -8
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                96,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bar_1",
+          "parent": "mount",
+          "pivot": [
+            0,
+            9,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                9,
+                -8
+              ],
+              "size": [
+                2,
+                2,
+                4
+              ],
+              "uv": [
+                84,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "bar_2",
+          "parent": "mount",
+          "pivot": [
+            0,
+            9,
+            -3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                9,
+                -8
+              ],
+              "size": [
+                2,
+                2,
+                6
+              ],
+              "uv": [
+                68,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

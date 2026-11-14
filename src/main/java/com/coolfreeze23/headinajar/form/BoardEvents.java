@@ -28,6 +28,9 @@ public final class BoardEvents {
     private BoardEvents() {
     }
 
+    /** Whether each player's jar had charge last tick (not saved: only the moment it runs out is heard). */
+    private static final java.util.Map<java.util.UUID, Boolean> CHARGED = new java.util.HashMap<>();
+
     @SubscribeEvent
     public static void playerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
@@ -39,6 +42,21 @@ public final class BoardEvents {
             state.setCharge(state.charge() - WHEELS_DRAIN);
             if (player.tickCount % 20 == 0) com.coolfreeze23.headinajar.network.Network.sync(player);
         }
+        if (state.form() == Form.JAR && state.wheels() && state.charge() <= 0) {
+            // flat: the wheels fold away (they can't turn) and the jar is told how it still gets about
+            state.setWheels(false);
+            player.serverLevel().playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.WHEELS_UP.get(),
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1, 0.9f);
+            com.coolfreeze23.headinajar.network.Network.sync(player);
+            com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "jar.wheels_flat", Component.translatable("block.headinajar.charging_dock"),
+                    Component.keybind("key.headinajar.drive"));
+        }
+        // the jar's charge running out: the company signs off politely, to its owner only
+        boolean charged = state.charge() > 0;
+        if (state.form().isJarred() && !charged && Boolean.TRUE.equals(CHARGED.get(player.getUUID()))) {
+            player.playNotifySound(com.coolfreeze23.headinajar.fx.HouseSounds.JINGLE_SHUTDOWN.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1, 1);
+        }
+        CHARGED.put(player.getUUID(), charged);
         if (state.form() != Form.LINKED || state.collar().isEmpty()) return;
         if (player.tickCount % 100 == 0 && QuantumItems.has(state.collar(), QuantumItems.Upgrade.NIGHT_OPTICS)) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, false, false));
@@ -83,17 +101,15 @@ public final class BoardEvents {
         Network.sync(player);
         ServerLevel level = player.serverLevel();
         Vec3 eye = player.getEyePosition(), end = eye.add(player.getLookAngle().scale(8));
+        // the beam stops at the first block in its way, and only what stands before that block is hurt
+        var block = level.clip(new net.minecraft.world.level.ClipContext(eye, end, net.minecraft.world.level.ClipContext.Block.COLLIDER,
+                net.minecraft.world.level.ClipContext.Fluid.NONE, player));
+        if (block.getType() != net.minecraft.world.phys.HitResult.Type.MISS) end = block.getLocation();
         var hit = net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().expandTowards(end.subtract(eye)).inflate(1),
-                e -> e != player && e instanceof LivingEntity && e.isAlive(), 64);
+                e -> e != player && e instanceof LivingEntity && e.isAlive() && !insideOwnBody(player, e), eye.distanceToSqr(end));
         if (hit != null) {
             hit.getEntity().hurt(level.damageSources().indirectMagic(player, player), 4);
             end = hit.getLocation();
-        }
-        if (hit == null) {
-            // the beam is drawn to the first block in its way (what it hurts is unchanged)
-            var block = level.clip(new net.minecraft.world.level.ClipContext(eye, end, net.minecraft.world.level.ClipContext.Block.COLLIDER,
-                    net.minecraft.world.level.ClipContext.Fluid.NONE, player));
-            if (block.getType() != net.minecraft.world.phys.HitResult.Type.MISS) end = block.getLocation();
         }
         // one memo: every client draws the twin weeping beams and the drips itself
         com.coolfreeze23.headinajar.fx.Fx.send(level, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.LASER, eye, end,
@@ -101,6 +117,11 @@ public final class BoardEvents {
         level.playSound(null, eye.x, eye.y, eye.z, com.coolfreeze23.headinajar.fx.FxSounds.LASER.get(), SoundSource.PLAYERS, 1.0f,
                 com.coolfreeze23.headinajar.fx.FxSounds.pitch(player.getRandom()));
         return true;
+    }
+
+    /** The jar's own idle body, with the jar still standing inside it (just out of it): the beam goes out through it. */
+    private static boolean insideOwnBody(ServerPlayer player, net.minecraft.world.entity.Entity e) {
+        return e instanceof HeadlessBody body && player.getUUID().equals(body.ownerId()) && body.getBoundingBox().inflate(0.1).contains(player.getEyePosition());
     }
 
     /** Body Recall Beacon: an idle Headless Body walks toward its head while both are in the same loaded world. */

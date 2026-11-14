@@ -1,0 +1,153 @@
+# The Golden Parachute from the walkers' ejects and the Kite's on the ground: the Hopper's from the side and from the
+# pilot's own camera looking down (the canopy faint), steering, the Bulwark's over water, an eject under a low ceiling
+# (the tangle), the Kite's on the ground
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- p1 the Hopper's eject, from a fixed place 9 blocks to the side --------------------------------------------------
+mecha hopper 0 -60 0 hydraulic_legs
+/tp @s 5.5 -60 -2.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -2.6 0 -25
+wait 5
+key use
+wait 70
+look 0 10
+watch at -9 1 1 -99 -6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:5f}
+frames p1_hopper_eject_parachute_side_9 300
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 2 minecraft:generic
+wait 10
+chute
+wait 15
+chute
+wait 30
+chute
+inspect me
+wait 120
+chute
+wait 120
+inspect me
+watch off
+/kill @e[type=headinajar:hopper]
+# --- p2 the same from the pilot's own camera: behind, then looking down steeply (the canopy drawn faint) -------------
+mecha hopper 0 -60 20 hydraulic_legs
+/tp @s 0.5 -60 17.4 0 -25
+wait 5
+key use
+wait 70
+view 1
+look 0 15
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:5f}
+frames p2_hopper_eject_own_camera_then_looking_down 260
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 2 minecraft:generic
+wait 35
+shot p2_own_camera_behind
+look 0 70
+wait 3
+shot p2_own_camera_looking_down
+chute
+key left hold 30
+chute
+wait 5
+look 0 20
+key right hold 30
+chute
+wait 150
+/kill @e[type=headinajar:hopper]
+# --- p3 the Bulwark's eject over water: the canopy sinks -----------------------------------------------------------
+/fill -6 -61 34 6 -61 46 minecraft:water
+/fill -1 -61 39 1 -61 41 minecraft:stone
+mecha bulwark 0 -60 40 hydraulic_legs
+/tp @s 2.5 -60 40.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 37.6 0 -25
+wait 5
+key use
+wait 70
+look 0 10
+watch at 9 1.5 -2 74 4
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Health:10f}
+frames p3_bulwark_eject_into_water_side_9 280
+/damage @e[type=headinajar:bulwark,limit=1,sort=nearest] 5 minecraft:generic
+wait 60
+chute
+wait 60
+chute
+inspect me
+wait 140
+watch off
+/kill @e[type=headinajar:bulwark]
+# --- p4 an eject under a low ceiling: no room to open, the canopy tangles -------------------------------------------
+mecha hopper 0 -60 70 hydraulic_legs
+/fill -5 -57 66 5 -57 76 minecraft:stone
+/tp @s 2.5 -60 70.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 67.6 0 -25
+wait 5
+key use
+wait 70
+look 0 10
+watch at -6 0.5 1 -99 -4
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:5f}
+frames p4_hopper_eject_low_ceiling_tangle 160
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 2 minecraft:generic
+wait 10
+chute
+wait 20
+chute
+wait 120
+watch off
+/kill @e[type=headinajar:hopper]
+# --- p5 the Kite's eject standing: the jar out of the lantern's back, thrown up into the parachute --------------------
+mecha kite 0 -60 100 drill
+/tp @s 0.5 -60 97.4 0 -25
+jar
+wait 10
+key use
+wait 70
+look 0 10
+watch at 8 1 3 110 -2
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+frames p5_kite_eject_standing_side_8 280
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+wait 30
+chute
+wait 230
+watch off
+/kill @e[type=headinajar:kite]
+# --- p6 the Kite's eject high in the air: from the ground 12 blocks off, looking up ------------------------------------
+mecha kite 0 -60 140 drill
+/tp @s 0.5 -60 137.4 0 -25
+wait 10
+key use
+wait 70
+look 0 10
+key jump hold 300
+watch at 12 -18 2 90 -50
+chute
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+frames p6_kite_eject_high_in_the_air_from_the_ground_12 420
+key jump down
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+key jump up
+wait 20
+chute
+wait 40
+chute
+inspect me
+wait 120
+chute
+inspect me
+wait 220
+chute
+inspect me
+watch off
+report all done

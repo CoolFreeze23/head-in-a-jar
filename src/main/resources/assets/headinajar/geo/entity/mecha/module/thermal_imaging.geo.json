@@ -1,0 +1,145 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_thermal_imaging",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                -2,
+                -1
+              ],
+              "size": [
+                4,
+                4,
+                1
+              ],
+              "uv": [
+                20,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -2.5,
+                -2.5,
+                -6
+              ],
+              "size": [
+                5,
+                5,
+                5
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                2.5,
+                -2,
+                -5
+              ],
+              "size": [
+                1,
+                4,
+                3
+              ],
+              "uv": [
+                38,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                -2,
+                -5
+              ],
+              "size": [
+                1,
+                4,
+                3
+              ],
+              "uv": [
+                46,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1.5,
+                -1.5,
+                -7
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                30,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_lens": [
+              0,
+              0,
+              -6.5
+            ]
+          }
+        },
+        {
+          "name": "shutter",
+          "parent": "mount",
+          "pivot": [
+            0,
+            2.5,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                -2.5,
+                -8
+              ],
+              "size": [
+                4,
+                5,
+                1
+              ],
+              "uv": [
+                54,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_smoke_mortar_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8,
+                -6,
+                -2
+              ],
+              "size": [
+                16,
+                12,
+                2
+              ],
+              "uv": [
+                76,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                -8,
+                -12
+              ],
+              "size": [
+                16,
+                6,
+                10
+              ],
+              "uv": [
+                24,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tube",
+          "parent": "mount",
+          "pivot": [
+            0,
+            -2,
+            -7
+          ],
+          "rotation": [
+            -60,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                -4,
+                -22
+              ],
+              "size": [
+                8,
+                8,
+                16
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -24
+              ],
+              "size": [
+                10,
+                10,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -16
+              ],
+              "size": [
+                10,
+                10,
+                2
+              ],
+              "uv": [
+                48,
+                16
+              ]
+            }
+          ],
+          "locators": {
+            "fx_muzzle": [
+              0,
+              0,
+              -24
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

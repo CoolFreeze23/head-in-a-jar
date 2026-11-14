@@ -1,0 +1,82 @@
+# First look at parked frames drawn from kept geometry: the row with it off and on (stills to compare pixel by
+# pixel), what is kept, the facing of every machine and shell after it is summoned, and boarding a Hopper filmed with
+# the HUD on (the dismount line).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper -21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+/summon headinajar:rover 27.5 -60 0.5 {Rotation:[180f,0f]}
+/summon headinajar:lunk 33.5 -60 0.5 {Rotation:[180f,0f]}
+/summon headinajar:spider_walker 39.5 -60 0.5 {Rotation:[180f,0f]}
+/tp @s 0.5 -55 -22 0 10
+facing headinajar
+wait 40
+facing headinajar
+wait 200
+facing headinajar
+parkstats
+parkcache off
+wait 10
+shot p0_row_off
+parkcache on
+wait 10
+shot p0_row_on
+parkstats
+/tp @s 30.5 -58 -9 0 10
+wait 20
+facing headinajar
+shot p0_shells
+/tp @s -12.5 -58 -11 0 10
+wait 10
+parkcache off
+wait 10
+shot p0_near_off
+parkcache on
+wait 10
+shot p0_near_on
+/time set 18000
+wait 10
+parkcache off
+wait 10
+shot p0_night_off
+parkcache on
+wait 10
+shot p0_night_on
+/time set 6000
+parkstats
+/kill @e[type=headinajar:bulwark]
+/kill @e[type=headinajar:colossus]
+wait 60
+parkstats
+# boarding: the jar's click on a parked Hopper, filmed with the HUD on from the jar's own view
+hud on
+jar
+charge 100000
+/tp @s -21 -60 -3 0 0
+view 0
+wait 10
+lookat headinajar:hopper
+frames board_hopper 30
+key use
+wait 40
+riding hopper
+parkstats
+key forward hold 30
+wait 10
+sneak down
+key jar_menu hold 25
+sneak up
+wait 120
+parkstats
+facing hopper

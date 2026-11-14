@@ -78,8 +78,26 @@ def stats(x):
         loudest_ms=round(int(np.argmax(e5)) * 220 / SR * 1000, 1))
 
 
+def is_loop(s):
+    k = s['kind']
+    return s.get('loop') or k == 'loop' or isinstance(k, (list, tuple)) and k[0] == 'loop'
+
+
+def seam(x):
+    """A loop's seam against its own insides: the step from the last sample to the first over the 99.9th percentile
+    of the file's sample-to-sample steps (1 or less: no click), and the level of the last 50 ms against the first 50 ms
+    in dB (0: no jump in loudness across the join)."""
+    d = np.abs(np.diff(x))
+    jump = abs(x[0] - x[-1]) / (np.percentile(d, 99.9) + 1e-12)
+    n = int(0.05 * SR)
+    a, b = np.sqrt((x[:n] ** 2).mean()) + 1e-12, np.sqrt((x[-n:] ** 2).mean()) + 1e-12
+    return round(float(jump), 2), round(float(20 * np.log10(b / a)), 1)
+
+
 def heard_range(s):
     k = s['kind']
+    if is_loop(s):
+        return (0.5, 30.0)
     if isinstance(k, (list, tuple)):  # ('servo', move seconds)
         return round(k[1] - 0.02, 3), round(k[1] + 0.30, 3)  # as long as the move (10 ms frames), plus the stop's ring
     return KINDS[k]
@@ -88,6 +106,14 @@ def heard_range(s):
 def check(s, st, fmt, ref):
     lo, hi = heard_range(s)
     res = {}
+    if is_loop(s):
+        # a loop is heard played round and round: its loudness is the tiled file's, its ends join instead of fading
+        res['format'] = fmt == ('vorbis', 1, 44100)
+        res['peak'] = st['peak'] <= -1.0
+        res['dc'] = abs(st['dc']) < 0.001
+        res['class'] = abs(st['m_max'] - s['target']) <= 2.0
+        res['seam'] = st['seam'][0] <= 1.0 and abs(st['seam'][1]) <= 3.0
+        return res
     res['format'] = fmt == ('vorbis', 1, 44100)
     res['peak'] = st['peak'] <= -1.0
     res['dc'] = abs(st['dc']) < 0.001
@@ -167,6 +193,9 @@ def main():
             fmt = probe(path)
             x = decode(path)
             st = stats(x)
+            if is_loop(s):
+                st['m_max'] = round(nsynth.m_max(np.tile(x, 3)), 2)
+                st['seam'] = seam(x)
             res = check(s, st, fmt, rst)
             pitches = s.get('pitch_per_play') or []
             extra = {}
@@ -179,7 +208,7 @@ def main():
             rows.append(dict(event=s['id'], file=f, cls=s['cls'], target=s['target'], ref=f"{r['event']} ({r['file']}, vol {r['vol']}, pitch {r['pitch']})",
                              ref_m_max=rst['m_max'], ref_centroid=rst['centroid'], ref_heard=rst['heard'],
                              heard_range='-'.join(str(v) for v in heard_range(s)), hit_ms=s.get('hit_ms'),
-                             preroll_ticks=s.get('preroll_ticks', 0), **{k: st[k] for k in st if k != 'cuts'},
+                             preroll_ticks=s.get('preroll_ticks', 0), **{k: st[k] for k in st if k not in ('cuts', 'seam')}, seam=st.get('seam', ''),
                              cuts=';'.join(map(str, st['cuts'])) or 'none', fails=';'.join(k for k, v in res.items() if not v) or 'PASS',
                              at_pitches=';'.join(f"p{p}: M {e['m_max']} cen {e['centroid']} heard {e['heard']}" for p, e in extra.items())))
         # takes differ by 5% in centroid or heard length

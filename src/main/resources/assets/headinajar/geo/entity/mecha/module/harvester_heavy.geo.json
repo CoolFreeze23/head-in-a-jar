@@ -1,0 +1,225 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_harvester_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                -6,
+                -2
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                44,
+                4
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -3,
+                -18
+              ],
+              "size": [
+                6,
+                6,
+                16
+              ],
+              "uv": [
+                0,
+                4
+              ]
+            },
+            {
+              "origin": [
+                10,
+                -4,
+                -22
+              ],
+              "size": [
+                2,
+                6,
+                6
+              ],
+              "uv": [
+                92,
+                26
+              ]
+            },
+            {
+              "origin": [
+                -12,
+                -4,
+                -22
+              ],
+              "size": [
+                2,
+                6,
+                6
+              ],
+              "uv": [
+                108,
+                26
+              ]
+            },
+            {
+              "origin": [
+                -12,
+                2,
+                -20
+              ],
+              "size": [
+                24,
+                2,
+                4
+              ],
+              "uv": [
+                0,
+                38
+              ]
+            }
+          ]
+        },
+        {
+          "name": "reel",
+          "parent": "mount",
+          "pivot": [
+            0,
+            -4,
+            -20
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -10,
+                -5,
+                -21
+              ],
+              "size": [
+                20,
+                2,
+                2
+              ],
+              "uv": [
+                80,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -10,
+                3,
+                -22
+              ],
+              "size": [
+                20,
+                2,
+                4
+              ],
+              "uv": [
+                72,
+                4
+              ]
+            },
+            {
+              "origin": [
+                -10,
+                -13,
+                -22
+              ],
+              "size": [
+                20,
+                2,
+                4
+              ],
+              "uv": [
+                0,
+                26
+              ]
+            },
+            {
+              "origin": [
+                -10,
+                -6,
+                -29
+              ],
+              "size": [
+                20,
+                4,
+                2
+              ],
+              "uv": [
+                48,
+                26
+              ]
+            },
+            {
+              "origin": [
+                -9,
+                5,
+                -21
+              ],
+              "size": [
+                18,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -9,
+                -5,
+                -31
+              ],
+              "size": [
+                18,
+                2,
+                2
+              ],
+              "uv": [
+                40,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_tip": [
+              0,
+              -4,
+              -30
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

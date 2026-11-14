@@ -1,0 +1,69 @@
+# Frame cost of the wave's lasting looks, each against the same view without it: ten ripe hosts (sag, sway, flies, hum),
+# ten idle bodies (code poses), and a run of saw cuts (the flying heads and puffs).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+/tp @s 0.5 -60 -6.5 0 10
+wait 40
+perf empty_view 300
+wait 305
+/summon cow -4.5 -60 2.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -2.5 -60 2.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -0.5 -60 2.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 1.5 -60 2.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 3.5 -60 2.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -4.5 -60 5.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -2.5 -60 5.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -0.5 -60 5.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 1.5 -60 5.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 3.5 -60 5.5 {"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 60
+perf ten_ripe_hosts 300
+wait 305
+/data merge entity @e[type=cow,limit=10] {"neoforge:attachments":{"headinajar:host":{host:0b,freshness:100f}}}
+/kill @e[type=cow]
+/summon cow -4.5 -60 2.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -2.5 -60 2.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -0.5 -60 2.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 1.5 -60 2.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 3.5 -60 2.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -4.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -2.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow -0.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 1.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+/summon cow 3.5 -60 5.5 {attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 60
+perf ten_plain_cows 300
+wait 305
+/kill @e[type=cow]
+/summon headinajar:headless_body -4.5 -60 2.5
+/summon headinajar:headless_body -2.5 -60 2.5
+/summon headinajar:headless_body -0.5 -60 2.5
+/summon headinajar:headless_body 1.5 -60 2.5
+/summon headinajar:headless_body 3.5 -60 2.5
+/summon headinajar:headless_body -4.5 -60 5.5
+/summon headinajar:headless_body -2.5 -60 5.5
+/summon headinajar:headless_body -0.5 -60 5.5
+/summon headinajar:headless_body 1.5 -60 5.5
+/summon headinajar:headless_body 3.5 -60 5.5
+wait 60
+perf ten_idle_bodies 300
+wait 305
+/kill @e[type=headinajar:headless_body]
+/summon minecraft:armor_stand -4.5 -60 2.5 {ShowArms:1b}
+/summon minecraft:armor_stand -2.5 -60 2.5 {ShowArms:1b}
+/summon minecraft:armor_stand -0.5 -60 2.5 {ShowArms:1b}
+/summon minecraft:armor_stand 1.5 -60 2.5 {ShowArms:1b}
+/summon minecraft:armor_stand 3.5 -60 2.5 {ShowArms:1b}
+/summon minecraft:armor_stand -4.5 -60 5.5 {ShowArms:1b}
+/summon minecraft:armor_stand -2.5 -60 5.5 {ShowArms:1b}
+/summon minecraft:armor_stand -0.5 -60 5.5 {ShowArms:1b}
+/summon minecraft:armor_stand 1.5 -60 5.5 {ShowArms:1b}
+/summon minecraft:armor_stand 3.5 -60 5.5 {ShowArms:1b}
+wait 60
+perf ten_armor_stands 300
+wait 305

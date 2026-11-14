@@ -168,7 +168,7 @@ public final class Network {
     }
 
     public static void register(RegisterPayloadHandlersEvent event) {
-        var registrar = event.registrar("3");
+        var registrar = event.registrar("4");
         registrar.playToClient(FormSync.TYPE, FormSync.CODEC, Network::onSync);
         registrar.playToServer(JarAction.TYPE, JarAction.CODEC, Network::onAction);
         registrar.playToClient(HostSync.TYPE, HostSync.CODEC, (msg, ctx) -> {
@@ -219,7 +219,10 @@ public final class Network {
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */
     public static void arms(ServerPlayer player, int held) {
         if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == player) {
-            mecha.armsHeld = held & 3;
+            // four arm slots, a bit each (left, right, left shoulder, right shoulder): a shoulder weapon answers the
+            // button of its side, with the arm below it
+            int buttons = held & 3;
+            mecha.armsHeld = buttons | (mecha.frame().hasShoulders() ? buttons << 2 : 0);
         }
     }
 
@@ -248,6 +251,8 @@ public final class Network {
     /** A key the jarred player pressed (the JarAction payload's handler). */
     public static void action(ServerPlayer player, JarAction msg) {
         JarState state = player.getData(ModRegistry.JAR_STATE);
+        // a press of the ability key that is also sprint: when no gene answers it, it was a sprint and nothing is said
+        boolean sprintToo = msg.action() == Action.ABILITY_SHARED;
         if (msg.action() == Action.ABILITY_SHARED) {
             com.coolfreeze23.headinajar.form.SharedKey.pressed(player);
             msg = new JarAction(Action.ABILITY);
@@ -272,19 +277,23 @@ public final class Network {
         }
         if (msg.action() == Action.DRIVE) {
             String result = FormActions.drive(player);
-            if (result != null) player.displayClientMessage(net.minecraft.network.chat.Component.translatable(result), true);
+            // the tip-over line names the drive key as it is bound
+            if (result != null) player.displayClientMessage(net.minecraft.network.chat.Component.translatable(
+                    result.equals("message.headinajar.tipped") ? "message.headinajar.tipped_keyed" : result,
+                    net.minecraft.network.chat.Component.keybind("key.headinajar.drive")), true);
             return;
         }
         boolean power = msg.action() == Action.ABILITY || msg.action() == Action.SECONDARY;
         int which = msg.action() == Action.SECONDARY ? 1 : 0;
         if (power && (state.form() == com.coolfreeze23.headinajar.form.Form.BODY || state.form() == com.coolfreeze23.headinajar.form.Form.LINKED)) {
-            com.coolfreeze23.headinajar.genetics.GeneEffects.activate(player, player, which);
+            if (sprintToo && com.coolfreeze23.headinajar.genetics.GeneEffects.actives(player).isEmpty()) return;
+            com.coolfreeze23.headinajar.genetics.GeneKeys.press(player, player, which);
             return;
         }
         if (power && state.form() == com.coolfreeze23.headinajar.form.Form.PILOT && player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
             boolean genes = !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mecha).isEmpty();
             if (genes && (player.isShiftKeyDown() || com.coolfreeze23.headinajar.mecha.MechaSystems.utilities(mecha).isEmpty())) {
-                com.coolfreeze23.headinajar.genetics.GeneEffects.activate(mecha, player, which);
+                com.coolfreeze23.headinajar.genetics.GeneKeys.press(player, mecha, which);
                 return;
             }
             if (!com.coolfreeze23.headinajar.mecha.MechaSystems.utilities(mecha).isEmpty()) {
@@ -312,7 +321,15 @@ public final class Network {
         }
         if (state.form() == com.coolfreeze23.headinajar.form.Form.HOSTED && player.getVehicle() instanceof net.minecraft.world.entity.Mob host) {
             if (msg.action() == Action.ABILITY || msg.action() == Action.SECONDARY) {
-                com.coolfreeze23.headinajar.host.HostAbilities.use(player, host, msg.action() == Action.SECONDARY);
+                // a host's own genes answer the keys as a mecha's do: with sneak held, or when the host has no ability there
+                boolean secondary = msg.action() == Action.SECONDARY;
+                var def = com.coolfreeze23.headinajar.host.Hosts.definition(host);
+                boolean ability = def != null && (secondary ? def.secondary() : def.primary()).isPresent();
+                if (!com.coolfreeze23.headinajar.genetics.GeneEffects.actives(host).isEmpty() && (player.isShiftKeyDown() || !ability)) {
+                    com.coolfreeze23.headinajar.genetics.GeneKeys.press(player, host, secondary ? 1 : 0);
+                } else {
+                    com.coolfreeze23.headinajar.host.HostAbilities.use(player, host, secondary);
+                }
                 return;
             }
         }

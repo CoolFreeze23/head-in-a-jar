@@ -1,0 +1,116 @@
+# Taking a body: the saw's cork and the first moment headless, seen from the doer's eyes, from behind in third person,
+# and from a bystander at 5 and 30 blocks, by day and at night; a husk pats the air; a jar in the off hand catches the
+# head; a jar seats on the neck (brace and collar twist).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+/difficulty easy
+hud off
+# --- the doer's eyes (first person): the real player saws a weakened cow
+/tp @s 0.5 -60 0.5 0 10
+/clear @s
+/item replace entity @s weapon.mainhand with headinajar:surgical_saw
+/summon cow 0.5 -60 3.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+lookat cow 0.9
+view 0
+frames s9_doer_day 70
+wait 2
+key use
+wait 70
+fxstate after_doer_cut
+# --- from behind, third person
+/kill @e[type=cow]
+/summon cow 1.9 -60 3.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+lookat cow 0.9
+view 1
+frames s9_third_behind_day 70
+wait 2
+key use
+wait 70
+view 0
+# --- a bystander does it; we watch from 5 blocks, three-quarter
+/kill @e[type=cow]
+bystander spawn 10 -60 0 0
+bystander hold headinajar:surgical_saw
+/summon cow 10.5 -60 2.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+/tp @s 14.5 -60 4.5 120 8
+lookat cow 0.8
+bystander mark
+frames s9_by5_day 80
+wait 3
+bystander useentity nearest cow
+wait 80
+bystander packets sound|particle|payload
+# --- a husk pats the air where its head was
+/kill @e[type=cow]
+/summon husk 10.5 -60 2.5 {Health:2f,NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+wait 20
+lookat husk 1.2
+frames s9_husk_by5_day 80
+wait 3
+bystander useentity nearest husk
+wait 80
+/kill @e[type=husk]
+# --- a jar in the off hand catches the head
+/summon cow 10.5 -60 2.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander hold headinajar:life_support_jar 1 offhand
+wait 20
+lookat cow 0.8
+frames s9_jar_catch_by5_day 60
+wait 3
+bystander useentity nearest cow
+wait 60
+/kill @e[type=cow]
+/kill @e[type=item]
+# --- a jar seats on a host's neck: the brace and the collar's quarter twist
+/summon cow 10.5 -60 2.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander hold headinajar:surgical_saw
+wait 20
+bystander useentity nearest cow
+wait 60
+bystander hold minecraft:air
+bystander form jar
+bystander tp 9 -60 2 90 0
+wait 10
+lookat cow 1.2
+frames s9_seat_by5_day 50
+wait 3
+bystander useentity nearest cow
+wait 50
+riding seated
+wait 10
+bystander sneak on
+wait 5
+bystander sneak off
+wait 20
+bystander form body
+/kill @e[type=cow]
+/kill @e[type=headinajar:headless_body]
+# --- 30 blocks, by day
+bystander hold headinajar:surgical_saw
+/summon cow 10.5 -60 2.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+/tp @s 34.5 -60 20.5 120 4
+lookat cow 0.8
+frames s9_by30_day 70
+wait 3
+bystander useentity nearest cow
+wait 70
+/kill @e[type=cow]
+# --- night, 5 blocks
+/time set 18000
+/summon cow 10.5 -60 2.5 {Health:1f,Rotation:[180f,0f],attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+wait 20
+/tp @s 14.5 -60 4.5 120 8
+lookat cow 0.8
+frames s9_by5_night 80
+wait 3
+bystander useentity nearest cow
+wait 80
+fxstate end

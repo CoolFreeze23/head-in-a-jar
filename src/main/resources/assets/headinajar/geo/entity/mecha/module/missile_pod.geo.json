@@ -1,0 +1,209 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_missile_pod",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                -3,
+                -1
+              ],
+              "size": [
+                8,
+                6,
+                1
+              ],
+              "uv": [
+                36,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -3,
+                -3
+              ],
+              "size": [
+                8,
+                2,
+                2
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            }
+          ]
+        },
+        {
+          "name": "pod",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -1
+          ],
+          "rotation": [
+            -50,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                -4,
+                -9
+              ],
+              "size": [
+                10,
+                8,
+                8
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1,
+                -3,
+                -9.5
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                78,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -3,
+                -9.5
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                86,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1,
+                0.5,
+                -9.5
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                94,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                0.5,
+                -9.5
+              ],
+              "size": [
+                3,
+                3,
+                1
+              ],
+              "uv": [
+                102,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_tube": [
+              0,
+              0,
+              -10
+            ]
+          }
+        },
+        {
+          "name": "hatch",
+          "parent": "pod",
+          "pivot": [
+            0,
+            4.5,
+            -9.5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.5,
+                -4.5,
+                -10.5
+              ],
+              "size": [
+                11,
+                9,
+                1
+              ],
+              "uv": [
+                54,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5.5,
+                -1,
+                -11.5
+              ],
+              "size": [
+                11,
+                2,
+                1
+              ],
+              "uv": [
+                20,
+                16
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

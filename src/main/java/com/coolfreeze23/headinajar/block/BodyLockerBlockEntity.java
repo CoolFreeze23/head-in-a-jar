@@ -39,7 +39,11 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
      * saved before the key existed has none, and lets anyone take its body out as it always did.
      */
     private java.util.UUID storedOwner;
-    private final Buffer energy = new Buffer(20_000, 1_000, 0, this::setChanged);
+    /**
+     * The kiosk needs no power: the buffer takes none in (so no cable drains into it) and gives none out. It is kept, and
+     * still read from and written to {@code Energy}, so a locker saved with a charge in it loads as it was.
+     */
+    private final Buffer energy = new Buffer(20_000, 0, 0, this::setChanged);
 
     public BodyLockerBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.LOCKER_BE.get(), pos, state);
@@ -80,7 +84,7 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
             storedOwner = sp.getUUID();
             host.discard();
             kit.event(EV_CHECKIN, 0);
-            server.playSound(null, worldPosition, SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS, 1, 0.8f);
+            server.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.LOCKER_THUNK.get(), SoundSource.BLOCKS, 1, 0.95f + server.random.nextFloat() * 0.1f);
             player.displayClientMessage(Component.translatable("message.headinajar.locker_stored", storedName), true);
         } else {
             // the ticket: the body goes back to whoever checked it in, or to someone they trust
@@ -94,7 +98,8 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
             }
             // the release is instant (the body is out on the click); the shutter's show plays after
             kit.event(EV_CHECKOUT, 0);
-            server.playSound(null, worldPosition, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1, 0.8f);
+            // the kiosk's own latch (the clip carries the rest of the show)
+            server.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.LOCKER_UNLATCH.get(), SoundSource.BLOCKS, 1, 1);
             player.displayClientMessage(Component.translatable("message.headinajar.locker_released", storedName), true);
         }
         setChanged();
@@ -123,6 +128,20 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
         return true;
     }
 
+    /**
+     * Whether this player may break the locker: anyone while it is empty or holds a body stored before owners were
+     * saved; otherwise only whoever checked the body in, or someone they trust (teams count), as at the ticket.
+     */
+    public boolean mayBreak(Player player) {
+        if (stored == null || storedOwner == null || !(player instanceof ServerPlayer sp)) return true;
+        return com.coolfreeze23.headinajar.form.HeadRegistry.get(sp.server).trusts(storedOwner, sp);
+    }
+
+    /** A break refused by {@link #mayBreak}: one line through the refusal rule, at the locker (its ticket rattle). */
+    public void refuseBreak(ServerPlayer player) {
+        Refusals.deny(player, Refuser.at(this), "locker.not_yours_break", Component.literal(storedName));
+    }
+
     /** The locker is being broken (or blown up): what it holds walks out rather than vanishing with it. */
     public void releaseOnBreak() {
         if (stored == null || !(level instanceof ServerLevel server)) return;
@@ -131,7 +150,7 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
             stored = null;
             storedOwner = null;
         }
-        server.playSound(null, worldPosition, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1, 0.8f);
+        server.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.LOCKER_UNLATCH.get(), SoundSource.BLOCKS, 1, 0.95f + server.random.nextFloat() * 0.1f);
     }
 
     /** The server's tick: what the kiosk shows (the lamp: waiting while it holds a body, ready when empty). */
@@ -159,7 +178,7 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
 
     @Override
     public int refusalPart(String reason) {
-        if (reason.equals("locker.not_yours")) return REFUSE_TICKET;
+        if (reason.equals("locker.not_yours") || reason.equals("locker.not_yours_break")) return REFUSE_TICKET;
         return stored != null ? REFUSE_FULL : REFUSE_EMPTY;
     }
 

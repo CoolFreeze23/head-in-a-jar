@@ -586,10 +586,13 @@ public class HostMechaRepairGameTests {
         gantry.items().setStackInSlot(AssemblyGantryBlockEntity.SLOT_FRAME, new ItemStack(ModRegistry.frameItem(MechaFrame.HOPPER)));
         gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.HOPPER.firstIndex(MechaModule.Slot.LEGS), module(MechaModule.STILTS));
         h.assertTrue(menu.clickMenuButton(p, AssemblyGantryMenu.ASSEMBLE), "assembly refused");
-        MechaEntity built = gantry.onPad();
-        h.assertTrue(built != null && built.battery() == 40_000 && gantry.energy().getEnergyStored() == 0,
-                "battery " + (built == null ? -1 : built.battery()) + ", gantry " + gantry.energy().getEnergyStored());
-        done(h, p);
+        // the frame stands on the deck once the arm has stood off
+        h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.LEAD + 1, () -> {
+            MechaEntity built = gantry.onPad();
+            h.assertTrue(built != null && built.battery() == 40_000 && gantry.energy().getEnergyStored() == 0,
+                    "battery " + (built == null ? -1 : built.battery()) + ", gantry " + gantry.energy().getEnergyStored());
+            done(h, p);
+        });
     }
 
     // --- every input answers ----------------------------------------------------------------------------

@@ -121,6 +121,8 @@ public class GalvanicPileBlock extends BaseEntityBlock implements com.coolfreeze
                 level.playSound(null, pos, com.coolfreeze23.headinajar.machine.MachineSounds.PILE_PLOP.get(), SoundSource.BLOCKS, 1,
                         com.coolfreeze23.headinajar.machine.MachineSounds.pitch("pile.plop", 1, level.random));
                 pile.kit().event(com.coolfreeze23.headinajar.machine.MachineKit.EV_PLOP, 0);
+                // a chair beside it is now a powered chair ("Take a Seat")
+                com.coolfreeze23.headinajar.clarity.TakeASeat.pileChanged((ServerPlayer) player, level, pos);
             }
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);

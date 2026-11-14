@@ -123,6 +123,7 @@ public final class FormActions {
         Vec3 collar = body.position().add(0, LINKED_COLLAR, 0);
         becomeHead(player, state, head);
         swapSeen(bodyLevel, collar, player.serverLevel(), player.getEyePosition(), body.getId(), player.getId(), -1);
+        com.coolfreeze23.headinajar.body.BodyServer.power(body, false);
         return true;
     }
 
@@ -254,6 +255,7 @@ public final class FormActions {
         fromLevel.playSound(null, goggles.x, goggles.y, goggles.z, com.coolfreeze23.headinajar.fx.FxSounds.SWAP_UP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         level.playSound(null, to.x, to.y, to.z, com.coolfreeze23.headinajar.fx.FxSounds.SWAP_UP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         swapSeen(fromLevel, goggles, level, to.add(0, LINKED_COLLAR, 0), -1, player.getId(), 1);
+        com.coolfreeze23.headinajar.body.BodyServer.power(player, true);
         return true;
     }
 
@@ -320,7 +322,8 @@ public final class FormActions {
                 com.coolfreeze23.headinajar.Advance.grant(player, "mula");
             }
         }
-        player.serverLevel().playSound(null, host.getX(), host.getY(), host.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 0.6f);
+        if (mecha) player.serverLevel().playSound(null, host.getX(), host.getY(), host.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_PLUG_IN.get(), SoundSource.PLAYERS, 1, 0.6f);
+        else com.coolfreeze23.headinajar.body.BodyServer.seat(player, host);
         return true;
     }
 
@@ -344,7 +347,7 @@ public final class FormActions {
         registry(player).setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.CARRIED, HeadRegistry.Spot.of(player), null));
         head.discard();
         Network.sync(player);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1, 1);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_BAGGED.get(), SoundSource.PLAYERS, 1, 1);
         return true;
     }
 
@@ -411,7 +414,7 @@ public final class FormActions {
         if (head != null) head.setGoggles(state.goggles());
         if (cradle != null) cradle.dock(player.getUUID(), player.getGameProfile().getName(), state.goggles());
         Network.sync(player);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 1, 1.2f);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_GOGGLES.get(), SoundSource.PLAYERS, 1, 1.2f);
         return true;
     }
 
@@ -424,7 +427,8 @@ public final class FormActions {
     }
 
     public static boolean hasSatchel(Player player) {
-        return player.getInventory().contains(new ItemStack(ModRegistry.HEAD_SATCHEL.get()))
+        // any satchel counts, renamed or dyed or worn: the item, not its exact data
+        return player.getInventory().hasAnyMatching(s -> s.is(ModRegistry.HEAD_SATCHEL.get()))
                 || com.coolfreeze23.headinajar.compat.Compat.wearsCurio(player, ModRegistry.HEAD_SATCHEL.get());
     }
 
@@ -458,7 +462,8 @@ public final class FormActions {
             case "vanilla" -> player.getInventory().dropAll();
             default -> corpse.takeInventory(player);
         }
-        corpse.becomeCorpse(null);
+        // the player is told once, below (HR's card would say the same again)
+        corpse.becomeCorpse(null, false);
         registry(player).setBody(player.getUUID(), new HeadRegistry.Body(corpse.getUUID(), HeadRegistry.Spot.of(corpse), true));
         state.setBody(corpse.getUUID());
         // a carried head falls out where the body fell
@@ -491,7 +496,7 @@ public final class FormActions {
             body.collapse();
         }
         registry(player).clear(player.getUUID());
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_SHATTER.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     // --- putting the head back on -------------------------------------------------------------------
@@ -538,7 +543,8 @@ public final class FormActions {
         player.onUpdateAbilities();
         player.refreshDimensions();
         Network.sync(player);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 0.7f);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.SUTURE.get(), SoundSource.PLAYERS, 1, 0.7f);
+        com.coolfreeze23.headinajar.body.BodyServer.tool(player, null, com.coolfreeze23.headinajar.fx.Fx.TOOL_SUTURE);
         return true;
     }
 
@@ -574,7 +580,7 @@ public final class FormActions {
         moveGenes(body, player);
         body.discard();
         Network.sync(player);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.PLAYERS, 1.0f, 0.7f);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.REATTACH.get(), SoundSource.PLAYERS, 1.0f, 0.7f);
         return true;
     }
 
@@ -598,7 +604,7 @@ public final class FormActions {
         player.stopRiding();
         player.refreshDimensions();
         Network.sync(player);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SLIME_BLOCK_BREAK, SoundSource.PLAYERS, 1.0f, 0.6f);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.DETACH.get(), SoundSource.PLAYERS, 1.0f, 0.6f);
         level.sendParticles(ParticleTypes.BUBBLE_POP, player.getX(), player.getY() + 0.5, player.getZ(), 20, 0.3, 0.3, 0.3, 0.02);
         return true;
     }
@@ -613,13 +619,13 @@ public final class FormActions {
         if (state.has(com.coolfreeze23.headinajar.module.ModuleType.WHEELS)) {
             state.setTipped(false);
             state.setWheels(!state.wheels());
-            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.PISTON_EXTEND, SoundSource.PLAYERS, 0.5f, state.wheels() ? 1.6f : 1.2f);
+            player.serverLevel().playSound(null, player.blockPosition(), (state.wheels() ? com.coolfreeze23.headinajar.fx.HouseSounds.WHEELS_DOWN : com.coolfreeze23.headinajar.fx.HouseSounds.WHEELS_UP).get(), SoundSource.PLAYERS, 1, com.coolfreeze23.headinajar.fx.HouseSounds.pitch(player.getRandom()));
             Network.sync(player);
             return state.wheels() ? "message.headinajar.wheels_down" : "message.headinajar.wheels_up";
         }
         state.setWheels(false);
         state.setTipped(!state.tipped());
-        player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 0.8f, state.tipped() ? 0.7f : 1.1f);
+        player.serverLevel().playSound(null, player.blockPosition(), (state.tipped() ? com.coolfreeze23.headinajar.fx.HouseSounds.TIP_OVER : com.coolfreeze23.headinajar.fx.HouseSounds.SIT_UP).get(), SoundSource.PLAYERS, 1, com.coolfreeze23.headinajar.fx.HouseSounds.pitch(player.getRandom()));
         Network.sync(player);
         return state.tipped() ? "message.headinajar.tipped" : "message.headinajar.upright";
     }

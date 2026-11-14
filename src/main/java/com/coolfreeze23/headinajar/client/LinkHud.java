@@ -63,6 +63,8 @@ public final class LinkHud {
         if (state.form() != lastForm) {
             if (lastForm.isDecapitated() || state.form().isDecapitated()) {
                 wipeTicks = 10;
+                // the commute: the old view pulls back and up, one burst of static, the new view drops into place
+                com.coolfreeze23.headinajar.client.body.CommuteFx.start(state.form() == Form.LINKED || state.form() == Form.BODY);
                 // under the photosensitive option the wipe is a plain crossfade from the old view's last frame,
                 // kept when the new form arrived (SwapFx.formChanging, from the sync packet)
             }
@@ -110,7 +112,11 @@ public final class LinkHud {
         if (wipeTicks > 0) {
             float a = wipeTicks / 10f;
             if (photosensitive()) com.coolfreeze23.headinajar.client.fx.SwapFx.renderCrossfade(g, delta.getGameTimeDeltaPartialTick(false));
-            else noise(g, w, h, a * intensity(), true);
+            else {
+                com.coolfreeze23.headinajar.client.body.CommuteFx.render(g, delta.getGameTimeDeltaPartialTick(false), wipeTicks);
+                noise(g, w, h, com.coolfreeze23.headinajar.client.body.CommuteFx.staticAlpha(wipeTicks, a) * intensity(), true);
+                com.coolfreeze23.headinajar.client.body.CommuteFx.band(g, delta.getGameTimeDeltaPartialTick(false), wipeTicks);
+            }
         }
     }
 
@@ -119,8 +125,12 @@ public final class LinkHud {
         float k = intensity();
         // faint scanlines at full signal, heavier as it drops
         float lines = (0.08f + (100 - q) * 0.006f) * k;
-        if (!photosensitive() && lines > 0.01f) tile(g, SCANLINES, w, h, lines, 0, mc.level.getGameTime() % 64);
-        if (q < 40 && !photosensitive()) noise(g, w, h, (40 - q) / 40f * 0.7f * k, false);
+        // both stand clear of Jade's look-at box when it is showing at the top, so its lines stay readable
+        if (!photosensitive() && lines > 0.01f) tileAround(g, SCANLINES, w, h, lines, 0, mc.level.getGameTime() % 64);
+        if (q < 40 && !photosensitive() && (40 - q) / 40f * 0.7f * k > 0.01f) {
+            var random = new java.util.Random(System.nanoTime());
+            tileAround(g, STATIC, w, h, Math.min(1, (40 - q) / 40f * 0.7f * k), random.nextInt(64), random.nextInt(64));
+        }
         if (q < 20) {
             String key = q == 0 ? "hud.headinajar.lost" : "hud.headinajar.weak";
             boolean show = photosensitive() || (mc.level.getGameTime() / 10) % 2 == 0;
@@ -133,13 +143,24 @@ public final class LinkHud {
         if (state.rollTicks() > 0) g.fill(0, h - 14, w, h, 0x60000000);
     }
 
+    /** Where the link bar was drawn this frame (the head pill sits beside it, or under it). */
+    private static int barY = 4;
+
+    private static boolean pillShown(JarState state) {
+        return state.form() == Form.LINKED && !state.carryingHead() && state.headAt() != JarState.HEAD_UNKNOWN;
+    }
+
     private static void topBar(GuiGraphics g, Minecraft mc, JarState state, int w) {
         int q = state.quality();
-        boolean always = q < 70 || state.form() == Form.JAR;
+        // a head left out in the world keeps the bar up: its distance, the chevron and the pill beside it belong together
+        boolean always = q < 70 || state.form() == Form.JAR
+                || state.form() == Form.LINKED && !state.carryingHead() && state.headAt() != JarState.HEAD_UNKNOWN;
         if (!always && barTicks <= 0) return;
         float alpha = always ? 1 : Math.min(1, barTicks / 20f);
         int a = (int) (alpha * 255) << 24;
-        int x = w / 2 - 90, y = 4;
+        // under Jade's look-at box when it is showing there, never across it (the chevron left of the bar, the pill right)
+        int x = w / 2 - 90, y = OverlayRoom.below(x - 12, x + 180 + (pillShown(state) ? 90 : 0), 4, 12);
+        barY = y;
         g.fill(x, y, x + 180, y + 12, (int) (alpha * 0x90) << 24);
         int bars = q >= 80 ? 5 : q >= 60 ? 4 : q >= 40 ? 3 : q >= 20 ? 2 : q > 0 ? 1 : 0;
         int color = q >= 60 ? 0x55FF77 : q >= 20 ? 0xFFD040 : 0xFF4040;
@@ -152,7 +173,16 @@ public final class LinkHud {
         String label = state.form() == Form.LINKED ? "hud.headinajar.head" : "hud.headinajar.body";
         Component text = Component.translatable("hud.headinajar.bar", q, ping, Component.translatable(label), dist);
         g.drawString(mc.font, text, x + 28, y + 2, 0xE0FFFFFF & 0xFFFFFF | a, false);
-        if (state.carryingHead()) g.drawString(mc.font, Component.translatable("hud.headinajar.carried"), x + 140, y + 2, 0x55FF77 | a, false);
+        // after the text, wherever it ends (it is longer in some languages), never on top of it
+        if (state.carryingHead()) g.drawString(mc.font, Component.translatable("hud.headinajar.carried"), Math.min(x + 176 - mc.font.width(Component.translatable("hud.headinajar.carried")),
+                Math.max(x + 140, x + 32 + mc.font.width(text))), y + 2, 0x55FF77 | a, false);
+        // which way the other half is, when this client can see it: just left of the bar
+        var other = com.coolfreeze23.headinajar.clarity.Wayfinding.otherHalf(mc.player, state.form() == Form.LINKED);
+        String arrow = other == null ? null : com.coolfreeze23.headinajar.clarity.Wayfinding.chevron(mc.player, other.position());
+        if (arrow != null) {
+            g.fill(x - 12, y, x - 1, y + 12, (int) (alpha * 0x90) << 24);
+            g.drawCenteredString(mc.font, arrow, x - 6, y + 2, 0x55FF77 | a);
+        }
         if (lossTicks > 0) {
             // a dropped click: the bar's frame goes red and says so, under the bar
             int red = ((lossTicks / 3) % 2 == 0 ? 0xFF4040 : 0xB02020) | a;
@@ -176,10 +206,10 @@ public final class LinkHud {
         int barW = 24, pad = 3;
         int pw = pad + mc.font.width(label) + 4 + barW + pad;
         int barX = w / 2 - 90;
-        int x = barX + 184, y = 4;
+        int x = barX + 184, y = barY;
         if (x + pw > w - 2) {
             x = Math.max(2, w / 2 - pw / 2);
-            y = 18;
+            y = barY + 14;
         }
         float saline = state.saline() / (float) Math.max(1, state.maxSaline());
         float glass = state.integrity() / (float) Math.max(1, state.maxIntegrity());
@@ -256,6 +286,29 @@ public final class LinkHud {
         g.blit(tex, 0, 0, u, v, w, h, 64, 64);
         g.setColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
+    }
+
+    /** As {@link #tile}, but around another mod's box at the top (Jade's): the screen in up to four bands, the box left clear. */
+    private static void tileAround(GuiGraphics g, ResourceLocation tex, int w, int h, float alpha, float u, float v) {
+        int[] box = OverlayRoom.box();
+        if (box == null) {
+            tile(g, tex, w, h, alpha, u, v);
+            return;
+        }
+        int bx = Math.max(0, box[0]), by = Math.max(0, box[1]), bx2 = Math.min(w, box[0] + box[2]), by2 = Math.min(h, box[1] + box[3]);
+        RenderSystem.enableBlend();
+        g.setColor(1, 1, 1, alpha);
+        band(g, tex, 0, 0, w, by, u, v);
+        band(g, tex, 0, by2, w, h - by2, u, v);
+        band(g, tex, 0, by, bx, by2 - by, u, v);
+        band(g, tex, bx2, by, w - bx2, by2 - by, u, v);
+        g.setColor(1, 1, 1, 1);
+        RenderSystem.disableBlend();
+    }
+
+    /** One band of a repeating texture, its pattern lined up with the rest of the screen's. */
+    private static void band(GuiGraphics g, ResourceLocation tex, int x, int y, int width, int height, float u, float v) {
+        if (width > 0 && height > 0) g.blit(tex, x, y, u + x, v + y, width, height, 64, 64);
     }
 
     private LinkHud() {

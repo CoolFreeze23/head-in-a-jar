@@ -29,8 +29,9 @@ public final class SharedKey {
             case PILOT -> player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha
                     && (!com.coolfreeze23.headinajar.mecha.MechaSystems.utilities(mecha).isEmpty()
                     || !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(mecha).isEmpty());
-            case HOSTED -> player.getVehicle() instanceof Mob host && com.coolfreeze23.headinajar.host.Hosts.definition(host) != null
-                    && com.coolfreeze23.headinajar.host.Hosts.definition(host).primary().isPresent();
+            case HOSTED -> player.getVehicle() instanceof Mob host && (com.coolfreeze23.headinajar.host.Hosts.definition(host) != null
+                    && com.coolfreeze23.headinajar.host.Hosts.definition(host).primary().isPresent()
+                    || !com.coolfreeze23.headinajar.genetics.GeneEffects.actives(host).isEmpty());
             default -> false;
         };
     }

@@ -1,0 +1,20 @@
+{
+  "name": "Dividindo a Energia",
+  "icon": "headinajar:leyden_jar",
+  "category": "headinajar:facilities",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A energia sai de uma Pilha Galvânica, Garrafa de Leyden ou Nó de Tesla para toda máquina encostada, em partes iguais. Máquinas não repassam: encoste a fonte na máquina. Cabos de FE de outros mods também servem."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A $(item)Garrafa de Leyden$() guarda 250 kFE. Enche com uma fonte ao lado e alimenta os outros vizinhos, 2.000 FE/t. Duas Garrafas não se alimentam.$(br2)O $(item)Nó de Tesla$() lança até 2.000 FE/t a um nó a até 16 blocos, perdendo 5%%."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Para ligar dois nós, segure a $(item)Chave Cirúrgica$(): use o nó que envia, depois o que recebe. Agache e use o que envia para desligar.$(br2)A fonte encosta no que envia; o que recebe alimenta o que toca nele."
+    }
+  ]
+}

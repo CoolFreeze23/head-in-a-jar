@@ -117,7 +117,7 @@ public class SeparationChairBlock extends BaseEntityBlock {
         if (!level.isClientSide) {
             chair.setWear(0);
             stack.consume(1, player);
-            level.playSound(null, pos, SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 1, 1.2f);
+            level.playSound(null, pos, com.coolfreeze23.headinajar.fx.HouseSounds.NEW_BLADE.get(), SoundSource.BLOCKS, 1, 1.2f);
             player.displayClientMessage(Component.translatable("dolores.headinajar.new_blade"), true);
             chair.voiceRefusal("new_blade");
         }
@@ -140,11 +140,40 @@ public class SeparationChairBlock extends BaseEntityBlock {
             server.openMenu(chair, pos);
             return InteractionResult.CONSUME;
         }
+        // someone already on one of the company's machines or shells gets down first: the chair never pulls them off
+        net.minecraft.world.entity.Entity ridden = server.getVehicle();
+        if (ridden != null && com.coolfreeze23.headinajar.HeadInAJar.MOD_ID.equals(
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(ridden.getType()).getNamespace())) {
+            com.coolfreeze23.headinajar.feedback.Refusals.deny(server, chair, "chair.riding", ridden.getDisplayName());
+            return InteractionResult.CONSUME;
+        }
+        // a seat left empty in this chair by an earlier try goes before a new one is made
+        for (SeatEntity stale : level.getEntitiesOfClass(SeatEntity.class, new net.minecraft.world.phys.AABB(pos).inflate(0.5),
+                s -> s.getPassengers().isEmpty() && s.chairPos().equals(pos))) {
+            stale.discard();
+        }
         // sitting down is always the player's own action: nobody can be put in the chair by someone else
         SeatEntity seat = SeatEntity.at(level, pos, state.getValue(FACING));
-        if (server.startRiding(seat)) server.openMenu(chair, pos);
-        else seat.discard();
+        if (server.startRiding(seat)) {
+            server.openMenu(chair, pos);
+            return InteractionResult.CONSUME;
+        }
+        LOGGER.debug("Separation Chair at {}: {} could not sit: {}", pos, server.getGameProfile().getName(), whyNotSeated(server, seat));
+        seat.discard();
+        com.coolfreeze23.headinajar.feedback.Refusals.deny(server, chair, "chair.no_seat");
         return InteractionResult.CONSUME;
+    }
+
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
+
+    /** Why a player could not ride a fresh seat, as far as the game lets it be seen (for the debug log). */
+    static String whyNotSeated(ServerPlayer player, SeatEntity seat) {
+        if (player.getVehicle() == seat) return "already on this seat";
+        if (!seat.isAddedToLevel()) return "the seat did not join the level";
+        if (!seat.getPassengers().isEmpty()) return "the seat already carries " + seat.getFirstPassenger().getName().getString();
+        if (player.isShiftKeyDown()) return "sneaking";
+        if (player.getVehicle() != null) return "riding " + player.getVehicle().getName().getString();
+        return "the boarding cooldown after getting off something, or the mount event was cancelled";
     }
 
     /** Hitting or mining a chair mid-operation gets an answer; it can't be broken until it is done. */

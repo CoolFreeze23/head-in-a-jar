@@ -346,7 +346,7 @@ public class GeneticsGameTests {
         done(h, p);
     }
 
-    @GameTest(template = "platform")
+    @GameTest(template = "platform", timeoutTicks = 160)
     public static void gantryKeepsChimeraGenes(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR.east(3));
         h.setBlock(FLOOR, ModRegistry.ASSEMBLY_GANTRY.get());
@@ -356,14 +356,19 @@ public class GeneticsGameTests {
         chimera.setOwner(p.getUUID());
         Genetics.inject(chimera, serum(100, Gene.SPIDER_CLIMB), Genetics.Target.MECHA, rolls(0.5f));
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.DISASSEMBLE), "disassemble failed");
-        ItemStack frame = gantry.items().getStackInSlot(AssemblyGantryBlockEntity.SLOT_FRAME);
-        h.assertTrue(MechaFrameItem.genes(frame).map(g -> g.has(Gene.SPIDER_CLIMB)).orElse(false), "frame lost the genes");
-        // a frame on legs is only built with legs that walk
-        gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.CHIMERA.firstIndex(com.coolfreeze23.headinajar.mecha.MechaModule.Slot.LEGS),
-                new ItemStack(ModRegistry.mechaModule(com.coolfreeze23.headinajar.mecha.MechaModule.HYDRAULIC_LEGS)));
-        h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assemble failed");
-        MechaEntity rebuilt = gantry.onPad();
-        h.assertTrue(rebuilt != null && rebuilt.frame() == MechaFrame.CHIMERA && Genetics.genes(rebuilt).has(Gene.SPIDER_CLIMB), "rebuilt chimera has no genes");
-        done(h, p);
+        // the arm takes it apart over its clip
+        h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.of(MechaFrame.CHIMERA).disassemble() + 1, () -> {
+            ItemStack frame = gantry.items().getStackInSlot(AssemblyGantryBlockEntity.SLOT_FRAME);
+            h.assertTrue(MechaFrameItem.genes(frame).map(g -> g.has(Gene.SPIDER_CLIMB)).orElse(false), "frame lost the genes");
+            // a frame on legs is only built with legs that walk
+            gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.CHIMERA.firstIndex(com.coolfreeze23.headinajar.mecha.MechaModule.Slot.LEGS),
+                    new ItemStack(ModRegistry.mechaModule(com.coolfreeze23.headinajar.mecha.MechaModule.HYDRAULIC_LEGS)));
+            h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assemble failed");
+            h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.LEAD + 1, () -> {
+                MechaEntity rebuilt = gantry.onPad();
+                h.assertTrue(rebuilt != null && rebuilt.frame() == MechaFrame.CHIMERA && Genetics.genes(rebuilt).has(Gene.SPIDER_CLIMB), "rebuilt chimera has no genes");
+                done(h, p);
+            });
+        });
     }
 }

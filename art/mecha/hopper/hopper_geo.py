@@ -7,9 +7,9 @@ left is -X. 16 px to a block.
     python art/mecha/hopper/hopper_geo.py                       # writes hopper_placeholder.png and hopper.bbmodel
     python art/mecha/hopper/hopper_geo.py --scale --out X.bbmodel  # a review copy with player and golem stand-ins
 
-hopper.bbmodel is written directly (art/mecha/bbbuild.py, the file layout the Blockbench tool server writes; UUIDs come
+hopper.bbmodel is written directly (art/mecha/bbbuild.py, the file layout Blockbench writes; UUIDs come
 from the node names, so clips stay bound across rebuilds) and keeps its clips; then run hopper_anim.py, which imports
-the rig numbers below (leg lengths, rest angles), and check with bbmodel_validate.
+the rig numbers below (leg lengths, rest angles), and check the model with a validator.
 
 Numbers taken from the game:
   hitbox 1.2 x 2.5 blocks (19.2 x 40 px)              MechaFrame.HOPPER

@@ -1,0 +1,148 @@
+# Chimera, first look in the default profile: parked (the hard hat over an empty collar), the boarding and boot from
+# behind, the walk from behind and from the side at hull height, a refused Graft (nothing tasted), the left fist hitting
+# a chicken then the Graft from behind, a refused second press while it lasts, the Graft from 6 blocks (right arm) and in
+# first person (left arm), vent, limp on a flat battery, the Golden Parachute then the collapse, and stills by day,
+# night and torchlight beside a Hopper and a Bulwark.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha chimera 0 -60 0 hydraulic_legs,hydraulic_fist,hydraulic_fist
+/tp @s 3.5 -59 3.5 135 15
+wait 30
+shot c00_parked_empty_hat_front_3q
+/tp @s -3 -59 -3 -45 15
+wait 10
+shot c00_parked_empty_hat_back_3q
+/tp @s 5.5 -60 -3.5 0 0
+jar
+/give @s headinajar:bio_gel 4
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:chimera
+view 1
+frames c01_board_and_boot_behind 90
+key use
+wait 90
+riding chimera
+look 0 10
+hud on
+shot c01_aboard_behind_hud
+hud off
+# --- the walk from behind, then from the side at hull height -----------------------------------------------------------
+frames c02_walk_behind 80
+key forward hold 70
+wait 10
+look 180 10
+wait 10
+watch follow -6.5 0.8 0 -90 3
+frames c03_walk_side 80
+key forward hold 70
+wait 10
+watch off
+view 1
+# --- a refused Graft: nothing tasted ---------------------------------------------------------------------------------
+look 0 10
+wait 10
+hud on
+frames c04_graft_refused_nothing_behind 40
+key drive
+wait 35
+# --- the left fist hits a chicken, then the Graft, from behind -------------------------------------------------------
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:chicken ~ ~ ~2.2 {NoAI:1b,Health:40f,attributes:[{id:"minecraft:generic.max_health",base:40}]}
+wait 5
+lookat minecraft:chicken 0.3
+frames c05_fist_then_graft_behind 120
+key attack
+wait 20
+key drive
+wait 70
+inspect near headinajar:chimera 4
+shot c05_grafted_veins_behind_hud
+# --- a second press while the graft lasts: refused ---------------------------------------------------------------------
+frames c06_graft_refused_running 40
+key drive
+wait 35
+hud off
+/kill @e[type=minecraft:chicken]
+# --- the Graft from 6 blocks to the side (right arm), then in first person (left arm) ----------------------------------
+wait 1150
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:chicken ~ ~ ~2.2 {NoAI:1b,Health:40f,attributes:[{id:"minecraft:generic.max_health",base:40}]}
+wait 5
+lookat minecraft:chicken 0.3
+watch at 6 1.6 1 90 8
+frames c07_graft_bystander_6 90
+key use
+wait 15
+key drive
+wait 70
+watch off
+wait 1250
+lookat minecraft:chicken 0.3
+view 0
+frames c08_graft_first_person 90
+key attack
+wait 15
+key drive
+wait 70
+view 1
+/kill @e[type=minecraft:chicken]
+# --- vent, from the side ---------------------------------------------------------------------------------------------
+look 0 10
+watch at -5 1.2 0 -90 8
+/data merge entity @e[type=headinajar:chimera,limit=1,sort=nearest] {Heat:900f}
+frames c09_vent_side 115
+wait 110
+# --- limp on a flat battery, from the side --------------------------------------------------------------------------
+/data merge entity @e[type=headinajar:chimera,limit=1,sort=nearest] {Battery:0}
+watch follow -6 0.8 0 -90 3
+frames c10_limp_side 90
+key forward hold 80
+wait 10
+/data merge entity @e[type=headinajar:chimera,limit=1,sort=nearest] {Battery:200000}
+watch off
+view 1
+# --- the Golden Parachute, then the empty machine destroyed: from 9 blocks to the side --------------------------------
+watch at -9 2 0 -90 10
+frames c11_golden_parachute_then_collapse 260
+/damage @e[type=headinajar:chimera,limit=1,sort=nearest] 110 minecraft:generic
+wait 120
+/damage @e[type=headinajar:chimera,limit=1,sort=nearest] 100 minecraft:generic
+wait 130
+watch off
+# --- stills: beside a parked Hopper and Bulwark, empty and with a jar aboard -------------------------------------------
+mecha chimera 0 -60 10 hydraulic_legs,hydraulic_fist,hydraulic_fist
+mecha hopper 3 -60 10 hydraulic_legs
+mecha bulwark -4 -60 10 hydraulic_legs
+/tp @s 0.5 -59.5 17 180 10
+view 0
+wait 20
+shot st_day_row_empty
+bystander spawn 0 -60 8 0
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:chimera
+wait 60
+shot st_day_row_jar
+/tp @s 2.5 -58.8 12.8 145 12
+wait 10
+shot st_day_jar_3q
+/tp @s 0.5 -59 4 0 8
+wait 10
+shot st_day_back_6
+/tp @s 0.5 -57 -10 0 4
+wait 10
+shot st_day_back_20
+/time set 18000
+/tp @s 0.5 -59.5 17 180 10
+wait 20
+shot st_night_row
+/setblock 1 -60 14 minecraft:torch
+/setblock -2 -60 14 minecraft:torch
+wait 10
+shot st_torch_row
+report done

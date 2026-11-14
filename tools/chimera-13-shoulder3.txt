@@ -1,0 +1,86 @@
+# His settings and shoulder view, after the lift clears the jar: the Wheelhouse, the Rover and the Lunk aboard (before
+# and after the pivot), and the Lunk's toss of a pig that cannot wander (speed 0), aimed by the crosshair.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha wheelhouse 20 -60 0 drill
+/summon headinajar:rover 40 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:lunk 50 -60 0 {Rotation:[0f,0f]}
+/tp @s -20.5 -60 -20.5 0 0
+jar
+charge 100000
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+/tp @s 20.5 -60 -4 0 0
+wait 5
+aimat headinajar:wheelhouse
+wait 3
+aimat headinajar:wheelhouse
+wait 3
+key use
+wait 50
+riding wheelhouse
+pivot off
+wait 10
+shot z_wheelhouse_before
+pivot on
+wait 10
+shot z_wheelhouse_after
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 30
+/tp @s 40.5 -60 -3 0 0
+wait 5
+aimat headinajar:rover
+wait 3
+aimat headinajar:rover
+wait 3
+key use
+wait 40
+riding rover
+pivot off
+wait 10
+shot z_rover_before
+pivot on
+wait 10
+shot z_rover_after
+sneak
+wait 30
+/tp @s 50.5 -60 -3 0 0
+wait 5
+aimat headinajar:lunk
+wait 3
+aimat headinajar:lunk
+wait 3
+key use
+wait 40
+riding lunk
+pivot off
+wait 10
+shot z_lunk_before
+pivot on
+wait 10
+shot z_lunk_after
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:pig ~ ~ ~2.2 {attributes:[{id:"minecraft:generic.movement_speed",base:0}]}
+wait 3
+aimat minecraft:pig
+wait 3
+aimat minecraft:pig
+wait 2
+shot z_lunk_aimed_at_pig
+frames z01_lunk_toss_shoulder_crosshair 70
+key ability
+wait 60
+report done

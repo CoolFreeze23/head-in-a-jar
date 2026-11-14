@@ -1,0 +1,107 @@
+# Re-takes: the Wheelhouse's Rush Hour ramming a cow that can move, on a stone road (dirt and grass are off-road); the
+# Bulwark carrying a cow overhead with a full back loadout, from the side with the camera high enough to see the cow.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+jar
+charge 100000
+/fill 36 -61 -30 44 -61 4 minecraft:stone
+mecha wheelhouse 40 -60 0 drill
+/tp @s 40.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:wheelhouse
+key use
+wait 60
+riding wheelhouse
+look 180 5
+view 1
+execute at @e[type=headinajar:wheelhouse,limit=1] run summon minecraft:cow ~ ~ ~-12
+wait 10
+watch at 9 2 -7 90 10
+wait 3
+frames r01_wheelhouse_rush_rams_a_cow_side 140
+key drive
+key forward hold 100
+wait 30
+inspect near cow 24
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+mecha bulwark 0 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,hydraulic_fist,hydraulic_fist,ore_scanner
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 60
+riding bulwark
+look 0 20
+view 1
+execute at @e[type=headinajar:bulwark,limit=1] run summon minecraft:cow ~0.8 ~ ~-2.4 {NoAI:1b}
+wait 10
+lookat minecraft:cow 0.6
+wait 2
+key drive
+wait 40
+watch at 8 4.5 0 90 -8
+wait 5
+frames r02_bulwark_full_back_cow_overhead_side_8 80
+key forward hold 60
+wait 20
+shot r02_overhead_side_still
+watch at -6 4 6 225 -5
+wait 5
+shot r02_overhead_back_3q_still
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# The Hopper and the Bulwark walked away, the camera flipped at once (the body chases it round), and back: the steps of
+# the films they were approved by, for a side-by-side comparison; then the Bulwark from behind, the camera following.
+/kill @e[type=minecraft:cow]
+mecha hopper -40 -60 0 hydraulic_legs
+/tp @s -39.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:hopper
+key use
+wait 70
+view 1
+look 0 12
+wait 10
+frames r03_hopper_walk_turn_back_as_approved 150
+key forward hold 60
+wait 10
+look 180 12
+key forward hold 60
+wait 15
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+mecha bulwark -60 -60 0 hydraulic_legs,drill
+/tp @s -59.5 -60 -3.5 0 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 70
+view 1
+look 0 12
+wait 10
+frames r04_bulwark_walk_turn_back_as_approved 160
+key forward hold 60
+wait 10
+look 180 12
+key forward hold 70
+wait 15
+look 0 8
+wait 15
+watch follow -2 2.4 -10 0 6
+frames r05_bulwark_walk_c_from_behind_as_approved 110
+key forward hold 100
+wait 15
+watch off

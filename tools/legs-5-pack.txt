@@ -1,0 +1,83 @@
+# The Skitter and the Spider Walker under the owner's settings and mods (SMOKE_PROFILE=pack
+# SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling), in his shoulder view (three presses of his perspective key from
+# first person): the Skitter's trot, a wall climbed, the Dragline fired and wound in; the Spider Walker's walk and web.
+# Also run with SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip (the presses then reach vanilla's front view; view 1
+# after them sets the chase view for that run's frames).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/fill -5 -60 14 5 -55 15 minecraft:stone
+/fill -6 -60 26 -6 -50 27 minecraft:stone
+/fill 6 -60 26 6 -50 27 minecraft:stone
+/fill -6 -50 26 6 -50 27 minecraft:stone
+/summon minecraft:armor_stand 0.5 -52.1 26.5 {Invisible:1b,NoGravity:1b}
+mecha skitter 0 -60 0 drill
+/tp @s 4.5 -60 -3.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -3.6 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+view 0
+look 0 8
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 20
+shot pk_skitter_shoulder_view
+frames p01_skitter_shoulder_trot_and_wall 160
+key forward hold 140
+wait 15
+inspect near headinajar:skitter 4
+shot pk_skitter_on_the_wall_top
+lookat minecraft:armor_stand 1.95
+wait 10
+frames p02_skitter_shoulder_dragline 160
+key drive hold 120
+wait 30
+key drive
+wait 20
+inspect near headinajar:skitter 4
+# --- the Spider Walker -----------------------------------------------------------------------------------------
+sneak
+wait 20
+body
+wait 10
+/tp @s 40.5 -60 -45 0 0
+wait 20
+/summon headinajar:spider_walker 40.5 -60 -40.5 {Rotation:[0f,0f]}
+/tp @s 40.5 -60 -42.6 0 -20
+jar
+charge 100000
+wait 10
+lookat headinajar:spider_walker
+key use
+wait 30
+view 0
+look 0 10
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 20
+shot pk_spider_shoulder_view
+frames p03_spider_shoulder_walk 80
+key forward hold 60
+wait 15
+execute at @e[type=headinajar:spider_walker,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~8 {NoAI:1b}
+wait 5
+lookat minecraft:cow 0.7
+frames p04_spider_shoulder_web 50
+key ability
+wait 45
+report done

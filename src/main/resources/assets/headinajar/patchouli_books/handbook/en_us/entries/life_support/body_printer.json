@@ -2,10 +2,16 @@
   "name": "The Body Printer",
   "icon": "headinajar:body_printer",
   "category": "headinajar:life_support",
+  "sortnum": 3,
   "pages": [
     {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:body_printer",
+      "text": "A new body, Collar Cam fitted, in 60 s, for 16 rotten flesh, 8 bone blocks, 4 redstone blocks, 8 slime balls, 2,000 mB of saline and 200 kFE stored first."
+    },
+    {
       "type": "patchouli:text",
-      "text": "Lost your body? Load the printer with rotten flesh, bone blocks, redstone blocks, slime and 2000 mB of saline, then press Print as a jar. Sixty seconds and 200 kFE later, a fresh body steps out, collar already fitted."
+      "text": "$(l)Load it before you need it:$() when you do, you are a jar and your things are on your corpse. Saline goes in by bucket or bottle. From a pile alone, 200 kFE take over 8 min.$(br2)Then, as the jar, press Print. Use the new body, or Swap, to step in."
     }
   ]
 }

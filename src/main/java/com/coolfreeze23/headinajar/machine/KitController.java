@@ -44,6 +44,8 @@ public class KitController<T extends BlockEntity & GeoAnimatable> extends Animat
     public double released = Double.NaN;
     /** A chooser's memory of a many-valued state (-1: not seen yet). */
     public int lastState = -1;
+    /** Ticks of blend for the next change of clip only (0: none): a part let go mid-move eases to its new clip. */
+    public int blendNext;
 
     /** {@code loops}: the clips that loop; every other clip plays once and holds its last frame. */
     public KitController(T machine, String name, Chooser<T> chooser, String... loops) {
@@ -69,7 +71,8 @@ public class KitController<T extends BlockEntity & GeoAnimatable> extends Animat
         c.seek = Math.max(0, choice.tick());
         if (!choice.clip().equals(c.clip)) {
             c.clip = choice.clip();
-            c.transitionLength = 0;
+            c.transitionLength = c.blendNext;
+            c.blendNext = 0;
             c.forceAnimationReset();
             c.setAnimation(c.raw(c.clip));
         } else if (c.getAnimationState() == State.RUNNING) {

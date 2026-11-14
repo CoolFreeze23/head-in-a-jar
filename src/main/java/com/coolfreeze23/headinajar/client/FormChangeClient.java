@@ -111,6 +111,12 @@ public final class FormChangeClient {
         return HELD.contains(key);
     }
 
+    /** The way-out line for what the player has just got into, said in place of vanilla's (null: vanilla's stands). */
+    public static Component mountLine() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player == null || mc.player.getVehicle() == null ? null : boarded(mc.player.getVehicle());
+    }
+
     /**
      * Vanilla says "press sneak to dismount" for any vehicle; a mecha is left by holding sneak with the jar menu key, and a
      * host or shell by sneaking. Put up for the first half second aboard, it stays over vanilla's line.

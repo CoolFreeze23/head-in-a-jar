@@ -37,6 +37,27 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
     public static final int LASER = 7;
     /** A guardian turret's shot lands: a = the target point. */
     public static final int TURRET_SHOT = 8;
+    /** The Surgical Saw takes a head: a = the neck, entityA = the cutter, entityB = the creature, arg 1 when the head goes into a jar. */
+    public static final int HOST_CUT = 9;
+    /** A jar seats on a host's neck: a = the neck, entityA = the jar's player, entityB = the host. */
+    public static final int HOST_SEAT = 10;
+    /** A jar leaves its host: a = the neck, entityB = the host. */
+    public static final int HOST_UNSEAT = 11;
+    /** A host is embalmed (or is seen embalmed when it comes into view): entityB = the host, arg 1 when it just happened. */
+    public static final int HOST_EMBALMED = 12;
+    /** A tool worked in the hand: entityA = who held it, entityB = what it worked on or -1, arg = {@link #TOOL_SYRINGE} etc. */
+    public static final int TOOL = 13;
+    /** A body became a corpse: a = where it lies, entityB = the body. */
+    public static final int CORPSE = 14;
+    /**
+     * One jump of an arm's arc (the Arc Cannon's chain, the Tesla Coil's zaps), 2 ticks after the last: a = where it leaves
+     * from (for the first jump the tool's muzzle as the server reckons it; the client uses the muzzle it drew), b = where
+     * it lands, entityA = the machine (first jump) or the creature it jumps from, entityB = the creature hit or -1 (a miss,
+     * at a block), arg = the tool's flat slot + 64 x the jump's number.
+     */
+    public static final int ARM_ARC = 15;
+
+    public static final int TOOL_SYRINGE = 1, TOOL_SUTURE = 2, TOOL_WRENCH = 3;
 
     public static final int DROP_CHARGE = 1, DROP_RANGE = 2, DROP_GONE = 3;
     /** Fizzle reasons (the client picks a look; the refusal line says why in words). */

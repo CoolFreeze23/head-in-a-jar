@@ -43,6 +43,12 @@ public class HeadJarEntity extends Entity {
     private static final EntityDataAccessor<Boolean> COMPACT = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.BOOLEAN);
     /** A botched cut put the head in upside down; it rights itself when the patient's view does. */
     private static final EntityDataAccessor<Boolean> UPSIDE_DOWN = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.BOOLEAN);
+    /**
+     * What the jar shows of its owner's life support, packed (shown, never saved): saline, charge and glass in percent
+     * (7 bits each, from the bottom), then a bit while the saline is rising. Kept from the owner's own state.
+     */
+    private static final EntityDataAccessor<Integer> VITALS = SynchedEntityData.defineId(HeadJarEntity.class, EntityDataSerializers.INT);
+    public static final int FULL_VITALS = 100 | 100 << 7 | 100 << 14;
     private int upsideDownTicks;
     public static final float MAX_HEALTH = 10;
     private float health = MAX_HEALTH;
@@ -61,6 +67,27 @@ public class HeadJarEntity extends Entity {
         builder.define(GOGGLES, ItemStack.EMPTY);
         builder.define(COMPACT, false);
         builder.define(UPSIDE_DOWN, false);
+        builder.define(VITALS, FULL_VITALS);
+    }
+
+    /** Copies the owner's saline, charge and glass to what watchers see of this jar (sent only when it changes). */
+    public void showVitals(com.coolfreeze23.headinajar.form.JarState state) {
+        int before = entityData.get(VITALS);
+        int saline = Math.round(100f * state.saline() / Math.max(1, state.maxSaline()));
+        int charge = Math.round(100f * state.charge() / Math.max(1, state.chargeCapacity()));
+        int glass = Math.round(100f * state.integrity() / Math.max(1, state.maxIntegrity()));
+        boolean rising = saline > (before & 127);
+        entityData.set(VITALS, saline | charge << 7 | glass << 14 | (rising ? 1 << 21 : 0));
+    }
+
+    /** Sets what watchers see directly (the dev client's films; an owner who is online overwrites it). */
+    public void showVitalsForFilm(int packed) {
+        entityData.set(VITALS, packed);
+    }
+
+    /** The packed vitals (see {@link #VITALS}). */
+    public int vitals() {
+        return entityData.get(VITALS);
     }
 
     public void setOwner(UUID id, String name) {
@@ -153,6 +180,7 @@ public class HeadJarEntity extends Entity {
         // set down on a Charging Dock, the head charges like a jar standing on it
         ServerPlayer owner = owner();
         if (owner != null) com.coolfreeze23.headinajar.block.ChargingDockBlock.chargeHead(this, owner, 10);
+        if (owner != null) showVitals(owner.getData(ModRegistry.JAR_STATE));
     }
 
     @Override
@@ -179,7 +207,7 @@ public class HeadJarEntity extends Entity {
         if (heat) heatTicks = 20;
         else hurtTicks = 10;
         lastHeat = heat;
-        level().playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_HIT, SoundSource.PLAYERS, 1, 1.2f);
+        level().playSound(null, getX(), getY(), getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_KNOCK.get(), SoundSource.PLAYERS, 1, 1.2f);
         if (owner != null) {
             // the jar's glass is the owner's Jar Integrity
             state.setIntegrity(state.integrity() - (heat && !bypass ? 1 : (int) Math.ceil(amount)));
@@ -206,7 +234,7 @@ public class HeadJarEntity extends Entity {
     /** The jar breaks. If its owner is out walking their body, that is a real death ({@link #remove}). */
     private void shatter() {
         ServerLevel level = (ServerLevel) level();
-        level.playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.2f, 0.8f);
+        level.playSound(null, getX(), getY(), getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_SHATTER.get(), SoundSource.PLAYERS, 1.2f, 0.8f);
         level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.GLASS)), getX(), getY() + 0.4, getZ(), 30, 0.25, 0.25, 0.25, 0.1);
         discard();
     }
@@ -288,7 +316,7 @@ public class HeadJarEntity extends Entity {
             if (patch && state.integrity() < state.maxIntegrity()) {
                 state.setIntegrity(state.integrity() + 5);
                 held.consume(1, player);
-                level().playSound(null, getX(), getY(), getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 1.4f);
+                level().playSound(null, getX(), getY(), getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_PATCH.get(), SoundSource.PLAYERS, 1, 1.4f);
                 return InteractionResult.CONSUME;
             }
             com.coolfreeze23.headinajar.feedback.Refusals.deny(player, saline ? "head.full" : "head.intact");

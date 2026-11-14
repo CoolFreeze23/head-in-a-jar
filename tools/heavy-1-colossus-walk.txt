@@ -1,0 +1,63 @@
+# Colossus, default profile: the Gantry's build and a stand-in's boarding (bystander, about 9 blocks at 45 degrees),
+# the pilot's boot from behind, walk_c from behind and from the side at hull height, the rise from idle into the walk
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- 01 the build, from a bystander's place --------------------------------------------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 colossus
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 7.5 -56.5 7.5 135 14
+wait 2
+frames c01_build_and_boarding_bystander_9 340
+wait 230
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:colossus
+wait 100
+inspect near headinajar:colossus 8
+bystander remove
+/kill @e[type=headinajar:colossus]
+wait 5
+# --- 02 the pilot's own: board and boot from behind ------------------------------------------------------------------
+mecha colossus 0 -60 30 hydraulic_legs,drill
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+view 1
+frames c02_board_and_boot_behind 90
+key use
+wait 90
+riding colossus
+look 0 10
+# --- 03 walk_c from behind (chase camera), starting from idle (the hips' rise) ---------------------------------------
+wait 40
+frames c03_walk_c_behind_from_idle 120
+wait 10
+key forward hold 100
+wait 15
+# --- 04 walk_c from the side at hull height ---------------------------------------------------------------------------
+watch follow -9 1.2 0 -90 4
+wait 3
+frames c04_walk_c_side_hull_height 130
+wait 15
+key forward hold 100
+wait 15
+watch off
+inspect near headinajar:colossus 30
+report colossus walk done

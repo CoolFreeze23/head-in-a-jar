@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:separated",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "head_carried"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:head_satchel"
+    },
+    "title": {
+      "translate": "advancements.headinajar.head_carried.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.head_carried.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

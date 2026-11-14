@@ -1,0 +1,217 @@
+# The arm verbs, a vent, a damaged frame, and a second pilot's beams seen from outside, default profile.
+# 1. A Hopper with a Hydraulic Fist (left) and a Rivet Gun (right): strike and recoil, from six blocks.
+# 2. A Bulwark with a Riot Shield (left) and a Hemo-Syringe (right): guard (a stand-in player hits the raised shield), jab.
+# 3. A Hopper with a Drill and a Chainsaw: spin, on stone and a log.
+# 4. The first Hopper hot (70%, then 95%), then over its limit: the vent.
+# 5. The same Hopper below half health (sparks), then below a quarter (smoke, the limp walking).
+# 6. The stand-in player pilots a lance-and-arc Hopper; the real player stands six blocks off and watches it fire.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+/give @s minecraft:iron_nugget 64
+mecha hopper 0 -60 0 hydraulic_legs,hydraulic_fist,rivet_gun
+mecha bulwark 20 -60 0 hydraulic_legs,riot_shield,hemo_syringe
+mecha hopper 40 -60 0 hydraulic_legs,drill,chainsaw
+mecha hopper 60 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+/summon cow 0.5 -60 3.5 {NoAI:1b,Invulnerable:1b}
+/summon cow 20.5 -60 3.5 {NoAI:1b}
+/fill 39 -60 3 39 -58 3 minecraft:stone
+/fill 41 -60 3 41 -57 3 minecraft:oak_log
+/summon cow 60.5 -60 10.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 62.5 -60 10.5 {NoAI:1b,Invulnerable:1b}
+# --- 1. fist and rivets
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 75
+riding fist
+view 0
+aimat cow
+wait 6
+watch at -5.5 2.4 1.5 -75 12
+wait 4
+observe 24
+report fist from six blocks
+frames fist_side6 40
+wait 4
+key attack
+wait 34
+look 0 2
+wait 4
+report rivets from six blocks
+frames rivet_side6 40
+wait 4
+key use hold 24
+wait 16
+observe 10
+watch off
+view 1
+aimat cow
+wait 4
+frames fist_behind 30
+wait 4
+key attack
+wait 28
+# --- 4. heat and the vent on this Hopper
+report hot 70
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:290f}
+watch at -4 2.2 -3.5 -49 14
+wait 4
+frames hot70_side 30
+wait 30
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:385f}
+wait 2
+frames hot95_side 30
+wait 30
+observe 110
+report vent
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:420f}
+frames vent_side 110
+wait 112
+observe 10
+watch off
+# --- 5. wear: below half, below a quarter, walking with the limp
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f,Health:25f}
+watch at -4 2.2 -3.5 -49 14
+wait 4
+observe 60
+report below half
+frames damaged_half_side 70
+wait 72
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:12f}
+report below a quarter
+frames damaged_quarter_side 70
+wait 72
+observe 10
+watch off
+view 1
+look 90 10
+wait 5
+watch follow -5 2.5 0 -90 12
+report limp walking
+frames limp_walk_side 70
+wait 2
+key forward hold 60
+wait 10
+watch off
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:60f}
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- 2. shield and syringe on the Bulwark
+/tp @s 20.5 -60 -4.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 75
+riding shield
+look 0 10
+wait 6
+bystander spawn 20 -60 2 180
+bystander gamemode survival
+wait 5
+watch at -6 2.6 1 -80 12
+wait 4
+report shield held and hit
+frames shield_side6 70
+wait 2
+key attack down
+wait 16
+bystander attack nearest headinajar:bulwark
+wait 12
+bystander attack nearest headinajar:bulwark
+wait 16
+key attack up
+wait 20
+bystander remove
+watch off
+view 0
+aimat cow
+wait 4
+watch at -6 2.6 1 -80 12
+wait 4
+report syringe jab
+frames syringe_side6 40
+wait 4
+key use
+wait 34
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- 3. drill and chainsaw
+/tp @s 40.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 75
+riding spin
+look 12 30
+wait 6
+watch at -5 2.4 1 -75 15
+wait 4
+report drill on stone
+frames drill_side6 70
+wait 2
+key attack down
+wait 60
+key attack up
+wait 10
+look -14 20
+wait 6
+report chainsaw on a log
+frames chainsaw_side6 70
+wait 2
+key use down
+wait 60
+key use up
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- 6. a second pilot fires; this client only watches from six blocks off
+/tp @s 54.5 -60 4.5 -60 5
+wait 5
+bystander spawn 60 -60 -3 0
+bystander gamemode creative
+bystander form jar
+bystander hold air
+wait 5
+bystander useentity nearest headinajar:hopper
+wait 70
+bystander state
+bystander tick on
+bystander gamemode survival
+bystander lookat nearest cow
+look -60 8
+wait 4
+report remote lance
+frames remote_lance 70
+wait 4
+bystander arms 1
+wait 45
+bystander arms 0
+wait 25
+bystander lookat nearest cow
+report remote arc
+frames remote_arc 40
+wait 4
+bystander arms 2
+wait 3
+bystander arms 0
+wait 35
+report done

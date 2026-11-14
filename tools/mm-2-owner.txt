@@ -1,0 +1,334 @@
+# The owner's settings and his Shoulder Surfing view (three presses of his perspective key): each of the eight
+# frames and three shells boarded by a real click with the crosshair put on it, driven, its verb once, and
+# out again (hold sneak with the jar menu key a second; shells: sneak). Then a cow right under a Bulwark's
+# nose, aimed at by the crosshair, struck and lifted.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs
+mecha bulwark 12 -60 0 hydraulic_legs
+mecha colossus 24 -60 0 hydraulic_legs
+mecha executive 36 -60 0 hydraulic_legs
+mecha wheelhouse 48 -60 0 hydraulic_legs,drill
+mecha skitter 60 -60 0 hydraulic_legs,drill
+mecha kite 72 -60 0 hydraulic_legs
+mecha chimera 84 -60 0 hydraulic_legs
+/summon headinajar:rover 96 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:lunk 108 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 120 -60 0 {Rotation:[0f,0f]}
+/tp @s -20.5 -60 -20.5 0 0
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+# --- hopper
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+aimat headinajar:hopper
+wait 3
+key use
+wait 60
+riding hopper
+look 0 10
+wait 10
+shot o_hopper_aboard
+key forward hold 40
+wait 5
+shot o_hopper_walked
+key drive hold 30
+wait 40
+shot o_hopper_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding hopper_after
+inspect me
+# --- bulwark
+/tp @s 12.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+aimat headinajar:bulwark
+wait 3
+key use
+wait 60
+riding bulwark
+look 0 10
+wait 10
+shot o_bulwark_aboard
+key forward hold 40
+wait 5
+shot o_bulwark_walked
+key drive
+wait 40
+shot o_bulwark_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding bulwark_after
+inspect me
+# --- colossus
+/tp @s 24.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:colossus
+wait 3
+aimat headinajar:colossus
+wait 3
+key use
+wait 60
+riding colossus
+look 0 10
+wait 10
+shot o_colossus_aboard
+key forward hold 40
+wait 5
+shot o_colossus_walked
+key drive
+wait 50
+shot o_colossus_sieged
+key drive
+wait 45
+wait 40
+shot o_colossus_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding colossus_after
+inspect me
+# --- executive
+/tp @s 36.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:executive
+wait 3
+aimat headinajar:executive
+wait 3
+key use
+wait 60
+riding executive
+look 0 10
+wait 10
+shot o_executive_aboard
+key forward hold 40
+wait 5
+shot o_executive_walked
+key drive
+wait 40
+shot o_executive_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding executive_after
+inspect me
+# --- wheelhouse
+/tp @s 48.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:wheelhouse
+wait 3
+aimat headinajar:wheelhouse
+wait 3
+key use
+wait 60
+riding wheelhouse
+look 0 10
+wait 10
+shot o_wheelhouse_aboard
+key forward hold 40
+wait 5
+shot o_wheelhouse_walked
+key drive
+wait 40
+shot o_wheelhouse_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding wheelhouse_after
+inspect me
+# --- skitter
+/tp @s 60.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:skitter
+wait 3
+aimat headinajar:skitter
+wait 3
+key use
+wait 60
+riding skitter
+look 0 10
+wait 10
+shot o_skitter_aboard
+key forward hold 40
+wait 5
+shot o_skitter_walked
+key drive
+wait 40
+shot o_skitter_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding skitter_after
+inspect me
+# --- kite
+/tp @s 72.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:kite
+wait 3
+aimat headinajar:kite
+wait 3
+key use
+wait 60
+riding kite
+look 0 10
+wait 10
+shot o_kite_aboard
+key forward hold 40
+wait 5
+shot o_kite_walked
+key jump hold 40
+shot o_kite_aloft
+key drive
+wait 40
+shot o_kite_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding kite_after
+inspect me
+# --- chimera
+/tp @s 84.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:chimera
+wait 3
+aimat headinajar:chimera
+wait 3
+key use
+wait 60
+riding chimera
+look 0 10
+wait 10
+shot o_chimera_aboard
+key forward hold 40
+wait 5
+shot o_chimera_walked
+key drive
+wait 40
+shot o_chimera_verb
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding chimera_after
+inspect me
+# --- rover
+/tp @s 96.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:rover
+wait 3
+aimat headinajar:rover
+wait 3
+key use
+wait 60
+riding rover
+look 0 10
+wait 10
+shot o_rover_aboard
+key forward hold 40
+wait 5
+shot o_rover_walked
+key ability
+wait 40
+shot o_rover_verb
+sneak hold 3
+wait 30
+riding rover_after
+inspect me
+# --- lunk
+/tp @s 108.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:lunk
+wait 3
+aimat headinajar:lunk
+wait 3
+key use
+wait 60
+riding lunk
+look 0 10
+wait 10
+shot o_lunk_aboard
+key forward hold 40
+wait 5
+shot o_lunk_walked
+key ability
+wait 40
+shot o_lunk_verb
+sneak hold 3
+wait 30
+riding lunk_after
+inspect me
+# --- spider_walker
+/tp @s 120.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:spider_walker
+wait 3
+aimat headinajar:spider_walker
+wait 3
+key use
+wait 60
+riding spider_walker
+look 0 10
+wait 10
+shot o_spider_walker_aboard
+key forward hold 40
+wait 5
+shot o_spider_walker_walked
+key ability
+wait 40
+shot o_spider_walker_verb
+sneak hold 3
+wait 30
+riding spider_walker_after
+inspect me
+# --- under the nose
+mecha bulwark 200 -60 0 hydraulic_legs,hydraulic_fist
+/tp @s 200.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+aimat headinajar:bulwark
+wait 3
+key use
+wait 60
+look 0 15
+wait 20
+execute as @e[type=headinajar:bulwark,limit=1,sort=nearest] at @s run summon minecraft:cow ^ ^ ^2.0 {NoAI:1b}
+wait 5
+shot o_nose_cow_level
+aimat minecraft:cow 0.6
+wait 3
+aimat minecraft:cow 0.6
+wait 3
+aimat minecraft:cow 0.6
+wait 3
+shot o_nose_cow_aimed
+key attack
+wait 20
+key drive
+wait 40
+shot o_nose_cow_after

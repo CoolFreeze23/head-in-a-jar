@@ -32,6 +32,7 @@ public final class MachineAnimations {
     static <T extends BlockEntity & GeoAnimatable> KitController<T> add(AnimatableManager.ControllerRegistrar controllers, KitController<T> c) {
         c.setSoundKeyframeHandler(MachineKeyframes::sound);
         c.setParticleKeyframeHandler(MachineKeyframes::particle);
+        c.setCustomInstructionKeyframeHandler(MachineKeyframes::instruction);
         controllers.add(c);
         return c;
     }

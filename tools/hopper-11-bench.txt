@@ -1,0 +1,62 @@
+# Frame time: a row of eight parked Hoppers at 10 blocks against the empty scene, uncapped, before (hopperlean off: every
+# machine animates and the model is drawn twice for its glow) and after (on), three windows each, interleaved
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+bench start empty1
+wait 300
+bench stop
+bench start empty2
+wait 300
+bench stop
+bench start empty3
+wait 300
+bench stop
+mecha hopper -7 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper -5 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper -3 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper -1 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper 1 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper 3 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper 5 -60 0 hydraulic_legs,jump_jets,drill
+mecha hopper 7 -60 0 hydraulic_legs,jump_jets,drill
+wait 100
+shot bench_row
+hopperlean off
+wait 40
+bench start before1
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after1
+wait 300
+bench stop
+hopperlean off
+wait 40
+bench start before2
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after2
+wait 300
+bench stop
+hopperlean off
+wait 40
+bench start before3
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after3
+wait 300
+bench stop
+report bench done

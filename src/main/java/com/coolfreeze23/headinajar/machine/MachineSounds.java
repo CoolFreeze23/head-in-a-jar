@@ -106,6 +106,9 @@ public final class MachineSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> RIG_SPROING = sound("rig.sproing", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> RIG_HOLSTER = sound("rig.holster", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> RIG_HISS = sound("rig.hiss", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIG_CANCEL = sound("rig.cancel", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIG_FILL = sound("rig.fill", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIG_DRAIN = sound("rig.drain", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> TESLA_PERK = sound("tesla.perk", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> TESLA_LOOK = sound("tesla.look", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> TESLA_SETTLE = sound("tesla.settle", 1, 0.97f, 1.03f);
@@ -120,6 +123,9 @@ public final class MachineSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_FIZZLE = sound("dock.fizzle", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_METER_TICK = sound("dock.meter_tick", 1, 1, 1);
     public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_SPARK = sound("dock.spark", 1, 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_LEVER = sound("dock.lever", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_UNCLACK = sound("dock.unclack", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> DOCK_TAP = sound("dock.tap", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> MAST_SWING = sound("mast.swing", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> MAST_DROOP = sound("mast.droop", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> MAST_FLINCH = sound("mast.flinch", 1, 0.95f, 1.05f);
@@ -149,6 +155,8 @@ public final class MachineSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> LEECH_CRANK_RATCHET = sound("leech.crank_ratchet", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> LEECH_PLINK = sound("leech.plink", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> LEECH_VIALS_CLATTER = sound("leech.vials_clatter", 1, 0.95f, 1.05f);
+    /** The sample clip's instruction {@code leech:bite;}. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> LEECH_BITE = sound("leech.bite", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> SOCKET_SERVO = sound("socket.servo", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> SOCKET_CLAMP = sound("socket.clamp", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> SOCKET_PLUG = sound("socket.plug", 1, 0.97f, 1.03f);
@@ -156,10 +164,26 @@ public final class MachineSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SOCKET_DROP = sound("socket.drop", 1, 0.95f, 1.05f);
     /** Played by the server once, on the tick the jar comes to full charge. */
     public static final DeferredHolder<SoundEvent, SoundEvent> LEYDEN_FULL = sound("leyden.full", 1, 0.94f, 1.06f);
+    // the Assembly Gantry (its arm, its turntable, its welder; all from its clips)
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_KLAXON = sound("gantry.klaxon", 1, 1, 1);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_SERVO = sound("gantry.servo", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_SERVO_STOP = sound("gantry.servo_stop", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_TOOL_OUT = sound("gantry.tool_out", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_WELD = sound("gantry.weld", 1, 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_ARC = sound("gantry.arc", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_TURNTABLE = sound("gantry.turntable", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_SCAN = sound("gantry.scan", 1, 1, 1);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_STAMP = sound("gantry.stamp", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_PARK = sound("gantry.park", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_CHARGE_TICK = sound("gantry.charge_tick", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_TAP = sound("gantry.tap", 1, 0.97f, 1.03f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_RATCHET = sound("gantry.ratchet", 1, 0.97f, 1.03f);
     // the clips' names for two of them
     static {
         PLAY.put("dock.thunk", PLAY.get("dock.fall"));
         PLAY.put("dock.tick", PLAY.get("dock.meter_tick"));
+        // the Locker's check-in ends on the company's own "done"
+        PLAY.put("machine.done", new Play(ModSounds.FEEDBACK_DONE, 1, 1, 1));
     }
 
 

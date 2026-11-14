@@ -57,6 +57,14 @@ versionRange="[15.0.0,)"
 ordering="NONE"
 side="BOTH"
 
+# the Employee Handbook is a Patchouli book
+[[dependencies.${mod_id}]]
+modId="patchouli"
+type="optional"
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
 [[dependencies.${mod_id}]]
 modId="entity_model_features"
 type="optional"

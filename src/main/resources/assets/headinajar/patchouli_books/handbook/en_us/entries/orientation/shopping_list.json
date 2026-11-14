@@ -1,0 +1,22 @@
+{
+  "name": "Shopping List",
+  "icon": "headinajar:surgical_steel_ingot",
+  "category": "headinajar:orientation",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "One operation, satchel included: 29 iron, 24 bone meal, 24 coal, 14 copper, 21 redstone, 19 glass, 4 amethyst shards, 8 leather, 2 string, 3 white wool, 1 slime ball, 2 kelp, 2 sugar, 11 rotten flesh, wood and stone.",
+      "title": "Form 1-A"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Far from home:$(li)amethyst: a geode$(li)slime ball: a swamp$(li)kelp: the sea$(br2)No Nether trip is needed. Ten of the rotten flesh are fuel for the chair's 40 kFE."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "headinajar:surgical_steel_ingot_from_smelting",
+      "text": "24 ingots, each one Blend: iron, bone meal, coal.$(br2)$(o)DOLORES notes: receipts in triplicate.$()"
+    }
+  ]
+}

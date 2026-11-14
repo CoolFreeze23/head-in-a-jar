@@ -1,0 +1,37 @@
+# Hopper walk and pogo in Shoulder Surfing's own perspective (run with SMOKE_PROFILE=pack and its mod groups): from
+# first person, one press of the perspective key is the shoulder camera there
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper 0 -60 3 hydraulic_legs,jump_jets,drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 1.9 0 -25
+wait 5
+key use
+wait 70
+view 0
+wait 5
+key togglePerspective
+wait 10
+shot ss_check
+look 0 10
+frames ss_walk 150
+key forward hold 60
+wait 10
+look 180 10
+key forward hold 60
+wait 15
+look 0 4
+execute at @e[type=headinajar:hopper,limit=1,sort=nearest] run summon minecraft:cow ~1.5 ~ ~10 {NoAI:1b}
+frames ss_pogo 140
+inspect near headinajar:hopper 40
+key drive hold 34
+wait 100
+inspect near headinajar:hopper 40
+report ss done

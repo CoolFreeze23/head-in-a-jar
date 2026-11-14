@@ -113,7 +113,7 @@ public final class LabMachines {
                 items.extractItem(0, 1, false);
                 place(1, out[0], false);
                 place(2, out[1], false);
-                level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.6f, 1.6f);
+                level.playSound(null, pos, com.coolfreeze23.headinajar.fx.HouseSounds.CENTRIFUGE_SETTLE.get(), SoundSource.BLOCKS, 0.6f, 1.6f);
                 level.playSound(null, pos, com.coolfreeze23.headinajar.registry.ModSounds.FEEDBACK_DONE.get(), SoundSource.BLOCKS, 1, 1);
                 kit.event(com.coolfreeze23.headinajar.machine.MachineKit.EV_FINISH, 0);
             }
@@ -407,7 +407,7 @@ public final class LabMachines {
             items.extractItem(0, 1, false);
             seed = level.random.nextInt(1 << 20);
             setChanged();
-            level.playSound(null, worldPosition, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 1, 1.4f);
+            level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.SEQUENCER_READ.get(), SoundSource.BLOCKS, 1, 1.4f);
             for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) if (GeneArchive.key(p).equals(owner)) Network.syncArchive(p);
             return true;
         }
@@ -1030,6 +1030,14 @@ public final class LabMachines {
                 } else if (now - rig.shotAt >= JAB) {
                     rig.patient = null;
                     Genetics.Result r = rig.ready(player) ? rig.inject(player) : null;
+                    if (r == null || r == Genetics.Result.FULL || r == Genetics.Result.TOO_HEAVY) {
+                        // refused at the jab (full, too heavy, no power): nothing went in, so the needle withdraws as a
+                        // called-off shot does, rather than playing a body's rejection; the refusal line said why
+                        rig.kit.event(EV_CANCEL, 0);
+                        rig.faultUntil = now + 40;
+                        rig.show(now);
+                        return;
+                    }
                     rig.result = r == Genetics.Result.OK ? 0 : r == Genetics.Result.MUTATED ? 2 : 1;
                     rig.resultAt = now;
                     rig.kit.event(EV_RESULT, rig.result);

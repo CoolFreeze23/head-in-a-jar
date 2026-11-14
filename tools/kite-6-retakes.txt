@@ -1,0 +1,81 @@
+# Kite re-takes: first person (the body is not drawn for the pilot's own eye), the eject high in the air seen from the
+# pilot's own camera following the jar down, the Talon Lift from behind with the drop at height
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha kite 0 -60 3 drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+# --- k13 first person: takeoff, flight, the Talon Lift ------------------------------------------------------------
+view 0
+look 0 25
+wait 10
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+frames k13_first_person_takeoff_talon_fly 260
+key jump down
+wait 40
+key drive
+wait 40
+key forward down
+look 0 15
+wait 60
+key drive
+wait 40
+key jump up
+wait 60
+key forward up
+shot fp_after
+/kill @e[type=minecraft:sheep]
+view 1
+look 0 10
+wait 40
+# --- k15 the Talon Lift from behind, dropped from height --------------------------------------------------------------
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+wait 3
+frames k15_talon_lift_carry_and_drop_from_height_behind 300
+key jump down
+wait 40
+key drive
+wait 80
+key forward down
+wait 40
+key drive
+wait 60
+key jump up
+key forward up
+wait 70
+inspect near minecraft:sheep 40
+/kill @e[type=minecraft:sheep]
+wait 60
+# --- k14 the eject high in the air, from the pilot's own camera: the jar falls clear and the canopy opens over it ---
+key jump hold 300
+view 1
+look 0 20
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+frames k14b_eject_in_the_air_own_camera 360
+key jump down
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+key jump up
+wait 30
+chute
+wait 30
+shot k14_own_camera_under_canopy
+look 0 70
+wait 5
+shot k14_own_camera_looking_down
+look 0 20
+wait 60
+chute
+wait 200
+chute
+inspect me
+report retakes done

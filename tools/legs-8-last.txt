@@ -1,0 +1,94 @@
+# Last takes: the reel drawing the Skitter toward a high anchor (it keeps its ground stance while dragged and tilts to
+# the line only once it hangs clear), from the side and from behind; a sneak letting go of a wall (side); the Spider
+# Walker's collapse with nothing in front of it.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# a beam 10 up (z 14-15) and a marker under it; a wall 6 high at x 40 for the cling
+/fill -6 -60 14 -6 -50 15 minecraft:stone
+/fill 6 -60 14 6 -50 15 minecraft:stone
+/fill -6 -50 14 6 -50 15 minecraft:stone
+/summon minecraft:armor_stand 0.5 -52.1 14.5 {Invisible:1b,NoGravity:1b}
+/fill 36 -60 14 44 -55 15 minecraft:stone
+/tp @s 4.5 -60 -9.5 0 0
+jar
+wait 10
+# --- the reel toward the high anchor, from the side ---------------------------------------------------------------
+mecha skitter 0.5 -60 -3.5 drill
+/tp @s 0.5 -60 -6.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+lookat minecraft:armor_stand 1.95
+watch 9 -58.5 5 90 -10
+frames z01_reel_to_high_anchor_side 220
+key drive hold 190
+wait 30
+key drive
+wait 30
+watch off
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- the same from behind (a fixed camera behind and above) --------------------------------------------------------
+mecha skitter 0.5 -60 -3.5 drill
+/tp @s 0.5 -60 -6.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+lookat minecraft:armor_stand 1.95
+watch 0.5 -56.5 -11 0 10
+frames z02_reel_to_high_anchor_behind 220
+key drive hold 190
+wait 30
+key drive
+wait 30
+watch off
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- a sneak lets go of the wall (side) ------------------------------------------------------------------------------
+mecha skitter 40.5 -60 11.5 drill
+/tp @s 43.5 -60 9.3 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 10
+wait 5
+key forward hold 30
+watch 33.5 -57 13 -90 8
+frames z03_holding_then_sneak_lets_go_side 120
+wait 40
+sneak
+wait 75
+inspect near headinajar:skitter 6
+watch off
+/ride @s dismount
+wait 5
+# --- the Spider Walker's collapse, nothing in front of it ------------------------------------------------------------
+/summon headinajar:spider_walker 70.5 -60 0.5 {Rotation:[0f,0f]}
+/tp @s 70.5 -60 -2.4 0 -20
+charge 100000
+wait 5
+lookat headinajar:spider_walker
+key use
+wait 40
+sneak
+wait 30
+/tp @s 60.5 -60 -10.5 0 0
+wait 5
+watch 74 -58.6 3.5 135 18
+frames z04_spider_destroyed_clear 70
+/damage @e[type=headinajar:spider_walker,limit=1,sort=nearest] 100 minecraft:generic
+wait 65
+watch off
+report done

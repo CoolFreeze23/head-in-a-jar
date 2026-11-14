@@ -1,0 +1,41 @@
+# The Colossus's Gantry build to its end and the hand-over to parked (bystander, 9 blocks); then Siege in first person
+# again after the eye fix (the stand-up out of Siege, every frame)
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 colossus
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 8.5 -56.5 7.5 135 14
+wait 190
+frames b01_build_end_to_parked 200
+wait 200
+/kill @e[type=headinajar:colossus]
+mecha colossus 0 -60 30 hydraulic_legs,drill,drill,arc_cannon,flamethrower
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+view 0
+look 0 8
+wait 10
+frames b02_siege_first_person_after_fix 200
+key drive
+wait 110
+key drive
+wait 80
+report build fp done

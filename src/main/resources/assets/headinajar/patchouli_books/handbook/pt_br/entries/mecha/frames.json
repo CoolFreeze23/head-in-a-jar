@@ -2,14 +2,21 @@
   "name": "Estruturas",
   "icon": "headinajar:hopper_frame",
   "category": "headinajar:mecha",
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Coloque uma estrutura no $(item)Pórtico de Montagem$(), encaixe módulos nos espaços certos e aperte Montar. O $(l)Saltador$() é leve, o $(l)Baluarte$() resistente, a $(l)Casa sobre Rodas$() é um carro, o $(l)Rastejador$() sobe paredes, a $(l)Pipa$() voa e o $(l)Colosso$() carrega armas nos ombros."
+      "text": "Um de cada, exceto:$(br)Saltador: torso 2, braços 2$(br)Baluarte: costas 2, torso 3, braços 2, sensor 2$(br)Quimera: torso 3, braços 2, 3 Portas Genéticas$(br)Casa sobre Rodas (um carro): sem pernas, costas 2, torso 2",
+      "title": "Formulário 12-M"
     },
     {
       "type": "patchouli:text",
-      "text": "A $(l)Quimera$() tem três Portas Genéticas e o $(l)Executivo$(), quatro. O peso contra a capacidade define a velocidade; calor acima do limite faz o mecha liberar vapor; bateria vazia é modo de emergência."
+      "text": "Rastejador: sobe paredes; sem pernas, torso 2, sensor 2$(br)Pipa: voa; sem costas, braços 2$(br)Colosso: costas 2, núcleo 2, torso 5, braços 4, sensor 2$(br)Executivo: idem, mais 4 Portas Genéticas$(br)A Casa não pula; é lenta fora da estrada."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:hopper_frame",
+      "text": "O Saltador, 60 de vida: com Pernas Hidráulicas e uma Pilha Galvânica Compacta, anda e se carrega. Colosso e Executivo não passam num portal do Nether."
     }
   ]
 }

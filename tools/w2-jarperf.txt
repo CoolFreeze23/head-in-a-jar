@@ -1,0 +1,61 @@
+# Frame cost of the jar's life support: ten jars in view (nine placed heads and a jar on a cow), the same view as the
+# build before it. Run alone.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+view 0
+/tp @s 0 -60 -4.5 0 10
+wait 40
+perf empty 300
+wait 305
+/summon headinajar:head_jar -4 -60 1.5 {Rotation:[180f,0f]}
+/tp @s -4 -60 0.3 0 0
+wait 2
+headvitals 40 20 30
+/summon headinajar:head_jar -3 -60 1.5 {Rotation:[180f,0f]}
+/tp @s -3 -60 0.3 0 0
+wait 2
+headvitals 47 29 38
+/summon headinajar:head_jar -2 -60 1.5 {Rotation:[180f,0f]}
+/tp @s -2 -60 0.3 0 0
+wait 2
+headvitals 54 38 46
+/summon headinajar:head_jar -1 -60 1.5 {Rotation:[180f,0f]}
+/tp @s -1 -60 0.3 0 0
+wait 2
+headvitals 61 47 54
+/summon headinajar:head_jar 0 -60 1.5 {Rotation:[180f,0f]}
+/tp @s 0 -60 0.3 0 0
+wait 2
+headvitals 68 56 62
+/summon headinajar:head_jar 1 -60 1.5 {Rotation:[180f,0f]}
+/tp @s 1 -60 0.3 0 0
+wait 2
+headvitals 75 65 70
+/summon headinajar:head_jar 2 -60 1.5 {Rotation:[180f,0f]}
+/tp @s 2 -60 0.3 0 0
+wait 2
+headvitals 82 74 78
+/summon headinajar:head_jar 3 -60 1.5 {Rotation:[180f,0f]}
+/tp @s 3 -60 0.3 0 0
+wait 2
+headvitals 89 83 86
+/summon headinajar:head_jar 4 -60 1.5 {Rotation:[180f,0f]}
+/tp @s 4 -60 0.3 0 0
+wait 2
+headvitals 96 92 94
+/summon cow 5.5 -60 1.5 {Rotation:[90f,0f],"neoforge:attachments":{"headinajar:host":{host:1b,freshness:90f}},attributes:[{id:"minecraft:generic.movement_speed",base:0d}]}
+bystander spawn 4 -60 0 0
+bystander form jar
+bystander tp 4.5 -60 1.5 90 0
+wait 10
+bystander useentity nearest cow
+wait 20
+/tp @s 0 -60 -4.5 0 10
+wait 60
+perf ten_jars 300
+wait 305

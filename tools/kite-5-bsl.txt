@@ -1,0 +1,53 @@
+# The Kite under Iris with BSL Classic (run with SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip): parked by day,
+# the jar in the lantern, a flight from behind at dusk
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha kite 0 -60 3 drill
+mecha hopper 4 -60 3 hydraulic_legs,drill
+mecha bulwark 8 -60 3 hydraulic_legs,drill
+wait 40
+/tp @s 3 -58.3 14 180 6
+wait 20
+shot bsl_day_row_parked
+/tp @s 0.5 -58.9 6.2 180 12
+wait 10
+shot bsl_day_jar_close
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+/time set 12500
+view 1
+look 0 10
+wait 10
+frames k17_bsl_dusk_flight_behind 260
+key jump down
+wait 50
+key forward down
+wait 50
+key jump up
+wait 120
+key forward up
+wait 20
+shot bsl_dusk_behind
+view 0
+look 0 15
+wait 10
+frames k18_first_person_flight_bsl_dusk 200
+key jump down
+wait 60
+key forward down
+wait 80
+key jump up
+wait 50
+key forward up
+view 1
+report bsl done

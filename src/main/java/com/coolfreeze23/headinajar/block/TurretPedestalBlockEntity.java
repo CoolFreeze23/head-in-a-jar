@@ -63,6 +63,10 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     public static final int RANGE = 16, FE_PER_TICK = 10, IDLE_FE_PER_TICK = 1;
     /** Has a target (shooting or reloading): runs at the firing rate. Not saved. */
     private boolean engaged;
+    /** A bow head with a target and no arrow to fire: it clicks, waits, and its lamp says so. Not saved. */
+    private boolean dry;
+    /** What the turret's shots carry, so their splash, slowness, fangs and blast spare whoever it would never aim at. */
+    public static final String SHOT_TAG = "headinajar_turret";
     private final Buffer energy = new Buffer(40_000, 2_000, 0, this::setChanged);
     private final ItemStackHandler items = new ItemStackHandler(1) {
         @Override
@@ -73,6 +77,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
+            dry = false;
             if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     };
@@ -135,8 +140,34 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     public LivingEntity findTarget() {
         Vec3 c = Vec3.atCenterOf(worldPosition).add(0, 0.8, 0);
         return level.getEntitiesOfClass(LivingEntity.class, new AABB(worldPosition).inflate(RANGE), this::mayTarget).stream()
-                .filter(e -> e.distanceToSqr(c) <= RANGE * RANGE)
+                .filter(e -> e.distanceToSqr(c) <= RANGE * RANGE && sees(e))
                 .min(Comparator.comparingDouble(e -> e.distanceToSqr(c))).orElse(null);
+    }
+
+    /**
+     * Line of sight as a mob has it: nothing solid between the head and the target's eyes. The look starts where it
+     * leaves the turret's own two cells (the head sits inside the upper one).
+     */
+    public boolean sees(LivingEntity e) {
+        Vec3 from = Vec3.atCenterOf(worldPosition).add(0, 0.9, 0), to = e.getEyePosition();
+        var own = new AABB(worldPosition).expandTowards(0, 1, 0);
+        if (own.contains(to)) return true;
+        Vec3 out = own.clip(to, from).orElse(from);
+        from = out.add(to.subtract(out).normalize().scale(0.01));
+        return level.clip(new net.minecraft.world.level.ClipContext(from, to, net.minecraft.world.level.ClipContext.Block.COLLIDER,
+                net.minecraft.world.level.ClipContext.Fluid.NONE, e)).getType() == net.minecraft.world.phys.HitResult.Type.MISS;
+    }
+
+    /** The turret whose shot this is, from the tag its shots carry, or null. */
+    public static TurretPedestalBlockEntity shooter(Level level, net.minecraft.world.entity.Entity shot) {
+        if (shot == null || !shot.getPersistentData().contains(SHOT_TAG)) return null;
+        BlockPos at = BlockPos.of(shot.getPersistentData().getLong(SHOT_TAG));
+        return level.isLoaded(at) && level.getBlockEntity(at) instanceof TurretPedestalBlockEntity t ? t : null;
+    }
+
+    private <T extends net.minecraft.world.entity.Entity> T tagged(T shot) {
+        shot.getPersistentData().putLong(SHOT_TAG, worldPosition.asLong());
+        return shot;
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
@@ -185,8 +216,16 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         Vec3 to = target.position().add(0, target.getBbHeight() * 0.6, 0);
         Vec3 dir = to.subtract(from);
         if (type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED) {
-            if (!takeArrow()) return;
-            Arrow arrow = new Arrow(level, from.x, from.y, from.z, new ItemStack(Items.ARROW), null);
+            if (!takeArrow()) {
+                // nothing to fire: one dry click, then a second's wait before it looks again (at the watching rate)
+                if (!dry) level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_DRY_CLICK.get(), SoundSource.BLOCKS, 1, 1.2f);
+                dry = true;
+                engaged = false;
+                cooldown = 20;
+                return;
+            }
+            dry = false;
+            Arrow arrow = tagged(new Arrow(level, from.x, from.y, from.z, new ItemStack(Items.ARROW), null));
             if (type == EntityType.STRAY) arrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
             if (type == EntityType.BOGGED) arrow.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
             arrow.pickup = net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED;
@@ -197,7 +236,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             cooldown = rate(20);
         } else if (type == EntityType.BLAZE) {
             Vec3 v = dir.normalize();
-            SmallFireball ball = new SmallFireball(level, from.x, from.y, from.z, v);
+            SmallFireball ball = tagged(new SmallFireball(level, from.x, from.y, from.z, v));
             level.addFreshEntity(ball);
             level.playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1, 1);
             kit.event(EV_SHOT, CHARGE);
@@ -209,7 +248,11 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 lockTicks = 0;
             }
             // the beam is drawn by every watching client from the synced lock: no particle packets
-            if (lockTicks == 0) showLock(lockedId);
+            if (lockTicks == 0) {
+                showLock(lockedId);
+                // the lock has its own sound: the target hears it coming
+                level.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.TURRET_LOCK.get(), SoundSource.BLOCKS, 1, 1);
+            }
             if (++lockTicks >= 40) {
                 target.hurt(level.damageSources().magic(), 6);
                 level.playSound(null, worldPosition, SoundEvents.GUARDIAN_ATTACK, SoundSource.BLOCKS, 1, 1);
@@ -222,23 +265,35 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         } else if (type == EntityType.CREEPER) {
             if (target.distanceToSqr(from) > 9) return;
             kit.event(EV_SHOT, PULSE);
-            level.explode(null, from.x, from.y, from.z, 3, Level.ExplosionInteraction.NONE);
+            // the blast hurts and throws only what the turret would aim at; its owner, pets and villagers stand fast
+            level.explode(null, null, new net.minecraft.world.level.ExplosionDamageCalculator() {
+                @Override
+                public boolean shouldDamageEntity(net.minecraft.world.level.Explosion explosion, net.minecraft.world.entity.Entity entity) {
+                    return entity instanceof LivingEntity living ? mayTarget(living) : super.shouldDamageEntity(explosion, entity);
+                }
+
+                @Override
+                public float getKnockbackMultiplier(net.minecraft.world.entity.Entity entity) {
+                    return entity instanceof LivingEntity living && !mayTarget(living) ? 0 : super.getKnockbackMultiplier(entity);
+                }
+            }, from.x, from.y, from.z, 3, false, Level.ExplosionInteraction.NONE, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER,
+                    SoundEvents.GENERIC_EXPLODE);
             items.setStackInSlot(0, ItemStack.EMPTY);
         } else if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) {
             if (target.distanceToSqr(from) > 2.5 * 2.5) return;
             target.hurt(level.damageSources().generic(), 4);
-            level.playSound(null, worldPosition, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundSource.BLOCKS, 0.6f, 1.4f);
+            level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_THUMP.get(), SoundSource.BLOCKS, 0.6f, 1.4f);
             kit.event(EV_SHOT, LUNGE);
             cooldown = rate(20);
         } else if (type == EntityType.SNOW_GOLEM) {
-            Snowball ball = new Snowball(level, from.x, from.y, from.z);
+            // the slowness comes with the snowball, on whatever it hits (TurretShots)
+            Snowball ball = tagged(new Snowball(level, from.x, from.y, from.z));
             ball.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 1.6f, 1f);
             level.addFreshEntity(ball);
-            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 1));
             kit.event(EV_SHOT, SHOT);
             cooldown = rate(10);
         } else if (type == EntityType.WITCH) {
-            ThrownPotion potion = new ThrownPotion(level, from.x, from.y, from.z);
+            ThrownPotion potion = tagged(new ThrownPotion(level, from.x, from.y, from.z));
             potion.setItem(PotionContents.createItemStack(Items.SPLASH_POTION, Potions.WEAKNESS));
             potion.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 0.9f, 2f);
             level.addFreshEntity(potion);
@@ -248,7 +303,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             Vec3 step = new Vec3(dir.x, 0, dir.z).normalize();
             for (int i = 1; i <= Math.min(16, (int) dir.horizontalDistance() + 1); i++) {
                 Vec3 p = from.add(step.scale(i));
-                level.addFreshEntity(new EvokerFangs(level, p.x, worldPosition.getY(), p.z, (float) Math.atan2(step.z, step.x), i, null));
+                level.addFreshEntity(tagged(new EvokerFangs(level, p.x, worldPosition.getY(), p.z, (float) Math.atan2(step.z, step.x), i, null)));
             }
             kit.event(EV_SHOT, NOD);
             cooldown = rate(60);
@@ -288,6 +343,21 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         if (level != null && level.isClientSide) com.coolfreeze23.headinajar.client.fx.BlockBeams.unloaded(this);
     }
 
+    private static boolean bow(EntityType<?> type) {
+        return type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED;
+    }
+
+    /** Whether a container under or beside the pedestal holds an arrow (nothing is taken). */
+    private boolean arrowsInReach() {
+        for (Direction d : Direction.values()) {
+            if (d == Direction.UP) continue;
+            var handler = level.getCapability(Capabilities.ItemHandler.BLOCK, worldPosition.relative(d), d.getOpposite());
+            if (handler == null) continue;
+            for (int i = 0; i < handler.getSlots(); i++) if (handler.getStackInSlot(i).is(Items.ARROW)) return true;
+        }
+        return false;
+    }
+
     /** Skeleton turrets take arrows from a container under (or beside) the pedestal. */
     private boolean takeArrow() {
         for (Direction d : Direction.values()) {
@@ -323,7 +393,13 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             }
             items.setStackInSlot(0, held.split(1));
             if (owner == null) setOwner(player.getUUID());
-            level.playSound(null, worldPosition, SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.BLOCKS, 1, 1.2f);
+            level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_FIT.get(), SoundSource.BLOCKS, 1, 1.2f);
+            // what the head will need, or use up, said as it goes in
+            if (bow(type) && !arrowsInReach()) {
+                com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.no_arrows", Component.translatable("block.minecraft.chest"));
+            } else if (type == EntityType.CREEPER) {
+                com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.creeper_once");
+            }
         } else if (held.isEmpty()) {
             com.coolfreeze23.headinajar.form.FormActions.give(player, items.extractItem(0, 1, false));
         } else {
@@ -339,6 +415,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         com.coolfreeze23.headinajar.machine.MachineLamp lamp;
         if (t.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
         else if (!t.powered) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.LOW;
+        else if (t.dry) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
         else lamp = t.engaged ? com.coolfreeze23.headinajar.machine.MachineLamp.WORK : com.coolfreeze23.headinajar.machine.MachineLamp.READY;
         t.kit.tick(lamp, t.engaged, t.engaged, 0);
     }
@@ -407,6 +484,11 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         }
         yaw = yaw + net.minecraft.util.Mth.wrapDegrees(wantYaw - yaw) * (target != null ? 0.3f : 0.5f);
         pitch += (wantPitch - pitch) * 0.2f;
+        // the yaw servo steps while it chases a target: a step on a tick it turns more than a degree, at most every fourth
+        if (target != null && powered && Math.abs(net.minecraft.util.Mth.wrapDegrees(yaw - yawO)) > 1 && level.getGameTime() % 4 == 0) {
+            level.playLocalSound(c.x, c.y + 0.5, c.z, com.coolfreeze23.headinajar.machine.MachineSounds.TURRET_SERVO.get(), net.minecraft.sounds.SoundSource.BLOCKS,
+                    1, 0.94f + level.random.nextFloat() * 0.12f, false);
+        }
     }
 
     @Override

@@ -1,0 +1,35 @@
+{
+  "parent": "headinajar:steel",
+  "criteria": {
+    "fed": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "headinajar:galvanic_pile"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:galvanic_pile"
+    },
+    "title": {
+      "translate": "advancements.headinajar.powered.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.powered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

@@ -36,12 +36,12 @@ public final class FxManager {
             case Fx.TK_FIZZLE -> TetherFx.fizzle(fx);
             case Fx.SWAP -> SwapFx.handle(fx);
             case Fx.LASER -> laser(fx);
+            case Fx.ARM_ARC -> ArmBeams.arc(fx);
             case Fx.TURRET_SHOT -> {
                 FxParticle r = FxParticle.make(FxParticle.Look.RING, fx.a(), Vec3.ZERO);
                 if (r != null) r.color(FxColors.WARN).size(0.45f).grow(2f).life(7).add();
             }
-            default -> {
-            }
+            default -> com.coolfreeze23.headinajar.client.body.BodyFx.handle(fx);
         }
     }
 

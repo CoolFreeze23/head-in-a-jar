@@ -408,7 +408,7 @@ public class ChargingDockBlock extends BaseEntityBlock implements com.coolfreeze
 
         /** The sound of charging starting. */
         void chime() {
-            if (level != null) level.playSound(null, worldPosition, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 0.5f, 1.8f);
+            if (level != null) level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.DOCK_CHARGING.get(), SoundSource.BLOCKS, 0.5f, 1.8f);
         }
 
         @Override

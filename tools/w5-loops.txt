@@ -1,0 +1,40 @@
+# The six-loop limit in the client: a room's machine loops (ten kinds in a ring round the player, ten identical
+# Centrifuges side by side) asked of the real loop player; the loop count says at most six are heard and the ten
+# Centrifuges are one loop; the subtitle log lists the loops started. Then the Shock Lid zapping a zombie that hits the
+# jar. The client is muted: the loop count and the subtitles stand for sounds.
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 30
+@clean
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 99999 4 true
+wait 40
+subtitles clear
+loopprobe 10 200
+wait 40
+loops
+wait 40
+loops
+report --- ten kinds and ten Centrifuges asked
+subtitles
+wait 140
+subtitles clear
+loopprobe 4 100
+wait 40
+loops
+report --- four kinds and ten Centrifuges asked
+subtitles
+wait 100
+loops
+report --- nothing asked (all faded)
+subtitles clear
+jar
+fit shock_lid
+charge 200000
+/summon zombie ~1 ~ ~ {PersistenceRequired:1b}
+wait 80
+report --- shock lid (the zombie hits the jar)
+subtitles
+/kill @e[type=minecraft:zombie]

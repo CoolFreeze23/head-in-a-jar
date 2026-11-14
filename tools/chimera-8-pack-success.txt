@@ -1,0 +1,105 @@
+# The owner's settings (SMOKE_PROFILE=pack, his mods), his Shoulder Surfing view (the third press of his perspective
+# key): the fist, the Graft and the Lunk's toss aimed only by moving the mouse (the camera), at a horse three blocks
+# ahead. The pitch is stepped down a few degrees at a time with a press after each step, so the press that lands is the
+# one whose crosshair is on the horse; the server's view of the pilot's look is logged before each press.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha chimera 0 -60 0 hydraulic_legs,hydraulic_fist,hydraulic_fist
+/tp @s 5.5 -60 -3.5 0 0
+jar
+/give @s headinajar:bio_gel 4
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:chimera
+key use
+wait 70
+riding chimera
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:horse ~ ~ ~3.2 {NoAI:1b,Tame:1b,Rotation:[90f,0f]}
+wait 5
+turn 0 -200 5
+wait 2
+turn 0 95 8
+wait 3
+shot a0_shoulder_view_horse_ahead
+frames a1_fist_then_graft_shoulder 260
+cmdout data get entity @s Rotation
+key attack
+wait 6
+turn 0 4 2
+cmdout data get entity @s Rotation
+key attack
+wait 6
+turn 0 4 2
+cmdout data get entity @s Rotation
+key attack
+wait 6
+turn 0 4 2
+cmdout data get entity @s Rotation
+key attack
+wait 6
+turn 0 4 2
+cmdout data get entity @s Rotation
+key attack
+wait 6
+turn 0 4 2
+cmdout data get entity @s Rotation
+key attack
+wait 6
+key drive
+wait 60
+inspect near minecraft:horse 6
+shot a2_grafted_hud
+/kill @e[type=minecraft:horse]
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 40
+/summon headinajar:lunk 8 -60 8 {Rotation:[0f,0f]}
+wait 5
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run tp @s ~ ~ ~-2.4 0 -20
+wait 5
+lookat headinajar:lunk
+charge 100000
+key use
+wait 40
+riding lunk
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:pig ~ ~ ~2.4
+wait 3
+turn 0 -200 5
+wait 2
+turn 0 100 8
+wait 3
+shot b0_lunk_shoulder_view_pig_ahead
+frames b1_lunk_toss_shoulder 200
+cmdout data get entity @s Rotation
+key ability
+wait 8
+turn 0 5 2
+cmdout data get entity @s Rotation
+key ability
+wait 8
+turn 0 5 2
+cmdout data get entity @s Rotation
+key ability
+wait 8
+turn 0 5 2
+cmdout data get entity @s Rotation
+key ability
+wait 50
+inspect near minecraft:pig 8
+report done

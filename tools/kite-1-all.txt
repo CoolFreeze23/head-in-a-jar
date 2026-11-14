@@ -1,0 +1,288 @@
+# Kite, everything in the default profile, in watching order: the Gantry's build and a bystander's boarding, stills
+# beside the Hopper and the Bulwark (day, night, torchlight), the pilot's own boot, the walk behind and beside, flight
+# (takeoff, wingbeat, glide, flare, landing) behind, beside and from a bystander's place, the Talon Lift with a sheep,
+# refusals, the drill, vent, the flat battery on the ground and in the air, the eject in the air into the Golden
+# Parachute, the collapse, first person
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- 01 the build, from a bystander's place about 7 blocks off at 45 degrees ----------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 kite
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 5.5 -57.8 5.5 135 16
+wait 2
+frames k01_build_and_boarding_bystander_7 240
+wait 140
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:kite
+wait 95
+inspect near headinajar:kite 8
+# --- stills: beside a Hopper, a Bulwark and an iron golem, the bystander's jar in the lantern -----------------------
+mecha hopper 4 -60 0 hydraulic_legs,jump_jets,drill
+mecha bulwark 8 -60 0 hydraulic_legs,drill
+/summon minecraft:iron_golem -3 -60 0.5 {NoAI:1b,Rotation:[0f,0f]}
+bystander look 0 0
+wait 40
+/tp @s 3 -58.3 12 180 6
+wait 10
+shot st_day_row
+/tp @s 0.5 -58.9 3.2 180 12
+wait 5
+shot st_day_jar_close
+/tp @s 2.8 -58.6 2.8 135 14
+wait 5
+shot st_day_jar_3q
+/tp @s 0.5 -58 -6 0 8
+wait 5
+shot st_day_back_6
+/tp @s 0.5 -55.5 -20 0 7
+wait 5
+shot st_day_back_20
+/time set 18000
+/tp @s 3 -58.3 12 180 6
+wait 10
+shot st_night_row
+/setblock 1 -60 2 minecraft:torch
+/setblock -1 -60 2 minecraft:torch
+/setblock 4 -60 3 minecraft:torch
+wait 10
+shot st_torch_row
+/tp @s 0.5 -58.9 3.2 180 12
+wait 5
+shot st_torch_jar_close
+/time set 6000
+bystander remove
+wait 5
+# --- 02 the pilot's own Kite, away from the row: board and boot from behind ----------------------------------------
+mecha kite 0 -60 40 drill
+/tp @s 5.5 -60 37.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 37.4 0 -25
+wait 5
+view 1
+frames k02_board_and_boot_behind 80
+key use
+wait 80
+riding kite
+look 0 10
+# --- 03 the walk, behind then beside at hull height ----------------------------------------------------------------
+frames k03a_walk_behind 110
+key forward hold 100
+wait 15
+watch follow -6.5 0.4 0 -90 3
+frames k03b_walk_side 110
+key forward hold 100
+wait 15
+watch off
+view 1
+look 0 10
+# --- 04 flight from behind: takeoff, wingbeat climbing, level, glide down, flare and landing -------------------------
+chute
+frames k04_flight_behind 330
+key jump down
+wait 12
+chute
+wait 50
+chute
+key forward down
+wait 40
+chute
+key jump up
+wait 8
+chute
+wait 30
+chute
+key jump down
+wait 30
+key jump up
+wait 40
+chute
+key forward up
+wait 100
+chute
+inspect near headinajar:kite 4
+# --- 05 flight from the side, the outside camera riding along ------------------------------------------------------
+watch follow -8 1 0 -90 6
+frames k05_flight_side 260
+key jump down
+wait 60
+key forward down
+wait 30
+key jump up
+wait 25
+key jump down
+wait 25
+key jump up
+wait 40
+key forward up
+wait 70
+watch off
+view 1
+# --- 06 takeoff, flare and landing from a bystander's place 8 blocks off --------------------------------------------
+look 0 0
+wait 20
+watch at 6 1.2 9 145 4
+frames k06_takeoff_flare_land_bystander_8 260
+key jump down
+wait 50
+key forward down
+wait 20
+key jump up
+wait 120
+key forward up
+wait 60
+watch off
+view 1
+# --- 07 the Talon Lift with a sheep, from behind ---------------------------------------------------------------------
+look 0 10
+wait 5
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+wait 3
+frames k07_talon_lift_sheep_behind 260
+key jump down
+wait 40
+key drive
+wait 30
+chute
+key forward down
+wait 50
+key jump up
+wait 10
+chute
+key drive
+wait 40
+key forward up
+wait 90
+inspect near minecraft:sheep 30
+# --- 08 the Talon Lift seen from a bystander's place about 6 blocks to the side ---------------------------------------
+/kill @e[type=minecraft:sheep]
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+watch follow -6 0.8 1 -100 6
+frames k08_talon_lift_sheep_side_6 200
+key jump down
+wait 40
+key drive
+wait 50
+key jump up
+wait 10
+key drive
+wait 100
+watch off
+view 1
+# --- 09 refusals: on the ground, then in the air over nothing, then a cow (too heavy) ---------------------------------
+/kill @e[type=minecraft:sheep]
+look 0 10
+watch follow 4 1 5 141 12
+frames k09_refusals_ground_nothing_cow 250
+key drive
+wait 40
+key jump down
+wait 30
+key drive
+wait 40
+key jump up
+wait 50
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~0.5 {Rotation:[0f,0f]}
+key jump down
+wait 40
+key drive
+wait 40
+key jump up
+wait 20
+watch off
+/kill @e[type=minecraft:cow]
+view 1
+# --- 10 the drill against a wall ----------------------------------------------------------------------------------------
+wait 40
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run fill ~-2 ~ ~2 ~2 ~3 ~2 minecraft:stone
+look 0 20
+frames k10_arm_drill_behind 100
+key attack hold 70
+wait 25
+look 0 10
+# --- 11 vent, from the side ------------------------------------------------------------------------------------------
+watch follow -7 0.6 0 -90 4
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Heat:600f}
+frames k11_vent_side 115
+wait 115
+# --- 12 the flat battery: the limp on the ground, then a stall in the air ---------------------------------------------
+look 180 10
+wait 15
+watch follow 7 0.6 0 90 4
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Battery:0}
+frames k12a_limp_flat_battery_side 100
+key forward hold 90
+wait 12
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Battery:250000}
+watch follow -9 2 0 -90 8
+frames k12b_stall_in_the_air_side 230
+key jump hold 90
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Battery:0}
+chute
+wait 130
+chute
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Battery:250000}
+watch off
+view 1
+look 0 10
+# --- 13 first person: takeoff, flight, the Talon Lift -----------------------------------------------------------------
+view 0
+look 0 30
+wait 10
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+frames k13_first_person_takeoff_talon 200
+key jump down
+wait 40
+key drive
+wait 40
+key forward down
+wait 40
+key jump up
+key drive
+wait 80
+key forward up
+/kill @e[type=minecraft:sheep]
+view 1
+look 0 10
+wait 20
+# --- 14 eject in the air into the Golden Parachute, from a fixed place 10 blocks off, then the collapse ---------------
+key jump hold 130
+chute
+inspect near headinajar:kite 4
+watch at 9 2 -4 70 -8
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+frames k14_eject_in_the_air_parachute_bystander 400
+key jump down
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+key jump up
+wait 30
+chute
+inspect me
+wait 60
+chute
+wait 120
+chute
+inspect me
+wait 120
+chute
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 100 minecraft:generic
+wait 80
+watch off
+inspect near headinajar:kite 30
+report all done

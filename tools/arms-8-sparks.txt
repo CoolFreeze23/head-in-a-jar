@@ -1,0 +1,39 @@
+# A damaged frame's sparks close up, and the lance's sparks where it lands, default profile.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+/fill -1 -60 6 1 -58 6 minecraft:stone
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 75
+view 0
+look 0 8
+wait 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f,Health:25f}
+watch at -3 2 3 -135 12
+wait 4
+report sparks close up
+observe 80
+frames sparks_close2 80
+turn 1 0 2
+wait 80
+observe 10
+report lance on stone
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f,Health:60f}
+frames lance_stone 50
+wait 4
+key attack down
+wait 24
+key attack up
+wait 20
+report done

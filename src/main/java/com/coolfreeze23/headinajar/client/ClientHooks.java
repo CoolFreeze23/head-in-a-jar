@@ -32,6 +32,7 @@ public final class ClientHooks {
             return;
         }
         handshakeEntity = entityId;
+        com.coolfreeze23.headinajar.client.body.HandshakeNotes.start();
         round = 0;
         tick = 0;
         hits = 0;
@@ -56,6 +57,8 @@ public final class ClientHooks {
         boolean hit = Math.abs(ring(0) - 20f) <= 6f;
         if (hit) hits++;
         flash = hit ? 6 : -6;
+        // each hit plays the next note of the company jingle (C5, E5, G5); a miss buzzes and the tune starts again
+        com.coolfreeze23.headinajar.client.body.HandshakeNotes.press(hit);
     }
 
     public static void tick() {
@@ -79,6 +82,7 @@ public final class ClientHooks {
             tick = 0;
             pressedThisRound = false;
             if (++round >= 3) {
+                com.coolfreeze23.headinajar.client.body.HandshakeNotes.done(hits);
                 PacketDistributor.sendToServer(new Network.Handshake(handshakeEntity, hits));
                 handshakeEntity = -1;
             }
@@ -88,13 +92,29 @@ public final class ClientHooks {
     public static void render(GuiGraphics g, float partial) {
         if (!handshakeActive() || !seenRiding) return;
         Minecraft mc = Minecraft.getInstance();
-        int cx = g.guiWidth() / 2, cy = g.guiHeight() / 2 + 30;
-        circle(g, cx, cy, 20, flash > 0 ? 0xFF55FF77 : flash < 0 ? 0xFFFF5555 : 0xFFFFFFFF);
-        circle(g, cx, cy, ring(partial), 0xFF59E0F4);
-        g.drawCenteredString(mc.font, Component.translatable("hud.headinajar.handshake", round + 1, Component.keybind(ClientSetup.ABILITY.getName())),
-                cx, cy + 34, 0xFFFFFF);
-        // above the ring: below it, at a large GUI scale, the line would run into the hearts
-        g.drawCenteredString(mc.font, Component.translatable("hud.headinajar.handshake_legs"), cx, cy - 72, 0xDDDDDD);
+        Component caption = Component.translatable("hud.headinajar.handshake", round + 1, Component.keybind(ClientSetup.ABILITY.getName()));
+        Component legs = Component.translatable("hud.headinajar.handshake_legs");
+        int w = g.guiWidth(), h = g.guiHeight();
+        // one block in the upper part of the screen: the ring, then the caption, then the legs line. It ends well above
+        // the middle, where the jar sits in third person and the crosshair in first; the action bar keeps its own place.
+        var state = mc.player.getData(com.coolfreeze23.headinajar.registry.ModRegistry.JAR_STATE);
+        boolean linkBar = state.form() == com.coolfreeze23.headinajar.form.Form.LINKED;
+        int top = linkBar ? 32 : 6, bottom = h / 2 - h / 12 - 2;
+        int text = 24; // the two lines under the ring
+        int r = Math.max(8, Math.min(60, (bottom - top - text - 4) / 2));
+        float scale = r / 60f;
+        int textW = Math.max(mc.font.width(caption), mc.font.width(legs));
+        // centred; moved right of the side column (the host's panel) when the block would reach into it
+        int half = Math.max(r, textW / 2);
+        int cx = w / 2;
+        if (cx - half < HudStack.right() + 6 && top < HudStack.bottom()) cx = HudStack.right() + 6 + half;
+        cx = Math.min(cx, w - half - 2);
+        int cy = top + r;
+        circle(g, cx, cy, 20 * scale, flash > 0 ? 0xFF55FF77 : flash < 0 ? 0xFFFF5555 : 0xFFFFFFFF);
+        circle(g, cx, cy, ring(partial) * scale, 0xFF59E0F4);
+        int ty = cy + r + 4;
+        g.drawCenteredString(mc.font, caption, cx, ty, 0xFFFFFF);
+        g.drawCenteredString(mc.font, legs, cx, ty + 12, 0xDDDDDD);
     }
 
     private static void circle(GuiGraphics g, int cx, int cy, float r, int color) {

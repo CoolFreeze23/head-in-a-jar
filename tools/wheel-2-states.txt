@@ -1,0 +1,66 @@
+# Wheelhouse, the rest in the default profile: the drill on the tool boom against a wall, vent, the flat battery's
+# limp, first person driving and Rush Hour, the Golden Parachute then the collapse, the build at the Gantry seen by a
+# bystander, and stills beside the Hopper and the Bulwark by day, night and torchlight.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/fill -60 -61 -60 60 -61 60 minecraft:smooth_stone
+mecha wheelhouse 0 -60 0 drill
+/tp @s 6.5 -60 -2.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -2.6 0 -25
+wait 5
+view 1
+key use
+wait 80
+look 0 15
+# --- the drill, from the front three-quarter ----------------------------------------------------------------------
+execute at @e[type=headinajar:wheelhouse,limit=1,sort=nearest] run fill ~-3 ~ ~3 ~1 ~2 ~3 minecraft:stone
+watch at -4 1.2 4.5 -140 14
+frames s01_arm_drill_front_3q 90
+key attack hold 70
+wait 25
+watch off
+view 1
+execute at @e[type=headinajar:wheelhouse,limit=1,sort=nearest] run fill ~-3 ~ ~3 ~1 ~2 ~3 minecraft:air
+# --- vent, from the side -------------------------------------------------------------------------------------------
+watch follow -6 0.4 0 -90 5
+/data merge entity @e[type=headinajar:wheelhouse,limit=1,sort=nearest] {Heat:700f}
+frames s02_vent_side 110
+wait 110
+# --- the flat battery's limp, from the side ---------------------------------------------------------------------------
+/data merge entity @e[type=headinajar:wheelhouse,limit=1,sort=nearest] {Battery:0}
+frames s03_limp_flat_battery_side 90
+key forward hold 80
+wait 12
+/data merge entity @e[type=headinajar:wheelhouse,limit=1,sort=nearest] {Battery:300000}
+watch off
+# --- first person: drive, Rush Hour ------------------------------------------------------------------------------
+view 0
+look 180 15
+wait 10
+frames s04_first_person_drive_rush 130
+key forward hold 30
+key drive
+key forward hold 90
+wait 10
+view 1
+# --- the Golden Parachute, then the empty machine destroyed, from 9 blocks to the side --------------------------------
+look 0 10
+wait 10
+watch at -9 0.8 1.5 -99 6
+/data merge entity @e[type=headinajar:wheelhouse,limit=1,sort=nearest] {Health:12f}
+frames s05_golden_parachute_then_collapse 260
+/damage @e[type=headinajar:wheelhouse,limit=1,sort=nearest] 4 minecraft:generic
+wait 120
+inspect me
+/damage @e[type=headinajar:wheelhouse,limit=1,sort=nearest] 100 minecraft:generic
+wait 140
+watch off
+inspect near headinajar:wheelhouse 30
+report done

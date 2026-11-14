@@ -1,0 +1,40 @@
+# Bulwark under Iris with BSL (run with SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip): walk, grab, throw from
+# behind, and stills by day and torchlight
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha bulwark 0 -60 3 hydraulic_legs,drill
+mecha hopper 4 -60 3 hydraulic_legs,jump_jets,drill
+/tp @s 2 -58.3 13 180 6
+wait 60
+shot bsl_day_row_parked
+/tp @s 0.5 -60 -1 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+view 1
+look 0 10
+frames v13_bsl_walk_behind 110
+key forward hold 100
+wait 12
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.7
+wait 3
+frames v13b_bsl_grab_carry_throw_behind 200
+key drive
+wait 30
+key forward hold 50
+look 0 -12
+key drive
+wait 90
+/time set 13500
+look 180 10
+wait 20
+shot bsl_dusk_behind
+report bsl done

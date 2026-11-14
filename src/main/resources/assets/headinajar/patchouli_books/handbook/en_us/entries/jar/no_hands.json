@@ -1,0 +1,22 @@
+{
+  "name": "You Have No Hands",
+  "icon": "headinajar:manipulator_arm",
+  "category": "headinajar:jar",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "FROM: DOLORES$(br)TO: All Staff$(br)RE: Hands$(br2)Without a Manipulator Arm a jar cannot mine, place, fight, use items or pick things up. Doors and chests do not answer.",
+      "title": "MEMO"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A bare jar can still:$(li)use every Noggin & Sons machine$(li)step back into its own body$(li)board a boat or minecart$(li)ride a host$(li)use its keys and modules$(li)pick up with a Magnet"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:manipulator_arm",
+      "text": "Hands: half speed, half damage, 200 FE a block or hit."
+    }
+  ]
+}

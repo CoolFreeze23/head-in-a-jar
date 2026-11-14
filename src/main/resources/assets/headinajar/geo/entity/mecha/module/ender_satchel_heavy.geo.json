@@ -1,0 +1,193 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_ender_satchel_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8,
+                -6,
+                -2
+              ],
+              "size": [
+                16,
+                12,
+                2
+              ],
+              "uv": [
+                76,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -10,
+                -10,
+                -12
+              ],
+              "size": [
+                20,
+                18,
+                10
+              ],
+              "uv": [
+                0,
+                44
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                4,
+                -11
+              ],
+              "size": [
+                16,
+                2,
+                8
+              ],
+              "uv": [
+                0,
+                34
+              ]
+            },
+            {
+              "origin": [
+                7,
+                -12,
+                -13
+              ],
+              "size": [
+                2,
+                22,
+                12
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -9,
+                -12,
+                -13
+              ],
+              "size": [
+                2,
+                22,
+                12
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "flap",
+          "parent": "mount",
+          "pivot": [
+            0,
+            8,
+            -13
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -11,
+                -2,
+                -15
+              ],
+              "size": [
+                22,
+                10,
+                2
+              ],
+              "uv": [
+                60,
+                44
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -3,
+                -17
+              ],
+              "size": [
+                8,
+                8,
+                2
+              ],
+              "uv": [
+                56,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -2,
+                -19
+              ],
+              "size": [
+                6,
+                6,
+                2
+              ],
+              "uv": [
+                48,
+                34
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                0,
+                -21
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                64,
+                34
+              ]
+            }
+          ],
+          "locators": {
+            "fx_eye": [
+              0,
+              1,
+              -19
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

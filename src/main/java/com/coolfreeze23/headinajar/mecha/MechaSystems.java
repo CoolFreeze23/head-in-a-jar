@@ -140,7 +140,8 @@ public final class MechaSystems {
             }
         }
         if (drain > 0 || gain > 0) m.setBattery(m.battery() + gain - drain);
-        if (heat > 0) m.setHeat(m.heat() + heat);
+        // a parked machine makes no heat (its cores still turn their fuel into charge): it never vents parked
+        if (heat > 0 && pilot != null) m.setHeat(m.heat() + heat);
     }
 
     private static int refuelBio(MechaEntity m) {
@@ -161,7 +162,15 @@ public final class MechaSystems {
         return 0;
     }
 
-    private static boolean takeFromCargo(MechaEntity m, Player pilot, net.minecraft.world.item.Item item) {
+    /** Whether the hold, or the pilot's pockets, hold one of an item. */
+    static boolean hasInCargo(MechaEntity m, Player pilot, net.minecraft.world.item.Item item) {
+        for (var container : pilot == null ? new net.minecraft.world.Container[]{m.cargo()} : new net.minecraft.world.Container[]{m.cargo(), pilot.getInventory()}) {
+            for (int i = 0; i < container.getContainerSize(); i++) if (container.getItem(i).is(item)) return true;
+        }
+        return false;
+    }
+
+    static boolean takeFromCargo(MechaEntity m, Player pilot, net.minecraft.world.item.Item item) {
         for (var container : pilot == null ? new net.minecraft.world.Container[]{m.cargo()} : new net.minecraft.world.Container[]{m.cargo(), pilot.getInventory()}) {
             for (int i = 0; i < container.getContainerSize(); i++) {
                 if (container.getItem(i).is(item)) {
@@ -179,18 +188,20 @@ public final class MechaSystems {
                 e -> e instanceof Enemy && e.isAlive());
         targets.sort(Comparator.comparingDouble(e -> e.distanceToSqr(m)));
         Vec3 from = m.position().add(0, m.getBbHeight() * 0.8, 0);
+        // one memo per jump: every client draws the arc from the coil's own terminal (the first) or the last creature
+        int slot = m.indexOf(MechaModule.TESLA_COIL);
+        net.minecraft.world.entity.Entity last = m;
         for (int i = 0; i < Math.min(3, targets.size()); i++) {
             LivingEntity t = targets.get(i);
             t.hurt(MechaArms.by(m, pilot, net.minecraft.world.damagesource.DamageTypes.LIGHTNING_BOLT), damage);
-            Vec3 to = t.getEyePosition();
-            for (int k = 0; k <= 8; k++) {
-                Vec3 p = from.lerp(to, k / 8.0);
-                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, p.x, p.y, p.z, 1, 0.1, 0.1, 0.1, 0);
-            }
+            Vec3 to = t.getBoundingBox().getCenter();
+            com.coolfreeze23.headinajar.fx.Fx.send(level, com.coolfreeze23.headinajar.fx.Fx.of(com.coolfreeze23.headinajar.fx.Fx.ARM_ARC, from, to,
+                    last.getId(), t.getId(), slot + 64 * i));
             from = to;
+            last = t;
         }
         if (!targets.isEmpty()) {
-            m.playSound(SoundEvents.BEE_LOOP_AGGRESSIVE, 0.6f, 2f);
+            m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.TESLA_COIL.get(), 1, 0.94f + m.getRandom().nextFloat() * 0.12f);
             m.setHeat(m.heat() + 10);
         }
     }
@@ -201,7 +212,8 @@ public final class MechaSystems {
         for (Entity e : m.getPassengers()) {
             if (e instanceof Player p && p.getHealth() < p.getMaxHealth() * threshold && takeFromCargo(m, pilot, ModRegistry.BIO_GEL.get())) {
                 p.heal(4);
-                m.playSound(SoundEvents.BREWING_STAND_BREW, 0.6f, 1.5f);
+                m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.MEDICAL.get(), 0.6f, 1.5f);
+                m.act(MechaModule.MEDICAL_INJECTOR);
             }
         }
         if (m.frame() == MechaFrame.CHIMERA && m.getHealth() < m.getMaxHealth()) {
@@ -322,7 +334,7 @@ public final class MechaSystems {
                 cloud.setOwner(m);
                 level.addFreshEntity(cloud);
                 SMOKE.put(cloud, true);
-                m.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 1, 0.6f);
+                m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.MORTAR.get(), 1, 0.6f);
             }
             case MISSILE_POD -> {
                 int warhead = m.sliderAt(m.indexOf(MechaModule.MISSILE_POD));
@@ -341,7 +353,7 @@ public final class MechaSystems {
                     fired++;
                 }
                 if (fired == 0) return refuse(m, pilot, mod, 4000);
-                m.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 1.4f, 0.8f);
+                m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.MISSILES.get(), 1.4f, 0.8f);
             }
             case ORE_SCANNER -> {
                 int radius = 8 + 16 * m.sliderAt(m.indexOf(MechaModule.ORE_SCANNER)) / 100;
@@ -351,13 +363,25 @@ public final class MechaSystems {
                 m.setHeat(m.heat() + 6);
                 m.getPersistentData().putInt(SCAN, 100);
                 showOres(m, pilot);
-                m.playSound(SoundEvents.BEACON_ACTIVATE, 0.8f, 1.8f);
+                m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.ORE_SCAN.get(), 0.8f, 1.8f);
             }
             default -> {
                 return false;
             }
         }
+        m.act(mod);
         return true;
+    }
+
+    /**
+     * The Bio-Scanner's reading of a creature the pilot looks at (its name, health and blood), or null when the machine
+     * has none fitted or no charge. Drawn on the pilot's HUD.
+     */
+    public static Component bioScan(MechaEntity m, LivingEntity seen) {
+        if (!m.has(MechaModule.BIO_SCANNER) || m.battery() <= 0 || !seen.isAlive()) return null;
+        var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(seen);
+        return Component.translatable("hud.headinajar.bio_scan", seen.getDisplayName(), (int) Math.ceil(seen.getHealth()), (int) Math.ceil(seen.getMaxHealth()),
+                Component.translatable("blood.headinajar." + blood.name().toLowerCase(java.util.Locale.ROOT)));
     }
 
     /** Moving on hover skirts and lava treads (both sides, while ridden). */

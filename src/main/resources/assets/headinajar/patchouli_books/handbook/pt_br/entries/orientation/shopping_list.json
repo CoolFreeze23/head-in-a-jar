@@ -1,0 +1,23 @@
+{
+  "name": "Lista de Compras",
+  "icon": "headinajar:surgical_steel_ingot",
+  "category": "headinajar:orientation",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Uma operação, com a bolsa: 29 de ferro, 24 de farinha de osso, 24 de carvão, 14 de cobre, 21 de redstone, 19 de vidro, 4 ametistas, 8 de couro, 2 de linha, 3 de lã branca, 1 bola de slime, 2 de alga, 2 de açúcar, 11 de carne podre, madeira e pedra.",
+      "title": "Formulário 1-A"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Longe de casa:$(li)ametista: um geodo$(li)bola de slime: um pântano$(li)alga: o mar$(br2)Não precisa ir ao Nether. Dez das carnes podres são combustível para os 40 kFE da cadeira."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "headinajar:surgical_steel_ingot_from_smelting",
+      "text": "24 lingotes. Mistura: ferro, farinha de osso e carvão.$(br2)$(o)DOLORES observa: recibos em três vias.$()",
+      "title": "Aço Cirúrgico"
+    }
+  ]
+}

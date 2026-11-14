@@ -328,7 +328,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
         if (printer.energy.getEnergyStored() < perTick) return;
         printer.energy.set(printer.energy.getEnergyStored() - perTick);
         printer.progress++;
-        if (printer.progress % 40 == 0) level.playSound(null, pos, SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 0.6f, 0.6f);
+        if (printer.progress % 40 == 0) level.playSound(null, pos, com.coolfreeze23.headinajar.fx.HouseSounds.PRINTER_SQUELCH.get(), SoundSource.BLOCKS, 0.6f, 0.6f);
         if (printer.progress >= TICKS) printer.deliver((ServerLevel) level);
     }
 
@@ -368,7 +368,7 @@ public class BodyPrinterBlockEntity extends BlockEntity implements MenuProvider,
             if (state.form().isJarred()) state.setBody(body.getUUID());
             owner.displayClientMessage(Component.translatable("message.headinajar.printed"), false);
         }
-        level.playSound(null, worldPosition, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.8f, 0.5f);
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.JINGLE.get(), SoundSource.BLOCKS, 1, 1);
         level.sendParticles(ParticleTypes.POOF, at.x, at.y + 1, at.z, 20, 0.3, 0.6, 0.3, 0.02);
         progress = -1;
         client = null;

@@ -26,19 +26,19 @@ REFUSALS = {
     'swap.no_body': ('No body on file. A %s can print you one.', 'Nenhum corpo registrado. Uma %s imprime um para você.'),
     'swap.corpse': ('Your body is deceased. Use a %s on it to get back in.', 'Seu corpo faleceu. Use um %s nele para voltar.'),
     'swap.no_collar': ('No %s on this jar. Use a %s on your body instead.', 'Este pote está sem %s. Use um %s no seu corpo.'),
-    'swap.weak_signal': ('Signal at %s%%. Get closer to your body or a %s.', 'Sinal em %s%%. Chegue mais perto do corpo ou de um %s.'),
+    'swap.weak_signal': ('Signal at %s%%. Get closer to your body or a %s.', 'Sinal em %s%%. Aproxime-se do corpo ou de um %s.'),
     'swap.unlink_disabled': ("This server doesn't allow swapping out. Walk back to your head.",
                              'Este servidor não deixa trocar. Volte a pé até sua cabeça.'),
     'swap.no_head': ("Your head isn't on file. An operator can sort it out.", 'Sua cabeça não está registrada. Um operador resolve.'),
     # mecha arms: one refusal per press. %s is the Assembly Gantry where it takes one
     'mecha.arm.empty': ('Nothing fitted on that arm. Fit one at the %s.', 'Nada instalado nesse braço. Instale um no %s.'),
     'mecha.arm.venting': ('Venting heat. The arms come back once it cools.', 'Expelindo calor. Os braços voltam quando esfriar.'),
-    'mecha.arm.no_power': ('Battery flat. Recharge it with Repair at the %s.', 'Bateria descarregada. Recarregue com Reparar no %s.'),
+    'mecha.arm.no_power': ('Battery flat. Park it on the %s to charge.', 'Bateria descarregada. Estacione no %s para carregar.'),
     'mecha.arm.low_power': ('That arm needs %s kFE. Recharge at the %s.', 'Esse braço precisa de %s kFE. Recarregue no %s.'),
     'mecha.arm.cooling': ('That arm is still cycling. One moment.', 'Esse braço ainda está recarregando. Um instante.'),
     'mecha.arm.no_rivets': ('Out of rivets. Carry iron nuggets.', 'Sem rebites. Leve pepitas de ferro.'),
     # the Assembly Gantry. The five walking Legs modules, by name
-    'gantry.no_legs': ("This frame can't walk. Fit %s, %s, %s, %s or %s.", 'Esta estrutura não anda. Instale %s, %s, %s, %s ou %s.'),
+    'gantry.no_legs': ("This frame can't walk. Fit walking legs, like %1$s.", 'Esta estrutura não anda. Instale pernas que andem, como %1$s.'),
 }
 
 # The sounds the refusal code plays. Their files, ranges and subtitles come from the sound hand-off,

@@ -46,10 +46,10 @@ MODULES = {
                   ('Hélice', 'Faz o pote voar (toque duas vezes em pular).')),
     'manipulator_arm': (('Manipulator Arm', 'A little arm: mine, place, use items, fight and pick things up.'),
                         ('Braço Manipulador', 'Um bracinho: minere, coloque blocos, use itens, lute e pegue coisas.')),
-    'telekinesis': (('Telekinesis Module', 'R grabs the block, creature or item you look at; R drops it, attack throws it.'),
-                    ('Módulo de Telecinese', 'R agarra o bloco, criatura ou item que você olha; R solta, atacar arremessa.')),
-    'drill_bit': (('Drill Bit', 'Mines three times as fast. Needs an arm or a body.'),
-                  ('Broca', 'Minera três vezes mais rápido. Precisa de um braço ou de um corpo.')),
+    'telekinesis': (('Telekinesis Module', 'The ability key grabs the block, creature or item you look at; again drops it, attack throws it.'),
+                    ('Módulo de Telecinese', 'A tecla de habilidade agarra o bloco, criatura ou item que você olha; de novo solta, atacar arremessa.')),
+    'drill_bit': (('Drill Bit', 'A jar mines three times as fast as a hand. Needs a Manipulator Arm.'),
+                  ('Broca', 'O pote minera três vezes mais rápido que uma mão. Precisa de um Braço Manipulador.')),
     'armor_plating': (('Armour Plating', '+6 armour, +2 toughness.'),
                       ('Blindagem', '+6 de armadura, +2 de resistência.')),
     'heat_shield': (('Heat Shield', "Fire and lava can't hurt the jar."),
@@ -83,7 +83,7 @@ EN = {
     'module.headinajar.powered': 'Uses charge',
     'key.categories.headinajar': 'Head in a Jar',
     'key.headinajar.jar_menu': 'Jar menu',
-    'key.headinajar.ability': 'Jar ability (Telekinesis)',
+    'key.headinajar.ability': 'Ability (jar, host, mecha, genes)',
 }
 PT = {
     'itemGroup.headinajar': 'Cabeça no Pote',
@@ -106,7 +106,7 @@ PT = {
     'module.headinajar.powered': 'Usa carga',
     'key.categories.headinajar': 'Cabeça no Pote',
     'key.headinajar.jar_menu': 'Menu do pote',
-    'key.headinajar.ability': 'Habilidade do pote (Telecinese)',
+    'key.headinajar.ability': 'Habilidade (pote, hospedeiro, mecha, genes)',
 }
 for key, ((en_name, en_desc), (pt_name, pt_desc)) in MODULES.items():
     EN[f'item.headinajar.{key}'], EN[f'module.headinajar.{key}.desc'] = en_name, en_desc
@@ -146,6 +146,23 @@ import gen_p14_effects; gen_p14_effects.run(EN, PT, write, shaped)  # the effect
 import gen_p17_release3; gen_p17_release3.run(EN, PT, write, shaped)  # the 0.3.0 release's own fixes
 import gen_p18_machines; gen_p18_machines.run(EN, PT, write, shaped)  # the machine line on the kit
 import gen_p25_machines5; gen_p25_machines5.run(EN, PT, write, shaped)  # the machine line, fifth batch
+import gen_p17_mecha; gen_p17_mecha.run(EN, PT, write, shaped)  # the Hopper on GeckoLib
+import gen_p17_bulwark; gen_p17_bulwark.run(EN, PT, write, shaped)  # the Bulwark on GeckoLib, Heavy Lifting
+import gen_p21_modules; gen_p21_modules.run(EN, PT, write, shaped)  # every module drawn from its own model
+import gen_p19_heavy; gen_p19_heavy.run(EN, PT, write, shaped)  # the Colossus and the Executive on GeckoLib, Siege
+import gen_p20_wheeled; gen_p20_wheeled.run(EN, PT, write, shaped)  # the Wheelhouse and the Rover on wheels
+import gen_p22_multileg; gen_p22_multileg.run(EN, PT, write, shaped)  # the Skitter and the Spider Walker on legs
+import gen_p24_chimera; gen_p24_chimera.run(EN, PT, write, shaped)  # the Chimera (the Graft) and the Lunk on GeckoLib
+import gen_p23_winged; gen_p23_winged.run(EN, PT, write, shaped)  # the Kite on GeckoLib, the Talon Lift, the Golden Parachute
+import gen_p30_mecha_merge; gen_p30_mecha_merge.run(EN, PT, write, shaped)  # the whole mecha line together
+import gen_p34_arms; gen_p34_arms.run(EN, PT, write, shaped)  # the arm tools at work, heat and wear
+import gen_p33_gantry; gen_p33_gantry.run(EN, PT, write, shaped)  # the Assembly Gantry on the kit, building every frame
+import gen_p29_repair4; gen_p29_repair4.run(EN, PT, write, shaped)  # no input that does nothing, no rule that contradicts itself
+import gen_p31_release4; gen_p31_release4.run(EN, PT, write, shaped)  # the 0.4.0 release's own fixes
+import gen_p26_body; gen_p26_body.run(EN, PT, write, shaped)  # the head and the body: hosts, the body left behind, tools, the jar's glass
+import gen_p32_release5; gen_p32_release5.run(EN, PT, write, shaped)  # the 0.5.0 release's own fixes (before the handbook's text check)
+import gen_p35_sound; gen_p35_sound.run(EN, PT, write, shaped)  # the sound families: house sounds, getting about, the link, the switchboard, a subtitle on every event
+import gen_p27_clarity; gen_p27_clarity.run(EN, PT, write, shaped)  # HUD, tooltips, memos, career advancements, the handbook
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)
 write('assets/headinajar/lang/pt_br.json', PT)

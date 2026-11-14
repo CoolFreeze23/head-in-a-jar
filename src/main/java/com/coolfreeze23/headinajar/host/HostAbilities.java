@@ -37,12 +37,27 @@ import net.minecraft.world.phys.Vec3;
 /** The things a jar can make its host do: the primary (R) at 50% sync and the secondary (G) at 75%. */
 public final class HostAbilities {
     private static final String NO_TARGET = "host.no_target";
+    /** A refusal {@link #fire} has already said itself (one that names someone). */
+    private static final String SAID = "";
 
     private HostAbilities() {
     }
 
-    /** Fires the host's primary or secondary ability if it is unlocked and off cooldown; says why not otherwise. */
+    /**
+     * Fires the host's primary or secondary ability if it is unlocked and off cooldown; says why not otherwise. A Lunk
+     * answers a refused toss with its refused scoop, a Spider Walker a refused web with its dud (it rears, the nozzle
+     * coughs and it taps it), as well as the line.
+     */
     public static boolean use(ServerPlayer pilot, Mob host, boolean secondary) {
+        boolean used = fireAbility(pilot, host, secondary);
+        if (!used && !secondary && host instanceof com.coolfreeze23.headinajar.entity.ShellEntity shell) {
+            if (shell.kind() == com.coolfreeze23.headinajar.entity.ShellEntity.Kind.LUNK) shell.tossRefused();
+            else shell.webDud();
+        }
+        return used;
+    }
+
+    private static boolean fireAbility(ServerPlayer pilot, Mob host, boolean secondary) {
         HostDefinition def = Hosts.definition(host);
         HostData data = Hosts.data(host);
         var ability = def == null ? java.util.Optional.<HostDefinition.Ability>empty() : secondary ? def.secondary() : def.primary();
@@ -58,7 +73,7 @@ public final class HostAbilities {
         }
         if ((secondary ? data.secondaryCooldown : data.primaryCooldown) > 0) return Refusals.deny(pilot, Refuser.at(host), "host.cooling");
         String refused = fire(pilot, host, ability.get());
-        if (refused != null) return Refusals.deny(pilot, Refuser.at(host), refused);
+        if (refused != null) return refused.equals(SAID) ? false : Refusals.deny(pilot, Refuser.at(host), refused);
         if (secondary) data.secondaryCooldown = ability.get().cooldown();
         else data.primaryCooldown = ability.get().cooldown();
         return true;
@@ -129,6 +144,11 @@ public final class HostAbilities {
                 BlockPos at = t != null ? t.blockPosition() : hit.getBlockPos().relative(hit.getDirection());
                 // a web only fills air: never water, lava or a plant, which would be gone when it melts
                 if (!level.getBlockState(at).isAir() || !level.mayInteract(pilot, at)) return "host.web_blocked";
+                if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity shell && shell.animated()) {
+                    // the Spider Walker rears and spits: the web lands with the spit, on the clip's tick 4
+                    shell.spit(at, pilot);
+                    return null;
+                }
                 level.setBlockAndUpdate(at, Blocks.COBWEB.defaultBlockState());
                 WebShots.get(level).add(at, level.getGameTime() + 200);
                 return null;
@@ -149,6 +169,17 @@ public final class HostAbilities {
             case "toss" -> {
                 Entity t = target(pilot, a.param("range", 4));
                 if (t == null) return NO_TARGET;
+                // a player is picked up only if they trust the rider (teams count), as for every other lift
+                if (t instanceof net.minecraft.world.entity.player.Player other
+                        && !com.coolfreeze23.headinajar.form.HeadRegistry.get(level.getServer()).trusts(other.getUUID(), pilot)) {
+                    Refusals.deny(pilot, Refuser.at(host), "mecha.lift.untrusted", other.getDisplayName());
+                    return SAID;
+                }
+                if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity shell && shell.kind() == com.coolfreeze23.headinajar.entity.ShellEntity.Kind.LUNK) {
+                    // the Lunk scoops, heaves and lets go: the push comes at its clip's release, with its own sounds
+                    shell.startToss(t, a.param("power", 1.2));
+                    return null;
+                }
                 t.setDeltaMovement(t.getDeltaMovement().add(0, a.param("power", 1.2), 0));
                 t.hurtMarked = true;
                 level.playSound(null, host.blockPosition(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 1, 1);
@@ -227,6 +258,7 @@ public final class HostAbilities {
             }
             case "sprint" -> {
                 host.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) a.param("duration", 100), (int) a.param("amplifier", 2)));
+                if (host instanceof com.coolfreeze23.headinajar.entity.ShellEntity shell) shell.markSprint();
                 level.playSound(null, host.blockPosition(), SoundEvents.HORSE_GALLOP, SoundSource.NEUTRAL, 1, 1);
                 return null;
             }

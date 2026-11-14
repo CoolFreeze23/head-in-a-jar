@@ -1,7 +1,6 @@
 package com.coolfreeze23.headinajar.item;
 
 import com.coolfreeze23.headinajar.HeadInAJar;
-import com.coolfreeze23.headinajar.form.FormActions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,16 +45,82 @@ public final class Handbook {
         return ItemStack.EMPTY;
     }
 
-    /** Hands the handbook to a player who has never had one. Returns whether it was given. */
+    /**
+     * Set with the gift for a player who shows no sign of having worked here before (see {@link #veteran}): only they
+     * are welcomed as a new employee. A player handed the book by an older version never has it.
+     */
+    public static final String NEW_EMPLOYEE = "headinajar_new_employee";
+
+    /**
+     * Hands the handbook to a player who has never had one. Returns whether it was given. A player who already carries
+     * a copy is not handed a second one.
+     */
     public static boolean giveOnce(ServerPlayer player) {
         CompoundTag kept = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
         if (kept.getBoolean(GIVEN)) return false;
         ItemStack book = copy(player.server);
         if (book.isEmpty()) return false;
+        boolean carried = carries(player);
         kept.putBoolean(GIVEN, true);
+        if (!carried && !veteran(player)) kept.putBoolean(NEW_EMPLOYEE, true);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, kept);
-        FormActions.give(player, book);
+        if (carried) return false;
+        place(player, book);
         return true;
+    }
+
+    /** Whether a player is a new employee: handed the first-day book on a first day with no history at the company. */
+    public static boolean newEmployee(Player player) {
+        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getBoolean(NEW_EMPLOYEE);
+    }
+
+    /** Whether the player carries a handbook already (either edition). */
+    public static boolean carries(ServerPlayer player) {
+        ItemStack fresh = copy(player.server);
+        for (ItemStack s : player.getInventory().items) {
+            if (s.isEmpty()) continue;
+            if (ItemStack.isSameItemSameComponents(s, fresh)) return true;
+            if (s.is(net.minecraft.world.item.Items.WRITTEN_BOOK)) {
+                var content = s.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+                if (content != null && content.author().equals("Noggin & Sons")) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Signs that a player has worked here before: their head is off (any form but a whole body), or they have earned
+     * any of the company's advancements (the first is smelting Surgical Steel; separation, hosts and mecha follow).
+     */
+    public static boolean veteran(ServerPlayer player) {
+        if (com.coolfreeze23.headinajar.form.FormActions.state(player).form() != com.coolfreeze23.headinajar.form.Form.BODY) return true;
+        for (var adv : player.server.getAdvancements().getAllAdvancements()) {
+            if (adv.id().getNamespace().equals(HeadInAJar.MOD_ID) && player.getAdvancements().getOrStartProgress(adv).isDone()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Where a gift goes: the first free hotbar slot from the right, never the one in hand, then the first free slot of
+     * the inventory from the right; only a full inventory drops it at the player's feet. So nothing held is pushed aside.
+     * Returns the inventory slot used, or -1 when it was dropped.
+     */
+    public static int place(ServerPlayer player, ItemStack stack) {
+        var inv = player.getInventory();
+        for (int i = 8; i >= 0; i--) {
+            if (i != inv.selected && inv.getItem(i).isEmpty()) {
+                inv.setItem(i, stack);
+                return i;
+            }
+        }
+        for (int i = 35; i >= 9; i--) {
+            if (inv.getItem(i).isEmpty()) {
+                inv.setItem(i, stack);
+                return i;
+            }
+        }
+        player.drop(stack, false);
+        return -1;
     }
 
     /**

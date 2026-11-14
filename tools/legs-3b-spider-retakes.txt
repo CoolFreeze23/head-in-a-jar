@@ -1,0 +1,35 @@
+# Spider Walker re-takes: the web at a cow from a fixed place 6 blocks to the side, and the collapse from 5 blocks.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon headinajar:spider_walker 0.5 -60 0.5 {Rotation:[0f,0f]}
+/summon minecraft:cow 0.5 -60 8.5 {NoAI:1b}
+/tp @s 4.5 -60 -3.5 0 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 -1.9 0 -20
+wait 5
+lookat headinajar:spider_walker
+key use
+wait 40
+lookat minecraft:cow 0.7
+watch 6.5 -58.8 3 90 8
+frames x01_web_side_6 60
+key ability
+wait 55
+watch off
+/kill @e[type=minecraft:cow]
+/fill -1 -60 7 2 -58 10 minecraft:air
+sneak
+wait 30
+/tp @s 4.5 -58.5 -3 45 15
+wait 5
+frames x02_destroyed_5 70
+/damage @e[type=headinajar:spider_walker,limit=1,sort=nearest] 100 minecraft:generic
+wait 65
+report done

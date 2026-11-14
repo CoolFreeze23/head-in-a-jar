@@ -1,0 +1,161 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_night_optics",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                -2,
+                -1
+              ],
+              "size": [
+                4,
+                4,
+                1
+              ],
+              "uv": [
+                42,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                -1,
+                -4
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                52,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "goggles",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -1,
+                -6
+              ],
+              "size": [
+                6,
+                2,
+                1
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                0.5,
+                -1.5,
+                -8
+              ],
+              "size": [
+                3,
+                3,
+                4
+              ],
+              "uv": [
+                14,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3.5,
+                -1.5,
+                -8
+              ],
+              "size": [
+                3,
+                3,
+                4
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1,
+                -1,
+                -9
+              ],
+              "size": [
+                2,
+                2,
+                1
+              ],
+              "uv": [
+                62,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -1,
+                -9
+              ],
+              "size": [
+                2,
+                2,
+                1
+              ],
+              "uv": [
+                68,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_lens": [
+              0,
+              0,
+              -9
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

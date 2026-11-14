@@ -221,7 +221,9 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
             for (int i = 0; i < items.getSlots(); i++) {
                 if (items.getStackInSlot(i).isEmpty()) {
                     items.setStackInSlot(i, sample);
-                    e.hurt(level.damageSources().cactus(), 0.5f);
+                    // the leeches bite, but never take the last point: a farm is not a slaughterhouse (as the Syringe)
+                    float bite = Math.min(0.5f, Math.max(0, e.getHealth() - 1));
+                    if (bite > 0) e.hurt(level.damageSources().cactus(), bite);
                     level.playSound(null, worldPosition, SoundEvents.HONEY_DRINK, SoundSource.BLOCKS, 0.5f, 0.6f);
                     return true;
                 }

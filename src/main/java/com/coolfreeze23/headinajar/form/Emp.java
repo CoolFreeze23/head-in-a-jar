@@ -37,7 +37,7 @@ public final class Emp {
         int hit = 0;
         AABB box = new AABB(at, at).inflate(radius);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, at.x, at.y, at.z, 80, radius / 3, radius / 3, radius / 3, 0.2);
-        level.playSound(null, at.x, at.y, at.z, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 2, 0.5f);
+        level.playSound(null, at.x, at.y, at.z, com.coolfreeze23.headinajar.fx.HouseSounds.EMP_BURST.get(), SoundSource.BLOCKS, 2, 0.5f);
         for (ServerPlayer p : level.getEntitiesOfClass(ServerPlayer.class, box, p -> p.position().distanceTo(at) <= radius)) {
             JarState state = FormActions.state(p);
             if (QuantumItems.has(p, QuantumItems.Upgrade.SHIELDED_HOUSING)) continue;
@@ -107,7 +107,7 @@ public final class Emp {
                 g.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1.2f, 1);
                 level.addFreshEntity(g);
             }
-            level.playSound(null, player.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.6f, 0.6f);
+            level.playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.EMP_THROW.get(), SoundSource.PLAYERS, 0.6f, 0.6f);
             player.getCooldowns().addCooldown(this, 40);
             stack.consume(1, player);
             return net.minecraft.world.InteractionResultHolder.sidedSuccess(stack, level.isClientSide);

@@ -24,10 +24,10 @@ REFUSALS = {
     'body.riding': ('Get down first, then use your body as a jar.', 'Desça primeiro e depois use seu corpo como pote.'),
     'body.not_yours': ("That is %s's body. It is spoken for.", 'Esse é o corpo de %s. Já tem dono.'),
     'body.corpse_untrusted': ("%s's effects. They can let you in with /headoffice trust.",
-                              'Os pertences de %s. A pessoa pode liberar você com /headoffice trust.'),
+                              'Pertences de %s. A pessoa libera com /headoffice trust.'),
     'suture.not_yours': ('Only %s can be sewn back onto that body.', 'Só %s pode ser costurado de volta nesse corpo.'),
     # %s is the Suture Kit
-    'suture.no_kit': ('No %s on you or in your effects. Make one, then try again.', 'Nenhum %s com você nem nos seus pertences. Faça um e tente de novo.'),
+    'suture.no_kit': ('No %s on you or in your effects. Make one, then try again.', 'Sem %s com você nem nos pertences. Faça um e tente de novo.'),
     # heads: %s is the owner's name
     'head.not_yours': ("That is %s's head. Please don't tap the glass.", 'Essa é a cabeça de %s. Por favor, não bata no vidro.'),
     'head.full': ('The jar is full of saline. Keep the bottle for later.', 'O pote está cheio de soro. Guarde o frasco para depois.'),

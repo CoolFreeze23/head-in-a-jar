@@ -1,0 +1,62 @@
+# Frame time: eight parked Wheelhouses, then eight parked Rovers, in a row 10 blocks ahead, against the empty scene,
+# uncapped, three 15-second windows each (the Hopper's method). Run in the default client and with SMOKE_MODS=sodium.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+bench start empty1
+wait 300
+bench stop
+bench start empty2
+wait 300
+bench stop
+bench start empty3
+wait 300
+bench stop
+mecha wheelhouse -11 -60 0 drill
+mecha wheelhouse -8 -60 0 drill
+mecha wheelhouse -5 -60 0 drill
+mecha wheelhouse -2 -60 0 drill
+mecha wheelhouse 1 -60 0 drill
+mecha wheelhouse 4 -60 0 drill
+mecha wheelhouse 7 -60 0 drill
+mecha wheelhouse 10 -60 0 drill
+wait 100
+shot bench_row_wheelhouse
+bench start wheel1
+wait 300
+bench stop
+bench start wheel2
+wait 300
+bench stop
+bench start wheel3
+wait 300
+bench stop
+tp @e[type=headinajar:wheelhouse] 0 -300 0
+wait 40
+summon headinajar:rover -11 -60 0
+summon headinajar:rover -8 -60 0
+summon headinajar:rover -5 -60 0
+summon headinajar:rover -2 -60 0
+summon headinajar:rover 1 -60 0
+summon headinajar:rover 4 -60 0
+summon headinajar:rover 7 -60 0
+summon headinajar:rover 10 -60 0
+wait 100
+shot bench_row_rover
+bench start rover1
+wait 300
+bench stop
+bench start rover2
+wait 300
+bench stop
+bench start rover3
+wait 300
+bench stop
+report done

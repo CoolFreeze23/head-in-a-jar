@@ -107,14 +107,16 @@ public final class QuantumItems {
             }
             stack.shrink(1);
             if (upgrade == Upgrade.PERISCOPE_STALK) com.coolfreeze23.headinajar.Advance.grant(player, "periscope");
-            level.playSound(null, player.blockPosition(), SoundEvents.SMITHING_TABLE_USE, player.getSoundSource(), 0.8f, 1.4f);
+            level.playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.COLLAR_INSTALL.get(), player.getSoundSource(), 0.8f, 1.4f);
             player.displayClientMessage(Component.translatable("collar.headinajar.installed", Component.translatable(getDescriptionId())), true);
             return InteractionResultHolder.consume(stack);
         }
 
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.headinajar." + upgrade.id() + ".desc").withStyle(ChatFormatting.GRAY));
+            // the Zoom Optic names its key as the player has it bound
+            tooltip.add((upgrade == Upgrade.ZOOM_OPTIC ? Component.translatable("item.headinajar.collar_zoom_optic.keyed", Component.keybind("key.headinajar.zoom"))
+                    : Component.translatable("item.headinajar." + upgrade.id() + ".desc")).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.translatable("collar.headinajar.how").withStyle(ChatFormatting.DARK_GRAY));
         }
     }
@@ -155,7 +157,7 @@ public final class QuantumItems {
                 if (player instanceof ServerPlayer sp) FormActions.give(sp, shard);
             }
             stack.shrink(1);
-            level.playSound(null, player.blockPosition(), SoundEvents.AMETHYST_BLOCK_RESONATE, player.getSoundSource(), 1, 0.6f);
+            level.playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.ENTANGLE.get(), player.getSoundSource(), 1, 0.6f);
             return InteractionResultHolder.consume(stack);
         }
     }

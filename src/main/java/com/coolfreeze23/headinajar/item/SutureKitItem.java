@@ -33,7 +33,8 @@ public class SutureKitItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var state = FormActions.state(player);
         if (state.form() != Form.LINKED || !state.carryingHead()) {
-            if (level.isClientSide) player.displayClientMessage(Component.translatable("message.headinajar.suture_how"), true);
+            if (level.isClientSide) player.displayClientMessage(Component.translatable(state.form() == Form.BODY
+                    ? "message.headinajar.clarity.suture_head_on" : "message.headinajar.suture_how"), true);
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
         player.startUsingItem(hand);
@@ -42,7 +43,8 @@ public class SutureKitItem extends Item {
 
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remaining) {
-        if (level.isClientSide && remaining % 10 == 0) entity.playSound(SoundEvents.WOOL_PLACE, 0.6f, 0.8f + level.random.nextFloat() * 0.4f);
+        // one stitch per loop of the needle hand
+        if (level.isClientSide && remaining % 10 == 0) entity.playSound(com.coolfreeze23.headinajar.fx.BodySounds.SNICK.get(), 1.0f, 0.94f + level.random.nextFloat() * 0.12f);
     }
 
     @Override

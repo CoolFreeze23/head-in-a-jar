@@ -15,7 +15,9 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> BOOTH_OOPSIE = sound("booth_oopsie");
     public static final DeferredHolder<SoundEvent, SoundEvent> LINK_LOST = sound("link_lost");
     public static final DeferredHolder<SoundEvent, SoundEvent> LINK_RESTORED = sound("link_restored");
-    public static final DeferredHolder<SoundEvent, SoundEvent> MECHA_BOOT = sound("mecha_boot");
+    /** A mecha powering up ends on the company jingle: heard 48 blocks off, like the jingle. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> MECHA_BOOT = SOUNDS.register("mecha_boot",
+            () -> SoundEvent.createFixedRangeEvent(HeadInAJar.id("mecha_boot"), 48));
     public static final DeferredHolder<SoundEvent, SoundEvent> GENE_SPLICE = sound("gene_splice");
     public static final DeferredHolder<SoundEvent, SoundEvent> GENE_MUTATION = sound("gene_mutation");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARRAY_MURMUR = sound("array_murmur");
@@ -40,8 +42,10 @@ public final class ModSounds {
     public static void register(IEventBus bus) {
         com.coolfreeze23.headinajar.block.ChairSounds.load();
         com.coolfreeze23.headinajar.block.DoloresVoice.load();
+        com.coolfreeze23.headinajar.mecha.HopperSounds.load();
         com.coolfreeze23.headinajar.machine.MachineSounds.load();
         com.coolfreeze23.headinajar.fx.FxSounds.load();
+        com.coolfreeze23.headinajar.mecha.ArmSounds.load();
         SOUNDS.register(bus);
     }
 

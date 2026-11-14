@@ -1,0 +1,54 @@
+# The Assembly Gantry says no, then repairs. The stand-in second player presses Assemble with no frame (the head shakes
+# at rest, the lamp red), builds a Bulwark, presses Assemble again with it standing on the pad (the head shakes stood
+# off), then, the Bulwark damaged, presses Repair: the plating mends it and the battery is topped up at once, and the
+# arm makes its weld pass with the charge lead out from the reel. Filmed from about six blocks at the front-left
+# three-quarter (the reel's side), by day.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+/tp @s -3.8 -59.4 -3.8 -45 -1.7
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames r1_refuse_rest 40
+wait 4
+bystander button 1
+wait 40
+bystander close
+gantry 0 -60 0 bulwark
+bystander useblock 0 -60 0 north
+wait 3
+bystander button 1
+bystander close
+wait 232
+inspect near bulwark 4
+bystander useblock 0 -60 0 north
+wait 5
+frames r2_refuse_loaded 40
+wait 4
+bystander button 1
+wait 40
+bystander close
+/damage @e[type=headinajar:bulwark,limit=1] 60
+wait 20
+inspect near bulwark 4
+bystander useblock 0 -60 0 north
+wait 5
+frames r3_repair 85
+wait 4
+bystander button 3
+wait 2
+bystander close
+inspect near bulwark 4
+wait 85
+inspect near bulwark 4
+inspect block 0 -60 0
+report repair done

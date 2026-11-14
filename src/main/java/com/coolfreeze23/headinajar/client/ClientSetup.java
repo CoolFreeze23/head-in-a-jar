@@ -22,10 +22,12 @@ public class ClientSetup {
     public static final String CATEGORY = "key.categories.headinajar";
     public static final KeyMapping JAR_MENU = new KeyMapping("key.headinajar.jar_menu", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, CATEGORY);
+    // swap and secondary sit on keys no other common mod's default takes (Curios opens on G; a pack often moves it to
+    // K). A player's saved binding always wins over a default, so changing these moves nobody who already chose.
     public static final KeyMapping SWAP = new KeyMapping("key.headinajar.swap", KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_HOME, CATEGORY);
     public static final KeyMapping SECONDARY = new KeyMapping("key.headinajar.secondary", KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
+            InputConstants.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_5, CATEGORY);
     /** Collar Cam Zoom Optic: hold for x3 zoom while linked. */
     public static final KeyMapping ZOOM = new KeyMapping("key.headinajar.zoom", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
@@ -36,6 +38,10 @@ public class ClientSetup {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
 
     public ClientSetup(IEventBus modBus, ModContainer container) {
+        // a flier is flown down by the sneak key as this client holds it: the player's own sneak input is cleared every
+        // ridden tick (the game's way of asking to get off once), and the flag by the server when it refuses
+        com.coolfreeze23.headinajar.host.HostControl.sneakHeld = p -> p instanceof net.minecraft.client.player.LocalPlayer
+                ? net.minecraft.client.Minecraft.getInstance().options.keyShift.isDown() : p.isShiftKeyDown();
         modBus.addListener(ClientSetup::renderers);
         modBus.addListener(ClientSetup::layers);
         modBus.addListener(ClientSetup::screens);
@@ -75,13 +81,15 @@ public class ClientSetup {
         MachineRenderers.register(event);
         MachineRenderers3.register(event);
         MachineRenderers4.register(event);
+        GantryClient.register(event);
         event.registerBlockEntityRenderer(ModRegistry.JARRED_HEAD_BE.get(), JarredHeadRenderer::new);
         for (var frame : com.coolfreeze23.headinajar.mecha.MechaFrame.values()) {
-            event.registerEntityRenderer(ModRegistry.mechaType(frame), c -> new MechaRenderer(c, frame));
+            // the frame decides which renderer draws it: GeckoLib from its own model, or the code-defined one
+            event.registerEntityRenderer(ModRegistry.mechaType(frame), c -> frame.animated() ? new HopperRenderer(c, frame) : new MechaRenderer(c, frame));
         }
-        event.registerEntityRenderer(ModRegistry.LUNK.get(), c -> new ShellRenderer(c, ShellRenderer.LUNK, "lunk", 0.8f));
-        event.registerEntityRenderer(ModRegistry.ROVER.get(), c -> new ShellRenderer(c, ShellRenderer.ROVER, "rover", 0.7f));
-        event.registerEntityRenderer(ModRegistry.SPIDER_WALKER.get(), c -> new ShellRenderer(c, ShellRenderer.SPIDER, "spider_walker", 0.8f));
+        event.registerEntityRenderer(ModRegistry.LUNK.get(), c -> new RoverRenderer(c, com.coolfreeze23.headinajar.entity.ShellEntity.Kind.LUNK));
+        event.registerEntityRenderer(ModRegistry.ROVER.get(), RoverRenderer::new);
+        event.registerEntityRenderer(ModRegistry.SPIDER_WALKER.get(), c -> new RoverRenderer(c, com.coolfreeze23.headinajar.entity.ShellEntity.Kind.SPIDER_WALKER));
     }
 
     private static void layers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -91,7 +99,6 @@ public class ClientSetup {
         event.registerLayerDefinition(JarModel.GOGGLES, JarModel::goggles);
         event.registerLayerDefinition(JarModel.COLLAR, JarModel::collar);
         event.registerLayerDefinition(JarModel.WHEELS, JarModel::wheels);
-        event.registerLayerDefinition(ShellRenderer.LUNK, ShellRenderer::lunk);
         event.registerLayerDefinition(MechaRenderer.HOPPER, MechaRenderer::hopper);
         event.registerLayerDefinition(MechaRenderer.BULWARK, MechaRenderer::bulwark);
         event.registerLayerDefinition(MechaRenderer.WHEELHOUSE, MechaRenderer::wheelhouse);
@@ -99,7 +106,6 @@ public class ClientSetup {
         event.registerLayerDefinition(MechaRenderer.KITE, MechaRenderer::kite);
         event.registerLayerDefinition(MechaRenderer.MODULES, MechaRenderer::modules);
         event.registerLayerDefinition(ShellRenderer.ROVER, ShellRenderer::rover);
-        event.registerLayerDefinition(ShellRenderer.SPIDER, ShellRenderer::spiderWalker);
     }
 
     private static void screens(RegisterMenuScreensEvent event) {

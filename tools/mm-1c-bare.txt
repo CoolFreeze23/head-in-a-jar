@@ -1,0 +1,163 @@
+# Cost of the bare frames: eight parked machines of each frame with no module at all, ten blocks ahead, two
+# 10-second windows each, against the same empty scene; what the frame itself costs beside its modules (mm-1-bench).
+# Run alone (GAME_EXCLUSIVE=1), in the default client and under SMOKE_MODS=sodium.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+bench start empty1
+wait 200
+bench stop
+bench start empty2
+wait 200
+bench stop
+mecha hopper -11 -60 0 -
+mecha hopper -8 -60 0 -
+mecha hopper -5 -60 0 -
+mecha hopper -2 -60 0 -
+mecha hopper 1 -60 0 -
+mecha hopper 4 -60 0 -
+mecha hopper 7 -60 0 -
+mecha hopper 10 -60 0 -
+wait 80
+shot bare_hopper
+bench start hopper_bare1
+wait 200
+bench stop
+bench start hopper_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:hopper]
+wait 20
+mecha bulwark -11 -60 0 -
+mecha bulwark -8 -60 0 -
+mecha bulwark -5 -60 0 -
+mecha bulwark -2 -60 0 -
+mecha bulwark 1 -60 0 -
+mecha bulwark 4 -60 0 -
+mecha bulwark 7 -60 0 -
+mecha bulwark 10 -60 0 -
+wait 80
+shot bare_bulwark
+bench start bulwark_bare1
+wait 200
+bench stop
+bench start bulwark_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:bulwark]
+wait 20
+mecha colossus -11 -60 0 -
+mecha colossus -8 -60 0 -
+mecha colossus -5 -60 0 -
+mecha colossus -2 -60 0 -
+mecha colossus 1 -60 0 -
+mecha colossus 4 -60 0 -
+mecha colossus 7 -60 0 -
+mecha colossus 10 -60 0 -
+wait 80
+shot bare_colossus
+bench start colossus_bare1
+wait 200
+bench stop
+bench start colossus_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:colossus]
+wait 20
+mecha executive -11 -60 0 -
+mecha executive -8 -60 0 -
+mecha executive -5 -60 0 -
+mecha executive -2 -60 0 -
+mecha executive 1 -60 0 -
+mecha executive 4 -60 0 -
+mecha executive 7 -60 0 -
+mecha executive 10 -60 0 -
+wait 80
+shot bare_executive
+bench start executive_bare1
+wait 200
+bench stop
+bench start executive_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:executive]
+wait 20
+mecha wheelhouse -11 -60 0 -
+mecha wheelhouse -8 -60 0 -
+mecha wheelhouse -5 -60 0 -
+mecha wheelhouse -2 -60 0 -
+mecha wheelhouse 1 -60 0 -
+mecha wheelhouse 4 -60 0 -
+mecha wheelhouse 7 -60 0 -
+mecha wheelhouse 10 -60 0 -
+wait 80
+shot bare_wheelhouse
+bench start wheelhouse_bare1
+wait 200
+bench stop
+bench start wheelhouse_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:wheelhouse]
+wait 20
+mecha skitter -11 -60 0 -
+mecha skitter -8 -60 0 -
+mecha skitter -5 -60 0 -
+mecha skitter -2 -60 0 -
+mecha skitter 1 -60 0 -
+mecha skitter 4 -60 0 -
+mecha skitter 7 -60 0 -
+mecha skitter 10 -60 0 -
+wait 80
+shot bare_skitter
+bench start skitter_bare1
+wait 200
+bench stop
+bench start skitter_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:skitter]
+wait 20
+mecha kite -11 -60 0 -
+mecha kite -8 -60 0 -
+mecha kite -5 -60 0 -
+mecha kite -2 -60 0 -
+mecha kite 1 -60 0 -
+mecha kite 4 -60 0 -
+mecha kite 7 -60 0 -
+mecha kite 10 -60 0 -
+wait 80
+shot bare_kite
+bench start kite_bare1
+wait 200
+bench stop
+bench start kite_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:kite]
+wait 20
+mecha chimera -11 -60 0 -
+mecha chimera -8 -60 0 -
+mecha chimera -5 -60 0 -
+mecha chimera -2 -60 0 -
+mecha chimera 1 -60 0 -
+mecha chimera 4 -60 0 -
+mecha chimera 7 -60 0 -
+mecha chimera 10 -60 0 -
+wait 80
+shot bare_chimera
+bench start chimera_bare1
+wait 200
+bench stop
+bench start chimera_bare2
+wait 200
+bench stop
+/kill @e[type=headinajar:chimera]
+wait 20

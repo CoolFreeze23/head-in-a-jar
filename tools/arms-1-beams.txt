@@ -1,0 +1,203 @@
+# The arm tools at work, default profile: the Plasma Lance and the Arc Cannon on a Hopper, the Tractor Beam and the
+# Flamethrower on a second, the Welding Torch, the Manipulator Hand and the Tesla Coil on a Bulwark. Each from behind
+# the pilot (third person) and from a fixed camera about six blocks to the side; the pilot aims with the crosshair.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+mecha hopper 20 -60 0 hydraulic_legs,tractor_beam,flamethrower
+mecha bulwark 40 -60 0 hydraulic_legs,welding_torch,manipulator_hand,tesla_coil
+/summon cow 0.5 -60 9.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 2.5 -60 9.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 4.5 -60 10.5 {NoAI:1b,Invulnerable:1b}
+/summon cow 20.5 -60 7.5
+/summon cow 22.5 -60 6.5 {NoAI:1b,Invulnerable:1b}
+/fill 39 -60 4 41 -58 4 minecraft:stone
+/summon husk 37.5 -60 0.5 {NoAI:1b,Invulnerable:1b}
+/summon husk 43.5 -60 0.5 {NoAI:1b,Invulnerable:1b}
+# --- the lance and the arc cannon
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+/gamemode creative @s
+key use
+wait 75
+/gamemode survival @s
+riding a
+view 0
+wait 2
+aimat cow
+wait 4
+view 1
+wait 6
+report lance from behind
+frames lance_behind 70
+wait 4
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+key attack down
+wait 24
+key attack up
+wait 30
+watch at -5.5 2.4 3 -80 10
+wait 5
+report lance from six blocks
+frames lance_side6 70
+wait 4
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+key attack down
+wait 24
+key attack up
+wait 30
+watch off
+view 0
+wait 2
+aimat cow
+wait 4
+view 1
+wait 6
+report arc from behind
+frames arc_behind 40
+wait 4
+key use
+wait 40
+watch at -5.5 2.4 3 -80 10
+wait 5
+report arc from six blocks
+frames arc_side6 40
+wait 4
+key use
+wait 40
+watch off
+# a miss: the arc to the ground where the crosshair is
+view 0
+look 20 12
+wait 4
+view 1
+wait 6
+frames arc_miss_behind 30
+wait 4
+key use
+wait 30
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- the tractor beam and the flamethrower
+/tp @s 20.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+/gamemode creative @s
+key use
+wait 75
+/gamemode survival @s
+riding b
+view 0
+wait 2
+aimat cow
+wait 4
+view 1
+wait 2
+report tractor from behind
+frames tractor_behind 80
+wait 4
+key attack down
+wait 20
+turn 30 -10 20
+wait 20
+key attack up
+wait 30
+view 0
+wait 2
+aimat cow
+wait 4
+view 1
+watch at -5.5 2.4 3 -80 10
+wait 6
+report tractor from six blocks
+frames tractor_side6 80
+wait 4
+key attack down
+wait 40
+key attack up
+wait 30
+watch off
+view 1
+look 10 8
+wait 10
+report flamethrower from behind
+frames flame_behind 70
+wait 4
+key use down
+wait 45
+key use up
+wait 30
+watch at -5.5 2.4 3 -80 10
+wait 5
+report flamethrower from six blocks
+frames flame_side6 70
+wait 4
+key use down
+wait 45
+key use up
+wait 30
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- the welding torch, the manipulator hand (holding a torch) and the tesla coil on a Bulwark
+/tp @s 40.5 -60 -4.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+/gamemode creative @s
+key use
+wait 75
+/gamemode survival @s
+riding c
+view 1
+look 0 25
+wait 10
+/item replace entity @s weapon.mainhand with minecraft:torch
+wait 5
+report welding torch and tesla from behind
+frames weld_behind 60
+wait 4
+key attack down
+wait 40
+key attack up
+wait 20
+report the hand holding a torch
+shot hand_torch_behind
+watch at -5.5 2.6 2 -70 12
+wait 5
+shot hand_torch_side6
+frames weld_side6 60
+wait 4
+key attack down
+wait 40
+key attack up
+wait 10
+key use
+wait 20
+shot hand_after_use_side6
+watch off
+# the hand from its own side and from in front, and the tesla coil's zaps at the husks
+watch at 5.5 2.6 2 70 12
+wait 5
+shot hand_torch_right6
+watch at 0 2.4 5.5 180 12
+wait 5
+shot bulwark_front
+frames tesla_front 60
+wait 64
+watch off
+report done

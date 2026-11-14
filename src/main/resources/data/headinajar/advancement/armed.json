@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:first_module",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "armed"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:manipulator_arm"
+    },
+    "title": {
+      "translate": "advancements.headinajar.armed.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.armed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

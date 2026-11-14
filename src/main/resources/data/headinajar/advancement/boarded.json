@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:assembled",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "boarded"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:hopper_frame"
+    },
+    "title": {
+      "translate": "advancements.headinajar.boarded.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.boarded.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

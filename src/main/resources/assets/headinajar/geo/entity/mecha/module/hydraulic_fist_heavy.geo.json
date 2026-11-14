@@ -1,0 +1,145 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_hydraulic_fist_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                -6,
+                -2
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                48,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -16
+              ],
+              "size": [
+                10,
+                10,
+                14
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                -6,
+                -10
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ram",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -16
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                -2,
+                -22
+              ],
+              "size": [
+                4,
+                4,
+                8
+              ],
+              "uv": [
+                60,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                -6,
+                -32
+              ],
+              "size": [
+                12,
+                12,
+                10
+              ],
+              "uv": [
+                76,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -7,
+                -3,
+                -34
+              ],
+              "size": [
+                14,
+                8,
+                2
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_tip": [
+              0,
+              0,
+              -34
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

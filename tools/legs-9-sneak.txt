@@ -1,0 +1,32 @@
+# The sneak that lets go of a wall, re-taken (side view).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/fill 36 -60 14 44 -55 15 minecraft:stone
+/tp @s 44.5 -60 4.5 0 0
+jar
+wait 10
+# --- a sneak lets go of the wall (side) ------------------------------------------------------------------------------
+mecha skitter 40.5 -60 11.5 drill
+/tp @s 43.5 -60 9.3 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 10
+wait 5
+key forward hold 30
+watch 33.5 -57 13 -90 8
+frames y03_holding_then_sneak_lets_go_side 120
+wait 40
+sneak
+wait 75
+inspect near headinajar:skitter 6
+watch off
+/ride @s dismount
+wait 5
+report done

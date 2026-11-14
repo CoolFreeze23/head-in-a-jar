@@ -1,0 +1,17 @@
+{
+  "name": "Jar Integrity",
+  "icon": "headinajar:glass_patch",
+  "category": "headinajar:life_support",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Integrity is the glass: 10 points. As the jar, damage takes glass first, then health. A placed head is only glass: at 0 it breaks. Players cannot harm it; fire and lava crack a point a second.$(br)No saline: a point lost per 30 s."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:glass_patch",
+      "text": "Mends 5 points: use it on your placed head, or the feed slot."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+# Stills: the Colossus and the Executive beside the Bulwark, the Hopper and an iron golem, by day, night and torchlight,
+# with the stand-in's jar in the Colossus and the player's in the Executive; from behind at 6 and 20 blocks. Run in the
+# default profile, then again with SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip (the same stills under BSL)
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha colossus -3 -60 0 hydraulic_legs,drill,arc_cannon
+mecha executive 2 -60 0 hydraulic_legs,drill
+mecha bulwark 6 -60 0 hydraulic_legs,drill
+mecha hopper 9 -60 0 hydraulic_legs,jump_jets,drill
+/summon minecraft:iron_golem -7 -60 0.5 {NoAI:1b,Rotation:[0f,0f]}
+bystander spawn -3 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:colossus
+wait 60
+/tp @s 6.5 -60 -4 0 0
+jar
+wait 10
+/tp @s 2.5 -60 -1.3 0 -30
+wait 5
+key use
+wait 70
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+view 1
+watch 1.5 -58 14 180 4
+wait 20
+shot st_day_row
+watch -3 -55.6 4.4 180 25
+wait 5
+shot st_day_colossus_jar_close
+watch 2.5 -55.4 4 180 25
+wait 5
+shot st_day_executive_jar_close
+watch -0.5 -57 -6 0 8
+wait 5
+shot st_day_back_6
+watch -0.5 -53 -20 0 9
+wait 5
+shot st_day_back_20
+/time set 18000
+watch 1.5 -58 14 180 4
+wait 10
+shot st_night_row
+/setblock -1 -60 3 minecraft:torch
+/setblock 0 -60 3 minecraft:torch
+/setblock 4 -60 3 minecraft:torch
+wait 10
+shot st_torch_row
+watch -3 -55.6 4.4 180 25
+wait 5
+shot st_torch_colossus_jar_close
+watch 2.5 -55.4 4 180 25
+wait 5
+shot st_torch_executive_jar_close
+/time set 6000
+watch off
+report stills done

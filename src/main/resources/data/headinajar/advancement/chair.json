@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:powered",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "chair_powered"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:separation_chair"
+    },
+    "title": {
+      "translate": "advancements.headinajar.chair.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.chair.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

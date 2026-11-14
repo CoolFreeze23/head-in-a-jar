@@ -1,0 +1,48 @@
+# Parking filmed every frame from a fixed camera near the machine: a Hopper and a Wheelhouse each boarded, driven a
+# little, got out of and left to park; the moment its look is kept is reported (parkstats: last kept at tick), to be
+# found in the film's frames.csv and looked at frame by frame.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 100 -60 100 hydraulic_legs,drill,night_optics
+/tp @s 100.5 -60 97 0 0
+wait 120
+lookat headinajar:hopper
+key use
+wait 80
+riding hopper
+key forward hold 20
+wait 20
+watch at 3 1.5 -1 70 15
+frames f_hopper_park 300
+wait 5
+sneak down
+key jar_menu hold 25
+sneak up
+wait 300
+parkstats
+watch off
+mecha wheelhouse 140 -60 100 hydraulic_legs
+/tp @s 140.5 -60 96 0 0
+wait 120
+lookat headinajar:wheelhouse
+key use
+wait 80
+riding wheelhouse
+key forward hold 20
+wait 20
+watch at 4 2 -2 63 15
+frames f_wheelhouse_park 300
+wait 5
+sneak down
+key jar_menu hold 25
+sneak up
+wait 300
+parkstats
+watch off

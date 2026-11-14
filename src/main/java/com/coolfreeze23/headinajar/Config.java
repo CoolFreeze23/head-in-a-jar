@@ -98,6 +98,12 @@ public final class Config {
     public static final ModConfigSpec.IntValue SCREEN_SHAKE = C
             .comment("How much the mod's effects may move the camera (shake, kicks, field-of-view pulls), in percent. The photosensitive option turns them all off.")
             .defineInRange("screenShake", 100, 0, 100);
+    public static final ModConfigSpec.BooleanValue MEMOS = C
+            .comment("DOLORES's memos: a line in chat, with a beep, the first time something new happens (off: none are shown).")
+            .define("memos", true);
+    public static final ModConfigSpec.BooleanValue HUD_NUMBERS = C
+            .comment("Show the numbers beside the jar's bars all the time (off: only while low, or for a few seconds after they change).")
+            .define("hudNumbers", false);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

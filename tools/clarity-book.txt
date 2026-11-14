@@ -1,0 +1,987 @@
+@world flat
+@gamemode creative
+@observe 5
+wait 40
+/tp @s 0.5 -60 0.5 0 10
+guiscale 3
+lang en_us
+/give @s patchouli:guide_book[patchouli:book="headinajar:handbook"]
+hotbar 1
+wait 5
+key use
+wait 15
+mouse 0 0
+shot pb_en_landing
+press escape
+wait 5
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/welcome 0
+wait 12
+mouse 0 0
+shot pb_en_orientation_welcome_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/shopping_list 0
+wait 12
+mouse 0 0
+shot pb_en_orientation_shopping_list_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/shopping_list 2
+wait 12
+mouse 0 0
+shot pb_en_orientation_shopping_list_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/how_to_read 0
+wait 12
+mouse 0 0
+shot pb_en_orientation_how_to_read_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/units 0
+wait 12
+mouse 0 0
+shot pb_en_orientation_units_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:facilities/galvanic_pile 0
+wait 12
+mouse 0 0
+shot pb_en_facilities_galvanic_pile_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:facilities/sharing_power 0
+wait 12
+mouse 0 0
+shot pb_en_facilities_sharing_power_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:facilities/sharing_power 2
+wait 12
+mouse 0 0
+shot pb_en_facilities_sharing_power_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:facilities/charging_dock 0
+wait 12
+mouse 0 0
+shot pb_en_facilities_charging_dock_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:life_support/saline 0
+wait 12
+mouse 0 0
+shot pb_en_life_support_saline_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:life_support/saline 2
+wait 12
+mouse 0 0
+shot pb_en_life_support_saline_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:life_support/integrity 0
+wait 12
+mouse 0 0
+shot pb_en_life_support_integrity_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:life_support/cradle 0
+wait 12
+mouse 0 0
+shot pb_en_life_support_cradle_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:life_support/body_printer 0
+wait 12
+mouse 0 0
+shot pb_en_life_support_body_printer_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_chair 0
+wait 12
+mouse 0 0
+shot pb_en_separation_the_chair_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_chair 2
+wait 12
+mouse 0 0
+shot pb_en_separation_the_chair_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_chair 4
+wait 12
+mouse 0 0
+shot pb_en_separation_the_chair_5
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_botch 0
+wait 12
+mouse 0 0
+shot pb_en_separation_the_botch_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_link 0
+wait 12
+mouse 0 0
+shot pb_en_separation_the_link_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:separation/when_it_goes_wrong 0
+wait 12
+mouse 0 0
+shot pb_en_separation_when_it_goes_wrong_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/no_hands 0
+wait 12
+mouse 0 0
+shot pb_en_jar_no_hands_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/no_hands 2
+wait 12
+mouse 0 0
+shot pb_en_jar_no_hands_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/jar_menu 0
+wait 12
+mouse 0 0
+shot pb_en_jar_jar_menu_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/modules 0
+wait 12
+mouse 0 0
+shot pb_en_jar_modules_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/modules 2
+wait 12
+mouse 0 0
+shot pb_en_jar_modules_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/modules 4
+wait 12
+mouse 0 0
+shot pb_en_jar_modules_5
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/charge 0
+wait 12
+mouse 0 0
+shot pb_en_jar_charge_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:jar/tiers 0
+wait 12
+mouse 0 0
+shot pb_en_jar_tiers_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:getting_home/reach 0
+wait 12
+mouse 0 0
+shot pb_en_getting_home_reach_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:getting_home/courier 0
+wait 12
+mouse 0 0
+shot pb_en_getting_home_courier_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:getting_home/suture 0
+wait 12
+mouse 0 0
+shot pb_en_getting_home_suture_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:getting_home/corpses 0
+wait 12
+mouse 0 0
+shot pb_en_getting_home_corpses_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:getting_home/lost_property 0
+wait 12
+mouse 0 0
+shot pb_en_getting_home_lost_property_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/saw 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_saw_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/riding 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_riding_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/sync 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_sync_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/abilities 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_abilities_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/abilities 2
+wait 12
+mouse 0 0
+shot pb_en_staffing_abilities_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/upkeep 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_upkeep_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/body_locker 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_body_locker_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:staffing/robots 0
+wait 12
+mouse 0 0
+shot pb_en_staffing_robots_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/gantry 0
+wait 12
+mouse 0 0
+shot pb_en_mecha_gantry_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/frames 0
+wait 12
+mouse 0 0
+shot pb_en_mecha_frames_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/frames 2
+wait 12
+mouse 0 0
+shot pb_en_mecha_frames_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/piloting 0
+wait 12
+mouse 0 0
+shot pb_en_mecha_piloting_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/gauges 0
+wait 12
+mouse 0 0
+shot pb_en_mecha_gauges_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:mecha/mecha_modules 0
+wait 12
+mouse 0 0
+shot pb_en_mecha_mecha_modules_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/chain 0
+wait 12
+mouse 0 0
+shot pb_en_research_chain_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/blood 0
+wait 12
+mouse 0 0
+shot pb_en_research_blood_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/carriers 0
+wait 12
+mouse 0 0
+shot pb_en_research_carriers_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/carriers 2
+wait 12
+mouse 0 0
+shot pb_en_research_carriers_3
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/carriers 4
+wait 12
+mouse 0 0
+shot pb_en_research_carriers_5
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/carriers 6
+wait 12
+mouse 0 0
+shot pb_en_research_carriers_7
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/splicing 0
+wait 12
+mouse 0 0
+shot pb_en_research_splicing_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/turret 0
+wait 12
+mouse 0 0
+shot pb_en_research_turret_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/array 0
+wait 12
+mouse 0 0
+shot pb_en_research_array_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/socket 0
+wait 12
+mouse 0 0
+shot pb_en_research_socket_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:research/staff 0
+wait 12
+mouse 0 0
+shot pb_en_research_staff_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:hr/faq 0
+wait 12
+mouse 0 0
+shot pb_en_hr_faq_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:hr/incidents 0
+wait 12
+mouse 0 0
+shot pb_en_hr_incidents_1
+press escape
+wait 3
+/open-patchouli-book @s headinajar:handbook headinajar:hr/incidents 2
+wait 12
+mouse 0 0
+shot pb_en_hr_incidents_3
+press escape
+wait 3
+/tp @s 0.5 -60 0.5 0 10
+guiscale 3
+/clear @s
+lang en_us
+/give @s minecraft:written_book[written_book_content={title:"Employee Handbook",author:"Noggin & Sons",resolved:true,pages:['{"translate": "book.headinajar.written2.title"}','["", {"translate": "book.headinajar.written2.contents", "bold": true}, "\\n\\n", {"translate": "book.headinajar.written2.cat.orientation", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "3"}}, "\\n", {"translate": "book.headinajar.written2.cat.facilities", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "11"}}, "\\n", {"translate": "book.headinajar.written2.cat.life_support", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "18"}}, "\\n", {"translate": "book.headinajar.written2.cat.separation", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "27"}}, "\\n", {"translate": "book.headinajar.written2.cat.jar", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "38"}}, "\\n", {"translate": "book.headinajar.written2.cat.getting_home", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "50"}}, "\\n", {"translate": "book.headinajar.written2.cat.staffing", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "58"}}, "\\n", {"translate": "book.headinajar.written2.cat.mecha", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "67"}}, "\\n", {"translate": "book.headinajar.written2.cat.research", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "77"}}, "\\n", {"translate": "book.headinajar.written2.cat.hr", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "93"}}, "\\n"]','["", {"translate": "book.headinajar.entry.orientation.welcome", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.welcome.1"}]','["", {"translate": "book.headinajar.written2.orientation.welcome.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.welcome.2"}]','["", {"translate": "book.headinajar.entry.orientation.shopping_list", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.shopping_list.1"}]','{"translate": "book.headinajar.written2.orientation.shopping_list.2"}','["", {"translate": "item.headinajar.surgical_steel_ingot", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.headinajar.surgical_steel_blend"}, "\\n", "\\n", {"translate": "book.headinajar.written2.orientation.shopping_list.3"}]','["", {"translate": "book.headinajar.entry.orientation.how_to_read", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.how_to_read.1", "with": [{"keybind": "key.headinajar.jar_menu"}]}]','{"translate": "book.headinajar.written2.orientation.how_to_read.2"}','["", {"translate": "book.headinajar.entry.orientation.units", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.units.1"}]','["", {"translate": "book.headinajar.entry.facilities.galvanic_pile", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "6 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "1 ", {"translate": "item.minecraft.rotten_flesh"}, "\\n", "\\n", {"translate": "book.headinajar.written2.facilities.galvanic_pile.1"}]','{"translate": "book.headinajar.written2.facilities.galvanic_pile.2"}','["", {"translate": "book.headinajar.entry.facilities.sharing_power", "bold": true}, "\\n", {"translate": "book.headinajar.written2.facilities.sharing_power.1"}]','{"translate": "book.headinajar.written2.facilities.sharing_power.2"}','{"translate": "book.headinajar.written2.facilities.sharing_power.3"}','["", {"translate": "book.headinajar.entry.facilities.charging_dock", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "1 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "block.minecraft.redstone_block"}, "\\n", "\\n", {"translate": "book.headinajar.written2.facilities.charging_dock.1"}]','{"translate": "book.headinajar.written2.facilities.charging_dock.2"}','["", {"translate": "book.headinajar.entry.life_support.saline", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.minecraft.potion.effect.water"}, ", ", "1 ", {"translate": "item.minecraft.sugar"}, ", ", "1 ", {"translate": "block.minecraft.kelp"}, ", ", "1 ", {"translate": "item.minecraft.redstone"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.saline.1"}]','{"translate": "book.headinajar.written2.life_support.saline.2"}','{"translate": "book.headinajar.written2.life_support.saline.3"}','["", {"translate": "book.headinajar.entry.life_support.integrity", "bold": true}, "\\n", {"translate": "book.headinajar.written2.life_support.integrity.1"}]','["", {"translate": "item.headinajar.glass_patch", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "block.minecraft.glass_pane"}, ", ", "1 ", {"translate": "item.minecraft.slime_ball"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.integrity.2"}]','["", {"translate": "book.headinajar.entry.life_support.cradle", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "block.minecraft.glass"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "3 ", {"translate": "item.headinajar.surgical_steel_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.cradle.1"}]','{"translate": "book.headinajar.written2.life_support.cradle.2"}','["", {"translate": "book.headinajar.entry.life_support.body_printer", "bold": true}, "\\n", {"translate": "book.headinajar.written2.life_support.body_printer.1"}]','{"translate": "book.headinajar.written2.life_support.body_printer.2"}','["", {"translate": "book.headinajar.entry.separation.the_chair", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "3 ", {"translate": "block.minecraft.white_wool"}, ", ", "1 ", {"translate": "item.headinajar.excision_head"}, ", ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "item.headinajar.booth_console"}, ", ", "1 ", {"translate": "item.headinajar.servo"}, ", ", "1 ", {"translate": "block.minecraft.lever"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.1"}]','["", {"translate": "book.headinajar.written2.separation.the_chair.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_chair.2"}]','{"translate": "book.headinajar.written2.separation.the_chair.3"}','["", {"translate": "item.headinajar.relay_goggles", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.minecraft.leather"}, ", ", "1 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "2 ", {"translate": "item.headinajar.lens"}, ", ", "1 ", {"translate": "item.headinajar.neuro_copper_wire"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.4"}]','["", {"translate": "item.headinajar.collar_cam", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.headinajar.lens"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "1 ", {"translate": "item.headinajar.servo"}, ", ", "3 ", {"translate": "item.headinajar.surgical_steel_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.5"}]','["", {"translate": "book.headinajar.entry.separation.the_botch", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_botch.1"}]','["", {"translate": "item.headinajar.replacement_blade", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "item.minecraft.diamond"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_botch.2"}]','["", {"translate": "book.headinajar.entry.separation.the_link", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_link.1"}]','{"translate": "book.headinajar.written2.separation.the_link.2", "with": [{"keybind": "key.headinajar.swap"}]}','["", {"translate": "book.headinajar.entry.separation.when_it_goes_wrong", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.when_it_goes_wrong.1.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.when_it_goes_wrong.1"}]','{"translate": "book.headinajar.written2.separation.when_it_goes_wrong.2"}','["", {"translate": "book.headinajar.entry.jar.no_hands", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.no_hands.1.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.no_hands.1"}]','{"translate": "book.headinajar.written2.jar.no_hands.2"}','["", {"translate": "item.headinajar.manipulator_arm", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "3 ", {"translate": "item.minecraft.iron_ingot"}, ", ", "1 ", {"translate": "item.minecraft.redstone"}, ", ", "1 ", {"translate": "item.minecraft.copper_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.jar.no_hands.3"}]','["", {"translate": "book.headinajar.entry.jar.jar_menu", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.jar_menu.1", "with": [{"keybind": "key.headinajar.jar_menu"}]}]','["", {"translate": "book.headinajar.entry.jar.modules", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.modules.1"}]','{"translate": "book.headinajar.written2.jar.modules.2", "with": [{"keybind": "key.headinajar.drive"}]}','{"translate": "book.headinajar.written2.jar.modules.3", "with": [{"keybind": "key.headinajar.ability"}]}','{"translate": "book.headinajar.written2.jar.modules.4", "with": [{"keybind": "key.headinajar.secondary"}]}','{"translate": "book.headinajar.written2.jar.modules.5"}','["", {"translate": "book.headinajar.entry.jar.charge", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.charge.1"}]','{"translate": "book.headinajar.written2.jar.charge.2"}','["", {"translate": "book.headinajar.entry.jar.tiers", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.tiers.1"}]','["", {"translate": "book.headinajar.entry.getting_home.reach", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.reach.1"}]','["", {"translate": "block.headinajar.relay_mast", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.reach.2"}]','["", {"translate": "book.headinajar.entry.getting_home.courier", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.courier.1", "with": [{"keybind": "key.headinajar.swap"}]}]','["", {"translate": "item.headinajar.body_recall_beacon", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.courier.2"}]','["", {"translate": "book.headinajar.entry.getting_home.suture", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.suture.1", "with": [{"keybind": "key.use"}]}]','["", {"translate": "book.headinajar.entry.getting_home.corpses", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.corpses.1"}]','["", {"translate": "book.headinajar.written2.getting_home.corpses.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.corpses.2"}]','["", {"translate": "book.headinajar.entry.getting_home.lost_property", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.lost_property.1"}]','["", {"translate": "book.headinajar.entry.staffing.saw", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.saw.1"}]','["", {"translate": "book.headinajar.entry.staffing.riding", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.riding.1", "with": [{"keybind": "key.jump"}, {"keybind": "key.attack"}, {"keybind": "key.sneak"}]}]','["", {"translate": "book.headinajar.entry.staffing.sync", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.sync.1", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}]}]','["", {"translate": "book.headinajar.entry.staffing.abilities", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.1", "with": [{"keybind": "key.headinajar.ability"}]}]','["", {"translate": "book.headinajar.written2.staffing.abilities.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.2"}]','["", {"translate": "book.headinajar.written2.staffing.abilities.3.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.3"}]','["", {"translate": "book.headinajar.entry.staffing.upkeep", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.upkeep.1"}]','["", {"translate": "book.headinajar.entry.staffing.body_locker", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.body_locker.1"}]','["", {"translate": "book.headinajar.entry.staffing.robots", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.robots.1"}]','["", {"translate": "book.headinajar.entry.mecha.gantry", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gantry.1"}]','["", {"translate": "book.headinajar.entry.mecha.frames", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.frames.1"}]','{"translate": "book.headinajar.written2.mecha.frames.2"}','["", {"translate": "item.headinajar.hopper_frame", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.frames.3"}]','["", {"translate": "book.headinajar.entry.mecha.piloting", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.piloting.1", "with": [{"keybind": "key.sneak"}, {"keybind": "key.headinajar.jar_menu"}]}]','{"translate": "book.headinajar.written2.mecha.piloting.2", "with": [{"keybind": "key.attack"}, {"keybind": "key.use"}, {"keybind": "key.jump"}, {"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}, {"keybind": "key.sneak"}, {"keybind": "key.headinajar.swap"}]}','["", {"translate": "book.headinajar.entry.mecha.gauges", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gauges.1"}]','["", {"translate": "book.headinajar.written2.mecha.gauges.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gauges.2"}]','["", {"translate": "book.headinajar.entry.mecha.mecha_modules", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.mecha_modules.1"}]','{"translate": "book.headinajar.written2.mecha.mecha_modules.2"}','["", {"translate": "book.headinajar.entry.research.chain", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.chain.1"}]','["", {"translate": "book.headinajar.entry.research.blood", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.blood.1"}]','["", {"translate": "book.headinajar.entry.research.carriers", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.carriers.1"}]','{"translate": "book.headinajar.written2.research.carriers.2"}','{"translate": "book.headinajar.written2.research.carriers.3"}','{"translate": "book.headinajar.written2.research.carriers.4"}','{"translate": "book.headinajar.written2.research.carriers.5"}','{"translate": "book.headinajar.written2.research.carriers.6"}','{"translate": "book.headinajar.written2.research.carriers.7"}','["", {"translate": "book.headinajar.entry.research.splicing", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.splicing.1"}]','{"translate": "book.headinajar.written2.research.splicing.2", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}]}','["", {"translate": "book.headinajar.entry.research.turret", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.turret.1"}]','["", {"translate": "book.headinajar.entry.research.array", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.array.1"}]','["", {"translate": "book.headinajar.entry.research.socket", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.socket.1", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.sneak"}, {"keybind": "key.headinajar.jar_menu"}]}]','["", {"translate": "book.headinajar.entry.research.staff", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.staff.1"}]','["", {"translate": "book.headinajar.written2.research.staff.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.staff.2"}]','["", {"translate": "book.headinajar.entry.hr.faq", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.faq.1"}]','{"translate": "book.headinajar.written2.hr.faq.2"}','["", {"translate": "book.headinajar.entry.hr.incidents", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.1"}]','["", {"translate": "book.headinajar.written2.hr.incidents.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.2"}]','["", {"translate": "book.headinajar.written2.hr.incidents.3.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.3"}]']}] 1
+hotbar 1
+wait 5
+key use
+wait 10
+mouse 0 0
+shot wb_en_001
+press page.down
+wait 2
+shot wb_en_002
+press page.down
+wait 2
+shot wb_en_003
+press page.down
+wait 2
+shot wb_en_004
+press page.down
+wait 2
+shot wb_en_005
+press page.down
+wait 2
+shot wb_en_006
+press page.down
+wait 2
+shot wb_en_007
+press page.down
+wait 2
+shot wb_en_008
+press page.down
+wait 2
+shot wb_en_009
+press page.down
+wait 2
+shot wb_en_010
+press page.down
+wait 2
+shot wb_en_011
+press page.down
+wait 2
+shot wb_en_012
+press page.down
+wait 2
+shot wb_en_013
+press page.down
+wait 2
+shot wb_en_014
+press page.down
+wait 2
+shot wb_en_015
+press page.down
+wait 2
+shot wb_en_016
+press page.down
+wait 2
+shot wb_en_017
+press page.down
+wait 2
+shot wb_en_018
+press page.down
+wait 2
+shot wb_en_019
+press page.down
+wait 2
+shot wb_en_020
+press page.down
+wait 2
+shot wb_en_021
+press page.down
+wait 2
+shot wb_en_022
+press page.down
+wait 2
+shot wb_en_023
+press page.down
+wait 2
+shot wb_en_024
+press page.down
+wait 2
+shot wb_en_025
+press page.down
+wait 2
+shot wb_en_026
+press page.down
+wait 2
+shot wb_en_027
+press page.down
+wait 2
+shot wb_en_028
+press page.down
+wait 2
+shot wb_en_029
+press page.down
+wait 2
+shot wb_en_030
+press page.down
+wait 2
+shot wb_en_031
+press page.down
+wait 2
+shot wb_en_032
+press page.down
+wait 2
+shot wb_en_033
+press page.down
+wait 2
+shot wb_en_034
+press page.down
+wait 2
+shot wb_en_035
+press page.down
+wait 2
+shot wb_en_036
+press page.down
+wait 2
+shot wb_en_037
+press page.down
+wait 2
+shot wb_en_038
+press page.down
+wait 2
+shot wb_en_039
+press page.down
+wait 2
+shot wb_en_040
+press page.down
+wait 2
+shot wb_en_041
+press page.down
+wait 2
+shot wb_en_042
+press page.down
+wait 2
+shot wb_en_043
+press page.down
+wait 2
+shot wb_en_044
+press page.down
+wait 2
+shot wb_en_045
+press page.down
+wait 2
+shot wb_en_046
+press page.down
+wait 2
+shot wb_en_047
+press page.down
+wait 2
+shot wb_en_048
+press page.down
+wait 2
+shot wb_en_049
+press page.down
+wait 2
+shot wb_en_050
+press page.down
+wait 2
+shot wb_en_051
+press page.down
+wait 2
+shot wb_en_052
+press page.down
+wait 2
+shot wb_en_053
+press page.down
+wait 2
+shot wb_en_054
+press page.down
+wait 2
+shot wb_en_055
+press page.down
+wait 2
+shot wb_en_056
+press page.down
+wait 2
+shot wb_en_057
+press page.down
+wait 2
+shot wb_en_058
+press page.down
+wait 2
+shot wb_en_059
+press page.down
+wait 2
+shot wb_en_060
+press page.down
+wait 2
+shot wb_en_061
+press page.down
+wait 2
+shot wb_en_062
+press page.down
+wait 2
+shot wb_en_063
+press page.down
+wait 2
+shot wb_en_064
+press page.down
+wait 2
+shot wb_en_065
+press page.down
+wait 2
+shot wb_en_066
+press page.down
+wait 2
+shot wb_en_067
+press page.down
+wait 2
+shot wb_en_068
+press page.down
+wait 2
+shot wb_en_069
+press page.down
+wait 2
+shot wb_en_070
+press page.down
+wait 2
+shot wb_en_071
+press page.down
+wait 2
+shot wb_en_072
+press page.down
+wait 2
+shot wb_en_073
+press page.down
+wait 2
+shot wb_en_074
+press page.down
+wait 2
+shot wb_en_075
+press page.down
+wait 2
+shot wb_en_076
+press page.down
+wait 2
+shot wb_en_077
+press page.down
+wait 2
+shot wb_en_078
+press page.down
+wait 2
+shot wb_en_079
+press page.down
+wait 2
+shot wb_en_080
+press page.down
+wait 2
+shot wb_en_081
+press page.down
+wait 2
+shot wb_en_082
+press page.down
+wait 2
+shot wb_en_083
+press page.down
+wait 2
+shot wb_en_084
+press page.down
+wait 2
+shot wb_en_085
+press page.down
+wait 2
+shot wb_en_086
+press page.down
+wait 2
+shot wb_en_087
+press page.down
+wait 2
+shot wb_en_088
+press page.down
+wait 2
+shot wb_en_089
+press page.down
+wait 2
+shot wb_en_090
+press page.down
+wait 2
+shot wb_en_091
+press page.down
+wait 2
+shot wb_en_092
+press page.down
+wait 2
+shot wb_en_093
+press page.down
+wait 2
+shot wb_en_094
+press page.down
+wait 2
+shot wb_en_095
+press page.down
+wait 2
+shot wb_en_096
+press page.down
+wait 2
+shot wb_en_097
+press page.down
+wait 2
+press escape
+wait 5
+/clear @s
+lang pt_br
+/give @s minecraft:written_book[written_book_content={title:"Employee Handbook",author:"Noggin & Sons",resolved:true,pages:['{"translate": "book.headinajar.written2.title"}','["", {"translate": "book.headinajar.written2.contents", "bold": true}, "\\n\\n", {"translate": "book.headinajar.written2.cat.orientation", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "3"}}, "\\n", {"translate": "book.headinajar.written2.cat.facilities", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "11"}}, "\\n", {"translate": "book.headinajar.written2.cat.life_support", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "18"}}, "\\n", {"translate": "book.headinajar.written2.cat.separation", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "27"}}, "\\n", {"translate": "book.headinajar.written2.cat.jar", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "38"}}, "\\n", {"translate": "book.headinajar.written2.cat.getting_home", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "50"}}, "\\n", {"translate": "book.headinajar.written2.cat.staffing", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "58"}}, "\\n", {"translate": "book.headinajar.written2.cat.mecha", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "67"}}, "\\n", {"translate": "book.headinajar.written2.cat.research", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "77"}}, "\\n", {"translate": "book.headinajar.written2.cat.hr", "color": "dark_blue", "underlined": true, "clickEvent": {"action": "change_page", "value": "93"}}, "\\n"]','["", {"translate": "book.headinajar.entry.orientation.welcome", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.welcome.1"}]','["", {"translate": "book.headinajar.written2.orientation.welcome.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.welcome.2"}]','["", {"translate": "book.headinajar.entry.orientation.shopping_list", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.shopping_list.1"}]','{"translate": "book.headinajar.written2.orientation.shopping_list.2"}','["", {"translate": "item.headinajar.surgical_steel_ingot", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.headinajar.surgical_steel_blend"}, "\\n", "\\n", {"translate": "book.headinajar.written2.orientation.shopping_list.3"}]','["", {"translate": "book.headinajar.entry.orientation.how_to_read", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.how_to_read.1", "with": [{"keybind": "key.headinajar.jar_menu"}]}]','{"translate": "book.headinajar.written2.orientation.how_to_read.2"}','["", {"translate": "book.headinajar.entry.orientation.units", "bold": true}, "\\n", {"translate": "book.headinajar.written2.orientation.units.1"}]','["", {"translate": "book.headinajar.entry.facilities.galvanic_pile", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "6 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "1 ", {"translate": "item.minecraft.rotten_flesh"}, "\\n", "\\n", {"translate": "book.headinajar.written2.facilities.galvanic_pile.1"}]','{"translate": "book.headinajar.written2.facilities.galvanic_pile.2"}','["", {"translate": "book.headinajar.entry.facilities.sharing_power", "bold": true}, "\\n", {"translate": "book.headinajar.written2.facilities.sharing_power.1"}]','{"translate": "book.headinajar.written2.facilities.sharing_power.2"}','{"translate": "book.headinajar.written2.facilities.sharing_power.3"}','["", {"translate": "book.headinajar.entry.facilities.charging_dock", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "1 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "block.minecraft.redstone_block"}, "\\n", "\\n", {"translate": "book.headinajar.written2.facilities.charging_dock.1"}]','{"translate": "book.headinajar.written2.facilities.charging_dock.2"}','["", {"translate": "book.headinajar.entry.life_support.saline", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.minecraft.potion.effect.water"}, ", ", "1 ", {"translate": "item.minecraft.sugar"}, ", ", "1 ", {"translate": "block.minecraft.kelp"}, ", ", "1 ", {"translate": "item.minecraft.redstone"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.saline.1"}]','{"translate": "book.headinajar.written2.life_support.saline.2"}','{"translate": "book.headinajar.written2.life_support.saline.3"}','["", {"translate": "book.headinajar.entry.life_support.integrity", "bold": true}, "\\n", {"translate": "book.headinajar.written2.life_support.integrity.1"}]','["", {"translate": "item.headinajar.glass_patch", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "block.minecraft.glass_pane"}, ", ", "1 ", {"translate": "item.minecraft.slime_ball"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.integrity.2"}]','["", {"translate": "book.headinajar.entry.life_support.cradle", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "block.minecraft.glass"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "3 ", {"translate": "item.headinajar.surgical_steel_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.life_support.cradle.1"}]','{"translate": "book.headinajar.written2.life_support.cradle.2"}','["", {"translate": "book.headinajar.entry.life_support.body_printer", "bold": true}, "\\n", {"translate": "book.headinajar.written2.life_support.body_printer.1"}]','{"translate": "book.headinajar.written2.life_support.body_printer.2"}','["", {"translate": "book.headinajar.entry.separation.the_chair", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "3 ", {"translate": "block.minecraft.white_wool"}, ", ", "1 ", {"translate": "item.headinajar.excision_head"}, ", ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "item.headinajar.booth_console"}, ", ", "1 ", {"translate": "item.headinajar.servo"}, ", ", "1 ", {"translate": "block.minecraft.lever"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.1"}]','["", {"translate": "book.headinajar.written2.separation.the_chair.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_chair.2"}]','{"translate": "book.headinajar.written2.separation.the_chair.3"}','["", {"translate": "item.headinajar.relay_goggles", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.minecraft.leather"}, ", ", "1 ", {"translate": "item.minecraft.copper_ingot"}, ", ", "2 ", {"translate": "item.headinajar.lens"}, ", ", "1 ", {"translate": "item.headinajar.neuro_copper_wire"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.4"}]','["", {"translate": "item.headinajar.collar_cam", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "1 ", {"translate": "item.headinajar.lens"}, ", ", "2 ", {"translate": "item.headinajar.neuro_copper_wire"}, ", ", "1 ", {"translate": "item.headinajar.servo"}, ", ", "3 ", {"translate": "item.headinajar.surgical_steel_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_chair.5"}]','["", {"translate": "book.headinajar.entry.separation.the_botch", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_botch.1"}]','["", {"translate": "item.headinajar.replacement_blade", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "2 ", {"translate": "item.headinajar.surgical_steel_ingot"}, ", ", "1 ", {"translate": "item.minecraft.diamond"}, "\\n", "\\n", {"translate": "book.headinajar.written2.separation.the_botch.2"}]','["", {"translate": "book.headinajar.entry.separation.the_link", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.the_link.1"}]','{"translate": "book.headinajar.written2.separation.the_link.2", "with": [{"keybind": "key.headinajar.swap"}]}','["", {"translate": "book.headinajar.entry.separation.when_it_goes_wrong", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.when_it_goes_wrong.1.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.separation.when_it_goes_wrong.1"}]','{"translate": "book.headinajar.written2.separation.when_it_goes_wrong.2"}','["", {"translate": "book.headinajar.entry.jar.no_hands", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.no_hands.1.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.no_hands.1"}]','{"translate": "book.headinajar.written2.jar.no_hands.2"}','["", {"translate": "item.headinajar.manipulator_arm", "bold": true}, "\\n", {"translate": "book.headinajar.written2.recipe"}, " ", "3 ", {"translate": "item.minecraft.iron_ingot"}, ", ", "1 ", {"translate": "item.minecraft.redstone"}, ", ", "1 ", {"translate": "item.minecraft.copper_ingot"}, "\\n", "\\n", {"translate": "book.headinajar.written2.jar.no_hands.3"}]','["", {"translate": "book.headinajar.entry.jar.jar_menu", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.jar_menu.1", "with": [{"keybind": "key.headinajar.jar_menu"}]}]','["", {"translate": "book.headinajar.entry.jar.modules", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.modules.1"}]','{"translate": "book.headinajar.written2.jar.modules.2", "with": [{"keybind": "key.headinajar.drive"}]}','{"translate": "book.headinajar.written2.jar.modules.3", "with": [{"keybind": "key.headinajar.ability"}]}','{"translate": "book.headinajar.written2.jar.modules.4", "with": [{"keybind": "key.headinajar.secondary"}]}','{"translate": "book.headinajar.written2.jar.modules.5"}','["", {"translate": "book.headinajar.entry.jar.charge", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.charge.1"}]','{"translate": "book.headinajar.written2.jar.charge.2"}','["", {"translate": "book.headinajar.entry.jar.tiers", "bold": true}, "\\n", {"translate": "book.headinajar.written2.jar.tiers.1"}]','["", {"translate": "book.headinajar.entry.getting_home.reach", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.reach.1"}]','["", {"translate": "block.headinajar.relay_mast", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.reach.2"}]','["", {"translate": "book.headinajar.entry.getting_home.courier", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.courier.1", "with": [{"keybind": "key.headinajar.swap"}]}]','["", {"translate": "item.headinajar.body_recall_beacon", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.courier.2"}]','["", {"translate": "book.headinajar.entry.getting_home.suture", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.suture.1", "with": [{"keybind": "key.use"}]}]','["", {"translate": "book.headinajar.entry.getting_home.corpses", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.corpses.1"}]','["", {"translate": "book.headinajar.written2.getting_home.corpses.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.corpses.2"}]','["", {"translate": "book.headinajar.entry.getting_home.lost_property", "bold": true}, "\\n", {"translate": "book.headinajar.written2.getting_home.lost_property.1"}]','["", {"translate": "book.headinajar.entry.staffing.saw", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.saw.1"}]','["", {"translate": "book.headinajar.entry.staffing.riding", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.riding.1", "with": [{"keybind": "key.jump"}, {"keybind": "key.attack"}, {"keybind": "key.sneak"}]}]','["", {"translate": "book.headinajar.entry.staffing.sync", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.sync.1", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}]}]','["", {"translate": "book.headinajar.entry.staffing.abilities", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.1", "with": [{"keybind": "key.headinajar.ability"}]}]','["", {"translate": "book.headinajar.written2.staffing.abilities.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.2"}]','["", {"translate": "book.headinajar.written2.staffing.abilities.3.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.abilities.3"}]','["", {"translate": "book.headinajar.entry.staffing.upkeep", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.upkeep.1"}]','["", {"translate": "book.headinajar.entry.staffing.body_locker", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.body_locker.1"}]','["", {"translate": "book.headinajar.entry.staffing.robots", "bold": true}, "\\n", {"translate": "book.headinajar.written2.staffing.robots.1"}]','["", {"translate": "book.headinajar.entry.mecha.gantry", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gantry.1"}]','["", {"translate": "book.headinajar.entry.mecha.frames", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.frames.1"}]','{"translate": "book.headinajar.written2.mecha.frames.2"}','["", {"translate": "item.headinajar.hopper_frame", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.frames.3"}]','["", {"translate": "book.headinajar.entry.mecha.piloting", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.piloting.1", "with": [{"keybind": "key.sneak"}, {"keybind": "key.headinajar.jar_menu"}]}]','{"translate": "book.headinajar.written2.mecha.piloting.2", "with": [{"keybind": "key.attack"}, {"keybind": "key.use"}, {"keybind": "key.jump"}, {"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}, {"keybind": "key.sneak"}, {"keybind": "key.headinajar.swap"}]}','["", {"translate": "book.headinajar.entry.mecha.gauges", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gauges.1"}]','["", {"translate": "book.headinajar.written2.mecha.gauges.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.gauges.2"}]','["", {"translate": "book.headinajar.entry.mecha.mecha_modules", "bold": true}, "\\n", {"translate": "book.headinajar.written2.mecha.mecha_modules.1"}]','{"translate": "book.headinajar.written2.mecha.mecha_modules.2"}','["", {"translate": "book.headinajar.entry.research.chain", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.chain.1"}]','["", {"translate": "book.headinajar.entry.research.blood", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.blood.1"}]','["", {"translate": "book.headinajar.entry.research.carriers", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.carriers.1"}]','{"translate": "book.headinajar.written2.research.carriers.2"}','{"translate": "book.headinajar.written2.research.carriers.3"}','{"translate": "book.headinajar.written2.research.carriers.4"}','{"translate": "book.headinajar.written2.research.carriers.5"}','{"translate": "book.headinajar.written2.research.carriers.6"}','{"translate": "book.headinajar.written2.research.carriers.7"}','["", {"translate": "book.headinajar.entry.research.splicing", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.splicing.1"}]','{"translate": "book.headinajar.written2.research.splicing.2", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.headinajar.secondary"}]}','["", {"translate": "book.headinajar.entry.research.turret", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.turret.1"}]','["", {"translate": "book.headinajar.entry.research.array", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.array.1"}]','["", {"translate": "book.headinajar.entry.research.socket", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.socket.1", "with": [{"keybind": "key.headinajar.ability"}, {"keybind": "key.sneak"}, {"keybind": "key.headinajar.jar_menu"}]}]','["", {"translate": "book.headinajar.entry.research.staff", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.staff.1"}]','["", {"translate": "book.headinajar.written2.research.staff.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.research.staff.2"}]','["", {"translate": "book.headinajar.entry.hr.faq", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.faq.1"}]','{"translate": "book.headinajar.written2.hr.faq.2"}','["", {"translate": "book.headinajar.entry.hr.incidents", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.1"}]','["", {"translate": "book.headinajar.written2.hr.incidents.2.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.2"}]','["", {"translate": "book.headinajar.written2.hr.incidents.3.title", "bold": true}, "\\n", {"translate": "book.headinajar.written2.hr.incidents.3"}]']}] 1
+hotbar 1
+wait 5
+key use
+wait 10
+mouse 0 0
+shot wb_pt_001
+press page.down
+wait 2
+shot wb_pt_002
+press page.down
+wait 2
+shot wb_pt_003
+press page.down
+wait 2
+shot wb_pt_004
+press page.down
+wait 2
+shot wb_pt_005
+press page.down
+wait 2
+shot wb_pt_006
+press page.down
+wait 2
+shot wb_pt_007
+press page.down
+wait 2
+shot wb_pt_008
+press page.down
+wait 2
+shot wb_pt_009
+press page.down
+wait 2
+shot wb_pt_010
+press page.down
+wait 2
+shot wb_pt_011
+press page.down
+wait 2
+shot wb_pt_012
+press page.down
+wait 2
+shot wb_pt_013
+press page.down
+wait 2
+shot wb_pt_014
+press page.down
+wait 2
+shot wb_pt_015
+press page.down
+wait 2
+shot wb_pt_016
+press page.down
+wait 2
+shot wb_pt_017
+press page.down
+wait 2
+shot wb_pt_018
+press page.down
+wait 2
+shot wb_pt_019
+press page.down
+wait 2
+shot wb_pt_020
+press page.down
+wait 2
+shot wb_pt_021
+press page.down
+wait 2
+shot wb_pt_022
+press page.down
+wait 2
+shot wb_pt_023
+press page.down
+wait 2
+shot wb_pt_024
+press page.down
+wait 2
+shot wb_pt_025
+press page.down
+wait 2
+shot wb_pt_026
+press page.down
+wait 2
+shot wb_pt_027
+press page.down
+wait 2
+shot wb_pt_028
+press page.down
+wait 2
+shot wb_pt_029
+press page.down
+wait 2
+shot wb_pt_030
+press page.down
+wait 2
+shot wb_pt_031
+press page.down
+wait 2
+shot wb_pt_032
+press page.down
+wait 2
+shot wb_pt_033
+press page.down
+wait 2
+shot wb_pt_034
+press page.down
+wait 2
+shot wb_pt_035
+press page.down
+wait 2
+shot wb_pt_036
+press page.down
+wait 2
+shot wb_pt_037
+press page.down
+wait 2
+shot wb_pt_038
+press page.down
+wait 2
+shot wb_pt_039
+press page.down
+wait 2
+shot wb_pt_040
+press page.down
+wait 2
+shot wb_pt_041
+press page.down
+wait 2
+shot wb_pt_042
+press page.down
+wait 2
+shot wb_pt_043
+press page.down
+wait 2
+shot wb_pt_044
+press page.down
+wait 2
+shot wb_pt_045
+press page.down
+wait 2
+shot wb_pt_046
+press page.down
+wait 2
+shot wb_pt_047
+press page.down
+wait 2
+shot wb_pt_048
+press page.down
+wait 2
+shot wb_pt_049
+press page.down
+wait 2
+shot wb_pt_050
+press page.down
+wait 2
+shot wb_pt_051
+press page.down
+wait 2
+shot wb_pt_052
+press page.down
+wait 2
+shot wb_pt_053
+press page.down
+wait 2
+shot wb_pt_054
+press page.down
+wait 2
+shot wb_pt_055
+press page.down
+wait 2
+shot wb_pt_056
+press page.down
+wait 2
+shot wb_pt_057
+press page.down
+wait 2
+shot wb_pt_058
+press page.down
+wait 2
+shot wb_pt_059
+press page.down
+wait 2
+shot wb_pt_060
+press page.down
+wait 2
+shot wb_pt_061
+press page.down
+wait 2
+shot wb_pt_062
+press page.down
+wait 2
+shot wb_pt_063
+press page.down
+wait 2
+shot wb_pt_064
+press page.down
+wait 2
+shot wb_pt_065
+press page.down
+wait 2
+shot wb_pt_066
+press page.down
+wait 2
+shot wb_pt_067
+press page.down
+wait 2
+shot wb_pt_068
+press page.down
+wait 2
+shot wb_pt_069
+press page.down
+wait 2
+shot wb_pt_070
+press page.down
+wait 2
+shot wb_pt_071
+press page.down
+wait 2
+shot wb_pt_072
+press page.down
+wait 2
+shot wb_pt_073
+press page.down
+wait 2
+shot wb_pt_074
+press page.down
+wait 2
+shot wb_pt_075
+press page.down
+wait 2
+shot wb_pt_076
+press page.down
+wait 2
+shot wb_pt_077
+press page.down
+wait 2
+shot wb_pt_078
+press page.down
+wait 2
+shot wb_pt_079
+press page.down
+wait 2
+shot wb_pt_080
+press page.down
+wait 2
+shot wb_pt_081
+press page.down
+wait 2
+shot wb_pt_082
+press page.down
+wait 2
+shot wb_pt_083
+press page.down
+wait 2
+shot wb_pt_084
+press page.down
+wait 2
+shot wb_pt_085
+press page.down
+wait 2
+shot wb_pt_086
+press page.down
+wait 2
+shot wb_pt_087
+press page.down
+wait 2
+shot wb_pt_088
+press page.down
+wait 2
+shot wb_pt_089
+press page.down
+wait 2
+shot wb_pt_090
+press page.down
+wait 2
+shot wb_pt_091
+press page.down
+wait 2
+shot wb_pt_092
+press page.down
+wait 2
+shot wb_pt_093
+press page.down
+wait 2
+shot wb_pt_094
+press page.down
+wait 2
+shot wb_pt_095
+press page.down
+wait 2
+shot wb_pt_096
+press page.down
+wait 2
+shot wb_pt_097
+press page.down
+wait 2
+press escape
+wait 5
+/clear @s

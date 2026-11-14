@@ -145,7 +145,7 @@ public class BoardGameTests {
         h.succeed();
     }
 
-    @GameTest(template = "platform")
+    @GameTest(template = "tall_platform")
     public static void gantryBuildsAColossus(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR.east(4));
         h.setBlock(FLOOR, ModRegistry.ASSEMBLY_GANTRY.get());
@@ -159,10 +159,13 @@ public class BoardGameTests {
         gantry.items().setStackInSlot(AssemblyGantryBlockEntity.FIRST_MODULE + MechaFrame.COLOSSUS.firstIndex(MechaModule.Slot.LEGS),
                 new ItemStack(ModRegistry.mechaModule(MechaModule.HYDRAULIC_LEGS)));
         h.assertTrue(gantry.button(p, AssemblyGantryMenu.ASSEMBLE), "assemble failed");
-        MechaEntity m = gantry.onPad();
-        h.assertTrue(m != null && m.frame() == MechaFrame.COLOSSUS && m.moduleAt(last) == MechaModule.TARGET_LOCK && m.arm(3) == MechaModule.ARC_CANNON,
-                "16th slot or shoulder lost");
-        done(h, p);
+        // the frame stands on the deck once the arm has stood off
+        h.runAfterDelay(com.coolfreeze23.headinajar.machine.GantryPlan.LEAD + 1, () -> {
+            MechaEntity m = gantry.onPad();
+            h.assertTrue(m != null && m.frame() == MechaFrame.COLOSSUS && m.moduleAt(last) == MechaModule.TARGET_LOCK && m.arm(3) == MechaModule.ARC_CANNON,
+                    "16th slot or shoulder lost");
+            done(h, p);
+        });
     }
 
     // --- modules ---------------------------------------------------------------------------------------

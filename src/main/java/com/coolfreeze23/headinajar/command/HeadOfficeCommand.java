@@ -70,8 +70,12 @@ public final class HeadOfficeCommand {
         int n = 0;
         for (GameProfile profile : profiles) {
             if (profile.getId().equals(self.getUUID())) continue;
-            if (registry.setTrust(self.getUUID(), profile.getId(), add)) n++;
-            c.getSource().sendSuccess(() -> Component.translatable(add ? "command.headinajar.trusted" : "command.headinajar.untrusted", profile.getName()), false);
+            // a change says what changed; no change says it was already so
+            boolean changed = registry.setTrust(self.getUUID(), profile.getId(), add);
+            if (changed) n++;
+            String line = add ? changed ? "command.headinajar.trusted" : "command.headinajar.already_trusted"
+                    : changed ? "command.headinajar.untrusted" : "command.headinajar.never_trusted";
+            c.getSource().sendSuccess(() -> Component.translatable(line, profile.getName()), false);
         }
         return n;
     }
@@ -93,10 +97,14 @@ public final class HeadOfficeCommand {
         JarState state = FormActions.state(player);
         HeadRegistry.Head head = HeadRegistry.get(player).head(player.getUUID());
         HeadRegistry.Body body = HeadRegistry.get(player).body(player.getUUID());
-        String headText = head == null ? "-" : head.where().name().toLowerCase(java.util.Locale.ROOT) + " " + blocks(head.spot());
-        String bodyText = body == null ? "-" : (body.corpse() ? "corpse " : "standing ") + blocks(body.spot());
+        // every word in the reader's language: the form, where the head is, whether the body stands or lies
+        Component headText = head == null ? Component.literal("-") : Component.translatable("command.headinajar.status.where",
+                Component.translatable("command.headinajar.status.head." + head.where().name().toLowerCase(java.util.Locale.ROOT)), blocks(head.spot()));
+        Component bodyText = body == null ? Component.literal("-") : Component.translatable("command.headinajar.status.where",
+                Component.translatable(body.corpse() ? "command.headinajar.status.corpse" : "command.headinajar.status.standing"), blocks(body.spot()));
         c.getSource().sendSuccess(() -> Component.translatable("command.headinajar.status", player.getDisplayName(),
-                state.form().getSerializedName(), state.quality(), headText, bodyText, state.charge()), false);
+                Component.translatable("command.headinajar.status.form." + state.form().getSerializedName()), state.quality(), headText, bodyText,
+                state.charge()), false);
         return 1;
     }
 

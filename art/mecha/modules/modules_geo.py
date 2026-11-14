@@ -80,7 +80,7 @@ MODULES = {
         ],
         'locators': [('fx_jet_0', [-3, -6, -4], 'nozzle_0'), ('fx_jet_1', [3, -6, -4], 'nozzle_1')],
         'clips': {
-            # one burst (6 ticks): the pods kick back 15 degrees and recover; the integrator snuffs a pilot lamp
+            # one burst (6 ticks): the pods kick back 15 degrees and recover; the game snuffs a pilot lamp
             'burst': {'length': 6, 'loop': 'once', 'bones': {
                 'nozzle_0': {'rotation': [(0, [0, 0, 0]), (1, [-15, 0, 0], 'easeOutExpo'), (6, [0, 0, 0], 'easeInOutSine')]},
                 'nozzle_1': {'rotation': [(0, [0, 0, 0]), (2, [-15, 0, 0], 'easeOutExpo'), (6, [0, 0, 0], 'easeInOutSine')]}},
@@ -90,18 +90,26 @@ MODULES = {
     # ---- Hydraulic Legs (LEGS slot): a brass ram clamped to each thigh and a damper on each shin. The frame's legs
     # stay the frame's; this module adds to them. ----
     'hydraulic_legs': {
-        'bones': [('mount_thigh', [0, 0, 0], None, None), ('mount_shin', [0, 0, 0], None, None)],
+        'bones': [('mount_thigh', [0, 0, 0], None, None), ('mount_shin', [0, 0, 0], None, None),
+                  ('ram_rod', [0, 0, -2], 'mount_thigh', None), ('damper_slide', [0, 3, -2], 'mount_shin', None)],
         'cubes': [
-            C('ram', [-1.5, -4, -3], [1.5, 4, -1], 'brass', 'mount_thigh'),    # held a pixel off the thigh by its clamps
+            C('ram', [-1.5, -4, -3], [1.5, 4, -1], 'brass', 'ram_rod'),        # held a pixel off the thigh by its clamps
             C('ram_clamp_top', [-2, 3, -2], [2, 5, 0], 'dsteel', 'mount_thigh'),
             C('ram_clamp_low', [-2, -5, -2], [2, -3, 0], 'dsteel', 'mount_thigh'),
             C('hose', [1.5, -3, -2], [2.5, 3, -1], 'rubber', 'mount_thigh'),
             C('damper', [-1, -5, -2], [1, 3, 0], 'bright', 'mount_shin'),
-            C('damper_can', [-1.5, 1, -3], [1.5, 5, -1], 'copper', 'mount_shin'),
+            C('damper_can', [-1.5, 1, -3], [1.5, 5, -1], 'copper', 'damper_slide'),
             C('damper_boot', [-1.5, -5, -3], [1.5, -3, -1], 'rubber', 'mount_shin'),
         ],
         'locators': [],
-        'clips': {},
+        'clips': {
+            # walking (the game's stride): the ram strokes 1.5 px out of its clamps and back, the damper can rides
+            # down its rod 1.5 px half a stroke later; 8 ticks a stroke (played at the frame's step rate)
+            'pump': {'length': 8, 'loop': 'loop', 'bones': {
+                'ram_rod': {'position': [(0, [0, 0, 0]), (4, [0, -1.5, 0], 'easeInOutSine'), (8, [0, 0, 0], 'easeInOutSine')]},
+                'damper_slide': {'position': [(0, [0, -1.5, 0]), (4, [0, 0, 0], 'easeInOutSine'),
+                                              (8, [0, -1.5, 0], 'easeInOutSine')]}}},
+        },
     },
 }
 
@@ -165,7 +173,10 @@ def clip_json(model, clips):
 
 
 def main():
+    only = [a for a in sys.argv[1:] if not a.startswith('-')]     # optional: module names to write (default all)
     for name, m in MODULES.items():
+        if only and name not in only:
+            continue
         offs = pack(m['cubes'])
         png = os.path.join(HERE, '%s_placeholder.png' % name)
         draw(m['cubes'], offs, png)

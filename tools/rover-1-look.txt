@@ -1,0 +1,108 @@
+# Rover, first look in the default profile: boarding from behind, the drive from behind and the side, steering, the
+# sprint, a wall crash, getting off behind and (walled behind) to the right, a nearly empty jar's limp, stills.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon headinajar:rover 0 -60 0 {Rotation:[0f,0f]}
+/tp @s 5.5 -60 -3.5 0 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 -2.2 0 -20
+wait 5
+lookat headinajar:rover
+view 1
+frames r01_board_behind 50
+key use
+wait 50
+riding rover
+look 0 10
+shot r01_on_the_tray_behind
+watch at 2.2 0.9 2.2 135 18
+wait 5
+shot r01_on_the_tray_front_3q
+watch off
+view 1
+# --- the drive from behind, then from the side --------------------------------------------------------------------
+frames r02_drive_behind 75
+key forward hold 60
+wait 15
+look 180 10
+wait 10
+watch follow -5 0.1 0 -90 3
+frames r03_drive_side 75
+key forward hold 60
+wait 15
+watch off
+view 1
+# --- steering from behind: a gentle curve, then a sharp one ------------------------------------------------------
+look 0 15
+wait 10
+frames r04_steering_behind 110
+key forward down
+turn 30 0 40
+turn -90 0 30
+key forward up
+wait 30
+# --- the sprint ----------------------------------------------------------------------------------------------------
+look 0 10
+wait 10
+frames r05_sprint_behind 80
+key ability
+key forward hold 60
+wait 15
+# --- a wall crash, from the side ------------------------------------------------------------------------------------
+look 0 10
+wait 5
+execute at @e[type=headinajar:rover,limit=1,sort=nearest] run fill ~-3 ~ ~8 ~3 ~2 ~8 minecraft:stone_bricks
+wait 5
+watch at -4 0.6 5 -90 5
+frames r06_crash_side 80
+key forward hold 50
+wait 30
+watch off
+view 1
+# --- getting off behind, from the side ------------------------------------------------------------------------------
+watch at -4 0.8 0 -90 8
+frames r07_get_off_behind_side 40
+sneak
+wait 40
+inspect me
+watch off
+# --- walled behind: getting off to the right (west), at a fresh spot -------------------------------------------------
+/tp @e[type=headinajar:rover] 20.5 -60 20.5 0 0
+/tp @s 23.5 -60 20.5 90 0
+wait 10
+/fill 19 -60 19 21 -59 19 minecraft:stone_bricks
+lookat headinajar:rover
+wait 3
+key use
+wait 20
+riding rover
+# facing south again (a ridden shell turns with its rider's look), so the wall is behind it
+look 0 10
+wait 5
+watch at 0 3 -3.5 0 40
+frames r08_get_off_right_above_behind 40
+sneak
+wait 40
+inspect me
+watch off
+# --- a nearly empty jar: the limp ---------------------------------------------------------------------------------
+/fill 19 -60 19 21 -59 19 minecraft:air
+lookat headinajar:rover
+wait 3
+key use
+wait 20
+view 1
+look 0 10
+charge 3000
+wait 10
+frames r09_limp_behind 60
+key forward hold 50
+wait 10
+report done

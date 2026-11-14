@@ -1,0 +1,72 @@
+# The deploy timed to the drop: standing ejects on flat ground from the side at nine blocks (the Hopper, the Kite); the
+# canopy must be open before the jar touches
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper 0 -60 0 hydraulic_legs
+/tp @s 5.5 -60 -2.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -2.6 0 -25
+wait 5
+key use
+wait 70
+look 0 10
+watch at -9 1 1 -99 -6
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:5f}
+frames s1_hopper_standing_eject_side_9 160
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 2 minecraft:generic
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 120
+watch off
+/kill @e[type=headinajar:hopper]
+mecha kite 0 -60 30 drill
+/tp @s 0.5 -60 27.4 0 -25
+wait 10
+key use
+wait 70
+look 0 10
+watch at -9 1 1 -99 -6
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+frames s2_kite_standing_eject_side_9 160
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 5
+chute
+wait 120
+watch off
+report standing done

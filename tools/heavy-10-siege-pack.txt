@@ -1,0 +1,47 @@
+# The re-authored Siege in the owner's settings and his shoulder view (the perspective key pressed three times), fully
+# loaded: do the back modules and the shoulder weapons clear the raised cradles and the planted arms? Run with
+# SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha colossus 0 -60 30 hydraulic_legs,rocket_pack,radiator_fins,fusion_bottle,galvanic_stack,armor_plating,energy_shield,coolant_loop,thorn_plating,reactive_armour,plasma_lance,excavator_scoop,arc_cannon,flamethrower,night_optics,ore_scanner
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+riding colossus
+look 0 5
+view 0
+key togglePerspective
+wait 3
+key togglePerspective
+wait 3
+key togglePerspective
+wait 10
+frames q01_siege_loaded_shoulder 200
+key drive
+wait 70
+shot q02_sieged_loaded_shoulder
+look 0 25
+wait 5
+shot q03_sieged_loaded_shoulder_looking_down
+look 0 5
+wait 30
+key drive
+wait 50
+watch at 0 3.5 -6 0 20
+wait 3
+key drive
+wait 70
+shot q04_sieged_loaded_behind_above
+watch at 6 2.5 6 135 12
+wait 5
+shot q05_sieged_loaded_front_3q
+watch off
+report siege pack done

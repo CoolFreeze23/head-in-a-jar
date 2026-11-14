@@ -68,7 +68,7 @@ public class ShellLayer<T extends LivingEntity, M extends EntityModel<T>> extend
     @Override
     public void render(PoseStack pose, MultiBufferSource buffers, int light, T entity, float limbSwing, float limbSwingAmount,
                        float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        float alpha = TetherFx.shell(entity, partialTick);
+        float alpha = Math.max(TetherFx.shell(entity, partialTick), 0.85f * ArmBeams.shell(entity));
         if (alpha <= 0.01f) return;
         float scroll = (ageInTicks * 0.01f) % 1;
         // model space runs downward from 1.5 blocks above the feet: grow the shell about the body's middle

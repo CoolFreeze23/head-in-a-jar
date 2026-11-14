@@ -2,14 +2,21 @@
   "name": "Frames",
   "icon": "headinajar:hopper_frame",
   "category": "headinajar:mecha",
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Put a frame on the $(item)Assembly Gantry$(), fit modules in the slots of the right kind and press Assemble. The $(l)Hopper$() is light, the $(l)Bulwark$() tough, the $(l)Wheelhouse$() a car, the $(l)Skitter$() climbs walls, the $(l)Kite$() flies and the $(l)Colossus$() carries shoulder weapons."
+      "text": "One of each slot, except:$(br)Hopper: torso 2, arms 2$(br)Bulwark: back 2, torso 3, arms 2, sensor 2$(br)Chimera: torso 3, arms 2, 3 Gene Ports$(br)Wheelhouse (a car): no legs, back 2, torso 2",
+      "title": "Form 12-M"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(l)Chimera$() has three Gene Ports and the $(l)Executive$() four. Weight against the load rating sets your speed; heat past the cap vents the mecha; an empty battery means limp mode."
+      "text": "Skitter: no legs (climbs walls), torso 2, sensor 2$(br)Kite: flies; no back, arms 2$(br)Colossus: back 2, core 2, torso 5, arms 4, sensor 2$(br)Executive: the same, plus 4 Gene Ports$(br)The Wheelhouse cannot jump and is slow off-road."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:hopper_frame",
+      "text": "The Hopper, 60 HP: with Hydraulic Legs and a Galvanic Stack it walks and charges itself. The Colossus and Executive cannot fit a nether portal."
     }
   ]
 }

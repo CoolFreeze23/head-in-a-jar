@@ -1,0 +1,53 @@
+# The Kite under the owner's settings (run with SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling):
+# HUD on, from first person three presses of the perspective key reach Shoulder Surfing's view; walk, take off, fly,
+# the Talon Lift with a sheep, land
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha kite 0 -60 3 drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+riding kite
+view 0
+look 0 8
+wait 10
+shot pk_p0_first_person
+key togglePerspective
+wait 15
+shot pk_p1
+key togglePerspective
+wait 15
+shot pk_p2
+key togglePerspective
+wait 20
+shot pk_p3_shoulder_hud
+frames k15_pack_shoulder_walk 110
+key forward hold 100
+wait 12
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+wait 3
+frames k16_pack_shoulder_takeoff_talon_fly_land 330
+key jump down
+wait 40
+key drive
+wait 20
+shot pk_carrying_hud
+key forward down
+wait 50
+key jump up
+wait 10
+key drive
+wait 60
+key forward up
+wait 120
+inspect near minecraft:sheep 40
+chute
+report pack done

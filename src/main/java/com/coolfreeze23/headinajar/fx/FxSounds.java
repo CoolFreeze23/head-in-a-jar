@@ -32,6 +32,8 @@ public final class FxSounds {
 
     /** Loads the class, so the events are registered with the mod's sound register. */
     public static void load() {
+        BodySounds.load();
+        HouseSounds.load();
     }
 
     /** One-shots that can repeat get pitch 0.94-1.06 per play (the takes do the rest). */

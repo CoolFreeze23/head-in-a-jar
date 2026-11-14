@@ -1,0 +1,59 @@
+# Both heavy frames in the owner's settings and mods, his shoulder view (the perspective key pressed three times):
+# fully loaded, the jar from his camera behind and above; walk, Siege, the jingle. Run with
+# SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha colossus 0 -60 30 hydraulic_legs,rocket_pack,radiator_fins,fusion_bottle,galvanic_stack,armor_plating,energy_shield,coolant_loop,thorn_plating,reactive_armour,plasma_lance,excavator_scoop,arc_cannon,flamethrower,night_optics,ore_scanner
+mecha executive 12 -60 30 hydraulic_legs,cargo_hold,glider_wings,fusion_bottle,galvanic_stack,armor_plating,energy_shield,coolant_loop,thorn_plating,reactive_armour,tractor_beam,welding_torch,rivet_gun,arc_cannon,night_optics,ore_scanner
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+riding colossus
+look 0 5
+view 0
+key togglePerspective
+wait 3
+key togglePerspective
+wait 3
+key togglePerspective
+wait 10
+shot p01_colossus_loaded_shoulder
+frames p02_colossus_loaded_walk_siege_shoulder 260
+key forward hold 80
+wait 15
+key drive
+wait 110
+key drive
+wait 50
+inspect me
+key sneak hold 5
+wait 20
+/tp @s 18.5 -60 27.5 0 0
+wait 5
+/tp @s 12.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+riding executive
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+look 0 5
+wait 10
+shot p03_executive_loaded_shoulder
+look 0 -15
+wait 5
+shot p04_executive_loaded_shoulder_looking_up
+look 0 5
+frames p05_executive_loaded_walk_jingle_shoulder 200
+key forward hold 80
+wait 15
+key drive
+wait 50
+report pack done

@@ -1,0 +1,90 @@
+# Second pass, default profile: both frames' first person from the jar's eyes (walk, jingle, vent; walk and Siege),
+# Siege from a bystander about 9 blocks off (the footings' dust, the vent plume), and the code-set bones frame by frame
+# after the change-mark fix: four parked Executives with serums (the vials), a parked Colossus, a piloted one sieged
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha executive 0 -60 30 hydraulic_legs,drill
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+view 0
+look 0 5
+wait 10
+shot f01_executive_first_person_level
+look 0 25
+wait 5
+shot f02_executive_first_person_down
+look 0 5
+frames f03_executive_first_person_walk_jingle 220
+key forward hold 80
+wait 15
+key drive
+wait 45
+/data merge entity @e[type=headinajar:executive,limit=1,sort=nearest] {Heat:2200f}
+wait 60
+key sneak hold 5
+wait 20
+/kill @e[type=headinajar:executive]
+mecha colossus 0 -60 60 hydraulic_legs,drill,rivet_gun,arc_cannon
+/tp @s 6.5 -60 57.5 0 0
+wait 5
+/tp @s 0.5 -60 57.2 0 -30
+wait 5
+key use
+wait 90
+view 0
+look 0 5
+wait 10
+shot f04_colossus_first_person_level
+frames f05_colossus_first_person_walk_siege 260
+key forward hold 70
+wait 15
+key drive
+wait 100
+key drive
+wait 50
+view 1
+look 0 10
+watch at -9 3.2 2 -110 12
+wait 3
+bystander spawn -10 -60 64 225
+bystander mark
+frames f06_siege_bystander_9 180
+key drive
+wait 100
+bystander packets particle
+key drive
+wait 70
+bystander remove
+watch off
+# --- code-set bones after the change-mark fix: parked Executives with serums, a parked Colossus -------------------------
+key sneak hold 5
+wait 20
+mecha executive -8 -60 100 hydraulic_legs
+mecha executive -4 -60 100 hydraulic_legs
+mecha colossus 1 -60 100 hydraulic_legs,arc_cannon
+/tp @s -5.5 -60 97 0 0
+wait 5
+/tp @s -7.5 -60 97.3 0 -30
+wait 5
+key use
+wait 90
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+key sneak hold 5
+wait 20
+watch -5 -55.2 107 180 22
+wait 20
+frames f07_parked_vials_frame_by_frame 120
+wait 120
+watch off
+report second done

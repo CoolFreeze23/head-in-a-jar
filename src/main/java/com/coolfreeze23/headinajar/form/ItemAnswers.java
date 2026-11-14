@@ -113,7 +113,7 @@ public final class ItemAnswers {
             } else if (patch && state.integrity() < state.maxIntegrity()) {
                 state.setIntegrity(state.integrity() + 5);
                 held.consume(1, player);
-                other.level().playSound(null, other.getX(), other.getY(), other.getZ(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 1, 1.4f);
+                other.level().playSound(null, other.getX(), other.getY(), other.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.JAR_PATCH.get(), SoundSource.PLAYERS, 1, 1.4f);
             } else {
                 Refusals.deny(player, saline ? "head.full" : "head.intact");
             }

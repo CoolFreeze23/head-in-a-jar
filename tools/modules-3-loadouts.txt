@@ -1,0 +1,95 @@
+# the two full loadouts (every slot filled, light enough to walk) in the owner's shoulder view (run with SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling),
+# then the Bulwark's full back loadout with a cow held overhead, seen from behind, the side and the shoulder view
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud on
+/fill -6 -60 16 6 -56 16 minecraft:stone
+mecha hopper 0 -60 30 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+/tp @s 6.5 -60 30.5 0 0
+jar
+wait 10
+/clear @s
+/tp @s 0.5 -60 28.0 0 -25
+wait 5
+key use
+wait 80
+look 180 6
+view 0
+wait 5
+key togglePerspective
+wait 3
+key togglePerspective
+wait 3
+key togglePerspective
+wait 10
+shot l_hopper_shoulder_rest
+frames l_hopper_shoulder_walk_arms 160
+key forward hold 50
+key attack down
+key use down
+wait 40
+key attack up
+key use up
+closegui
+wait 40
+shot l_hopper_shoulder_after
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+mecha bulwark 0 -60 30 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+/tp @s 0.5 -60 27.4 0 -25
+wait 5
+key use
+wait 80
+look 180 30
+wait 10
+shot l_bulwark_shoulder_rest
+frames l_bulwark_shoulder_walk_arms 160
+key forward hold 50
+key attack down
+key use down
+wait 40
+key attack up
+key use up
+closegui
+wait 40
+/tp @e[type=headinajar:bulwark,limit=1] 0.5 -60 30.5 180 0
+wait 5
+look 180 10
+execute at @e[type=headinajar:bulwark,limit=1] run summon minecraft:cow ~ ~ ~-2.6 {NoAI:1b}
+wait 3
+lookat cow 0.5
+wait 30
+key drive
+wait 40
+look 180 20
+wait 10
+shot l_bulwark_cow_overhead_shoulder
+watch at 0 4.6 7 180 18
+wait 3
+shot l_bulwark_cow_overhead_behind_high
+watch at 0 3.0 6 180 6
+wait 3
+shot l_bulwark_cow_overhead_behind_level
+watch at 7 2.6 0 90 6
+wait 3
+shot l_bulwark_cow_overhead_side
+watch at -5 3.0 4.5 225 8
+wait 3
+shot l_bulwark_cow_overhead_back34
+/data merge entity @e[type=headinajar:bulwark,limit=1] {Heat:580f}
+wait 6
+shot l_bulwark_cow_overhead_side_fins_open
+key ability
+wait 6
+shot l_bulwark_cow_overhead_side_missiles
+watch at -5 3.0 4.5 225 8
+wait 2
+shot l_bulwark_cow_overhead_back34_missiles
+watch off
+report loadouts done

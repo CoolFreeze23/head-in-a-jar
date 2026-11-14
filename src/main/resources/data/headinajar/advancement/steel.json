@@ -1,0 +1,30 @@
+{
+  "parent": "headinajar:root",
+  "criteria": {
+    "got": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "headinajar:surgical_steel_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:surgical_steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.headinajar.steel.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.steel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

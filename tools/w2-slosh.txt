@@ -1,0 +1,72 @@
+# The saline's slosh and bubbles, filmed close: a half-full placed head knocked sideways (at 1.5 and at 3 blocks), the
+# same jar landing from a short fall (at 1.5 and 3 blocks), and a carried jar walked and stopped (seen from the front).
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+view 0
+/summon headinajar:head_jar 0.5 -60 3.5 {Rotation:[180f,0f]}
+/tp @s 0.5 -60 2.3 0 0
+wait 2
+headvitals 55 100 100
+/summon headinajar:head_jar 10.5 -60 3.5 {Rotation:[180f,0f]}
+/tp @s 10.5 -60 2.3 0 0
+wait 2
+headvitals 55 100 100
+wait 20
+/tp @s 0.0 -60 2.0 0 35
+wait 10
+frames knock_close 60
+wait 5
+/data merge entity @e[type=headinajar:head_jar,limit=1,sort=nearest] {Motion:[0.25d,0.0d,0.0d]}
+wait 60
+/tp @s 10.0 -60 0.5 0 18
+wait 10
+frames knock_3 60
+wait 5
+/data merge entity @e[type=headinajar:head_jar,limit=1,sort=nearest] {Motion:[0.25d,0.0d,0.0d]}
+wait 60
+# two more jars dropped from a block and a half
+/summon headinajar:head_jar 4.5 -60 3.5 {Rotation:[180f,0f]}
+/tp @s 4.5 -60 2.3 0 0
+wait 2
+headvitals 55 100 100
+/summon headinajar:head_jar 14.5 -60 3.5 {Rotation:[180f,0f]}
+/tp @s 14.5 -60 2.3 0 0
+wait 2
+headvitals 55 100 100
+wait 20
+/tp @s 4.0 -60 2.0 0 35
+wait 5
+/tp @e[type=headinajar:head_jar,limit=1,sort=nearest] 4.5 -58.5 3.5
+frames land_close 50
+wait 55
+/tp @s 14.0 -60 0.5 0 18
+wait 5
+/tp @e[type=headinajar:head_jar,limit=1,sort=nearest] 14.5 -58.5 3.5
+frames land_3 50
+wait 55
+# a carried jar, walked and stopped, seen from the front
+/tp @s 40.5 -60 0.5 0 0
+jar
+wait 10
+body
+wait 10
+separate
+wait 20
+/clear @s
+/item replace entity @s inventory.5 with headinajar:head_satchel
+wait 2
+pickup
+wait 10
+vitals 55 100 100
+view 2
+wait 20
+frames carried_front 80
+wait 5
+key forward hold 20
+wait 50
+view 0

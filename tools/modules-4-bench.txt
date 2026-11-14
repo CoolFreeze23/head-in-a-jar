@@ -1,0 +1,291 @@
+# module cost: parked rows bare and full (two ways) against empty, and a piloted machine bare and full
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+bench start empty1
+wait 300
+bench stop
+bench start empty2
+wait 300
+bench stop
+bench start empty3
+wait 300
+bench stop
+mecha hopper -7 -60 0 -
+mecha hopper -5 -60 0 -
+mecha hopper -3 -60 0 -
+mecha hopper -1 -60 0 -
+mecha hopper 1 -60 0 -
+mecha hopper 3 -60 0 -
+mecha hopper 5 -60 0 -
+mecha hopper 7 -60 0 -
+wait 80
+shot bench_hopper_bare
+bench start hopper_bare1
+wait 300
+bench stop
+bench start hopper_bare2
+wait 300
+bench stop
+bench start hopper_bare3
+wait 300
+bench stop
+/kill @e[type=headinajar:hopper]
+wait 20
+mecha hopper -7 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper -5 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper -3 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper -1 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper 1 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper 3 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper 5 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+mecha hopper 7 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+wait 80
+shot bench_hopper_full
+moduledefer off
+wait 40
+bench start hopper_full_off1
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start hopper_full_on1
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start hopper_full_off2
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start hopper_full_on2
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start hopper_full_off3
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start hopper_full_on3
+wait 300
+bench stop
+moduledefer on
+/kill @e[type=headinajar:hopper]
+wait 20
+/kill @e[type=item]
+mecha bulwark -11 -60 0 -
+mecha bulwark -8 -60 0 -
+mecha bulwark -5 -60 0 -
+mecha bulwark -2 -60 0 -
+mecha bulwark 1 -60 0 -
+mecha bulwark 4 -60 0 -
+mecha bulwark 7 -60 0 -
+mecha bulwark 10 -60 0 -
+wait 80
+shot bench_bulwark_bare
+bench start bulwark_bare1
+wait 300
+bench stop
+bench start bulwark_bare2
+wait 300
+bench stop
+bench start bulwark_bare3
+wait 300
+bench stop
+/kill @e[type=headinajar:bulwark]
+wait 20
+mecha bulwark -11 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark -8 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark -5 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark -2 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark 1 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark 4 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark 7 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+mecha bulwark 10 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+wait 80
+shot bench_bulwark_full
+moduledefer off
+wait 40
+bench start bulwark_full_off1
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start bulwark_full_on1
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start bulwark_full_off2
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start bulwark_full_on2
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start bulwark_full_off3
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start bulwark_full_on3
+wait 300
+bench stop
+moduledefer on
+/kill @e[type=headinajar:bulwark]
+wait 20
+/kill @e[type=item]
+/tp @s 6.5 -60 -5.5 0 0
+jar
+wait 10
+/clear @s
+mecha hopper 0 -60 0 -
+wait 5
+/tp @s 0.5 -60 -2.0 0 -25
+wait 5
+key use
+wait 80
+view 1
+look 0 8
+wait 20
+shot bench_piloted_hopper_bare
+bench start piloted_hopper_bare1
+wait 300
+bench stop
+bench start piloted_hopper_bare2
+wait 300
+bench stop
+bench start piloted_hopper_bare3
+wait 300
+bench stop
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+mecha hopper 0 -60 0 hydraulic_legs,ender_satchel,galvanic_stack,fire_suppression,signal_booster,harvester,hemo_syringe,night_optics
+wait 5
+/tp @s 0.5 -60 -2.0 0 -25
+wait 5
+key use
+wait 80
+view 1
+look 0 8
+wait 20
+shot bench_piloted_hopper_full
+moduledefer off
+wait 40
+bench start piloted_hopper_full_off1
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_hopper_full_on1
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start piloted_hopper_full_off2
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_hopper_full_on2
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start piloted_hopper_full_off3
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_hopper_full_on3
+wait 300
+bench stop
+moduledefer on
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 50
+mecha bulwark 0 -60 0 -
+wait 5
+/tp @s 0.5 -60 -2.6 0 -25
+wait 5
+key use
+wait 80
+view 1
+look 0 8
+wait 20
+shot bench_piloted_bulwark_bare
+bench start piloted_bulwark_bare1
+wait 300
+bench stop
+bench start piloted_bulwark_bare2
+wait 300
+bench stop
+bench start piloted_bulwark_bare3
+wait 300
+bench stop
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:bulwark]
+wait 50
+mecha bulwark 0 -60 0 hydraulic_legs,missile_pod,radiator_fins,capacitor_bank,armor_plating,fire_suppression,tesla_coil,rivet_gun,manipulator_hand,target_lock,ore_scanner
+wait 5
+/tp @s 0.5 -60 -2.6 0 -25
+wait 5
+key use
+wait 80
+view 1
+look 0 8
+wait 20
+shot bench_piloted_bulwark_full
+moduledefer off
+wait 40
+bench start piloted_bulwark_full_off1
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_bulwark_full_on1
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start piloted_bulwark_full_off2
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_bulwark_full_on2
+wait 300
+bench stop
+moduledefer off
+wait 40
+bench start piloted_bulwark_full_off3
+wait 300
+bench stop
+moduledefer on
+wait 40
+bench start piloted_bulwark_full_on3
+wait 300
+bench stop
+moduledefer on
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:bulwark]
+wait 50
+report bench done

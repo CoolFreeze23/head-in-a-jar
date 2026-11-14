@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:separated",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "charged"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:charging_dock"
+    },
+    "title": {
+      "translate": "advancements.headinajar.charged.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.charged.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

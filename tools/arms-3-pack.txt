@@ -1,0 +1,111 @@
+# The owner's settings and his Shoulder Surfing view (three presses of his perspective key): the Plasma Lance and the
+# Arc Cannon, then the Tractor Beam and the Flamethrower, each aimed by putting the crosshair on a cow (the shoulder
+# camera turned, the pilot's eye turned onto the crosshair's target by the mod every tick). Run with
+# SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+mecha hopper 20 -60 0 hydraulic_legs,tractor_beam,flamethrower
+/summon cow 2.5 -60 9.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 4.5 -60 10.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 6.5 -60 11.5 {NoAI:1b,Invulnerable:1b}
+/summon cow 22.5 -60 7.5
+/summon cow 18.5 -60 7.5 {NoAI:1b,Invulnerable:1b}
+/tp @s -20.5 -60 -20.5 0 0
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+# --- lance and arc
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+aimat headinajar:hopper
+wait 3
+/gamemode creative @s
+key use
+wait 75
+/gamemode survival @s
+riding a
+look 0 10
+wait 5
+aimat cow
+wait 4
+aimat cow
+wait 6
+shot p_lance_aim
+report lance, shoulder view
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+frames p_lance 60
+wait 4
+key attack down
+wait 24
+key attack up
+wait 30
+aimat cow
+wait 4
+aimat cow
+wait 6
+report arc, shoulder view
+frames p_arc 40
+wait 4
+key use
+wait 36
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# --- tractor and flamethrower
+/tp @s 20.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+aimat headinajar:hopper
+wait 3
+/gamemode creative @s
+key use
+wait 75
+/gamemode survival @s
+riding b
+look 0 10
+wait 5
+aimat cow
+wait 4
+aimat cow
+wait 6
+report tractor, shoulder view
+frames p_tractor 80
+wait 4
+key attack down
+wait 40
+turn 25 -8 15
+wait 20
+key attack up
+wait 15
+look 0 10
+wait 4
+aimat cow
+wait 4
+aimat cow
+wait 6
+report flamethrower, shoulder view
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f}
+frames p_flame 60
+wait 4
+key use down
+wait 40
+key use up
+wait 20
+report done

@@ -1,0 +1,56 @@
+# the grapple's line and flying hook from the side, and the glider wings off a ten-block ledge (frames, for video)
+@observe 10
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/fill -6 -60 16 6 -56 16 minecraft:stone
+/tp @s 6.5 -60 30.5 0 0
+jar
+wait 10
+/clear @s
+mecha hopper 0 -60 30 hydraulic_legs,grapple_hook,galvanic_stack
+/tp @s 0.5 -60 28.0 0 -25
+wait 5
+key use
+wait 80
+look 180 0
+wait 20
+watch at 7 1.4 -6 90 4
+wait 3
+frames e01_grapple_side_7_blocks 70
+wait 10
+key attack
+wait 70
+watch at 4 2.2 -3 125 10
+/tp @e[type=headinajar:hopper,limit=1] 0.5 -60 30.5 180 0
+look 180 0
+wait 20
+frames e02_grapple_front34_near 60
+wait 8
+key attack
+wait 60
+watch off
+/ride @s dismount
+wait 3
+/kill @e[type=headinajar:hopper]
+wait 40
+/fill -3 -60 34 3 -51 44 minecraft:stone
+mecha hopper 0 -50 42 hydraulic_legs,glider_wings,galvanic_stack
+/tp @s 0.5 -50 40.0 0 -25
+wait 5
+key use
+wait 80
+look 180 0
+wait 20
+watch at 9 0 -3 90 2
+wait 3
+frames e03_glider_off_a_ledge_side 140
+key jump down
+key forward hold 40
+wait 100
+key jump up
+watch off
+report done

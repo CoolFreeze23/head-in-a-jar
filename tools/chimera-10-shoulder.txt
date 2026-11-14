@@ -1,0 +1,178 @@
+# The owner's settings (SMOKE_PROFILE=pack, his mods), all in his Shoulder Surfing view (three presses of his
+# perspective key on foot). Every machine is boarded by a real click with the crosshair put on it (`aimat`, which turns
+# Shoulder Surfing's own camera, as the mouse does). Aboard each, one still with the camera turning about the pilot's
+# eye (`pivot off`, the old framing) and one about the machine (`pivot on`): the Hopper, the Bulwark, the Wheelhouse,
+# the Chimera, the Rover and the Lunk. Then the Graft (a fist on a horse) and the Lunk's toss of a pig, aimed by the
+# crosshair.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha hopper 0 -60 0 hydraulic_legs
+mecha bulwark 10 -60 0 hydraulic_legs
+mecha wheelhouse 20 -60 0 drill
+mecha chimera 30 -60 0 hydraulic_legs,hydraulic_fist,hydraulic_fist
+/summon headinajar:rover 40 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:lunk 50 -60 0 {Rotation:[0f,0f]}
+/tp @s -20.5 -60 -20.5 0 0
+jar
+charge 100000
+/give @s headinajar:bio_gel 4
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+# --- the Hopper -------------------------------------------------------------------------------------------------------
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+aimat headinajar:hopper
+wait 3
+key use
+wait 50
+riding hopper
+wait 5
+pivot off
+wait 10
+shot v_hopper_before
+pivot on
+wait 10
+shot v_hopper_after
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 30
+# --- the Bulwark ------------------------------------------------------------------------------------------------------
+/tp @s 10.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+aimat headinajar:bulwark
+wait 3
+key use
+wait 50
+riding bulwark
+pivot off
+wait 10
+shot v_bulwark_before
+pivot on
+wait 10
+shot v_bulwark_after
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 30
+# --- the Wheelhouse ---------------------------------------------------------------------------------------------------
+/tp @s 20.5 -60 -4 0 0
+wait 5
+aimat headinajar:wheelhouse
+wait 3
+aimat headinajar:wheelhouse
+wait 3
+key use
+wait 50
+riding wheelhouse
+pivot off
+wait 10
+shot v_wheelhouse_before
+pivot on
+wait 10
+shot v_wheelhouse_after
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 30
+# --- the Chimera ------------------------------------------------------------------------------------------------------
+/tp @s 30.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:chimera
+wait 3
+aimat headinajar:chimera
+wait 3
+key use
+wait 50
+riding chimera
+pivot off
+wait 10
+shot v_chimera_before
+pivot on
+wait 10
+shot v_chimera_after
+# --- the Graft: the left fist on a horse three blocks ahead, aimed by the crosshair ------------------------------------
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:horse ~ ~ ~3.2 {NoAI:1b,Tame:1b,Rotation:[90f,0f]}
+wait 5
+aimat minecraft:horse 1.0
+wait 3
+aimat minecraft:horse 1.0
+wait 3
+cmdout data get entity @s Rotation
+frames w01_graft_shoulder_crosshair 120
+key attack
+wait 15
+key drive
+wait 60
+shot w02_grafted_shoulder_hud
+/kill @e[type=minecraft:horse]
+sneak down
+wait 2
+key jar_menu
+wait 5
+sneak up
+wait 30
+# --- the Rover --------------------------------------------------------------------------------------------------------
+/tp @s 40.5 -60 -3 0 0
+wait 5
+aimat headinajar:rover
+wait 3
+aimat headinajar:rover
+wait 3
+key use
+wait 40
+riding rover
+pivot off
+wait 10
+shot v_rover_before
+pivot on
+wait 10
+shot v_rover_after
+sneak
+wait 30
+# --- the Lunk, and its toss of a pig aimed by the crosshair ------------------------------------------------------------
+/tp @s 50.5 -60 -3 0 0
+wait 5
+aimat headinajar:lunk
+wait 3
+aimat headinajar:lunk
+wait 3
+key use
+wait 40
+riding lunk
+pivot off
+wait 10
+shot v_lunk_before
+pivot on
+wait 10
+shot v_lunk_after
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:pig ~ ~ ~2.4
+wait 3
+aimat minecraft:pig
+wait 3
+aimat minecraft:pig
+wait 2
+frames w03_lunk_toss_shoulder_crosshair 70
+key ability
+wait 60
+report done

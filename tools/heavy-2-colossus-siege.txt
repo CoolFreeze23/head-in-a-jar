@@ -1,0 +1,103 @@
+# Colossus, default profile: Siege from behind, from a bystander about 6 blocks to the side, and in first person; a
+# refused Siege (walking); the drill; vent; limp; the Golden Parachute then the collapse
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha colossus 0 -60 30 hydraulic_legs,drill,rivet_gun,arc_cannon
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+view 1
+look 0 10
+riding colossus
+# --- 05 Siege from behind: in, held, out ---------------------------------------------------------------------------
+frames c05_siege_in_held_out_behind 190
+key drive
+wait 110
+inspect me
+key drive
+wait 70
+# --- 06 Siege seen from a bystander's place, 6 blocks to the side ---------------------------------------------------
+watch at -6 0.4 0.5 -90 6
+wait 3
+bystander spawn -7 -60 34 225
+bystander mark
+frames c06_siege_bystander_6 180
+key drive
+wait 100
+key drive
+wait 70
+bystander packets sound|particle
+bystander remove
+watch off
+# --- 07 Siege in first person ----------------------------------------------------------------------------------------
+view 0
+look 0 15
+wait 10
+frames c07_siege_first_person 160
+key drive
+wait 90
+key drive
+wait 60
+view 1
+look 0 10
+# --- 08 a refused Siege: pressed while walking (from the front three-quarter) ---------------------------------------
+watch follow 6 0.8 7 141 10
+wait 5
+frames c08_siege_refused_walking 90
+key forward down
+wait 8
+key drive
+wait 4
+key forward up
+wait 60
+watch off
+view 1
+look 0 10
+# --- 09 the drill against a wall, and the shoulder arc cannon (slot 4) ----------------------------------------------
+execute at @e[type=headinajar:colossus,limit=1,sort=nearest] run fill ~-2 ~ ~3 ~2 ~4 ~3 minecraft:stone
+look 0 20
+watch follow 6 1 6 141 10
+frames c09_arm_drill_front_3q 100
+key attack hold 70
+wait 25
+watch off
+view 1
+look 0 10
+# --- 10 vent, from the side ------------------------------------------------------------------------------------------
+watch follow -9 1 0 -90 4
+/data merge entity @e[type=headinajar:colossus,limit=1,sort=nearest] {Heat:1800f}
+frames c10_vent_side 115
+wait 115
+# --- 11 limp on a flat battery, from the side --------------------------------------------------------------------
+look 180 10
+wait 15
+watch follow 9 1 0 90 4
+/data merge entity @e[type=headinajar:colossus,limit=1,sort=nearest] {Battery:0}
+frames c11_limp_flat_battery_side 100
+key forward hold 90
+wait 12
+/data merge entity @e[type=headinajar:colossus,limit=1,sort=nearest] {Battery:1000000}
+watch off
+# --- 12 the Golden Parachute, then the empty machine destroyed, from 11 blocks to the side --------------------------
+view 1
+look 0 10
+wait 10
+watch at -11 1 1.5 -99 4
+/data merge entity @e[type=headinajar:colossus,limit=1,sort=nearest] {Health:30f}
+frames c12_golden_parachute_then_collapse 280
+/damage @e[type=headinajar:colossus,limit=1,sort=nearest] 4 minecraft:generic
+wait 130
+inspect me
+/damage @e[type=headinajar:colossus,limit=1,sort=nearest] 400 minecraft:generic
+wait 150
+watch off
+report colossus siege done

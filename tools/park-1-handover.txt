@@ -1,0 +1,104 @@
+# Parked frames from kept geometry, second look: the row off and on again (stills to compare), what is kept and
+# whether the checks find it the same; the Rover summoned as in the row script and seen straight from in front; a
+# Hopper boarded, walked, got out of and left to park, filmed every frame from a fixed camera; a module fitted to a
+# parked Bulwark (as the Assembly Gantry sets its slots) filmed every frame.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper -21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha bulwark -15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha colossus -9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha executive -3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha wheelhouse 3 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha skitter 9 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha kite 15 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+mecha chimera 21 -60 0 hydraulic_legs,ender_satchel,radiator_fins,galvanic_stack,capacitor_bank,fire_suppression,signal_booster,armor_plating,coolant_loop,solar_skin,drill,hydraulic_fist,rivet_gun,chainsaw,night_optics,target_lock
+/tp @s 0.5 -60 -22 0 4
+wait 300
+parkstats
+parkcache off
+wait 10
+shot p1_row_off
+parkcache on
+wait 10
+shot p1_row_on
+/tp @s -12.5 -60 -11 0 4
+wait 10
+parkcache off
+wait 10
+shot p1_near_off
+parkcache on
+wait 10
+shot p1_near_on
+parkstats
+# the Rover exactly as the row script summoned it, at x 50, and a second one at x 60; seen from the row script's place
+# (ten blocks back, nine and a half to the side) and straight from in front
+/summon headinajar:rover 50 -60 30 {Rotation:[180f,0f]}
+/summon headinajar:rover 60.5 -60 30.5 {Rotation:[180f,0f]}
+/summon headinajar:lunk 70.5 -60 30.5 {Rotation:[180f,0f]}
+/tp @s 40.5 -60 20 0 4
+wait 100
+facing headinajar:rover
+shot p1_rover_from_the_row_place
+/tp @s 50 -60 24 0 10
+wait 10
+shot p1_rover_straight_front
+/tp @s 60.5 -60 24.5 0 10
+wait 10
+shot p1_rover2_straight_front
+/tp @s 56 -60 30 -90 10
+wait 10
+shot p1_rover_from_its_left
+/tp @s 70.5 -60 24.5 0 10
+wait 10
+shot p1_lunk_straight_front
+# boarding, walking, getting out and parking again, from a fixed camera
+/kill @e[type=headinajar:hopper]
+/kill @e[type=headinajar:bulwark]
+/kill @e[type=headinajar:colossus]
+/kill @e[type=headinajar:executive]
+/kill @e[type=headinajar:wheelhouse]
+/kill @e[type=headinajar:skitter]
+/kill @e[type=headinajar:kite]
+/kill @e[type=headinajar:chimera]
+wait 60
+mecha hopper 100 -60 104 hydraulic_legs,drill,night_optics,capacitor_bank,galvanic_stack
+jar
+charge 100000
+/tp @s 100.5 -60 101 0 0
+wait 120
+parkstats
+watch 104.5 -58.5 100.5 45 15
+lookat headinajar:hopper
+frames h1_board 80
+wait 5
+key use
+wait 75
+riding hopper
+parkstats
+key forward hold 30
+wait 25
+frames h1_park 330
+wait 5
+sneak down
+key jar_menu hold 25
+sneak up
+wait 320
+parkstats
+watch off
+# a module fitted to a parked Bulwark, filmed
+mecha bulwark 120 -60 120 hydraulic_legs
+/tp @s 120.5 -60 112 0 8
+wait 120
+parkstats
+watch 124.5 -58 116.5 40 15
+frames m1_refit 60
+wait 20
+refit hydraulic_legs,missile_pod,radiator_fins
+wait 30
+parkstats
+watch off

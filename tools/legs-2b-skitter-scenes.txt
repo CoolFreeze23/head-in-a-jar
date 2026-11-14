@@ -1,0 +1,198 @@
+# Skitter, scene by scene (each scene a fresh machine at a known place, boarded by a real click, so no scene depends
+# on where the last one left it): the Dragline from the ground at a beam 10 up (behind, a bystander's place 6 blocks
+# off, first person), from a platform's top off its far edge into the swing (paid out, wound in, cut), holding on to a
+# wall with no input then letting go, a refused fire, the mandible's drill, vent, limp, a blow, the Golden Parachute and
+# the collapse.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# a beam 10 up (z 10-11); a platform 6 high (z 14-23); a beam 14 up past its far edge (z 30-31); markers under both beams
+/fill -6 -60 10 -6 -50 11 minecraft:stone
+/fill 6 -60 10 6 -50 11 minecraft:stone
+/fill -6 -50 10 6 -50 11 minecraft:stone
+/fill -6 -60 14 6 -55 23 minecraft:stone
+/fill -8 -60 30 -8 -46 31 minecraft:stone
+/fill 8 -60 30 8 -46 31 minecraft:stone
+/fill -8 -46 30 8 -46 31 minecraft:stone
+/summon minecraft:armor_stand 0.5 -52.1 10.5 {Invisible:1b,NoGravity:1b,Tags:["near"]}
+/summon minecraft:armor_stand 0.5 -48.1 30.5 {Invisible:1b,NoGravity:1b,Tags:["far"]}
+/tp @s 4.5 -60 -3.5 0 0
+jar
+wait 10
+# --- scene 1: from the ground at the near beam, from behind: fired and wound in, hanging, cut --------------------------
+mecha skitter 0.5 -60 0.5 drill
+/tp @s 0.5 -60 -3.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+riding skitter
+view 1
+look 0 -30
+wait 5
+lookat minecraft:armor_stand 1.95
+wait 5
+frames d01_fire_and_reel_behind 220
+key drive hold 170
+wait 45
+inspect near headinajar:skitter 4
+frames d02_hang_then_cut_behind 70
+key drive
+wait 60
+inspect near headinajar:skitter 4
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- scene 2: the same from a bystander's place 6 blocks to the side ---------------------------------------------------
+mecha skitter 0.5 -60 0.5 drill
+/tp @s 0.5 -60 -3.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 -30
+wait 5
+lookat minecraft:armor_stand 1.95
+watch 7 -58.5 5 90 -12
+frames d03_fire_and_reel_bystander_6 200
+key drive hold 160
+wait 35
+key drive
+wait 40
+watch off
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- scene 3: first person ------------------------------------------------------------------------------------------
+mecha skitter 0.5 -60 0.5 drill
+/tp @s 0.5 -60 -3.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+lookat minecraft:armor_stand 1.95
+view 0
+frames d04_fire_and_reel_first_person 180
+key drive hold 140
+wait 35
+key drive
+wait 40
+view 1
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- scene 4: on the platform's top, fired at the far beam, off the edge into the swing, paid out, wound in, cut -------
+mecha skitter 0.5 -54 19.5 drill
+/tp @s 0.5 -54 16.3 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 -20
+wait 5
+lookat minecraft:armor_stand 1.95
+wait 5
+frames d05_fire_from_the_top 40
+key drive
+wait 35
+inspect near headinajar:skitter 4
+look 0 10
+frames d06_off_the_edge_swing_behind 180
+key forward hold 22
+wait 150
+inspect near headinajar:skitter 4
+watch at 8 1 0 90 0
+frames d07_swing_side 100
+wait 95
+watch off
+view 1
+frames d08_rappel_then_reel 160
+key jump hold 30
+wait 10
+key drive hold 70
+wait 40
+inspect near headinajar:skitter 4
+frames d09_cut 70
+key drive
+wait 60
+inspect near headinajar:skitter 4
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- scene 5: onto the platform's face, holding on with no input (from the side), then sneaking lets go ----------------
+mecha skitter 0.5 -60 11.5 drill
+/tp @s 3.5 -60 9.3 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 10
+wait 5
+frames d10_onto_the_face 70
+key forward hold 30
+watch at -7 1 0 -90 8
+frames d11_holding_on_no_input_side 90
+wait 85
+inspect near headinajar:skitter 4
+frames d12_sneak_lets_go_side 50
+sneak
+wait 45
+inspect near headinajar:skitter 4
+watch off
+view 1
+/ride @s dismount
+wait 5
+/tp @e[type=headinajar:skitter] 0 -300 0
+wait 5
+# --- scene 6: the rest, in the open east of the course ---------------------------------------------------------------
+mecha skitter 30.5 -60 0.5 drill
+/tp @s 30.5 -60 -3.2 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+look 0 -85
+wait 5
+frames d13_refused_nothing_to_fix_to 50
+key drive
+wait 40
+execute at @e[type=headinajar:skitter,limit=1,sort=nearest] run fill ~-1 ~ ~2 ~1 ~1 ~3 minecraft:stone
+look 0 15
+wait 5
+frames d14_mandible_drill 70
+key attack hold 50
+wait 15
+watch at -6 1.2 0 -90 5
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Heat:700f}
+frames d15_vent_side 110
+wait 105
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Battery:0}
+watch follow -6 1 0 -90 5
+frames d16_limp_side 80
+key forward hold 70
+wait 10
+watch off
+view 1
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Battery:200000}
+look 0 15
+wait 10
+frames d17_hurt 30
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 4 minecraft:generic
+wait 30
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Health:9f}
+watch at 7 2 5 125 10
+frames d18_parachute_then_collapse 280
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 3 minecraft:generic
+wait 150
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 200 minecraft:generic
+wait 120
+watch off
+report done

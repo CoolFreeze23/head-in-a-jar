@@ -1,0 +1,97 @@
+# The jar's own sounds and the link's static, by the subtitle log (the client is muted: subtitles stand for sounds).
+# Flat world, survival. A jar with Wheels drives (drive key, forward held), folds them; a bare jar tips and rolls; a
+# Propeller jar flies; Hop Springs hop; a Shock Lid zaps a zombie; then the head is set down and the body walks away so
+# the link falls through its bands (quality read by inspect me), the static's subtitle and the loop count after each.
+@world flat
+@gamemode survival
+@difficulty easy
+@observe 30
+@clean
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 99999 4 true
+wait 40
+subtitles clear
+jar
+fit wheels
+charge 200000
+wait 10
+key drive
+wait 10
+key forward hold 40
+loops
+key drive
+wait 20
+report --- wheels: down, drive loop, up
+subtitles
+subtitles clear
+fit armor_plating
+wait 5
+key drive
+wait 10
+key forward hold 60
+loops
+key drive
+wait 20
+report --- bare jar: tip over, roll, sit up
+subtitles
+subtitles clear
+fit propeller
+charge 200000
+wait 10
+jump
+jump
+wait 5
+key jump hold 30
+loops
+wait 40
+report --- propeller
+subtitles
+subtitles clear
+/gamemode survival
+fit hop_springs
+charge 200000
+wait 40
+key forward hold 60
+wait 20
+report --- hop springs
+subtitles
+subtitles clear
+fit shock_lid
+charge 200000
+/summon zombie ~1 ~ ~ {PersistenceRequired:1b}
+wait 60
+report --- shock lid (the zombie hits the jar)
+subtitles
+/kill @e[type=minecraft:zombie]
+subtitles clear
+body
+wait 20
+separate
+wait 20
+inspect me
+wait 40
+report --- linked, beside the head
+loops
+subtitles
+subtitles clear
+/tp @s ~40 ~ ~
+wait 60
+inspect me
+loops
+report --- linked, 40 blocks off
+subtitles
+subtitles clear
+/tp @s ~25 ~ ~
+wait 60
+inspect me
+loops
+report --- linked, 65 blocks off
+subtitles
+subtitles clear
+/tp @s ~15 ~ ~
+wait 60
+inspect me
+loops
+report --- linked, 80 blocks off
+subtitles

@@ -1,0 +1,56 @@
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/tp @s 0.5 -60 0.5 -90 0
+report == K4 on foot: swap, drive, ability, secondary (no gene)
+key swap
+wait 15
+key drive
+wait 15
+key ability
+wait 15
+key secondary
+wait 15
+shot k4_onfoot
+screen none
+report == K5 laser at a cow behind stone, then in the open
+/setblock 2 -60 0 minecraft:stone
+/setblock 2 -59 0 minecraft:stone
+/summon minecraft:cow 4.5 -60 0.5 {NoAI:1b,Rotation:[90f,0f]}
+jar
+fit lacrimal_laser
+charge 100000
+wait 10
+look -90 3
+view 1
+key secondary
+wait 5
+shot k5_laser_wall
+screen none
+inspect near cow 8
+wait 30
+/setblock 2 -60 0 minecraft:air
+/setblock 2 -59 0 minecraft:air
+wait 5
+key secondary
+wait 3
+shot k5_laser_open
+screen none
+inspect near cow 8
+report == K2 the wheels go flat; the tip-over line names the key
+/kill @e[type=cow]
+fit wheels
+charge 3000
+key drive
+wait 10
+charge 0
+wait 4
+shot k2_wheels_flat
+wait 20
+key drive
+wait 3
+shot k2_tipped

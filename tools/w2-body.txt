@@ -1,0 +1,131 @@
+# The swap seen from both ends, the body left behind (idle, fidgets, sitting, reaching, waving), the corpse lying down
+# and opened, a cracked jar, a ripe host, and tools in the hand from the doer's eyes.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/weather clear
+hud off
+view 0
+# --- S10 from 5 blocks: the bystander swaps out of its body, the body powers down, then it swaps back
+bystander spawn 10 -60 0 0
+bystander tick on
+bystander form linked
+wait 30
+bystander tp 10 -60 0 180 0
+/tp @s 13.5 -60 4.5 140 10
+wait 10
+lookat player 1.0
+frames s10_by5_out 50
+wait 3
+bystander key swap
+wait 50
+frames s10_by5_back 50
+wait 3
+bystander key swap
+wait 50
+# --- S11: out again, and the body is left standing; watched from 4 blocks
+bystander key swap
+wait 20
+bystander tp 4 -60 -4 0 0
+/tp @s 12.5 -60 3.5 150 15
+lookat headless_body 1.0
+frames s11_attention 60
+wait 62
+/tick rate 200
+wait 700
+/tick rate 20
+wait 5
+frames s11_fidget 250
+wait 252
+/tick rate 200
+wait 3000
+/tick rate 20
+wait 40
+frames s11_sitting 50
+wait 52
+inspect near headless_body 20
+# its head comes near and looks at it: it waves; closer, it reaches out
+/tick rate 200
+wait 2000
+/tick rate 20
+wait 5
+bystander tp 10 -60 -5 0 0
+wait 20
+frames s11_wave 60
+wait 62
+bystander tp 10 -60 -1.5 0 0
+wait 5
+frames s11_reach 50
+wait 52
+# --- B23: the body dies and lies down; its owner opens its things (hands unfold) and closes them
+bystander tp 7 -60 0 90 0
+wait 5
+frames b23_corpse_fall 60
+wait 3
+/damage @e[type=headinajar:headless_body,limit=1] 1000 minecraft:generic
+wait 60
+frames b23_corpse_open 60
+wait 3
+bystander useentity nearest headless_body
+wait 30
+bystander close
+wait 30
+# --- B20: the bystander's jar takes hits; its glass cracks in stages
+/tp @s 9.5 -60 4.5 180 18
+bystander tp 9.5 -60 1.5 0 0
+wait 10
+frames b20_cracks 120
+wait 5
+/damage Bystander 3 minecraft:generic
+wait 30
+/damage Bystander 3 minecraft:generic
+wait 30
+/damage Bystander 3 minecraft:generic
+wait 50
+bystander state
+# --- B25: a ripe host sags, sways and has flies
+/summon cow 20.5 -60 2.5 {Rotation:[90f,0f],"neoforge:attachments":{"headinajar:host":{host:1b,freshness:8f}}}
+/summon cow 23.5 -60 2.5 {Rotation:[90f,0f],"neoforge:attachments":{"headinajar:host":{host:1b,freshness:90f}}}
+/tp @s 22 -60 5 180 15
+wait 20
+frames b25_ripe_and_fresh 100
+wait 100
+fxstate rot
+# --- B24 from the doer's eyes: a syringe draw and the wrench on a node (the hand shows only with the HUD)
+hud on
+/kill @e[type=cow]
+/tp @s 30.5 -60 0.5 0 15
+/clear @s
+/summon pig 30.5 -60 2.5 {NoAI:1b}
+wait 20
+lookat pig 0.5
+/item replace entity @s weapon.mainhand with headinajar:syringe
+frames b24_syringe 45
+wait 2
+key use
+wait 45
+/kill @e[type=pig]
+/setblock 30 -60 2 headinajar:tesla_node
+/clear @s headinajar:syringe
+/item replace entity @s weapon.mainhand with headinajar:surgical_wrench
+look 0 38
+frames b24_wrench 25
+wait 2
+key use
+wait 25
+hud off
+# --- S10 from the doer's eyes: out of the body into the jar, and back
+/kill @e[type=headinajar:headless_body]
+/tp @s 40.5 -60 0.5 0 5
+separate
+wait 40
+frames s10_doer_to_head 30
+wait 2
+key swap
+wait 30
+frames s10_doer_to_body 30
+wait 2
+key swap
+wait 30

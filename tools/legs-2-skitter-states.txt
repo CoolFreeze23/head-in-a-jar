@@ -1,0 +1,215 @@
+# Skitter, the rest in the default profile: the Dragline from the ground at a beam 10 up (fired and wound in from
+# behind, from a bystander's place 6 blocks to the side, and in first person), a refused fire, the mandible's drill,
+# vent, the flat battery's limp, a blow, the Golden Parachute and the collapse, then stills beside the Hopper and the
+# Bulwark by day, night and torchlight.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# a beam 10 up on two posts, 10 blocks south; beyond it a platform 6 high and 10 deep (z 14-23), and past its far edge
+# a second beam 14 up (z 30-31)
+/fill -6 -60 10 -6 -50 11 minecraft:stone
+/fill 6 -60 10 6 -50 11 minecraft:stone
+/fill -6 -50 10 6 -50 11 minecraft:stone
+/fill -6 -60 14 6 -55 23 minecraft:stone
+/fill -8 -60 30 -8 -46 31 minecraft:stone
+/fill 8 -60 30 8 -46 31 minecraft:stone
+/fill -8 -46 30 8 -46 31 minecraft:stone
+mecha skitter 0 -60 0 drill
+/tp @s 4.5 -60 -3.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -3.6 0 -20
+wait 5
+lookat headinajar:skitter 1
+key use
+wait 70
+riding skitter
+view 1
+# --- uneven ground: a step field west of the start (a slab row, a block row, a gap), walked across from the side ---
+/fill -14 -60 -2 -14 -60 4 minecraft:stone_slab
+/fill -16 -60 -2 -17 -60 4 minecraft:stone
+/fill -20 -60 -2 -21 -60 4 minecraft:stone_slab
+look 90 10
+wait 10
+watch follow 0 0.3 -6 0 3
+frames d00_uneven_ground_side 140
+key forward hold 110
+wait 25
+watch off
+view 1
+look -90 10
+key forward hold 40
+look 90 10
+key forward hold 22
+watch at 0 0.6 -4.5 0 4
+wait 10
+shot d00_uneven_standing_side
+burst d00_uneven_standing_burst 10
+watch at -4.5 0.6 0 -90 4
+wait 5
+shot d00_uneven_standing_front
+watch off
+view 1
+look -90 10
+key forward hold 45
+look 0 10
+wait 10
+# --- fired from behind, then wound in: dragged to the beam and up under it, swinging; cut ---------------------------
+look 0 -40
+wait 10
+frames d01_fire_and_reel_behind 200
+key drive hold 160
+wait 30
+inspect near headinajar:skitter 4
+frames d02_hang_then_cut_behind 80
+wait 30
+key drive
+wait 40
+inspect near headinajar:skitter 4
+# back to the start (walk north and turn round)
+look 180 10
+key forward hold 45
+look 0 -40
+wait 10
+# --- the same from a bystander's place 6 blocks to the side ---------------------------------------------------------
+watch at 6 1.2 3 120 -5
+frames d03_fire_and_reel_bystander_6 180
+key drive hold 140
+wait 30
+key drive
+wait 30
+watch off
+look 180 10
+key forward hold 45
+look 0 -40
+wait 10
+# --- first person ---------------------------------------------------------------------------------------------------
+view 0
+frames d04_fire_and_reel_first_person 160
+key drive hold 120
+wait 30
+key drive
+wait 30
+view 1
+# --- a refused fire: nothing within 24 blocks (the open sky) ---------------------------------------------------------
+look 0 -85
+wait 5
+frames d05_refused_nothing_to_fix_to 50
+key drive
+wait 40
+# --- the mandible's drill into a block ahead ---------------------------------------------------------------------
+execute at @e[type=headinajar:skitter,limit=1,sort=nearest] run fill ~-1 ~ ~2 ~1 ~1 ~3 minecraft:stone
+look 0 15
+wait 5
+frames d06_mandible_drill 70
+key attack hold 50
+wait 15
+execute at @e[type=headinajar:skitter,limit=1,sort=nearest] run fill ~-1 ~ ~2 ~1 ~1 ~3 minecraft:air
+# --- up the platform, the line fired at the far beam, off the far edge into the swing, paid out, wound in, cut ----------
+look 0 12
+wait 10
+frames d06b_onto_the_platform_face 100
+key forward hold 64
+watch at -7 1 0 -90 5
+frames d06h_cling_no_input_side 60
+wait 50
+watch off
+view 1
+frames d06i_on_up_and_over 90
+key forward hold 50
+wait 30
+inspect near headinajar:skitter 4
+look 0 -28
+wait 10
+frames d06c_fire_from_the_top 40
+key drive
+wait 35
+inspect near headinajar:skitter 4
+look 0 10
+frames d06d_off_the_edge_swing 180
+key forward hold 20
+wait 150
+inspect near headinajar:skitter 4
+frames d06e_rappel_then_reel 150
+key jump hold 30
+wait 10
+key drive hold 60
+wait 40
+inspect near headinajar:skitter 4
+frames d06f_cut 60
+key drive
+wait 50
+inspect near headinajar:skitter 4
+# --- vent, from the side ------------------------------------------------------------------------------------------
+look 90 10
+wait 5
+watch at -6 1.2 0 -90 5
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Heat:700f}
+frames d07_vent_side 110
+wait 105
+# --- the flat battery's limp, from the side ---------------------------------------------------------------------
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Battery:0}
+watch follow 0 1 -6 0 5
+frames d08_limp_side 80
+key forward hold 70
+wait 10
+watch off
+view 1
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Battery:200000}
+# --- a blow, from behind ------------------------------------------------------------------------------------------
+look 0 15
+wait 10
+frames d09_hurt 30
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 4 minecraft:generic
+wait 30
+# --- the Golden Parachute, from a bystander's place; then the empty machine's collapse -----------------------------
+/data merge entity @e[type=headinajar:skitter,limit=1,sort=nearest] {Health:9f}
+watch at 7 2 5 125 10
+frames d10_parachute_then_collapse 280
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 3 minecraft:generic
+wait 150
+/damage @e[type=headinajar:skitter,limit=1,sort=nearest] 200 minecraft:generic
+wait 120
+watch off
+inspect me
+# --- stills: a Skitter with the stand-in's jar in its cage, beside a Hopper and a Bulwark -----------------------------
+body
+wait 10
+mecha hopper -4 -60 30 hydraulic_legs
+mecha skitter 0 -60 30
+mecha bulwark 4.5 -60 30 hydraulic_legs
+bystander spawn 0 -60 27 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:skitter
+wait 80
+bystander look 0 0
+/tp @s 0.5 -58.6 37.5 180 8
+wait 20
+shot st_day_row_front
+/tp @s 0.5 -57.5 23 0 20
+wait 10
+shot st_day_back_6
+/tp @s 0.5 -55 9.5 0 12
+wait 10
+shot st_day_back_20
+/tp @s 2.6 -58.4 32.4 135 25
+wait 10
+shot st_day_jar_3q
+/time set 18000
+/tp @s 0.5 -58.6 37.5 180 8
+wait 20
+shot st_night_row_front
+/setblock 0 -60 34 minecraft:torch
+/setblock -3 -60 33 minecraft:torch
+wait 20
+shot st_torch_row_front
+/tp @s 2.6 -58.4 32.4 135 25
+wait 10
+shot st_torch_jar_3q
+report done

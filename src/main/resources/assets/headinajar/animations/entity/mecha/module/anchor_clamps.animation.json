@@ -1,0 +1,65 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "deploy": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.3,
+      "bones": {
+        "spike": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.15": {
+              "vector": [
+                0,
+                -8,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "0.3": {
+              "vector": [
+                0,
+                -8,
+                0
+              ]
+            }
+          }
+        }
+      },
+      "timeline": {
+        "0.15": "anchor:bite;"
+      }
+    },
+    "retract": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.3,
+      "bones": {
+        "spike": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                -8,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutCubic"
+            }
+          }
+        }
+      }
+    }
+  }
+}

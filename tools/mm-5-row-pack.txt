@@ -1,0 +1,49 @@
+# The owner's settings and shoulder view: the Hopper walked along the parked row of all eleven.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha hopper -30 -60 0 hydraulic_legs
+mecha bulwark -25 -60 0 hydraulic_legs
+mecha colossus -20 -60 0 hydraulic_legs
+mecha executive -15 -60 0 hydraulic_legs
+mecha wheelhouse -10 -60 0 hydraulic_legs
+mecha skitter -5 -60 0 hydraulic_legs
+mecha kite 0 -60 0 hydraulic_legs
+mecha chimera 5 -60 0 hydraulic_legs
+/summon headinajar:rover 10 -60 0 {Rotation:[180f,0f]}
+/summon headinajar:lunk 15 -60 0 {Rotation:[180f,0f]}
+/summon headinajar:spider_walker 20 -60 0 {Rotation:[180f,0f]}
+mecha hopper -36 -60 -6 hydraulic_legs
+jar
+charge 100000
+/tp @s -36.5 -60 -9.5 0 0
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+aimat headinajar:hopper
+wait 3
+aimat headinajar:hopper
+wait 3
+key use
+wait 60
+riding hopper
+look -90 8
+wait 20
+shot rp_start
+frames rp_walk_hopper_along_row 260
+key forward hold 250
+wait 10
+shot rp_end
+/time set 18000
+wait 30
+turn 180 0 20
+wait 10
+shot rp_night_back_along_row

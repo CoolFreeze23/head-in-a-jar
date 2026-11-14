@@ -1,0 +1,166 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_arachnid_legs_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount_thigh",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                -4,
+                -6
+              ],
+              "size": [
+                8,
+                8,
+                6
+              ],
+              "uv": [
+                20,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "upper",
+          "parent": "mount_thigh",
+          "pivot": [
+            0,
+            2,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                0,
+                -18
+              ],
+              "size": [
+                4,
+                4,
+                14
+              ],
+              "uv": [
+                92,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -1,
+                -20
+              ],
+              "size": [
+                6,
+                6,
+                4
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "lower",
+          "parent": "upper",
+          "pivot": [
+            0,
+            2,
+            -18
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                -18,
+                -19
+              ],
+              "size": [
+                2,
+                20,
+                2
+              ],
+              "uv": [
+                84,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -2,
+                -20,
+                -20
+              ],
+              "size": [
+                4,
+                2,
+                4
+              ],
+              "uv": [
+                68,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_claw": [
+              0,
+              -20,
+              -18
+            ]
+          }
+        },
+        {
+          "name": "mount_shin",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -4,
+                -4
+              ],
+              "size": [
+                6,
+                8,
+                4
+              ],
+              "uv": [
+                48,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+# Lunk, first look in the default profile: the jar cupped up onto the lid from behind, the knuckle-walk from behind and
+# from the side at hull height, the toss of a cow from behind and from 6 blocks, a refused toss (nothing in reach), the
+# flat jar's slump, getting off (the jar lifted down in front), stills by day, night and torchlight beside a parked
+# Hopper and Bulwark.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon headinajar:lunk 0 -60 0 {Rotation:[0f,0f]}
+/tp @s 4.5 -60 -3.5 0 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:lunk
+view 1
+frames l01_board_behind 50
+key use
+wait 50
+riding lunk
+look 0 10
+shot l01_on_the_lid_behind
+watch at 2.4 1.2 2.4 135 18
+wait 5
+shot l01_on_the_lid_front_3q
+watch off
+view 1
+# --- the knuckle-walk from behind, then from the side at hull height --------------------------------------------------
+frames l02_walk_behind 80
+key forward hold 70
+wait 10
+look 180 10
+wait 10
+watch follow -6 0.4 0 -90 3
+frames l03_walk_side 80
+key forward hold 70
+wait 10
+watch off
+view 1
+# --- the toss: a cow in front, from behind, then from 6 blocks to the side -------------------------------------------
+look 0 30
+wait 10
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2
+wait 5
+lookat minecraft:cow 0.7
+frames l04_toss_behind 60
+key ability
+wait 50
+inspect near minecraft:cow 20
+/kill @e[type=minecraft:cow]
+wait 30
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2
+wait 5
+lookat minecraft:cow 0.7
+watch at 6 1.2 1 90 8
+frames l05_toss_bystander_6 60
+key ability
+wait 50
+watch off
+/kill @e[type=minecraft:cow]
+view 1
+# --- a refused toss: nothing in reach ---------------------------------------------------------------------------------
+look 0 -40
+wait 35
+frames l06_toss_refused_behind 40
+key ability
+wait 35
+# --- the flat jar's slump, from the side ------------------------------------------------------------------------------
+watch at -4.5 1 0 -90 8
+charge 0
+frames l07_flat_side 60
+wait 55
+watch off
+charge 100000
+wait 20
+# --- getting off: the jar lifted down to the floor in front, from the side -------------------------------------------
+watch at -4.5 1 0.5 -90 8
+frames l08_alight_side 45
+sneak
+wait 40
+inspect me
+watch off
+# --- stills: beside a parked Hopper and Bulwark, empty and with a jar aboard -------------------------------------------
+mecha hopper 3 -60 0 hydraulic_legs
+mecha bulwark -4 -60 0 hydraulic_legs
+/tp @s 0.5 -59.5 7 180 10
+view 0
+wait 20
+shot st_day_row_empty
+bystander spawn 0 -60 -2 0
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:lunk
+wait 30
+shot st_day_row_jar
+/tp @s 2.5 -59 2.8 145 15
+wait 10
+shot st_day_jar_3q
+/tp @s 0.5 -59 -6 0 8
+wait 10
+shot st_day_back_6
+/tp @s 0.5 -57 -20 0 4
+wait 10
+shot st_day_back_20
+/time set 18000
+/tp @s 0.5 -59.5 7 180 10
+wait 20
+shot st_night_row
+/setblock 1 -60 4 minecraft:torch
+/setblock -2 -60 4 minecraft:torch
+wait 10
+shot st_torch_row
+report done

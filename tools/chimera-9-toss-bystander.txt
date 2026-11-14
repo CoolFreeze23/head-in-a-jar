@@ -1,0 +1,33 @@
+# The Lunk's toss with the creature held in its fists, seen from a bystander's place about six blocks to its side (the
+# stand-in standing there and its packet record kept), then the HUD from behind.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon headinajar:lunk 0 -60 0 {Rotation:[0f,0f]}
+/tp @s 6.5 -60 -6.5 0 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:lunk
+view 1
+key use
+wait 40
+riding lunk
+bystander spawn 7 -60 2 90
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:pig ~ ~ ~2
+wait 3
+lookat minecraft:pig 0.4
+bystander mark
+watch at 6.5 1.4 5 125 6
+frames s06_lunk_toss_held_bystander_6 70
+key ability
+wait 60
+bystander packets MoveEntity|TeleportEntity|SetEntityMotion|sound
+watch off
+report done

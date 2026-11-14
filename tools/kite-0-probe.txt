@@ -1,0 +1,64 @@
+# Probe: the Talon Lift's hold tick by tick (server positions), the bank on the pose, an eject seen by the pilot looking down
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+mecha kite 0 -60 3 drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+view 1
+look 0 10
+execute at @e[type=headinajar:kite,limit=1,sort=nearest] run summon minecraft:sheep ~ ~ ~0.5 {Rotation:[0f,0f]}
+wait 3
+key jump down
+wait 26
+key drive
+wait 8
+chute
+inspect near minecraft:sheep 8
+wait 3
+chute
+inspect near minecraft:sheep 8
+wait 3
+chute
+inspect near minecraft:sheep 8
+wait 3
+chute
+inspect near minecraft:sheep 8
+wait 3
+chute
+inspect near minecraft:sheep 8
+wait 3
+chute
+inspect near minecraft:sheep 8
+shot probe_carry
+wait 10
+chute
+inspect near minecraft:sheep 8
+key forward down
+turn 60 0 20
+wait 10
+chute
+shot probe_bank
+key forward up
+key jump up
+wait 60
+/kill @e[type=minecraft:sheep]
+key jump hold 80
+/data merge entity @e[type=headinajar:kite,limit=1,sort=nearest] {Health:6f}
+key jump down
+/damage @e[type=headinajar:kite,limit=1,sort=nearest] 2 minecraft:generic
+key jump up
+wait 25
+chute
+look 0 75
+wait 5
+shot probe_chute_looking_down
+chute
+wait 60
+chute
+report probe done

@@ -1,13 +1,13 @@
 """Separation Chair (DOLORES): every clip, keyed by server tick, written into separation_chair.bbmodel.
 
 This file is the source of truth for the chair's animations: edit the tables here and run it again; hand edits to the
-bbmodel's animations in Blockbench are overwritten by the next run. Geometry comes from chair_geo.py and is edited with
-the Blockbench tool server; this script only replaces the "animations" array.
+bbmodel's animations in Blockbench are overwritten by the next run. Geometry comes from chair_geo.py and is edited in
+Blockbench; this script only replaces the "animations" array.
 
     python art/chair/chair_anim.py                 # write the clips into the bbmodel (sparse keys, GeckoLib easings)
     python art/chair/chair_anim.py --preview OUT   # also write a review copy with every eased segment baked into
                                                    # per-tick linear keys (GeckoLib 4.9.3's own curves), so contact
-                                                   # sheets and bbmodel_sample_pose show the in-between spacing
+                                                   # sheets and sampled poses show the in-between spacing
 
 Key tuples: (tick, value, easing, easing_args). The easing shapes the move ARRIVING at that key (GeckoLib rule).
 GeckoLib 4.9.3: easeIn* of elastic/bounce is the settle (EasingType.java: easeOut(f) = 1 - f(1 - t), and the raw

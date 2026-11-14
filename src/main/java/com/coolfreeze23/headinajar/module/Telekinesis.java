@@ -88,7 +88,7 @@ public final class Telekinesis {
             Entity e = entityHit.getEntity();
             String why = whyNot(player, e);
             if (why != null) {
-                Object arg = e instanceof Player || e instanceof HeadJarEntity || e instanceof HeadlessBody ? ownerName(player, e) : e.getDisplayName();
+                Object arg = why.equals("tk.not_trusted") ? ownerName(player, e) : e.getDisplayName();
                 return fizzle(player, centre(e), e.getId(), why.equals("tk.not_trusted") ? Fx.WHY_TRUST : Fx.WHY_BOSS, why, arg);
             }
             held = e;
@@ -144,27 +144,36 @@ public final class Telekinesis {
     public static String whyNot(ServerPlayer player, Entity e) {
         if (e.getType().is(Tags.EntityTypes.BOSSES)) return "tk.boss";
         if (e instanceof Player p && (p.isCreative() || p.isSpectator())) return "tk.untouchable";
-        UUID owner = owner(e);
-        if (owner != null && !owner.equals(player.getUUID()) && !HeadRegistry.get(player.server).trusts(owner, player.getUUID())) return "tk.not_trusted";
+        UUID owner = owner(player, e);
+        if (owner != null && !owner.equals(player.getUUID()) && !HeadRegistry.get(player.server).trusts(owner, player)) return "tk.not_trusted";
         return null;
     }
 
-    /** The player a thing belongs to, for the trust rule: a player, their placed head, their idle body; else null. */
-    private static UUID owner(Entity e) {
+    /**
+     * The player a thing belongs to, for the trust rule: a player, their placed head, their idle body, their mecha
+     * (its owner, parked or not); anything another player rides (a host, a shell, a mount, a mecha with no owner) is
+     * theirs while they ride it. Else null.
+     */
+    private static UUID owner(ServerPlayer lifter, Entity e) {
         if (e instanceof Player p) return p.getUUID();
         if (e instanceof HeadJarEntity head) return head.ownerId();
         if (e instanceof HeadlessBody body) return body.ownerId();
+        if (e instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.owner() != null) return mecha.owner();
+        for (Entity rider : e.getIndirectPassengers()) {
+            if (rider instanceof Player p && p != lifter) return p.getUUID();
+        }
         return null;
     }
 
     private static Component ownerName(ServerPlayer player, Entity e) {
         if (e instanceof Player p) return p.getDisplayName();
-        UUID owner = owner(e);
+        UUID owner = owner(player, e);
         Player online = owner == null ? null : player.server.getPlayerList().getPlayer(owner);
         if (online != null) return online.getDisplayName();
         var cache = player.server.getProfileCache();
-        String name = owner == null || cache == null ? "?" : cache.get(owner).map(com.mojang.authlib.GameProfile::getName).orElse("?");
-        return Component.literal(name);
+        // an owner this server has never seen by name is simply another player
+        var name = owner == null || cache == null ? java.util.Optional.<String>empty() : cache.get(owner).map(com.mojang.authlib.GameProfile::getName);
+        return name.<Component>map(Component::literal).orElseGet(() -> Component.translatable("message.headinajar.another_player"));
     }
 
     /** Why this block can't be lifted (a refusal reason), or null when it can. */

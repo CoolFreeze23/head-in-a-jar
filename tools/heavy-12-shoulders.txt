@@ -1,0 +1,44 @@
+# The shoulder weapons firing from the raised cradles while the Colossus is sieged: from behind (his chase camera) and from
+# a bystander about 8 blocks off; the left button works the left shoulder (an arc cannon at a target), the right the
+# right shoulder (a flamethrower); the planted arms answer in text
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha colossus 0 -60 30 hydraulic_legs,drill,drill,arc_cannon,flamethrower
+/summon minecraft:zombie 0 -60 40 {NoAI:1b,PersistenceRequired:1b}
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+view 1
+look 0 10
+key drive
+wait 60
+lookat zombie 1
+frames h01_shoulders_fire_sieged_behind 150
+wait 5
+key attack hold 10
+wait 30
+key use hold 50
+wait 50
+watch at -7 2.5 4 -120 8
+wait 3
+bystander spawn -8 -60 35 230
+bystander mark
+frames h02_shoulders_fire_sieged_bystander 150
+wait 5
+key attack hold 10
+wait 40
+key use hold 50
+wait 40
+bystander packets sound|particle
+bystander remove
+watch off
+report shoulders done

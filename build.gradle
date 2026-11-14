@@ -21,6 +21,29 @@ repositories {
             includeGroup('software.bernie.geckolib')
         }
     }
+    // the optional integrations, compiled against only (from each project's developer instructions)
+    maven {
+        name = 'BlameJared' // JEI and Patchouli
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup('mezz.jei')
+            includeGroup('vazkii.patchouli')
+        }
+    }
+    maven {
+        name = 'Curios'
+        url = 'https://maven.theillusivec4.top/'
+        content {
+            includeGroup('top.theillusivec4.curios')
+        }
+    }
+    maven {
+        name = 'Modrinth' // Jade, Entity Model and Texture Features, Shoulder Surfing Reloaded
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup('maven.modrinth')
+        }
+    }
 }
 
 sourceSets {
@@ -110,8 +133,19 @@ neoForge {
 dependencies {
     // required: animated machines, mecha and shells
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
-    // optional integrations: compiled against the pack's own JEI, Jade and Curios jars (tools copy them into libs/)
-    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    // optional integrations (compat/): compiled against only, never shipped or required; each hook loads only when its
+    // mod is present
+    [
+            "mezz.jei:jei-${minecraft_version}-common-api:19.57.0.450",
+            "mezz.jei:jei-${minecraft_version}-neoforge-api:19.57.0.450",
+            "vazkii.patchouli:Patchouli:1.21.1-93-NEOFORGE:api",
+            "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api",
+            "maven.modrinth:jade:15.10.6+neoforge",
+            "maven.modrinth:entity-model-features:3.3.9-neoforge-1.21",
+            "maven.modrinth:entitytexturefeatures:7.2.4-neoforge-1.21", // types in Entity Model Features' API
+            "maven.modrinth:shoulder-surfing-reloaded:1.21.1-5.2.0+neoforge",
+    ].each { compileOnly(it) { transitive = false } }
+    // the local folders below are for the hidden dev client only (tools/smoke.sh), not for building the mod
     // the hidden smoke client also runs them, so their screens and tooltips can be checked
     // (SMOKE_MODS containing "noemf" leaves Entity Model Features and Entity Texture Features out)
     def smokeMods = (System.getenv('SMOKE_MODS') ?: '').toLowerCase().split('[ ,]+').findAll { it } as Set

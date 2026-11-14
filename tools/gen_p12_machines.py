@@ -18,8 +18,8 @@ REFUSALS = {
     # genetics by hand. %s: the Injection Rig, the Surgical Saw
     'gene.syringe_air': ('Nothing to draw from the air. Use it on a creature.', 'Não há o que tirar do ar. Use numa criatura.'),
     'gene.syringe_player': ('Colleagues are not samples. Draw from a creature.', 'Colegas não são amostras. Tire de uma criatura.'),
-    'gene.serum_target': ('Serums go into hosts. Use the %1$s, or make a host with the %2$s.',
-                          'Soros vão em hospedeiros. Use a %1$s, ou faça um hospedeiro com a %2$s.'),
+    'gene.serum_target': ('Serums go in hosts. Use the %1$s, or make one: %2$s.',
+                          'Soro é para hospedeiros. Use a %1$s ou crie um: %2$s.'),
     'gene.serum_self': ('No self-injection by hand. Use the %s.', 'Nada de se injetar à mão. Use a %s.'),
     'gene.wash_jar': ('A jar has nothing to wash. Drink it with your body on.', 'Um pote não tem o que lavar. Beba com o corpo no lugar.'),
     # the genetics lab. %s: item and block names, a gene's name, FE
@@ -31,7 +31,7 @@ REFUSALS = {
     'lab.splicer.duplicate': ('%s is already in the strand. Pick another gene.', '%s já está na fita. Escolha outro gene.'),
     'lab.splicer.empty_library': ('No gene read to 30%% yet. Read more at a %s.', 'Nenhum gene lido até 30%% ainda. Leia mais num %s.'),
     'lab.splicer.no_genes': ('No genes picked. Pick at least one with the arrows.', 'Nenhum gene escolhido. Escolha pelo menos um com as setas.'),
-    'lab.splicer.too_heavy': ('Load %s of %s. Drop a gene from the strand.', 'Carga %s de %s. Tire um gene da fita.'),
+    'lab.splicer.too_heavy': ('Load %s of %s. Drop a gene from the strand.', 'Peso %s de %s. Tire um gene da fita.'),
     'lab.splicer.no_gel': ('Out of %s. Load some in the second slot.', 'Sem %s. Coloque no segundo espaço.'),
     'lab.splicer.no_bottle': ('Needs a %s. Load one in the third slot.', 'Precisa de %s. Coloque no terceiro espaço.'),
     'lab.splicer.out_full': ('The last %s is still in. Take it out first.', 'O último %s ainda está lá. Tire primeiro.'),
@@ -43,7 +43,7 @@ REFUSALS = {
     'printer.busy': ('Printing already, %s s to go. Wait for the body.', 'Já está imprimindo, faltam %s s. Espere o corpo.'),
     'printer.has_head': ('Bodies are for heads in jars. Come back decapitated.', 'Corpos são para cabeças em potes. Volte decapitado.'),
     'printer.missing': ('Short %s %s. Load it and press Print again.', 'Faltam %s de %s. Coloque e aperte Imprimir de novo.'),
-    'printer.no_saline': ('Short %s mB of %s. Pour in buckets or bottles.', 'Faltam %s mB de %s. Despeje baldes ou garrafas.'),
+    'printer.no_saline': ('Short %s mB of %s. Pour in buckets or bottles.', 'Faltam %s mB de %s. Despeje baldes ou frascos.'),
     # tanks. %1$s: the fluid, %2$s: the machine
     'machine.wrong_fluid': ("The %2$s doesn't take %1$s. Check what it runs on.", '%2$s não aceita %1$s. Veja do que precisa.'),
     'machine.tank_full': ('The tank is full of %1$s. Use some first.', 'O tanque está cheio de %1$s. Gaste um pouco primeiro.'),
@@ -56,8 +56,8 @@ REFUSALS = {
     'socket.occupied': ('%s is plugged in. Wait until they unplug.', '%s está conectado. Espere desconectar.'),
     'socket.has_head': ('A head (%s) runs this socket. Take it out by hand first.', 'Uma cabeça (%s) roda este soquete. Tire à mão primeiro.'),
     'socket.needs_head': ('The socket takes a %s, or a jar plugging in.', 'O soquete aceita uma %s, ou um pote se conectando.'),
-    'socket.no_program': ('That head (%s) has no program. Try a zombie, villager or enderman.',
-                          'Essa cabeça (%s) não tem programa. Tente zumbi, aldeão ou enderman.'),
+    'socket.no_program': ('That head (%s) has no program. Try zombie, villager, enderman.',
+                          'Cabeça (%s) sem programa. Tente zumbi, aldeão ou enderman.'),
     'jarred_head.busy': ('This head is with another customer. Come back shortly.', 'Esta cabeça está com outro cliente. Volte já já.'),
 }
 

@@ -1,0 +1,108 @@
+# Skitter, first look in the default profile: the Gantry's build and a stand-in's jar boarding it from a bystander's
+# place, then the pilot's own: boarding and boot from behind, the trot from behind and from the side at hull height, a
+# wall climbed and topped, and the Dragline from behind: fired from the wall's top at a beam, off the edge into the
+# swing, paid out, wound in, cut.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- the build, from a bystander's place 6 blocks off at 45 degrees -------------------------------------------------
+/setblock 30 -60 0 headinajar:assembly_gantry
+gantry 30 -60 0 skitter
+/tp @s 32.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 34.5 -57.8 4.5 135 16
+wait 2
+frames s00_build_and_boarding_bystander 240
+wait 150
+bystander spawn 30 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:skitter
+wait 85
+inspect near headinajar:skitter 6
+# --- the course: a wall 6 high (z 14-15), and beyond it a beam 12 up on two posts (z 22-23) -------------------------
+/fill -5 -60 14 5 -55 15 minecraft:stone
+/fill -8 -60 22 -8 -48 23 minecraft:stone
+/fill 8 -60 22 8 -48 23 minecraft:stone
+/fill -8 -48 22 8 -48 23 minecraft:stone
+mecha skitter 0 -60 0 drill
+/tp @s 4.5 -60 -3.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -3.6 0 -20
+wait 5
+lookat headinajar:skitter 1
+view 1
+frames s01_board_and_boot_behind 90
+key use
+wait 90
+riding skitter
+look 0 12
+shot s01_seated_behind
+watch at 3 1.4 3 135 20
+wait 5
+shot s01_jar_front_3q
+watch off
+view 1
+# --- the trot: away from the wall and back, from behind, then from the side at hull height ------------------------
+look 180 12
+wait 20
+frames s02_trot_behind 70
+key forward hold 50
+wait 15
+inspect near headinajar:skitter 4
+look 0 12
+wait 25
+watch follow -7 0.2 0 -90 3
+frames s03_trot_side_hull_height 70
+key forward hold 45
+wait 20
+watch off
+view 1
+# --- backing and turning on the spot --------------------------------------------------------------------------------
+frames s04_back_and_turn 90
+key back hold 30
+turn 90 0 20
+turn -90 0 20
+wait 15
+# --- up the wall: from behind, and from the side at 7 blocks ------------------------------------------------------
+look 0 12
+wait 10
+frames s05_wall_climb_behind 150
+key forward hold 120
+wait 25
+inspect near headinajar:skitter 4
+# --- the Dragline: from the wall's top at the beam's underside, off the edge into the swing ------------------------
+look 0 -28
+wait 10
+frames s06_dragline_fire_behind 60
+key drive
+wait 50
+inspect near headinajar:skitter 4
+look 0 10
+frames s07_dragline_off_the_edge_swing 160
+key forward hold 20
+wait 140
+inspect near headinajar:skitter 4
+frames s08_dragline_rappel_then_reel 140
+key jump hold 30
+wait 10
+key drive hold 50
+wait 40
+inspect near headinajar:skitter 4
+frames s09_dragline_cut 60
+key drive
+wait 50
+inspect near headinajar:skitter 4
+report done

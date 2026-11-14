@@ -140,7 +140,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
                 setChanged();
             }
             com.coolfreeze23.headinajar.Advance.grant(player, "staffed");
-            level.playSound(null, worldPosition, SoundEvents.VILLAGER_WORK_LIBRARIAN, SoundSource.BLOCKS, 1, 1);
+            level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.MOUNT_WORK.get(), SoundSource.BLOCKS, 1, 1);
             return;
         }
         if (player.isShiftKeyDown()) {
@@ -201,6 +201,12 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
 
     @Override
     public void clientTick() {
+        // a head left unpaid three days or more sits facing the wall and sighs now and then
+        if (level == null || paid() || daysMissed() < 3 || (level.getGameTime() + (worldPosition.asLong() & 255)) % 400 != 0) return;
+        if (!com.coolfreeze23.headinajar.fx.IdleBudget.take(level.getGameTime())) return;
+        level.playLocalSound(worldPosition.getX() + 0.5, worldPosition.getY() + 1.2, worldPosition.getZ() + 0.5,
+                com.coolfreeze23.headinajar.machine.MachineSounds.MOUNT_SIGH.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1,
+                0.95f + level.random.nextFloat() * 0.1f, false);
     }
 
     @Override

@@ -1,0 +1,52 @@
+# Hopper on GeckoLib, first look: parked, boarded by a click, boot, walk, pogo, drill, from the pilot's chase camera
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper 0 -60 3 hydraulic_legs,jump_jets,drill,armor_plating,night_optics,galvanic_stack
+/tp @s 0.5 -60 -1.5 0 10
+wait 30
+shot h1_parked_front
+/tp @s 4.5 -59 7.5 135 15
+wait 5
+shot h1_parked_3q
+/tp @s 0.5 -59 9 180 15
+wait 5
+shot h1_parked_back
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 1.9 0 -25
+wait 5
+key use
+wait 5
+riding after_click
+view 1
+frames h1_board 70
+wait 72
+shot h1_booted_back
+frames h1_walk 80
+key forward hold 60
+wait 20
+shot h1_stopped
+frames h1_pogo 110
+key drive hold 40
+wait 70
+inspect near hopper 12
+/setblock 0 -60 14 minecraft:stone
+/setblock 0 -59 14 minecraft:stone
+inspect near hopper 12
+frames h1_drill 60
+key attack hold 40
+wait 20
+frames h1_dry 40
+key use
+wait 40
+view 0
+frames h1_fp 60
+key forward hold 30
+wait 30
+report done

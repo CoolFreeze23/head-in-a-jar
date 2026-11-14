@@ -1,0 +1,30 @@
+# The Assembly Gantry builds a Colossus. The stand-in second player opens the Gantry by a use packet on its front and
+# presses Assemble (the screen's button packet); the build is filmed whole from a bystander's place about six blocks
+# off at the front three-quarter on the arm's side, by day.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+gantry 0 -60 0 colossus
+/tp @s 5.6 -59.0 -4.6 45 -13.9
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames g3_colossus_build 372
+wait 4
+bystander button 1
+wait 2
+bystander close
+inspect block 0 -60 0
+wait 166
+inspect near colossus 4
+wait 202
+inspect near colossus 4
+report gantry colossus build done

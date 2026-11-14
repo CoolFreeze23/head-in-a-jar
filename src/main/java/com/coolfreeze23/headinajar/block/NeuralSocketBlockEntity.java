@@ -59,6 +59,15 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         }
         if (occupied != wasOccupied) changedAt = now;
         wasOccupied = occupied;
+        // a zombie head's 1 Hz clock is heard: a relay tick on each rising edge, and the head's groan every ten seconds
+        if (program == PROG_CLOCK && now % 20 == 0 && com.coolfreeze23.headinajar.fx.IdleBudget.take(now)) {
+            var c = worldPosition.getCenter();
+            boolean groan = Math.floorMod(now + (worldPosition.asLong() & 7) * 20, 200) == 0;
+            level.playLocalSound(c.x, c.y, c.z, com.coolfreeze23.headinajar.fx.HouseSounds.METRONOME.get(), SoundSource.BLOCKS, 1,
+                    0.98f + level.random.nextFloat() * 0.04f, false);
+            // the head's own groan, small (pitched up, quiet): a head in a jar, not a zombie at the door
+            if (groan) level.playLocalSound(c.x, c.y + 0.5, c.z, com.coolfreeze23.headinajar.fx.HouseSounds.ZOMBIE_GROAN.get(), SoundSource.BLOCKS, 0.5f, 1.3f, false);
+        }
     }
     private final int[] out = new int[CHANNELS];
     private final int[] pulse = new int[CHANNELS];
@@ -333,7 +342,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         player.teleportTo((ServerLevel) level, top.x, top.y, top.z, player.getYRot(), player.getXRot());
         player.refreshDimensions();
         Network.sync(player);
-        level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.6f, 1.6f);
+        level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.RELAY_UP.get(), SoundSource.BLOCKS, 1, 1);
         player.displayClientMessage(Component.translatable("socket.headinajar.plugged", Component.keybind("key.headinajar.ability"),
                 Component.keybind("key.sneak"), Component.keybind("key.headinajar.jar_menu")), true);
         setChanged();
@@ -353,7 +362,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         player.refreshDimensions();
         Network.sync(player);
         player.displayClientMessage(Component.translatable(line), true);
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 0.6f, 1.6f);
+        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), com.coolfreeze23.headinajar.fx.HouseSounds.RELAY_DOWN.get(), SoundSource.BLOCKS, 1, 0.97f + player.getRandom().nextFloat() * 0.06f);
         return true;
     }
 
@@ -372,6 +381,11 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
     }
 
     /** The SocketInput payload's handler: 0 set a face's level, 1 pulse a face, 2 unplug. */
+    /** The level the n-th hotbar key sets (1 to 9 give 1, 3, 5, 6, 8, 10, 12, 13, 15): both ends can be reached. */
+    public static int levelForKey(int n) {
+        return n <= 0 ? 0 : Math.round(1 + (Math.min(9, n) - 1) * 14 / 8f);
+    }
+
     public static void input(ServerPlayer player, int action, int face, int value) {
         if (FormActions.state(player).form() != Form.SOCKET) return;
         if (action == 2) {
@@ -385,11 +399,22 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
             return;
         }
         var side = Direction.from3DDataValue(Math.floorMod(face, 6));
-        if (action == 0) socket.setOutput(side, value);
-        else if (action == 1) {
+        if (action == 0) {
+            boolean was = socket.out[side.get3DDataValue()] > 0;
+            socket.setOutput(side, value);
+            if (was != socket.out[side.get3DDataValue()] > 0) socket.channel(side, !was);
+        } else if (action == 1) {
+            socket.channel(side, true);
             socket.pulse(side);
             com.coolfreeze23.headinajar.Advance.grant(player, "socket_pulse");
         }
+    }
+
+    /** A channel switched by the jar: one relay click at that face's pitch, bright on, softer off. */
+    private void channel(Direction side, boolean on) {
+        if (level == null) return;
+        level.playSound(null, worldPosition, (on ? com.coolfreeze23.headinajar.fx.HouseSounds.CHANNEL_ON : com.coolfreeze23.headinajar.fx.HouseSounds.CHANNEL_OFF).get(),
+                SoundSource.BLOCKS, 1, com.coolfreeze23.headinajar.fx.HouseSounds.CHANNEL_PITCH[side.get3DDataValue()]);
     }
 
     /** The block is going (broken, blown up, carried off): its jar is unplugged on the spot. */

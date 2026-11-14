@@ -1,0 +1,35 @@
+{
+  "parent": "headinajar:steel",
+  "criteria": {
+    "placed": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "headinajar:assembly_gantry"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:assembly_gantry"
+    },
+    "title": {
+      "translate": "advancements.headinajar.gantry.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.gantry.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

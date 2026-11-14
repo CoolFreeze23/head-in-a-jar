@@ -1,0 +1,80 @@
+# Last looks, default profile: the arc's chain seen side on (cow, then two spiders further along the line of fire),
+# a damaged frame's sparks close up, and the Manipulator Hand holding a sword and then a torch.
+@difficulty normal
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+mecha bulwark 20 -60 0 hydraulic_legs,welding_torch,manipulator_hand
+/summon cow 0.5 -60 7.5 {NoAI:1b,Invulnerable:1b}
+/summon spider 0.5 -60 10.5 {NoAI:1b,PersistenceRequired:1b}
+/summon spider 0.5 -60 13.5 {NoAI:1b,PersistenceRequired:1b}
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 75
+/gamemode survival @s
+view 0
+look 0 8
+wait 10
+aimat cow
+wait 4
+watch at 7 3 7 90 14
+wait 4
+report arc chain side on
+observe 20
+frames chain_side_on 40
+wait 4
+key use
+wait 36
+observe 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:0f,Health:25f}
+watch at -3 2 3 -135 12
+wait 4
+report sparks close up
+observe 80
+frames sparks_close 80
+turn 1 0 2
+wait 80
+observe 10
+watch off
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:60f}
+/gamemode creative @s
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 20.5 -60 -4.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 75
+/item replace entity @s weapon.mainhand with minecraft:iron_sword
+view 1
+look 0 10
+wait 15
+muzzles
+watch at -3.5 2.6 3.5 -135 12
+wait 5
+shot hand_sword_front_right
+watch at -4.5 2.8 0 -90 10
+wait 5
+shot hand_sword_right_side
+/item replace entity @s weapon.mainhand with minecraft:torch
+wait 5
+shot hand_torch_right_side
+watch at -3.5 2.6 3.5 -135 12
+wait 5
+shot hand_torch_front_right
+watch off
+muzzles
+report done

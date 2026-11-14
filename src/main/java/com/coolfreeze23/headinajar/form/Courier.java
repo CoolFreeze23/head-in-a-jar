@@ -61,7 +61,7 @@ public final class Courier {
         player.getPersistentData().putInt(SEARCH, SEARCH_TICKS);
         holdChunk(player, body);
         Network.sync(player);
-        player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.PLAYERS, 1, 0.8f);
+        player.serverLevel().playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.COURIER_BOOKED.get(), SoundSource.PLAYERS, 1, 0.8f);
         return "courier.headinajar.booked";
     }
 

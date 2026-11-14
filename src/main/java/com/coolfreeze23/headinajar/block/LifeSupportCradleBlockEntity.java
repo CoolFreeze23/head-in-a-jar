@@ -260,6 +260,7 @@ public class LifeSupportCradleBlockEntity extends BlockEntity implements com.coo
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, LifeSupportCradleBlockEntity cradle) {
+        if (cradle.owner == null && level.getGameTime() % 20 == 0) cradle.restSitter(level, pos);
         if (cradle.owner == null || level.getGameTime() % 20 != 0 || level.getServer() == null) return;
         cradle.upkeep(level.getServer().getPlayerList().getPlayer(cradle.owner), level.getGameTime());
         // the registry is the truth: if the player swapped into this head, the Cradle is empty again
@@ -267,6 +268,20 @@ public class LifeSupportCradleBlockEntity extends BlockEntity implements com.coo
         if (head == null || head.where() != HeadRegistry.Where.CRADLE || !head.spot().dimension().equals(level.dimension())
                 || !BlockPos.containing(head.spot().pos()).equals(pos)) {
             cradle.clear();
+        }
+    }
+
+    /**
+     * A jar resting on an empty Cradle's cushion (it climbed in) is kept topped up as a docked head is: saline, charge and
+     * a point of glass every 10 s, from the same tank and buffer.
+     */
+    private void restSitter(Level level, BlockPos pos) {
+        net.minecraft.world.phys.AABB cushion = new net.minecraft.world.phys.AABB(pos).inflate(0.05, 0.5, 0.05);
+        for (net.minecraft.world.entity.player.Player p : level.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class, cushion,
+                p -> p instanceof net.minecraft.server.level.ServerPlayer && p.isAlive() && cushion.contains(p.position())
+                        && p.getData(ModRegistry.JAR_STATE).form() == com.coolfreeze23.headinajar.form.Form.JAR)) {
+            upkeep((net.minecraft.server.level.ServerPlayer) p, level.getGameTime());
+            return;
         }
     }
 

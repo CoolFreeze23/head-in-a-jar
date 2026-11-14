@@ -1,0 +1,245 @@
+# The row: the eight frames and three shells parked side by side, from ten blocks by day, night and torchlight,
+# a slow pan; then each one boarded and piloted out of the row past a fixed camera.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper -30 -60 0 hydraulic_legs
+mecha bulwark -25 -60 0 hydraulic_legs
+mecha colossus -20 -60 0 hydraulic_legs
+mecha executive -15 -60 0 hydraulic_legs
+mecha wheelhouse -10 -60 0 hydraulic_legs
+mecha skitter -5 -60 0 hydraulic_legs
+mecha kite 0 -60 0 hydraulic_legs
+mecha chimera 5 -60 0 hydraulic_legs
+/summon headinajar:rover 10 -60 0 {Rotation:[180f,0f]}
+/summon headinajar:lunk 15 -60 0 {Rotation:[180f,0f]}
+/summon headinajar:spider_walker 20 -60 0 {Rotation:[180f,0f]}
+/tp @s 0.5 -59 -12 0 5
+wait 100
+shot row_day_10
+/tp @s -32 -58.5 -6 -60 5
+wait 20
+shot row_day_end_3q
+/tp @s 0.5 -59 -12 0 5
+wait 10
+frames row_pan_10 120
+turn -40 0 40
+turn 80 0 80
+wait 10
+/time set 18000
+wait 40
+shot row_night_10
+/setblock -28 -60 -2 minecraft:torch
+/setblock -23 -60 -2 minecraft:torch
+/setblock -18 -60 -2 minecraft:torch
+/setblock -13 -60 -2 minecraft:torch
+/setblock -8 -60 -2 minecraft:torch
+/setblock -3 -60 -2 minecraft:torch
+/setblock 2 -60 -2 minecraft:torch
+/setblock 7 -60 -2 minecraft:torch
+/setblock 12 -60 -2 minecraft:torch
+/setblock 17 -60 -2 minecraft:torch
+/setblock 22 -60 -2 minecraft:torch
+/setblock 27 -60 -2 minecraft:torch
+wait 40
+shot row_torch_10
+/time set 6000
+wait 20
+jar
+charge 100000
+/tp @s -29.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:hopper
+key use
+wait 60
+riding past_hopper
+watch -24 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_hopper 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s -24.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 60
+riding past_bulwark
+watch -19 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_bulwark 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s -19.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:colossus
+key use
+wait 60
+riding past_colossus
+watch -14 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_colossus 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s -14.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:executive
+key use
+wait 60
+riding past_executive
+watch -9 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_executive 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s -9.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:wheelhouse
+key use
+wait 60
+riding past_wheelhouse
+watch -4 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_wheelhouse 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s -4.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:skitter
+key use
+wait 60
+riding past_skitter
+watch 1 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_skitter 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s 0.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:kite
+key use
+wait 60
+riding past_kite
+watch 6 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_kite 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s 5.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:chimera
+key use
+wait 60
+riding past_chimera
+watch 11 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_chimera 70
+key forward hold 60
+wait 10
+watch off
+sneak down
+key jar_menu hold 25
+sneak up
+wait 15
+/tp @s 10.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:rover
+key use
+wait 60
+riding past_rover
+watch 16 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_rover 70
+key forward hold 60
+wait 10
+watch off
+sneak hold 3
+wait 15
+/tp @s 15.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:lunk
+key use
+wait 60
+riding past_lunk
+watch 21 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_lunk 70
+key forward hold 60
+wait 10
+watch off
+sneak hold 3
+wait 15
+/tp @s 20.5 -60 -3 0 0
+view 0
+wait 5
+lookat headinajar:spider_walker
+key use
+wait 60
+riding past_spider_walker
+watch 26 -58.5 -18 30 8
+look 180 5
+wait 5
+frames past_spider_walker 70
+key forward hold 60
+wait 10
+watch off
+sneak hold 3
+wait 15

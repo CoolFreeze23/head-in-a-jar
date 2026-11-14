@@ -1,0 +1,17 @@
+{
+  "name": "The Courier",
+  "icon": "minecraft:bell",
+  "category": "headinajar:getting_home",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Stranded as a jar? Press $(l)Courier$() in the jar menu, or type /headoffice courier. In 30 s your body, or its corpse, arrives beside you from anywhere, for 20 kFE (or all your charge). Step into a body with $(k:key.headinajar.swap); a corpse takes a Suture Kit."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:body_recall_beacon",
+      "text": "A jar module: while you are a jar, your standing body walks to you, 10 FE/t. Same dimension and loaded chunks only. It halts before lava, fire or a drop of over 3 blocks."
+    }
+  ]
+}

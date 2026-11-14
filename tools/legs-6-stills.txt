@@ -1,0 +1,76 @@
+# Stills: a Skitter with the stand-in's jar in its cage beside a Hopper and a Bulwark, then a Spider Walker with the
+# stand-in's jar on its lid beside the Skitter and the Rover; by day, night and torchlight; from behind at 6 and 20
+# blocks. The player stays in its body (only the stand-in is a jar).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha hopper -4 -60 0 hydraulic_legs
+mecha skitter 0.5 -60 0.5 drill
+mecha bulwark 5 -60 0 hydraulic_legs
+bystander spawn 0 -60 -3 0
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:skitter
+wait 80
+bystander look 0 0
+/tp @s 0.5 -58.6 8 180 8
+wait 20
+shot st1_day_row_front
+/tp @s 3 -58.4 3 135 25
+wait 10
+shot st1_day_skitter_jar_3q
+/tp @s 0.5 -57.5 -6 0 20
+wait 10
+shot st1_day_back_6
+/tp @s 0.5 -55 -20 0 10
+wait 10
+shot st1_day_back_20
+/time set 18000
+/tp @s 0.5 -58.6 8 180 8
+wait 20
+shot st1_night_row_front
+/setblock 2 -60 3 minecraft:torch
+/setblock -2 -60 3 minecraft:torch
+wait 20
+shot st1_torch_row_front
+/tp @s 3 -58.4 3 135 25
+wait 10
+shot st1_torch_skitter_jar_3q
+/time set 6000
+# --- the Spider Walker beside the Skitter and the Rover ---------------------------------------------------------------
+bystander tp 40 -60 -3 0 0
+wait 5
+mecha skitter 36.5 -60 0.5
+/summon headinajar:spider_walker 40.5 -60 0.5 {Rotation:[0f,0f]}
+/summon headinajar:rover 44.5 -60 0.5 {Rotation:[0f,0f]}
+wait 5
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:spider_walker
+wait 40
+bystander look 0 0
+/tp @s 40.5 -58.8 6 180 8
+wait 20
+shot st2_day_row_front
+/tp @s 42.5 -59 2.5 135 22
+wait 10
+shot st2_day_spider_lid_3q
+/tp @s 40.5 -58 -5.5 0 22
+wait 10
+shot st2_day_back_6
+/tp @s 40.5 -55 -19.5 0 12
+wait 10
+shot st2_day_back_20
+/time set 18000
+/tp @s 40.5 -58.8 6 180 8
+wait 20
+shot st2_night_row_front
+/setblock 41 -60 3 minecraft:torch
+wait 20
+shot st2_torch_row_front
+report done

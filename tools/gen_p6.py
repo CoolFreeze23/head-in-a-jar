@@ -4,11 +4,11 @@ P, V, C, W = 'headinajar:mecha_plating', 'headinajar:servo', 'headinajar:synapse
 S = 'headinajar:surgical_steel_ingot'
 
 FRAMES = {
-    # name: (en, pt, neck height, recipe pattern, key)
-    'wheelhouse': ('Wheelhouse', 'Casa sobre Rodas', 1.125, ['PCP', 'PMP', 'V V'], dict(P=P, C='headinajar:collar_cam', M='minecart', V=V)),
-    'skitter': ('Skitter', 'Rastejador', 1.25, ['VCV', 'PEP', 'V V'], dict(V=V, C='headinajar:collar_cam', P=P, E='fermented_spider_eye')),
+    # name: (en, pt, neck height (or the whole neck: the Wheelhouse's jar rides at its stern), recipe pattern, key)
+    'wheelhouse': ('Wheelhouse', 'Casa sobre Rodas', [0, 1.975, -0.594], ['PCP', 'PMP', 'V V'], dict(P=P, C='headinajar:collar_cam', M='minecart', V=V)),
+    'skitter': ('Skitter', 'Rastejador', 1.725, ['VCV', 'PEP', 'V V'], dict(V=V, C='headinajar:collar_cam', P=P, E='fermented_spider_eye')),
     'colossus': ('Colossus', 'Colosso', 4.08, ['PCP', 'NBN', 'PVP'], dict(P=P, C='headinajar:collar_cam', N='netherite_ingot', B='headinajar:bulwark_frame', V=V)),
-    'kite': ('Kite', 'Pipa', 1.875, ['FCF', 'PVP', ' V '], dict(F='phantom_membrane', C='headinajar:collar_cam', P=P, V=V)),
+    'kite': ('Kite', 'Pipa', 1.04, ['FCF', 'PVP', ' V '], dict(F='phantom_membrane', C='headinajar:collar_cam', P=P, V=V)),
     'executive': ('Executive', 'Executivo', 4.08, ['GHG', 'NFN', 'GHG'], dict(G='gold_block', H=C, N='nether_star', F='headinajar:colossus_frame')),
 }
 CHIMERA_NECK = 2.52
@@ -18,7 +18,7 @@ MODULES = {
     'sprint_servos': ('Sprint Servos', 'Up to +80% speed (Boost); 15 FE/t while moving.', 'Servos de Corrida', 'Até +80% de velocidade (Impulso); 15 FE/t em movimento.',
                       ['RVR'], dict(R='redstone', V=V)),
     'stilts': ('Stilts', 'Steps up two blocks.', 'Pernas de Pau', 'Sobe dois blocos de uma vez.', ['P P', 'I I', 'I I'], dict(P=P, I='iron_bars')),
-    'arachnid_legs': ('Arachnid Legs', 'Walks up walls (Grip sets climbing speed).', 'Pernas Aracnídeas', 'Anda pelas paredes (Aderência define a velocidade).',
+    'arachnid_legs': ('Arachnid Legs', 'Walks up walls.', 'Pernas Aracnídeas', 'Anda pelas paredes.',
                       ['S S', 'VPV', 'S S'], dict(S='string', V=V, P=P)),
     'hover_skirt': ('Hover Skirt', 'Floats 0.5 to 2 blocks over ground, water and lava. No fall damage.', 'Saia Flutuante',
                     'Flutua de 0,5 a 2 blocos sobre o chão, a água e a lava. Sem dano de queda.', ['PPP', 'F F'], dict(P=P, F='phantom_membrane')),
@@ -43,7 +43,7 @@ MODULES = {
                       'Criaturas a mais de 4 blocos perdem seu rastro; atacar desliga por 3 s.', ['EPE', 'PCP'], dict(E='ender_eye', P=P, C=C)),
     'tesla_coil': ('Tesla Coil', 'Arcs strike nearby hostiles (Voltage sets reach and damage).', 'Bobina de Tesla',
                    'Arcos atingem hostis por perto (Voltagem define alcance e dano).', ['T', 'P'], dict(T='headinajar:tesla_node', P=P)),
-    'workbench': ('Workbench', 'A crafting grid on the go.', 'Bancada', 'Uma mesa de trabalho portátil.', ['T', 'P'], dict(T='crafting_table', P=P)),
+    'workbench': ('Workbench', 'A crafting grid on the go.', 'Bancada', 'Uma bancada de trabalho portátil.', ['T', 'P'], dict(T='crafting_table', P=P)),
     'bio_integration_port': ('Bio-Integration Port', 'One Gene Port on any frame; -20% battery.', 'Porta de Biointegração',
                              'Uma Porta Genética em qualquer estrutura; -20% de bateria.', ['GYG', 'PCP'], dict(G='headinajar:bio_gel', Y='headinajar:injection_rig', P=P, C=C)),
     'manipulator_hand': ('Manipulator Hand', 'Uses your selected hotbar item like a hand.', 'Mão Manipuladora', 'Usa o item selecionado na barra como uma mão.',
@@ -59,14 +59,14 @@ MODULES = {
     'harvester': ('Harvester', 'Picks and replants ripe crops in a 5x5.', 'Colheitadeira', 'Colhe e replanta plantações maduras em 5x5.',
                   ['HHH', ' V '], dict(H='iron_hoe', V=V)),
     'welding_torch': ('Welding Torch', 'Hold: repairs the mecha you look at (or yours) with Mecha Plating from the hold.', 'Maçarico',
-                      'Segure: repara o mecha que você olha (ou o seu) com Blindagem de Mecha do compartimento.', ['B', 'F', 'V'], dict(B='blaze_rod', F='flint_and_steel', V=V)),
+                      'Segure: repara o mecha que você olha (ou o seu) com Placa de Mecha do compartimento.', ['B', 'F', 'V'], dict(B='blaze_rod', F='flint_and_steel', V=V)),
     'plasma_lance': ('Plasma Lance', 'Hold: a 32-block beam, 20 damage a second. Very hot.', 'Lança de Plasma',
                      'Segure: um feixe de 32 blocos, 20 de dano por segundo. Muito quente.', ['EPE', ' V '], dict(E='end_rod', P='headinajar:plasma_pellet', V=V)),
     # a servo under it, so it doesn't share the Collar Cam's Thermal Overlay recipe
     'thermal_imaging': ('Thermal Imaging', 'Living things within 32 blocks glow.', 'Imagem Térmica', 'Seres vivos a até 32 blocos brilham.',
                         ['L', 'G', 'V'], dict(L='headinajar:lens', G='glow_ink_sac', V=V)),
     'ore_scanner': ('Ore Scanner', 'Ping: marks ores within 8 to 24 blocks for 5 s (Radius).', 'Scanner de Minério',
-                    'Pulso: marca minérios a 8 a 24 blocos por 5 s (Raio).', ['L', 'C', 'R'], dict(L='headinajar:lens', C='compass', R='redstone_block')),
+                    'Pulso: marca minérios num raio de 8 a 24 blocos por 5 s (Raio).', ['L', 'C', 'R'], dict(L='headinajar:lens', C='compass', R='redstone_block')),
     # redstone under it, so it doesn't share the Bio-Scanner's recipe
     'target_lock': ('Target Lock', 'Your aim drifts onto hostiles near the crosshair.', 'Trava de Mira', 'Sua mira desliza para hostis perto da cruz.',
                     ['L', 'C', 'R'], dict(L='headinajar:lens', C=C, R='redstone')),
@@ -77,14 +77,14 @@ SLIDERS = {'boost': ('Boost', 'Impulso'), 'altitude': ('Altitude', 'Altitude'), 
            'charge': ('Charge', 'Carga'), 'radius': ('Radius', 'Raio')}
 
 JAR_MODULES = {
-    'wheels': ('Wheels', 'Press the drive key (V) to drop four little wheels and drive at half walking speed. 10 FE/t while moving.', 'Rodinhas',
-               'Aperte a tecla de dirigir (V) para baixar quatro rodinhas e andar à metade da velocidade de caminhada. 10 FE/t em movimento.',
+    'wheels': ('Wheels', 'The Jar wheels key drops four little wheels: drive at half walking speed. 10 FE/t while moving.', 'Rodinhas',
+               'A tecla Rodinhas baixa quatro rodinhas: ande à metade da velocidade de caminhada. 10 FE/t em movimento.',
                ['I I', 'WCW'], dict(I='iron_nugget', W='black_dye', C='copper_ingot')),
     'cortex_coprocessor': ('Cortex Coprocessor', 'Forgives one miscalled base at the DNA Sequencer; soft-locks your aim in a mecha.', 'Coprocessador Cortical',
                            'Perdoa uma base errada no Sequenciador de DNA; trava suavemente a mira num mecha.', ['GCG', 'RLR'],
                            dict(G='gold_nugget', C=C, R='redstone', L='headinajar:lens')),
-    'lacrimal_laser': ('Lacrimal Laser', 'G: the head weeps a beam, 4 damage at 8 blocks, once a second (1,500 FE).', 'Laser Lacrimal',
-                       'G: a cabeça chora um feixe, 4 de dano a 8 blocos, uma vez por segundo (1.500 FE).', [' L ', 'GCG'],
+    'lacrimal_laser': ('Lacrimal Laser', 'Secondary key: the head weeps a beam, 4 damage at 8 blocks, once a second (1,500 FE).', 'Laser Lacrimal',
+                       'Tecla secundária: a cabeça chora um feixe, 4 de dano a 8 blocos, uma vez por segundo (1.500 FE).', [' L ', 'GCG'],
                        dict(L='headinajar:lens', G='ghast_tear', C='copper_ingot')),
     'body_recall_beacon': ('Body Recall Beacon', 'Your Headless Body walks to your head while its chunk is loaded.', 'Farol de Chamado do Corpo',
                            'Seu Corpo Sem Cabeça anda até sua cabeça enquanto o chunk estiver carregado.', [' B ', 'CWC'],
@@ -101,7 +101,7 @@ UPGRADES = {
     'antenna_whip': ('Antenna Whip', '+25% link range.', 'Antena Chicote', '+25% de alcance da conexão.', ['R', 'C', 'C'], dict(R='lightning_rod', C='copper_ingot')),
     'noise_filter': ('Noise Filter', 'Halves the visual static.', 'Filtro de Ruído', 'Reduz a estática visual pela metade.', ['WAW'], dict(W='white_wool', A='amethyst_shard')),
     'thermal_overlay': ('Thermal Overlay', 'Living things nearby glow.', 'Sobreposição Térmica', 'Seres vivos por perto brilham.', ['L', 'G'], dict(L='headinajar:lens', G='glow_ink_sac')),
-    'zoom_optic': ('Zoom Optic', 'Hold the zoom key (C) for x3 zoom.', 'Óptica de Zoom', 'Segure a tecla de zoom (C) para zoom x3.', ['LSL'], dict(L='headinajar:lens', S='spyglass')),
+    'zoom_optic': ('Zoom Optic', 'Hold the Collar zoom key for x3 zoom.', 'Óptica de Zoom', 'Segure a tecla Zoom do colar para zoom x3.', ['LSL'], dict(L='headinajar:lens', S='spyglass')),
 }
 
 BLOCKS = {
@@ -132,15 +132,15 @@ LANG = [
     ('gene.headinajar.decay_aura', 'Decay Aura', 'Aura da Decadência'),
     ('item.headinajar.quantum_goggles.range', 'Range: anywhere in this dimension', 'Alcance: qualquer lugar nesta dimensão'),
     ('item.headinajar.entangled_shard.id', 'Entangled: %s', 'Emaranhado: %s'),
-    ('item.headinajar.entangled_shard.how', 'Craft with Relay Goggles or a Collar Cam; give its twin to the other one', 'Combine com Óculos de Retransmissão ou uma Câmera de Colar; dê o gêmeo ao outro'),
+    ('item.headinajar.entangled_shard.how', 'Craft with Relay Goggles or a Collar Cam; give its twin to the other one', 'Combine com Óculos Retransmissores ou uma Câmera de Colar; dê o gêmeo ao outro'),
     ('collar.headinajar.no_room', 'No Collar Cam to fit it to, or no room left (4 upgrades)', 'Nenhuma Câmera de Colar para encaixar, ou sem espaço (4 melhorias)'),
     ('collar.headinajar.installed', 'Fitted: %s', 'Instalado: %s'),
     ('collar.headinajar.how', 'Use it with a Collar Cam in your other hand, or while your collar is fitted', 'Use com uma Câmera de Colar na outra mão, ou com o colar instalado'),
-    ('message.headinajar.emp', 'EMP! The link is down', 'PEM! A conexão caiu'),
+    ('message.headinajar.emp', "EMP! The link dropped: you're back in your head. Swap to go back.", 'PEM! A conexão caiu: você voltou para a cabeça. Troque para retornar.'),
     ('turret.headinajar.needs_head', 'Fit a jarred mob head', 'Encaixe uma cabeça de criatura no pote'),
     ('staff.headinajar.needs_villager', 'Only a jarred villager can work here', 'Só um aldeão no pote pode trabalhar aqui'),
     ('staff.headinajar.status_paid', '%s: on the job, paid up', '%s: trabalhando, salário em dia'),
-    ('staff.headinajar.status_unpaid', '%s: unpaid (1 emerald a day from a chest touching the mount)', '%s: sem pagamento (1 esmeralda por dia de um baú encostado no suporte)'),
+    ('staff.headinajar.status_unpaid', '%s: unpaid (1 emerald a day from a chest beside or above the mount)', '%s: sem pagamento (1 esmeralda por dia de um baú ao lado ou em cima do suporte)'),
     ('staff.headinajar.says', '<%s> %s', '<%s> %s'),
     ('staff.headinajar.complaint.dental', 'I was promised dental.', 'Me prometeram plano odontológico.'),
     ('staff.headinajar.complaint.overtime', 'Is this overtime? Feels like overtime.', 'Isso é hora extra? Parece hora extra.'),
@@ -160,7 +160,7 @@ LANG = [
     ('array.headinajar.motion.broth', 'warmer broth', 'caldo mais quente'),
     ('array.headinajar.motion.lunch', 'a longer lunch', 'almoço mais longo'),
     ('array.headinajar.motion.windows', 'windows for the jars', 'janelas para os potes'),
-    ('array.headinajar.motion.chair', 'a chair for the chair', 'uma cadeira para o presidente'),
+    ('array.headinajar.motion.chair', 'a chair for the chair', 'uma cadeira para a DOLORES'),
     ('array.headinajar.motion.union', 'unionise', 'formar um sindicato'),
     ('array.headinajar.motion.dental', 'dental cover', 'plano odontológico'),
     ('array.headinajar.motion.merger', 'merge with the Board of the other jar', 'fundir com o Conselho do outro pote'),
@@ -168,12 +168,12 @@ LANG = [
     ('gui.headinajar.broth', 'Broth: %s / %s mB', 'Caldo: %s / %s mB'),
     ('gui.headinajar.array.output', '%s FE/t', '%s FE/t'),
     ('gui.headinajar.array.heads', '%s heads', '%s cabeças'),
-    ('socket.headinajar.plugged', 'Plugged in. Scroll: face, 0-9: level, %s: pulse, %s + %s: unplug', 'Conectado. Rolar: face, 0-9: nível, %s: pulso, %s + %s: desconectar'),
+    ('socket.headinajar.plugged', 'Plugged in. Hotbar keys: level 1-15, 0: off. %2$s + %3$s: unplug.', 'Conectado. Barra: nível 1-15, 0 desliga. %2$s + %3$s: sair.'),
     ('hud.headinajar.socket', 'NEURAL SOCKET', 'SOQUETE NEURAL'),
     ('hud.headinajar.socket.face', '%s  out %s  in %s', '%s  saída %s  entrada %s'),
     ('hud.headinajar.socket.items', 'Items touching: %s', 'Itens encostados: %s'),
     ('hud.headinajar.socket.tank', 'Tank: %s / %s mB', 'Tanque: %s / %s mB'),
-    ('hud.headinajar.socket.keys', 'Scroll face, 0-9 level, %s pulse, %s next', 'Rolar face, 0-9 nível, %s pulso, %s próxima'),
+    ('hud.headinajar.socket.keys', 'Scroll face, hotbar keys 1-15, 0 off, %s pulse, %s next face', 'Rolar face, barra 1-15, 0 desliga, %s pulso, %s próxima face'),
     ('direction.headinajar.down', 'Down ', 'Baixo'),
     ('direction.headinajar.up', 'Up   ', 'Cima '),
     ('direction.headinajar.north', 'North', 'Norte'),
@@ -186,9 +186,9 @@ LANG = [
 
 def run(EN, PT, write, shaped):
     for name, (en, pt, neck, pattern, key) in FRAMES.items():
-        EN[f'item.headinajar.{name}_frame'], PT[f'item.headinajar.{name}_frame'] = en + ' Frame', 'Estrutura ' + pt
+        EN[f'item.headinajar.{name}_frame'], PT[f'item.headinajar.{name}_frame'] = en + ' Frame', ('Estrutura da ' if pt in ('Casa sobre Rodas', 'Pipa') else 'Estrutura do ') + pt
         EN[f'entity.headinajar.{name}'], PT[f'entity.headinajar.{name}'] = en, pt
-        write(f'data/headinajar/headinajar/host/{name}.json', {'entity': f'headinajar:{name}', 'neck': [0, neck, 0], 'blood': 'oil', 'decay_per_minute': 0})
+        write(f'data/headinajar/headinajar/host/{name}.json', {'entity': f'headinajar:{name}', 'neck': neck if isinstance(neck, list) else [0, neck, 0], 'blood': 'oil', 'decay_per_minute': 0})
         shaped(f'{name}_frame', pattern, key)
         write(f'assets/headinajar/models/item/{name}_frame.json', {'parent': 'minecraft:item/generated', 'textures': {'layer0': f'headinajar:item/{name}_frame'}})
     write('data/headinajar/headinajar/host/chimera.json', {'entity': 'headinajar:chimera', 'neck': [0, CHIMERA_NECK, 0], 'blood': 'warm', 'decay_per_minute': 0})

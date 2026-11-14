@@ -14,7 +14,7 @@ REFUSALS = {
     'host.no_leash': ("A %s won't hold this one. Try a calmer body.", '%s não segura este. Tente um corpo mais manso.'),
     'host.saddle': ('No head to steer by. Put a jar on it instead.', 'Sem cabeça para guiar. Ponha um pote nele.'),
     'host.no_mouth': ('Nothing to eat with. %s keeps it fresh.', 'Não tem boca para comer. %s mantém fresco.'),
-    'host.not_a_host': ('%s is for host bodies. Use a %s on it first.', '%s é para corpos hospedeiros. Use uma %s nele antes.'),
+    'host.not_a_host': ('%s is for host bodies. Use a %s on it first.', '%s é para hospedeiros. Use uma %s nele antes.'),
     # a jar riding a host
     'host.no_hands': ('A host has no hands for that. Get down first.', 'Hospedeiro não tem mãos para isso. Desça primeiro.'),
     'host.second_host': ('One body at a time. Get down from this one first.', 'Um corpo por vez. Desça deste primeiro.'),
@@ -43,7 +43,7 @@ REFUSALS = {
     'mecha.venting': ('Venting heat. Everything comes back once it cools.', 'Expelindo calor. Tudo volta quando esfriar.'),
     'mecha.no_power': ('Battery flat. Park it on the %s to charge.', 'Bateria descarregada. Estacione no %s para carregar.'),
     'mecha.jets_spent': ('Jets spent. They refill when you land.', 'Jatos esgotados. Recarregam quando você pousar.'),
-    'mecha.utility.low_power': ('%s needs %s kFE. Park on the %s to charge.', '%s precisa de %s kFE. Estacione no %s para carregar.'),
+    'mecha.utility.low_power': ('%s needs %s kFE. Charge it at the %s.', '%s precisa de %s kFE. Carregue no %s.'),
     'mecha.no_utility': ('No utility module fitted. Fit one at the %s.', 'Nenhum módulo utilitário instalado. Instale um no %s.'),
     'mecha.arm.no_target': ('Nothing in reach. Aim at something.', 'Nada ao alcance. Mire em algo.'),
     'mecha.arm.chainsaw_log': ('The chainsaw wants a creature or a log. Aim at one.', 'A motosserra quer uma criatura ou um tronco. Mire num.'),

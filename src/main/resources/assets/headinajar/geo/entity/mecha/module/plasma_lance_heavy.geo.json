@@ -1,0 +1,205 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_plasma_lance_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6,
+                -6,
+                -2
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                36,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -4,
+                -12
+              ],
+              "size": [
+                8,
+                8,
+                10
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                -2,
+                -14
+              ],
+              "size": [
+                16,
+                4,
+                2
+              ],
+              "uv": [
+                44,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "lance",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -14
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                -2,
+                -36
+              ],
+              "size": [
+                4,
+                4,
+                22
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                -3,
+                -26
+              ],
+              "size": [
+                6,
+                6,
+                2
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                -6,
+                -38
+              ],
+              "size": [
+                12,
+                12,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -44
+              ],
+              "size": [
+                10,
+                10,
+                6
+              ],
+              "uv": [
+                64,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -8,
+                -1,
+                -43
+              ],
+              "size": [
+                16,
+                2,
+                4
+              ],
+              "uv": [
+                80,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_tip": [
+              0,
+              0,
+              -44
+            ]
+          }
+        },
+        {
+          "name": "core",
+          "parent": "lance",
+          "pivot": [
+            0,
+            0,
+            -18
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -3,
+                -20
+              ],
+              "size": [
+                6,
+                6,
+                4
+              ],
+              "uv": [
+                96,
+                14
+              ],
+              "inflate": 0.1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

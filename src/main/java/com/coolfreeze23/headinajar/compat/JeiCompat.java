@@ -44,6 +44,15 @@ public class JeiCompat implements IModPlugin {
         pages.put("emp_grenade", ModRegistry.EMP_GRENADE.get());
         pages.put("jarred_head", ModRegistry.JARRED_HEAD.get());
         pages.forEach((key, item) -> registration.addIngredientInfo(item, Component.translatable("jei.headinajar." + key)));
+        // every other item of the mod that has an information page in the language files gets it too
+        for (var item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+            var id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+            String key = "jei.headinajar." + id.getPath();
+            if (id.getNamespace().equals(HeadInAJar.MOD_ID) && !pages.containsKey(id.getPath())
+                    && net.minecraft.client.resources.language.I18n.exists(key)) {
+                registration.addIngredientInfo(item, Component.translatable(key));
+            }
+        }
         for (MechaFrame frame : MechaFrame.values()) {
             registration.addIngredientInfo(ModRegistry.frameItem(frame), Component.translatable("jei.headinajar.frame"));
         }

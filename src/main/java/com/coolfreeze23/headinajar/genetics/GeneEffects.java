@@ -253,6 +253,12 @@ public final class GeneEffects {
         }
     }
 
+    /** Ticks left before active gene {@code which} (R = 0, G = 1) may fire again; 0 when ready. */
+    public static int cooldown(Entity e, int which) {
+        int[] cd = COOLDOWNS.get(e);
+        return cd == null || which < 0 || which >= cd.length ? 0 : cd[which];
+    }
+
     /** The active genes of a body, in gene order: the first answers R, the second G. */
     public static List<Gene> actives(LivingEntity e) {
         List<Gene> out = new ArrayList<>();
@@ -262,10 +268,26 @@ public final class GeneEffects {
 
     /** Fires an active gene (R = 0, G = 1). {@code aim} is whoever looks: the pilot of a host or mecha, or the body itself. */
     public static boolean activate(LivingEntity body, LivingEntity aim, int which) {
+        return fire(body, aim, which) == null;
+    }
+
+    /** The gene a key would fire in this body (R = 0, G = 1), or null when there is none for it. */
+    public static Gene keyed(LivingEntity body, int which) {
         List<Gene> actives = actives(body);
-        if (which >= actives.size()) return false;
+        return which < actives.size() ? actives.get(which) : null;
+    }
+
+    /**
+     * Fires an active gene as {@link #activate} does. Returns null when it fired, else why not, as a refusal reason:
+     * {@code gene.none} (no active gene), {@code gene.one_only} (the second key, one gene), {@code gene.cooling},
+     * {@code gene.no_target} (nothing in reach to aim at).
+     */
+    public static String fire(LivingEntity body, LivingEntity aim, int which) {
+        List<Gene> actives = actives(body);
+        if (actives.isEmpty()) return "gene.none";
+        if (which >= actives.size()) return "gene.one_only";
         int[] cd = COOLDOWNS.computeIfAbsent(body, k -> new int[2]);
-        if (cd[which] > 0) return false;
+        if (cd[which] > 0) return "gene.cooling";
         Gene gene = actives.get(which);
         ServerLevel level = (ServerLevel) body.level();
         Vec3 look = aim.getLookAngle();
@@ -337,7 +359,7 @@ public final class GeneEffects {
                     other.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1), body);
                     other.hurt(level.damageSources().freeze(), 4 * scale(body));
                 }
-                level.playSound(null, body.blockPosition(), SoundEvents.POWDER_SNOW_STEP, SoundSource.PLAYERS, 1.5f, 0.6f);
+                level.playSound(null, body.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.GENE_FROST.get(), SoundSource.PLAYERS, 1.5f, 0.6f);
                 cd[which] = 100;
                 yield true;
             }
@@ -370,7 +392,7 @@ public final class GeneEffects {
             }
             default -> false;
         };
-        return done;
+        return done ? null : "gene.no_target";
     }
 
     private static LivingEntity target(LivingEntity aim, LivingEntity body, double range) {

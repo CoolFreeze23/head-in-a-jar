@@ -1,0 +1,32 @@
+# Which press of the perspective key is Shoulder Surfing's camera in his profile, with the HUD on (crosshair), piloting
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+mecha hopper 0 -60 3 hydraulic_legs,jump_jets,drill
+/setblock 0 -59 12 minecraft:target
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 1.9 0 -25
+wait 5
+key use
+wait 70
+view 0
+look 0 5
+wait 20
+shot ss_p0
+key togglePerspective
+wait 20
+shot ss_p1
+key togglePerspective
+wait 20
+shot ss_p2
+key togglePerspective
+wait 20
+shot ss_p3
+key togglePerspective
+wait 20
+shot ss_p4
+report ss2 done

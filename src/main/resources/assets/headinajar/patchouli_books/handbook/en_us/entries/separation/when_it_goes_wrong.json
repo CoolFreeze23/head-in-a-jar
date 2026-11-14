@@ -1,15 +1,17 @@
 {
   "name": "When It Goes Wrong",
-  "icon": "headinajar:suture_kit",
+  "icon": "headinajar:glass_patch",
   "category": "headinajar:separation",
+  "sortnum": 3,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "If your body dies, it becomes a $(l)corpse$() that keeps your things, and you wake up in your head. As a jar, use a $(item)Suture Kit$() on the corpse to get back into it, or print a new body."
+      "text": "FROM: DOLORES$(br)TO: All Staff$(br)RE: Drying Out$(br2)Out of saline, a placed head loses 1 glass per 30 s; at 0 glass it is a real death. A full jar lasts 3 h 20 min, then 5 min of warnings.",
+      "title": "MEMO"
     },
     {
       "type": "patchouli:text",
-      "text": "If your head is destroyed while you are out walking, that is a real death. Guard it. A $(item)Signal Jammer$() near your enemies works wonders."
+      "text": "$(l)Not a death:$() losing the link, or your body dying (a corpse keeps your things).$(br2)$(l)Real death:$() your placed head breaking or drying while you walk, or dying as the jar. Modules drop; you respawn with a head."
     }
   ]
 }

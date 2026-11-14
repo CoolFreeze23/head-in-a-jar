@@ -1,0 +1,38 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "sustain": {
+      "loop": true,
+      "animation_length": 0.8,
+      "bones": {
+        "needle": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                50,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                0,
+                -50,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.8": {
+              "vector": [
+                0,
+                50,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      }
+    }
+  }
+}

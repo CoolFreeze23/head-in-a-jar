@@ -1,0 +1,76 @@
+# The Wheelhouse and the Rover under the owner's settings and mods (SMOKE_PROFILE=pack
+# SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling), in his shoulder view (three presses of his perspective key from
+# first person): drive, Rush Hour into a cow; then the Rover: drive and a wall crash. Also run with
+# SMOKE_MODS=iris SMOKE_SHADER=BSLClassic_v10.0.zip (the perspective presses then reach vanilla's front view; the
+# script sets view 1 after them, so that run films vanilla's third person from behind).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/fill -60 -61 -60 60 -61 60 minecraft:smooth_stone
+mecha wheelhouse 0 -60 3 drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+view 0
+look 0 8
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 20
+shot pk_wheelhouse_shoulder_view
+frames p01_wheelhouse_shoulder_drive 90
+key forward hold 80
+wait 10
+execute at @e[type=headinajar:wheelhouse,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~12 {NoAI:1b}
+wait 3
+frames p02_wheelhouse_shoulder_rush_ram 130
+key drive
+wait 2
+key forward hold 100
+wait 20
+inspect near minecraft:cow 60
+shot pk_wheelhouse_shoulder_after
+# --- the Rover --------------------------------------------------------------------------------------------------
+/tp @s 40.5 -60 -45 0 0
+wait 20
+/summon headinajar:rover 40 -60 -40 {Rotation:[0f,0f]}
+/tp @s 40.5 -60 -42.2 0 -20
+jar
+charge 100000
+wait 10
+lookat headinajar:rover
+wait 3
+key use
+wait 5
+# under his settings the click on the Rover was refused as a reach for nothing (not understood): the setup verb boards it
+mount
+wait 30
+view 0
+look 0 10
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 10
+key togglePerspective
+wait 20
+shot pk_rover_shoulder_view
+frames p03_rover_shoulder_drive 80
+key forward hold 70
+wait 10
+execute at @e[type=headinajar:rover,limit=1,sort=nearest] run fill ~-3 ~ ~7 ~3 ~2 ~7 minecraft:stone_bricks
+wait 3
+frames p04_rover_shoulder_crash 70
+key forward hold 50
+wait 20
+report done

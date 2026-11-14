@@ -27,9 +27,9 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
     private final ModelPart stump;
 
     public HeadlessBodyRenderer(EntityRendererProvider.Context context) {
-        super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0.45f);
+        super(context, new com.coolfreeze23.headinajar.client.body.BodyModel(context.bakeLayer(ModelLayers.PLAYER), false), 0.45f);
         wide = model;
-        slim = new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
+        slim = new com.coolfreeze23.headinajar.client.body.BodyModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         stump = context.bakeLayer(JarModel.STUMP).getChild("stump");
         addLayer(new HumanoidArmorLayer<>(this,
                 new HumanoidArmorModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
@@ -56,11 +56,8 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
     @Override
     protected void setupRotations(HeadlessBody body, PoseStack pose, float bob, float yBodyRot, float partialTick, float scale) {
         super.setupRotations(body, pose, bob, yBodyRot, partialTick, scale);
-        if (body.isCorpse()) {
-            // a corpse lies on its back
-            pose.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90));
-            pose.translate(0, -0.9, -0.15);
-        }
+        // a corpse falls onto its back (or lies there already); an idle body shifts, turns, sits
+        com.coolfreeze23.headinajar.client.body.BodyPoses.root(body, pose, partialTick);
     }
 
     @Override
@@ -89,6 +86,10 @@ public class HeadlessBodyRenderer extends LivingEntityRenderer<HeadlessBody, Pla
         model.body.translateAndRotate(pose);
         if (body.hasCollar()) CollarLayer.collar().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(CollarLayer.TEXTURE)), light, OverlayTexture.NO_OVERLAY);
         else stump.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STUMP_TEXTURE)), light, OverlayTexture.NO_OVERLAY);
+        // HR's card on the chest of a corpse that has finished lying down
+        if (body.isCorpse() && com.coolfreeze23.headinajar.client.body.BodyPoses.fall(body, 0) >= 1) {
+            com.coolfreeze23.headinajar.client.body.HrCard.render(pose, buffers, light, body);
+        }
         pose.popPose();
     }
 

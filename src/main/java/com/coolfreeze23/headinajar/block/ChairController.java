@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>
  * Runs on the client only (GeckoLib animates what it draws).
  */
-public class ChairController extends AnimationController<SeparationChairBlockEntity> {
+public class ChairController extends com.coolfreeze23.headinajar.anim.SeekingController<SeparationChairBlockEntity> {
     public enum Clip {
         IDLE("idle", true), READY("ready", true), OPERATION("operation", false), BOTCH("botch", false),
         ABORT("abort", false), AFTERCARE("aftercare", false);
@@ -36,12 +36,11 @@ public class ChairController extends AnimationController<SeparationChairBlockEnt
     }
 
     private Clip clip;
-    private double seek;
     /** Beyond this distance an idle chair stops animating; its idle pose is within a degree of rest. */
     private static final double IDLE_QUIET_DISTANCE = 24;
 
     public ChairController(SeparationChairBlockEntity chair) {
-        super(chair, "main", 0, ChairController::predicate);
+        super(chair, "main", ChairController::predicate);
         setSoundKeyframeHandler(event -> com.coolfreeze23.headinajar.client.ChairKeyframes.sound(event));
         setParticleKeyframeHandler(event -> com.coolfreeze23.headinajar.client.ChairKeyframes.particle(event));
         setCustomInstructionKeyframeHandler(event -> com.coolfreeze23.headinajar.client.ChairKeyframes.instruction(event));
@@ -81,66 +80,32 @@ public class ChairController extends AnimationController<SeparationChairBlockEnt
                 && com.coolfreeze23.headinajar.client.ChairClock.cameraDistance(chair) > IDLE_QUIET_DISTANCE) {
             return PlayState.STOP;
         }
-        controller.seek = choice.tick();
-        if (choice.clip() != controller.clip) {
-            Clip from = controller.clip;
-            controller.clip = choice.clip();
-            // a fresh abort blends from wherever the machine is; the idle and ready loops ease into each other; every
-            // other start (and any start seen late) snaps to where the clock is
-            if (choice.clip() == Clip.ABORT && now - chair.abortAt() < 2) controller.transitionLength = ChairTimeline.ABORT_BLEND;
-            else if ((choice.clip() == Clip.IDLE || choice.clip() == Clip.READY) && (from == Clip.IDLE || from == Clip.READY)) controller.transitionLength = 5;
-            else controller.transitionLength = 0;
-            controller.forceAnimationReset();
-            controller.setAnimation(choice.clip().raw);
-        } else if (controller.getAnimationState() == State.RUNNING) {
-            // the blend is over: events must not be shifted by it
-            controller.transitionLength = 0;
-        }
-        return PlayState.CONTINUE;
+        Clip from = controller.clip;
+        controller.clip = choice.clip();
+        // a fresh abort blends from wherever the machine is; the idle and ready loops ease into each other; every
+        // other start (and any start seen late) snaps to where the clock is
+        int blend = 0;
+        if (choice.clip() == Clip.ABORT && now - chair.abortAt() < 2) blend = ChairTimeline.ABORT_BLEND;
+        else if ((choice.clip() == Clip.IDLE || choice.clip() == Clip.READY) && (from == Clip.IDLE || from == Clip.READY)) blend = 5;
+        return controller.show(choice.clip().name(), choice.clip().raw, choice.tick(), blend);
     }
 
     public Clip clip() {
         return clip;
     }
 
-    /** While a clip runs, its tick is the clock's, never the controller's own count from when it started. */
-    @Override
-    protected double adjustTick(double tick) {
-        if (clip != null && (animationState == State.RUNNING || animationState == State.PAUSED)) {
-            shouldResetTick = false;
-            tickOffset = tick - seek;
-            return seek;
-        }
-        return super.adjustTick(tick);
-    }
-
-    /**
-     * A clip that starts with no blend spends its first processed frame posed at its tick 0 (GeckoLib's transition
-     * step). Process that frame a second time so the first frame drawn is already at the clock's tick: no flash of the
-     * rest pose when a late arrival first sees the chair, or when the operation turns into the botch.
-     */
-    @Override
-    public void process(GeoModel<SeparationChairBlockEntity> model, AnimationState<SeparationChairBlockEntity> state, Map<String, GeoBone> bones,
-                        Map<String, BoneSnapshot> snapshots, double seekTime, boolean crashWhenCantFindBone) {
-        super.process(model, state, bones, snapshots, seekTime, crashWhenCantFindBone);
-        if (animationState == State.TRANSITIONING && transitionLength == 0 && currentAnimation != null) {
-            super.process(model, state, bones, snapshots, seekTime, crashWhenCantFindBone);
-        }
-    }
-
     /**
      * The jar tray's own controller: out while a jar is loaded, an operation runs, or the finished head jar still stands
      * on it; in otherwise. A chair first seen with its tray out shows it out at once, not sliding out on arrival.
      */
-    public static class Tray extends AnimationController<SeparationChairBlockEntity> {
+    public static class Tray extends com.coolfreeze23.headinajar.anim.SeekingController<SeparationChairBlockEntity> {
         static final RawAnimation OUT = RawAnimation.begin().thenPlayAndHold("tray_out");
         static final RawAnimation IN = RawAnimation.begin().thenPlayAndHold("tray_in");
         private Boolean out;
         private double changedAt;
-        private double seek;
 
         public Tray(SeparationChairBlockEntity chair) {
-            super(chair, "tray", 0, Tray::predicate);
+            super(chair, "tray", Tray::predicate);
             setSoundKeyframeHandler(event -> com.coolfreeze23.headinajar.client.ChairKeyframes.sound(event));
         }
 
@@ -155,30 +120,8 @@ public class ChairController extends AnimationController<SeparationChairBlockEnt
                 // first sight: already there; a change seen happening: play it from its start
                 tray.changedAt = tray.out == null ? now - ChairTimeline.TRAY_LENGTH : now;
                 tray.out = out;
-                tray.forceAnimationReset();
-                tray.setAnimation(out ? OUT : IN);
             }
-            tray.seek = Math.min(ChairTimeline.TRAY_LENGTH, now - tray.changedAt);
-            return PlayState.CONTINUE;
-        }
-
-        @Override
-        protected double adjustTick(double tick) {
-            if (out != null && (animationState == State.RUNNING || animationState == State.PAUSED)) {
-                shouldResetTick = false;
-                tickOffset = tick - seek;
-                return seek;
-            }
-            return super.adjustTick(tick);
-        }
-
-        @Override
-        public void process(GeoModel<SeparationChairBlockEntity> model, AnimationState<SeparationChairBlockEntity> state, Map<String, GeoBone> bones,
-                            Map<String, BoneSnapshot> snapshots, double seekTime, boolean crashWhenCantFindBone) {
-            super.process(model, state, bones, snapshots, seekTime, crashWhenCantFindBone);
-            if (animationState == State.TRANSITIONING && currentAnimation != null) {
-                super.process(model, state, bones, snapshots, seekTime, crashWhenCantFindBone);
-            }
+            return tray.show(out ? "tray_out" : "tray_in", out ? OUT : IN, Math.min(ChairTimeline.TRAY_LENGTH, now - tray.changedAt), 0);
         }
     }
 }

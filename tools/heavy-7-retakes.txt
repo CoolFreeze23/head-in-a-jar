@@ -1,0 +1,74 @@
+# Colossus re-takes, default profile: Siege seen from a bystander's place (farther and higher than the first take,
+# so the whole machine is in frame), and the rise from standing into walk_c from the side at hull height
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha colossus 0 -60 30 hydraulic_legs,drill,rivet_gun,arc_cannon
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+key use
+wait 90
+view 1
+look 0 10
+watch at -8 2.6 3 -110 10
+wait 3
+frames c06b_siege_bystander_8 180
+key drive
+wait 100
+key drive
+wait 70
+watch follow -9 1.6 0 -90 6
+wait 30
+frames c04b_rise_into_walk_side 90
+wait 15
+key forward hold 60
+wait 15
+watch off
+report retakes done
+# --- the Executive: the jingle (now played by the server) from a bystander, the vials with a gene fired (looking
+# down, so Ender Blink finds the ground), and the collapse with the jar already thrown clear (the sunroof open) ----
+/kill @e[type=headinajar:colossus]
+wait 5
+mecha executive 0 -60 50 hydraulic_legs,drill
+/tp @s 6.5 -60 47.5 0 0
+wait 5
+/tp @s 0.5 -60 47.2 0 -30
+wait 5
+key use
+wait 90
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+view 1
+look 0 10
+watch at -5.5 1.2 5.5 -135 6
+wait 3
+bystander spawn -7 -60 57 225
+bystander mark
+frames e06b_jingle_bystander_7 50
+key drive
+wait 45
+bystander packets sound|particle
+bystander remove
+watch at 0 6.4 -3.6 0 35
+wait 5
+look 0 60
+wait 5
+frames e08b_vials_gene_fired 90
+wait 10
+key ability
+wait 70
+shot e08c_vials_one_resting
+look 0 10
+watch at -10 2 1.5 -99 10
+wait 5
+frames e12b_collapse_jar_thrown_clear 120
+/damage @e[type=headinajar:executive,limit=1,sort=nearest] 1000 minecraft:generic
+wait 110
+watch off
+report executive retakes done

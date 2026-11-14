@@ -1,0 +1,68 @@
+# Bulwark re-takes: the build from 5 blocks with the whole machine in frame; both carries seen from a bystander's
+# place beside the path (the stand-in's machine at the chest, the pilot's overhead), then both throws
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 bulwark
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 4.0 -57.2 4.0 135 12
+wait 2
+frames r01_build_5_blocks 230
+wait 140
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:bulwark
+wait 90
+bystander remove
+/kill @e[type=headinajar:bulwark]
+wait 60
+mecha bulwark -4 -60 30 hydraulic_legs,drill
+mecha bulwark 0 -60 30 hydraulic_legs,drill
+bystander spawn -4 -60 28 0
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:bulwark
+wait 5
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.4 0 -25
+wait 5
+key use
+wait 70
+look 0 8
+wait 15
+bystander look 0 0
+bulwarkcarry high nearest
+bystander pace -4 0 4
+wait 3
+execute at @e[type=headinajar:bulwark,limit=2] run summon minecraft:cow ~ ~ ~2.8
+wait 3
+key drive
+bystander drive tap
+wait 32
+# a bystander's place 9 blocks to the left of the path, level with the hulls, ahead of where they start
+watch at 9 1.6 9 90 3
+frames r02_carries_from_a_bystander_chest_far_overhead_near 230
+key forward hold 70
+wait 15
+look 0 -10
+key drive
+bystander drive tap
+wait 80
+watch off
+report retakes done

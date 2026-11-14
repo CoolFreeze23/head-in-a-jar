@@ -1,0 +1,92 @@
+# Which side each arm's muzzle is drawn on and where the rest pose reckons it (the harness's muzzles readout), the hand's
+# held item, and a second pilot (the stand-in player, trusted) firing while this client only watches. Default profile.
+@difficulty normal
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+mecha bulwark 20 -60 0 hydraulic_legs,welding_torch,manipulator_hand
+mecha hopper 40 -60 0 hydraulic_legs,plasma_lance,arc_cannon
+/summon cow 40.5 -60 8.5 {NoAI:1b,Invulnerable:1b}
+/tp @s 0.5 -60 -3.5 0 0
+wait 5
+aimat headinajar:hopper
+wait 3
+key use
+wait 75
+view 1
+look 0 8
+wait 15
+muzzles
+look 90 8
+wait 25
+muzzles
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 20.5 -60 -4.5 0 0
+wait 5
+aimat headinajar:bulwark
+wait 3
+key use
+wait 75
+/item replace entity @s weapon.mainhand with minecraft:torch
+view 1
+look 0 10
+wait 15
+muzzles
+watch at 5.5 2.8 1.5 75 10
+wait 5
+shot hand_holds_torch_east
+watch at -5.5 2.8 1.5 -75 10
+wait 5
+shot hand_holds_torch_west
+watch off
+muzzles
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+# a second pilot: the real player trusts it, then only watches
+headoffice trust add Bystander
+/tp @s 34.5 -60 5.5 -110 10
+wait 5
+bystander spawn 40 -60 -3 0
+bystander gamemode creative
+bystander charge 100000
+bystander form jar
+bystander hold air
+wait 5
+bystander mark
+bystander useentity nearest headinajar:hopper
+wait 3
+bystander packets actionbar|chat|refus
+wait 80
+bystander state
+bystander tick on
+bystander lookat nearest cow
+look -110 10
+wait 4
+report remote lance
+observe 40
+frames remote_lance 60
+bystander arms 1
+wait 24
+bystander arms 0
+wait 30
+bystander lookat nearest cow
+report remote arc
+frames remote_arc 40
+bystander arms 2
+wait 3
+bystander arms 0
+wait 35
+observe 10
+report done

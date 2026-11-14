@@ -44,6 +44,9 @@ public class FxParticle extends TextureSheetParticle {
     private Vec3 followOffset = Vec3.ZERO;
     private boolean fade = true;
     private int fixedFrame = -1;
+    /** Drawn full bright whatever its kind (a flame's body), and the colour it turns to over its life (-1: none). */
+    private boolean bright;
+    private int fromColor = -1, toColor = -1;
 
     protected FxParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, Look kind) {
         super(level, x, y, z);
@@ -131,6 +134,20 @@ public class FxParticle extends TextureSheetParticle {
         return this;
     }
 
+    /** Full bright, whatever the sheet (a flame's core glows; its smoke does not). */
+    public FxParticle bright() {
+        bright = true;
+        return this;
+    }
+
+    /** Turns from its colour to {@code rgb} over its life (a flame cooling from amber through red to grey). */
+    public FxParticle fadeTo(int from, int rgb) {
+        fromColor = from;
+        toColor = rgb;
+        color(from);
+        return this;
+    }
+
     public FxParticle steady() {
         fade = false;
         return this;
@@ -158,6 +175,12 @@ public class FxParticle extends TextureSheetParticle {
         if (!isAlive()) return;
         float t = age / (float) Math.max(1, lifetime);
         quadSize = startSize * Mth.lerp(t, 1, grow);
+        if (toColor >= 0) {
+            setColor(Mth.lerp(t, (fromColor >> 16 & 255), (toColor >> 16 & 255)) / 255f, Mth.lerp(t, (fromColor >> 8 & 255), (toColor >> 8 & 255)) / 255f,
+                    Mth.lerp(t, fromColor & 255, toColor & 255) / 255f);
+            // the glow goes out as it cools to smoke
+            if (bright && t > 0.55f) bright = false;
+        }
         if (fade) setAlpha(baseAlpha * (t < 0.6f ? 1 : 1 - (t - 0.6f) / 0.4f));
         if (home != null) {
             Vec3 to = home.subtract(x, y, z);
@@ -211,10 +234,9 @@ public class FxParticle extends TextureSheetParticle {
         float u0 = getU0(), u1 = getU1(), v0 = getV0(), v1 = getV1();
         int light = getLightColor(partialTicks);
         quad(buffer, px, py, pz, u, v, u0, u1, v0, v1, light);
-        if (normal != null) {
-            // both faces, so a ring lying across the view is seen from either side
-            quad(buffer, px, py, pz, new Vector3f(u).negate(), v, u0, u1, v0, v1, light);
-        }
+        // both faces: a ring lying across the view is seen from either side, and a spark's winding follows its motion,
+        // so half of them faced away from the camera and were culled
+        quad(buffer, px, py, pz, new Vector3f(u).negate(), v, u0, u1, v0, v1, light);
     }
 
     private void quad(VertexConsumer b, float x, float y, float z, Vector3f u, Vector3f v, float u0, float u1, float v0, float v1, int light) {
@@ -230,7 +252,7 @@ public class FxParticle extends TextureSheetParticle {
 
     @Override
     protected int getLightColor(float partialTick) {
-        return kind.emissive ? 0xF000F0 : super.getLightColor(partialTick);
+        return kind.emissive || bright ? 0xF000F0 : super.getLightColor(partialTick);
     }
 
     @Override

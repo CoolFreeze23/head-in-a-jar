@@ -145,7 +145,8 @@ public final class GeneticsItems {
             player.getPersistentData().putInt("headinajar_samples", drawn);
             if (drawn >= 10) com.coolfreeze23.headinajar.Advance.grant(player, "out_for_blood");
             stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-            player.serverLevel().playSound(null, target.blockPosition(), SoundEvents.BEE_STING, target.getSoundSource(), 0.8f, 1.4f);
+            player.serverLevel().playSound(null, target.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.SYRINGE_JAB.get(), target.getSoundSource(), 0.8f, 1.4f);
+            com.coolfreeze23.headinajar.body.BodyServer.tool(player, target, com.coolfreeze23.headinajar.fx.Fx.TOOL_SYRINGE);
             return InteractionResult.CONSUME;
         }
 
@@ -241,7 +242,7 @@ public final class GeneticsItems {
 
         private static void reportOnly(ServerPlayer player, Genetics.Result result) {
             player.displayClientMessage(Component.translatable("message.headinajar.inject." + result.name().toLowerCase(java.util.Locale.ROOT)), true);
-            player.serverLevel().playSound(null, player.blockPosition(), result == Genetics.Result.REJECTED ? SoundEvents.SLIME_HURT : SoundEvents.BREWING_STAND_BREW,
+            player.serverLevel().playSound(null, player.blockPosition(), (result == Genetics.Result.REJECTED ? com.coolfreeze23.headinajar.fx.HouseSounds.GENE_REJECTED : com.coolfreeze23.headinajar.fx.HouseSounds.GENE_ACCEPTED).get(),
                     player.getSoundSource(), 1, 1.2f);
         }
 

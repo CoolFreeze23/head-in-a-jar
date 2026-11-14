@@ -1,0 +1,225 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_grapple_hook",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -3,
+                -1
+              ],
+              "size": [
+                6,
+                6,
+                1
+              ],
+              "uv": [
+                0,
+                14
+              ]
+            },
+            {
+              "origin": [
+                -2,
+                -2,
+                -11
+              ],
+              "size": [
+                4,
+                4,
+                10
+              ],
+              "uv": [
+                92,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -2,
+                -8
+              ],
+              "size": [
+                2,
+                4,
+                5
+              ],
+              "uv": [
+                78,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -2.5,
+                -2.5,
+                -12
+              ],
+              "size": [
+                5,
+                5,
+                1
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "hook",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -11
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                -1,
+                -17
+              ],
+              "size": [
+                2,
+                2,
+                5
+              ],
+              "uv": [
+                64,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                1,
+                -17
+              ],
+              "size": [
+                2,
+                3,
+                1
+              ],
+              "uv": [
+                32,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                4,
+                -16
+              ],
+              "size": [
+                2,
+                1,
+                3
+              ],
+              "uv": [
+                38,
+                0
+              ]
+            },
+            {
+              "origin": [
+                1,
+                -2,
+                -17
+              ],
+              "size": [
+                3,
+                2,
+                1
+              ],
+              "uv": [
+                48,
+                0
+              ]
+            },
+            {
+              "origin": [
+                3,
+                -3,
+                -16
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                12,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -2,
+                -17.5
+              ],
+              "size": [
+                3,
+                2,
+                1
+              ],
+              "uv": [
+                56,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -3,
+                -16.5
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                22,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_tip": [
+              0,
+              0,
+              -17
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

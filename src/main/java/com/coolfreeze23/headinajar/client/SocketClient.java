@@ -48,14 +48,26 @@ public final class SocketClient {
         event.setCanceled(true);
     }
 
+    /** The 0 key turns the face off (no hotbar key is bound to it by default). */
     @SubscribeEvent
     public static void key(InputEvent.Key event) {
         if (!socketed() || Minecraft.getInstance().screen != null || event.getAction() != GLFW.GLFW_PRESS) return;
-        int k = event.getKey();
-        if (k < GLFW.GLFW_KEY_0 || k > GLFW.GLFW_KEY_9) return;
-        int digit = k - GLFW.GLFW_KEY_0;
-        int level = digit == 0 ? 0 : Math.round(digit * 15 / 9f);
-        PacketDistributor.sendToServer(new Network.SocketInput(0, face, level));
+        if (event.getKey() == GLFW.GLFW_KEY_0) PacketDistributor.sendToServer(new Network.SocketInput(0, face, 0));
+    }
+
+    /**
+     * The hotbar keys (however they are bound) set the face's level, 1 to 15; they are taken before the game sees them,
+     * so a plugged-in jar's hotbar stays where it was.
+     */
+    @SubscribeEvent
+    public static void hotbarKeys(net.neoforged.neoforge.client.event.ClientTickEvent.Pre event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (!socketed() || mc.screen != null) return;
+        for (int i = 0; i < mc.options.keyHotbarSlots.length; i++) {
+            while (mc.options.keyHotbarSlots[i].consumeClick()) {
+                PacketDistributor.sendToServer(new Network.SocketInput(0, face, com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.levelForKey(i + 1)));
+            }
+        }
     }
 
     public static void hud(GuiGraphics g, DeltaTracker delta) {

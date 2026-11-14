@@ -1,0 +1,20 @@
+{
+  "name": "Sharing Power",
+  "icon": "headinajar:leyden_jar",
+  "category": "headinajar:facilities",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Power flows from a Galvanic Pile, Leyden Jar or Tesla Node into every machine touching any face, shared evenly. Machines do not pass it on: put the source against the machine. FE cables from other mods work too."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A $(item)Leyden Jar$() stores 250 kFE. It fills from a source beside it and feeds its other neighbours, 2,000 FE/t; two do not feed each other.$(br2)A $(item)Tesla Node$() sends up to 2,000 FE/t to a node within 16 blocks, losing 5%%."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To link two nodes, hold a $(item)Surgical Wrench$(): use the sending node, then the receiving one. Sneak and use the sender to unlink.$(br2)The source goes against the sender; the receiver feeds what touches it."
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+# Vanilla third person (no shoulder camera): each of the eleven boarded, a still with the camera turning about the
+# machine's top and one about the pilot's eye; then getting out of a Chimera under water by the eject hold.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+jar
+charge 100000
+mecha hopper 0 -60 0 hydraulic_legs
+mecha bulwark 12 -60 0 hydraulic_legs
+mecha colossus 24 -60 0 hydraulic_legs
+mecha executive 36 -60 0 hydraulic_legs
+mecha wheelhouse 48 -60 0 hydraulic_legs
+mecha skitter 60 -60 0 hydraulic_legs
+mecha kite 72 -60 0 hydraulic_legs
+mecha chimera 84 -60 0 hydraulic_legs
+/summon headinajar:rover 96 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:lunk 108 -60 0 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 120 -60 0 {Rotation:[0f,0f]}
+/tp @s 0.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:hopper
+key use
+wait 60
+riding hopper
+look 0 10
+view 1
+wait 10
+shot v3_hopper_vanilla_third
+pivot off
+wait 5
+shot v3_hopper_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 12.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:bulwark
+key use
+wait 60
+riding bulwark
+look 0 10
+view 1
+wait 10
+shot v3_bulwark_vanilla_third
+pivot off
+wait 5
+shot v3_bulwark_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 24.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:colossus
+key use
+wait 60
+riding colossus
+look 0 10
+view 1
+wait 10
+shot v3_colossus_vanilla_third
+pivot off
+wait 5
+shot v3_colossus_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 36.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:executive
+key use
+wait 60
+riding executive
+look 0 10
+view 1
+wait 10
+shot v3_executive_vanilla_third
+pivot off
+wait 5
+shot v3_executive_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 48.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:wheelhouse
+key use
+wait 60
+riding wheelhouse
+look 0 10
+view 1
+wait 10
+shot v3_wheelhouse_vanilla_third
+pivot off
+wait 5
+shot v3_wheelhouse_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 60.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:skitter
+key use
+wait 60
+riding skitter
+look 0 10
+view 1
+wait 10
+shot v3_skitter_vanilla_third
+pivot off
+wait 5
+shot v3_skitter_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 72.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:kite
+key use
+wait 60
+riding kite
+look 0 10
+view 1
+wait 10
+shot v3_kite_vanilla_third
+pivot off
+wait 5
+shot v3_kite_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 84.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:chimera
+key use
+wait 60
+riding chimera
+look 0 10
+view 1
+wait 10
+shot v3_chimera_vanilla_third
+pivot off
+wait 5
+shot v3_chimera_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+/tp @s 96.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:rover
+key use
+wait 60
+riding rover
+look 0 10
+view 1
+wait 10
+shot v3_rover_vanilla_third
+pivot off
+wait 5
+shot v3_rover_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak hold 3
+wait 20
+/tp @s 108.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:lunk
+key use
+wait 60
+riding lunk
+look 0 10
+view 1
+wait 10
+shot v3_lunk_vanilla_third
+pivot off
+wait 5
+shot v3_lunk_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak hold 3
+wait 20
+/tp @s 120.5 -60 -3.5 0 0
+view 0
+wait 5
+lookat headinajar:spider_walker
+key use
+wait 60
+riding spider_walker
+look 0 10
+view 1
+wait 10
+shot v3_spider_walker_vanilla_third
+pivot off
+wait 5
+shot v3_spider_walker_vanilla_eye_pivot
+pivot on
+view 0
+wait 3
+sneak hold 3
+wait 20
+/fill 300 -60 -3 306 -54 3 minecraft:water
+mecha chimera 303 -60 0 hydraulic_legs
+/tp @s 303.5 -60 -3.5 0 0
+wait 10
+lookat headinajar:chimera
+key use
+wait 60
+riding chimera_in_water
+view 1
+wait 5
+shot w_chimera_under_water
+sneak down
+key jar_menu hold 25
+sneak up
+wait 20
+riding chimera_after_eject
+inspect me
+shot w_after_eject

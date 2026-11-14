@@ -1,0 +1,47 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "hit": {
+      "animation_length": 0.4,
+      "bones": {
+        "thorns": {
+          "position": {
+            "0.0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.05": {
+              "vector": [
+                0,
+                0,
+                -4
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.2": {
+              "vector": [
+                0,
+                0,
+                -4
+              ]
+            },
+            "0.4": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      },
+      "timeline": {
+        "0.05": "thorns:prick;"
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import top.theillusivec4.curios.api.CuriosApi;
 
-/** Curios: the Head Satchel counts when worn on the belt. Only loaded when Curios is present. */
+/** Curios: the Head Satchel counts when worn on the belt; an old head slot's goggles come back. Only loaded when Curios is present. */
 final class CuriosCompat {
     private CuriosCompat() {
     }
@@ -20,6 +20,20 @@ final class CuriosCompat {
             broken = true;
             com.coolfreeze23.headinajar.HeadInAJar.LOGGER.warn("Curios API changed; the Head Satchel on the belt is ignored: {}", e.toString());
             return false;
+        }
+    }
+
+    /**
+     * Curios' own hand-back of what sat in a slot it no longer has (an older version's goggles head slot), run now
+     * rather than on the player's next tick, so {@link OldHeadSlot} can see where it goes.
+     */
+    static void giveBackInvalid(Player player) {
+        if (broken) return;
+        try {
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> inv.handleInvalidStacks());
+        } catch (LinkageError e) {
+            broken = true;
+            com.coolfreeze23.headinajar.HeadInAJar.LOGGER.warn("Curios API changed; items in an old Curios slot are left to Curios: {}", e.toString());
         }
     }
 }

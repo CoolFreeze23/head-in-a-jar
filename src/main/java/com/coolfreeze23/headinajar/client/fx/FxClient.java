@@ -18,6 +18,7 @@ public final class FxClient {
         modBus.addListener(FxClient::particles);
         modBus.addListener(FxClient::layers);
         NeoForge.EVENT_BUS.addListener(FxClient::tick);
+        NeoForge.EVENT_BUS.addListener(SoundLoops::heard);
         NeoForge.EVENT_BUS.addListener(FxClient::render);
         NeoForge.EVENT_BUS.register(CameraDesk.class);
         NeoForge.EVENT_BUS.register(PoseFx.class);
@@ -57,6 +58,9 @@ public final class FxClient {
         PoseFx.tick();
         BlockBeams.tick();
         CameraDesk.tick();
+        JarSounds.tick();
+        ArmBeams.tick();
+        com.coolfreeze23.headinajar.client.MechaWear.tick();
         SoundLoops.tick();
     }
 
@@ -72,6 +76,7 @@ public final class FxClient {
         FxManager.render(frame);
         SwapFx.render(frame);
         BlockBeams.render(frame);
+        ArmBeams.render(frame);
     }
 
     private FxClient() {

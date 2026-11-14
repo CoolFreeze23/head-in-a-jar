@@ -1,0 +1,62 @@
+# Frame time: a row of eight parked Executives at 10 blocks against the empty scene, uncapped (the Hopper's method):
+# before (hopperlean off: every machine animates and the model is drawn twice for its glow) and after (on), interleaved
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -58 -10 0 8
+wait 200
+bench start empty1
+wait 300
+bench stop
+bench start empty2
+wait 300
+bench stop
+bench start empty3
+wait 300
+bench stop
+mecha executive -12 -60 0 hydraulic_legs,drill
+mecha executive -8 -60 0 hydraulic_legs,drill
+mecha executive -5 -60 0 hydraulic_legs,drill
+mecha executive -1 -60 0 hydraulic_legs,drill
+mecha executive 2 -60 0 hydraulic_legs,drill
+mecha executive 5 -60 0 hydraulic_legs,drill
+mecha executive 9 -60 0 hydraulic_legs,drill
+mecha executive 12 -60 0 hydraulic_legs,drill
+wait 100
+shot bench_row_executive
+hopperlean off
+wait 40
+bench start before1
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after1
+wait 300
+bench stop
+hopperlean off
+wait 40
+bench start before2
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after2
+wait 300
+bench stop
+hopperlean off
+wait 40
+bench start before3
+wait 300
+bench stop
+hopperlean on
+wait 40
+bench start after3
+wait 300
+bench stop
+report bench done

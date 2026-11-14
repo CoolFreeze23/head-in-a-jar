@@ -1,0 +1,18 @@
+{
+  "name": "O Entregador",
+  "icon": "minecraft:bell",
+  "category": "headinajar:getting_home",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Preso como pote? Aperte $(l)Entregador$() no menu do pote, ou digite /headoffice courier. Em 30 s seu corpo, ou cadáver, chega ao seu lado de onde estiver: 20 kFE, ou toda a sua carga. Entre no corpo com $(k:key.headinajar.swap); no cadáver, com Kit de Sutura."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:body_recall_beacon",
+      "text": "Módulo de pote: sendo você pote, seu corpo em pé anda até você, 10 FE/t. Só na mesma dimensão e em chunk carregado. Para antes de lava, fogo ou queda de mais de 3 blocos.",
+      "title": "Farol de Chamado"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+@world flat
+@gamemode survival
+@observe 20
+wait 40
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/time set 6000
+/tp @s 0.5 -60 0.5 0 40
+/setblock 0 -60 1 headinajar:neural_socket
+/tp @s -10.5 -60 -10.5
+jar
+wait 10
+/tp @s 0.5 -60 -0.5 0 10
+wait 5
+look 0 10
+hotbar 3
+wait 10
+report == K3 a bare jar plugs into the socket; hotbar 1 then 9 set levels 1 and 15; the hotbar stays
+key use
+wait 10
+riding K3-plugged
+hotbar 1
+wait 10
+inspect block 0 -60 1
+hotbar 9
+wait 10
+inspect block 0 -60 1
+shot k3_socket
+key sneak down
+key jar_menu
+key sneak up
+wait 20
+riding K3-unplugged
+report == K6 a bat host 6 up: sneak keeps the jar aboard and says to fly lower
+/tp @s 8.5 -60 8.5 0 0
+hostify minecraft:bat 8 -54 9
+wait 2
+mount
+report the handshake holds the host for its three rounds; then sneak
+wait 110
+riding K6-aboard
+inspect near bat 12
+view 1
+sneak hold 8
+riding K6-after-first-sneak
+inspect near bat 12
+shot k6_sinking
+sneak hold 40
+riding K6-after-long-sneak
+inspect near bat 12
+wait 10
+sneak
+wait 10
+riding K6-after-sneak-on-ground
+shot k6_off

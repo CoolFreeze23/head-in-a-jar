@@ -1,0 +1,269 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_radiator_fins",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                -3,
+                -1
+              ],
+              "size": [
+                8,
+                6,
+                1
+              ],
+              "uv": [
+                46,
+                0
+              ]
+            },
+            {
+              "origin": [
+                5,
+                -6,
+                -6
+              ],
+              "size": [
+                1,
+                12,
+                5
+              ],
+              "uv": [
+                22,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                -6,
+                -6
+              ],
+              "size": [
+                1,
+                12,
+                5
+              ],
+              "uv": [
+                34,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                5
+              ],
+              "uv": [
+                64,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -6,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                5
+              ],
+              "uv": [
+                94,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -5,
+                -2
+              ],
+              "size": [
+                10,
+                10,
+                1
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_heat": [
+              0,
+              0,
+              -6
+            ]
+          }
+        },
+        {
+          "name": "fin_0",
+          "parent": "mount",
+          "pivot": [
+            0,
+            -4,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                -4.5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                4
+              ],
+              "uv": [
+                0,
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_1",
+          "parent": "mount",
+          "pivot": [
+            0,
+            -2,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                -2.5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                4
+              ],
+              "uv": [
+                28,
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_2",
+          "parent": "mount",
+          "pivot": [
+            0,
+            0,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                -0.5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                4
+              ],
+              "uv": [
+                56,
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_3",
+          "parent": "mount",
+          "pivot": [
+            0,
+            2,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                1.5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                4
+              ],
+              "uv": [
+                84,
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fin_4",
+          "parent": "mount",
+          "pivot": [
+            0,
+            4,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                3.5,
+                -6
+              ],
+              "size": [
+                10,
+                1,
+                4
+              ],
+              "uv": [
+                0,
+                22
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

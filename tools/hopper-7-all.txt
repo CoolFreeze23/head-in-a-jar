@@ -1,0 +1,142 @@
+# Hopper, everything in the default profile: the Gantry's build and a boarding by a bystander's click, stills beside
+# vanilla things (day, night, torchlight), then the pilot's own walk, pogo, arms, vent, limp, hurt and the parachute
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- the build, from a bystander's place 6 blocks off at 45 degrees -------------------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 hopper
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widgets
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 4.8 -58.6 4.8 135 18
+wait 2
+frames v_build 150
+wait 125
+bystander spawn 0 -60 -1 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:hopper
+wait 100
+inspect near headinajar:hopper 8
+# --- stills: the built Hopper with the bystander's jar in its collar, beside an iron golem, a minecart, the chair ---
+/summon minecraft:iron_golem -2.5 -60 0.5 {NoAI:1b,Rotation:[0f,0f]}
+/setblock 3 -60 0 minecraft:rail
+/summon minecraft:minecart 3.5 -60 0.5
+/setblock 6 -60 0 headinajar:separation_chair[facing=south]
+bystander look 0 0
+wait 30
+/tp @s 2 -58.5 8.5 180 8
+wait 10
+shot st_day_row
+/tp @s 0.5 -57.4 2.6 180 30
+wait 5
+shot st_day_jar_close
+/tp @s 2.3 -57 2.3 135 35
+wait 5
+shot st_day_jar_3q
+/tp @s 0.5 -58.6 -5 0 6
+wait 5
+shot st_day_back_6
+/tp @s 0.5 -56 -20 0 8
+wait 5
+shot st_day_back_20
+/time set 18000
+/tp @s 2 -58.5 8.5 180 8
+wait 10
+shot st_night_row
+/setblock 1 -60 2 minecraft:torch
+/setblock -1 -60 2 minecraft:torch
+/setblock 4 -60 2 minecraft:torch
+wait 10
+shot st_torch_row
+/tp @s 0.5 -57.4 2.6 180 30
+wait 5
+shot st_torch_jar_close
+/time set 6000
+bystander remove
+wait 5
+# --- the pilot's own Hopper, away from the row --------------------------------------------------------------------
+mecha hopper 0 -60 23 hydraulic_legs,jump_jets,drill
+/tp @s 6.5 -60 20.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 21.9 0 -25
+wait 5
+key use
+wait 70
+view 1
+look 0 12
+frames v_walk 150
+key forward hold 60
+wait 10
+look 180 12
+key forward hold 60
+wait 15
+look 0 6
+execute at @e[type=headinajar:hopper,limit=1,sort=nearest] run summon minecraft:cow ~1.5 ~ ~10 {NoAI:1b}
+frames v_pogo_back 140
+inspect near headinajar:hopper 40
+key drive hold 34
+wait 100
+inspect near headinajar:hopper 40
+view 2
+execute at @e[type=headinajar:hopper,limit=1,sort=nearest] run summon minecraft:cow ~1.5 ~ ~10 {NoAI:1b}
+frames v_pogo_front 140
+inspect near headinajar:hopper 40
+key drive hold 34
+wait 100
+inspect near headinajar:hopper 40
+view 1
+look 180 10
+key forward hold 40
+look 0 25
+wait 20
+execute at @e[type=headinajar:hopper,limit=1,sort=nearest] run fill ~-2 ~ ~2 ~2 ~2 ~2 minecraft:stone
+frames v_drill 100
+key attack hold 70
+wait 25
+frames v_dry 40
+key use
+wait 40
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Heat:600f}
+look 60 15
+frames v_vent 110
+wait 112
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Battery:0}
+look 180 12
+frames v_limp 80
+key forward hold 70
+wait 10
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Battery:400000}
+view 0
+look 90 5
+wait 15
+frames v_fp_walk 90
+key forward hold 70
+wait 20
+frames v_fp_pogo 120
+key drive hold 30
+wait 90
+view 1
+look 90 20
+frames v_hurt 30
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 4 minecraft:generic
+wait 30
+/data merge entity @e[type=headinajar:hopper,limit=1,sort=nearest] {Health:7f}
+frames v_parachute 200
+/damage @e[type=headinajar:hopper,limit=1,sort=nearest] 3 minecraft:generic
+wait 200
+inspect me
+report all done

@@ -1,0 +1,65 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 0.8,
+      "bones": {
+        "fin": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                35,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                0,
+                -35,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.8": {
+              "vector": [
+                0,
+                35,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "fin_t": {
+          "rotation": {
+            "0.0": {
+              "vector": [
+                0,
+                -25,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                0,
+                25,
+                0
+              ],
+              "easing": "easeInOutSine"
+            },
+            "0.8": {
+              "vector": [
+                0,
+                -25,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      }
+    }
+  }
+}

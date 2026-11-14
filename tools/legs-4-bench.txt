@@ -1,0 +1,62 @@
+# Frame time: eight parked Skitters, then eight parked Spider Walkers, in a row 10 blocks ahead, against the empty scene,
+# uncapped, three 15-second windows each (the Hopper's method). Run in the default client and with SMOKE_MODS=sodium.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+wait 200
+bench start empty1
+wait 300
+bench stop
+bench start empty2
+wait 300
+bench stop
+bench start empty3
+wait 300
+bench stop
+mecha skitter -11 -60 0 drill
+mecha skitter -8 -60 0 drill
+mecha skitter -5 -60 0 drill
+mecha skitter -2 -60 0 drill
+mecha skitter 1 -60 0 drill
+mecha skitter 4 -60 0 drill
+mecha skitter 7 -60 0 drill
+mecha skitter 10 -60 0 drill
+wait 100
+shot bench_row_skitter
+bench start skitter1
+wait 300
+bench stop
+bench start skitter2
+wait 300
+bench stop
+bench start skitter3
+wait 300
+bench stop
+tp @e[type=headinajar:skitter] 0 -300 0
+wait 40
+summon headinajar:spider_walker -11 -60 0
+summon headinajar:spider_walker -8 -60 0
+summon headinajar:spider_walker -5 -60 0
+summon headinajar:spider_walker -2 -60 0
+summon headinajar:spider_walker 1 -60 0
+summon headinajar:spider_walker 4 -60 0
+summon headinajar:spider_walker 7 -60 0
+summon headinajar:spider_walker 10 -60 0
+wait 100
+shot bench_row_spider_walker
+bench start spider1
+wait 300
+bench stop
+bench start spider2
+wait 300
+bench stop
+bench start spider3
+wait 300
+bench stop
+report done

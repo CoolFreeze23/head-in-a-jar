@@ -11,11 +11,11 @@ REFUSALS = {
                      'Sua cabeça ainda está no lugar. O menu do pote é para uma cabeça no pote.'),
     # a Cradle that docks a head with nothing to keep it topped up (said on docking and on a click): %1$s the Galvanic
     # Pile, %2$s Cranial Saline
-    'cradle.unpowered': ('This Cradle has no power and keeps nothing topped up. Put a %1$s beside it.',
-                         'Este Berço está sem energia e não repõe nada. Coloque uma %1$s ao lado.'),
+    'cradle.unpowered': ('This Cradle has no power. Put a %1$s beside it.',
+                         'Este Berço está sem energia. Coloque uma %1$s ao lado.'),
     'cradle.dry': ('This Cradle has no saline to give. Fill it with %2$s.', 'Este Berço não tem soro para dar. Encha com %2$s.'),
-    'cradle.starved': ('This Cradle has no power and no saline. Put a %1$s beside it and fill it with %2$s.',
-                       'Este Berço está sem energia e sem soro. Coloque uma %1$s ao lado e encha com %2$s.'),
+    'cradle.starved': ('No power, no saline. Put a %1$s beside it; fill with %2$s.',
+                       'Sem energia nem soro: %1$s ao lado e %2$s dentro.'),
 }
 
 # (key, en, pt)

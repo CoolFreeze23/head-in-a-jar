@@ -109,6 +109,18 @@ public final class MachineKeyframes {
     }
 
     /** Plays a kit sound at the machine (or at {@code at}), at the event's volume and {@code pitch}. */
+    /**
+     * A clip's instruction keyframe naming a sound, {@code family:name;} (the Locker's check-in and portrait): played as
+     * the event {@code family.name}. Anything else in an instruction is left alone.
+     */
+    public static <T extends BlockEntity & software.bernie.geckolib.animatable.GeoAnimatable> void instruction(
+            software.bernie.geckolib.animation.keyframe.event.CustomInstructionKeyframeEvent<T> event) {
+        for (String line : event.getKeyframeData().getInstructions().split(";")) {
+            String id = line.trim();
+            if (id.matches("[a-z]+:[a-z_]+")) play(event.getAnimatable(), id.replace(':', '.'), 1, null);
+        }
+    }
+
     public static void play(BlockEntity machine, String id, float pitch, Vec3 at) {
         Level level = machine.getLevel();
         if (level == null) return;
@@ -162,6 +174,8 @@ public final class MachineKeyframes {
             case "minecraft:wax_on" -> spawn(level, ParticleTypes.WAX_ON, at, 3, 0.06, 0.02);
             case "minecraft:electric_spark" -> {
                 if (!LinkHud.photosensitive()) spawn(level, ParticleTypes.ELECTRIC_SPARK, at, 3, 0.05, 0.02);
+                // the Charging Dock's jaws snap as they spark (heard under the photosensitive option too: it is not a flash)
+                if (machine.getBlockState().getBlock() instanceof com.coolfreeze23.headinajar.block.ChargingDockBlock) play(machine, "dock.spark", 1, at);
             }
             case "minecraft:smoke" -> spawn(level, ParticleTypes.SMOKE, at, 3, 0.04, 0.02);
             case "minecraft:happy_villager" -> spawn(level, ParticleTypes.HAPPY_VILLAGER, at, 2, 0.08, 0.02);

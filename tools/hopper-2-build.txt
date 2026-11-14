@@ -1,0 +1,31 @@
+# Hopper: the Gantry's build seen from a bystander, then a jar boards it by a click mid-build (skips to the boot)
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 hopper
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+hud off
+key use
+wait 10
+widgets
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 5.2 -59.2 5.2 135 12
+wait 2
+frames b_build 160
+wait 120
+bystander spawn 2 -60 1 90
+headoffice trust add Bystander
+bystander form jar
+wait 10
+bystander useentity nearest headinajar:hopper
+wait 80
+inspect near hopper 8
+report build-board done

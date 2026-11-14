@@ -58,8 +58,16 @@ public class SurgicalSawItem extends Item {
             return InteractionResult.FAIL;
         }
         ServerLevel level = server.serverLevel();
-        level.playSound(null, mob.getX(), mob.getY(), mob.getZ(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.2f, 0.5f);
-        com.coolfreeze23.headinajar.feedback.Sanitary.puff(level, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ());
+        // the company's own blade (the chair's old cut sound) under the cork's whine
+        level.playSound(null, mob.getX(), mob.getY(), mob.getZ(), com.coolfreeze23.headinajar.registry.ModSounds.BOOTH_CUT.get(), SoundSource.PLAYERS, 0.8f, 1);
+        // the creature holds still for the cork's whine; the head pops on the third tick, in a sanitary puff. Into an
+        // off-hand jar the head arcs only when the cut really kills (below): a creature that lives keeps its head.
+        ItemStack held = player.getOffhandItem();
+        boolean intoJar = held.getItem() instanceof LifeSupportJarItem;
+        if (!intoJar) com.coolfreeze23.headinajar.body.BodyServer.cut(server, mob, false);
+        net.minecraft.world.phys.Vec3 neck = com.coolfreeze23.headinajar.body.BodyServer.neck(mob);
+        Runnable puff = () -> com.coolfreeze23.headinajar.body.BodyServer.later(level, 3, () -> com.coolfreeze23.headinajar.feedback.Sanitary.puff(level, neck.x, neck.y, neck.z));
+        if (!intoJar) puff.run();
         stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
         ItemStack offhand = player.getOffhandItem();
@@ -68,6 +76,10 @@ public class SurgicalSawItem extends Item {
             // the cut, and handed over only if the cut really killed (a totem, a claim or Resistance can stop it).
             ItemStack head = JarredHeadItem.of(mob);
             mob.hurt(mob.damageSources().playerAttack(player), Float.MAX_VALUE);
+            if (mob.isDeadOrDying()) {
+                com.coolfreeze23.headinajar.body.BodyServer.cut(server, mob, true);
+                puff.run();
+            }
             if (!mob.isDeadOrDying()) {
                 com.coolfreeze23.headinajar.feedback.Refusals.deny(server, com.coolfreeze23.headinajar.feedback.Refuser.at(mob), "saw.survived", mob.getDisplayName());
                 return InteractionResult.CONSUME;

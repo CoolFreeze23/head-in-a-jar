@@ -525,9 +525,18 @@ public class MachineLineGameTests {
     public static void theCradleSaysItsPowerAndSaline(GameTestHelper h) {
         h.setBlock(FLOOR, ModRegistry.CRADLE.get());
         var cradle = (com.coolfreeze23.headinajar.block.LifeSupportCradleBlockEntity) h.getBlockEntity(FLOOR);
-        cradle.dock(java.util.UUID.randomUUID(), "Dev", ItemStack.EMPTY);
+        java.util.UUID id = java.util.UUID.randomUUID();
+        cradle.dock(id, "Dev", ItemStack.EMPTY);
+        // as a dock leaves it: the head registry says the head is here, else the Cradle's check (every 20 ticks of game
+        // time) lets the head go, and whether that check fell inside the wait below depended on the tick the test began
+        var registry = com.coolfreeze23.headinajar.form.HeadRegistry.get(h.getLevel().getServer());
+        registry.setHead(id, new com.coolfreeze23.headinajar.form.HeadRegistry.Head(com.coolfreeze23.headinajar.form.HeadRegistry.Where.CRADLE,
+                new com.coolfreeze23.headinajar.form.HeadRegistry.Spot(h.getLevel().dimension(), net.minecraft.world.phys.Vec3.atBottomCenterOf(h.absolutePos(FLOOR))), null));
         cradle.saline().fill(new FluidStack(com.coolfreeze23.headinajar.registry.ModFluids.SALINE.source.get(), 2500), IFluidHandler.FluidAction.EXECUTE);
         h.runAfterDelay(5, () -> {
+            boolean docked = id.equals(cradle.owner());
+            registry.setHead(id, null);
+            h.assertTrue(docked, "the Cradle let its docked head go");
             h.assertValueEqual(lamp(h, FLOOR), MachineLamp.LOW, "a docked head with no power");
             var state = h.getBlockState(FLOOR);
             h.assertValueEqual(state.getValue(com.coolfreeze23.headinajar.block.LifeSupportCradleBlock.SALINE), 3, "the bag's level");

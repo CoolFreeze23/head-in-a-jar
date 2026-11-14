@@ -43,7 +43,7 @@ public final class Genetics {
         }
     }
 
-    public enum Result { OK, MUTATED, REJECTED, FULL, TOO_HEAVY }
+    public enum Result { OK, MUTATED, REJECTED, FULL, TOO_HEAVY, DUD }
 
     public static GeneSet genes(LivingEntity entity) {
         return entity.getData(ModRegistry.GENES);
@@ -111,7 +111,8 @@ public final class Genetics {
         Result result = Result.OK;
         if (random.nextFloat() < mutationChance(serum.stability())) {
             Gene mutation = rollMutation(random);
-            if (mutation == null) return Result.REJECTED;
+            // the dud: the serum curdled and nothing took (not a rejection: the blood types did not fight)
+            if (mutation == null) return Result.DUD;
             if (!set.mutations.contains(mutation)) set.mutations.add(mutation);
             result = Result.MUTATED;
         }

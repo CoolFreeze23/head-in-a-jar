@@ -1,0 +1,38 @@
+# Bulwark re-takes: the drill against a wall and the vent, each seen from the side with nothing in the way
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+mecha bulwark 0 -60 3 hydraulic_legs,drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+look 0 20
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run fill ~-2 ~ ~3 ~2 ~3 ~3 minecraft:stone
+watch follow -6.5 1.4 1.2 -90 8
+wait 5
+frames v07b_drill_side 100
+key attack hold 70
+wait 25
+look 0 10
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Heat:950f}
+frames v08b_vent_side 115
+wait 115
+watch follow -6 1.4 0 -90 6
+/data merge entity @e[type=headinajar:bulwark,limit=1,sort=nearest] {Battery:0}
+/fill -3 -60 4 4 -57 8 minecraft:air
+look 180 10
+wait 15
+watch follow 6 1.4 0 90 6
+frames v09b_limp_side 100
+key forward hold 90
+wait 12
+watch off
+report fix done

@@ -642,10 +642,10 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         }
         if (docked) {
             // piped away to the Cradle
-            sound(SoundEvents.PISTON_CONTRACT, 0.6f, 1.4f);
+            sound(com.coolfreeze23.headinajar.fx.HouseSounds.PIPE_AWAY.get(), 0.6f, 1.4f);
             server.sendParticles(ParticleTypes.CLOUD, outlet.x, outlet.y + 0.4, outlet.z, 6, 0.2, 0.2, 0.2, 0.01);
         }
-        sound(SoundEvents.PLAYER_LEVELUP, 0.6f, 0.6f);
+        sound(com.coolfreeze23.headinajar.fx.HouseSounds.JINGLE.get(), 1, 1);
         // a Mason on staff halves blade wear
         setWear(wear + Math.round(5 * (1 - 0.5f * HeadJobs.staff(level, worldPosition, "mason"))));
         lastJarKind = kindOf(inJar);

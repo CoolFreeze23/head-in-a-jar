@@ -1,0 +1,1459 @@
+{
+  "modules": {
+    "anchor_clamps": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          6.0,
+          "hold"
+        ],
+        "retract": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "aqua_fins": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "idle": [
+          16.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "arachnid_legs": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          10.0,
+          "hold"
+        ],
+        "sustain": [
+          12.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "arc_cannon": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          6.0,
+          "loop"
+        ],
+        "recoil": [
+          8.0,
+          "once"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "prong_l",
+            1
+          ],
+          [
+            "prong_r",
+            1
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "prong_l",
+            1
+          ],
+          [
+            "prong_r",
+            1
+          ]
+        ]
+      }
+    },
+    "armor_plating": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "hit": [
+          6.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "battery_rack": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          8.0,
+          "once"
+        ]
+      },
+      "light": {
+        "charge": [
+          [
+            "mount",
+            8
+          ],
+          [
+            "cell_1",
+            2
+          ],
+          [
+            "mount",
+            9
+          ]
+        ]
+      },
+      "heavy": {
+        "charge": [
+          [
+            "mount",
+            8
+          ],
+          [
+            "cell_1",
+            2
+          ],
+          [
+            "mount",
+            9
+          ]
+        ]
+      }
+    },
+    "bio_integration_port": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          40.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            5
+          ]
+        ],
+        "tint": [
+          [
+            "serum",
+            0,
+            "c060d0"
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            5
+          ]
+        ],
+        "tint": [
+          [
+            "serum",
+            0,
+            "c060d0"
+          ]
+        ]
+      }
+    },
+    "bio_reactor_core": {
+      "slot": "CORE",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          20.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            3
+          ],
+          [
+            "mount",
+            4
+          ],
+          [
+            "bubble",
+            0
+          ],
+          [
+            "bubble",
+            1
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            3
+          ],
+          [
+            "mount",
+            4
+          ],
+          [
+            "bubble",
+            0
+          ],
+          [
+            "bubble",
+            1
+          ]
+        ]
+      }
+    },
+    "bio_scanner": {
+      "slot": "SENSOR",
+      "two_sizes": false,
+      "clips": {
+        "sustain": [
+          12.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            6
+          ]
+        ]
+      }
+    },
+    "capacitor_bank": {
+      "slot": "CORE",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          24.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            4
+          ],
+          [
+            "bar_0",
+            0
+          ],
+          [
+            "bar_1",
+            0
+          ],
+          [
+            "bar_2",
+            0
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            4
+          ],
+          [
+            "bar_0",
+            0
+          ],
+          [
+            "bar_1",
+            0
+          ],
+          [
+            "bar_2",
+            0
+          ]
+        ]
+      }
+    },
+    "cargo_hold": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          8.0,
+          "hold"
+        ],
+        "retract": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "chainsaw": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "spin": [
+          4.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "combustion_kernel": {
+      "slot": "CORE",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          4.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            3
+          ],
+          [
+            "mount",
+            4
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            3
+          ],
+          [
+            "mount",
+            4
+          ]
+        ]
+      }
+    },
+    "coolant_loop": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          20.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "drill": {
+      "slot": "ARM",
+      "two_sizes": false,
+      "clips": {
+        "spin": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {}
+    },
+    "ender_satchel": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          10.0,
+          "hold"
+        ],
+        "retract": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            2
+          ],
+          [
+            "flap",
+            2
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            2
+          ],
+          [
+            "flap",
+            2
+          ]
+        ]
+      }
+    },
+    "energy_shield": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "mount",
+            2
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "mount",
+            2
+          ]
+        ]
+      }
+    },
+    "excavator_scoop": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "strike": [
+          14.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "fire_suppression": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "burst": [
+          16.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "flamethrower": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          6.0,
+          "loop"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "pilot",
+            0
+          ]
+        ],
+        "firing": [
+          [
+            "flame",
+            0
+          ],
+          [
+            "flame",
+            1
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "pilot",
+            0
+          ]
+        ],
+        "firing": [
+          [
+            "flame",
+            0
+          ],
+          [
+            "flame",
+            1
+          ]
+        ]
+      }
+    },
+    "fusion_bottle": {
+      "slot": "CORE",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            4
+          ],
+          [
+            "mount",
+            5
+          ],
+          [
+            "ring",
+            0
+          ],
+          [
+            "ring",
+            1
+          ],
+          [
+            "ring",
+            2
+          ],
+          [
+            "ring",
+            3
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            4
+          ],
+          [
+            "mount",
+            5
+          ],
+          [
+            "ring",
+            0
+          ],
+          [
+            "ring",
+            1
+          ],
+          [
+            "ring",
+            2
+          ],
+          [
+            "ring",
+            3
+          ]
+        ]
+      }
+    },
+    "galvanic_stack": {
+      "slot": "CORE",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          16.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            4
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            4
+          ]
+        ]
+      }
+    },
+    "glider_wings": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          10.0,
+          "hold"
+        ],
+        "retract": [
+          10.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "grapple_hook": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          4.0,
+          "hold"
+        ],
+        "retract": [
+          8.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "harvester": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "spin": [
+          9.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "hemo_syringe": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "strike": [
+          14.0,
+          "once"
+        ]
+      },
+      "light": {
+        "tint": [
+          [
+            "mount",
+            3,
+            "7d323a"
+          ]
+        ]
+      },
+      "heavy": {
+        "tint": [
+          [
+            "mount",
+            3,
+            "7d323a"
+          ]
+        ]
+      }
+    },
+    "hover_skirt": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          6.0,
+          "hold"
+        ],
+        "spin": [
+          2.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "skirt",
+            1
+          ],
+          [
+            "mount_shin",
+            1
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "skirt",
+            1
+          ],
+          [
+            "mount_shin",
+            1
+          ]
+        ]
+      }
+    },
+    "hydraulic_fist": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "strike": [
+          12.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "hydraulic_legs": {
+      "slot": "LEGS",
+      "two_sizes": false,
+      "clips": {
+        "pump": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {}
+    },
+    "jump_jets": {
+      "slot": "BACK",
+      "two_sizes": false,
+      "clips": {
+        "burst": [
+          6.0,
+          "once"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "pilot_0",
+            0
+          ],
+          [
+            "pilot_1",
+            0
+          ],
+          [
+            "pilot_2",
+            0
+          ]
+        ]
+      }
+    },
+    "lava_treads": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "spin": [
+          4.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "life_support_recycler": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          40.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            5
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "mount",
+            5
+          ]
+        ]
+      }
+    },
+    "manipulator_hand": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "strike": [
+          10.0,
+          "once"
+        ],
+        "guard": [
+          4.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "medical_injector": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "burst": [
+          12.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "missile_pod": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          6.0,
+          "hold"
+        ],
+        "recoil": [
+          8.0,
+          "once"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "night_optics": {
+      "slot": "SENSOR",
+      "two_sizes": false,
+      "clips": {
+        "deploy": [
+          6.0,
+          "hold"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "goggles",
+            3
+          ],
+          [
+            "goggles",
+            4
+          ]
+        ]
+      }
+    },
+    "ore_scanner": {
+      "slot": "SENSOR",
+      "two_sizes": false,
+      "clips": {
+        "spin": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "rotor",
+            1
+          ],
+          [
+            "rotor",
+            2
+          ]
+        ]
+      }
+    },
+    "passenger_pod": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          8.0,
+          "hold"
+        ],
+        "retract": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "plasma_lance": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "strike": [
+          14.0,
+          "once"
+        ],
+        "sustain": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "lance",
+            3
+          ],
+          [
+            "core",
+            0
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "lance",
+            3
+          ],
+          [
+            "core",
+            0
+          ]
+        ]
+      }
+    },
+    "radiator_fins": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          12.0,
+          "loop"
+        ],
+        "deploy": [
+          8.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "reactive_armour": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "hit": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "riot_shield": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "guard": [
+          6.0,
+          "hold"
+        ],
+        "deploy": [
+          8.0,
+          "hold"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "rivet_gun": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "recoil": [
+          6.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "rocket_pack": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "burst": [
+          6.0,
+          "once"
+        ],
+        "sustain": [
+          4.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "signal_booster": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          20.0,
+          "loop"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "blink",
+            0
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "blink",
+            0
+          ]
+        ]
+      }
+    },
+    "smoke_mortar": {
+      "slot": "BACK",
+      "two_sizes": true,
+      "clips": {
+        "recoil": [
+          10.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "solar_skin": {
+      "slot": "TORSO",
+      "two_sizes": false,
+      "clips": {
+        "sustain": [
+          40.0,
+          "loop"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {}
+    },
+    "spring_heels": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "burst": [
+          8.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "sprint_servos": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "spin": [
+          4.0,
+          "loop"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "stealth_field": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          32.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "pupil",
+            0
+          ]
+        ]
+      },
+      "heavy": {
+        "glow": [
+          [
+            "pupil",
+            0
+          ]
+        ]
+      }
+    },
+    "stilts": {
+      "slot": "LEGS",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          8.0,
+          "hold"
+        ],
+        "retract": [
+          8.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "target_lock": {
+      "slot": "SENSOR",
+      "two_sizes": false,
+      "clips": {
+        "sustain": [
+          16.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "scope",
+            2
+          ]
+        ]
+      }
+    },
+    "tesla_coil": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          6.0,
+          "loop"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "arcs",
+            0
+          ],
+          [
+            "arcs",
+            1
+          ],
+          [
+            "arcs",
+            2
+          ],
+          [
+            "arcs",
+            3
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "arcs",
+            0
+          ],
+          [
+            "arcs",
+            1
+          ],
+          [
+            "arcs",
+            2
+          ],
+          [
+            "arcs",
+            3
+          ]
+        ]
+      }
+    },
+    "thermal_imaging": {
+      "slot": "SENSOR",
+      "two_sizes": false,
+      "clips": {
+        "deploy": [
+          4.0,
+          "hold"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "glow": [
+          [
+            "mount",
+            4
+          ]
+        ]
+      }
+    },
+    "thorn_plating": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "hit": [
+          8.0,
+          "once"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    },
+    "tractor_beam": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          8.0,
+          "loop"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "dish",
+            5
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "dish",
+            5
+          ]
+        ]
+      }
+    },
+    "welding_torch": {
+      "slot": "ARM",
+      "two_sizes": true,
+      "clips": {
+        "sustain": [
+          4.0,
+          "loop"
+        ],
+        "idle": [
+          1.0,
+          "hold"
+        ]
+      },
+      "light": {
+        "firing": [
+          [
+            "flame",
+            0
+          ]
+        ]
+      },
+      "heavy": {
+        "firing": [
+          [
+            "flame",
+            0
+          ]
+        ]
+      }
+    },
+    "workbench": {
+      "slot": "TORSO",
+      "two_sizes": true,
+      "clips": {
+        "deploy": [
+          8.0,
+          "hold"
+        ],
+        "retract": [
+          6.0,
+          "hold"
+        ]
+      },
+      "light": {},
+      "heavy": {}
+    }
+  },
+  "heavy": {
+    "bulwark": [
+      "arc_cannon",
+      "armor_plating",
+      "bio_reactor_core",
+      "capacitor_bank",
+      "combustion_kernel",
+      "energy_shield",
+      "excavator_scoop",
+      "fusion_bottle",
+      "galvanic_stack",
+      "hemo_syringe",
+      "reactive_armour",
+      "spring_heels",
+      "stealth_field",
+      "thorn_plating",
+      "welding_torch"
+    ],
+    "chimera": [],
+    "colossus": [
+      "anchor_clamps",
+      "aqua_fins",
+      "arachnid_legs",
+      "arc_cannon",
+      "armor_plating",
+      "battery_rack",
+      "bio_integration_port",
+      "bio_reactor_core",
+      "capacitor_bank",
+      "cargo_hold",
+      "chainsaw",
+      "combustion_kernel",
+      "coolant_loop",
+      "ender_satchel",
+      "energy_shield",
+      "excavator_scoop",
+      "fire_suppression",
+      "flamethrower",
+      "fusion_bottle",
+      "galvanic_stack",
+      "grapple_hook",
+      "harvester",
+      "hemo_syringe",
+      "hover_skirt",
+      "hydraulic_fist",
+      "lava_treads",
+      "life_support_recycler",
+      "manipulator_hand",
+      "medical_injector",
+      "missile_pod",
+      "passenger_pod",
+      "plasma_lance",
+      "radiator_fins",
+      "reactive_armour",
+      "riot_shield",
+      "rivet_gun",
+      "signal_booster",
+      "smoke_mortar",
+      "spring_heels",
+      "sprint_servos",
+      "stealth_field",
+      "stilts",
+      "tesla_coil",
+      "thorn_plating",
+      "tractor_beam",
+      "welding_torch",
+      "workbench"
+    ],
+    "executive": [
+      "anchor_clamps",
+      "aqua_fins",
+      "arachnid_legs",
+      "arc_cannon",
+      "armor_plating",
+      "battery_rack",
+      "bio_integration_port",
+      "bio_reactor_core",
+      "capacitor_bank",
+      "cargo_hold",
+      "chainsaw",
+      "combustion_kernel",
+      "coolant_loop",
+      "ender_satchel",
+      "energy_shield",
+      "excavator_scoop",
+      "fire_suppression",
+      "flamethrower",
+      "fusion_bottle",
+      "galvanic_stack",
+      "grapple_hook",
+      "harvester",
+      "hemo_syringe",
+      "hover_skirt",
+      "hydraulic_fist",
+      "lava_treads",
+      "life_support_recycler",
+      "manipulator_hand",
+      "medical_injector",
+      "missile_pod",
+      "passenger_pod",
+      "plasma_lance",
+      "radiator_fins",
+      "reactive_armour",
+      "riot_shield",
+      "rivet_gun",
+      "signal_booster",
+      "smoke_mortar",
+      "spring_heels",
+      "sprint_servos",
+      "stealth_field",
+      "stilts",
+      "tesla_coil",
+      "thorn_plating",
+      "tractor_beam",
+      "welding_torch",
+      "workbench"
+    ],
+    "hopper": [],
+    "kite": [],
+    "skitter": [],
+    "wheelhouse": []
+  }
+}

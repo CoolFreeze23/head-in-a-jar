@@ -66,6 +66,7 @@ public final class NeuroLink {
         double range = range(state);
         double best = fromDistance(player.position().distanceTo(other.pos()), range);
         if (best < 100 && player.getServer() != null) best = Math.max(best, viaMasts(player, other.pos(), range));
+        if (best < 100) best = Math.max(best, viaBoosters(player, other.pos(), range));
         return (int) Math.round(best * environment(player) * jammers(player));
     }
 
@@ -122,6 +123,26 @@ public final class NeuroLink {
         return result;
     }
 
+    /** How far a mecha's Signal Booster reaches the body, as a Relay Mast does. */
+    public static final double BOOSTER_RADIUS = 96;
+
+    /**
+     * A mecha with a Signal Booster and charge is a Relay Mast that walks: the head reaches the machine within the
+     * goggles' range, the machine reaches the body within a mast's radius, less 3% for the hop. Its owner's link and the
+     * links of those its owner trusts.
+     */
+    static double viaBoosters(ServerPlayer player, net.minecraft.world.phys.Vec3 head, double range) {
+        HeadRegistry heads = HeadRegistry.get(player);
+        double best = 0;
+        for (var m : player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.MechaEntity.class, player.getBoundingBox().inflate(BOOSTER_RADIUS),
+                e -> e.isAlive() && e.battery() > 0 && e.has(com.coolfreeze23.headinajar.mecha.MechaModule.SIGNAL_BOOSTER))) {
+            if (m.owner() != null && !m.owner().equals(player.getUUID()) && !heads.trusts(m.owner(), player)) continue;
+            var at = m.position().add(0, m.getBbHeight(), 0);
+            best = Math.max(best, Math.min(fromDistance(head.distanceTo(at), range), fromDistance(player.position().distanceTo(at), BOOSTER_RADIUS)) * 0.97);
+        }
+        return best;
+    }
+
     /** An enemy Signal Jammer within its radius cuts the link to 30%. Its owner and those they trust are immune. */
     static double jammers(ServerPlayer player) {
         if (player.getServer() == null) return 1;
@@ -163,6 +184,11 @@ public final class NeuroLink {
             if (otherWorld && !com.coolfreeze23.headinajar.item.QuantumItems.linked(state)) {
                 breakLink(player, Component.translatable("message.headinajar.link_lost.dimension", Component.translatable("item.headinajar.entangled_pair")));
                 return;
+            }
+            // a link that was dead for two seconds or more and has come back before it broke says so
+            if (q > 0 && state.deadLinkTicks() >= 40) {
+                player.serverLevel().playSound(null, player.blockPosition(), com.coolfreeze23.headinajar.registry.ModSounds.LINK_RESTORED.get(),
+                        net.minecraft.sounds.SoundSource.PLAYERS, 1, 1);
             }
             state.setDeadLinkTicks(q == 0 ? state.deadLinkTicks() + 10 : 0);
             if (state.deadLinkTicks() >= DEAD_LINK_GRACE) {

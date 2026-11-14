@@ -1,0 +1,165 @@
+# A new employee's first twenty minutes, as pictures for a reader who knows nothing of the mod: first join, the
+# handbook, the chair, waking with the head off, the jar, a first host. Default profile, GUI scale 3, English.
+@world flat
+@gamemode survival
+@observe 20
+wait 60
+guiscale 3
+/gamerule doMobSpawning false
+/time set 6000
+/effect give @s minecraft:resistance 9999 4 true
+/tp @s 0.5 -60 0.5 0 10
+report == F1 first join
+shot f01_first_join
+key inventory
+wait 5
+mouse 0 0
+shot f02_inventory
+press escape
+wait 3
+key advancements
+wait 10
+shot f03_advancements
+press escape
+wait 3
+report == F2 the handbook
+hotbar 1
+key use
+wait 15
+mouse 0 0
+shot f04_handbook_landing
+press escape
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/welcome 0
+wait 12
+mouse 0 0
+shot f05_handbook_welcome
+press escape
+/open-patchouli-book @s headinajar:handbook headinajar:orientation/shopping_list 0
+wait 12
+mouse 0 0
+shot f06_handbook_shopping
+press escape
+/open-patchouli-book @s headinajar:handbook headinajar:separation/the_chair 0
+wait 12
+mouse 0 0
+shot f07_handbook_chair
+press escape
+wait 3
+report == F3 the chair, placed against a pile, then opened with use
+/setblock 0 -60 3 headinajar:separation_chair
+/setblock 1 -60 3 headinajar:galvanic_pile
+/tp @s 0.5 -60 0.5 0 25
+wait 5
+shot f08_chair_and_pile
+key use
+wait 20
+mouse rel 121 78
+wait 5
+guiscale 2
+lang en_us
+wait 4
+shot f09_chair_panel_empty_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot f09_chair_panel_empty_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot f09_chair_panel_empty_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot f09_chair_panel_empty_g3_pt
+lang en_us
+guiscale 3
+press escape
+wait 5
+sneak tap
+wait 10
+chair 0 -60 3
+wait 5
+/tp @s 0.5 -60 0.5 0 25
+key use
+wait 20
+mouse rel 121 78
+wait 5
+shot f10_chair_panel_loaded
+observe 300
+at rel 121 78 hold 50
+wait 60
+shot f11_operation
+wait 120
+shot f12_operation_late
+wait 140
+report == F4 after the cut: the body stands, the head is on the tray
+shot f13_after_cut
+wait 40
+/tp @s 6.5 -60 -6.5 45 10
+wait 40
+guiscale 2
+lang en_us
+wait 4
+shot f14_walked_away_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot f14_walked_away_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot f14_walked_away_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot f14_walked_away_g3_pt
+lang en_us
+guiscale 3
+observe 20
+report == F5 swap into the jar
+key swap
+wait 40
+guiscale 2
+lang en_us
+wait 4
+shot f15_as_a_jar_g2_en
+guiscale 3
+lang en_us
+wait 4
+shot f15_as_a_jar_g3_en
+guiscale 2
+lang pt_br
+wait 4
+shot f15_as_a_jar_g2_pt
+guiscale 3
+lang pt_br
+wait 4
+shot f15_as_a_jar_g3_pt
+lang en_us
+guiscale 3
+key jar_menu
+wait 10
+mouse 0 0
+shot f16_jar_menu
+press escape
+wait 5
+report == F6 the jar tries a chest
+/execute at @s run setblock ~1 ~ ~ minecraft:chest
+look -90 35
+wait 5
+key use
+wait 5
+shot f17_jar_chest
+report == F7 a first host: a cow, sawn, then used by the jar
+/kill @e[type=minecraft:cow]
+hostify cow 2 -60 5
+wait 10
+lookat cow
+wait 5
+key use
+wait 40
+shot f18_first_host
+wait 100
+shot f19_host_later
+inspect me
+report == end

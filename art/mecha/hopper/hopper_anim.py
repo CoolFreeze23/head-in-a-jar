@@ -1,7 +1,11 @@
-"""Hopper ("biped_light" skeleton): every clip, keyed in ticks, written into hopper.bbmodel.
+"""The light-biped clip script ("biped_light" skeleton): every clip, keyed in ticks, written into a frame's bbmodel.
+Run as it is for the Hopper; art/mecha/chimera/chimera_anim.py runs it for the Chimera (use_frame), adding the Graft.
 
 Source of truth for the clips. Edit the tables and run it again; hand edits to the bbmodel's animations are
-overwritten. Geometry and rig numbers come from hopper_geo.py.
+overwritten. Geometry and rig numbers come from the frame's geo module (hopper_geo.py here); the frame's ANIM dict
+overrides the Hopper's parameters (HOPPER_FRAME below): speed, the position scale, the walk's timing and lift, toe
+length. Position keys are authored in Hopper pixels and multiplied by the frame's `scale` before the legs are solved;
+the legs are re-solved every tick for the frame's own thigh, shin and hip height.
 
     python art/mecha/hopper/hopper_anim.py                 # write the clips into the bbmodel
     python art/mecha/hopper/hopper_anim.py --preview OUT   # also a review copy: every eased segment baked into
@@ -30,8 +34,8 @@ import hopper_geo as G  # noqa: E402
 MODEL = os.path.join(HERE, 'hopper.bbmodel')
 T = 20.0
 
-# design walking speed: Hopper speed attribute 0.13 x 2.16 (vanilla ground movement, motion.md section 6) blocks a
-# tick, in pixels a tick. The walk is authored at this speed; the integrator scales playback by measured / design.
+# design walking speed: Hopper speed attribute 0.13 x 2.16 (vanilla ground movement) blocks a
+# tick, in pixels a tick. The walk is authored at this speed; the game scales playback by measured / design.
 V_WALK = 0.13 * 2.16 * 16           # 4.49 px a tick (5.6 blocks a second)
 V_LIMP = V_WALK * 0.3               # flat battery: MechaLogic.riddenSpeed x 0.3
 REST_FOOT_T = (G.REST_ANKLE[0], G.REST_ANKLE[1], 0.0)
@@ -400,7 +404,7 @@ def shutdown():
 
 def idle():
     """Piloted, standing: breathes on its hydraulics (0.6 px over 60 ticks, the torso a beat behind), the forearms
-    flex a hair. The sensor is free for the look (driven by the integrator, not keyed here)."""
+    flex a hair. The sensor is free for the look (driven by the game code, not keyed here)."""
     return {
         'length': 60, 'loop': 'loop', 'feet': planted(),
         'bones': {
@@ -415,7 +419,7 @@ def idle():
 
 
 def idle_tic():
-    """Played by the integrator every 200-300 ticks of idle: bounces on its toes once."""
+    """Played by the game every 200-300 ticks of idle: bounces on its toes once."""
     a = REST_FOOT_T
     toe = on_toe(a[0], -20)
     feet = {s: [k(0, a), k(3, a), k(7, toe, 'easeOutCubic'), k(9, toe), k(12, a, 'easeInQuad')] for s in 'lr'}
@@ -449,11 +453,12 @@ def walk_foot(s):
     zf = G.REST_ANKLE[0]
     if s <= WALK_STANCE:
         z = zf - WALK_REACH + V_WALK * s
-        ang = {0: 6, 1: 0, 2: 0, 3: -6, 4: -18}[int(s)]
+        i = int(s)
+        ang = 6 if i == 0 else (-18 if i == WALK_STANCE else (-6 if i == WALK_STANCE - 1 else 0))
         return on_toe(z, ang)
     u = (s - WALK_STANCE) / float(WALK_N - WALK_STANCE)
     z = zf + WALK_REACH - 2 * WALK_REACH * (1 - math.cos(math.pi * u)) / 2
-    lift = 6.5 * math.sin(math.pi * u)
+    lift = WALK_LIFT * math.sin(math.pi * u)
     ang = -18 * math.sin(math.pi * min(1, u / 0.35)) if u < 0.35 else (10 * (u - 0.35) / 0.55 if u < 0.9 else 6 + 4 * (1 - u) / 0.1)
     zz, yy, aa = on_toe(z, ang)
     return (zz, yy + lift, aa)
@@ -463,19 +468,20 @@ def walk():
     feet = lambda side, t: walk_foot(t if side == 'l' else t - WALK_N // 2)
     c = lambda t, ph=0, n=WALK_N: math.cos(2 * math.pi * (t - ph) / n)
     ticks = range(0, WALK_N + 1)
+    h = WALK_N // 2
     return {
         'length': WALK_N, 'loop': 'loop', 'feet': feet,
         'bones': {
-            'hips': {'position': [k(t, P(y=BOB[t % 6])) for t in ticks],
+            'hips': {'position': [k(t, P(y=BOB[t % h])) for t in ticks],
                      'rotation': [k(t, R(z=1.5 * c(t, 2))) for t in ticks]},
-            'torso': {'rotation': [k(t, R(x=-4 + 0.6 * BOB[(t - 1) % 6], z=2.5 * c(t, 3))) for t in ticks]},
-            'restraint': {'rotation': [k(t, R(x=0.6 if t % 6 == 1 else (0.2 if t % 6 == 2 else 0))) for t in ticks]},
+            'torso': {'rotation': [k(t, R(x=-4 + 0.6 * BOB[(t - 1) % h], z=2.5 * c(t, 3))) for t in ticks]},
+            'restraint': {'rotation': [k(t, R(x=0.6 if t % h == 1 else (0.2 if t % h == 2 else 0))) for t in ticks]},
             'arm_l': {'rotation': [k(t, R(x=-10 * c(t, 1))) for t in ticks]},
             'arm_r': {'rotation': [k(t, R(x=10 * c(t, 1))) for t in ticks]},
             'forearm_l': {'rotation': [k(t, R(x=-6 * c(t, 3))) for t in ticks]},
             'forearm_r': {'rotation': [k(t, R(x=6 * c(t, 3))) for t in ticks]},
         },
-        'effects': [(0, 'timeline', 'step:l', None), (6, 'timeline', 'step:r', None)],
+        'effects': [(0, 'timeline', 'step:l', None), (h, 'timeline', 'step:r', None)],
     }
 
 
@@ -496,10 +502,10 @@ def limp_foot(s, drag):
         uu = min(1, u * 1.25) ** 1.6
         z = zf + reach - 2 * reach * uu
         zz, yy, aa = on_toe(z, -22 + 12 * u)
-        return (zz, yy + 1.0 * math.sin(math.pi * u), aa)
+        return (zz, yy + SC * 1.0 * math.sin(math.pi * u), aa)
     z = zf + reach - 2 * reach * (1 - math.cos(math.pi * u)) / 2
     zz, yy, aa = on_toe(z, -15 * math.sin(math.pi * u) + 4 * u)
-    return (zz, yy + 4 * math.sin(math.pi * u), aa)
+    return (zz, yy + SC * 4 * math.sin(math.pi * u), aa)
 
 
 def limp():
@@ -596,7 +602,7 @@ def fall():
 
 def land(heavy=False):
     """Landing: the feet take it on tick 0 (contact), the hips absorb and recover. Light under 4 blocks of fall
-    (3.5 px), heavy above (8 px, vents puff). The integrator picks by fall distance."""
+    (3.5 px), heavy above (8 px, vents puff). The game picks by fall distance."""
     d = 10.0 if heavy else 4.0
     L = 20 if heavy else 12
     if heavy:
@@ -1096,6 +1102,7 @@ def build_anims(model, baked=False):
     anims = []
     for name, clip in clips():
         clip = copy.deepcopy(clip)
+        scale_positions(clip)
         solve_legs(clip)
         vents_to_z(clip)
         animators = {}
@@ -1142,12 +1149,73 @@ def build_anims(model, baked=False):
     return anims
 
 
+# ------------------------------------------------------------------------------------------------------------------
+# Frames
+# ------------------------------------------------------------------------------------------------------------------
+HOPPER_FRAME = dict(model=MODEL, speed=0.13, scale=1, toe=6.0, walk=dict(n=12, stance=4, lift=6.5, bob=BOB))
+
+
+def resample(seq, m):
+    """A periodic per-tick curve stretched to m entries (linear)."""
+    n = len(seq)
+    if m == n:
+        return list(seq)
+    out = []
+    for i in range(m):
+        x = i * n / float(m)
+        j = int(x)
+        f = x - j
+        out.append(round(seq[j % n] * (1 - f) + seq[(j + 1) % n] * f, 3))
+    return out
+
+
+def use_frame(geo):
+    """Point every clip at a frame: its geo module and its ANIM parameters over the Hopper's. A walk whose timing
+    differs gets the Hopper's bob resampled to its step (in Hopper pixels; scale_positions sizes it)."""
+    g = globals()
+    own = getattr(geo, 'ANIM', {})
+    fr = dict(HOPPER_FRAME, **{kk: v for kk, v in own.items() if kk != 'walk'})
+    w = dict(HOPPER_FRAME['walk'], **own.get('walk', {}))
+    if 'bob' not in own.get('walk', {}):
+        w['bob'] = resample(HOPPER_FRAME['walk']['bob'], w['n'] // 2)
+    fr['walk'] = w
+    g.update(G=geo, F=fr, MODEL=fr['model'], SC=fr['scale'], TOE=fr['toe'], WALK_N=w['n'], WALK_STANCE=w['stance'],
+             WALK_LIFT=w['lift'], BOB=w['bob'])
+    g['V_WALK'] = fr['speed'] * 2.16 * 16
+    g['V_LIMP'] = g['V_WALK'] * 0.3
+    g['WALK_REACH'] = g['V_WALK'] * g['WALK_STANCE'] / 2.0
+    g['REST_FOOT_T'] = (geo.REST_ANKLE[0], geo.REST_ANKLE[1], 0.0)
+    return fr
+
+
+def scale_positions(clip):
+    """Hopper-pixel position keys to the frame's size (not the jar's travel), and authored ankle targets as offsets
+    from the frame's rest ankle. A clip marked native is left alone."""
+    if SC == 1 or clip.get('native'):
+        return
+    for bone, chans in clip['bones'].items():
+        if bone == 'jar_anchor' or 'position' not in chans:
+            continue
+        chans['position'] = [(t, [round(c * SC, 3) for c in v], e, a, i) for (t, v, e, a, i) in chans['position']]
+    feet = clip.get('feet')
+    if isinstance(feet, dict):
+        rz, ry = G.REST_ANKLE
+        for side in feet:
+            if clip.get('feet_rel'):
+                feet[side] = [(t, (v[0] * SC, v[1] * SC, v[2]), e, a, i) for (t, v, e, a, i) in feet[side]]
+            else:
+                feet[side] = [(t, (rz + (v[0] - rz) * SC, ry + (v[1] - ry) * SC, v[2]), e, a, i)
+                              for (t, v, e, a, i) in feet[side]]
+
+
 def main():
-    with open(MODEL, encoding='utf-8') as f:
+    path = sys.argv[sys.argv.index('--model') + 1] if '--model' in sys.argv else MODEL
+    with open(path, encoding='utf-8') as f:
         model = json.load(f)
     model['animations'] = build_anims(model)
-    with open(MODEL, 'w', encoding='utf-8') as f:
-        json.dump(model, f, indent=1)
+    if '--model' not in sys.argv:
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(model, f, indent=1)
     if '--preview' in sys.argv:
         out = sys.argv[sys.argv.index('--preview') + 1]
         prev = copy.deepcopy(model)
@@ -1156,6 +1224,10 @@ def main():
             json.dump(prev, f, indent=1)
     print('wrote %d clips' % len(model['animations']))
 
+
+WALK_LIFT = 6.5
+SC = 1
+use_frame(G)
 
 if __name__ == '__main__':
     main()

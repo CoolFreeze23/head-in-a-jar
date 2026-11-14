@@ -14,19 +14,19 @@ REFUSALS = {
     'head.hit_not_yours': ("That is %s's head. The glass is not for knocking.",
                            'Essa é a cabeça de %s. O vidro não é para bater.'),
     # Print pressed with less power stored than a whole print takes: %1$s kFE needed, %2$s kFE stored, %3$s the Galvanic Pile
-    'printer.no_power': ('A print takes %1$s kFE stored; it has %2$s. Feed its %3$s first.',
-                         'Uma impressão precisa de %1$s kFE guardados; tem %2$s. Alimente a %3$s antes.'),
+    'printer.no_power': ('Needs %1$s kFE; has %2$s. Feed its %3$s.',
+                         'Pede %1$s kFE; tem %2$s. Alimente a %3$s.'),
     # Print pressed while a finished body waits in the vat for its owner (%s) to be a jar again
     'printer.waiting': ("A body waits in the vat for %s. It comes out once they're a jar.",
-                        'Um corpo espera no tanque por %s. Ele sai quando voltar a ser pote.'),
+                        'Um corpo espera no tanque por %s. Sai quando for pote.'),
     # its owner swung at their own placed head: %s the Head Satchel
     'head.hit_own': ("That's your own head. Carry it in your %s instead.",
                      'Essa é a sua própria cabeça. Carregue-a na sua %s.'),
     # the company's things used at nothing they work on: what they are for. %1$s the Separation Chair, %2$s the saw
-    'item.air.jar': ('A jar goes in the %1$s, or in your off hand while you use the %2$s.',
-                     'Um pote vai na %1$s, ou na mão secundária enquanto você usa a %2$s.'),
-    'item.air.goggles': ('Goggles go in the %s, or onto a set-down head: use them on its jar.',
-                         'Os óculos vão na %s, ou numa cabeça pousada: use-os no pote dela.'),
+    'item.air.jar': ('A jar goes in the %1$s, or your off hand with the %2$s.',
+                     'Um pote vai na %1$s, ou na mão secundária com a %2$s.'),
+    'item.air.goggles': ("Goggles go in the %s, or on a set-down head's jar.",
+                         'Os óculos vão na %s, ou no pote de uma cabeça pousada.'),
     'item.air.collar': ('The collar goes in the %s, with a jar and goggles.',
                         'A câmera vai na %s, com um pote e óculos.'),
     # %s the Assembly Gantry
@@ -46,34 +46,34 @@ REFUSALS = {
     # Saline Bottle or Glass Patch with the head on: %s the item
     'item.air.head_on': ('Your head is on. %s is for a head in a jar.', 'Sua cabeça está no lugar. %s é para uma cabeça no pote.'),
     # a body tool used on another player: %s the item
-    'item.on_colleague': ('Colleagues are not specimens. Use the %s on a creature or a host.',
-                          'Colegas não são espécimes. Use %s numa criatura ou num hospedeiro.'),
+    'item.on_colleague': ("Colleagues aren't specimens. Use the %s on a creature.",
+                          'Colegas não são espécimes. Use %s numa criatura.'),
     # a head plugged into a Neural Socket clicked (sneak with the jar menu key unplugs it)
     'socket.hands': ('Plugged into the socket. Sneak with the jar menu key to unplug first.',
-                     'Conectado ao soquete. Agache com a tecla do menu do pote para desconectar antes.'),
+                     'Conectado ao soquete. Agache com a tecla do menu do pote para sair.'),
 }
 
 # id (after 'warning.headinajar.'): (en, pt)
 WARNINGS = {
     # a jar (bare, on a host, in a socket or cockpit) knocked: %1$s glass left, of %2$s, %3$s the Glass Patch
-    'jar.glass_hit': ('The glass took a knock: %1$s/%2$s left. A %3$s mends it.',
-                      'O vidro levou um tranco: restam %1$s/%2$s. Um %3$s conserta.'),
-    'jar.glass_low': ('Glass at %1$s/%2$s: the next bad knock is a real death. Get clear, then a %3$s.',
-                      'Vidro em %1$s/%2$s: o próximo tranco forte é morte de verdade. Saia daí e use um %3$s.'),
+    'jar.glass_hit': ('Glass hit: %1$s/%2$s left. A %3$s mends it.',
+                      'Vidro: restam %1$s/%2$s. Um %3$s conserta.'),
+    'jar.glass_low': ('Glass %1$s/%2$s: deadly. Flee, then a %3$s.',
+                      'Vidro %1$s/%2$s: mortal. Fuja e use um %3$s.'),
     # no glass left, and the hits now go to the head itself: %s the Life Support Cradle
     'jar.glass_gone': ('No glass left: every hit now is real. Get away, then rest in a %s.',
-                       'Sem vidro: cada golpe agora é de verdade. Fuja e descanse num %s.'),
+                       'Sem vidro: cada golpe é de verdade. Fuja; descanse num %s.'),
     # the owner's placed head, out in the world: %1$s/%2$s glass, %3$s the Head Satchel
-    'head.hit': ('Your head is being knocked about: glass %1$s/%2$s. Fetch it with your %3$s.',
-                 'Sua cabeça está levando pancadas: vidro %1$s/%2$s. Busque com sua %3$s.'),
-    'head.burning': ('Your head is in the fire: glass %1$s/%2$s, one a second. Fetch it with your %3$s now.',
-                     'Sua cabeça está no fogo: vidro %1$s/%2$s, um por segundo. Busque já com sua %3$s.'),
+    'head.hit': ('Head hit: glass %1$s/%2$s. Fetch it: %3$s.',
+                 'Cabeça atingida: vidro %1$s/%2$s. Use a %3$s.'),
+    'head.burning': ('Head burning: glass %1$s/%2$s. Fetch it: %3$s.',
+                     'Cabeça no fogo: vidro %1$s/%2$s. Use a %3$s.'),
     # the mecha around a pilot destroyed: %1$s the mecha, %2$s/%3$s glass, %4$s the Glass Patch
-    'mecha.wrecked': ('%1$s is wrecked. You were thrown clear; the glass took one knock: %2$s/%3$s.',
-                      '%1$s foi destruído. Você foi lançado para fora; o vidro levou um tranco: %2$s/%3$s.'),
+    'mecha.wrecked': ("%1$s wrecked, you're clear. Glass %2$s/%3$s.",
+                      '%1$s destruído; ejetado. Vidro %2$s/%3$s.'),
     # a print finished while its owner had their head on (or was out in another body): %s the Body Printer
-    'printer.body_waits': ('Your new body is ready, but you have one on. It waits in the %s until you are a jar.',
-                           'Seu corpo novo está pronto, mas você já está num. Ele espera na %s até você ser pote.'),
+    'printer.body_waits': ('New body ready; you have one on. It waits in the %s.',
+                           'Corpo novo pronto, mas você já usa um. Espera na %s.'),
 }
 
 # (key, en, pt)
@@ -106,12 +106,12 @@ LANG = [
     ('item.headinajar.sample.reads', 'About %s auto-reads of this quality to a Draft (30%%)',
      'Cerca de %s leituras automáticas desta qualidade até um Rascunho (30%%)'),
     # the Splicer's load: %1$s the strand's load, %2$s the cap of the lightest thing that takes it, %3$s that thing
-    ('gui.headinajar.splicer.load_fits', 'Load %1$s/%2$s (%3$s)', 'Carga %1$s/%2$s (%3$s)'),
+    ('gui.headinajar.splicer.load_fits', 'Load %1$s/%2$s (%3$s)', 'Peso %1$s/%2$s (%3$s)'),
     # %1$s the load, %2$s the heaviest any target takes
-    ('gui.headinajar.splicer.load_heavy', 'Load %1$s/%2$s: too heavy', 'Carga %1$s/%2$s: pesada demais'),
+    ('gui.headinajar.splicer.load_heavy', 'Load %1$s/%2$s: too heavy', 'Peso %1$s/%2$s: pesado demais'),
     ('gui.headinajar.splicer.target.body', 'body', 'corpo'),
     ('gui.headinajar.splicer.target.host', 'host', 'hospedeiro'),
-    ('gui.headinajar.splicer.target.mecha', 'Chimera', 'Quimera'),
+    ('gui.headinajar.splicer.target.mecha', 'Gene Port', 'Porta Genética'),
 ]
 
 # the vanilla creatures that carry genes, by their names in both languages (the mod's other carriers come from mods

@@ -4,6 +4,7 @@ import com.coolfreeze23.headinajar.entity.HeldBlockEntity;
 import com.coolfreeze23.headinajar.entity.MechaEntity;
 import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.feedback.Refuser;
+import com.coolfreeze23.headinajar.fx.Fx;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -31,12 +32,16 @@ public final class MechaArms {
         MechaModule arm = m.arm(side);
         MechaLogic.ArmState s = m.armState[side];
         if (s.cooldown > 0) s.cooldown--;
+        // anchored in Siege, the shoulder weapons cycle twice as fast
+        if (side >= 2 && s.cooldown > 0 && Siege.locked(m)) s.cooldown--;
         if (arm == null) return;
         float eff = MechaLogic.effectiveness(m);
         if (pressed) s.refused = false;
         if (pressed) MechaSystems.revealed(m);
         if (released) release(m, side);
         if (eff <= 0) return;
+        // a blow or a shot pressed a few ticks ago lands now, with its arm clip's contact
+        due(m, pilot, side, s);
         switch (arm) {
             case DRILL -> {
                 if (held) drill(m, pilot, side, eff);
@@ -66,13 +71,12 @@ public final class MechaArms {
                     refuse(m, pilot, s, "mecha.arm.no_target");
                     return;
                 }
-                if (target instanceof LivingEntity victim && m.spend(300 + 12 * force)) {
-                    victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), (10 + 0.12f * force) * eff);
-                    Vec3 push = pilot.getLookAngle().multiply(1, 0, 1).normalize();
-                    victim.knockback(1 + force / 50.0, -push.x, -push.z);
-                    m.setHeat(m.heat() + 4 * force / 100f);
-                    m.playSound(SoundEvents.IRON_GOLEM_ATTACK, 1.2f, 0.7f);
+                if (m.spend(300 + 12 * force)) {
+                    // the piston hisses as the arm cocks; the blow lands with the strike's contact
                     s.cooldown = 12;
+                    s.contactAt = m.level().getGameTime() + ArmAim.STRIKE_CONTACT;
+                    s.contactPower = eff;
+                    sound(m, side, ArmSounds.FIST_HISS.get());
                 }
             }
             case GRAPPLE_HOOK -> {
@@ -91,10 +95,9 @@ public final class MechaArms {
                         return;
                     }
                     Vec3 pull = hit.getLocation().subtract(m.position()).normalize().scale(1.6);
-                    m.setDeltaMovement(pull.add(0, 0.35, 0));
-                    m.hurtMarked = true;
+                    MechaLogic.impulse(m, pull.add(0, 0.35, 0));
                 }
-                m.playSound(SoundEvents.FISHING_BOBBER_THROW, 1, 0.5f);
+                m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.GRAPPLE_FIRE.get(), 1, 0.5f);
             }
             case TRACTOR_BEAM -> beam(m, pilot, side, held, pressed);
             case RIVET_GUN -> {
@@ -105,20 +108,24 @@ public final class MechaArms {
                 }
                 if (!m.spend(30)) return;
                 s.cooldown = 4;
-                Vec3 look = pilot.getLookAngle();
+                // out of the gun's barrel, toward what the crosshair is on
+                Vec3 from = ArmAim.origin(m, side, 1);
+                Vec3 look = ArmAim.end(pilot, m, 48, 1).subtract(from).normalize();
                 Arrow rivet = new Arrow(m.serverLevel(), m, new ItemStack(Items.ARROW), null);
-                rivet.setPos(pilot.getEyePosition().add(look.scale(1.2)));
+                rivet.setPos(from.add(look.scale(0.3)));
                 rivet.setBaseDamage(1.0 * eff);
                 rivet.pickup = AbstractArrow.Pickup.DISALLOWED;
                 rivet.shoot(look.x, look.y, look.z, 3.5f, 1.5f);
+                Chimera.tag(rivet, side);
                 m.serverLevel().addFreshEntity(rivet);
                 m.setHeat(m.heat() + 0.5f);
-                m.playSound(SoundEvents.CROSSBOW_SHOOT, 0.6f, 1.8f);
+                sound(m, side, ArmSounds.RIVET_PAK.get());
             }
             case MANIPULATOR_HAND -> {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 if (pressed && s.cooldown <= 0 && m.spend(50)) {
                     s.cooldown = 5;
+                    sound(m, side, ArmSounds.HAND_GRIP.get());
                     hand(m, pilot, s);
                 }
             }
@@ -135,16 +142,26 @@ public final class MechaArms {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
                 else if (pressed && m.battery() < 6000) refuse(m, pilot, s, "mecha.arm.low_power", 6, Component.translatable("block.headinajar.assembly_gantry"));
                 if (pressed && s.cooldown <= 0 && m.battery() >= 6000) {
+                    // paid at the press, the capacitor whines while the arm winds up; the shot goes with the recoil
                     m.spend(6000);
                     s.cooldown = 10 + 30 * m.armSlider(side) / 100;
-                    arc(m, pilot, (8 + 8 * m.armSlider(side) / 100f) * eff);
+                    s.contactAt = m.level().getGameTime() + ArmAim.RECOIL_CONTACT;
+                    s.contactPower = (8 + 8 * m.armSlider(side) / 100f) * eff;
+                    sound(m, side, ArmSounds.ARC_CHARGE.get());
                 }
             }
             case HEMO_SYRINGE -> {
                 if (pressed && s.cooldown > 0) refuse(m, pilot, s, "mecha.arm.cooling");
-                if (pressed && s.cooldown <= 0 && m.spend(20)) {
-                    s.cooldown = 10;
-                    hemo(m, pilot, side, eff);
+                if (pressed && s.cooldown <= 0) {
+                    Entity target = MechaLogic.lookEntity(pilot, m, 4);
+                    if (target instanceof net.minecraft.world.entity.player.Player) refuse(m, pilot, s, "mecha.arm.hemo_player");
+                    else if (!(target instanceof LivingEntity)) refuse(m, pilot, s, "mecha.arm.no_target");
+                    else if (m.spend(20)) {
+                        // the jab lands with the strike's contact
+                        s.cooldown = 10;
+                        s.contactAt = m.level().getGameTime() + ArmAim.STRIKE_CONTACT;
+                        s.contactPower = eff;
+                    }
                 }
             }
             case HARVESTER -> {
@@ -214,10 +231,7 @@ public final class MechaArms {
         ServerLevel level = m.serverLevel();
         Vec3 eye = pilot.getEyePosition(), look = pilot.getLookAngle();
         double cone = 0.95 - 0.25 * m.armSlider(side) / 100.0;
-        for (int i = 0; i < 4; i++) {
-            Vec3 p = eye.add(look.scale(1.5 + level.random.nextDouble() * 4.5));
-            level.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, p.x, p.y, p.z, 2, 0.2, 0.2, 0.2, 0.02);
-        }
+        // the flame itself is drawn by every client from the arm button and the battery, from the nozzle
         if (m.tickCount % 5 == 0) {
             for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, m.getBoundingBox().inflate(7), e -> e != m && e != pilot && e.getVehicle() != m)) {
                 Vec3 to = e.position().add(0, e.getBbHeight() / 2, 0).subtract(eye);
@@ -229,29 +243,79 @@ public final class MechaArms {
         m.setHeat(m.heat() + 8);
     }
 
-    /** Arc Cannon: a hitscan bolt to the first creature in 16 blocks that jumps to up to three hostile ones nearby. */
-    private static void arc(MechaEntity m, ServerPlayer pilot, float damage) {
+    /**
+     * Arc Cannon: a hitscan bolt to the first creature in 16 blocks that jumps to up to three hostile ones nearby, one
+     * jump every 2 ticks so the chain is seen to travel. Each jump is one memo; every client draws the arc from the
+     * cannon's muzzle (the first) or the last creature, to the next. A miss arcs to what the crosshair is on.
+     */
+    private static void arc(MechaEntity m, ServerPlayer pilot, int side, MechaLogic.ArmState s, float damage) {
         ServerLevel level = m.serverLevel();
         Entity first = MechaLogic.lookEntity(pilot, m, 16);
         m.setHeat(m.heat() + 25);
-        m.playSound(SoundEvents.LIGHTNING_BOLT_IMPACT, 1, 1.6f);
-        if (!(first instanceof LivingEntity victim)) return;
-        java.util.Set<Entity> hit = new java.util.HashSet<>();
-        LivingEntity from = pilot, at = victim;
-        for (int jump = 0; jump < 4 && at != null; jump++) {
-            hit.add(at);
-            at.hurt(by(m, pilot, DamageTypes.LIGHTNING_BOLT), damage);
-            Vec3 a = from.getEyePosition(), b = at.getEyePosition();
-            for (int i = 0; i <= 10; i++) {
-                Vec3 p = a.lerp(b, i / 10.0);
-                level.sendParticles(net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK, p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0);
-            }
-            from = at;
-            LivingEntity last = at;
-            at = level.getEntitiesOfClass(LivingEntity.class, at.getBoundingBox().inflate(4),
-                            e -> !hit.contains(e) && e != m && e != pilot && e instanceof net.minecraft.world.entity.monster.Enemy)
-                    .stream().min(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(last))).orElse(null);
+        sound(m, side, ArmSounds.ARC_CRACK.get());
+        int slot = ArmAim.slot(m, side);
+        Vec3 from = ArmAim.origin(m, side, 1);
+        if (!(first instanceof LivingEntity victim)) {
+            Fx.send(level, Fx.of(Fx.ARM_ARC, from, ArmAim.end(pilot, m, 16, 1), m.getId(), -1, slot));
+            return;
         }
+        s.chain = new java.util.ArrayList<>();
+        s.hopDamage = damage;
+        hop(m, pilot, s, slot, from, m, victim);
+    }
+
+    /** One jump of the arc: the creature is hurt and every client near is told to draw it. */
+    private static void hop(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s, int slot, Vec3 from, Entity fromEntity, LivingEntity at) {
+        int n = s.chain.size();
+        s.chain.add(at);
+        at.hurt(by(m, pilot, DamageTypes.LIGHTNING_BOLT), s.hopDamage);
+        Fx.send(m.serverLevel(), Fx.of(Fx.ARM_ARC, from, at.getBoundingBox().getCenter(), fromEntity.getId(), at.getId(), slot + 64 * n));
+        s.hopAt = s.chain.size() < 4 ? m.level().getGameTime() + 2 : -1;
+        if (s.hopAt < 0) s.chain = null;
+    }
+
+    /** A blow, jab or shot whose arm clip has reached its contact, and the arc's next jump. */
+    private static void due(MechaEntity m, ServerPlayer pilot, int side, MechaLogic.ArmState s) {
+        long now = m.level().getGameTime();
+        if (s.contactAt >= 0 && now >= s.contactAt) {
+            boolean fresh = now - s.contactAt <= 4;
+            s.contactAt = -1;
+            MechaModule arm = m.arm(side);
+            if (fresh && arm == MechaModule.HYDRAULIC_FIST) strike(m, pilot, side, s.contactPower);
+            else if (fresh && arm == MechaModule.HEMO_SYRINGE) hemo(m, pilot, side, s.contactPower);
+            else if (fresh && arm == MechaModule.ARC_CANNON) arc(m, pilot, side, s, s.contactPower);
+        }
+        if (s.hopAt >= 0 && now >= s.hopAt && s.chain != null && !s.chain.isEmpty()) {
+            LivingEntity last = s.chain.getLast();
+            java.util.List<LivingEntity> chain = s.chain;
+            LivingEntity next = now - s.hopAt > 4 ? null : m.serverLevel().getEntitiesOfClass(LivingEntity.class, last.getBoundingBox().inflate(4),
+                            e -> !chain.contains(e) && e != m && e != pilot && e.isAlive() && e instanceof net.minecraft.world.entity.monster.Enemy)
+                    .stream().min(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(last))).orElse(null);
+            if (next == null) {
+                s.hopAt = -1;
+                s.chain = null;
+            } else {
+                hop(m, pilot, s, ArmAim.slot(m, side), last.getBoundingBox().getCenter(), last, next);
+            }
+        }
+    }
+
+    /** The Hydraulic Fist's blow, on the strike's contact: what is in reach now takes it. */
+    private static void strike(MechaEntity m, ServerPlayer pilot, int side, float eff) {
+        Entity target = MechaLogic.lookEntity(pilot, m, 4.5);
+        if (!(target instanceof LivingEntity victim)) return;
+        int force = m.armSlider(side);
+        victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), (10 + 0.12f * force) * eff);
+        Vec3 push = pilot.getLookAngle().multiply(1, 0, 1).normalize();
+        victim.knockback(1 + force / 50.0, -push.x, -push.z);
+        m.setHeat(m.heat() + 4 * force / 100f);
+        sound(m, side, ArmSounds.FIST_STRIKE.get());
+    }
+
+    /** Plays an arm's sound for everyone near, from the arm. */
+    static void sound(MechaEntity m, int side, net.minecraft.sounds.SoundEvent event) {
+        Vec3 at = ArmAim.origin(m, side, 1);
+        m.level().playSound(null, at.x, at.y, at.z, event, net.minecraft.sounds.SoundSource.NEUTRAL, 1, ArmSounds.pitch(m.getRandom()));
     }
 
     /** Hemo-Syringe: a jab that draws a Blood Sample (quality 50-80) and patches the frame with 10% of the damage. */
@@ -274,7 +338,7 @@ public final class MechaArms {
         ItemStack sample = com.coolfreeze23.headinajar.item.GeneticsItems.sample(com.coolfreeze23.headinajar.registry.ModRegistry.BLOOD_SAMPLE.get(), victim.getType(), quality);
         ItemStack left = m.has(MechaModule.CARGO_HOLD) ? m.cargo().addItem(sample) : sample;
         if (!left.isEmpty()) com.coolfreeze23.headinajar.form.FormActions.give(pilot, left);
-        m.playSound(SoundEvents.BEE_STING, 1, 0.8f);
+        m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.SYRINGE_JAB.get(), 1, 0.8f);
     }
 
     /** Harvester: ripe crops in a 5x5 around the block you look at are picked and replanted. */
@@ -337,8 +401,6 @@ public final class MechaArms {
         }
         target.heal(1 * eff);
         data.putInt("headinajar_weld", credit - 1);
-        m.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.LAVA, target.getX(), target.getY() + target.getBbHeight() * 0.5,
-                target.getZ(), 2, 0.4, 0.4, 0.4, 0);
     }
 
     /** Plasma Lance: a 32-block beam, 20 damage a second, that sets things alight. */
@@ -348,10 +410,7 @@ public final class MechaArms {
         Entity target = MechaLogic.lookEntity(pilot, m, 32);
         BlockHitResult block = MechaLogic.lookBlock(pilot, 32);
         Vec3 end = target != null ? target.position().add(0, target.getBbHeight() / 2, 0) : block.getLocation();
-        for (int i = 2; i < (int) eye.distanceTo(end); i += 2) {
-            Vec3 p = eye.add(look.scale(i));
-            level.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME, p.x, p.y, p.z, 1, 0.02, 0.02, 0.02, 0);
-        }
+        // the beam is drawn by every client from the arm button, from the lance's muzzle to what the crosshair is on
         if (target instanceof LivingEntity victim) {
             victim.hurt(level.damageSources().indirectMagic(m, pilot), 1 * eff);
             victim.igniteForSeconds(3);
@@ -445,7 +504,7 @@ public final class MechaArms {
             }
         }
         m.setHeat(m.heat() + felled * 0.5f);
-        m.playSound(SoundEvents.AXE_STRIP, 1.2f, 0.6f);
+        m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.CHAINSAW.get(), 1.2f, 0.6f);
     }
 
     /** Tractor Beam: v1 telekinesis at mecha scale (24 blocks). Grab on press, carry while held, drop on release. */
@@ -472,7 +531,10 @@ public final class MechaArms {
             } else if (target == null) {
                 refuse(m, pilot, s, "mecha.arm.no_target");
             }
-            if (target != null) s.held = target.getId();
+            if (target != null) {
+                s.held = target.getId();
+                m.setBeamHeld(side, s.held);
+            }
         }
         if (s.held < 0) return;
         Entity held = level.getEntity(s.held);
@@ -506,6 +568,7 @@ public final class MechaArms {
     private static void refuse(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s, String reason, Object... args) {
         if (s.refused) return;
         s.refused = true;
+        m.dryFire(java.util.Arrays.asList(m.armState).indexOf(s) % 2);
         Refusals.deny(pilot, Refuser.at(m), reason, args);
     }
 
@@ -517,6 +580,7 @@ public final class MechaArms {
             Entity held = m.level().getEntity(s.held);
             if (held instanceof HeldBlockEntity block) block.drop(block.getDeltaMovement().scale(0.5), false);
             s.held = -1;
+            m.setBeamHeld(side, -1);
         }
     }
 }

@@ -136,9 +136,29 @@ public final class Observer {
         return obs.focus != null && obs.focus.distanceToSqr(x, y, z) < 256;
     }
 
+    /**
+     * The subtitle log: every sound started near the player (or the input's focus) since the last {@code subtitles clear},
+     * by id, with the subtitle the game would show for it in the current language, or why it shows none. The client is
+     * muted, so a sound is known by its id and its subtitle.
+     */
+    static final java.util.Map<String, Integer> HEARD = new java.util.TreeMap<>();
+
+    /** The subtitle the game shows for a sound id, "(no subtitle)", or "UNKNOWN EVENT" when it would play nothing. */
+    static String subtitle(net.minecraft.resources.ResourceLocation id) {
+        var events = Minecraft.getInstance().getSoundManager().getSoundEvent(id);
+        if (events == null) return "UNKNOWN EVENT";
+        return events.getSubtitle() == null ? "(no subtitle)" : "\"" + events.getSubtitle().getString() + "\"";
+    }
+
     public static void sound(SoundInstance sound) {
         Observer o = INSTANCE;
         if (o == null) return;
+        Minecraft mc = Minecraft.getInstance();
+        boolean near = sound.isRelative() || mc.player != null && mc.player.distanceToSqr(sound.getX(), sound.getY(), sound.getZ()) < 256
+                || o.current() != null && o.current().focus != null && o.current().focus.distanceToSqr(sound.getX(), sound.getY(), sound.getZ()) < 256;
+        if (near && sound.getSource() != SoundSource.MUSIC && sound.getSource() != SoundSource.AMBIENT && sound.getSource() != SoundSource.WEATHER) {
+            HEARD.merge(sound.getLocation() + " " + sound.getSource().getName() + " -> " + subtitle(sound.getLocation()), 1, Integer::sum);
+        }
         Obs obs = o.current();
         if (obs == null) return;
         String id = String.valueOf(sound.getLocation());

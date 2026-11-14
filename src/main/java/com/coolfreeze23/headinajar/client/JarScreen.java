@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Inventory;
 /** Module slots, charge and the feed slot. */
 public class JarScreen extends AbstractContainerScreen<JarMenu> {
     private static final ResourceLocation BACKGROUND = HeadInAJar.id("textures/gui/jar.png");
+    /** The charge line and its bar, then the two buttons, all under the module row and clear of each other. */
+    static final int CHARGE_Y = 50, BAR_X = 8, BAR_Y = 60, BAR_W = 132, BUTTON_Y = 67;
 
     public JarScreen(JarMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -25,12 +27,12 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
     protected void init() {
         super.init();
         addRenderableWidget(Button.builder(Component.translatable("gui.headinajar.let_go"), b -> confirmLetGo())
-                .bounds(leftPos + 8, topPos + 54, 56, 16)
+                .bounds(leftPos + 8, topPos + BUTTON_Y, 64, 14)
                 .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.headinajar.let_go.tooltip")))
                 .build());
         addRenderableWidget(Button.builder(Component.translatable("gui.headinajar.courier"),
                         b -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, JarMenu.BUTTON_COURIER))
-                .bounds(leftPos + 66, topPos + 54, 56, 16)
+                .bounds(leftPos + 76, topPos + BUTTON_Y, 64, 14)
                 .tooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("gui.headinajar.courier.tooltip")))
                 .build());
     }
@@ -49,6 +51,15 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         JarState state = menu.state();
+        // every module slot gets its own frame, so the first is as plain to see as the rest
+        for (int i = 0; i < JarState.MAX_SLOTS; i++) {
+            int x = leftPos + JarMenu.MODULE_X + i * 18 - 1, y = topPos + JarMenu.MODULE_Y - 1;
+            graphics.fill(x, y, x + 18, y + 18, 0xFF8B8B8B);
+            graphics.fill(x, y, x + 17, y + 1, 0xFF373737);
+            graphics.fill(x, y, x + 1, y + 17, 0xFF373737);
+            graphics.fill(x + 1, y + 17, x + 18, y + 18, 0xFFFFFFFF);
+            graphics.fill(x + 17, y + 1, x + 18, y + 18, 0xFFFFFFFF);
+        }
         // shut slots past the jar's tier
         for (int i = state.slots(); i < JarState.MAX_SLOTS; i++) {
             int x = leftPos + JarMenu.MODULE_X + i * 18;
@@ -56,7 +67,7 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
             graphics.blit(BACKGROUND, x - 1, y - 1, 176, 0, 18, 18);
         }
         float fraction = state.charge() / (float) state.chargeCapacity();
-        ChargeHud.drawBar(graphics, leftPos + 80, topPos + 61, 62, fraction);
+        ChargeHud.drawBar(graphics, leftPos + BAR_X, topPos + BAR_Y, BAR_W, fraction);
     }
 
     @Override
@@ -64,8 +75,8 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
         graphics.drawString(font, title, titleLabelX, titleLabelY, 0x404040, false);
         graphics.drawString(font, Component.translatable("gui.headinajar.modules"), JarMenu.MODULE_X, 18, 0x404040, false);
         JarState state = menu.state();
-        graphics.drawString(font, Component.translatable("gui.headinajar.charge", Math.round(100f * state.charge() / state.chargeCapacity())), 80, 50, 0x404040, false);
-        graphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
+        graphics.drawString(font, Component.translatable("gui.headinajar.charge", Math.round(100f * state.charge() / state.chargeCapacity())), BAR_X, CHARGE_Y, 0x404040, false);
+        // (the inventory's own label would sit under the buttons; the inventory needs no caption)
     }
 
     /** The reader's own number format (5,000 in English, 5.000 in Portuguese). */
@@ -83,6 +94,28 @@ public class JarScreen extends AbstractContainerScreen<JarMenu> {
                             String.format(locale(), "%,d", JarMenu.chargeValue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.REDSTONE_BLOCK)))).withStyle(net.minecraft.ChatFormatting.GRAY),
                     Component.translatable("gui.headinajar.feed.saline").withStyle(net.minecraft.ChatFormatting.GRAY)), mouseX, mouseY);
             return;
+        }
+        JarState state = menu.state();
+        int mx = mouseX - leftPos, my = mouseY - topPos;
+        if (mx >= BAR_X && mx < BAR_X + BAR_W && my >= CHARGE_Y - 1 && my < BAR_Y + 6) {
+            graphics.renderComponentTooltip(font, java.util.List.of(Component.translatable("gui.headinajar.clarity.charge_hover",
+                    String.format(locale(), "%,d", state.charge()), String.format(locale(), "%,d", state.chargeCapacity()))), mouseX, mouseY);
+            return;
+        }
+        // an empty open slot says what goes in it
+        if (hoveredSlot != null && hoveredSlot.index < state.slots() && !hoveredSlot.hasItem() && menu.getCarried().isEmpty()) {
+            graphics.renderComponentTooltip(font, java.util.List.of(Component.translatable("gui.headinajar.clarity.slot_empty")), mouseX, mouseY);
+            return;
+        }
+        // a shut slot says what opens it
+        for (int i = state.slots(); i < JarState.MAX_SLOTS; i++) {
+            int x = JarMenu.MODULE_X + i * 18;
+            if (mx >= x - 1 && mx < x + 17 && my >= JarMenu.MODULE_Y - 1 && my < JarMenu.MODULE_Y + 17) {
+                graphics.renderComponentTooltip(font, java.util.List.of(Component.translatable("gui.headinajar.clarity.slot_shut",
+                        Component.translatable("item.headinajar.reinforced_life_support_jar"),
+                        Component.translatable("item.headinajar.executive_life_support_jar"))), mouseX, mouseY);
+                return;
+            }
         }
         renderTooltip(graphics, mouseX, mouseY);
     }

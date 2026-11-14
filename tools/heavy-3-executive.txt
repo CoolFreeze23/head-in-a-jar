@@ -1,0 +1,133 @@
+# Executive, default profile: the fitting at the Gantry and a stand-in's boarding (bystander); the boot from behind; walk_c
+# behind and from the side; the jingle from behind, from a bystander about 6 blocks off, in first person; the vials
+# filled (four serums), a gene fired (its vial dims); the drill; vent; limp; the Golden Parachute through the sunroof
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- 01 the fitting ---------------------------------------------------------------------------------------------------
+/setblock 0 -60 0 headinajar:assembly_gantry
+gantry 0 -60 0 executive
+/tp @s 2.5 -60 0.5 90 40
+wait 10
+key use
+wait 10
+widget "Assemble"
+wait 3
+closegui
+wait 3
+/tp @s 7 -56.8 7 135 14
+wait 2
+frames e01_fitting_and_boarding_bystander_8 280
+wait 170
+bystander spawn 0 -60 -2 180
+headoffice trust add Bystander
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:executive
+wait 100
+bystander remove
+/kill @e[type=headinajar:executive]
+wait 5
+# --- 02 the pilot's own: board and boot from behind ------------------------------------------------------------------
+mecha executive 0 -60 30 hydraulic_legs,drill
+/tp @s 6.5 -60 27.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 27.2 0 -30
+wait 5
+view 1
+frames e02_board_and_boot_behind 90
+key use
+wait 90
+riding executive
+genes mecha ender_blink,gills,guardian_eye,golem_frame
+look 0 10
+wait 20
+# --- 03 walk_c behind, then from the side at hull height -------------------------------------------------------------
+frames e03_walk_c_behind_from_idle 120
+wait 10
+key forward hold 100
+wait 15
+watch follow -9 1.2 0 -90 4
+wait 3
+frames e04_walk_c_side_hull_height 130
+wait 15
+key forward hold 100
+wait 15
+watch off
+view 1
+look 0 10
+# --- 05 the jingle from behind, then from a bystander 6 blocks off, then first person --------------------------------
+frames e05_jingle_behind 50
+key drive
+wait 45
+watch at -4.5 0.2 4.5 -135 4
+wait 3
+bystander spawn -6 -60 40 180
+bystander mark
+frames e06_jingle_bystander_6 50
+key drive
+wait 45
+bystander packets sound|particle
+bystander remove
+watch off
+view 0
+look 0 25
+wait 10
+frames e07_jingle_first_person 50
+key drive
+wait 45
+view 1
+look 0 10
+# --- 08 the vials close up from behind and above; Ender Blink fired (its vial pulses, then dims while it rests) -----
+watch at 0 2.2 -3.2 0 30
+wait 5
+shot e08a_vials_four_serums_behind
+frames e08_vials_gene_fired 90
+wait 10
+key ability
+wait 70
+shot e08b_vials_one_resting
+watch off
+view 1
+look 0 10
+# --- 09 the drill against a wall -------------------------------------------------------------------------------------
+execute at @e[type=headinajar:executive,limit=1,sort=nearest] run fill ~-2 ~ ~3 ~2 ~4 ~3 minecraft:stone
+look 0 20
+watch follow 6 1 6 141 10
+frames e09_arm_drill_front_3q 100
+key attack hold 70
+wait 25
+watch off
+view 1
+look 180 10
+wait 15
+# --- 10 vent, from the side; 11 limp ------------------------------------------------------------------------------
+watch follow -9 1 0 -90 4
+/data merge entity @e[type=headinajar:executive,limit=1,sort=nearest] {Heat:2200f}
+frames e10_vent_side 115
+wait 115
+watch follow 9 1 0 90 4
+/data merge entity @e[type=headinajar:executive,limit=1,sort=nearest] {Battery:0}
+frames e11_limp_flat_battery_side 100
+key forward hold 90
+wait 12
+/data merge entity @e[type=headinajar:executive,limit=1,sort=nearest] {Battery:2000000}
+watch off
+# --- 12 the Golden Parachute through the sunroof, then the collapse, from 10 blocks ---------------------------------
+view 1
+look 0 10
+wait 10
+watch at -10 2 1.5 -99 10
+/data merge entity @e[type=headinajar:executive,limit=1,sort=nearest] {Health:35f}
+frames e12_parachute_sunroof_then_collapse 280
+/damage @e[type=headinajar:executive,limit=1,sort=nearest] 4 minecraft:generic
+wait 130
+/damage @e[type=headinajar:executive,limit=1,sort=nearest] 400 minecraft:generic
+wait 150
+watch off
+report executive done

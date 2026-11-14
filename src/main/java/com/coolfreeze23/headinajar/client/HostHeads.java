@@ -33,6 +33,25 @@ public final class HostHeads {
 
     public static void reveal() {
         HIDDEN.clear();
+        ARMS.clear();
+    }
+
+    /** Arm angles to add to a part when it next draws in this render (after its model has posed it). */
+    private static final Map<ModelPart, float[]> ARMS = new IdentityHashMap<>();
+
+    /** Adds {@code part}'s angles to the model's own the next time it draws in this entity's render. */
+    public static void poseArm(ModelPart part, float xRot, float yRot, float zRot) {
+        if (part != null) ARMS.put(part, new float[]{xRot, yRot, zRot});
+    }
+
+    /** Called as a part starts to draw: applies a pending arm pose, once. */
+    public static void applyArm(ModelPart part) {
+        if (ARMS.isEmpty()) return;
+        float[] a = ARMS.remove(part);
+        if (a == null) return;
+        part.xRot += a[0];
+        part.yRot += a[1];
+        part.zRot += a[2];
     }
 
     public static ModelPart find(EntityModel<?> model) {

@@ -1,15 +1,21 @@
 {
   "name": "Cranial Saline",
-  "icon": "headinajar:saline_mixer",
+  "icon": "headinajar:saline_bottle",
   "category": "headinajar:life_support",
+  "sortnum": 0,
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "A head out in the world uses 1 mB of saline every 12 seconds. A docked or carried head uses none. A dry jar loses $(l)Jar Integrity$(), and integrity is the glass between you and the world."
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:saline_bottle",
+      "text": "Made by hand, two bottles of 250 mB each. The chair wants four."
     },
     {
       "type": "patchouli:text",
-      "text": "The $(item)Saline Mixer$() turns water, sugar, kelp and redstone into saline and bottles it. Use bottles on your placed head, put them in the Jar menu, or pipe saline into a Cradle."
+      "text": "A jar holds 1,000 mB. Your head uses 1 mB per 12 s while you are the jar or it is set down: 3 h 20 min a full jar. In the Head Satchel or a Cradle, none.$(br2)Top up: use a bottle on your placed head, or the jar menu's feed slot."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The $(item)Saline Mixer$(): 1,000 mB of water, a sugar, a kelp, a redstone and 2,000 FE make 1,000 mB in 10 s. Water by bucket or pipe.$(br2)It fills glass bottles in its slot. An empty bucket takes a bucketful, for Cradle and Printer."
     }
   ]
 }

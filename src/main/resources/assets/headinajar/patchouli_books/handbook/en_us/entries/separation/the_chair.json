@@ -1,15 +1,32 @@
 {
-  "name": "The Separation Chair",
+  "name": "The Chair",
   "icon": "headinajar:separation_chair",
   "category": "headinajar:separation",
+  "sortnum": 0,
   "pages": [
     {
-      "type": "patchouli:text",
-      "text": "Load the chair with a $(item)Life Support Jar$(), $(item)Relay Goggles$(), a $(item)Collar Cam$() and four bottles of $(item)Cranial Saline$(), and give it 40 kFE. Sit down and hold $(l)Sign$() on Form 27-B."
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:separation_chair",
+      "text": "The tray slides out to its left. Keep that side, the front and the top clear."
     },
     {
       "type": "patchouli:text",
-      "text": "You may get up until the cut. After that, DOLORES will finish what she started. A worn blade can botch the job: keep a $(item)Replacement Blade$() handy."
+      "text": "$(li)a Life Support Jar$(li)Relay Goggles$(li)a Collar Cam$(li)4 Cranial Saline$(li)40 kFE, from a pile or Leyden Jar touching it$(br2)Load them in its panel; sneak and use the chair to open it without sitting.",
+      "title": "Form 27-B"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Use it to sit; hold Sign for 2 s. It takes 12 s; in the first 5 you may get up, keeping the parts, losing 10 kFE.$(br2)Your head goes on the tray (or an empty Cradle within 3 blocks). To carry it, use it with a Head Satchel in your inventory."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:relay_goggles",
+      "text": "Range 48 blocks; Mk II 160, Mk III 640. Use new ones on your placed or docked head."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "headinajar:collar_cam",
+      "text": "Bolted to your neck: your body sees through it."
     }
   ]
 }

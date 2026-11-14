@@ -1,0 +1,47 @@
+# His shoulder view: the Lunk tosses a pig three blocks ahead that cannot wander, aimed by the crosshair (re-take).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/summon headinajar:lunk 50 -60 0 {Rotation:[0f,0f]}
+/tp @s -20.5 -60 -20.5 0 0
+jar
+charge 100000
+view 0
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 5
+key togglePerspective
+wait 10
+/tp @s 50.5 -60 -3 0 0
+wait 5
+aimat headinajar:lunk
+wait 3
+aimat headinajar:lunk
+wait 3
+key use
+wait 40
+riding lunk
+pivot off
+wait 10
+shot q_lunk_before
+pivot on
+wait 10
+shot q_lunk_after
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:pig ~ ~ ~3.0 {attributes:[{id:"minecraft:generic.movement_speed",base:0}]}
+wait 3
+aimat minecraft:pig
+wait 5
+aimat minecraft:pig
+wait 5
+aimat minecraft:pig
+wait 5
+shot q_lunk_aimed_at_pig
+frames q01_lunk_toss_shoulder_crosshair 70
+key ability
+wait 60
+report done

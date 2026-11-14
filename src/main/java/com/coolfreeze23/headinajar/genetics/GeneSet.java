@@ -29,6 +29,8 @@ public final class GeneSet {
 
     public final List<Serum> serums = new ArrayList<>();
     public final List<Gene> mutations = new ArrayList<>();
+    /** A gene grafted for a while (the Chimera's Graft): it works at full strength, takes no port and is never saved. */
+    public Gene graft;
     private Map<Gene, Float> cache;
 
     public boolean isEmpty() {
@@ -66,6 +68,7 @@ public final class GeneSet {
             }
         }
         for (Gene m : mutations) out.merge(m, 1f, Float::sum);
+        if (graft != null) out.merge(graft, 1f, Float::sum);
         cache = out;
         return out;
     }

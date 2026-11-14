@@ -1,0 +1,171 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.mecha_module_spring_heels_heavy",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 3.5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "mount_thigh",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                -4,
+                -4
+              ],
+              "size": [
+                6,
+                8,
+                4
+              ],
+              "uv": [
+                8,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mount_shin",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                -4
+              ],
+              "size": [
+                8,
+                4,
+                4
+              ],
+              "uv": [
+                28,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "spring",
+          "parent": "mount_shin",
+          "pivot": [
+            0,
+            -8,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                -2,
+                -10
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                92,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -6,
+                -10
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                0,
+                16
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                -10,
+                -10
+              ],
+              "size": [
+                8,
+                2,
+                8
+              ],
+              "uv": [
+                32,
+                16
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                -12,
+                -7
+              ],
+              "size": [
+                2,
+                14,
+                2
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -5,
+                -14,
+                -11
+              ],
+              "size": [
+                10,
+                2,
+                10
+              ],
+              "uv": [
+                52,
+                0
+              ]
+            }
+          ],
+          "locators": {
+            "fx_heel": [
+              0,
+              -14,
+              -6
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+# The signs code sets, checked by eye: wheel spin against travel (close from the left side), steering against the turn
+# (straight down from above during a right curve), the lean (from behind during a left curve); then the Rover's
+# castors from the side.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/fill -60 -61 -60 60 -61 60 minecraft:smooth_stone
+mecha wheelhouse 0 -60 -40 drill
+/tp @s 6.5 -60 -42.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 -42.6 0 -25
+wait 5
+lookat headinajar:wheelhouse
+wait 3
+key use
+wait 80
+look 0 10
+# travelling south (+z); the camera 3.2 blocks to the machine's west, looking east: forward is to the image's right
+watch follow -3.2 0.3 0 -90 4
+frames g01_spin_side_close 40
+key forward hold 35
+wait 10
+# straight down from 7 blocks above while curving right (look turns right: yaw increases)
+watch follow 0 7 0 0 90
+frames g02_steer_above_right_curve 60
+key forward down
+turn 30 0 50
+key forward up
+wait 10
+# from behind and a little above while curving left
+look 0 10
+wait 20
+watch follow 0 2.2 -6 0 12
+frames g03_lean_behind_left_curve 60
+key forward down
+turn -30 0 50
+key forward up
+wait 10
+watch off
+# --- the Rover's castors from the side ---------------------------------------------------------------------------
+/tp @s 30.5 -60 -45 0 0
+wait 20
+/summon headinajar:rover 30 -60 -40 {Rotation:[0f,0f]}
+/tp @s 30.5 -60 -42.2 0 -20
+jar
+charge 100000
+wait 10
+lookat headinajar:rover
+wait 3
+key use
+wait 30
+look 0 10
+watch follow -2.4 0.2 0 -90 4
+frames g04_rover_castor_spin_side 40
+key forward hold 35
+wait 10
+watch follow 0 4 0 0 90
+frames g05_rover_steer_above_right_curve 50
+key forward down
+turn 30 0 40
+key forward up
+wait 10
+watch off
+report done

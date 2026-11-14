@@ -82,6 +82,7 @@ public class SmokeClient {
             GeckoProbe.register(modBus);
             MachineProbe.register(modBus);
             NeoForge.EVENT_BUS.addListener(this::onTick);
+            NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre e) -> LoopProbe.tick());
             NeoForge.EVENT_BUS.addListener(this::onRenderGui);
             NeoForge.EVENT_BUS.addListener(frames::onFrame);
             NeoForge.EVENT_BUS.addListener(Bench::onFrame);
@@ -246,7 +247,7 @@ public class SmokeClient {
             case "bystander" -> {
                 // bystander VERB ...: the stand-in second player (Bystander.java); its actions are observed like inputs
                 String[] a = line.split("\\s+");
-                if (java.util.Set.of("useblock", "useitem", "useentity", "attack", "sneak", "swing", "button", "key", "chair", "operate", "form", "close").contains(a[1])) {
+                if (java.util.Set.of("useblock", "useitem", "useentity", "attack", "sneak", "swing", "button", "key", "drive", "chair", "operate", "form", "close").contains(a[1])) {
                     observer.begin(line, 0, Bystander.position());
                 } else {
                     observer.setup(line);
@@ -260,6 +261,132 @@ public class SmokeClient {
                 String[] a = parts[1].trim().split(" +");
                 report.add(a[0].equals("start") ? Bench.start(a.length > 1 ? a[1] : "bench") : Bench.stop(mc));
             }
+            case "hopperlean" -> {
+                // hopperlean on|off: the Hopper's cheap drawing path (parked machines run nothing), for measuring both
+                com.coolfreeze23.headinajar.client.HopperRenderer.LEAN = parts[1].trim().equals("on");
+                report.add("hopperlean " + com.coolfreeze23.headinajar.client.HopperRenderer.LEAN);
+            }
+            case "pivot" -> {
+                // pivot on|off: the third-person camera turns about the machine (on) or the pilot's eye (off), for stills of both
+                com.coolfreeze23.headinajar.client.PilotClient.PIVOT = parts[1].trim().equals("on");
+                report.add("pivot " + com.coolfreeze23.headinajar.client.PilotClient.PIVOT);
+            }
+            case "aimat" -> {
+                // aimat TYPE [DY]: puts the crosshair on the nearest entity whose type id contains TYPE (its middle, or DY
+                // above its feet), as a player would by moving the mouse: from the camera, not the player's eye. In
+                // Shoulder Surfing's view its own camera is turned (its rotation is the mouse's); run it twice a few ticks
+                // apart there, since the camera's place moves as it turns.
+                String[] a = parts[1].trim().split(" +");
+                net.minecraft.world.entity.Entity best = null;
+                for (var e : mc.level.entitiesForRendering()) {
+                    if (e == mc.player || e == mc.player.getVehicle()) continue;
+                    if (!BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString().contains(a[0])) continue;
+                    if (best == null || e.distanceToSqr(mc.player) < best.distanceToSqr(mc.player)) best = e;
+                }
+                if (best == null) {
+                    report.add("aimat " + a[0] + " -> none in sight");
+                } else {
+                    var from = mc.gameRenderer.getMainCamera().getPosition();
+                    double ty = best.getY() + (a.length > 1 ? Double.parseDouble(a[1]) : best.getBbHeight() / 2);
+                    double dx = best.getX() - from.x, dy = ty - from.y, dz = best.getZ() - from.z;
+                    float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
+                    float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
+                    String how = "player";
+                    try {
+                        Class<?> api = Class.forName("com.github.exopandora.shouldersurfing.api.client.IShoulderSurfing");
+                        Object ss = api.getMethod("getInstance").invoke(null);
+                        if ((boolean) api.getMethod("isShoulderSurfing").invoke(ss)) {
+                            Object cam = api.getMethod("getCamera").invoke(ss);
+                            cam.getClass().getMethod("setYRot", float.class).invoke(cam, yaw);
+                            cam.getClass().getMethod("setXRot", float.class).invoke(cam, pitch);
+                            how = "shoulder camera";
+                        }
+                    } catch (ReflectiveOperationException | LinkageError ignored) {
+                        // no Shoulder Surfing: the player's rotation is the camera's
+                    }
+                    if (how.equals("player")) {
+                        mc.player.setYRot(yaw);
+                        mc.player.setXRot(pitch);
+                    }
+                    report.add(String.format(java.util.Locale.ROOT, "aimat %s -> %s by the %s, yaw %.0f pitch %.0f", a[0],
+                            BuiltInRegistries.ENTITY_TYPE.getKey(best.getType()), how, yaw, pitch));
+                }
+            }
+            case "parkcache" -> {
+                // parkcache on|off: parked frames drawn from geometry kept when they parked, or the ordinary way (for measuring both)
+                com.coolfreeze23.headinajar.client.ParkedDraw.ON = parts[1].trim().equals("on");
+                report.add("parkcache " + parts[1].trim());
+            }
+            case "parkstats" -> report.add(com.coolfreeze23.headinajar.client.ParkedDraw.describe());
+            case "facing" -> {
+                // facing TYPE: every entity of TYPE within 32 blocks, its yaw, body yaw and head yaw on this client and on the server
+                String type = parts[1].trim();
+                StringBuilder sb = new StringBuilder("facing " + type + " ->");
+                var server = mc.getSingleplayerServer();
+                for (var e : mc.level.entitiesForRendering()) {
+                    if (!BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString().contains(type) || e.distanceTo(mc.player) > 32) continue;
+                    sb.append(String.format(java.util.Locale.ROOT, " [%s at %.1f %.1f: client yaw %.1f", BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath(),
+                            e.getX(), e.getZ(), e.getYRot()));
+                    if (e instanceof net.minecraft.world.entity.LivingEntity le) sb.append(String.format(java.util.Locale.ROOT, " body %.1f head %.1f", le.yBodyRot, le.yHeadRot));
+                    var level = server == null ? null : server.getLevel(mc.level.dimension());
+                    var se = level == null ? null : level.getEntity(e.getUUID());
+                    if (se != null) {
+                        sb.append(String.format(java.util.Locale.ROOT, "; server yaw %.1f", se.getYRot()));
+                        if (se instanceof net.minecraft.world.entity.LivingEntity sl) sb.append(String.format(java.util.Locale.ROOT, " body %.1f head %.1f", sl.yBodyRot, sl.yHeadRot));
+                    }
+                    sb.append("]");
+                }
+                report.add(sb.toString());
+            }
+            case "moduleatlas" -> {
+                // moduleatlas on|off: module sheets and masks drawn on the block atlas's shared buffers, or each its own (for measuring both)
+                com.coolfreeze23.headinajar.client.HopperRenderer.modulesOnAtlas(parts[1].trim().equals("on"));
+                report.add("moduleatlas " + parts[1].trim());
+            }
+            case "moduledefer" -> {
+                // moduledefer on|off: modules drawn after the frame in batches, or in the middle of it (for measuring both)
+                com.coolfreeze23.headinajar.client.HopperRenderer.deferModules(parts[1].trim().equals("on"));
+                report.add("moduledefer " + parts[1].trim());
+            }
+            case "muzzles" -> {
+                // muzzles: for the ridden machine, each arm's muzzle as last drawn and as the rest pose reckons it, which side
+                // of the body each is on (+ left), the pilot's held item and how many items hands have drawn
+                if (mc.player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) {
+                    StringBuilder b = new StringBuilder("muzzles " + m.frame().id());
+                    double yaw = Math.toRadians(m.yBodyRot);
+                    var left = new net.minecraft.world.phys.Vec3(Math.cos(yaw), 0, Math.sin(yaw));
+                    for (int side = 0; side < m.frame().slots(com.coolfreeze23.headinajar.mecha.MechaModule.Slot.ARM); side++) {
+                        int slot = com.coolfreeze23.headinajar.mecha.ArmAim.slot(m, side);
+                        var drawn = m.view.muzzle[slot];
+                        var rest = com.coolfreeze23.headinajar.mecha.ArmAim.origin(m, side, 1);
+                        b.append(String.format(java.util.Locale.ROOT, "; arm %d %s drawn %s rest side %.2f", side, m.arm(side),
+                                drawn == null ? "-" : String.format(java.util.Locale.ROOT, "side %.2f (%.2f from rest)", drawn.subtract(m.position()).dot(left), drawn.distanceTo(rest)),
+                                rest.subtract(m.position()).dot(left)));
+                    }
+                    b.append("; held ").append(mc.player.getMainHandItem()).append(", hand items drawn ").append(com.coolfreeze23.headinajar.client.HopperRenderer.handItemsDrawn());
+                    report.add(b.toString());
+                } else report.add("muzzles -> not riding a machine");
+            }
+            case "modulesseen" -> {
+                // modulesseen: every module file the animated frames have put at a socket so far, by frame
+                var seen = com.coolfreeze23.headinajar.client.HopperRenderer.modulesSeen();
+                report.add("modules seen: " + seen.size() + " " + String.join(" ", seen));
+            }
+            case "chute" -> {
+                // chute: every Golden Parachute this client draws, with its clip and tick; and the piloted Kite's flight clip
+                report.add("chute -> " + com.coolfreeze23.headinajar.client.Parachute.describe());
+                if (mc.player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && m.frame().animated()) {
+                    var v = m.view;
+                    double now = mc.level.getGameTime();
+                    var c = com.coolfreeze23.headinajar.mecha.HopperAnimation.main(m, v, now);
+                    var cam = mc.gameRenderer.getMainCamera().getPosition();
+                    report.add(String.format("flight camera y %.2f, player y %.2f, kite render y %.2f", cam.y, mc.player.getY(), m.getPosition(1).y));
+                    report.add(String.format("flight -> %s, y %.2f, ground %s, vy %.3f, speed %.3f, beat %.2f, roll %.1f, pitch %.1f, held %d, battery %d",
+                            c == null ? "none" : c.clip().name(), m.getY(), m.onGround(), v.vy, v.speed, v.flapRate, v.roll, v.pitch, m.heldId(), m.battery()));
+                }
+            }
+            // watch X Y Z YAW PITCH | watch follow DX DY DZ YAW PITCH | watch off: film from outside while the keys drive (Watch.java)
+            case "watch" -> report.add(Watch.run(mc, parts[1].trim().split(" +")));
             case "fpscap" -> report.add(Bench.fpsCap(mc, line.trim().split(" +")));
             case "cmdout" -> {
                 // cmdout COMMAND: run a server command (permission 4) and report what it printed
@@ -299,6 +426,23 @@ public class SmokeClient {
                             + " model=" + (mc.getEntityRenderDispatcher().getRenderer(e) instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> r ? r.getModel().getClass().getSimpleName() : "-"));
                 }
             }
+            case "subtitles" -> {
+                // subtitles [clear]: the subtitle log (every sound started near the player since the last clear, with the
+                // subtitle the game shows for it); "UNKNOWN EVENT" is a sound that would play nothing
+                if (parts.length > 1 && parts[1].trim().equals("clear")) Observer.HEARD.clear();
+                else {
+                    report.add("subtitles -> " + Observer.HEARD.size() + " sounds");
+                    Observer.HEARD.forEach((k, n) -> report.add("  SUBTITLE " + k + (n > 1 ? " x" + n : "")));
+                }
+            }
+            case "loopprobe" -> {
+                // loopprobe KINDS TICKS: a room's machine loops asked of the real loop player for TICKS ticks (LoopProbe)
+                String[] a = parts[1].trim().split(" ");
+                LoopProbe.start(Integer.parseInt(a[0]), Integer.parseInt(a[1]));
+                report.add("loopprobe -> " + a[0] + " kinds in a ring, ten Centrifuges together, for " + a[1] + " ticks");
+            }
+            case "loops" -> report.add("loops -> " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + " playing, "
+                    + com.coolfreeze23.headinajar.client.fx.SoundLoops.audible() + " heard (at most " + com.coolfreeze23.headinajar.client.fx.SoundLoops.MAX_AUDIBLE + ")");
             case "hostcopy" -> {
                 // hostcopy: the client's own copy of the host files (what a client of a dedicated server steers by)
                 try {
@@ -317,6 +461,7 @@ public class SmokeClient {
                 String[] args = parts[1].split(" ");
                 Perf.camlog(args[0], Integer.parseInt(args[1]), report::add);
             }
+            case "emfhost" -> report.add("emfhost -> " + com.coolfreeze23.headinajar.compat.EmfCompat.lastHost + "; " + com.coolfreeze23.headinajar.client.body.HostFx.counts());
             case "fxstate" -> report.add("fxstate " + (parts.length > 1 ? parts[1] : "") + " -> tethers " + com.coolfreeze23.headinajar.client.fx.TetherFx.live()
                     + ", loops " + com.coolfreeze23.headinajar.client.fx.SoundLoops.playing() + ", memos " + java.util.Arrays.toString(com.coolfreeze23.headinajar.client.fx.FxManager.HANDLED)
                     + ", beams drawn/asked " + com.coolfreeze23.headinajar.client.fx.Beams.counts() + ", trauma " + com.coolfreeze23.headinajar.client.fx.CameraDesk.trauma() + ", particles " + mc.particleEngine.countParticles());
@@ -340,6 +485,9 @@ public class SmokeClient {
                     mc.getLanguageManager().onResourceManagerReload(mc.getResourceManager());
                     wait = 5;
                 }
+                // chat lays each line out once, as it arrives: lay the lines already there out again in the new language,
+                // as a client started in that language would have shown them
+                mc.gui.getChat().rescaleChat();
                 report.add("lang -> " + mc.getLanguageManager().getSelected());
             }
             case "report" -> report.add(parts[1]);
@@ -369,10 +517,22 @@ public class SmokeClient {
             case "inventory" -> mc.setScreen(new InventoryScreen(mc.player));
             case "use" -> mc.gameMode.useItem(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND);
             case "look" -> {
-                // look YAW PITCH
+                // look YAW PITCH; in Shoulder Surfing's view its own camera is turned too (a coupled camera gives the
+                // player its rotation every tick, so turning only the player would be undone)
                 String[] a = parts[1].split(" ");
                 mc.player.setYRot(Float.parseFloat(a[0]));
                 mc.player.setXRot(Float.parseFloat(a[1]));
+                try {
+                    Class<?> api = Class.forName("com.github.exopandora.shouldersurfing.api.client.IShoulderSurfing");
+                    Object ss = api.getMethod("getInstance").invoke(null);
+                    if ((boolean) api.getMethod("isShoulderSurfing").invoke(ss)) {
+                        Object cam = api.getMethod("getCamera").invoke(ss);
+                        cam.getClass().getMethod("setYRot", float.class).invoke(cam, Float.parseFloat(a[0]));
+                        cam.getClass().getMethod("setXRot", float.class).invoke(cam, Float.parseFloat(a[1]));
+                    }
+                } catch (ReflectiveOperationException | LinkageError ignored) {
+                    // no Shoulder Surfing: the player's rotation is the camera's
+                }
             }
             case "inspect" -> {
                 // inspect block X Y Z | inspect me | inspect near TYPE R: reads the server's world into the report; changes nothing
@@ -519,7 +679,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -546,6 +706,26 @@ public class SmokeClient {
                             }
                         }
                         case "charge" -> state.setCharge(Integer.parseInt(parts[1]));
+                        case "vitals" -> {
+                            // vitals SALINE% CHARGE% GLASS%: this player's jar, for films of what the jar shows
+                            String[] v = parts[1].split(" ");
+                            state.setSaline(state.maxSaline() * Integer.parseInt(v[0]) / 100);
+                            state.setCharge(state.chargeCapacity() * Integer.parseInt(v[1]) / 100);
+                            state.setIntegrity(state.maxIntegrity() * Integer.parseInt(v[2]) / 100);
+                            com.coolfreeze23.headinajar.network.Network.sync(player);
+                            report.add("vitals -> saline " + state.saline() + ", charge " + state.charge() + ", glass " + state.integrity());
+                        }
+                        case "headvitals" -> {
+                            // headvitals SALINE% CHARGE% GLASS% [RISING]: the nearest placed head with no owner online
+                            String[] v = parts[1].split(" ");
+                            var heads = player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.HeadJarEntity.class, player.getBoundingBox().inflate(24));
+                            heads.sort(java.util.Comparator.comparingDouble(h -> h.distanceToSqr(player)));
+                            if (heads.isEmpty()) report.add("headvitals -> no placed head");
+                            else {
+                                heads.get(0).showVitalsForFilm(Integer.parseInt(v[0]) | Integer.parseInt(v[1]) << 7 | Integer.parseInt(v[2]) << 14 | (v.length > 3 ? 1 << 21 : 0));
+                                report.add("headvitals -> " + heads.get(0).position());
+                            }
+                        }
                         case "grab", "tkgrab" -> report.add("grab -> " + Telekinesis.grab(player, state));
                         case "throw" -> Telekinesis.throwHeld(player, state);
                         case "swap" -> report.add("swap -> " + (state.form() == com.coolfreeze23.headinajar.form.Form.LINKED
@@ -597,7 +777,7 @@ public class SmokeClient {
                             var m = ModRegistry.mechaType(frame).create(player.serverLevel());
                             java.util.List<ItemStack> slots = new java.util.ArrayList<>();
                             for (int i = 0; i < frame.totalSlots(); i++) slots.add(ItemStack.EMPTY);
-                            for (String name : a[4].split(",")) {
+                            for (String name : a.length < 5 || a[4].equals("-") ? new String[0] : a[4].split(",")) {
                                 var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
                                 int first = frame.firstIndex(type.slot);
                                 for (int i = first; i < first + frame.slots(type.slot); i++) {
@@ -611,7 +791,35 @@ public class SmokeClient {
                             m.setOwner(player.getUUID());
                             m.setBattery(m.batteryCapacity());
                             m.moveTo(Double.parseDouble(a[1]) + 0.5, Double.parseDouble(a[2]), Double.parseDouble(a[3]) + 0.5, 180, 0);
+                            // facing north as the Assembly Gantry sets a new machine: body and head with it, not only the yaw
+                            m.setYBodyRot(180);
+                            m.setYHeadRot(180);
                             player.serverLevel().addFreshEntity(m);
+                        }
+                        case "refit" -> {
+                            // refit module,module,...|-: the nearest machine (16 blocks) given these modules, as the Assembly Gantry sets a machine's slots
+                            var machines = player.serverLevel().getEntitiesOfClass(com.coolfreeze23.headinajar.entity.MechaEntity.class, player.getBoundingBox().inflate(16));
+                            machines.sort(java.util.Comparator.comparingDouble(e -> e.distanceToSqr(player)));
+                            if (machines.isEmpty()) {
+                                report.add("refit -> no machine within 16 blocks");
+                            } else {
+                                var m = machines.get(0);
+                                var frame = m.frame();
+                                java.util.List<ItemStack> slots = new java.util.ArrayList<>();
+                                for (int i = 0; i < frame.totalSlots(); i++) slots.add(ItemStack.EMPTY);
+                                for (String name : parts[1].trim().equals("-") ? new String[0] : parts[1].trim().split(",")) {
+                                    var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
+                                    int first = frame.firstIndex(type.slot);
+                                    for (int i = first; i < first + frame.slots(type.slot); i++) {
+                                        if (slots.get(i).isEmpty()) {
+                                            slots.set(i, new ItemStack(ModRegistry.mechaModule(type)));
+                                            break;
+                                        }
+                                    }
+                                }
+                                m.setModules(slots);
+                                report.add("refit " + frame.id() + " -> " + parts[1].trim());
+                            }
                         }
                         case "lab" -> {
                             // stocks every lab machine within 10 blocks, and fills the player's gene library
@@ -770,7 +978,8 @@ public class SmokeClient {
                                         : com.coolfreeze23.headinajar.mecha.MechaFrame.BULWARK;
                                 g.items().setStackInSlot(0, new ItemStack(ModRegistry.frameItem(frame)));
                                 g.items().setStackInSlot(1, new ItemStack(ModRegistry.MECHA_PLATING.get(), 12));
-                                String[] mods = {"hydraulic_legs", "jump_jets", "cargo_hold", "galvanic_stack", "armor_plating", "life_support_recycler", "drill", "hydraulic_fist", "night_optics"};
+                                // gantry X Y Z [FRAME [module,module,...]]: the frame, plating, these modules (else a standard loadout) and 100 kFE
+                                String[] mods = a.length > 4 ? a[4].split(",") : new String[]{"hydraulic_legs", "jump_jets", "cargo_hold", "galvanic_stack", "armor_plating", "life_support_recycler", "drill", "hydraulic_fist", "night_optics"};
                                 for (String name : mods) {
                                     var type = com.coolfreeze23.headinajar.mecha.MechaModule.valueOf(name.toUpperCase(java.util.Locale.ROOT));
                                     int first = frame.firstIndex(type.slot);

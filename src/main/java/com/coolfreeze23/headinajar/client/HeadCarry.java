@@ -193,7 +193,7 @@ public final class HeadCarry {
         float headYaw = 180 * lift + Mth.sin(age * 0.05f) * 8 * lift;
         float pitch = -18 * lift;
         JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), headYaw, pitch, age, true, !state.goggles().isEmpty(),
-                JarRenderer.shape(state.compact()));
+                JarRenderer.shape(state.compact()), false, JarRenderer.Vitals.of(state, player.getId(), 180.0f - player.yBodyRot));
     }
 
     /** The middle of a hand (2 px in from the end of the arm; side -1 right, 1 left), in model space (blocks). */
@@ -282,7 +282,7 @@ public final class HeadCarry {
         pose.mulPose(Axis.XP.rotationDegrees(FP_TILT));
         pose.translate(0, -0.5f, 0);
         JarRenderer.draw(pose, buffers, light, OverlayTexture.NO_OVERLAY, player.getSkin().texture(), 180 + Mth.sin(age * 0.05f) * 6, -18, age, true,
-                !state.goggles().isEmpty(), JarRenderer.shape(state.compact()));
+                !state.goggles().isEmpty(), JarRenderer.shape(state.compact()), false, JarRenderer.Vitals.of(state, player.getId(), 180.0f - player.yBodyRot));
         pose.popPose();
         return true;
     }

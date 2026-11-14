@@ -1,0 +1,142 @@
+# Chimera re-takes: the grafted veins close up (front three-quarter and behind at 3 blocks), the hard hat put away for
+# the Hat Mount's helmet, the Golden Parachute (the blow takes it under a tenth: 132 HP, so 121), and the stills with a
+# stand-in's jar aboard (the stand-in trusted, as the owner's machine requires).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+headoffice trust add Bystander
+mecha chimera 0 -60 0 hydraulic_legs,hydraulic_fist,hydraulic_fist
+/tp @s 5.5 -60 -3.5 0 0
+jar
+/give @s headinajar:bio_gel 4
+wait 10
+/tp @s 0.5 -60 -2.4 0 -20
+wait 5
+lookat headinajar:chimera
+key use
+wait 70
+riding chimera
+look 0 10
+wait 10
+shot r01_veins_before_behind
+watch at 2.6 1.2 2.6 135 12
+wait 5
+shot r01_veins_before_front_3q
+watch off
+view 1
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run summon minecraft:chicken ~ ~ ~2.2 {NoAI:1b,Health:40f,attributes:[{id:"minecraft:generic.max_health",base:40}]}
+wait 5
+lookat minecraft:chicken 0.3
+watch at 2.6 1.2 2.6 135 12
+frames r02_graft_close_front_3q 80
+key attack
+wait 15
+key drive
+wait 60
+shot r03_veins_grafted_front_3q
+watch at -2.2 1.4 -3.2 -35 12
+wait 5
+shot r03_veins_grafted_back_3q
+watch off
+view 1
+look 0 10
+wait 5
+shot r03_veins_grafted_behind
+view 0
+look 0 40
+wait 5
+shot r03_first_person_no_hat
+view 1
+look 0 10
+/kill @e[type=minecraft:chicken]
+# --- out, the helmet on the jar, back in: the hard hat is put away --------------------------------------------------
+sneak
+wait 30
+fit hat_mount
+/item replace entity @s armor.head with minecraft:golden_helmet
+wait 5
+execute at @e[type=headinajar:chimera,limit=1,sort=nearest] run tp @s ~ ~ ~-2.4 0 -20
+wait 5
+lookat headinajar:chimera
+key use
+wait 70
+view 2
+look 0 10
+wait 10
+shot r04_helmet_no_hat_front
+view 1
+wait 10
+shot r04_helmet_no_hat_behind
+# --- the Golden Parachute, then the empty machine destroyed, from 9 blocks to the side ---------------------------------
+watch at -9 2 0 -90 10
+frames r05_golden_parachute_then_collapse 260
+/damage @e[type=headinajar:chimera,limit=1,sort=nearest] 121 minecraft:generic
+wait 120
+/damage @e[type=headinajar:chimera,limit=1,sort=nearest] 100 minecraft:generic
+wait 130
+watch off
+# --- stills with a stand-in's jar aboard, by day, night and torchlight ---------------------------------------------
+mecha chimera 0 -60 10 hydraulic_legs,hydraulic_fist,hydraulic_fist
+mecha hopper 3 -60 10 hydraulic_legs
+mecha bulwark -4 -60 10 hydraulic_legs
+/summon headinajar:lunk 7 -60 10
+bystander spawn 0 -60 8 0
+bystander form jar
+wait 5
+bystander useentity nearest headinajar:chimera
+wait 60
+/tp @s 1.5 -59.5 17 180 10
+view 0
+wait 20
+shot st_day_row_jar
+/tp @s 2.5 -58.8 12.8 145 12
+wait 10
+shot st_day_jar_3q
+/tp @s 0.5 -59 4 0 8
+wait 10
+shot st_day_back_6
+/tp @s 0.5 -57 -10 0 4
+wait 10
+shot st_day_back_20
+/time set 18000
+/tp @s 1.5 -59.5 17 180 10
+wait 20
+shot st_night_row
+/setblock 1 -60 14 minecraft:torch
+/setblock -2 -60 14 minecraft:torch
+wait 10
+shot st_torch_row
+# --- the Lunk's toss of a cow that can leave the ground: from behind, then from 6 blocks ----------------------------
+/time set 6000
+/summon headinajar:lunk 0 -60 -20 {Rotation:[0f,0f]}
+/tp @s 0.5 -60 -22.4 0 -20
+charge 100000
+wait 10
+lookat headinajar:lunk
+view 1
+key use
+wait 40
+riding lunk
+look 0 30
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2
+wait 3
+lookat minecraft:cow 0.7
+frames r06_lunk_toss_behind 70
+key ability
+wait 60
+/kill @e[type=minecraft:cow]
+/kill @e[type=minecraft:item]
+wait 20
+execute at @e[type=headinajar:lunk,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2
+wait 3
+lookat minecraft:cow 0.7
+watch at 6 1.2 1 90 8
+frames r07_lunk_toss_bystander_6 70
+key ability
+wait 60
+watch off
+report done

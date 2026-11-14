@@ -1,11 +1,17 @@
 {
-  "name": "A Impressora de Corpos",
+  "name": "A Impressora",
   "icon": "headinajar:body_printer",
   "category": "headinajar:life_support",
+  "sortnum": 3,
   "pages": [
     {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:body_printer",
+      "text": "Um corpo novo, com câmera, em 60 s, por 16 carnes podres, 8 blocos de osso, 4 blocos de redstone, 8 bolas de slime, 2.000 mB de soro e 200 kFE guardados antes."
+    },
+    {
       "type": "patchouli:text",
-      "text": "Perdeu o corpo? Carregue a impressora com carne podre, blocos de osso, blocos de redstone, slime e 2000 mB de soro, e aperte Imprimir como pote. Sessenta segundos e 200 kFE depois, sai um corpo novo, já com câmera."
+      "text": "$(l)Carregue antes de precisar:$() aí você já será um pote, e suas coisas estarão no cadáver. Soro por balde ou frasco. Só com a pilha, 200 kFE levam mais de 8 min.$(br)Depois, como pote, aperte Imprimir. Para entrar, use o corpo novo ou Troque."
     }
   ]
 }

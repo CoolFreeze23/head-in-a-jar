@@ -1,0 +1,46 @@
+# Bulwark under the owner's settings (run with SMOKE_PROFILE=pack SMOKE_MODS=anim,sodium,iris,shoulder,camera,culling):
+# HUD on, from first person three presses of the perspective key reach Shoulder Surfing's view; walk, grab, carry, throw
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+mecha bulwark 0 -60 3 hydraulic_legs,drill
+/tp @s 6.5 -60 0.5 0 0
+jar
+wait 10
+/tp @s 0.5 -60 0.4 0 -25
+wait 5
+key use
+wait 70
+riding bulwark
+view 0
+look 0 8
+wait 10
+shot pk_p0_first_person
+key togglePerspective
+wait 15
+shot pk_p1
+key togglePerspective
+wait 15
+shot pk_p2
+key togglePerspective
+wait 20
+shot pk_p3_shoulder_hud
+frames v12_pack_shoulder_walk 110
+key forward hold 100
+wait 12
+execute at @e[type=headinajar:bulwark,limit=1,sort=nearest] run summon minecraft:cow ~ ~ ~2.7
+wait 3
+frames v12b_pack_shoulder_grab_carry_throw 220
+key drive
+wait 30
+shot pk_holding_hud
+key forward hold 60
+wait 5
+look 0 -12
+key drive
+wait 100
+inspect near minecraft:cow 40
+report pack done

@@ -133,10 +133,13 @@ public class SeparationChairScreen extends AbstractContainerScreen<SeparationCha
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         super.render(g, mouseX, mouseY, partialTick);
         if (overSign(mouseX, mouseY)) {
-            g.renderComponentTooltip(font, List.of(
+            List<Component> lines = new java.util.ArrayList<>(List.of(
                     Component.translatable("gui.headinajar.chair.form").withStyle(ChatFormatting.GOLD),
                     Component.translatable("gui.headinajar.chair.form.body", minecraft.player.getName()).withStyle(ChatFormatting.GRAY),
-                    Component.translatable("gui.headinajar.chair.form.hold").withStyle(ChatFormatting.DARK_GRAY)), mouseX, mouseY);
+                    Component.translatable("gui.headinajar.chair.form.hold").withStyle(ChatFormatting.DARK_GRAY)));
+            // a Sign that can't be signed says why before it is pressed
+            if (!canSign() && menu.opTick() < 0) lines.add(1, whyNot().copy().withStyle(ChatFormatting.RED));
+            g.renderComponentTooltip(font, lines, mouseX, mouseY);
         }
         renderTooltip(g, mouseX, mouseY);
     }
