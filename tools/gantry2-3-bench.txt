@@ -1,0 +1,180 @@
+# Cost of a working Assembly Gantry for 0.5.2 against 0.5.1 (run the same script in both builds, alone:
+# GAME_EXCLUSIVE=1): eight Gantries in a row ten blocks ahead, the empty scene twice, then two rounds of eight Colossus
+# builds pressed by the stand-in, each measured over 200 ticks from about 100 ticks after the presses (the frame
+# playing its build, the arm telescoped at its shoulders: the sleeves drawn, the telescope sounds playing).
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -10 0 5
+bystander spawn 0 -60 -14 0
+wait 200
+bench start empty1
+wait 200
+bench stop
+bench start empty2
+wait 200
+bench stop
+/setblock -11 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -8 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -5 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock -2 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 1 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 4 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 7 -60 0 headinajar:assembly_gantry[facing=north]
+/setblock 10 -60 0 headinajar:assembly_gantry[facing=north]
+gantry -11 -60 0 colossus
+gantry -8 -60 0 colossus
+gantry -5 -60 0 colossus
+gantry -2 -60 0 colossus
+gantry 1 -60 0 colossus
+gantry 4 -60 0 colossus
+gantry 7 -60 0 colossus
+gantry 10 -60 0 colossus
+wait 20
+bystander tp -11 -60 -2 0
+wait 1
+bystander useblock -11 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -8 -60 -2 0
+wait 1
+bystander useblock -8 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -5 -60 -2 0
+wait 1
+bystander useblock -5 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -2 -60 -2 0
+wait 1
+bystander useblock -2 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 1 -60 -2 0
+wait 1
+bystander useblock 1 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 4 -60 -2 0
+wait 1
+bystander useblock 4 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 7 -60 -2 0
+wait 1
+bystander useblock 7 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 10 -60 -2 0
+wait 1
+bystander useblock 10 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 0 -60 -14 0
+wait 70
+shot bench_colossus_build1
+bench start colossus_build1
+wait 200
+bench stop
+wait 80
+/kill @e[type=headinajar:colossus]
+wait 40
+gantry -11 -60 0 colossus
+gantry -8 -60 0 colossus
+gantry -5 -60 0 colossus
+gantry -2 -60 0 colossus
+gantry 1 -60 0 colossus
+gantry 4 -60 0 colossus
+gantry 7 -60 0 colossus
+gantry 10 -60 0 colossus
+wait 20
+bystander tp -11 -60 -2 0
+wait 1
+bystander useblock -11 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -8 -60 -2 0
+wait 1
+bystander useblock -8 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -5 -60 -2 0
+wait 1
+bystander useblock -5 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp -2 -60 -2 0
+wait 1
+bystander useblock -2 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 1 -60 -2 0
+wait 1
+bystander useblock 1 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 4 -60 -2 0
+wait 1
+bystander useblock 4 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 7 -60 -2 0
+wait 1
+bystander useblock 7 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 10 -60 -2 0
+wait 1
+bystander useblock 10 -60 0 north
+wait 2
+bystander button 1
+wait 1
+bystander close
+bystander tp 0 -60 -14 0
+wait 70
+shot bench_colossus_build2
+bench start colossus_build2
+wait 200
+bench stop
+wait 80
+/kill @e[type=headinajar:colossus]
+wait 40
+report gantry2 bench done

@@ -138,8 +138,9 @@ BUILD_SLOTS = [('legs', 44, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l'
                ('torso_0', 74, ['socket_torso_0']), ('torso_1', 79, ['socket_torso_1']),
                ('torso_2', 84, ['socket_torso_2']), ('torso_3', 89, ['socket_torso_3']),
                ('torso_4', 94, ['socket_torso_4']),
-               ('arm_l', 101, ['socket_arm_l']), ('arm_r', 106, ['socket_arm_r']),
-               ('arm_2', 111, ['socket_arm_2']), ('arm_3', 116, ['socket_arm_3']),
+               # each arm, then the shoulder hardpoint above it (the Gantry's arm welds one side, then the other)
+               ('arm_l', 101, ['socket_arm_l']), ('arm_2', 106, ['socket_arm_2']),
+               ('arm_r', 111, ['socket_arm_r']), ('arm_3', 116, ['socket_arm_3']),
                ('sensor', 123, ['socket_sensor']), ('sensor_1', 128, ['socket_sensor_1'])]
 
 

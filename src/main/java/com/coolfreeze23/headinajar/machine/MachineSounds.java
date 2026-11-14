@@ -169,6 +169,8 @@ public final class MachineSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_SERVO = sound("gantry.servo", 1, 0.97f, 1.03f);
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_SERVO_STOP = sound("gantry.servo_stop", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_TOOL_OUT = sound("gantry.tool_out", 1, 0.95f, 1.05f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_EXTEND = sound("gantry.extend", 1, 0.94f, 1.06f);
+    public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_RETRACT = sound("gantry.retract", 1, 0.94f, 1.06f);
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_WELD = sound("gantry.weld", 1, 0.94f, 1.06f);
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_ARC = sound("gantry.arc", 1, 0.95f, 1.05f);
     public static final DeferredHolder<SoundEvent, SoundEvent> GANTRY_TURNTABLE = sound("gantry.turntable", 1, 0.97f, 1.03f);

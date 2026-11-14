@@ -109,9 +109,9 @@ ENTRIES = [
      'en': 'The Surgical Saw', 'pt': 'A Serra Cirúrgica',
      'pages': [
          ('spotlight', 'headinajar:surgical_saw',
-          'Use it on a creature below a quarter of its health: the body stays up as a $(l)host$(). With a jar of any '
+          'Use it on a creature at half its health or less: the body stays up as a $(l)host$(). With a jar of any '
           'kind in your off hand, you keep the $(l)head$() and the body falls.',
-          'Use numa criatura abaixo de um quarto da vida: o corpo fica de pé como $(l)hospedeiro$(). Com um pote de '
+          'Use numa criatura com metade da vida ou menos: o corpo fica de pé como $(l)hospedeiro$(). Com um pote de '
           'qualquer tipo na outra mão, você fica com a $(l)cabeça$() e o corpo cai.'),
      ]},
 
@@ -387,6 +387,13 @@ ENTRIES = [
     {'cat': 'research', 'id': 'staff', 'sort': 8, 'icon': 'headinajar:employee_mount',
      'en': 'Villager Staff', 'pt': 'Aldeões',
      'pages': [
+         ('spotlight', 'headinajar:employee_mount',
+          'Hold $(k:key.sneak) and use the mount on a machine to hang it there: without $(k:key.sneak) the machine '
+          'opens instead. Then use the mount with a jarred villager. Use it to check on them; $(k:key.sneak) and use '
+          'with an empty hand to take them down.',
+          'Segure $(k:key.sneak) e use o suporte numa máquina para pendurá-lo: sem $(k:key.sneak), a máquina abre. '
+          'Depois use o suporte com um aldeão no pote. Use-o para ver como ele está; $(k:key.sneak) e use com a mão '
+          'vazia para tirá-lo.'),
          ('form', ('Form 31-E: Staff', 'Formulário 31-E'),
           'Pay: an emerald a day, from a chest touching the mount; unpaid, half the bonus.$(br)Nitwit: '
           'nothing$(br)Librarian: Sequencer reads at 90%$(br)Cleric: +10 stability$(br)Fisherman: Saline Mixer 25% '

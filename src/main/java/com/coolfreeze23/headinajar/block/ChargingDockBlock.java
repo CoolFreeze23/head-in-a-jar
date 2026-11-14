@@ -155,6 +155,17 @@ public class ChargingDockBlock extends BaseEntityBlock implements com.coolfreeze
         return Vec3.atBottomCenterOf(pos).add(0, TOP, 0);
     }
 
+    /**
+     * Which way a jar or a head resting on this dock faces: side-on to the dock's column, the side nearer {@code yaw}
+     * (on a tie, the right hand of someone standing at its front). Facing the column, a jar's crosshair and its
+     * clicks would rest on the dock, and a camera behind or in front of it would sit in the column; side-on, none do.
+     */
+    public static float sideOn(BlockState state, float yaw) {
+        net.minecraft.core.Direction front = state.getValue(FACING);
+        float right = front.getCounterClockWise().toYRot(), left = front.getClockWise().toYRot();
+        return net.minecraft.util.Mth.degreesDifferenceAbs(yaw, left) < net.minecraft.util.Mth.degreesDifferenceAbs(yaw, right) ? left : right;
+    }
+
     /** The dock a box rests on (a jar's feet, a placed head), if any: one whose plate it overlaps, the nearest first. */
     public static Entity under(Level level, AABB box) {
         Entity best = null;

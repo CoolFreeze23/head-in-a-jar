@@ -380,6 +380,9 @@ def blend(p, q, f):
 G = FK(geo.PATH)
 
 
+ROD_NAMES = ('upper_rod', 'fore_rod_lo', 'fore_rod_hi')
+
+
 def _arm_elements():
     out = []
     for u, e in G.els.items():
@@ -388,7 +391,13 @@ def _arm_elements():
         anc = G.anc(u)
         if not anc or anc[0] not in ('upper', 'upper_t', 'fore', 'fore_t1', 'fore_t2', 'head') + TOOLS:
             continue
+        if e['name'] in geo.SLEEVES:
+            continue                     # drawn by the client over the rods' exposed stretch: tested as the rods below
         f, t = np.array(e['from'], float), np.array(e['to'], float)
+        if e['name'] in ROD_NAMES:
+            # a rod out of its bar shows as its 3x3 sleeve: tested at the sleeve's section all along (inside the bar
+            # it is inside the bar's own outline anyway)
+            f, t = f - np.array([0.5, 0.0, 0.5]), t + np.array([0.5, 0.0, 0.5])
         Re, oe = rmat(*(e.get('rotation') or [0, 0, 0])), np.array(e.get('origin', [0, 0, 0]), float)
         P = (Re @ (surface_points(f, t) - oe).T).T + oe
         out.append((e['name'], G.parent[u], P))
@@ -569,6 +578,15 @@ def path_ok(fr, so, app, tip, d, t, theta, tools):
     return False
 
 
+YAW_JUMP = 25.0                  # the most the swivel may turn between the approach and the contact (a press of a few px)
+
+
+def yaw_jump(p, q):
+    """True when two poses a few px apart along the tool differ by more than YAW_JUMP in swivel yaw: the head pivot
+    is near the swivel's axis, where a small move of the tip spins the arm round (seen as a snap)."""
+    return abs(unwrap(q['yaw'], p['yaw']) - p['yaw']) > YAW_JUMP
+
+
 def natural(pose):
     """The upper arm between 30 degrees in and 100 degrees out (its elbow above the pedestal's top, never folded back
     over the turntable)."""
@@ -594,6 +612,8 @@ def plan_point(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=Non
                 if short > 0.2 or err > TWIST_MAX or not natural(pose):
                     continue
                 app = solve(tip - d * BACK, d, pose['yaw'], True, e, u)[0]
+                if yaw_jump(app, pose):
+                    continue
                 if not pose_clean(fr, pose, app, t, theta, tools, tip if way_out else None, d):
                     continue
                 if so is not None and not path_ok(fr, so, app, tip, d, t, theta, tools):
@@ -624,17 +644,18 @@ ARC_DIRS = _arc_dirs()
 ARC_DISTS = np.arange(6.0, 58.0, 2.0)
 
 
-def plan_arc(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=None, los=True):
+def plan_arc(fr, p, n, t, theta, tools=WELD, prev_yaw=45.0, label=None, so=None, los=True, near=None):
     """The nearest clean pose with the welder aimed straight at frame point p, and a clear line from the tool's tip to
-    the point (the arc). Tried first from in front of the socket's face, then from wider round."""
+    the point (the arc). Tried first from in front of the socket's face, then from wider round. Given `near` (where the
+    arm is), the clean arc among the first few found that the arm comes to with the least travel."""
     for u, e in ((0.0, 0.0), (0.0, geo.EMAX / 2.0), (0.0, geo.EMAX), (geo.UMAX, geo.EMAX)):
-        pl = _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u)
+        pl = _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u, near)
         if pl is not None:
             return pl
     return None
 
 
-def _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u):
+def _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u, near=None):
     pw, nw = to_world(theta, p), ry(theta) @ np.array(n, float)
     solid = fr.solid(t)
     Rt = ry(theta)
@@ -650,6 +671,7 @@ def _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u):
             (tips[:, :, 1] > 15)
         order = sorted(zip(*np.nonzero(ok)), key=lambda ij: ARC_DISTS[ij[1]])
         tried = 0
+        got = []
         for i, j in order:
             w, dd = U[i], ARC_DISTS[j]
             tip, d = pw + w * dd, -w
@@ -664,12 +686,21 @@ def _plan_arc(fr, p, n, t, theta, tools, prev_yaw, label, so, los, e, u):
             if los and len(seg) and solid.contains_any(seg, Rt, DECKV):
                 continue
             app = solve(tip - d * 3.0, d, pose['yaw'], True, e, u)[0]
+            if yaw_jump(app, pose):
+                continue
             if not pose_clean(fr, pose, app, t, theta, tools, tip, d):
                 continue
             if so is not None and not path_ok(fr, so, app, tip, d, t, theta, tools):
                 continue
-            return {'tip': tip, 'dir': d, 'pose': pose, 'approach': app, 'err': err, 'tilt': None, 'off': float(dd),
-                    'reach': False, 'theta': theta, 'point': pw, 'label': label}
+            found = {'tip': tip, 'dir': d, 'pose': pose, 'approach': app, 'err': err, 'tilt': None, 'off': float(dd),
+                     'reach': False, 'theta': theta, 'point': pw, 'label': label}
+            if near is None:
+                return found
+            got.append(found)
+            if len(got) >= 6:
+                break
+        if got:
+            return min(got, key=lambda q: (joint_travel(near, q['approach']), q['off']))
     return None
 
 
@@ -782,6 +813,43 @@ class Track:
     def theta_at(self, t):
         return turn_angle(self.turn, t)
 
+    def strokes(self, length):
+        """The telescopes' strokes: runs of ticks over which the arm's total extension (forearm and upper arm) keeps
+        growing or keeps shrinking. [(start tau, end tau, change in px)]."""
+        if not self.poses:
+            return []
+        ext = [self.pose_at(t).get('e', 0.0) + self.pose_at(t).get('u', 0.0) for t in range(0, length + 1)]
+        out, start, sign = [], None, 0
+        for t in range(length):
+            d = ext[t + 1] - ext[t]
+            sg = 0 if abs(d) < 0.3 else (1 if d > 0 else -1)
+            if sg != sign:
+                if sign and start is not None:
+                    out.append((start, t, ext[t] - ext[start]))
+                start, sign = (t if sg else None), sg
+        if sign and start is not None:
+            out.append((start, length, ext[length] - ext[start]))
+        return out
+
+    def stroke_fx(self, length):
+        """A hydraulic sound at the start of each telescope stroke of 3 px or more (gantry.extend going out,
+        gantry.retract coming in), on a tick no other effect takes, never the same sound within 4 ticks."""
+        taken = {e[0] for e in self.effects}
+        out, last = [], {}
+        for t0, t1, dx in self.strokes(length):
+            if abs(dx) < 3.0:
+                continue
+            name = 'extend' if dx > 0 else 'retract'
+            t = t0
+            while t in taken:
+                t += 1
+            if t > length or t - last.get(name, -99) < 4:
+                continue
+            taken.add(t)
+            last[name] = t
+            out.append((t, 'sound', SND(name, 1.0, 1.0), None))
+        return out
+
     def clip(self, length, loop='hold', review=False):
         bones = {}
         prev = None
@@ -804,7 +872,7 @@ class Track:
         for tl, ks in self.tools.items():
             if len(ks) > 1 or ks[0][1] != 0:
                 bones[tl] = {'position': [k(t, R(z=v), e) for (t, v, e) in ks]}
-        out = {'length': length, 'loop': loop, 'bones': bones, 'effects': sorted(self.effects)}
+        out = {'length': length, 'loop': loop, 'bones': bones, 'effects': sorted(self.effects + self.stroke_fx(length))}
         if review:
             out['review'] = True
             if self.turn:
@@ -856,11 +924,17 @@ SPEED_FAST = 60.0                # ... and in a hurry (a heavy frame's parts lan
 ESPEED_FAST = 14.0               # px a telescope runs in one tick in a hurry
 
 
+YAW_FAST = 55.0                  # degrees the swivel may turn in one tick on average in a hurry (eased, it peaks near 90:
+                                 # 30 degrees a frame at 60 fps; faster reads as a snap)
+
+
 def travel_ticks(p, q, fast=False):
     """Ticks the arm needs from pose p to pose q at its joint speeds (or its hurried ones)."""
     ang = max(abs(unwrap(q[kk], p[kk]) - p[kk]) for kk in ('yaw', 'a', 'b', 'c', 'hy'))
+    yaw = abs(unwrap(q['yaw'], p['yaw']) - p['yaw'])
     lin = max(abs(q.get('e', 0.0) - p.get('e', 0.0)), abs(q.get('u', 0.0) - p.get('u', 0.0)))
-    return int(math.ceil(max(ang / (SPEED_FAST if fast else SPEED), lin / (ESPEED_FAST if fast else ESPEED)) - 1e-9))
+    return int(math.ceil(max(ang / (SPEED_FAST if fast else SPEED), yaw / (YAW_FAST if fast else SPEED),
+                             lin / (ESPEED_FAST if fast else ESPEED)) - 1e-9))
 
 
 def joint_travel(p, q):
@@ -1009,6 +1083,8 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None, fast=False
         if not fn(*a):
             continue
         t_end = tr.poses[-1][0]
+        if jerky(tr, n0):
+            continue
         bad = sweep(fr, tr, t0, t_end)
         if not bad:
             return t_end, True
@@ -1048,11 +1124,28 @@ def move(fr, tr, t0, p0, t1, p1, so, ease='easeInOutSine', cart=None, fast=False
             tr.at(ta, qa, 'easeInOutSine')
             tr.at(tb, qb, 'easeInOutSine')
         tr.at(t8, p1, ease)
-        if not sweep(fr, tr, t0, t8):
+        if not jerky(tr, n0) and not sweep(fr, tr, t0, t8):
             return t8, True
     del tr.poses[n0:]
-    best[1](*best[2])
+    if best is None:
+        direct(max(t1, t0 + travel_ticks(p0, p1, fast)))
+    else:
+        best[1](*best[2])
     return tr.poses[-1][0], False
+
+
+def jerky(tr, n0):
+    """True when a path just keyed (from key n0 - 1 on) turns a joint faster than the hurried limits between two of
+    its keys: the swivel YAW_FAST degrees a tick on average, the others SPEED_FAST (a via pose on the far side of the
+    swivel's axis swings the arm round in a tick: a snap)."""
+    ks = tr.poses[max(0, n0 - 1):]
+    for (t0, p, _), (t1, q, _) in zip(ks, ks[1:]):
+        dt = max(1e-6, t1 - t0)
+        if abs(unwrap(q['yaw'], p['yaw']) - p['yaw']) > YAW_FAST * dt + 1e-6:
+            return True
+        if any(abs(unwrap(q[kk], p[kk]) - p[kk]) > SPEED_FAST * dt + 1e-6 for kk in ('a', 'b', 'c', 'hy')):
+            return True
+    return False
 
 
 def worst(bad):
@@ -1476,6 +1569,34 @@ class Builder:
             ARCS.clear()
             ARCS.update(best[1][3])
             pl, res, self.last_ok = best[2], best[3], best[4]
+            if not self.last_ok:
+                # no clean way in on time: the same plans a tick or more late (the frame may have moved on out of
+                # the way), the least late clean one; a weld that touches the frame is never kept if a late one is clean
+                kept = (self.tr, list(self.notes), dict(LOCATORS), dict(ARCS), pl, res)
+                found = False
+                for k in range(1, 9):
+                    for cand in cands[:6]:
+                        self.tr, self.notes = copy.deepcopy(saved[0]), list(saved[1])
+                        tr = self.tr
+                        LOCATORS.clear()
+                        LOCATORS.update(saved[2])
+                        ARCS.clear()
+                        ARCS.update(saved[3])
+                        r2 = self.weld(self.at_theta(cand, th), tau, cur, S + k, 'w_%s_%s' % (name, slot),
+                                       'arc_%s_%s' % (name, slot), after_turn)
+                        if self.last_ok:
+                            pl, res, found = self.at_theta(cand, th), r2, True
+                            break
+                    if found:
+                        break
+                if not found:
+                    self.tr, self.notes = kept[0], kept[1]
+                    tr = self.tr
+                    LOCATORS.clear()
+                    LOCATORS.update(kept[2])
+                    ARCS.clear()
+                    ARCS.update(kept[3])
+                    pl, res, self.last_ok = kept[4], kept[5], False
             if not self.last_ok and pl['reach']:
                 # no clean way onto the socket: aim at it from close to the stood-off pose instead, if that is clean
                 aim = None
@@ -2106,7 +2227,32 @@ def _frame_task(job):
     r.parked = {label: standoff_hits(b.fr, LOADED, [b.fr.length], range(0, 360, 10), tools)
                 for label, tools in (('loaded', {}), ('charge', {'tool_grip': EXT}))}
     r.locators, r.arcs = dict(LOCATORS), dict(ARCS)
+    r.swing = swing_report(b.tr, b.length)
+    r.strokes = len(b.tr.stroke_fx(b.length))
     return r
+
+
+def swing_report(tr, length, step=0.25):
+    """How fast the swivel swings: the fastest rate (degrees a tick, over a quarter tick) and every swing of more than
+    90 degrees, as (start tau, end tau, degrees, peak rate)."""
+    taus = np.arange(0.0, length + 1e-9, step)
+    yaw = [tr.pose_at(t)['yaw'] for t in taus]
+    for i in range(1, len(yaw)):
+        yaw[i] = unwrap(yaw[i], yaw[i - 1])
+    rate = [abs(yaw[i + 1] - yaw[i]) / step for i in range(len(yaw) - 1)]
+    swings, i = [], 0
+    while i < len(rate):
+        if rate[i] < 2.0:
+            i += 1
+            continue
+        j = i
+        while j < len(rate) and rate[j] >= 2.0 and (j == i or (yaw[j + 1] - yaw[j]) * (yaw[i + 1] - yaw[i]) > 0):
+            j += 1
+        deg = abs(yaw[j] - yaw[i])
+        if deg > 90:
+            swings.append((round(float(taus[i]), 2), round(float(taus[j]), 2), round(deg), round(max(rate[i:j]))))
+        i = j
+    return round(max(rate)), swings
 
 
 def main():
@@ -2211,7 +2357,8 @@ def main():
             print('   %-9s seat %3d contact %3d late %2d theta %6.1f %s%s' % (
                 c['slot'], c['seat'], c['contact'], c['late'], c['theta'], 'reach' if c['reach'] else 'ARC',
                 '' if c['reach'] else ' (%s, %.1f px)' % (c['arc'], c['arc_length'])))
-        print('   scan at tau %s, stamp at tau %s' % (r.scan, r.stamp_tick))
+        print('   scan at tau %s, stamp at tau %s; telescope sounds %d' % (r.scan, r.stamp_tick, r.strokes))
+        print('   swivel: fastest %d deg/tick; swings over 90 deg (from, to, deg, peak deg/tick): %s' % (r.swing[0], r.swing[1]))
         for nt in r.notes:
             print('   note:', nt)
         for kind in ('disassemble', 'repair'):

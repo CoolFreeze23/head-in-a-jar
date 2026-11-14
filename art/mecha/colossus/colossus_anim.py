@@ -729,8 +729,9 @@ BUILD_SLOTS = [('legs', 124, ['socket_thigh_l', 'socket_thigh_r', 'socket_shin_l
                ('torso_2', 168, ['socket_torso_2']), ('torso_3', 174, ['socket_torso_3']),
                ('torso_4', 180, ['socket_torso_4']),
                ('arm_l', 186, ['socket_arm_l']), ('arm_r', 192, ['socket_arm_r']),
-               ('arm_2', 198, ['socket_arm_2']), ('arm_3', 204, ['socket_arm_3']),
-               ('sensor', 210, ['socket_sensor']), ('sensor_1', 216, ['socket_sensor_1'])]
+               ('arm_3', 198, ['socket_arm_3']),
+               ('sensor', 204, ['socket_sensor']), ('sensor_1', 210, ['socket_sensor_1']),
+               ('arm_2', 228, ['socket_arm_2'])]
 
 
 def outward(bone):

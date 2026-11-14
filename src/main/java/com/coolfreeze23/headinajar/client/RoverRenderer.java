@@ -132,6 +132,11 @@ public class RoverRenderer extends GeoEntityRenderer<ShellEntity> {
 
         @Override
         public ResourceLocation getTextureResource(ShellEntity animatable) {
+            return MechaDents.sheet(animatable, texture);
+        }
+
+        /** The shell's own sheet (its glow mask is named after it). */
+        ResourceLocation sheet() {
             return texture;
         }
 
@@ -307,7 +312,7 @@ public class RoverRenderer extends GeoEntityRenderer<ShellEntity> {
             String name = bone.getName();
             if (name.equals("jar_anchor")) jar(pose, s, bone, buffers, partialTick, light);
             else if (model(s.kind()).lamps.contains(name) && bone.getScaleY() > 0.01f && !bone.isHidden() && !s.isDeadOrDying()) {
-                RenderType glow = AutoGlowingTexture.getRenderType(getTextureResource(s));
+                RenderType glow = AutoGlowingTexture.getRenderType(model(s.kind()).sheet());
                 getRenderer().renderCubesOfBone(pose, bone, buffers.getBuffer(glow), 0xF000F0, overlay, 0xFFFFFFFF);
             }
         }

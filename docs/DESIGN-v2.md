@@ -631,7 +631,7 @@ working inside hosts and mecha where it makes sense (sensor and support modules 
 
 ### 9.2 Mob hosts
 
-**Getting one.** Use the **Surgical Saw** (T2: Surgical Steel blade, Servo, diamond) on a mob below 25% health. The
+**Getting one.** Use the **Surgical Saw** (T2: Surgical Steel blade, Servo, diamond) on a mob at 50% health or less. The
 mob stops thinking (its goals are cleared and it is flagged as a host; it keeps its entity type and data), its head is
 hidden and capped with a neck seal, and it stands still. If an empty jar is in your off hand, the saw takes the
 **head** instead (a jarred mob head item for turrets and arrays; section 13) and the body falls as loot. Bosses
@@ -715,7 +715,7 @@ data pass. Hosts move at their own speed attributes. "Blood" is the creature's b
 | Armadillo | warm | | Roll Up: -80% damage, can't move | | |
 | Sniffer | warm | | Sniff: dig up a seed (10 min) | | 1.75 wide, slow |
 | Frog | cold | jump | Tongue: eat small slimes and magma cubes (froglights) | | |
-| Warden (T5) | grave | sense vibrations: entities glow within 32 | Sonic Boom (10 s cooldown) | | **blind**: your screen is black except for glowing outlines. Sawing a Warden needs it under 25% of 500 HP |
+| Warden (T5) | grave | sense vibrations: entities glow within 32 | Sonic Boom (10 s cooldown) | | **blind**: your screen is black except for glowing outlines. Sawing a Warden needs it at half of 500 HP or less |
 
 **OreSpawn port** (abilities follow the Necromancy OreSpawn spec's trait choices, so a creature means the same thing in
 both mods):

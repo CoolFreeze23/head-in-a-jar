@@ -15,7 +15,8 @@ import java.util.List;
 
 /**
  * The facts a player needs at the moment they hold the block: what the Galvanic Pile burns and how much an operation
- * takes, that the Assembly Gantry is itself the pad a mecha stands on, how the Charging Dock and the Cradle are fed.
+ * takes, that the Assembly Gantry is itself the pad a mecha stands on, how the Charging Dock and the Cradle are fed, and
+ * how an Employee Mount is hung on a machine.
  */
 public final class BlockTooltips {
     private BlockTooltips() {
@@ -43,6 +44,10 @@ public final class BlockTooltips {
         } else if (stack.is(ModRegistry.CRADLE_ITEM.get())) {
             add(tip, Component.translatable("tooltip.headinajar.cradle.how", Component.translatable("item.headinajar.saline_bottle")));
             add(tip, Component.translatable("tooltip.headinajar.fed_by", Component.translatable("block.headinajar.galvanic_pile")));
+        } else if (stack.is(ModRegistry.EMPLOYEE_MOUNT_ITEM.get())) {
+            // without sneak, a use on a machine with a screen opens the machine (as with any block placed against a chest)
+            add(tip, Component.translatable("tooltip.headinajar.mount.how", Component.keybind("key.sneak")));
+            add(tip, Component.translatable("tooltip.headinajar.mount.staff"));
         }
     }
 

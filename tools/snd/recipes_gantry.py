@@ -124,6 +124,96 @@ def tool_out(take, r):
     return b
 
 
+def _ramp(x):
+    """0 -> 1 smoothstep of x (clipped), for the speed curves of the telescope strokes."""
+    x = np.clip(x, 0, 1)
+    return x * x * (3 - 2 * x)
+
+
+def _stroke(r, m, L, f, cut, air, s):
+    """The common body of a telescope stroke over 0.003 .. 0.003 + L under the speed curve s (0..1, already let go):
+    a low-passed whoosh of oil through the rod's port whose cutoff runs cut[0] -> cut[1] across the stroke, the
+    cylinder's air (0.8-5 kHz) and the groan, a 6-partial harmonic tone gliding f[0] -> f[1] (exponentially) with a
+    4 Hz waver. Returns the summed layers."""
+    dur = len(s) / SR
+    t = tt(dur)
+    u = np.clip((t - 0.003) / L, 0, 1)
+    fc = cut[0] + (cut[1] - cut[0]) * u
+    whoosh = sweep_bandpass(noise(dur, r), np.full(len(t), 60.0), fc * (0.6 + 0.4 * s), block=128) * s
+    hiss = bandpass(noise(dur, r), 800 * m, 5000 * m) * s ** 1.5
+    fg = f[0] * (f[1] / f[0]) ** u * (1 + 0.03 * np.sin(2 * np.pi * 4 * t))
+    groan = osc_harm(fg, 6, r, 1.3) * s ** 0.6
+    return 0.50 * norm(whoosh) + air * norm(hiss) + 0.26 * norm(groan)
+
+
+EXTEND = [dict(m=1.00, L=0.15, f=(72.0, 104.0), cut=(320.0, 1500.0), air=0.42, valve=0.30, stop=520.0, land=0.40),
+          dict(m=1.07, L=0.12, f=(78.0, 110.0), cut=(360.0, 1650.0), air=0.50, valve=0.24, stop=560.0, land=0.48),
+          dict(m=0.93, L=0.20, f=(70.0, 98.0), cut=(300.0, 1350.0), air=0.36, valve=0.36, stop=490.0, land=0.34)]
+
+
+def extend(take, r):
+    """A telescope of the arm sliding out (build and repair clips, a key at the start of each stroke; the forearm's two
+    stages out by up to 43 px, the upper arm by up to 15 px, at about 10 px a tick, so 1-5 ticks): the valve opens at
+    3 ms (a dry 'tsk' and a short 3-10 kHz hiss as the pressure goes in), the oil pushes the rod out over 0.12-0.20 s,
+    the speed coming up in the first quarter and the pressure still building (level 0.75 -> 1.0), the whoosh's cutoff
+    climbing 300-360 -> 1350-1650 Hz and the groan rising 70-78 -> 98-110 Hz, easing over the last fifth onto its
+    end-stop (a soft thunk: a small iron body about 490-560 Hz, a thunk 130 -> 85 Hz, at 0.34-0.48). It reads as rising
+    and ends gently; the retraction is the firmer of the two."""
+    p = EXTEND[take - 1]
+    m, L = p['m'], p['L']
+    dur = L + 0.42
+    b = buf(dur)
+    t = tt(dur)
+    u = (t - 0.003) / L
+    s = _ramp(u / 0.25) * (1 - 0.55 * _ramp((u - 0.8) / 0.2)) * (0.75 + 0.25 * np.clip(u, 0, 1))
+    s = np.where(u < 1, s, 0.45 * np.exp(-(t - 0.003 - L) / 0.015))  # 0.45: the curve's value at the stop
+    s = smooth(s * (u > 0), 3)
+    b += _stroke(r, m, L, p['f'], p['cut'], p['air'], s)
+    place(b, strike(r, 2500, 0.0008), 0.003, 0.35)
+    place(b, norm(noise_burst(3000 * m, 10000, 0.030, r, attack=0.004)), 0.003, p['valve'])
+    stop = mix(0.45 * norm(iron_body(r, p['stop'], p['stop'] * 1.6, 0.8, noise_gain=0.30, band_scale=m)),
+               0.55 * thunk(r, 130 * m, 85 * m, 0.040, 0.015), 0.25 * strike(r, 1500))
+    place(b, norm(stop), 0.003 + L, p['land'])
+    return b
+
+
+RETRACT = [dict(m=1.00, L=0.15, f=(106.0, 72.0), cut=(1500.0, 380.0), air=0.40, valve=0.20, stop=430.0, land=0.80,
+                puff=0.20, settle=0.050),
+           dict(m=1.08, L=0.12, f=(112.0, 76.0), cut=(1650.0, 420.0), air=0.48, valve=0.16, stop=470.0, land=0.88,
+                puff=0.16, settle=0.044),
+           dict(m=0.92, L=0.19, f=(102.0, 70.0), cut=(1350.0, 340.0), air=0.36, valve=0.24, stop=400.0, land=0.74,
+                puff=0.24, settle=0.058)]
+
+
+def retract(take, r):
+    """A telescope of the arm drawing back in (build and repair clips, a key at the start of each stroke, 1-5 ticks):
+    the return valve clicks open at 3 ms (a 'tsk' and a smaller hiss), the rod is drawn in over 0.12-0.19 s at full
+    speed from the first sixth to the end, the whoosh's cutoff falling 1350-1650 -> 340-420 Hz and the groan falling
+    102-112 -> 70-76 Hz; it arrives still moving, so it ends on a firmer end-stop than the extension (an iron body
+    about 400-470 Hz, a thunk 150 -> 80 Hz and a strike, at 0.74-0.88), the spent oil's vent puff 12 ms after it
+    (1.5-7 kHz) and the stage seating with a quieter tick 44-58 ms after the stop."""
+    p = RETRACT[take - 1]
+    m, L = p['m'], p['L']
+    dur = L + 0.45
+    b = buf(dur)
+    t = tt(dur)
+    u = (t - 0.003) / L
+    s = _ramp(u / 0.16) * (0.9 + 0.1 * np.clip(u, 0, 1))
+    s = np.where(u < 1, s, np.exp(-(t - 0.003 - L) / 0.012))
+    s = smooth(s * (u > 0), 3)
+    b += _stroke(r, m, L, p['f'], p['cut'], p['air'], s)
+    place(b, strike(r, 2500, 0.0008), 0.003, 0.30)
+    place(b, norm(noise_burst(2500 * m, 9000, 0.022, r, attack=0.003)), 0.003, p['valve'])
+    stop = mix(0.45 * norm(iron_body(r, p['stop'], p['stop'] * 1.55, 0.7, noise_gain=0.35, band_scale=m)),
+               0.60 * thunk(r, 150 * m, 80 * m, 0.038, 0.016), 0.35 * strike(r, 1400))
+    end = 0.003 + L
+    place(b, norm(stop), end, p['land'])
+    place(b, norm(noise_burst(1500 * m, 7000, 0.025, r, attack=0.005)), end + 0.012, p['puff'])
+    place(b, mix(norm(modal(p['stop'] * 1.25, [1, 2.756], [1, 0.5], [0.018, 0.011], r)), 0.6 * thunk(r, 120, 90, 0.022, 0.010)),
+          end + p['settle'], 0.16)
+    return b
+
+
 # ---------------------------------------------------------------- the welder
 
 WELD = [dict(m=1.00, L=0.20, hum=100.0, lo=2200.0, hi=11000.0, sp=(0.004, 0.014)),
@@ -355,6 +445,7 @@ def ratchet(take, r):
 # ---------------------------------------------------------------- references (measured as the game plays them)
 
 PISTON_IN = dict(event='block.piston.contract', file='tile__piston__in.ogg', vol=0.5, pitch=0.675)
+PISTON_OUT = dict(event='block.piston.extend', file='tile__piston__out.ogg', vol=0.5, pitch=0.725)
 CRAFTER = dict(event='block.crafter.craft', file='block__crafter__craft.ogg', vol=1.0, pitch=1.0)
 SPYGLASS = dict(event='item.spyglass.use', file='item__spyglass__use.ogg', vol=1.0, pitch=1.0)
 IRON_DOOR_CLOSE = dict(event='block.iron_door.close', file='block__iron_door__close1.ogg', vol=0.9, pitch=0.95)
@@ -398,6 +489,16 @@ SOUNDS = [
        subtitle_en='Gantry tool slides out', subtitle_pt='Ferramenta desliza para fora',
        clip_key='build key 50: gantry.tool_out|0.4|1.2 -> gantry.tool_out|1.0|1.2',
        play='Gantry build clips, key 50 (the welder out over 3 ticks, easeOutCubic): the catch at 3 ms, the slide slowing over 105-140 ms, the detent click at its end.' + KEY_NOTE),
+    ev('extend', fn=extend, takes=3, target=-27.5, cls='servo (hydraulic stroke, the arm telescoping out)',
+       kind=('servo', 0.20), fade_ms=20, hit_ms=3, ref=PISTON_OUT, pitch=[0.94, 1.06],
+       subtitle_en='Gantry arm extends', subtitle_pt='Braço do pórtico se estende',
+       clip_key='build and repair clips, a key at the start of each telescope stroke (|1.0|1.0)',
+       play='Gantry clips build and repair, a key at the start of each telescope stroke out (the forearm\'s two stages, up to 43 px, and the upper arm, up to 15 px, 1-5 ticks): the valve at 3 ms, the stroke rising over 0.12-0.20 s, the soft end-stop at its end, gone by about 0.4 s.' + KEY_NOTE),
+    ev('retract', fn=retract, takes=3, target=-27.0, cls='servo (hydraulic stroke, the arm telescoping in)',
+       kind=('servo', 0.20), fade_ms=20, hit_ms=3, ref=PISTON_IN, pitch=[0.94, 1.06],
+       subtitle_en='Gantry arm retracts', subtitle_pt='Braço do pórtico se recolhe',
+       clip_key='build and repair clips, a key at the start of each telescope stroke (|1.0|1.0)',
+       play='Gantry clips build and repair, a key at the start of each telescope stroke in (1-5 ticks): the valve at 3 ms, the stroke falling over 0.12-0.19 s, the firmer end-stop and vent puff at its end, the seating tick 44-58 ms on, gone by about 0.45 s.' + KEY_NOTE),
     # ---- the welder
     ev('weld', fn=weld, takes=3, target=-26.0, cls='arc crackle (one spot weld)', kind='latch', fade_ms=15, hit_ms=3,
        ref=VAULT_ACTIVATE, pitch=[0.94, 1.06],

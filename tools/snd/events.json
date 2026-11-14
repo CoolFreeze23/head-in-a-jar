@@ -4651,6 +4651,58 @@
       "how_to_play": "Gantry build clips, key 50 (the welder out over 3 ticks, easeOutCubic): the catch at 3 ms, the slide slowing over 105-140 ms, the detent click at its end. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
     },
     {
+      "id": "headinajar:gantry.extend",
+      "files": [
+        "headinajar:gantry/extend_1",
+        "headinajar:gantry/extend_2",
+        "headinajar:gantry/extend_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (hydraulic stroke, the arm telescoping out) (M max target -27.5)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Gantry arm extends",
+        "pt_br": "Braço do pórtico se estende"
+      },
+      "clip_keys": "build and repair clips, a key at the start of each telescope stroke (|1.0|1.0)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Gantry clips build and repair, a key at the start of each telescope stroke out (the forearm's two stages, up to 43 px, and the upper arm, up to 15 px, 1-5 ticks): the valve at 3 ms, the stroke rising over 0.12-0.20 s, the soft end-stop at its end, gone by about 0.4 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
+      "id": "headinajar:gantry.retract",
+      "files": [
+        "headinajar:gantry/retract_1",
+        "headinajar:gantry/retract_2",
+        "headinajar:gantry/retract_3"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 16,
+      "fixed_range": false,
+      "category": "BLOCKS",
+      "loudness_class": "servo (hydraulic stroke, the arm telescoping in) (M max target -27.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Gantry arm retracts",
+        "pt_br": "Braço do pórtico se recolhe"
+      },
+      "clip_keys": "build and repair clips, a key at the start of each telescope stroke (|1.0|1.0)",
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Gantry clips build and repair, a key at the start of each telescope stroke in (1-5 ticks): the valve at 3 ms, the stroke falling over 0.12-0.19 s, the firmer end-stop and vent puff at its end, the seating tick 44-58 ms on, gone by about 0.45 s. Keyframe volume 1.0 (the file carries the loudness); the key's pitch is kept."
+    },
+    {
       "id": "headinajar:gantry.weld",
       "files": [
         "headinajar:gantry/weld_1",

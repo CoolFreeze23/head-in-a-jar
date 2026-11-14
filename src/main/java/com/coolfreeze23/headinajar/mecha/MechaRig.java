@@ -242,10 +242,12 @@ public final class MechaRig {
 
     /**
      * The gatehouse: two towers on long legs, the jar in the slot between them; Siege on the drive key. Its clips were
-     * authored at 0.1944 blocks a tick (walk) and 0.0583 (limp). It borrows the Bulwark's sounds where it has none of its own.
+     * authored at 0.1944 blocks a tick (walk) and 0.0583 (limp). Its build seats the left shoulder hardpoint (slot 12)
+     * last, after a pause in which the Gantry's turntable turns that shoulder to the arm (from no other side can the
+     * arm reach it). It borrows the Bulwark's sounds where it has none of its own.
      */
     public static final MechaRig COLOSSUS = new MechaRig("colossus", Verb.SIEGE, 0.1944, 0.0583,
-            new int[]{127, 135, 141, 147, 153, 159, 165, 171, 177, 183, 189, 195, 201, 207, 213, 219},
+            new int[]{127, 135, 141, 147, 153, 159, 165, 171, 177, 183, 189, 195, 231, 201, 207, 213},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor",
                     "shin_l", "shin_r", "socket_arm_2", "socket_arm_3"},
             Set.of("lamp_core", "lamp_tail"), 1.4, 1.8,
@@ -267,9 +269,11 @@ public final class MechaRig {
     /**
      * The board's company car: a dark suit on narrow legs, the jar under a canopy with a sunroof, four Gene Port vials on
      * the shoulders; the premium jingle on the drive key. Clips authored at 0.216 blocks a tick (walk) and 0.0648 (limp).
+     * Its build seats each arm and then the shoulder hardpoint above it (slots 10, 12, 11, 13), so the Gantry's arm welds
+     * one side, then the other.
      */
     public static final MechaRig EXECUTIVE = new MechaRig("executive", Verb.JINGLE, 0.216, 0.0648,
-            new int[]{47, 55, 60, 65, 70, 77, 82, 87, 92, 97, 104, 109, 114, 119, 126, 131},
+            new int[]{47, 55, 60, 65, 70, 77, 82, 87, 92, 97, 104, 114, 109, 119, 126, 131},
             new String[]{"foot_l", "foot_r", "vent_l", "vent_r", "clamp_l", "jar_anchor", "socket_arm_l", "socket_arm_r", "torso", "sensor",
                     "gene_port_0", "gene_port_1", "gene_port_2", "gene_port_3"},
             Set.of("lamp_core", "lamp_tail"), 1.2, 1.8,

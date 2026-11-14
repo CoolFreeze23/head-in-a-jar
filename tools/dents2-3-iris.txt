@@ -1,0 +1,312 @@
+# dents2 under a shader pack: a row of the eight frames parked and dented, in the Overworld, the Nether and the End,
+# each view drawn the ordinary way (off), from kept geometry (on), the ordinary way again (off); then a dent stage
+# changed while kept, and the render thread's time on machines kept and drawn the ordinary way (parktime).
+# Run with SMOKE_MODS=iris and SMOKE_SHADER=BSLClassic_v10.0.zip or ComplementaryReimagined_r5.5.1.zip (their TAA and
+# clouds off in run-smoke/shaderpacks/<pack>.txt, so that two ordinary shots are the same picture).
+@observe 20
+wait 60
+/time set 1500
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/weather clear
+hud off
+/gamemode spectator
+/tp @s 0.5 -60 -24 0 4
+wait 40
+mecha hopper -21 -60 0
+mecha bulwark -15 -60 0
+mecha colossus -9 -60 0
+mecha executive -3 -60 0
+mecha wheelhouse 3 -60 0
+mecha skitter 9 -60 0
+mecha kite 15 -60 0
+mecha chimera 21 -60 0
+wait 20
+/data merge entity @e[type=headinajar:hopper,x=-20.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:9.9f}
+/data merge entity @e[type=headinajar:bulwark,x=-14.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:23.1f}
+/data merge entity @e[type=headinajar:colossus,x=-8.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:49.5f}
+/data merge entity @e[type=headinajar:executive,x=-2.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:59.4f}
+/data merge entity @e[type=headinajar:wheelhouse,x=3.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:14.9f}
+/data merge entity @e[type=headinajar:skitter,x=9.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:16.5f}
+/data merge entity @e[type=headinajar:kite,x=15.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:11.5f}
+/data merge entity @e[type=headinajar:chimera,x=21.5,y=-60,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:19.8f}
+wait 300
+dents
+parkstats
+/tp @s 0.5 -60 -24 0 4
+wait 20
+parkcache off
+wait 10
+shot ow_whole_off_a
+parkcache on
+wait 10
+shot ow_whole_on
+parkcache off
+wait 10
+shot ow_whole_off_b
+parkcache on
+/tp @s -6 -59 -5 -20 15
+wait 20
+parkcache off
+wait 10
+shot ow_close_off_a
+parkcache on
+wait 10
+shot ow_close_on
+parkcache off
+wait 10
+shot ow_close_off_b
+parkcache on
+/tp @s -12.5 -60 -10 0 4
+wait 20
+parkcache off
+wait 10
+shot ow_left_off_a
+parkcache on
+wait 10
+shot ow_left_on
+parkcache off
+wait 10
+shot ow_left_off_b
+parkcache on
+/data merge entity @e[type=headinajar:hopper,x=-20.5,y=-60,z=0.5,distance=..1,limit=1] {Health:26.4f}
+/data merge entity @e[type=headinajar:bulwark,x=-14.5,y=-60,z=0.5,distance=..1,limit=1] {Health:61.6f}
+/data merge entity @e[type=headinajar:colossus,x=-8.5,y=-60,z=0.5,distance=..1,limit=1] {Health:132.0f}
+/data merge entity @e[type=headinajar:executive,x=-2.5,y=-60,z=0.5,distance=..1,limit=1] {Health:158.4f}
+/data merge entity @e[type=headinajar:wheelhouse,x=3.5,y=-60,z=0.5,distance=..1,limit=1] {Health:39.6f}
+/data merge entity @e[type=headinajar:skitter,x=9.5,y=-60,z=0.5,distance=..1,limit=1] {Health:44.0f}
+/data merge entity @e[type=headinajar:kite,x=15.5,y=-60,z=0.5,distance=..1,limit=1] {Health:30.8f}
+/data merge entity @e[type=headinajar:chimera,x=21.5,y=-60,z=0.5,distance=..1,limit=1] {Health:52.8f}
+wait 100
+dents
+parkstats
+/tp @s 0.5 -60 -24 0 4
+wait 20
+parkcache off
+wait 10
+shot ow2_whole_off_a
+parkcache on
+wait 10
+shot ow2_whole_on
+parkcache off
+wait 10
+shot ow2_whole_off_b
+parkcache on
+/tp @s -6 -59 -5 -20 15
+wait 20
+parkcache off
+wait 10
+shot ow2_close_off_a
+parkcache on
+wait 10
+shot ow2_close_on
+parkcache off
+wait 10
+shot ow2_close_off_b
+parkcache on
+/tp @s -12.5 -60 -10 0 4
+wait 20
+parkcache off
+wait 10
+shot ow2_left_off_a
+parkcache on
+wait 10
+shot ow2_left_on
+parkcache off
+wait 10
+shot ow2_left_off_b
+parkcache on
+/tp @s 0.5 -60 -24 0 4
+parkcache on
+wait 40
+parktime
+report parktime overworld kept
+wait 200
+parktime
+parkcache off
+wait 40
+parktime
+report parktime overworld ordinary
+wait 200
+parktime
+parkcache on
+wait 40
+parkstats
+execute in minecraft:the_nether run tp @s 0.5 101 -24 0 4
+wait 80
+fill -32 100 -40 -17 115 12 air
+fill -16 100 -40 -1 115 12 air
+fill 0 100 -40 15 115 12 air
+fill 16 100 -40 31 115 12 air
+fill 32 100 -40 32 115 12 air
+fill -32 99 -40 32 99 12 minecraft:smooth_stone
+wait 20
+/tp @s 0.5 101 -24 0 4
+wait 20
+mecha hopper -21 100 0
+mecha bulwark -15 100 0
+mecha colossus -9 100 0
+mecha executive -3 100 0
+mecha wheelhouse 3 100 0
+mecha skitter 9 100 0
+mecha kite 15 100 0
+mecha chimera 21 100 0
+wait 20
+/data merge entity @e[type=headinajar:hopper,x=-20.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:9.9f}
+/data merge entity @e[type=headinajar:bulwark,x=-14.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:23.1f}
+/data merge entity @e[type=headinajar:colossus,x=-8.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:49.5f}
+/data merge entity @e[type=headinajar:executive,x=-2.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:59.4f}
+/data merge entity @e[type=headinajar:wheelhouse,x=3.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:14.9f}
+/data merge entity @e[type=headinajar:skitter,x=9.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:16.5f}
+/data merge entity @e[type=headinajar:kite,x=15.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:11.5f}
+/data merge entity @e[type=headinajar:chimera,x=21.5,y=100,z=0.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:19.8f}
+wait 300
+dents
+parkstats
+/tp @s 0.5 100 -24 0 4
+wait 20
+parkcache off
+wait 10
+shot ne_whole_off_a
+parkcache on
+wait 10
+shot ne_whole_on
+parkcache off
+wait 10
+shot ne_whole_off_b
+parkcache on
+/tp @s -6 101 -5 -20 15
+wait 20
+parkcache off
+wait 10
+shot ne_close_off_a
+parkcache on
+wait 10
+shot ne_close_on
+parkcache off
+wait 10
+shot ne_close_off_b
+parkcache on
+/tp @s -12.5 100 -10 0 4
+wait 20
+parkcache off
+wait 10
+shot ne_left_off_a
+parkcache on
+wait 10
+shot ne_left_on
+parkcache off
+wait 10
+shot ne_left_off_b
+parkcache on
+/tp @s 0.5 100 -24 0 4
+parkcache on
+wait 40
+parktime
+report parktime nether kept
+wait 200
+parktime
+parkcache off
+wait 40
+parktime
+report parktime nether ordinary
+wait 200
+parktime
+parkcache on
+wait 40
+parkstats
+execute in minecraft:the_end run tp @s 0.5 101 176 0 4
+wait 80
+kill @e[type=minecraft:ender_dragon]
+fill -32 100 160 -17 115 212 air
+fill -16 100 160 -1 115 212 air
+fill 0 100 160 15 115 212 air
+fill 16 100 160 31 115 212 air
+fill 32 100 160 32 115 212 air
+fill -32 99 160 32 99 212 minecraft:end_stone
+wait 20
+/tp @s 0.5 101 176 0 4
+wait 20
+mecha hopper -21 100 200
+mecha bulwark -15 100 200
+mecha colossus -9 100 200
+mecha executive -3 100 200
+mecha wheelhouse 3 100 200
+mecha skitter 9 100 200
+mecha kite 15 100 200
+mecha chimera 21 100 200
+wait 20
+/data merge entity @e[type=headinajar:hopper,x=-20.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:9.9f}
+/data merge entity @e[type=headinajar:bulwark,x=-14.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:23.1f}
+/data merge entity @e[type=headinajar:colossus,x=-8.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:49.5f}
+/data merge entity @e[type=headinajar:executive,x=-2.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:59.4f}
+/data merge entity @e[type=headinajar:wheelhouse,x=3.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:14.9f}
+/data merge entity @e[type=headinajar:skitter,x=9.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:16.5f}
+/data merge entity @e[type=headinajar:kite,x=15.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:11.5f}
+/data merge entity @e[type=headinajar:chimera,x=21.5,y=100,z=200.5,distance=..1,limit=1] {HitBearings:4311859392L,Health:19.8f}
+wait 300
+dents
+parkstats
+/tp @s 0.5 100 176 0 4
+wait 20
+parkcache off
+wait 10
+shot en_whole_off_a
+parkcache on
+wait 10
+shot en_whole_on
+parkcache off
+wait 10
+shot en_whole_off_b
+parkcache on
+/tp @s -6 101 195 -20 15
+wait 20
+parkcache off
+wait 10
+shot en_close_off_a
+parkcache on
+wait 10
+shot en_close_on
+parkcache off
+wait 10
+shot en_close_off_b
+parkcache on
+/tp @s -12.5 100 190 0 4
+wait 20
+parkcache off
+wait 10
+shot en_left_off_a
+parkcache on
+wait 10
+shot en_left_on
+parkcache off
+wait 10
+shot en_left_off_b
+parkcache on
+/tp @s 0.5 100 176 0 4
+parkcache on
+wait 40
+parktime
+report parktime end kept
+wait 200
+parktime
+parkcache off
+wait 40
+parktime
+report parktime end ordinary
+wait 200
+parktime
+parkcache on
+wait 40
+parkstats
+# back to the Overworld row: kept again, shadows included
+execute in minecraft:overworld run tp @s 0.5 -60 -24 0 4
+wait 200
+parkstats
+parktime
+report parktime overworld again kept
+wait 200
+parktime
+parkstats
+shot ow3_whole_on

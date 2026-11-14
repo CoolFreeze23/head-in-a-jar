@@ -59,8 +59,8 @@ SHELLS = {
 
 LANG = [
     ('item.headinajar.surgical_saw', 'Surgical Saw', 'Serra Cirúrgica'),
-    ('item.headinajar.surgical_saw.how', 'Use on a mob below 25% health to make it a host body a jar can pilot.',
-     'Use numa criatura com menos de 25% de vida para torná-la um corpo hospedeiro que um pote pode pilotar.'),
+    ('item.headinajar.surgical_saw.how', 'Use on a mob at half its health or less to make it a host body a jar can pilot.',
+     'Use numa criatura com metade da vida ou menos para torná-la um corpo hospedeiro que um pote pode pilotar.'),
     ('item.headinajar.surgical_saw.how2', 'With an empty Life Support Jar in your off hand, keep the head instead.',
      'Com um Pote de Suporte Vital vazio na outra mão, fique com a cabeça.'),
     ('item.headinajar.embalming_fluid', 'Embalming Fluid', 'Fluido de Embalsamar'),
@@ -86,8 +86,8 @@ LANG = [
     ('key.headinajar.secondary', 'Secondary (laser, host, mecha, genes)', 'Secundária (laser, hospedeiro, mecha, genes)'),
     ('message.headinajar.saw_refused', 'The saw refuses: bosses, named mobs, other people\'s pets and hosts are off limits.',
      'A serra se recusa: chefões, criaturas com nome, bichos de outras pessoas e hospedeiros estão fora de questão.'),
-    ('message.headinajar.saw_too_healthy', 'Too lively. Wear it down below a quarter of its health first.',
-     'Vivo demais. Deixe-o com menos de um quarto da vida antes.'),
+    ('message.headinajar.saw_too_healthy', 'Too lively. Wear it down to half its health or less first.',
+     'Vivo demais. Deixe-o com metade da vida ou menos antes.'),
     ('message.headinajar.host_made', '%s is now a host body. As a jar, use it to climb on.', '%s agora é um corpo hospedeiro. Como pote, use-o para subir.'),
     ('message.headinajar.host_busy', 'Someone is already in that body', 'Alguém já está nesse corpo'),
     ('message.headinajar.host_status', 'Host: freshness %s%%, sync %s%%. Climb on as a jar.', 'Hospedeiro: frescor %s%%, sincronia %s%%. Suba nele como pote.'),

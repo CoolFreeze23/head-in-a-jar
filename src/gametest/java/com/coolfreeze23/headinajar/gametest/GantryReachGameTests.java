@@ -28,22 +28,24 @@ import java.util.Set;
 @PrefixGameTestTemplate(false)
 public class GantryReachGameTests {
     /**
-     * Contacts struck as an arc, frame id + "_" + slot: a core socket inside the hull, or a reach the arm cannot come
-     * into from the contact before (or from standing off) cleanly in time, where the arc lands on time instead.
+     * Contacts struck as an arc, frame id + "_" + slot: a socket with no reach at the angle the frame stands at (a core
+     * inside the hull, a back socket behind it), or a reach with no clean way in from the contact before (or from
+     * standing off) in time, where the arc lands on time instead.
      */
-    static final Set<String> ARCS = Set.of("hopper_core", "bulwark_back", "bulwark_back_1", "bulwark_torso_2",
+    static final Set<String> ARCS = Set.of("hopper_core", "bulwark_back", "bulwark_back_1", "bulwark_core", "bulwark_torso_2",
             "colossus_legs", "colossus_back", "colossus_back_1", "executive_back", "wheelhouse_back_1", "wheelhouse_core",
-            "skitter_back", "skitter_core", "skitter_arm_l", "kite_core");
+            "skitter_back", "skitter_core", "skitter_arm_l", "kite_arm_l", "chimera_back");
 
     /**
-     * Contacts that still come after their seat, and at most how many ticks: the Colossus's second shoulder pod can be
-     * met only with the frame turned 150 degrees from where its other shoulders and sensors are met, six ticks apart.
+     * Contacts that still come after their seat, and at most how many ticks: after a turn, or where the only way on time
+     * would swing the arm round faster than it may (the Skitter's left arm). The Colossus lands its left shoulder last,
+     * after the turntable has turned that shoulder to the arm, and the Executive each shoulder after its arm, so the
+     * heavies' shoulders are met on time.
      */
-    static final Map<String, Integer> LATE = Map.ofEntries(Map.entry("colossus_torso_4", 1), Map.entry("colossus_arm_2", 6),
-            Map.entry("colossus_arm_3", 11), Map.entry("colossus_sensor", 16), Map.entry("colossus_sensor_1", 14),
-            Map.entry("bulwark_torso_2", 1), Map.entry("wheelhouse_torso_1", 1), Map.entry("skitter_torso_1", 4),
-            Map.entry("skitter_arm_l", 1), Map.entry("kite_core", 3), Map.entry("kite_torso_0", 4), Map.entry("kite_arm_l", 5),
-            Map.entry("kite_arm_r", 2), Map.entry("chimera_back", 5), Map.entry("chimera_core", 2));
+    static final Map<String, Integer> LATE = Map.ofEntries(Map.entry("colossus_torso_4", 1), Map.entry("executive_arm_r", 1),
+            Map.entry("bulwark_core", 1), Map.entry("skitter_torso_1", 4), Map.entry("skitter_arm_l", 9),
+            Map.entry("skitter_sensor", 5), Map.entry("skitter_sensor_1", 3), Map.entry("kite_sensor", 1),
+            Map.entry("chimera_torso_0", 2), Map.entry("chimera_torso_1", 3));
 
     /** Every other contact of every frame meets its seat tick: the weld lands as the part does, not after it. */
     @GameTest(template = "platform")
@@ -109,6 +111,40 @@ public class GantryReachGameTests {
                 h.assertTrue(Math.abs(last(bones.getAsJsonObject(bone))) < 1e-3, clip.getKey() + ": " + bone + " is not home at the end");
             }
         }
+        h.succeed();
+    }
+
+    /**
+     * The telescopes are heard: the heavies' builds key gantry.extend and gantry.retract (each telescope stroke's
+     * start), and every clip that runs a telescope out keys at least one of each.
+     */
+    @GameTest(template = "platform")
+    public static void theTelescopesAreHeard(GameTestHelper h) {
+        JsonObject anims;
+        try (InputStream in = GantryReachGameTests.class.getResourceAsStream("/assets/headinajar/animations/block/gantry.animation.json")) {
+            h.assertTrue(in != null, "the Gantry's clips are missing");
+            anims = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonObject("animations");
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        for (var clip : anims.entrySet()) {
+            JsonObject c = clip.getValue().getAsJsonObject();
+            JsonObject bones = c.getAsJsonObject("bones");
+            double out = 0;
+            for (String bone : new String[]{"upper_t", "fore_t1", "fore_t2"}) if (bones.has(bone)) out = Math.max(out, most(bones.getAsJsonObject(bone)));
+            int extend = 0, retract = 0;
+            if (c.has("sound_effects")) for (var k : c.getAsJsonObject("sound_effects").entrySet()) {
+                String effect = k.getValue().getAsJsonObject().get("effect").getAsString();
+                if (effect.startsWith("headinajar:gantry.extend|")) extend++;
+                if (effect.startsWith("headinajar:gantry.retract|")) retract++;
+            }
+            if (out > 5) h.assertTrue(extend > 0 && retract > 0, clip.getKey() + ": the telescopes run out " + out + " px unheard");
+            if (clip.getKey().equals("build_colossus") || clip.getKey().equals("build_executive")) {
+                h.assertTrue(extend >= 3 && retract >= 3, clip.getKey() + ": " + extend + " extend and " + retract + " retract keys");
+            }
+        }
+        h.assertTrue(com.coolfreeze23.headinajar.machine.MachineSounds.byId("gantry.extend") != null
+                && com.coolfreeze23.headinajar.machine.MachineSounds.byId("gantry.retract") != null, "the telescope sounds are not registered");
         h.succeed();
     }
 

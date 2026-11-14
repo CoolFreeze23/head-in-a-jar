@@ -7,7 +7,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Wear a bystander can read: where a machine has been hit and how badly it is damaged, from two things every client has,
- * its health and the bearings of its last few blows ({@link MechaEntity#hitBearings}, synced and saved). At three
+ * its health and the bearings of its last few blows ({@link MechaEntity#hitBearings}, synced and saved; a Utility
+ * Shell's are {@link com.coolfreeze23.headinajar.entity.ShellEntity#hitBearings}, saved and sent on an optional channel). At three
  * quarters, half and a quarter of its health a dent stage appears on the side it was hit from most; a side it was hit
  * from often enough besides shows one stage less. Below a quarter a walking frame limps on the leg of the side it was
  * hit from more (with power: the limp of a flat battery is its own). A machine never hit shows nothing, whatever its
@@ -28,7 +29,7 @@ public final class Wear {
      * Where a blow came from, in degrees about the machine from its front (0) through its right (90), back (180) and left
      * (270); NaN for a blow from nowhere in particular (a fall, fire, starving), which leaves no dent.
      */
-    public static float bearing(MechaEntity m, DamageSource source) {
+    public static float bearing(net.minecraft.world.entity.LivingEntity m, DamageSource source) {
         Vec3 from = source.getSourcePosition();
         if (from == null) return Float.NaN;
         double dx = from.x - m.getX(), dz = from.z - m.getZ();

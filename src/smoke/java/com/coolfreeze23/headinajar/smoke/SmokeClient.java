@@ -70,6 +70,8 @@ public class SmokeClient {
     private String keep;
     /** "@join HOST:PORT": connect to that server instead of making a world, and report how the connection ended. */
     private String join;
+    /** "@join HOST:PORT play": once in the server's world, run the script there instead of stopping. */
+    private boolean joinPlay;
     private int joinTicks;
     private long seed = 12345L;
     private GameType gameMode;
@@ -170,6 +172,14 @@ public class SmokeClient {
             }
             case 1 -> {
                 if (join != null) {
+                    if (joinPlay && mc.level != null && mc.player != null && mc.getConnection() != null) {
+                        report.add("join " + join + ": joined, in a world; running the script on the server (" + mc.getConnection().getConnection().getRemoteAddress() + ")");
+                        mc.options.pauseOnLostFocus = false;
+                        Harness.grab();
+                        state = 2;
+                        wait = 60;
+                        return;
+                    }
                     joinTick(mc);
                     return;
                 }
@@ -346,6 +356,8 @@ public class SmokeClient {
                 for (var e : mc.level.entitiesForRendering()) {
                     if (e instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && e.distanceTo(mc.player) < 32) {
                         sb.append(" [").append(m.frame().id()).append(": ").append(com.coolfreeze23.headinajar.client.MechaDents.describe(m)).append("]");
+                    } else if (e instanceof com.coolfreeze23.headinajar.entity.ShellEntity sh && e.distanceTo(mc.player) < 32) {
+                        sb.append(" [").append(sh.kind().name().toLowerCase(java.util.Locale.ROOT)).append(": ").append(com.coolfreeze23.headinajar.client.MechaDents.describe(sh)).append("]");
                     }
                 }
                 report.add(sb.toString());
@@ -1094,6 +1106,12 @@ public class SmokeClient {
             default -> {
                 var server = mc.getSingleplayerServer();
                 String command = line.startsWith("/") ? line.substring(1) : line;
+                if (server == null) {
+                    // joined to a server: the command goes as the player's own chat command (the player must be an operator there)
+                    mc.player.connection.sendCommand(command);
+                    wait = 2;
+                    return;
+                }
                 var uuid = mc.player.getUUID();
                 server.execute(() -> {
                     var player = server.getPlayerList().getPlayer(uuid);
@@ -1113,7 +1131,10 @@ public class SmokeClient {
             switch (a[0]) {
                 case "world" -> worldMode = a[1];
                 case "keep" -> keep = a[1];
-                case "join" -> join = a[1];
+                case "join" -> {
+                    join = a[1];
+                    joinPlay = a.length > 2 && a[2].equals("play");
+                }
                 case "seed" -> seed = Long.parseLong(a[1]);
                 case "gamemode" -> gameMode = GameType.byName(a[1]);
                 case "difficulty" -> difficulty = Difficulty.byName(a[1]);

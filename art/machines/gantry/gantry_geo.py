@@ -43,6 +43,7 @@ EMAX = EXT1 + EXT2         # (the stages share an extension in proportion: e * E
 UMAX = 15.0                # the upper arm's bar slides out along a steel rod from the shoulder by up to UMAX
 LAT = -3.0                 # the forearm and head run 3 px beside the upper arm (local -X), like an Anglepoise's
                            # paired rods, so the folded arm never passes through itself
+SLEEVES = ('upper_sleeve', 'fore_sleeve_lo', 'fore_sleeve_hi')   # drawn by the client only, scaled (see model())
 CRADLE = (-6.5, 9.5)       # the head's parking place (x, z); the head pivot rests at y 19.5
 HEAD_REST_Y = 19.5
 
@@ -181,6 +182,12 @@ def model():
     m.box('upper_rod', [5.5, 17.5, 5.5], [7.5, 33.5, 7.5], 'steel', 'upper', part='upper_rod')
     m.bone('upper_t', [ax, HINGE_Y, az], 'upper')
     m.box('upper_bar', [5, 17, 5], [8, 35, 8], 'enamel', 'upper_t', part='upper')
+    # the sleeves: what a player sees of a rod once it is out is a 3x3 steel member, the bar's own section, as long as
+    # the stage is out. A 3x3 rod cannot sit inside a 3x3 bar at rest (their faces would fight), so these three cubes
+    # are never drawn as they are: the client hides them and draws each one scaled along its length from its fixed end
+    # to the stage's current extension (nothing at rest; it grows as the bar slides). Painted the same all along their
+    # length, so the scale stretches no pixel. Each is exactly the longest stretch of its rod that shows.
+    m.box('upper_sleeve', [5, 17, 5], [8, 17 + UMAX, 8], 'steel', 'upper', part='upper_sleeve')
     # the elbow: a slim brass knuckle round the elbow pin, kept small so that the brass focal point is the head (a big
     # brass block at the top of the zig-zag reads as the lamp's head)
     m.box('elbow', [1.5, 34.5, 4.5], [8.5, 37.5, 8.5], 'brass', 'upper_t', part='upper_elbow')     # the elbow pin, 6 wide
@@ -196,11 +203,13 @@ def model():
     ey = HINGE_Y + LU
     m.bone('fore', [ax, ey, az], 'upper_t', rot=[pose['fore'], 0, 0])
     m.box('fore_rod_lo', [2.5, 35.5, 5.5], [4.5, 57.5, 7.5], 'steel', 'fore', part='fore_rod_lo')
+    m.box('fore_sleeve_lo', [2, 35, 5], [5, 35 + EXT1, 8], 'steel', 'fore', part='fore_sleeve_lo')
     m.bone('fore_t1', [ax, ey, az], 'fore')
     m.box('fore_bar', [2, 35, 5], [5, 59, 8], 'enamel', 'fore_t1', part='fore')
     m.box('fore_cable', [3, 40, 8], [4, 57, 9], 'rubber', 'fore_t1', part='fore_cable')
     m.bone('fore_t2', [ax, ey, az], 'fore_t1')
     m.box('fore_rod_hi', [2.5, 36, 5.5], [4.5, 60, 7.5], 'steel', 'fore_t2', part='fore_rod_hi')
+    m.box('fore_sleeve_hi', [2, 59 - EXT2, 5], [5, 59, 8], 'steel', 'fore_t2', part='fore_sleeve_hi')
 
     # head (keyed pitch). A brass shade 5x5x4 round the head pivot (y 61), its face on local -Z with the lamp lens
     # (3x1x1) above the tool port; the tools retract inside the shade and slide out 4 px along -Z.
@@ -272,7 +281,9 @@ def check(m):
     if nb > m.budget:
         errors.append('%d bones against %d' % (nb, m.budget))
     drawn = m.drawn()
-    cop, flush = kit.faces_check(drawn, [c for c in m.cubes if not kit.is_hidden(m, c[4])])
+    # the sleeves are never drawn as they stand (see model()): left out of the face checks
+    drawn = [c for c in drawn if c[0] not in SLEEVES]
+    cop, flush = kit.faces_check(drawn, [c for c in m.cubes if not kit.is_hidden(m, c[4]) and c[0] not in SLEEVES])
     errors += ['coplanar overlap (z-fight): %s' % x for x in cop]
     for w in flush:
         sys.stderr.write('  WARN flush joint: %s\n' % w)

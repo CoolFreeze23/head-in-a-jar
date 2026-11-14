@@ -168,6 +168,29 @@ public final class Network {
     }
 
     /**
+     * A Utility Shell's remembered blows ({@link com.coolfreeze23.headinajar.mecha.Wear}), for its dents: sent when they
+     * change and when a player starts seeing the shell. Its channel is optional, so a game without it (0.5.1) still
+     * connects and simply shows no shell dents; the server sends it only where the channel is open.
+     */
+    public record ShellDents(int entityId, long bearings) implements CustomPacketPayload {
+        public static final Type<ShellDents> TYPE = new Type<>(HeadInAJar.id("shell_dents"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, ShellDents> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, ShellDents::entityId, ByteBufCodecs.VAR_LONG, ShellDents::bearings, ShellDents::new);
+
+        @Override
+        public Type<ShellDents> type() {
+            return TYPE;
+        }
+    }
+
+    /** Sends a shell's remembered blows to a player whose game has the channel for them (a 0.5.1 game has not). */
+    public static void shellDents(ServerPlayer player, com.coolfreeze23.headinajar.entity.ShellEntity shell) {
+        if (player.connection != null && player.connection.hasChannel(ShellDents.TYPE)) {
+            PacketDistributor.sendToPlayer(player, new ShellDents(shell.getId(), shell.hitBearings()));
+        }
+    }
+
+    /**
      * The version of the mod's payloads. A client and a server with different versions are refused at the handshake with
      * NeoForge's reason ("The client wants the payload to be version: 4, but the server wants it to be version: 5!"),
      * before they can disagree about anything else. Raised whenever what is sent changes shape, including a mecha's synced
@@ -221,6 +244,12 @@ public final class Network {
         com.coolfreeze23.headinajar.fx.Fx.register(registrar);
         registrar.playToServer(RefuseRequest.TYPE, RefuseRequest.CODEC, (msg, ctx) -> {
             if (ctx.player() instanceof ServerPlayer player) com.coolfreeze23.headinajar.feedback.Refusals.fromClient(player, msg.reason(), msg.target());
+        });
+        // optional: a game on either side without it still connects (added in 0.5.2 under the same version)
+        registrar.optional().playToClient(ShellDents.TYPE, ShellDents.CODEC, (msg, ctx) -> {
+            if (ctx.player().level().getEntity(msg.entityId()) instanceof com.coolfreeze23.headinajar.entity.ShellEntity shell) {
+                shell.setHitBearings(msg.bearings());
+            }
         });
     }
 

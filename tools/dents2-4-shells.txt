@@ -1,0 +1,161 @@
+# dents2: the three Utility Shells' dents from their struck side (left, west) at 5 and 8 blocks in daylight, stages 0-3.
+# Each shell faces north (no AI, so it keeps facing), three blows from its left are set as remembered, health inside
+# each stage (60%, 40%, 15% of its health with the +10% a shell may be given). Default profile, flat world.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/tp @s -6 -60 0 -90 0
+wait 10
+/summon headinajar:lunk 0.5 -60 0.5 {Rotation:[180f,0f],NoAI:1b}
+/tp @s -6 -60 14 -90 0
+wait 10
+/summon headinajar:rover 0.5 -60 14.5 {Rotation:[180f,0f],NoAI:1b}
+/tp @s -6 -60 28 -90 0
+wait 10
+/summon headinajar:spider_walker 0.5 -60 28.5 {Rotation:[180f,0f],NoAI:1b}
+wait 40
+# --- stage 0
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s0_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s0_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s0_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s0_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s0_8b
+# --- stage 1
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:39.6f}
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:19.8f}
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:19.8f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s1_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s1_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s1_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s1_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s1_8b
+# --- stage 2
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:26.4f}
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:13.2f}
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:13.2f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s2_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s2_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s2_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s2_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s2_8b
+# --- stage 3
+/data merge entity @e[type=headinajar:lunk,limit=1] {HitBearings:12632256L,Health:9.9f}
+/data merge entity @e[type=headinajar:rover,limit=1] {HitBearings:12632256L,Health:5.0f}
+/data merge entity @e[type=headinajar:spider_walker,limit=1] {HitBearings:12632256L,Health:5.0f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:lunk 1.3
+wait 6
+shot lunk_s3_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s3_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:rover 0.45
+wait 6
+shot rover_s3_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s3_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:spider_walker 0.45
+wait 6
+shot spider_walker_s3_8b

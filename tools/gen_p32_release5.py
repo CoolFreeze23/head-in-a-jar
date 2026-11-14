@@ -34,6 +34,13 @@ def run(EN, PT, write, shaped):
     EN['message.headinajar.curios_head.floor'] = "Goggles count only on the jar, so Curios no longer holds them: your %s are at your feet, and won't despawn."
     PT['message.headinajar.curios_head.floor'] = 'Óculos só contam no pote, então o Curios não os guarda mais: seus %s estão aos seus pés e não somem.'
 
+    # 0.5.2: the Employee Mount says how it hangs on a machine (the machine's own use comes first without sneak, as
+    # with any block placed against a chest)
+    EN['tooltip.headinajar.mount.how'] = 'Hang it on a machine: hold %s as you use it on the machine.'
+    PT['tooltip.headinajar.mount.how'] = 'Pendure numa máquina: segure %s ao usá-lo na máquina.'
+    EN['tooltip.headinajar.mount.staff'] = 'Then use it with a jarred villager, paid an emerald a day from a chest beside it.'
+    PT['tooltip.headinajar.mount.staff'] = 'Depois use com um aldeão no pote, pago com uma esmeralda por dia de um baú ao lado.'
+
     # the Separation Chair's panel: the checklist and the wear line from x 74 to the panel's edge, the Sign button's
     # label inside the button, in both languages
     from gen_p27_clarity import width

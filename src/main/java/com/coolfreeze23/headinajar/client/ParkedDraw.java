@@ -110,6 +110,15 @@ public final class ParkedDraw {
     private static long shadowAsked = -1;
     /** Set if queued shadow draws were ever left undrawn: machines then cast their shadows the ordinary way. */
     private static boolean shadowBroken;
+    /**
+     * The level whose shadow pass last queued draws, and the level the main view last started in. Through a portal Iris
+     * builds the new dimension's own pipeline, so a fall-back to ordinary shadows holds for one dimension, not the
+     * session: under BSL the Nether's shadow pass runs without the pack's shadow program, and before this every machine
+     * cast its shadow the ordinary way from the first trip there until the game restarted. In a new level what the old
+     * one's shadow pass queued is let go quietly and the kept shadows are tried again; a dimension that cannot take them
+     * falls back again at its first frame.
+     */
+    private static Object shadowLevel, viewLevel;
 
     /**
      * Asked for from the shadow pass's own buffers when a kept machine is queued there, so that when the shadow pass draws
@@ -537,6 +546,7 @@ public final class ParkedDraw {
         }
         Matrix4f at = new Matrix4f(RenderSystem.getModelViewMatrix()).mul(pose);
         for (Part p : parts) SHADOW_QUEUE.add(new ShadowQueued(p, at, p.translucent() ? 1 : 0));
+        shadowLevel = Minecraft.getInstance().level;
     }
 
     /**
@@ -589,6 +599,14 @@ public final class ParkedDraw {
     public static void stage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
             entityPass = true;
+            Object level = Minecraft.getInstance().level;
+            if (level != viewLevel) {
+                viewLevel = level;
+                if (shadowBroken || !SHADOW_QUEUE.isEmpty() && shadowLevel != level) {
+                    shadowBroken = false;
+                    SHADOW_QUEUE.clear();
+                }
+            }
             if (!SHADOW_QUEUE.isEmpty()) {
                 // the shadow pass ended without drawing what was queued in it: shadows the ordinary way from now on
                 shadowBroken = true;

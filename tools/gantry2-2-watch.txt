@@ -1,0 +1,77 @@
+# Watching the arm at full speed after the 0.5.2 changes: a Colossus side on from the arm's side (east) at 10 blocks,
+# then close (5 blocks, pitched up) to see the steel sleeves on the rods at full stretch; an Executive side on (its
+# arms and shoulders now welded one side, then the other); a Skitter and a Chimera from the front-right (where 0.5.1
+# swung the swivel 108 degrees in one tick and 112 in two). Every rendered frame, by day, real presses by the stand-in.
+@observe 20
+wait 40
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/kill @e[type=!player]
+/clear @s
+/setblock 0 -60 0 headinajar:assembly_gantry[facing=north]
+gantry 0 -60 0 colossus
+/tp @s 5.2 -59.4 3.2 120 -38
+bystander spawn 0 -60 -2 0
+wait 20
+hud off
+bystander useblock 0 -60 0 north
+wait 5
+frames w1_colossus_close 360
+wait 4
+observe 350
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 370
+/kill @e[type=headinajar:colossus]
+wait 20
+gantry 0 -60 0 executive
+/tp @s 9.5 -58.8 0.5 90 -12
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames w2_executive_side 280
+wait 4
+observe 270
+bystander button 1
+observe 20
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 290
+/kill @e[type=headinajar:executive]
+wait 20
+gantry 0 -60 0 skitter
+/tp @s 4.8 -59.4 -3.8 45 -1.7
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames w3_skitter 230
+wait 4
+bystander button 1
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 240
+/kill @e[type=headinajar:skitter]
+wait 20
+gantry 0 -60 0 chimera
+/tp @s 4.8 -59.4 -3.8 45 -1.7
+bystander tp 0 -60 -2 0
+wait 20
+bystander useblock 0 -60 0 north
+wait 5
+frames w4_chimera 250
+wait 4
+bystander button 1
+wait 2
+bystander close
+bystander tp -8 -60 -10 0
+wait 260
+report gantry2 watch done

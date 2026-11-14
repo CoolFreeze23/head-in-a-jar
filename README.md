@@ -142,7 +142,7 @@ Walk too far and the link breaks: you wake up in your head. To get back:
 
 ### Day 7: what's next
 
-- **Borrow a body.** Make a **Surgical Saw**, wear a creature down below a quarter of its health and saw its head
+- **Borrow a body.** Make a **Surgical Saw**, wear a creature down to half its health or less and saw its head
   off. As a jar, **Use** the standing body to climb on. See [Hostile Takeover](#hostile-takeover-mob-bodies).
 - **Build a mecha.** **Mecha Plating** (8 ingots around an iron block, makes 2), an **Assembly Gantry**, a **Hopper
   Frame** and **Hydraulic Legs**, 10 kFE, Assemble, and watch it build itself on the pad; climb in as a jar and hold
@@ -743,6 +743,8 @@ switch and a dial.
 - Holds 20,000 FE and takes up to 2,000 FE a tick. It charges a jar standing on its plate at 500 FE a tick, or your
   own head set down on it while you are out in your body: carrying your head, **Use** the dock and the head goes onto
   the plate. "Charging Dock: charging, 40%." and, when it is done, "Charging Dock: your jar is fully charged."
+- A head set down on the plate sits side-on to the dock's column, and swapping into it wakes you facing that way, so
+  your view, your crosshair and a third-person camera are clear of the dock.
 - When a jar or a head is on the plate the switch closes and the needle follows its charge from E to F; sparks fly
   while it charges and a bell rings when it is full. With nothing left to give, the switch drops open and the needle
   sinks below E.
@@ -1042,8 +1044,10 @@ The **Surgical Saw** takes the head off a weakened creature. It has 200 uses.
 
 - **Recipe** (shaped): a Diamond in the bottom left corner, a Servo in the centre, and a Surgical Steel Ingot to the right
   of the Servo and another in the top right corner. That is 2 Surgical Steel Ingots, 1 Servo, 1 Diamond.
-- **Use** it on a creature at **a quarter of its health or less**. You need hands: a body or a linked body. Above a
-  quarter: "Too lively. Wear it down below a quarter of its health first."
+- **Use** it on a creature at **half its health or less**. You need hands: a body or a linked body. Above half: "Too
+  lively. Wear it down to half its health or less first." Every plain weapon, a fist to a diamond sword or axe, leaves
+  a cow, pig, sheep, villager, skeleton or zombie there for at least one hit before the hit that kills it (a stone
+  sword takes a cow 10, 5, dead: saw after the first hit). Only a stone, iron or diamond axe kills a sheep outright.
 - **Off limits:** bosses (the Ender Dragon, the Wither), players, armour stands, **any creature with a name tag**,
   someone else's tamed pet (yours is fine), and anything that is already a host, a shell or a mecha. The saw says "The
   saw refuses: bosses, named mobs, other people's pets and hosts are off limits."
@@ -1057,7 +1061,7 @@ The **Surgical Saw** takes the head off a weakened creature. It has 200 uses.
 
 ![A colleague saws a weakened cow: its head pops out of the neck and turns over as it rises, gone in a puff, and the headless cow stands on](docs/images/cork.gif)
 
-*Taking a body, seen by a colleague: **Use** the saw on a creature at a quarter of its health or less.*
+*Taking a body, seen by a colleague: **Use** the saw on a creature at half its health or less.*
 
 The saw does one of two things, depending on your **off hand**:
 
@@ -1378,6 +1382,9 @@ None of them has a **Secondary**.
   last one): sparks at the front, a clang, and "Crash! Rover met a wall. The jar took one knock." The next crash counts
   only after 2 seconds. The Rover and the Spider Walker are fast enough for this; the Lunk is not, unless something
   speeds it up.
+- **Dents:** a shell remembers where its last eight blows came from and dents on the side hit most, a stage further at
+  three quarters, half and a quarter of its health, as a mecha does; whole again, it forgets them. A 0.5.1 game on a
+  0.5.2 server, or a 0.5.2 game on a 0.5.1 server, sees its shells clean.
 - Shells cannot drown, do not despawn and stand still when empty. Leads, Embalming Fluid and Neural Lace do not work on
   them ("A machine has no nerves to lace. Neural Lace is for flesh.").
 - A shell cannot be folded back into its chassis. Destroyed, it plays out its last moments, then drops 2 Servos, 3
@@ -1451,8 +1458,10 @@ and many modules, and it is how a mecha is patched (see *Damage and repair*).
   adjust. Pick another module."
 - **Assemble** spends 10,000 FE: a klaxon, the arm swings back to stand off, and half a second later the mecha
   **builds itself on top of the Gantry** while the arm reaches in and welds each module home with a spray of sparks
-  as it lands (for a Colossus or an Executive the arm telescopes, its upper arm and forearm sliding out along steel
-  rods to reach their shoulders). The turntable turns the frame to reach its far side,
+  as it lands (for a Colossus or an Executive the arm telescopes, its upper arm and forearm sliding out on steel as
+  thick as the arm itself to reach their shoulders, with a hydraulic stroke going out and coming in; a Colossus fits
+  its left shoulder hardpoint last, once the turntable has turned that shoulder round to the arm). The turntable
+  turns the frame to reach its far side,
   then turns it to face whoever pressed Assemble: ten seconds for most
   frames, eleven for a Chimera, twelve for an Executive and sixteen for a Colossus, each fitted module clunking home in turn ("Module clunks home"). You are its owner.
   Its battery starts with whatever is left in the Gantry after the 10,000 FE, up to the battery's size, so a new mecha
@@ -1479,7 +1488,7 @@ What the Gantry says when it won't:
 | no frame | "No frame to build on. Put one in the frame slot." |
 | a press while it is still working | "The Gantry is at work. Wait for its arm to stand off." |
 | blocks in the space over the pad | "Something blocks the space over the pad. Clear it for the frame." |
-| blocks beside the pad where the frame's head would be (a frame may overhang anything lower) | "The frame would stand with its head in the blocks beside the pad. Clear them up to its head height." |
+| blocks beside the pad where the frame's head would be (a frame may overhang anything lower) | "The frame's head would be in the blocks beside the pad. Clear them." |
 | a mecha already on the pad | "Something stands on the Gantry. Clear its top first." |
 | a frame that needs legs has none that walk | "This frame can't walk. Fit walking legs, like Hydraulic Legs." (Arachnid Legs, Stilts, a Hover Skirt and Lava Treads walk too) |
 | under 10,000 FE | "Assembly needs 10 kFE. Feed the Gantry power." |
@@ -1500,7 +1509,7 @@ Frames and modules used in the air say they go in the Gantry.
 
 *Assemble: the frame builds itself on the pad while the arm welds each module home.*
 
-![From the front-right, a Colossus builds itself on the Assembly Gantry; the arm's upper arm and forearm slide out along steel rods until its head stands at the Colossus's chest and shoulders, welding each part home as it lands, then fold back](docs/images/gantry_colossus.gif)
+![From the front-right, a Colossus builds itself on the Assembly Gantry; the arm's upper arm and forearm slide out on steel as thick as the arm until its head stands at the Colossus's chest and shoulders, welding each part home as it lands; then the turntable turns the frame round for its last shoulder module and the arm folds back](docs/images/gantry_colossus.gif)
 
 *For a Colossus or an Executive the arm telescopes to reach their shoulders.*
 
@@ -2338,10 +2347,12 @@ take the chair.
 **Employee Mount:** four Surgical Steel Ingots and two iron ingots: a steel ingot in each top corner, an iron ingot
 between two steel ones in the middle row, an iron ingot at the bottom centre. A small cubicle, one block tall.
 
-Place it against a machine and **Use** it with a jarred villager. The villager works for that machine, for one emerald
-a day, taken from any chest or container touching the mount (not the machine). **Use** the mount to check on them
-("Librarian: on the job, paid up"); **Sneak** and **Use** with an empty hand to take them down. Only villagers apply:
-"Staff positions are for a jarred Villager only." The first hire earns **Employee of the Month**.
+Hang it on a machine: hold **Sneak** as you **Use** it on the machine (without Sneak, a machine with a screen opens
+instead, as a chest does when you place a block against it). Then **Use** the mount with a jarred villager. The
+villager works for that machine, for one emerald a day, taken from any chest or container touching the mount (not the
+machine). **Use** the mount to check on them ("Librarian: on the job, paid up"); **Sneak** and **Use** with an empty
+hand to take them down. Only villagers apply: "Staff positions are for a jarred Villager only." The first hire earns
+**Employee of the Month**.
 
 Paid staff stamp forms at their desk, glance about now and then, and keep the day's emerald on the tray; payday comes
 with a clink. Unpaid staff give half the bonus, hang their heads, and every two minutes pick up the phone to complain
@@ -2698,7 +2709,8 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
   the Lunk's filing drawers ("Filing goes everywhere"); "Mecha powers up" ending on the company jingle, "Vents steam",
   "Jump jets fire", "Missiles launch", the Arc Cannon ("Arc Cannon charges", "Arc Cannon cracks", "Arc jumps"; no thunder),
   the Plasma Lance ("Plasma Lance burns") and the Tesla Coil ("Tesla Coil zaps"), "Hot metal ticks" on a hot machine,
-  "Mecha sparks" on a damaged one, the Gantry's "Plating patched", the eject klaxon and the Golden Parachute's canopy; genes splicing, something
+  "Mecha sparks" on a damaged one, the Gantry's "Plating patched" and its arm's telescopes ("Gantry arm extends",
+  "Gantry arm retracts"), the eject klaxon and the Golden Parachute's canopy; genes splicing, something
   mutating, the Board murmuring, staff complaining.
 - **Answers:** "Noggin & Sons declines" when something is refused, "Noggin & Sons approves" when a lab machine
   finishes or the Body Locker takes a body, a tap on the glass when a bare jar reaches for something, a gurgle in the
@@ -2708,6 +2720,47 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 ## Release notes
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
+
+### What's new in 0.5.2
+
+- **Dents that read on every frame.** The Hopper (parked too), the Kite, the Skitter and the Chimera showed their
+  dents only faintly; from five and eight blocks they now read nearly as plainly as the Bulwark's: the Kite along its
+  folded wings, the Skitter down its splayed legs, the Hopper over its arms and cage. The other frames' fainter sides
+  take more dents as well.
+- **The Utility Shells dent too.** The Lunk, the Rover and the Spider Walker now dent on the side they were hit from
+  most, a stage further at three quarters, half and a quarter of their health, as the mecha frames do, and the dents
+  go when the shell is whole again. 0.5.1 and 0.5.2 still connect to each other, either way round; a 0.5.1 game sees
+  the shells clean.
+- **Parked machines keep their quick shadows after a portal.** With the BSL shader pack, a trip to the Nether used to
+  switch off the parked machines' quick shadows until the game restarted, and parked machines took about five times
+  as long to draw from then on; each dimension now tries them afresh (in the Nether, BSL's shadows are still drawn
+  the ordinary way).
+- **The Assembly Gantry's arm, finished off.** A rod run out of the arm now shows as steel as thick as the arm
+  itself instead of a thin pole, and none of it shows at rest; the telescopes are heard going out and coming in
+  ("Gantry arm extends", "Gantry arm retracts"). A Colossus now fits its left shoulder hardpoint last, once the
+  turntable has turned that shoulder round to the arm, and an Executive fits each shoulder hardpoint straight after the
+  arm below it, so the arm welds the heavies' shoulders as they land instead of up to most of a second late, and swings
+  across an Executive less often. The swivel no longer spins round within a tick. Some welds still come as an arc
+  where the arm has no clean way in, and a Skitter's left arm is welded about half a second after it lands.
+- **The Surgical Saw takes a creature at half its health or less.** Below a quarter was often a narrower gap than one
+  weapon hit: a stone, iron or diamond sword took a cow from whole to dead without a stop there. Now every plain
+  weapon from a fist to a diamond sword, and every axe on all but a sheep, leaves a cow, pig, sheep, villager, skeleton
+  or zombie at half or less for at least one hit before the hit that kills it: a stone sword takes a cow 10, 5, dead, so
+  saw after the first hit. A stone, iron or diamond axe still kills a sheep with its first hit. A host is still raised to a quarter of its health if it
+  was lower.
+- **A jar on the Charging Dock looks past the dock, not into it.** A head set down on the dock sits side-on to the
+  dock's column, and swapping into it wakes you facing that way. Before, you woke looking into the column: your
+  crosshair, your clicks and Telekinesis went to the dock ("Machines and chests stay put"), and the camera in front of
+  the jar sat inside it.
+- **A Suture Kit held on past the stitch stays quiet.** A stitch that worked is no longer followed by "Your head is
+  already on. Keep the kit for when it isn't." while the button is still down; a fresh press still says so.
+- **The Employee Mount says how it hangs:** hold Sneak as you use it on the machine. Without Sneak, a machine with a
+  screen opens instead, as a chest does when you place a block against it. Its tooltip, the handbook's Villager Staff
+  entry and the README say so.
+- **The Gantry's wall refusal is shorter**, so it fits the action bar at GUI scale 3: "The frame's head would be in the
+  blocks beside the pad. Clear them."
+
+<details><summary>What changed in 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.1
 
@@ -2738,8 +2791,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   Assemble answer that something blocks the space over the pad. The space straight over the pad must still be clear,
   and so must the blocks beside it at the frame's head height: "The frame would stand with its head in the blocks beside the pad. Clear them up to its head height."
 - Client and server must both be on 0.5.1.
-
-<details><summary>What changed in 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.0
 

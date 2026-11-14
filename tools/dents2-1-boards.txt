@@ -1,0 +1,392 @@
+# dents2: every frame's dents from its struck side (its left, west) at 5 and 8 blocks in daylight, stages 0 to 3.
+# Each machine is parked facing north, three blows from its left are set as remembered (HitBearings), and its health
+# is set inside each stage (60%, 40%, 15% of the frame's health with the +10% a machine is given). Default profile, flat world.
+@observe 10
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/tp @s -6 -60 0 -90 0
+wait 10
+mecha hopper 0 -60 0 hydraulic_legs
+/tp @s -6 -60 14 -90 0
+wait 10
+mecha bulwark 0 -60 14 hydraulic_legs
+/tp @s -6 -60 28 -90 0
+wait 10
+mecha colossus 0 -60 28 hydraulic_legs
+/tp @s -6 -60 42 -90 0
+wait 10
+mecha executive 0 -60 42 hydraulic_legs
+/tp @s -6 -60 56 -90 0
+wait 10
+mecha wheelhouse 0 -60 56
+/tp @s -6 -60 70 -90 0
+wait 10
+mecha chimera 0 -60 70 hydraulic_legs
+/tp @s -6 -60 84 -90 0
+wait 10
+mecha skitter 0 -60 84
+/tp @s -6 -60 98 -90 0
+wait 10
+mecha kite 0 -60 98
+wait 40
+# --- stage 0
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s0_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s0_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s0_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s0_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s0_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s0_8b
+/tp @s -4.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s0_5b
+/tp @s -7.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s0_8b
+/tp @s -4.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s0_5b
+/tp @s -7.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s0_8b
+/tp @s -4.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s0_5b
+/tp @s -7.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s0_8b
+/tp @s -4.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s0_5b
+/tp @s -7.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s0_8b
+/tp @s -4.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s0_5b
+/tp @s -7.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s0_8b
+# --- stage 1
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:39.6f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:92.4f}
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:198.0f}
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:237.6f}
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:59.4f}
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:79.2f}
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:66.0f}
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:46.2f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s1_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s1_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s1_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s1_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s1_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s1_8b
+/tp @s -4.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s1_5b
+/tp @s -7.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s1_8b
+/tp @s -4.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s1_5b
+/tp @s -7.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s1_8b
+/tp @s -4.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s1_5b
+/tp @s -7.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s1_8b
+/tp @s -4.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s1_5b
+/tp @s -7.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s1_8b
+/tp @s -4.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s1_5b
+/tp @s -7.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s1_8b
+# --- stage 2
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:26.4f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:61.6f}
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:132.0f}
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:158.4f}
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:39.6f}
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:52.8f}
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:44.0f}
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:30.8f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s2_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s2_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s2_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s2_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s2_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s2_8b
+/tp @s -4.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s2_5b
+/tp @s -7.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s2_8b
+/tp @s -4.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s2_5b
+/tp @s -7.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s2_8b
+/tp @s -4.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s2_5b
+/tp @s -7.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s2_8b
+/tp @s -4.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s2_5b
+/tp @s -7.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s2_8b
+/tp @s -4.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s2_5b
+/tp @s -7.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s2_8b
+# --- stage 3
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:12632256L,Health:9.9f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:12632256L,Health:23.1f}
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:12632256L,Health:49.5f}
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:59.4f}
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:12632256L,Health:14.9f}
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:12632256L,Health:19.8f}
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:12632256L,Health:16.5f}
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:11.5f}
+wait 30
+dents
+/tp @s -4.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s3_5b
+/tp @s -7.5 -60 0.5 -90 0
+wait 4
+lookat headinajar:hopper 1.2
+wait 6
+shot hopper_s3_8b
+/tp @s -4.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s3_5b
+/tp @s -7.5 -60 14.5 -90 0
+wait 4
+lookat headinajar:bulwark 1.6
+wait 6
+shot bulwark_s3_8b
+/tp @s -4.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s3_5b
+/tp @s -7.5 -60 28.5 -90 0
+wait 4
+lookat headinajar:colossus 2.2
+wait 6
+shot colossus_s3_8b
+/tp @s -4.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s3_5b
+/tp @s -7.5 -60 42.5 -90 0
+wait 4
+lookat headinajar:executive 2.2
+wait 6
+shot executive_s3_8b
+/tp @s -4.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s3_5b
+/tp @s -7.5 -60 56.5 -90 0
+wait 4
+lookat headinajar:wheelhouse 0.8
+wait 6
+shot wheelhouse_s3_8b
+/tp @s -4.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s3_5b
+/tp @s -7.5 -60 70.5 -90 0
+wait 4
+lookat headinajar:chimera 1.4
+wait 6
+shot chimera_s3_8b
+/tp @s -4.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s3_5b
+/tp @s -7.5 -60 84.5 -90 0
+wait 4
+lookat headinajar:skitter 0.8
+wait 6
+shot skitter_s3_8b
+/tp @s -4.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s3_5b
+/tp @s -7.5 -60 98.5 -90 0
+wait 4
+lookat headinajar:kite 1.0
+wait 6
+shot kite_s3_8b
+parkstats

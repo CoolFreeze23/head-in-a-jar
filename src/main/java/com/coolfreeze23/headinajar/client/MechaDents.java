@@ -30,8 +30,8 @@ import java.util.WeakHashMap;
  * repair pass the arm is seen making, from what was shown before it.
  */
 public final class MechaDents {
-    /** Sheets made, by frame and the four sides' stages packed ({@link Wear#packed}). */
-    private static final Map<MechaFrame, Map<Integer, ResourceLocation>> SHEETS = new HashMap<>();
+    /** Sheets made, by frame (or shell) and the four sides' stages packed ({@link Wear#packed}). */
+    private static final Map<String, Map<Integer, ResourceLocation>> SHEETS = new HashMap<>();
     /** What each machine shows now, and the repair pass it is stepping down through. */
     private static final Map<MechaEntity, Shown> SHOWN = new WeakHashMap<>();
     /** Dented sheets made since the game started, and the time spent making them (for the harness). */
@@ -51,9 +51,25 @@ public final class MechaDents {
 
     /** The sheet to draw this machine with: its frame's own, or that sheet dented as it is now. */
     public static ResourceLocation sheet(MechaEntity m, ResourceLocation own) {
-        int packed = Wear.packed(shown(m));
+        return sheet(m.frame().id(), own, Wear.packed(shown(m)));
+    }
+
+    /**
+     * A Utility Shell's sheet: its own, or dented as its health and remembered blows call for (the blows come on the
+     * optional shell_dents channel; on a server without it a shell has none and shows none). No Gantry steps a shell's
+     * dents down: they go when it is whole.
+     */
+    public static ResourceLocation sheet(com.coolfreeze23.headinajar.entity.ShellEntity s, ResourceLocation own) {
+        return sheet(shellId(s.kind()), own, Wear.packed(Wear.stages(s.hitBearings(), s.getHealth(), s.getMaxHealth())));
+    }
+
+    static String shellId(com.coolfreeze23.headinajar.entity.ShellEntity.Kind kind) {
+        return kind.name().toLowerCase(java.util.Locale.ROOT);
+    }
+
+    private static ResourceLocation sheet(String id, ResourceLocation own, int packed) {
         if (packed == 0) return own;
-        return SHEETS.computeIfAbsent(m.frame(), f -> new HashMap<>()).computeIfAbsent(packed, p -> make(m.frame(), own, p));
+        return SHEETS.computeIfAbsent(id, f -> new HashMap<>()).computeIfAbsent(packed, p -> make(id, own, p));
     }
 
     /** The four sides' stages as drawn now (front, right, back, left). */
@@ -114,15 +130,15 @@ public final class MechaDents {
     private record Source(int w, int h, int[] sheet, int[][] tiles) {
     }
 
-    private static final Map<MechaFrame, Source> SOURCES = new HashMap<>();
+    private static final Map<String, Source> SOURCES = new HashMap<>();
 
-    private static Source source(MechaFrame frame, ResourceLocation own) {
+    private static Source source(String frame, ResourceLocation own) {
         var mc = Minecraft.getInstance();
         try (var in = mc.getResourceManager().open(own); NativeImage sheet = NativeImage.read(in);
-             var tin = mc.getResourceManager().open(HeadInAJar.id("mecha/dents/" + frame.id() + ".png")); NativeImage dents = NativeImage.read(tin)) {
+             var tin = mc.getResourceManager().open(HeadInAJar.id("mecha/dents/" + frame + ".png")); NativeImage dents = NativeImage.read(tin)) {
             int w = sheet.getWidth(), h = sheet.getHeight();
             if (dents.getWidth() != w || dents.getHeight() != h * 12) {
-                HeadInAJar.LOGGER.warn("The dents of {} do not fit its sheet ({}x{} for {}x{})", frame.id(), dents.getWidth(), dents.getHeight(), w, h);
+                HeadInAJar.LOGGER.warn("The dents of {} do not fit its sheet ({}x{} for {}x{})", frame, dents.getWidth(), dents.getHeight(), w, h);
                 return null;
             }
             int[] pixels = new int[w * h];
@@ -145,12 +161,12 @@ public final class MechaDents {
             }
             return new Source(w, h, pixels, tiles);
         } catch (Exception e) {
-            HeadInAJar.LOGGER.warn("Could not read the dents of {}", frame.id(), e);
+            HeadInAJar.LOGGER.warn("Could not read the dents of {}", frame, e);
             return null;
         }
     }
 
-    private static ResourceLocation make(MechaFrame frame, ResourceLocation own, int packed) {
+    private static ResourceLocation make(String frame, ResourceLocation own, int packed) {
         long start = System.nanoTime();
         Source src = SOURCES.computeIfAbsent(frame, f -> source(f, own));
         if (src == null) return own;
@@ -164,7 +180,7 @@ public final class MechaDents {
             for (int i = 0; i < tile.length; i += 2) px[tile[i]] = tile[i + 1];
         }
         for (int i = 0; i < px.length; i++) out.setPixelRGBA(i % w, i / w, px[i]);
-        ResourceLocation at = HeadInAJar.id("dynamic/dents/" + frame.id() + "_" + packed);
+        ResourceLocation at = HeadInAJar.id("dynamic/dents/" + frame + "_" + packed);
         Minecraft.getInstance().getTextureManager().register(at, new DynamicTexture(out));
         made++;
         madeNanos += System.nanoTime() - start;
@@ -172,6 +188,12 @@ public final class MechaDents {
     }
 
     /** For the harness: what a machine shows, and what the dented sheets cost to make. */
+    public static String describe(com.coolfreeze23.headinajar.entity.ShellEntity s) {
+        int[] st = Wear.stages(s.hitBearings(), s.getHealth(), s.getMaxHealth());
+        return String.format(java.util.Locale.ROOT, "dents front %d right %d back %d left %d (health %.1f / %.1f, bearings %016x), %d sheets made in %.1f ms",
+                st[0], st[1], st[2], st[3], s.getHealth(), s.getMaxHealth(), s.hitBearings(), made, madeNanos / 1e6);
+    }
+
     public static String describe(MechaEntity m) {
         int[] s = shown(m);
         return String.format(java.util.Locale.ROOT, "dents front %d right %d back %d left %d (health %.1f / %.1f, bearings %016x), %d sheets made in %.1f ms",
@@ -202,8 +224,12 @@ public final class MechaDents {
                 clear();
                 for (MechaFrame frame : MechaFrame.values()) {
                     if (!frame.animated()) continue;
-                    Source s = source(frame, HeadInAJar.id("textures/entity/mecha/" + frame.id() + ".png"));
-                    if (s != null) SOURCES.put(frame, s);
+                    Source s = source(frame.id(), HeadInAJar.id("textures/entity/mecha/" + frame.id() + ".png"));
+                    if (s != null) SOURCES.put(frame.id(), s);
+                }
+                for (var kind : com.coolfreeze23.headinajar.entity.ShellEntity.Kind.values()) {
+                    Source s = source(shellId(kind), HeadInAJar.id("textures/entity/shell/" + shellId(kind) + ".png"));
+                    if (s != null) SOURCES.put(shellId(kind), s);
                 }
             }));
         }

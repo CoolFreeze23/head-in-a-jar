@@ -2,6 +2,45 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.5.2 (2026-11-15)
+
+- **Dents that read on every frame.** The Hopper (parked too), the Kite, the Skitter and the Chimera showed their
+  dents only faintly; from five and eight blocks they now read nearly as plainly as the Bulwark's: the Kite along its
+  folded wings, the Skitter down its splayed legs, the Hopper over its arms and cage. The other frames' fainter sides
+  take more dents as well.
+- **The Utility Shells dent too.** The Lunk, the Rover and the Spider Walker now dent on the side they were hit from
+  most, a stage further at three quarters, half and a quarter of their health, as the mecha frames do, and the dents
+  go when the shell is whole again. 0.5.1 and 0.5.2 still connect to each other, either way round; a 0.5.1 game sees
+  the shells clean.
+- **Parked machines keep their quick shadows after a portal.** With the BSL shader pack, a trip to the Nether used to
+  switch off the parked machines' quick shadows until the game restarted, and parked machines took about five times
+  as long to draw from then on; each dimension now tries them afresh (in the Nether, BSL's shadows are still drawn
+  the ordinary way).
+- **The Assembly Gantry's arm, finished off.** A rod run out of the arm now shows as steel as thick as the arm
+  itself instead of a thin pole, and none of it shows at rest; the telescopes are heard going out and coming in
+  ("Gantry arm extends", "Gantry arm retracts"). A Colossus now fits its left shoulder hardpoint last, once the
+  turntable has turned that shoulder round to the arm, and an Executive fits each shoulder hardpoint straight after the
+  arm below it, so the arm welds the heavies' shoulders as they land instead of up to most of a second late, and swings
+  across an Executive less often. The swivel no longer spins round within a tick. Some welds still come as an arc
+  where the arm has no clean way in, and a Skitter's left arm is welded about half a second after it lands.
+- **The Surgical Saw takes a creature at half its health or less.** Below a quarter was often a narrower gap than one
+  weapon hit: a stone, iron or diamond sword took a cow from whole to dead without a stop there. Now every plain
+  weapon from a fist to a diamond sword, and every axe on all but a sheep, leaves a cow, pig, sheep, villager, skeleton
+  or zombie at half or less for at least one hit before the hit that kills it: a stone sword takes a cow 10, 5, dead, so
+  saw after the first hit. A stone, iron or diamond axe still kills a sheep with its first hit. A host is still raised to a quarter of its health if it
+  was lower.
+- **A jar on the Charging Dock looks past the dock, not into it.** A head set down on the dock sits side-on to the
+  dock's column, and swapping into it wakes you facing that way. Before, you woke looking into the column: your
+  crosshair, your clicks and Telekinesis went to the dock ("Machines and chests stay put"), and the camera in front of
+  the jar sat inside it.
+- **A Suture Kit held on past the stitch stays quiet.** A stitch that worked is no longer followed by "Your head is
+  already on. Keep the kit for when it isn't." while the button is still down; a fresh press still says so.
+- **The Employee Mount says how it hangs:** hold Sneak as you use it on the machine. Without Sneak, a machine with a
+  screen opens instead, as a chest does when you place a block against it. Its tooltip, the handbook's Villager Staff
+  entry and the README say so.
+- **The Gantry's wall refusal is shorter**, so it fits the action bar at GUI scale 3: "The frame's head would be in the
+  blocks beside the pad. Clear them."
+
 ## 0.5.1 (2026-11-14)
 
 - **Wear and tear you can read from across the yard.** A damaged mecha's panels dent on the side it was hit from

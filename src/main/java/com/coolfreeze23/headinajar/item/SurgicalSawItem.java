@@ -23,11 +23,19 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 
 /**
- * Use on a mob below 25% health: its head comes off and it becomes a host body a jar can pilot. With an empty Life
- * Support Jar in your off hand, the saw keeps the head instead (a jarred head) and the body falls.
+ * Use on a mob at half its health or less: its head comes off and it becomes a host body a jar can pilot. With an
+ * empty Life Support Jar in your off hand, the saw keeps the head instead (a jarred head) and the body falls.
  */
 public class SurgicalSawItem extends Item {
-    public static final float MAX_HEALTH_FRACTION = 0.25f;
+    /**
+     * The saw takes a creature at this share of its health or less. Half, so every plain weapon from a fist to a diamond
+     * sword or axe leaves the common hosts (cow, pig, sheep, villager, skeleton, zombie) inside it for at least one hit
+     * before the hit that kills: a cow (10) goes 10, 5, dead to a stone sword, a sheep (8) 8, 4, dead to a wooden one.
+     * Only a first hit that kills outright leaves no window (a stone, iron or diamond axe on a sheep).
+     */
+    public static final float MAX_HEALTH_FRACTION = 0.5f;
+    /** A host body is raised to this share of its health if it was lower when sawn. */
+    public static final float HOST_HEALTH_FLOOR = 0.25f;
 
     public SurgicalSawItem(Properties properties) {
         super(properties);
@@ -95,7 +103,7 @@ public class SurgicalSawItem extends Item {
         mob.setPersistenceRequired();
         mob.setTarget(null);
         mob.getNavigation().stop();
-        mob.setHealth(Math.max(mob.getHealth(), mob.getMaxHealth() * MAX_HEALTH_FRACTION));
+        mob.setHealth(Math.max(mob.getHealth(), mob.getMaxHealth() * HOST_HEALTH_FLOOR));
         Network.syncHost(mob);
         player.displayClientMessage(Component.translatable("message.headinajar.host_made", mob.getDisplayName()), true);
         return InteractionResult.CONSUME;

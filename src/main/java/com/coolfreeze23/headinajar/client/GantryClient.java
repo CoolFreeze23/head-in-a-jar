@@ -335,6 +335,73 @@ public final class GantryClient {
                 return;
             }
             super.renderCubesOfBone(pose, bone, buffer, light, overlay, colour);
+            sleeve(pose, bone, buffer, light, overlay, colour);
+        }
+
+        /**
+         * The telescopes' sleeves (gantry_geo.py): on the upper arm, the forearm and the forearm's top rod, a 3x3 steel
+         * cube as long as the most that rod ever shows. It is never drawn as it stands (a 3x3 rod inside a 3x3 bar
+         * would fight its faces); it is drawn scaled along its length from its fixed end to the stage's extension now,
+         * so a rod that is out shows as a steel member of the bar's own section, and nothing at all at rest. Its
+         * paint is the same all along its length, so the scale stretches no pixel. Its ends are left out (both sit
+         * inside a joint or against the bar's mouth, and a scaled end would be lit wrongly).
+         */
+        static int sleeveIndex(GeoBone bone) {
+            String n = bone.getName();
+            if (!n.equals("upper") && !n.equals("fore") && !n.equals("fore_t2")) return -1;
+            var cubes = bone.getCubes();
+            for (int i = 0; i < cubes.size(); i++) {
+                var size = cubes.get(i).size();
+                if (Math.round(size.x) == 3 && Math.round(size.z) == 3) return i;
+            }
+            return -1;
+        }
+
+        @Override
+        protected int hiddenCubes(AssemblyGantryBlockEntity g, GeoBone bone) {
+            int i = sleeveIndex(bone);
+            return i < 0 ? 0 : 1 << i;
+        }
+
+        /** How far the stage the sleeve shows is out now, in pixels. */
+        static double extension(GeoBone bone) {
+            GeoBone stage = bone.getName().equals("fore_t2") ? bone : null;
+            if (stage == null) {
+                String child = bone.getName().equals("upper") ? "upper_t" : "fore_t1";
+                for (GeoBone c : bone.getChildBones()) if (c.getName().equals(child)) stage = c;
+            }
+            return stage == null ? 0 : stage.getPosY() - stage.getInitialSnapshot().getOffsetY();
+        }
+
+        void sleeve(PoseStack pose, GeoBone bone, VertexConsumer buffer, int light, int overlay, int colour) {
+            int i = sleeveIndex(bone);
+            if (i < 0 || bone.isHidden()) return;
+            GeoCube cube = bone.getCubes().get(i);
+            double length = cube.size().y, out = extension(bone);
+            if (out < 0.02 || length <= 0) return;
+            float lo = Float.MAX_VALUE, hi = -Float.MAX_VALUE;
+            for (var quad : cube.quads()) {
+                if (quad == null) continue;
+                for (var v : quad.vertices()) {
+                    lo = Math.min(lo, v.position().y());
+                    hi = Math.max(hi, v.position().y());
+                }
+            }
+            // the fixed end: the shoulder's and the elbow's at the bottom, the top rod's under the head at the top
+            float anchor = bone.getName().equals("fore_t2") ? hi : lo;
+            float scale = (float) Math.min(1.0, out / length);
+            pose.pushPose();
+            pose.translate(0, anchor, 0);
+            pose.scale(1, scale, 1);
+            pose.translate(0, -anchor, 0);
+            org.joml.Matrix3f normals = pose.last().normal();
+            Matrix4f at = new Matrix4f(pose.last().pose());
+            for (var quad : cube.quads()) {
+                if (quad == null || Math.abs(quad.normal().y()) > 0.5f) continue;
+                org.joml.Vector3f n = normals.transform(new org.joml.Vector3f(quad.normal())).normalize();
+                createVerticesOfQuad(quad, at, n, buffer, light, overlay, colour);
+            }
+            pose.popPose();
         }
 
         @Override

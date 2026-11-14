@@ -57,6 +57,14 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
     private static final EntityDataAccessor<Long> WEB = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<net.minecraft.core.BlockPos> WEB_AT = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Long> HIT = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.LONG);
+    /**
+     * The bearings of its last blows ({@link com.coolfreeze23.headinajar.mecha.Wear#push}), for its dents: kept and saved
+     * on the server (key "HitBearings", written only when there are any), forgotten when it is whole again, and sent to
+     * the players who see it on the optional {@link com.coolfreeze23.headinajar.network.Network.ShellDents} channel (not
+     * synced data, so a 0.5.1 game reads this shell exactly as before). What was last sent, and who sees it.
+     */
+    private long bearings, bearingsSent;
+    private final java.util.Set<ServerPlayer> watchers = new java.util.HashSet<>();
     /** Server: a web on its way (placed when the spit lands), and when. */
     private net.minecraft.core.BlockPos webDue;
     private long webDueAt;
@@ -101,6 +109,35 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
         return entityData.get(WEB_AT);
     }
 
+    /** The bearings of its last blows (server: as kept; client: as last sent, 0 on a server without the channel). */
+    public long hitBearings() {
+        return bearings;
+    }
+
+    public void setHitBearings(long bearings) {
+        this.bearings = bearings;
+    }
+
+    /** Whole again: the blows are forgotten (the dents go), as a mecha's are. */
+    @Override
+    public void setHealth(float health) {
+        super.setHealth(health);
+        if (level() != null && !level().isClientSide && getHealth() >= getMaxHealth()) bearings = 0;
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        watchers.add(player);
+        if (bearings != 0) com.coolfreeze23.headinajar.network.Network.shellDents(player, this);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        watchers.remove(player);
+    }
+
     /** The last blow: game time x 2 + 1 when it came from the right, or -1. */
     public long hitAt() {
         return entityData.get(HIT);
@@ -132,6 +169,7 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
             Vec3 from = source.getSourcePosition();
             boolean right = from != null && from.subtract(position()).dot(Vec3.directionFromRotation(0, yBodyRot + 90)) > 0;
             entityData.set(HIT, level().getGameTime() * 2 + (right ? 1 : 0));
+            if (isAlive()) bearings = com.coolfreeze23.headinajar.mecha.Wear.push(bearings, com.coolfreeze23.headinajar.mecha.Wear.bearing(this, source));
         }
         return hurt;
     }
@@ -283,6 +321,10 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
     public void tick() {
         super.tick();
         if (level().isClientSide) return;
+        if (bearings != bearingsSent) {
+            bearingsSent = bearings;
+            for (ServerPlayer p : watchers) com.coolfreeze23.headinajar.network.Network.shellDents(p, this);
+        }
         // the Lunk's toss: held in the fists from the scoop, pushed at the clip's release, when the fists let go
         long toss = tossAt();
         if (tossTarget != null && toss >= 0 && (toss & 3) == TOSS) {
@@ -517,12 +559,14 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.put("Cargo", cargo.createTag(registryAccess()));
+        if (bearings != 0) tag.putLong("HitBearings", bearings);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         cargo.fromTag(tag.getList("Cargo", 10), registryAccess());
+        bearings = tag.getLong("HitBearings");
         HostData data = Hosts.data(this);
         data.host = true;
         data.shell = true;

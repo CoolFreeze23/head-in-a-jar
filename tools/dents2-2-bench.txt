@@ -1,0 +1,93 @@
+# dents2 cost: median frame time with dented machines, parked and walking (run alone: GAME_EXCLUSIVE=1).
+# Parked: one machine of each of the eight frames in a row 12 blocks off, each dented on a different side and stage,
+# three windows of 300 ticks. Walking: the player drives a Hopper dented at stage 3 on its left, seen from behind
+# (third person), up and down the flat world, three windows. Run on 0.5.1 and on 0.5.2 with the same script.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+fpscap 260 vsync 0
+/tp @s 0.5 -59 -12 0 5
+wait 100
+mecha hopper -21 -60 0
+mecha bulwark -15 -60 0
+mecha colossus -9 -60 0
+mecha executive -3 -60 0
+mecha wheelhouse 3 -60 0
+mecha chimera 9 -60 0
+mecha skitter 15 -60 0
+mecha kite 21 -60 0
+wait 100
+/data merge entity @e[type=headinajar:hopper,limit=1] {HitBearings:65793L,Health:39.6f}
+/data merge entity @e[type=headinajar:bulwark,limit=1] {HitBearings:4210752L,Health:61.6f}
+/data merge entity @e[type=headinajar:colossus,limit=1] {HitBearings:8421504L,Health:49.5f}
+/data merge entity @e[type=headinajar:executive,limit=1] {HitBearings:12632256L,Health:237.6f}
+/data merge entity @e[type=headinajar:wheelhouse,limit=1] {HitBearings:65793L,Health:39.6f}
+/data merge entity @e[type=headinajar:chimera,limit=1] {HitBearings:4210752L,Health:19.8f}
+/data merge entity @e[type=headinajar:skitter,limit=1] {HitBearings:8421504L,Health:66.0f}
+/data merge entity @e[type=headinajar:kite,limit=1] {HitBearings:12632256L,Health:30.8f}
+wait 100
+dents
+parkstats
+shot bench_parked
+bench start parked1
+wait 300
+bench stop
+wait 40
+bench start parked2
+wait 300
+bench stop
+wait 40
+bench start parked3
+wait 300
+bench stop
+wait 40
+parkstats
+mecha hopper 0 -60 -40
+wait 40
+/data merge entity @e[type=headinajar:hopper,x=0.5,y=-60,z=-39.5,distance=..1,limit=1] {HitBearings:12632256L,Health:9.9f}
+jar
+charge 100000
+/tp @s 0.5 -60 -43.5 0 0
+wait 10
+aimat headinajar:hopper
+wait 3
+key use
+wait 80
+riding hopper
+view 1
+look 180 10
+wait 40
+dents
+shot bench_walk
+look 180 10
+wait 10
+walk 1
+wait 20
+bench start walking1
+wait 300
+bench stop
+walk 0
+wait 30
+look 0 10
+wait 10
+walk 1
+wait 20
+bench start walking2
+wait 300
+bench stop
+walk 0
+wait 30
+look 180 10
+wait 10
+walk 1
+wait 20
+bench start walking3
+wait 300
+bench stop
+walk 0
+wait 30
+dents

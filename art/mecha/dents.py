@@ -1,10 +1,11 @@
-"""Dents for the animated mecha frames: where a frame's sheet buckles as it takes damage on one side.
+"""Dents for the animated mecha frames and the Utility Shells: where a sheet buckles as it takes damage on one side.
 
 A frame that has lost a quarter, a half and three quarters of its health shows dent stage 1, 2 and 3 on the side it
 was hit from most (front, right, back or left of the machine). This script places the dents, once, for every frame:
 
 - the faces that look out to each side are found from the frame's model (the cube faces' normals with the bones' rest
-  rotations; the machine faces north, its left is -x);
+  rotations; the machine faces north, its left is -x), and only pixels seen from that side standing are used (a depth
+  test: the inside of the far leg is never seen);
 - only pixels that belong to that side alone are used (a UV area shared with a face looking elsewhere is left alone),
   and only metal: enamel, steel, brass, warning paint, iron, and the rubber-black paint on broad panels (glass, lamps,
   bone, flesh and copper are never dented);
@@ -13,6 +14,13 @@ was hit from most (front, right, back or left of the machine). This script place
   the side's broadest panels; stage 2 adds more and larger ones and a scrape through the paint; stage 3 adds more again
   and a crease across the broadest panel. Placement follows a fixed low-discrepancy sequence over each face, so the
   result is the same every run and nothing is per-pixel noise.
+- a side that still reads less than the Bulwark's left flank (the frame that reads best: at stages 1, 2 and 3, 6, 12
+  and 14 in a hundred of the texels seen of that side parked change by more than 24 in luminance) takes more marks
+  until it does or has no room left: on smaller parts and narrower black panels too, on faces that lean toward the side
+  (a leg splayed at forty-five degrees belongs to both sides it shows to, a part turned for parking counts by its
+  parked normal), on pixels only the parked pose shows, packed closer; still short, the hollows' faint floors and
+  rims go a step deeper. A side with room never needs any of it (the Bulwark's left flank is as it was), so this adds
+  only to the Hopper, the Kite, the Skitter, the Chimera and the fainter sides of the others.
 
 Every dented pixel is a palette colour (a step or a half step of the ramp the pixel already uses). The output is one
 PNG per frame, `assets/headinajar/mecha/dents/<frame>.png`: the sheet's width, twelve sheets tall, tile (side * 3 +
@@ -33,12 +41,27 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 ASSETS = os.path.join(ROOT, 'src', 'main', 'resources', 'assets', 'headinajar')
 FRAMES = ['hopper', 'bulwark', 'colossus', 'executive', 'wheelhouse', 'chimera', 'skitter', 'kite']
+# the three Utility Shells, dented the same way (their models in art/shell, their sheets in textures/entity/shell)
+SHELLS = ['lunk', 'rover', 'spider_walker']
+
+
+def model_file(frame):
+    if frame in SHELLS:
+        return os.path.join(os.path.dirname(HERE), 'shell', frame, frame + '.bbmodel')
+    return os.path.join(HERE, frame, frame + '.bbmodel')
+
+
+def sheet_file(frame, suffix=''):
+    return os.path.join(ASSETS, 'textures', 'entity', 'shell' if frame in SHELLS else 'mecha', frame + suffix + '.png')
+
+
 SIDES = ['front', 'right', 'back', 'left']
 # the machine faces north (-z); its right is +x
 SIDE_OF_NORMAL = {(0, -1): 0, (1, 0): 1, (0, 1): 2, (-1, 0): 3}
 METAL = {'enamel', 'steel', 'brass', 'warning', 'iron'}
 PAINT = {'enamel', 'warning', 'rubber'}
 PANEL = 6          # rubber-black only on faces at least this wide and tall (panels, not hoses)
+PANEL_SPARE = 4    # the same on a side short of metal
 
 # Shades a mark gives a pixel, in that pixel's own ramp: X three steps darker, D two, d one, c half a step (the floor of
 # a shallow hollow), l one step lighter, L two. Light comes from the top left (as on everything in the mod): a dent's
@@ -150,25 +173,44 @@ def apply(m, v):
 NORMALS = {'north': (0, 0, -1), 'south': (0, 0, 1), 'east': (1, 0, 0), 'west': (-1, 0, 0), 'up': (0, 1, 0), 'down': (0, -1, 0)}
 
 
-def faces(frame):
-    """Every cube face of the frame (stand-ins left out): (side or -1, uv rect in sheet px, width, height, element)."""
-    model = json.load(open(os.path.join(HERE, frame, frame + '.bbmodel'), encoding='utf-8'))
+def faces(frame, leaning=False):
+    """Every cube face of the frame (stand-ins left out): (side or -1, uv rect in sheet px, width, height, element).
+
+    A face looks out to a side when its normal at rest is within forty-five degrees of it. Leaning (for a side short of
+    metal): to the side its normal leans to most, standing or else parked, unless it looks within about twenty-five
+    degrees of straight up or down (a leg splayed at forty-five degrees, a wing folded down the flank for parking: both
+    are seen from the side), and a corner face turned near forty-five degrees to both sides it shows to."""
+    model = json.load(open(model_file(frame), encoding='utf-8'))
     groups = {g['uuid']: g for g in model['groups']}
     elements = {e['uuid']: e for e in model['elements']}
+    parked = pose(frame, 'parked')
     out = []
 
-    def walk(nodes, m, skip):
+    def side_of(n):
+        nx, ny, nz = n
+        if abs(ny) >= 0.9:
+            return -1
+        ex, ez = (1 if nx > 0 else 3), (2 if nz > 0 else 0)
+        if min(abs(nx), abs(nz)) > 0.5 * math.hypot(nx, nz):
+            # a corner face, turned near forty-five degrees: seen as much from either side, dented by blows from both
+            return tuple(sorted((ex, ez)))
+        return ex if abs(nx) > abs(nz) else ez
+
+    def walk(nodes, m, mp, skip):
         for n in nodes:
             if isinstance(n, dict):
                 g = groups.get(n['uuid'], {})
                 name = g.get('name', '')
-                walk(n.get('children', []), mul(m, rot(g.get('rotation', [0, 0, 0]))),
+                r = g.get('rotation', [0, 0, 0])
+                extra = parked.get(name, ([0, 0, 0], None, 1))[0]
+                walk(n.get('children', []), mul(m, rot(r)), mul(mp, rot([a + b for a, b in zip(r, extra)])),
                      skip or name.startswith('standin') or name.startswith('lamp_'))
             elif n in elements and not skip:
                 e = elements[n]
                 if e.get('type', 'cube') != 'cube' or e['name'].startswith('standin'):
                     continue
                 em = mul(m, rot(e.get('rotation', [0, 0, 0])))
+                emp = mul(mp, rot(e.get('rotation', [0, 0, 0])))
                 size = [abs(e['to'][i] - e['from'][i]) for i in range(3)]
                 for fname, f in e.get('faces', {}).items():
                     if f.get('texture') is None or 'uv' not in f:
@@ -177,13 +219,19 @@ def faces(frame):
                     rect = (int(round(min(x0, x1))), int(round(min(y0, y1))), int(round(max(x0, x1))), int(round(max(y0, y1))))
                     if rect[2] <= rect[0] or rect[3] <= rect[1]:
                         continue
-                    nx, ny, nz = apply(em, NORMALS[fname])
-                    side = -1
-                    if abs(ny) < 0.5:
-                        key = (int(round(nx)), int(round(nz))) if max(abs(nx), abs(nz)) > 0.7 else None
-                        side = SIDE_OF_NORMAL.get(key, -1)
+                    if leaning:
+                        side = side_of(apply(em, NORMALS[fname]))
+                        if side == -1:
+                            side = side_of(apply(emp, NORMALS[fname]))
+                    else:
+                        nx, ny, nz = apply(em, NORMALS[fname])
+                        side = -1
+                        if abs(ny) < 0.5:
+                            key = (int(round(nx)), int(round(nz))) if max(abs(nx), abs(nz)) > 0.7 else None
+                            side = SIDE_OF_NORMAL.get(key, -1)
                     out.append((side, rect, e['name'], fname, size))
-    walk(model['outliner'], [[1, 0, 0], [0, 1, 0], [0, 0, 1]], False)
+    one = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    walk(model['outliner'], one, one, False)
     return out
 
 
@@ -191,12 +239,12 @@ def faces(frame):
 A1, A2 = 0.7548776662, 0.5698402910     # the plastic-number sequence: well spread, fixed
 
 
-def seen(frame, side):
-    """The sheet's pixels seen from that side of the machine at rest (a depth test over every face, half-pixel samples):
-    a dent on a face hidden behind another part (the inside of the far leg) would be wasted."""
+def seen_in(geo, side):
+    """The sheet's pixels seen from that side of the machine posed as geo is (a depth test over every face, half-pixel
+    samples): a dent on a face hidden behind another part (the inside of the far leg) would be wasted."""
     near = {}
     sx, depth = VIEWS[side]
-    for corner_at, tf, uv in geometry(frame):
+    for corner_at, tf, uv in geo:
         u1, v1, u2, v2 = uv
         for ty in range(int(min(v1, v2)), int(max(v1, v2))):
             for tx in range(int(min(u1, u2)), int(max(u1, u2))):
@@ -212,12 +260,26 @@ def seen(frame, side):
     return {t for _, t in near.values()}
 
 
-def dentable(sheet, glow, claims, side, x, y, wide):
+DENTABLE = {}
+
+
+def dentable(sheet, glow, claims, side, x, y, wide, spare=False):
+    """Whether a dent may change this pixel for this side: metal (or broad black paint), not glowing, seen from that
+    side and on no face that looks elsewhere. The first rule is the one every frame had: faces by their rest normal,
+    pixels seen standing. Spare (for a side short of metal): faces leaning to the side, pixels seen standing or parked."""
+    key = (side, x, y, wide, spare)
+    if key not in DENTABLE:
+        DENTABLE[key] = dentable_now(sheet, glow, claims[spare], side, x, y, wide, VISIBLE[spare])
+    return DENTABLE[key]
+
+
+def dentable_now(sheet, glow, claims, side, x, y, wide, visible):
     if not (0 <= x < sheet.width and 0 <= y < sheet.height):
         return False
-    if claims.get((x, y)) != {side}:
+    # every face that shows this pixel looks out to this side (or is a corner face between it and the next)
+    if not all(side in (c if isinstance(c, tuple) else (c,)) for c in claims.get((x, y), {-1})):
         return False
-    if VISIBLE is not None and (x, y) not in VISIBLE[side]:
+    if (x, y) not in visible[side]:
         return False
     c = sheet.getpixel((x, y))
     if c[3] != 255 or (glow is not None and glow.getpixel((x, y))[3] > 0):
@@ -226,75 +288,135 @@ def dentable(sheet, glow, claims, side, x, y, wide):
     return mat in METAL or (mat == 'rubber' and wide)
 
 
-VISIBLE = None
+VISIBLE = {}
+
+
+def panels_of(sheet, glow, claims, fs, side, spare, shown):
+    """The side's panels: (dentable pixels, rect, element, broad enough for black paint, of them seen parked)."""
+    least, area_least = (PANEL_SPARE, 8) if spare else (PANEL, 12)
+    rects = {}
+    for s, rect, name, fname, size in fs:
+        if (s == side or isinstance(s, tuple) and side in s) and rect not in rects:
+            rects[rect] = name
+    out = []
+    for rect, name in rects.items():
+        x0, y0, x1, y1 = rect
+        wide = x1 - x0 >= least and y1 - y0 >= least
+        n = sum(dentable(sheet, glow, claims, side, x, y, wide, spare) for y in range(y0, y1) for x in range(x0, x1))
+        if n >= 6:
+            parked_n = sum((x, y) in shown and dentable(sheet, glow, claims, side, x, y, wide, spare)
+                           for y in range(y0, y1) for x in range(x0, x1))
+            out.append((n, rect, name, wide, parked_n))
+    out.sort(key=lambda p: (-p[0], p[1][1], p[1][0]))
+    # small parts (bolts, rims, thin bars) get no dents: they would read as noise
+    return [p for p in out if min(p[1][2] - p[1][0], p[1][3] - p[1][1]) >= 2
+            and (p[1][2] - p[1][0]) * (p[1][3] - p[1][1]) >= area_least]
 
 
 def plan(frame):
-    sheet = Image.open(os.path.join(ASSETS, 'textures', 'entity', 'mecha', frame + '.png')).convert('RGBA')
-    gpath = os.path.join(ASSETS, 'textures', 'entity', 'mecha', frame + '_glowmask.png')
+    sheet = Image.open(sheet_file(frame)).convert('RGBA')
+    gpath = sheet_file(frame, '_glowmask')
     glow = Image.open(gpath).convert('RGBA') if os.path.exists(gpath) else None
-    fs = faces(frame)
+    fs = {False: faces(frame), True: faces(frame, leaning=True)}
     claims = {}
-    for side, (x0, y0, x1, y1), *_ in fs:
-        for y in range(y0, y1):
-            for x in range(x0, x1):
-                claims.setdefault((x, y), set()).add(side)
-    global VISIBLE
-    VISIBLE = {s: seen(frame, s) for s in range(4)}
+    for spare in (False, True):
+        claims[spare] = {}
+        for side, (x0, y0, x1, y1), *_ in fs[spare]:
+            for y in range(y0, y1):
+                for x in range(x0, x1):
+                    claims[spare].setdefault((x, y), set()).add(side)
+    DENTABLE.clear()
+    rest = geometry(frame)
+    parked = geometry(frame, pose(frame, 'parked'))
+    VISIBLE[False] = {s: seen_in(rest, s) for s in range(4)}
+    # what a bystander sees of each side of a parked machine (where a stage is judged)
+    shown = {s: {t for t in seen_in(parked, s) if sheet.getpixel(t)[3] > 0} for s in range(4)}
+    VISIBLE[True] = {s: VISIBLE[False][s] | shown[s] for s in range(4)}
     tiles = {}
     report = []
     for side in range(4):
-        rects = {}
-        for s, rect, name, fname, size in fs:
-            if s == side and rect not in rects:
-                rects[rect] = name
-        panels = []
-        for rect, name in rects.items():
-            x0, y0, x1, y1 = rect
-            wide = x1 - x0 >= PANEL and y1 - y0 >= PANEL
-            n = sum(dentable(sheet, glow, claims, side, x, y, wide) for y in range(y0, y1) for x in range(x0, x1))
-            if n >= 6:
-                panels.append((n, rect, name, wide))
-        panels.sort(key=lambda p: (-p[0], p[1][1], p[1][0]))
-        # small parts (bolts, rims, thin bars) get no dents: they would read as noise
-        panels = [p for p in panels if min(p[1][2] - p[1][0], p[1][3] - p[1][1]) >= 2 and (p[1][2] - p[1][0]) * (p[1][3] - p[1][1]) >= 12]
+        panels = panels_of(sheet, glow, claims, fs[False], side, False, shown[side])
+        spare = panels_of(sheet, glow, claims, fs[True], side, True, shown[side])
         area = sum(p[0] for p in panels)
         # the share of the side's metal each stage leaves dented (dent pixels against metal pixels)
         cover = [0.15, 0.40, 0.70]
+        # and, at the least, the share of what is seen of that side parked (every material) that a stage changes plainly
+        # (by more than 24 in luminance): the Bulwark's left side, the frame that reads best, gives 6, 12 and 14
+        plain = [0.06, 0.12, 0.14]
         used = set()
         changed = {}
         counts = []
-        on = [0] * len(panels)
+        on = {}           # marks on each panel (by its rect), in either pass
+        tried = {}        # failed tries on each spare panel, so the next looks at other places
         for stage in range(3):
             placed, misses = 0, 0
             i = 0
             while len(changed) < cover[stage] * area and misses < 120:
                 kind = mark(stage, i)
                 i += 1
-                order = sorted(range(len(panels)), key=lambda q: (-panels[q][0] / (on[q] + 1.0), q))
+                order = sorted(range(len(panels)), key=lambda q: (-panels[q][0] / (on.get(panels[q][1], 0) + 1.0), q))
                 done = False
                 for q in order:
-                    n, rect, name, wide = panels[q]
+                    n, rect, name, wide, _ = panels[q]
+                    k = on.get(rect, 0)
                     # a thin rail takes a ding or two, not a row of them (a row reads as studs)
                     thin = min(rect[2] - rect[0], rect[3] - rect[1]) <= 3
-                    if on[q] >= max(1, n // ((40, 24, 10) if thin else (20, 12, 4))[stage]):
+                    if k >= max(1, n // ((40, 24, 10) if thin else (20, 12, 4))[stage]):
                         continue
-                    if place(sheet, glow, claims, side, rect, wide, kind, used, changed, seed=on[q] * 5 + q * 3 + stage * 17, gap=1 if stage < 2 else 0, last=stage == 2):
-                        on[q] += 1
+                    if place(sheet, glow, claims, side, rect, wide, kind, used, changed, seed=k * 5 + q * 3 + stage * 17,
+                             gap=1 if stage < 2 else 0, last=stage == 2):
+                        on[rect] = k + 1
                         placed += 1
                         done = True
                         break
                 misses = 0 if done else misses + 1
+            # a side with too little open metal to read from where the others do: marks on its smaller parts, on faces
+            # turned toward it and on what shows of it parked, packed closer and more of them to a part, the parts seen
+            # parked first
+            misses = 0
+            while strong(sheet, changed, shown[side]) < plain[stage] * len(shown[side]) and misses < 120:
+                kind = mark(stage, i)
+                i += 1
+                order = sorted(range(len(spare)), key=lambda q: (-(spare[q][0] + 2 * spare[q][4]) / (on.get(spare[q][1], 0) + 1.0), q))
+                done = False
+                for q in order:
+                    n, rect, name, wide, _ = spare[q]
+                    k = on.get(rect, 0)
+                    thin = min(rect[2] - rect[0], rect[3] - rect[1]) <= 3
+                    if k >= max(1, n // ((20, 10, 4) if thin else (10, 6, 2))[stage]):
+                        continue
+                    if place(sheet, glow, claims, side, rect, wide, kind, used, changed,
+                             seed=k * 5 + q * 3 + stage * 17 + tried.get(rect, 0) * 53,
+                             gap=1 if stage == 0 else 0, last=stage >= 1, spare=True):
+                        on[rect] = k + 1
+                        placed += 1
+                        done = True
+                        break
+                    tried[rect] = tried.get(rect, 0) + 1
+                misses = 0 if done else misses + 1
+            if stage >= 1 and strong(sheet, changed, shown[side]) < plain[stage] * len(shown[side]):
+                # still short: the hollows' faint floors and rims (1 to 24 in luminance) go a step further
+                for (x, y), c in list(changed.items()):
+                    base = sheet.getpixel((x, y))[:3]
+                    diff = lum(c[:3]) - lum(base)
+                    if abs(diff) <= 24 and c[:3] in INDEX:
+                        changed[(x, y)] = shade(c[:3], 'd' if diff < 0 else 'l') + (255,)
             if stage == 2:
                 # by the last stage the earlier dents have been hit again: their shadowed walls go a step deeper
                 for (x, y), c in list(changed.items()):
                     base = sheet.getpixel((x, y))[:3]
-                    if lum(c[:3]) < lum(base) - 4 and c[:3] in INDEX:
+                    if lum(c[:3]) < lum(base) - 4 and c[:3] in INDEX and lum(shade(c[:3], 'd')) < lum(c[:3]):
                         changed[(x, y)] = shade(c[:3], 'd') + (255,)
             counts.append(placed)
             tiles[(side, stage + 1)] = dict(changed)
-        report.append('%s %-5s: %4d px of metal on %2d panels; dents placed %s' % (frame, SIDES[side], area, len(panels), counts))
+        report.append('%s %-5s: %4d px of metal on %2d panels (%d spare); dents placed %s; plainly changed %d of %d seen parked'
+                      % (frame, SIDES[side], area, len(panels), len(spare), counts, strong(sheet, changed, shown[side]), len(shown[side])))
     return sheet, tiles, report
+
+
+def strong(sheet, changed, shown):
+    """How many of the texels seen parked a stage changes plainly (by more than 24 in luminance)."""
+    return sum(1 for t, c in changed.items() if t in shown and abs(lum(c[:3]) - lum(sheet.getpixel(t)[:3])) > 24)
 
 
 def mark(stage, i):
@@ -329,15 +451,15 @@ def cells(kind, w, h):
     return [dent(*sz) for sz in reversed(fit)] + [[(0, 0, 'D'), (1, 0, 'd'), (0, 1, 'd'), (1, 1, 'L')]]
 
 
-def place(sheet, glow, claims, side, rect, wide, kind, used, changed, seed, gap=1, last=False):
+def place(sheet, glow, claims, side, rect, wide, kind, used, changed, seed, gap=1, last=False, spare=False):
     x0, y0, x1, y1 = rect
     for cs in cells(kind, x1 - x0, y1 - y0):
-        if put(sheet, glow, claims, side, rect, wide, cs, used, changed, seed, gap, last):
+        if put(sheet, glow, claims, side, rect, wide, cs, used, changed, seed, gap, last, spare):
             return True
     return False
 
 
-def put(sheet, glow, claims, side, rect, wide, cs, used, changed, seed, gap, last=False):
+def put(sheet, glow, claims, side, rect, wide, cs, used, changed, seed, gap, last=False, spare=False):
     x0, y0, x1, y1 = rect
     w = max(c[0] for c in cs) + 1
     h = max(c[1] for c in cs) + 1
@@ -348,14 +470,14 @@ def put(sheet, glow, claims, side, rect, wide, cs, used, changed, seed, gap, las
     # of the places the sequence offers, the one where the mark shows most (a pale flat field, not a dark band that
     # cannot go darker); none if even that would barely show
     best, best_score = None, 0.0
-    for j in range(48):
+    for j in range(96 if spare else 48):
         u = (0.5 + A1 * (seed + j)) % 1.0
         v = (0.5 + A2 * (seed + j)) % 1.0
         ox = x0 + margin + int(round(u * span_x))
         oy = y0 + margin + int(round(v * span_y))
         pts = [(ox + dx, oy + dy, s) for dx, dy, s in cs]
         # most of the mark must land on this side's visible metal; the rest of it is left out
-        ok = [p for p in pts if dentable(sheet, glow, claims, side, p[0], p[1], wide)]
+        ok = [p for p in pts if dentable(sheet, glow, claims, side, p[0], p[1], wide, spare)]
         if len(ok) < (0.5 if last else 0.75) * len(pts):
             continue
         pts = ok
@@ -390,11 +512,37 @@ def write(frame, sheet, tiles):
 
 
 # ---- review ------------------------------------------------------------------------------------------------------
-def geometry(frame):
-    """Every cube of the frame at rest, in model px: (corners of each face by name, its uv, element)."""
-    model = json.load(open(os.path.join(HERE, frame, frame + '.bbmodel'), encoding='utf-8'))
+def pose(frame, clip):
+    """A clip's first pose: {bone: (rotation added to the bone's own, move, scale)} from its keys at time 0."""
+    model = json.load(open(model_file(frame), encoding='utf-8'))
+    anim = next(a for a in model.get('animations', []) if a['name'] == clip)
+    out = {}
+    for a in anim.get('animators', {}).values():
+        r, t, sc = [0, 0, 0], [0, 0, 0], 1
+        for k in a.get('keyframes', []):
+            if k['time'] != 0:
+                continue
+            d = k['data_points'][0]
+            v = [float(d.get(c) or 0) for c in 'xyz']
+            if k['channel'] == 'rotation':
+                r = v
+            elif k['channel'] == 'position':
+                # Blockbench moves a bone by -x, +y, +z of its key
+                t = [-v[0], v[1], v[2]]
+            elif k['channel'] == 'scale':
+                sc = v[0]
+        out[a['name']] = (r, t, sc)
+    return out
+
+
+def geometry(frame, posed=None):
+    """Every cube of the frame at rest (or in a pose from pose()), in model px: (corners of each face by name, its uv,
+    element). A key's rotation adds to the bone's own (checked against Blockbench's own sampling of the Hopper's
+    parked knee)."""
+    model = json.load(open(model_file(frame), encoding='utf-8'))
     groups = {g['uuid']: g for g in model['groups']}
     elements = {e['uuid']: e for e in model['elements']}
+    posed = posed or {}
     out = []
 
     def walk(nodes, chain, skip):
@@ -402,18 +550,20 @@ def geometry(frame):
             if isinstance(n, dict):
                 g = groups.get(n['uuid'], {})
                 name = g.get('name', '')
-                walk(n.get('children', []), chain + [(g.get('origin', [0, 0, 0]), rot(g.get('rotation', [0, 0, 0])))],
-                     skip or name.startswith('standin'))
+                r, t, sc = posed.get(name, ([0, 0, 0], [0, 0, 0], 1))
+                angles = [a + b for a, b in zip(g.get('rotation', [0, 0, 0]), r)]
+                walk(n.get('children', []), chain + [(g.get('origin', [0, 0, 0]), rot(angles), t)],
+                     skip or name.startswith('standin') or sc == 0)
             elif n in elements and not skip:
                 e = elements[n]
                 if e.get('type', 'cube') != 'cube':
                     continue
-                full = chain + [(e.get('origin', [0, 0, 0]), rot(e.get('rotation', [0, 0, 0])))]
+                full = chain + [(e.get('origin', [0, 0, 0]), rot(e.get('rotation', [0, 0, 0])), [0, 0, 0])]
 
                 def tf(p, full=full):
-                    for o, m in reversed(full):
+                    for o, m, t in reversed(full):
                         q = apply(m, [p[i] - o[i] for i in range(3)])
-                        p = [q[i] + o[i] for i in range(3)]
+                        p = [q[i] + o[i] + t[i] for i in range(3)]
                     return p
                 (x0, y0, z0), (x1, y1, z1) = e['from'], e['to']
                 for fname, f in e.get('faces', {}).items():
@@ -491,8 +641,8 @@ def preview(frame, sheet, tiles, out_dir):
 
 def main():
     out_dir = sys.argv[sys.argv.index('--preview') + 1] if '--preview' in sys.argv else None
-    only = [a for a in sys.argv[1:] if a in FRAMES]
-    for frame in only or FRAMES:
+    only = [a for a in sys.argv[1:] if a in FRAMES + SHELLS]
+    for frame in only or FRAMES + SHELLS:
         sheet, tiles, report = plan(frame)
         write(frame, sheet, tiles)
         if out_dir:

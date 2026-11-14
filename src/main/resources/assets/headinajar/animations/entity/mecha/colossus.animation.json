@@ -31411,7 +31411,7 @@
             }
           }
         },
-        "socket_arm_2": {
+        "socket_arm_3": {
           "position": {
             "0.0": {
               "vector": [
@@ -31474,20 +31474,20 @@
             }
           }
         },
-        "socket_arm_3": {
+        "socket_sensor": {
           "position": {
             "0.0": {
               "vector": [
                 0,
-                0,
-                -8
+                8,
+                0
               ]
             },
             "10.2": {
               "vector": [
                 0,
-                0,
-                -8
+                8,
+                0
               ]
             },
             "10.35": {
@@ -31501,8 +31501,8 @@
             "10.4": {
               "vector": [
                 0,
-                0,
-                -1.4
+                1.4,
+                0
               ],
               "easing": "easeOutQuad"
             },
@@ -31537,7 +31537,7 @@
             }
           }
         },
-        "socket_sensor": {
+        "socket_sensor_1": {
           "position": {
             "0.0": {
               "vector": [
@@ -31600,23 +31600,23 @@
             }
           }
         },
-        "socket_sensor_1": {
+        "socket_arm_2": {
           "position": {
             "0.0": {
               "vector": [
                 0,
-                8,
-                0
+                0,
+                -8
               ]
             },
-            "10.8": {
+            "11.4": {
               "vector": [
                 0,
-                8,
-                0
+                0,
+                -8
               ]
             },
-            "10.95": {
+            "11.55": {
               "vector": [
                 0,
                 0,
@@ -31624,15 +31624,15 @@
               ],
               "easing": "easeInQuad"
             },
-            "11.0": {
+            "11.6": {
               "vector": [
                 0,
-                1.4,
-                0
+                0,
+                -1.4
               ],
               "easing": "easeOutQuad"
             },
-            "11.05": {
+            "11.65": {
               "vector": [
                 0,
                 0,
@@ -31649,7 +31649,7 @@
                 0
               ]
             },
-            "10.8": {
+            "11.4": {
               "pre": [
                 0,
                 0,
@@ -34559,10 +34559,10 @@
         "9.15": "build:seat:torso_4;",
         "9.45": "build:seat:arm_l;",
         "9.75": "build:seat:arm_r;",
-        "10.05": "build:seat:arm_2;",
-        "10.35": "build:seat:arm_3;",
-        "10.65": "build:seat:sensor;",
-        "10.95": "build:seat:sensor_1;",
+        "10.05": "build:seat:arm_3;",
+        "10.35": "build:seat:sensor;",
+        "10.65": "build:seat:sensor_1;",
+        "11.55": "build:seat:arm_2;",
         "13.2": "build:ribbon;"
       }
     },

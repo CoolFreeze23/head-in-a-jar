@@ -185,7 +185,13 @@ public final class FormActions {
         player.fallDistance = 0;
         player.stopRiding();
         if (to != null) {
-            player.teleportTo(headLevel, to.x, to.y, to.z, player.getYRot(), player.getXRot());
+            // a head set down on a Charging Dock wakes side-on to the dock's column, never looking into it
+            float yaw = player.getYRot();
+            var dock = head.where() == HeadRegistry.Where.ENTITY ? com.coolfreeze23.headinajar.block.ChargingDockBlock.under(headLevel,
+                    (state.compact() ? FormEvents.COMPACT_SIZE : FormEvents.JAR_SIZE).makeBoundingBox(to)) : null;
+            if (dock != null) yaw = com.coolfreeze23.headinajar.block.ChargingDockBlock.sideOn(dock.getBlockState(), yaw);
+            player.teleportTo(headLevel, to.x, to.y, to.z, yaw, player.getXRot());
+            player.setYHeadRot(yaw);
             registry.setHead(player.getUUID(), new HeadRegistry.Head(HeadRegistry.Where.PLAYER, HeadRegistry.Spot.of(player), null));
         }
         player.refreshDimensions();
@@ -399,7 +405,10 @@ public final class FormActions {
         var dock = com.coolfreeze23.headinajar.block.ChargingDockBlock.under(player.level(), footprint);
         if (dock != null) at = com.coolfreeze23.headinajar.block.ChargingDockBlock.top(dock.getBlockPos());
         state.setCarryingHead(false);
-        placeHead(player, player.serverLevel(), at, player.getYRot() + 180);
+        // set down facing whoever set it down; on a dock, side-on to its column (as the jar wakes there)
+        float yaw = player.getYRot() + 180;
+        if (dock != null) yaw = com.coolfreeze23.headinajar.block.ChargingDockBlock.sideOn(dock.getBlockState(), yaw);
+        placeHead(player, player.serverLevel(), at, yaw);
         Network.sync(player);
         return true;
     }

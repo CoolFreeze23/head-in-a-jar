@@ -24,6 +24,18 @@
         -4.24
       ]
     },
+    "arc_bulwark_core": {
+      "from": [
+        12.67,
+        40.03,
+        10.92
+      ],
+      "to": [
+        0.0,
+        38.0,
+        0.0
+      ]
+    },
     "arc_bulwark_torso_2": {
       "from": [
         13.66,
@@ -34,6 +46,18 @@
         4.0,
         40.0,
         6.93
+      ]
+    },
+    "arc_chimera_back": {
+      "from": [
+        6.67,
+        40.03,
+        10.92
+      ],
+      "to": [
+        -2.85,
+        40.0,
+        -10.63
       ]
     },
     "arc_colossus_back": {
@@ -87,8 +111,8 @@
     "arc_hopper_core": {
       "from": [
         9.4,
-        37.01,
-        7.64
+        40.01,
+        10.64
       ],
       "to": [
         0.0,
@@ -96,16 +120,16 @@
         0.0
       ]
     },
-    "arc_kite_core": {
+    "arc_kite_arm_l": {
       "from": [
-        -1.41,
-        38.34,
-        0.66
+        6.48,
+        42.9,
+        10.72
       ],
       "to": [
-        -4.24,
-        44.0,
-        -4.24
+        -16.0,
+        42.0,
+        -9.0
       ]
     },
     "arc_skitter_arm_l": {
@@ -163,9 +187,9 @@
         19.77
       ],
       "to": [
-        -1.0,
+        -0.87,
         29.0,
-        -0.0
+        0.5
       ]
     }
   },
@@ -200,10 +224,11 @@
           "slot": "back_1"
         },
         {
-          "contact": 87,
-          "late": 0,
+          "arc": "arc_bulwark_core",
+          "contact": 88,
+          "late": 1,
           "locator": "w_bulwark_core",
-          "reach": true,
+          "reach": false,
           "seat": 87,
           "slot": "core"
         },
@@ -225,8 +250,8 @@
         },
         {
           "arc": "arc_bulwark_torso_2",
-          "contact": 109,
-          "late": 1,
+          "contact": 108,
+          "late": 0,
           "locator": "w_bulwark_torso_2",
           "reach": false,
           "seat": 108,
@@ -333,12 +358,12 @@
           "easeInOutSine"
         ],
         [
-          103,
+          82,
           -135.0,
           null
         ],
         [
-          106,
+          85,
           -150.0,
           "easeInOutSine"
         ],
@@ -361,32 +386,33 @@
           "slot": "legs"
         },
         {
-          "contact": 120,
-          "late": 5,
+          "arc": "arc_chimera_back",
+          "contact": 115,
+          "late": 0,
           "locator": "w_chimera_back",
-          "reach": true,
+          "reach": false,
           "seat": 115,
           "slot": "back"
         },
         {
-          "contact": 124,
-          "late": 2,
+          "contact": 122,
+          "late": 0,
           "locator": "w_chimera_core",
           "reach": true,
           "seat": 122,
           "slot": "core"
         },
         {
-          "contact": 129,
-          "late": 0,
+          "contact": 131,
+          "late": 2,
           "locator": "w_chimera_torso_0",
           "reach": true,
           "seat": 129,
           "slot": "torso_0"
         },
         {
-          "contact": 136,
-          "late": 0,
+          "contact": 139,
+          "late": 3,
           "locator": "w_chimera_torso_1",
           "reach": true,
           "seat": 136,
@@ -483,28 +509,38 @@
           null
         ],
         [
-          93,
+          91,
           0.0,
           null
         ],
         [
           99,
-          -105.0,
+          165.0,
           "easeInOutSine"
         ],
         [
           109,
-          -105.0,
+          165.0,
           null
         ],
         [
           112,
-          -135.0,
+          195.0,
+          "easeInOutSine"
+        ],
+        [
+          133,
+          195.0,
+          null
+        ],
+        [
+          136,
+          225.0,
           "easeInOutSine"
         ],
         [
           210,
-          -135.0,
+          225.0,
           null
         ]
       ]
@@ -612,36 +648,36 @@
           "slot": "arm_r"
         },
         {
-          "contact": 207,
-          "late": 6,
-          "locator": "w_colossus_arm_2",
-          "reach": true,
-          "seat": 201,
-          "slot": "arm_2"
-        },
-        {
-          "contact": 218,
-          "late": 11,
+          "contact": 201,
+          "late": 0,
           "locator": "w_colossus_arm_3",
           "reach": true,
-          "seat": 207,
+          "seat": 201,
           "slot": "arm_3"
         },
         {
-          "contact": 229,
-          "late": 16,
+          "contact": 207,
+          "late": 0,
           "locator": "w_colossus_sensor",
           "reach": true,
-          "seat": 213,
+          "seat": 207,
           "slot": "sensor"
         },
         {
-          "contact": 233,
-          "late": 14,
+          "contact": 213,
+          "late": 0,
           "locator": "w_colossus_sensor_1",
           "reach": true,
-          "seat": 219,
+          "seat": 213,
           "slot": "sensor_1"
+        },
+        {
+          "contact": 231,
+          "late": 0,
+          "locator": "w_colossus_arm_2",
+          "reach": true,
+          "seat": 231,
+          "slot": "arm_2"
         }
       ],
       "disassemble": 60,
@@ -712,38 +748,18 @@
           "easeInOutSine"
         ],
         [
-          197,
+          215,
           -120.0,
           null
         ],
         [
-          204,
-          30.0,
-          "easeInOutSine"
-        ],
-        [
-          209,
-          30.0,
-          null
-        ],
-        [
-          212,
-          15.0,
-          "easeInOutSine"
-        ],
-        [
-          220,
-          15.0,
-          null
-        ],
-        [
-          225,
-          -75.0,
+          223,
+          60.0,
           "easeInOutSine"
         ],
         [
           310,
-          -75.0,
+          60.0,
           null
         ]
       ]
@@ -843,18 +859,18 @@
         {
           "contact": 109,
           "late": 0,
-          "locator": "w_executive_arm_r",
-          "reach": true,
-          "seat": 109,
-          "slot": "arm_r"
-        },
-        {
-          "contact": 114,
-          "late": 0,
           "locator": "w_executive_arm_2",
           "reach": true,
-          "seat": 114,
+          "seat": 109,
           "slot": "arm_2"
+        },
+        {
+          "contact": 115,
+          "late": 1,
+          "locator": "w_executive_arm_r",
+          "reach": true,
+          "seat": 114,
+          "slot": "arm_r"
         },
         {
           "contact": 119,
@@ -1082,48 +1098,18 @@
           null
         ],
         [
-          51,
+          89,
           0.0,
           null
         ],
         [
-          57,
-          105.0,
-          "easeInOutSine"
-        ],
-        [
-          78,
-          105.0,
-          null
-        ],
-        [
-          81,
-          135.0,
-          "easeInOutSine"
-        ],
-        [
-          89,
-          135.0,
-          null
-        ],
-        [
-          92,
-          165.0,
-          "easeInOutSine"
-        ],
-        [
-          100,
-          165.0,
-          null
-        ],
-        [
-          103,
-          195.0,
+          95,
+          -135.0,
           "easeInOutSine"
         ],
         [
           190,
-          195.0,
+          -135.0,
           null
         ]
       ]
@@ -1140,41 +1126,41 @@
           "slot": "legs"
         },
         {
-          "arc": "arc_kite_core",
-          "contact": 76,
-          "late": 3,
+          "contact": 73,
+          "late": 0,
           "locator": "w_kite_core",
-          "reach": false,
+          "reach": true,
           "seat": 73,
           "slot": "core"
         },
         {
-          "contact": 85,
-          "late": 4,
+          "contact": 81,
+          "late": 0,
           "locator": "w_kite_torso_0",
           "reach": true,
           "seat": 81,
           "slot": "torso_0"
         },
         {
-          "contact": 94,
-          "late": 5,
+          "arc": "arc_kite_arm_l",
+          "contact": 89,
+          "late": 0,
           "locator": "w_kite_arm_l",
-          "reach": true,
+          "reach": false,
           "seat": 89,
           "slot": "arm_l"
         },
         {
-          "contact": 99,
-          "late": 2,
+          "contact": 97,
+          "late": 0,
           "locator": "w_kite_arm_r",
           "reach": true,
           "seat": 97,
           "slot": "arm_r"
         },
         {
-          "contact": 105,
-          "late": 0,
+          "contact": 106,
+          "late": 1,
           "locator": "w_kite_sensor",
           "reach": true,
           "seat": 105,
@@ -1239,48 +1225,28 @@
           null
         ],
         [
-          51,
+          91,
           0.0,
           null
         ],
         [
-          57,
-          -105.0,
+          94,
+          -30.0,
           "easeInOutSine"
         ],
         [
-          67,
-          -105.0,
+          99,
+          -30.0,
           null
         ],
         [
-          70,
-          -135.0,
-          "easeInOutSine"
-        ],
-        [
-          78,
-          -135.0,
-          null
-        ],
-        [
-          81,
-          -105.0,
-          "easeInOutSine"
-        ],
-        [
-          87,
-          -105.0,
-          null
-        ],
-        [
-          90,
-          -135.0,
+          103,
+          -90.0,
           "easeInOutSine"
         ],
         [
           190,
-          -135.0,
+          -90.0,
           null
         ]
       ]
@@ -1324,24 +1290,24 @@
         },
         {
           "arc": "arc_skitter_arm_l",
-          "contact": 98,
-          "late": 1,
+          "contact": 106,
+          "late": 9,
           "locator": "w_skitter_arm_l",
           "reach": false,
           "seat": 97,
           "slot": "arm_l"
         },
         {
-          "contact": 105,
-          "late": 0,
+          "contact": 110,
+          "late": 5,
           "locator": "w_skitter_sensor",
           "reach": true,
           "seat": 105,
           "slot": "sensor"
         },
         {
-          "contact": 113,
-          "late": 0,
+          "contact": 116,
+          "late": 3,
           "locator": "w_skitter_sensor_1",
           "reach": true,
           "seat": 113,
@@ -1480,8 +1446,8 @@
           "slot": "torso_0"
         },
         {
-          "contact": 98,
-          "late": 1,
+          "contact": 97,
+          "late": 0,
           "locator": "w_wheelhouse_torso_1",
           "reach": true,
           "seat": 97,
@@ -1572,22 +1538,22 @@
           "easeInOutSine"
         ],
         [
-          83,
+          75,
           90.0,
           null
         ],
         [
-          86,
+          78,
           120.0,
           "easeInOutSine"
         ],
         [
-          91,
+          83,
           120.0,
           null
         ],
         [
-          94,
+          86,
           150.0,
           "easeInOutSine"
         ],
@@ -1611,10 +1577,20 @@
       49.03,
       10.92
     ],
+    "arc_bulwark_core": [
+      12.67,
+      40.03,
+      10.92
+    ],
     "arc_bulwark_torso_2": [
       13.66,
       40.0,
       9.52
+    ],
+    "arc_chimera_back": [
+      6.67,
+      40.03,
+      10.92
     ],
     "arc_colossus_back": [
       14.71,
@@ -1638,13 +1614,13 @@
     ],
     "arc_hopper_core": [
       9.4,
-      37.01,
-      7.64
+      40.01,
+      10.64
     ],
-    "arc_kite_core": [
-      -1.41,
-      38.34,
-      0.66
+    "arc_kite_arm_l": [
+      6.48,
+      42.9,
+      10.72
     ],
     "arc_skitter_arm_l": [
       31.18,
@@ -1707,19 +1683,19 @@
       -0.21
     ],
     "plate_colossus_1": [
-      20.17,
-      70.21,
-      5.04
+      7.81,
+      32.59,
+      -19.09
     ],
     "plate_colossus_2": [
-      12.81,
-      84.59,
-      11.58
+      5.86,
+      72.35,
+      11.47
     ],
     "plate_executive_1": [
-      13.59,
-      73.48,
-      1.71
+      15.39,
+      70.71,
+      3.25
     ],
     "plate_executive_2": [
       -0.02,
@@ -1727,19 +1703,19 @@
       15.53
     ],
     "plate_hopper_1": [
-      8.37,
-      41.85,
-      9.99
+      12.9,
+      41.35,
+      2.84
     ],
     "plate_kite_1": [
-      19.58,
-      42.35,
-      -4.44
+      -5.51,
+      58.53,
+      1.49
     ],
     "plate_kite_2": [
-      -5.26,
+      10.57,
       42.85,
-      19.46
+      16.91
     ],
     "plate_skitter_1": [
       14.51,
@@ -2072,24 +2048,24 @@
       8.35
     ],
     "stamp_colossus": [
-      18.66,
-      71.85,
-      7.94
+      -2.43,
+      59.19,
+      -1.15
     ],
     "stamp_executive": [
-      15.42,
+      15.51,
       72.35,
-      -1.91
+      -0.94
     ],
     "stamp_hopper": [
-      8.37,
-      41.85,
-      9.99
+      12.9,
+      41.35,
+      2.84
     ],
     "stamp_kite": [
-      11.87,
+      16.79,
       55.2,
-      11.87
+      -0.0
     ],
     "stamp_skitter": [
       16.56,
@@ -2127,9 +2103,9 @@
       -4.24
     ],
     "w_bulwark_core": [
-      3.32,
-      36.29,
-      3.32
+      0.0,
+      38.0,
+      0.0
     ],
     "w_bulwark_legs": [
       -7.12,
@@ -2147,14 +2123,14 @@
       15.7
     ],
     "w_bulwark_torso_0": [
-      17.95,
-      51.09,
-      2.39
+      16.7,
+      51.48,
+      4.99
     ],
     "w_bulwark_torso_1": [
-      3.42,
+      0.16,
       50.71,
-      18.97
+      17.44
     ],
     "w_bulwark_torso_2": [
       4.0,
@@ -2172,19 +2148,19 @@
       21.33
     ],
     "w_chimera_back": [
-      -9.14,
-      39.48,
-      -9.14
+      -2.85,
+      40.0,
+      -10.63
     ],
     "w_chimera_core": [
-      0.0,
+      0.61,
       35.08,
-      0.87
+      0.61
     ],
     "w_chimera_legs": [
-      -6.05,
-      29.78,
-      9.6
+      16.61,
+      39.73,
+      -0.47
     ],
     "w_chimera_sensor": [
       1.51,
@@ -2192,29 +2168,29 @@
       17.12
     ],
     "w_chimera_torso_0": [
-      16.22,
-      44.48,
-      0.66
+      14.46,
+      43.71,
+      11.48
     ],
     "w_chimera_torso_1": [
-      0.69,
-      45.35,
-      16.24
+      0.18,
+      45.61,
+      18.18
     ],
     "w_chimera_torso_2": [
-      10.28,
+      10.98,
       43.11,
-      10.28
+      10.98
     ],
     "w_colossus_arm_2": [
-      -10.13,
-      103.48,
-      5.21
+      -6.86,
+      103.64,
+      11.48
     ],
     "w_colossus_arm_3": [
-      9.49,
-      104.11,
-      -3.36
+      -2.79,
+      102.87,
+      10.48
     ],
     "w_colossus_arm_l": [
       21.97,
@@ -2237,9 +2213,9 @@
       1.56
     ],
     "w_colossus_core": [
-      4.19,
-      59.85,
-      2.91
+      6.35,
+      59.29,
+      5.07
     ],
     "w_colossus_core_1": [
       -4.08,
@@ -2252,14 +2228,14 @@
       19.61
     ],
     "w_colossus_sensor": [
-      17.03,
-      70.7,
-      -7.99
+      17.49,
+      70.15,
+      4.54
     ],
     "w_colossus_sensor_1": [
-      18.34,
+      12.77,
       70.53,
-      -3.14
+      12.37
     ],
     "w_colossus_torso_0": [
       20.79,
@@ -2292,9 +2268,9 @@
       -16.43
     ],
     "w_executive_arm_3": [
-      -16.43,
-      75.71,
-      22.34
+      -16.1,
+      76.09,
+      21.65
     ],
     "w_executive_arm_l": [
       30.11,
@@ -2342,19 +2318,19 @@
       15.62
     ],
     "w_executive_torso_0": [
-      13.59,
-      73.48,
-      1.71
+      15.39,
+      70.71,
+      3.25
     ],
     "w_executive_torso_1": [
-      -0.02,
-      72.35,
-      15.53
+      -0.16,
+      70.71,
+      18.81
     ],
     "w_executive_torso_2": [
-      4.1,
-      64.87,
-      7.58
+      3.72,
+      64.61,
+      6.16
     ],
     "w_executive_torso_3": [
       23.21,
@@ -2367,19 +2343,19 @@
       22.19
     ],
     "w_hopper_arm_l": [
-      16.8,
+      22.02,
       44.0,
-      12.17
+      -0.0
     ],
     "w_hopper_arm_r": [
-      -8.49,
-      41.84,
-      18.85
+      -0.05,
+      43.48,
+      18.65
     ],
     "w_hopper_back": [
-      16.4,
+      -0.0,
       37.11,
-      0.22
+      19.53
     ],
     "w_hopper_core": [
       0.0,
@@ -2387,54 +2363,54 @@
       0.0
     ],
     "w_hopper_legs": [
-      6.53,
-      37.98,
-      11.37
+      13.42,
+      38.61,
+      5.63
     ],
     "w_hopper_sensor": [
-      4.7,
-      39.68,
-      13.18
+      9.53,
+      40.17,
+      9.53
     ],
     "w_hopper_torso_0": [
-      2.21,
-      41.35,
-      12.99
+      13.4,
+      41.61,
+      5.62
     ],
     "w_hopper_torso_1": [
-      -3.55,
-      42.48,
-      14.15
+      6.39,
+      43.11,
+      14.16
     ],
     "w_kite_arm_l": [
-      19.58,
-      42.35,
-      -4.44
+      -16.0,
+      42.0,
+      -9.0
     ],
     "w_kite_arm_r": [
-      -4.06,
-      42.61,
-      21.01
+      20.28,
+      41.48,
+      0.04
     ],
     "w_kite_core": [
-      -4.24,
-      44.0,
-      -4.24
+      0.0,
+      42.29,
+      10.7
     ],
     "w_kite_legs": [
-      -3.21,
+      18.76,
       39.52,
-      17.08
+      5.18
     ],
     "w_kite_sensor": [
-      12.87,
-      55.71,
-      12.87
+      16.79,
+      55.2,
+      -0.0
     ],
     "w_kite_torso_0": [
-      -5.27,
-      58.53,
-      -0.32
+      3.32,
+      55.71,
+      10.32
     ],
     "w_skitter_arm_l": [
       22.52,
@@ -2487,9 +2463,9 @@
       -7.5
     ],
     "w_wheelhouse_core": [
-      -1.0,
+      -0.87,
       29.0,
-      -0.0
+      0.5
     ],
     "w_wheelhouse_sensor": [
       -5.57,
@@ -2497,9 +2473,9 @@
       13.14
     ],
     "w_wheelhouse_torso_0": [
-      5.55,
-      38.68,
-      15.64
+      12.3,
+      42.53,
+      11.78
     ],
     "w_wheelhouse_torso_1": [
       -15.22,

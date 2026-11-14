@@ -33,6 +33,10 @@ public class SutureKitItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var state = FormActions.state(player);
         if (state.form() != Form.LINKED || !state.carryingHead()) {
+            // the button held on past a stitch that put the head back: the repeat of a held use, not a new try
+            if (level.isClientSide && state.form() == Form.BODY && com.coolfreeze23.headinajar.client.SutureHold.held()) {
+                return InteractionResultHolder.pass(player.getItemInHand(hand));
+            }
             if (level.isClientSide) player.displayClientMessage(Component.translatable(state.form() == Form.BODY
                     ? "message.headinajar.clarity.suture_head_on" : "message.headinajar.suture_how"), true);
             return InteractionResultHolder.pass(player.getItemInHand(hand));

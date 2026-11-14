@@ -18,6 +18,8 @@ LINES = {
                                        'O pórtico está trabalhando. Espere o braço se afastar.'),
     'refusal.headinajar.gantry.pad_blocked': ('Something blocks the space over the pad. Clear it for the frame.',
                                               'Algo ocupa o espaço sobre a plataforma. Libere para a estrutura.'),
+    'refusal.headinajar.gantry.pad_walled': ("The frame's head would be in the blocks beside the pad. Clear them.",
+                                             'A cabeça da estrutura ficaria nos blocos ao lado da plataforma. Libere-os.'),
     'refusal.headinajar.gantry.nothing_to_repair': ('Nothing to repair: the hull and the battery are full.',
                                                     'Nada a reparar: casco e bateria estão cheios.'),
     'refusal.headinajar.gantry.no_plating': ('No Mecha Plating to mend the hull. Put some in its slot.',

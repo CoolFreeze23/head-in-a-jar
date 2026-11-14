@@ -112,6 +112,17 @@ def arm(S):
                 f.col(0, 's4')
         S.face(n, 'up').fill('s4')
         S.face(n, 'down').fill('s2')
+    # the sleeves the client draws over a rod once it is out (3x3, the bar's section, scaled along their length: every
+    # column one value from end to end, so the scale stretches nothing): polished steel, a lit arris on the north and
+    # west faces, the far edge a step down; the ends as the rods'
+    for n in ('upper_sleeve', 'fore_sleeve_lo', 'fore_sleeve_hi'):
+        for f in S.faces(n, K.SIDES):
+            f.fill('s3')
+            if f.side in ('north', 'west'):
+                f.col(0, 's4')
+            f.col(f.W - 1, 's2')
+        S.face(n, 'up').fill('s4')
+        S.face(n, 'down').fill('s2')
     joint(S, 'elbow', ('west', 'east'))
     K.coil(S, 'spring')
     for n in ('standoff_1', 'standoff_2'):

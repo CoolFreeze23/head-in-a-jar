@@ -40,8 +40,8 @@ REFUSALS = {
                        'Combine com %1$s ou uma %2$s; o gêmeo vai para o outro.'),
     'item.air.embalm': ('Use it on a host body to keep it fresh.', 'Use num corpo hospedeiro para mantê-lo fresco.'),
     'item.air.lace': ('Use it on a host body at 50%% sync or more.', 'Use num corpo hospedeiro com 50%% de sincronia ou mais.'),
-    'item.air.saw': ('Use the saw on a creature worn below a quarter of its health.',
-                     'Use a serra numa criatura com menos de um quarto da vida.'),
+    'item.air.saw': ('Use the saw on a creature worn down to half its health or less.',
+                     'Use a serra numa criatura com metade da vida ou menos.'),
     'item.air.wrench': ("Use the wrench on one of the company's machines.", 'Use a chave numa das máquinas da empresa.'),
     # Saline Bottle or Glass Patch with the head on: %s the item
     'item.air.head_on': ('Your head is on. %s is for a head in a jar.', 'Sua cabeça está no lugar. %s é para uma cabeça no pote.'),
