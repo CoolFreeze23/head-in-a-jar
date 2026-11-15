@@ -77,6 +77,25 @@ public final class SawTable {
         return 1;
     }
 
+    /** The jar a kept head needs, from its type and its record (a slime's saved {@code Size} is its size less one). */
+    public static int needs(EntityType<?> type, net.minecraft.nbt.CompoundTag record) {
+        if (type == EntityType.SLIME || type == EntityType.MAGMA_CUBE) {
+            int size = record.getInt("Size") + 1;
+            if (size >= 4) return 3;
+            if (size >= 2) return 2;
+        }
+        if (type.is(EXECUTIVE)) return 3;
+        if (type.is(REINFORCED)) return 2;
+        return 1;
+    }
+
+    /** A jar's size by its item id (as a kept head records it); 1 for anything unknown. */
+    public static int rank(String jar) {
+        var id = jar == null ? null : net.minecraft.resources.ResourceLocation.tryParse(jar);
+        int rank = id == null ? 0 : rank(new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(id)));
+        return Math.max(1, rank);
+    }
+
     /** Whether this creature is all head (no body for the saw to leave). */
     public static boolean headOnly(Mob mob) {
         return mob.getType().is(HEAD_ONLY);

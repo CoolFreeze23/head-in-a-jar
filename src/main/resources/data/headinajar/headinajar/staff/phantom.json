@@ -1,5 +1,15 @@
 {
   "entity": "minecraft:phantom",
   "wage": "none",
-  "noise": "staff.headinajar.noise.phantom"
+  "noise": "staff.headinajar.noise.phantom",
+  "bells": 3,
+  "alarm": "minecraft:entity.phantom.ambient",
+  "dislikes": [
+    "open_sky"
+  ],
+  "lines": {
+    "complaint.overtime": 1,
+    "complaint.chair": 1,
+    "lookout": 1
+  }
 }

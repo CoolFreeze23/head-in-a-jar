@@ -26,6 +26,11 @@ public class HeadHolderBlock<T extends BlockEntity & HeadHolderBlock.Holder> ext
 
         default void placedBy(LivingEntity placer) {
         }
+
+        /** The jarred head a sampling tool draws from here (the Living Library), or empty. */
+        default ItemStack donorHead() {
+            return ItemStack.EMPTY;
+        }
     }
 
     public HeadHolderBlock(Properties properties, Supplier<BlockEntityType<T>> type, BiFunction<BlockPos, BlockState, T> factory,
@@ -36,7 +41,19 @@ public class HeadHolderBlock<T extends BlockEntity & HeadHolderBlock.Holder> ext
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof Holder holder) {
-            if (!level.isClientSide) holder.use((ServerPlayer) player, stack);
+            if (!level.isClientSide && stack.is(net.minecraft.world.item.Items.CAKE) && !holder.donorHead().isEmpty()) {
+                // cake is for desk staff on plinths; nothing is eaten
+                com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at((BlockEntity) holder),
+                        holder instanceof EmployeeMountBlockEntity ? "staff.mount_cake" : "staff.board_cake");
+                return ItemInteractionResult.sidedSuccess(false);
+            }
+            if (!level.isClientSide) {
+                // a sampling tool draws from the head here first (the Living Library); else the station's own use
+                if (!(stack.getItem() instanceof com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem)
+                        || !HeadDonor.station((ServerPlayer) player, stack, hand, (BlockEntity) holder, holder.donorHead())) {
+                    holder.use((ServerPlayer) player, stack);
+                }
+            }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

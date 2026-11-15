@@ -1,0 +1,87 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bowl": "headinajar:block/plinth_bowl",
+    "particle": "headinajar:block/plinth_bowl"
+  },
+  "elements": [
+    {
+      "name": "spoon",
+      "from": [
+        13,
+        8,
+        -0.5
+      ],
+      "to": [
+        14,
+        9,
+        2.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11,
+            6,
+            12,
+            7
+          ],
+          "texture": "#bowl"
+        },
+        "east": {
+          "uv": [
+            8,
+            6,
+            11,
+            7
+          ],
+          "texture": "#bowl"
+        },
+        "south": {
+          "uv": [
+            12,
+            6,
+            13,
+            7
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            8,
+            7,
+            11,
+            8
+          ],
+          "texture": "#bowl"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            7,
+            9
+          ],
+          "texture": "#bowl"
+        },
+        "down": {
+          "uv": [
+            7,
+            6,
+            8,
+            9
+          ],
+          "texture": "#bowl"
+        }
+      },
+      "rotation": {
+        "origin": [
+          13.5,
+          8,
+          -0.5
+        ],
+        "axis": "x",
+        "angle": -45
+      }
+    }
+  ]
+}

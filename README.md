@@ -41,6 +41,7 @@ default key for each is in [Controls](#controls).
 - [Utility Shells](#utility-shells)
 - [Jarred heads](#jarred-heads)
 - [Staff files, pay and lanyards](#staff-files-pay-and-lanyards)
+- [Heads at work: the bell, lunch and desk jobs](#heads-at-work-the-bell-lunch-and-desk-jobs)
 - [Mecha Division](#mecha-division)
 - [Genetics Department](#genetics-department)
 - [Board of Directors: heads at work](#board-of-directors-heads-at-work)
@@ -1095,7 +1096,7 @@ The saw does one of two things, depending on your **off hand**:
 | Anything but a Life Support Jar | The head comes off and the body stays standing as a **host**: "Cow is now a host body". It is raised to a quarter of its health if it was lower. |
 | An empty Life Support Jar (basic, Compact, Reinforced or Executive, big enough for the head) | The head does not fly off: it arcs from the neck into the jar in your hand. You keep the **head** in the jar, and the body falls (normal drops). A creature that is all head goes into the jar whole and leaves nothing. The head remembers which jar it went into. See [Jarred heads](#jarred-heads). |
 
-![A size-4 slime sawn whole into an Executive Life Support Jar and set down on its plinth: the green cube floats in the middle of the saline, its face to you](docs/images/slime_executive.png)
+![A size-4 slime sawn whole into an Executive Life Support Jar and set down on its plinth: the green cube floats in the middle of the saline, its face to you, the plinth's empty bowl and spoon at its front corner](docs/images/slime_executive.png)
 
 Every creature the saw cuts is put on file: see [Staff files](#staff-files-pay-and-lanyards).
 
@@ -1429,7 +1430,7 @@ None of them has a **Secondary**.
 
 ## Jarred heads
 
-![A placed jarred villager head in its jar while a player walks past behind it and comes up to trade](docs/images/jarred_head.gif)
+![A placed jarred villager head in its jar turning to follow a player who walks past behind it, comes round beside it and rings it; it answers over the jar: "Hrm. Is that a jar?"](docs/images/jarred_head.gif)
 
 *A placed jarred head turning to watch a player walk past.*
 
@@ -1441,20 +1442,24 @@ its owner ("Jarred Villager Head"). It keeps everything the creature was.
 - **Use the placed head** (a jar can do this): a jarred villager opens its usual trading screen with all its trades
   (the bell rings), keeps the uses and experience you give it, nods at each trade, and restocks if 10 minutes have
   passed since it last did. If someone else is trading, it shakes its head: "This head is with another customer. Come
-  back shortly." Any other head: "A jarred Cow head. It looks at you."
-- **Break it** to get the item back with everything in it, mid-trade included.
+  back shortly." Any other head rings its bell and answers (see
+  [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)); a head of a creature from another mod with no lines of
+  its own still says "A jarred Cow head. It looks at you."
+- **Break it** to get the item back with everything in it, mid-trade included, its bowl's broth too. A head with an
+  employer can be broken only by its employer or someone they trust: "Bessie reports to Steve. Ask them to trust you."
 - **Every creature's head is drawn** in its jar, scaled to float inside the saline (the jar is kept fuller than a
-  player's own); the creatures that are all head (a slime, a shulker, a bee) are drawn whole, a ghast as its face. A head in a Compact Jar is drawn in the Compact Jar's shape; the Life Support, Reinforced
+  player's own); the creatures that are all head (a slime, a shulker, a bee) are drawn whole, a ghast as its face, a goat with its head raised and horns swept back. A head in a Compact Jar is drawn in the Compact Jar's shape; the Life Support, Reinforced
   and Executive jars look alike. Its tooltip says which jar it is in ("In a Reinforced Life Support Jar").
 - **Sneak** and **Use** the placed head with an empty hand to open its file card (see below). A plain **Use** does what
   it always did.
-- Only villagers trade. Other heads have work to do: see [Heads at work](#board-of-directors-heads-at-work).
+- Only villagers trade. Fed, a head does a desk job (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)),
+  and at a station it has other work: see [Board of Directors](#board-of-directors-heads-at-work).
 
 ## Staff files, pay and lanyards
 
 *"We do not lose staff. We occasionally misplace them."*
 
-![Turning from the grass onto a placed cow head in its jar: Jade shows "Jarred Head", "No. 0001 · Livestock · Dev's staff", "Bessie (Cow)" and "Morale: Content" to its employer](docs/images/jade_staff.gif)
+![Turning from the grass onto a placed cow head in its jar: Jade shows "Jarred Head", "Title: Canteen Supervisor", "No. 0001 · Livestock · Dev's staff", "Bessie (Cow)", "Morale: Content", "Lunch: 0 mB" and "Not on lunch. It looks at you." to its employer](docs/images/jade_staff.gif)
 
 The first time the company touches a creature (a syringe or any sampling tool, the Leech Jar or the Hemo-Syringe, the
 saw, placing a jarred head, fitting one to a station, putting down a Utility Shell) it gets a **staff number** and a
@@ -1477,7 +1482,7 @@ occasionally misplace them."
   someone they trust, can rename it there (16 characters; the name lives in the file and is never a name tag, so it
   never stops the saw). Anyone else: "Bessie reports to Steve. Ask them to trust you."
 
-![From 10 blocks, two players' staff side by side: on the left a Turret Pedestal and two paid plinth heads wearing blue badges, on the right two more and a Turret wearing red ones](docs/images/badges_teams.gif)
+![From 10 blocks, two players' staff side by side: on the left a Turret Pedestal and two paid plinth heads (bowls at their front corners) wearing blue badges, on the right two more and a Turret wearing red ones](docs/images/badges_teams.gif)
 
 - **Pay:** a placed head is a **trophy** until someone pays it by hand. **Use** its wage on it (wheat for a cow, a
   carrot for a pig, rotten flesh for a zombie; the card says which) and it is on the payroll: "Bessie is on the
@@ -1488,11 +1493,13 @@ occasionally misplace them."
   twice in a day: "It was paid today." The wrong wage: "Bessie is paid in Wheat. HR has the paperwork." Creatures that
   want nothing (a slime, a ghast) count as paid and cannot be hired by hand: "A Slime draws no wage. HR files it as a
   trophy." A trophy never takes anything from a chest beside it.
-- **Villager heads** are never paid by hand: an emerald in hand still trades. Villagers are paid on the Employee Mount.
+- **Villager heads** are never paid by hand: an emerald in hand still trades. A villager head, or a creature that
+  wants no wage, is hired by lunch instead (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)).
 - **Morale**, for heads on the payroll: they start at 50, gain 10 for each paid dawn (to 100) and lose 15 for each
   unpaid one. 75 and over is **Engaged** (the head tips up a little and bobs more), 40 to 74 **Content**, under 40
   **Disengaged** (it sags and turns a little away from you); under 15 at two dawns running Jade and the card say
-  **Grievance**. In this release morale changes nothing a head does. An Employee Mount's villager shows a band read from
+  **Grievance**. Morale changes how a fed head works (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)).
+  An Employee Mount's villager shows a band read from
   its pay record (paid today and yesterday Engaged, paid today Content, unpaid one or two days Disengaged, three or more
   Grievance); nothing about the Mount changes. The server value `staff.morale` turns morale off.
 - **Lanyards:** a head on the payroll, and every Turret Pedestal, Employee Mount, Neural Socket and Cerebral Array with
@@ -1504,6 +1511,73 @@ occasionally misplace them."
   of whatever killed it, "natural wastage" (a host that rotted away) or "a workplace incident". A **Condolence Card**
   drops where it happened: "HR is sorry for your loss of Bessie. The desk will be cleared by Tuesday." In lava or the
   void it is lost with everything else. A host farm sends a line for every host that rots away.
+
+## Heads at work: the bell, lunch and desk jobs
+
+*"Every member of staff has a title. Some of them have a head to go with it."*
+
+![Walking along a row of placed heads on a stone ledge and ringing each with an empty hand: a chicken, a cow, a creeper, a blaze and a ghast in turn say a line over the jar ("Moo. Is there a canteen?", "Fwoosh. I run hot. It is in my appraisal.", the ghast "Ooooooh. It is a snug fit."), the same line on the action bar, and Jade at the top right gives each one's title: Timekeeper, Canteen Supervisor, Demolition (Probationary), Heating, Grief Counsellor](docs/images/heads_rung.gif)
+
+*A row of staff rung in turn: each nods, says its line over the jar and on your action bar, and Jade gives its title.*
+
+- **A title:** every placed head has a job title, on its tooltip, on Jade and on its file card: a cow is the Canteen
+  Supervisor, a ghast the Grief Counsellor, a phantom the Sleep Auditor; a villager's title is its profession.
+- **The bell:** **Use** a placed head with an empty hand. The bell on its plinth rings, the head looks up and nods, and
+  it says a line in its own noise with HR's translation, over the jar for 5 seconds for everyone within 16 blocks (each
+  in their own language) and on your action bar: "Moo." (HR translates: "Is there a canteen?"). Every species has two
+  to four lines and never says the same one twice running; a second ring within a second is ignored. Anyone may ring
+  anyone's head. A head that needed a Reinforced or Executive Jar says its noise and "It is a snug fit." the first time
+  it is ever rung (once, wherever it is set down after).
+- **Lunch:** the plinth has a bowl on its front corner. **Use** a Nutrient Broth Bucket on the plinth: the bowl fills
+  (1,000 mB) and the empty bucket comes back. A head eats 1 mB every 72 ticks, so a bucket is three in-game days of
+  lunch; a spoon taps the bowl about once a minute while it eats. The first lunch hires a trophy, its feeder the
+  employer ("Bessie is on lunch. Lunch is employment. HR has the paperwork."), and earns **Lunch Is Served**. A hired
+  head's bowl also takes broth by pipe, from any side but the top; a trophy's never does. A full bowl: "It has had
+  lunch. It will eat again in 3.0 days." Another fluid: "Heads eat Nutrient Broth. Not Water Bucket." A paid Farmer on
+  an Employee Mount facing the plinth halves what it eats.
+- **Desk jobs:** a fed head does its job. Things used on a head go in this order: a sampling tool, a broth bucket, the
+  species' desk item, a cake, then its wage. A desk item on a head that is not fed: "It does that on a full stomach. Use
+  a Nutrient Broth Bucket on the plinth."; a daily one used twice: "It did that today. Come back tomorrow."
+
+![A fed ghast head in its jar at dawn: "The Grief Counsellor has produced a tear. Nothing personal." appears over the jar, a Ghast Tear drops down the front of the plinth to its foot by the bowl, green sparkles of the dawn's pay rise, and the subtitles read "Ghast head weeps" and "Pay clinks into tray"](docs/images/ghast_tear.gif)
+
+*The Grief Counsellor's first tear, at dawn.*
+
+| Head | Desk job |
+|---|---|
+| Villager | Rung with an emerald in hand, reads its best offer aloud ("Best offer: Emerald x1 for Bread x4."); the trading screen opens as always. |
+| Cow | Broth used by any bowl or Cerebral Array within 8 blocks lasts a tenth longer. |
+| Sheep | Shears: one wool of its colour, once a day. A dye: its fleece takes the colour, for good. |
+| Mooshroom | A bowl: stew, once a day; a brown one fed a small flower first gives that flower's suspicious stew. Shears: "It keeps its mushrooms. They are load-bearing." |
+| Chicken | Clucks every in-game hour (heard 16 blocks off) and lays a feather at dawn. |
+| Cat | Creepers keep 6 blocks away and phantoms break off their swoop within 16, as from a live cat. At dawn, if its employer slept, a morning gift from the cat's own list. |
+| Blaze | Furnaces, smokers and blast furnaces touching the plinth cook a quarter faster; one blaze per furnace counts. Dislikes rain and water. |
+| Ghast | A Ghast Tear at dawn (two when Disengaged). Wails once a night, heard far off. |
+| Piglin | A gold ingot: it inspects it for 6 seconds, then one vanilla barter. Outside the Nether, off a Nether block (netherrack, nylium, soul sand or soil, blackstone, basalt), a fed piglin head turns into a zombified piglin's after 15 seconds, for good; you are warned as you feed it. |
+| Allay | Use any item on it: it takes one (another swaps, the old one back to you). Every 30 seconds it calls one dropped item of that kind within 16 blocks into a container touching the plinth. |
+| Frog | Croaks a minute before rain or a thunderstorm: "Frog head croaks: rain is due within the minute." |
+| Squid | A glass bottle: an Ink Sac, once a day; the bottle stays in your hand. |
+| Goat | Rung while it still has a horn, it rams its glass and a Goat Horn of its kind drops: twice, ever. A screaming goat screams at 3 a.m. |
+| Sniffer | On a plinth standing on dirt, grass, moss or mud, a seed from the sniffer's own list at dawn. |
+| Iron Golem | Villager heads on staff within 16 gain 2 morale at dawn. On its first ring of the day it hands you a poppy. |
+| Evoker | Every 30 seconds turns one blue sheep, or blue sheep head, within 8 blocks red. |
+| Warden | The Noise Log: hears every vibration within 16 blocks as a sculk sensor does (wool blocks it) and turns to the last. Rung, it shushes and reads its last five ("Logged: 3 steps, 1 opening."). More than 20 in a minute costs it 5 morale; at a Grievance it shrieks once and gives Darkness for 10 seconds to every player within 16 (server value `heads.wardenDarkness`). |
+| Zombie | Bangs on a door within 4 blocks of the plinth when a player comes within 4 of the door, at most once per player in 30 seconds. Smokes in daylight under open sky (no harm done) and dislikes it. |
+
+- **Morale does work** for a fed head on staff: **Engaged** heads do their timed work (a blaze's furnaces, a piglin's
+  inspection) a fifth faster, **Disengaged** ones at half speed, and a Disengaged ghast cries two tears. A Disengaged
+  head complains over its jar every two minutes in its own voice ("Moo." (HR translates: "I was promised dental.")),
+  never in chat; the first time, DOLORES tells its employer. The server value `staff.complaints` silences them.
+- **What moves morale** for a placed head on staff, at dawn: fed +5 (never above 60 from lunch alone); on lunch with an
+  empty bowl -5 (never below 30 from hunger alone); a colleague of its department within 8 blocks +2; a rival within 4
+  (villager and zombie villager, pillager or vindicator; skeleton and wolf; piglin and wither skeleton; creeper and cat
+  or ocelot; spider and armadillo) -5; something its species dislikes -5 (rain for a bee or an enderman, thunder for a
+  panda, open sky for a zombie, skeleton or phantom, a hot biome for a polar bear, the Overworld for a strider, warped
+  fungus within 8 for a hoglin). Any time: a cake used on it +40, once a day ("It is not hungry for cake."; on a station
+  head "The Board does not eat cake. It takes broth."); a blood sample -10. Heads at stations stay Content.
+- **Goodbyes:** a member of staff broken off its plinth, or taken out of a Turret Pedestal, says goodbye where it stood:
+  "Clearing my desk." (a zombie: "Braaains." (HR translates: "I'll see myself out.")).
+- The server value `heads.deskJobs` turns desk jobs off (titles, bells and lunch stay).
 
 ## Mecha Division
 
@@ -2085,6 +2159,14 @@ and comes back out.
 - The Ender Dragon can be sampled with the Leviathan Needle, or the easy way: put **Dragon's Breath** in the
   Centrifuge.
 - Ten samples earn **Out for Blood**.
+- **The Living Library:** a placed head, or a head at a Turret Pedestal, Employee Mount, Neural Socket or Cerebral
+  Array, gives one sample a day to its usual tool, quality 70 to 95 whatever the tool (50 to 75 for a trophy or a head
+  whose bowl is empty), with no harm done: it winces. Use the tool on the plinth or the station (sneaking works too); a
+  Cerebral Array gives from the first head that has not given today. Again the same day: "It gave blood today. HR
+  insists on a day's rest."; an Array whose every head gave: "The whole Board gave blood today. The meeting
+  continues." Only the head's employer and those they trust may draw from a head with an employer. A plinth head on
+  staff loses 10 morale; station heads do not. The same head bled by hand on seven different days earns
+  **Blood Bank**. The server value `heads.livingLibrary` turns it off.
 
 A sample's tooltip shows its quality, the creature's blood type, the genes it carries, and how many auto-reads of
 samples this good it takes to read each gene to a Draft. Creatures with no genes (a cow, a pig, a zombie) say
@@ -2105,7 +2187,9 @@ bank: a gumball machine two blocks tall with a leech in the globe. Every 30 seco
 creature standing on it, beside it or just under it, for 0.5 damage (a quarter of a heart). Its samples are small:
 quality 15-35 before the health rule. It never samples players, thick hides or the bloodless. It holds nine samples and
 then stops. **Use** it to empty it into your inventory ("9 samples"), or pull them out with a hopper. It needs no
-power.
+power. A Leech Jar touching a placed head draws the head once a day, at the head's quality, and farms creatures the
+rest of the day; beside a head it cannot draw (bloodless, or too thick a hide) with nothing else to farm its lamp
+stays amber, and Jade says why.
 
 When a creature stands beside it the leech wakes, turns to face it and presses against the glass. Each sample pops the
 nozzle out, turns the crank and drops a vial into the window under the globe. Emptied, the crank turns twice and the
@@ -2384,8 +2468,22 @@ head has its own: the blaze winds up with a flame at the muzzle, the zombie head
 nods. A guardian's lock shows as a guardian beam from the muzzle to its target, warming from cold purple to yellow over
 the two seconds while brackets close on the target, amber, then red; a ring flashes when the laser lands.
 
-Refusals (the mount shakes its head): "A turret needs a brain. Fit a Jarred Head.", "That head (Pig) has nothing to
-shoot with. Try a skeleton.", "This turret has its head (Skeleton). Take it out by hand first." Fitting a bow head
+**Lookouts.** Any other head fits too: "Cow head: no attack. It will keep watch and raise the alarm." A Lookout
+deals no damage. It looks for a hostile once a second, by the same rules, and while one is in sight it raises its
+species' own alarm (a moo, a cluck) with a double ding ("Lookout raises the alarm") every 5 seconds, makes the
+hostile glow for everyone for 5 seconds, turns to it and says a line over its jar the first time; its saline stirs.
+1 FE/t watching, 2 FE/t alarmed. The server value `heads.lookouts` turns Lookouts off (the pig's old refusal comes
+back). Only the employer and those they trust may take a head with an employer out.
+
+![Two Turret Pedestals with a Galvanic Pile between them, a comparator and a redstone lamp behind the left one: a zombie walks in from far off, the cow Lookout says "Moo! Intruder at the canteen." over its jar, the zombie glows and the lamp lights; the skeleton head beside it shoots until the zombie falls, and the lamp goes out](docs/images/lookout.gif)
+
+*A cow Lookout raising the alarm while the skeleton head next door does the shooting; its comparator lights the lamp.*
+
+**The comparator.** A comparator against either cell of a Turret Pedestal reads **15** while its Lookout is alarmed or
+its head has a target, and for 2 seconds after; 0 otherwise.
+
+Refusals (the mount shakes its head): "A turret needs a brain. Fit a Jarred Head.", "This turret has its head
+(Skeleton). Take it out by hand first." Fitting a bow head
 with no arrows in reach warns "No arrows in reach. Put a Chest of them under it."; a creeper head warns "A creeper
 head goes off once and is spent. Choose the spot."
 
@@ -2622,6 +2720,11 @@ are in `config/headinajar-client.toml`.
 | `genetics.keepGenesOnDeath` | true | true / false | Spliced genes stay in your body when you die and respawn. |
 | `saw.allowBabies` | false | true / false | Babies may be sawn (as before 0.6.0). Off: "Child labour is against company policy. Come back when it's grown." |
 | `staff.morale` | true | true / false | Morale moves with pay. Off: it never moves and every head shows Content; wages are still taken. |
+| `staff.complaints` | true | true / false | Disengaged heads on plinths complain over their jars every two minutes. Off: they sulk in silence. |
+| `heads.deskJobs` | true | true / false | Fed heads on plinths do their desk jobs. Off: titles, bells and lunch stay, desk jobs stop. |
+| `heads.lookouts` | true | true / false | A head with no attack fits a Turret Pedestal as a Lookout. Off: "That head (Pig) has nothing to shoot with." |
+| `heads.wardenDarkness` | true | true / false | A warden head at a Grievance gives Darkness to every player within 16 blocks when it shrieks. |
+| `heads.livingLibrary` | true | true / false | Placed and station heads give one sample a day to a tool or a Leech Jar. Off: tools do nothing on heads. |
 
 </details>
 
@@ -2642,7 +2745,7 @@ are in `config/headinajar-client.toml`.
 
 ## Advancements
 
-Forty, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
+Forty-three, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
 arrive. The steps from there to your first mecha are a career ladder: each says what to do next.
 
 <details><summary>All advancements</summary>
@@ -2679,6 +2782,7 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Chairman of the Board** | Heavy Is the Head | Assemble an Executive. |
 | **Out for Blood** | Orientation Day | Draw 10 Blood Samples. |
 | **Staff Number** | Out for Blood | Have any creature entered in the register: sample it, saw it, or place or fit its head. |
+| **Blood Bank** | Out for Blood | Bleed the same placed head on seven different days. |
 | **Splice of Life** | Out for Blood | Have a Gene Splicer finish a serum from your library while you are within 16 blocks. |
 | **Mutually Assured** | Splice of Life | Suffer a mutation from a serum. |
 | **Synergy!** | Splice of Life | Inject a serum that holds both genes of a synergy pair. |
@@ -2686,6 +2790,8 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Legendary Genes** | Splice of Life | Read a Legendary gene to 100% in your library. |
 | **Employee of the Month** | Orientation Day | Hang a jarred villager on an **Employee Mount**. |
 | **Pay Grade** | Employee of the Month | Pay a placed jarred head that is not a villager its wage by hand. |
+| **Lunch Is Served** | Employee of the Month | Feed a jarred head on its plinth a Nutrient Broth Bucket. |
+| **Neighbourhood Watch** | Lunch Is Served | Have a Lookout raise the alarm. |
 | **Board Meeting** | Employee of the Month | Be within 16 blocks of a fed Cerebral Array holding five or more heads. |
 | **Brain Trust** | Board Meeting | Be within 16 blocks of a fed Cerebral Array making 500 FE/t. |
 | **Ask Me Anything** | Orientation Day | Pulse a face from a **Neural Socket** with **Ability**. |
@@ -2701,7 +2807,7 @@ the hotbar, never the one in your hand (then your inventory; only a full one dro
 crafted from a Book and a **Surgical Steel Blend** (shapeless, any crafting grid).
 
 This is the Second Edition: ten chapters in the order you will need them (Orientation, Facilities, Life Support,
-Separation, Life as a Jar, Getting Home, Temporary Staffing, Mecha Division, Research, Human Resources), 49 entries.
+Separation, Life as a Jar, Getting Home, Temporary Staffing, Mecha Division, Research, Human Resources), 52 entries.
 Alongside the explanations it carries the company's paperwork: Form 1-A, the shopping list for one operation; Form
 27-B, the chair's checklist; Form 12-M, which frame takes how many of each module; Form 3-P, the pilot's warnings;
 Form 9-H, which host does what; Form 31-E, villager staff. Two memos from DOLORES, five Incident Reports, and the odd
@@ -2820,6 +2926,60 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.6.1
+
+- **Every head has a title and a bell.** A placed head's tooltip, Jade and file card give its job title ("Canteen
+  Supervisor", "Grief Counsellor", "Sleep Auditor"; a villager's is its profession). **Use** a placed head with an
+  empty hand: the bell rings, it looks up, nods and says a line in its own noise with HR's translation, over the jar
+  for 5 seconds for everyone within 16 blocks and on your action bar: "Moo." (HR translates: "Is there a canteen?").
+  Every species has two to four lines and never says the same one twice running. A villager head still opens its
+  trades. A big head in a big jar (a warden in a Reinforced Jar, a ghast in an Executive one) says "It is a snug fit."
+  the first time it is ever rung. A goat's head is drawn raised in its jar, looking out, so it is no longer tiny.
+- **Lunch.** The plinth has a bowl. **Use** a Nutrient Broth Bucket on it: the bowl fills (1,000 mB, three in-game days)
+  and the empty bucket comes back. The first lunch hires a trophy, villagers and wage-less creatures included; after
+  that a pipe may top the bowl up from any side but the top. A spoon taps the bowl now and then while it eats. The
+  bowl's broth stays in the head when you break it.
+- **Desk jobs.** A fed head works. Eighteen species have a job: a cow makes broth near it last longer, a sheep gives
+  wool to shears and takes dye, a mooshroom gives stew to a bowl, a chicken clucks the hour, a cat keeps creepers off
+  and leaves its employer a gift after a night's sleep, a blaze makes furnaces beside it cook a quarter faster, a ghast
+  cries a tear at dawn (and wails at night), a piglin barters a gold ingot (and turns, off a Nether block, outside the
+  Nether), an allay fetches dropped items of the kind you gave it into a chest, a frog croaks before rain, a squid
+  gives ink to a glass bottle, a goat gives up its horns, a sniffer digs up a seed, an iron golem cheers villager heads
+  and hands out a poppy, an evoker turns blue sheep red, a warden logs every sound within 16 blocks (and does not like
+  a noisy floor), a zombie answers the door, and a fed villager reads its best offer when you ring it with an emerald.
+- **Morale does work.** Engaged heads do their timed work (a blaze's furnaces, a piglin's inspection) a fifth faster
+  and Disengaged ones at half speed, a Disengaged ghast cries two tears, and a Disengaged head complains over its jar every two minutes ("Moo." (HR translates: "I was promised dental.")). At dawn a fed head gains
+  5 (never above 60 from lunch alone) and a hungry one loses 5 (never below 30); a colleague of its department within 8
+  blocks is +2, a rival within 4 is -5, and something its species dislikes (rain for a bee, open sky for a zombie) is
+  -5. A cake used on a staff head is +40, once a day ("It is not hungry for cake."). DOLORES writes the first time one
+  of your heads is Disengaged.
+- **Every head fits a Turret Pedestal.** The thirteen heads that attacked still do, with today's numbers. Any other head
+  is a **Lookout**: "Cow head: no attack. It will keep watch and raise the alarm." It watches 16 blocks (never
+  through walls), raises its own species' alarm with a double ding every 5 seconds while a hostile is in sight, makes
+  it glow for everyone, and deals no damage; 1 FE/t watching, 2 alarmed. **A comparator** on either cell of a Turret
+  Pedestal reads 15 while its Lookout is alarmed or its head has a target, and for 2 seconds after: the mod's first
+  comparator output.
+- **The Living Library.** Any placed head, and any head at a Turret Pedestal, Employee Mount, Neural Socket or Cerebral
+  Array, gives one blood sample a day to the right sampling tool, quality 70 to 95 (50 to 75 for a trophy or a head
+  whose bowl is empty), with no harm done; it winces. A Leech Jar touching a plinth draws the head once a day and farms
+  creatures the rest of the time. "It gave blood today. HR insists on a day's rest."
+- **Staff stay with their employers.** Only a head's employer, or someone they trust, may take a head with an employer
+  off its plinth or draw its blood: "Bessie reports to Steve. Ask them to trust you." A head nobody employs is
+  anyone's, as before; whoever sets a head down employs it, trophy or not. A member of staff taken off its plinth, or out of a Turret Pedestal, says goodbye ("Clearing
+  my desk.").
+- Three advancements: Lunch Is Served, Neighbourhood Watch and Blood Bank. Four memos from DOLORES. The Employee
+  Handbook has new pages on desk jobs, Lookouts and the Living Library. New server values `heads.deskJobs`,
+  `heads.lookouts`, `heads.wardenDarkness`, `heads.livingLibrary` and `staff.complaints`.
+- Fixed: a Turret Pedestal's arrows (and its fireballs, snowballs and potions) started inside the mount itself, so a
+  skeleton, stray or bogged head's arrows stuck in it and never reached anything (0.6.0 did the same). They now leave from outside it, and turrets in old worlds start hitting.
+- Eight new sounds with subtitles ("Desk bell rings", "Lookout raises the alarm", "Warden head shushes"...).
+- Worlds from 0.6.0 load as they are. A trophy head does nothing new until it is fed or rung, except that a Leech
+  Jar beside it now draws it once a day. The Array, Mount and Socket numbers and an attacking Turret's are unchanged;
+  a Turret holding a head with no attack is now a Lookout and draws 1 to 2 FE/t instead of its old idle draw. A 0.6.1
+  game can join a 0.6.0 server; a 0.6.0 game cannot join a 0.6.1 server (new sounds). Update both.
+
+<details><summary>What changed in 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.6.0
 
 - **The saw reads a table.** Before anything spins up, the Surgical Saw now says why it will not cut, each case in
@@ -2866,7 +3026,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 - Worlds from 0.5.4 load as they are. A 0.6.0 game can join a 0.5.4 server; a 0.5.4 game cannot join a 0.6.0
   server. Update both.
 
-<details><summary>What changed in 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.4
 

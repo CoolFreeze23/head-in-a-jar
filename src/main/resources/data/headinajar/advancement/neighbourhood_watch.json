@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:lunch_is_served",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "neighbourhood_watch"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "translate": "advancements.headinajar.neighbourhood_watch.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.neighbourhood_watch.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

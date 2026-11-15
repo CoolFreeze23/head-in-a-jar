@@ -1,0 +1,60 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "bowl": "headinajar:block/plinth_bowl",
+    "particle": "headinajar:block/plinth_bowl"
+  },
+  "elements": [
+    {
+      "name": "bowl_3",
+      "from": [
+        13,
+        7,
+        -2
+      ],
+      "to": [
+        16,
+        8,
+        1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3,
+            3,
+            4
+          ],
+          "texture": "#bowl"
+        },
+        "east": {
+          "uv": [
+            3,
+            3,
+            6,
+            4
+          ],
+          "texture": "#bowl"
+        },
+        "west": {
+          "uv": [
+            9,
+            3,
+            12,
+            4
+          ],
+          "texture": "#bowl"
+        },
+        "up": {
+          "uv": [
+            9,
+            0,
+            12,
+            3
+          ],
+          "texture": "#bowl"
+        }
+      }
+    }
+  ]
+}

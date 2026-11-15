@@ -234,7 +234,7 @@ public final class Staff {
         String day = Long.toString(shown(e.d()));
         String key = "staff.headinajar.history." + e.k();
         return switch (e.k()) {
-            case "placed", "hired", "renamed" -> Component.translatable(key, e.a(), day);
+            case "placed", "hired", "renamed", "lunch" -> Component.translatable(key, e.a(), day);
             case "fitted" -> {
                 String[] parts = e.a().split("\n", 2);
                 yield Component.translatable(key, Component.translatable(parts[0]), parts.length > 1 ? parts[1] : "", day);

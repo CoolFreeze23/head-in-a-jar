@@ -121,6 +121,43 @@ public final class GeneticsItems {
             this.bosses = bosses;
         }
 
+        /** What it draws: WARM for blood, or the bloodless kind it is for. */
+        public BloodType kind() {
+            return kind;
+        }
+
+        /** Whether it gets through a thick hide (the Leviathan Needle, the bloodless tools). */
+        public boolean bosses() {
+            return bosses;
+        }
+
+        /**
+         * Used on a block while sneaking: the game skips the block's own use then, so a sneaking draw from a placed
+         * head or a station's head is handled here (the Living Library).
+         */
+        @Override
+        public InteractionResult useOn(net.minecraft.world.item.context.UseOnContext context) {
+            if (context.getPlayer() == null || !context.getPlayer().isSecondaryUseActive()) return InteractionResult.PASS;
+            var level = context.getLevel();
+            var be = level.getBlockEntity(context.getClickedPos());
+            if (be == null && level.getBlockState(context.getClickedPos()).getBlock() instanceof com.coolfreeze23.headinajar.machine.MachineTopBlock) {
+                be = level.getBlockEntity(context.getClickedPos().below());
+            }
+            if (!(context.getPlayer() instanceof ServerPlayer player)) {
+                // the client: a head or a station takes the click (the server answers), so the tool is not also used in the air
+                return be instanceof com.coolfreeze23.headinajar.block.JarredHeadBlockEntity || be instanceof com.coolfreeze23.headinajar.block.HeadHolderBlock.Holder
+                        || be instanceof com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            }
+            ItemStack stack = context.getItemInHand();
+            boolean done = false;
+            if (be instanceof com.coolfreeze23.headinajar.block.JarredHeadBlockEntity head) done = com.coolfreeze23.headinajar.block.HeadDonor.plinth(player, stack, context.getHand(), head);
+            else if (be instanceof com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity t) done = com.coolfreeze23.headinajar.block.HeadDonor.station(player, stack, context.getHand(), t, t.head());
+            else if (be instanceof com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity m) done = com.coolfreeze23.headinajar.block.HeadDonor.station(player, stack, context.getHand(), m, m.head());
+            else if (be instanceof com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity s) done = com.coolfreeze23.headinajar.block.HeadDonor.station(player, stack, context.getHand(), s, s.head());
+            else if (be instanceof com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity a) done = com.coolfreeze23.headinajar.block.HeadDonor.array(player, stack, context.getHand(), a);
+            return done ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }
+
         /** Draws a sample from {@code target}. Returns the result to report. */
         public InteractionResult draw(ServerPlayer player, ItemStack stack, LivingEntity target, InteractionHand hand) {
             if (target instanceof Player) {

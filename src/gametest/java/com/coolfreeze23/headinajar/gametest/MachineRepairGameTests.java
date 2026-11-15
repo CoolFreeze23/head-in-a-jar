@@ -493,7 +493,10 @@ public class MachineRepairGameTests {
         var offers = ((MerchantMenu) p.containerMenu).getOffers();
         h.assertFalse(offers.isEmpty(), "setup: the librarian has no trades");
         offers.get(0).increaseUses();
+        // another player may not take someone's staff head off its plinth (0.6.1); its employer may, mid-trade
         breakBlock(h, other, at);
+        h.assertTrue(h.getBlockEntity(at) instanceof JarredHeadBlockEntity, "a stranger broke someone's staff head");
+        breakBlock(h, p, at);
         h.assertFalse(p.containerMenu instanceof MerchantMenu, "the trade screen stayed open on a broken head");
         ItemEntity drop = h.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(h.absolutePos(at)).inflate(2)).stream()
                 .filter(e -> e.getItem().is(ModRegistry.JARRED_HEAD.get())).findFirst().orElse(null);
@@ -576,8 +579,10 @@ public class MachineRepairGameTests {
         var turret = (TurretPedestalBlockEntity) h.getBlockEntity(FLOOR);
         p.setItemInHand(InteractionHand.MAIN_HAND, jarredHead(h, EntityType.PIG, null));
         useBlock(h, p, FLOOR);
-        h.assertTrue(turret.head().isEmpty(), "a pig head went on a turret");
-        h.assertValueEqual(Refusals.lastDelivered(p), "turret.no_job", "pig head line");
+        // a pig head keeps watch (a Lookout, since 0.6.1): fitted, with its warning; taken off again
+        h.assertTrue(turret.headInfo().type() == EntityType.PIG, "a pig head was not fitted as a Lookout");
+        h.assertTrue(com.coolfreeze23.headinajar.feedback.Warnings.delivered(p).contains("turret.lookout"), "pig head warning");
+        turret.items().setStackInSlot(0, ItemStack.EMPTY);
         p.setItemInHand(InteractionHand.MAIN_HAND, jarredHead(h, EntityType.SKELETON, null));
         useBlock(h, p, FLOOR);
         h.assertTrue(turret.headInfo().type() == EntityType.SKELETON, "the skeleton head was not fitted");

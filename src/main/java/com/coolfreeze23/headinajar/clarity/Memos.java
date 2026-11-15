@@ -39,7 +39,11 @@ public final class Memos {
         MECHA_BUILT("mecha/piloting"),
         WELCOME("orientation/welcome"),
         STAFF_NUMBER("staffing/personnel"),
-        UNPAID_DAWN("staffing/pay");
+        UNPAID_DAWN("staffing/pay"),
+        FIRST_HEAD_PLACED("staffing/desk"),
+        DISENGAGED("staffing/pay"),
+        FIRST_HEAD_DRAW("research/library"),
+        FIRST_STATION_DRAW("research/library");
 
         public final String entry;
 

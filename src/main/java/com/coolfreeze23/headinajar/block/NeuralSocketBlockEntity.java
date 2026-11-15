@@ -107,6 +107,11 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         return items;
     }
 
+    @Override
+    public ItemStack donorHead() {
+        return head();
+    }
+
     public ItemStack head() {
         return items.getStackInSlot(0);
     }

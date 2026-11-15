@@ -27,6 +27,28 @@ SOUNDS = {
 }
 
 
+# Heads at work: the warden head's shush (event head.warden_shush; its sounds.json entry and subtitle come from
+# tools/gen_p38_heads.py). Breath noise through a voiceless "sh" band, 2-6 kHz with its peak near 3 kHz, swelling over
+# 80 ms, held, and let go by 0.55 s. name: (duration s, aevalsrc expression in t, ffmpeg filters)
+HEAD = {
+    'head/warden_shush': (0.6, '(random(0)*2-1)*0.7*min(1,t/0.08)*if(lt(t,0.32),1,exp(-14*(t-0.32)))',
+                          'highpass=f=1900,highpass=f=1900,lowpass=f=6200,equalizer=f=3000:t=q:w=1.2:g=6,volume=0.24'),
+}
+
+
+def head(names):
+    """Renders the named HEAD sounds only (python tools/make_sounds.py head/warden_shush); sounds.json is not touched."""
+    for name in names:
+        dur, expr, filters = HEAD[name]
+        out = os.path.join(OUT, name + '.ogg')
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        cmd = [FFMPEG, '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', f"aevalsrc='{expr}':s=44100:d={dur}",
+               '-af', filters, '-ac', '1', '-c:a', 'libvorbis', '-q:a', '4', '-fflags', '+bitexact', '-flags:a', '+bitexact',
+               '-map_metadata', '-1', out]
+        subprocess.run(cmd, check=True)
+    print(len(names), 'sounds')
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     for name, (dur, expr, *_rest) in SOUNDS.items():
@@ -42,4 +64,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if sys.argv[1:]:
+        head(sys.argv[1:])
+    else:
+        main()

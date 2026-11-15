@@ -129,6 +129,18 @@ public class MachineTopBlock extends Block {
         return level.getBlockState(below).useWithoutItem(level, player, new BlockHitResult(hit.getLocation(), hit.getDirection(), below, hit.isInside()));
     }
 
+    /** A Turret Pedestal's top cell gives the pedestal's comparator signal too. */
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return state.getValue(MACHINE) == Kind.TURRET_PEDESTAL;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        if (state.getValue(MACHINE) != Kind.TURRET_PEDESTAL) return 0;
+        return level.getBlockEntity(pos.below()) instanceof com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity t ? t.signal() : 0;
+    }
+
     /** It breaks as fast as the machine, with the same tool. */
     @Override
     protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {

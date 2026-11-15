@@ -64,6 +64,9 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
         return items;
     }
 
+    /** Beside a head it cannot draw, with no creature to farm (not saved). */
+    private boolean stuck;
+
     public static void serverTick(Level level, BlockPos pos, BlockState state, LeechJarBlockEntity jar) {
         if (++jar.timer >= INTERVAL) {
             jar.timer = 0;
@@ -73,7 +76,10 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
         int count = jar.count();
         jar.full = count >= jar.items.getSlots();
         jar.kit.level(LeechJarBlock.SAMPLES, (count + 2) / 3);
-        jar.kit.tick(jar.full ? com.coolfreeze23.headinajar.machine.MachineLamp.WAIT : com.coolfreeze23.headinajar.machine.MachineLamp.READY, false, false, 0);
+        // beside a head it cannot draw (bloodless, or too thick a hide) with nothing else to farm, it waits
+        boolean stuck = jar.side < 0 && jar.timer % 20 == 0 ? HeadDonor.leechRefusal(level, pos) != null : jar.stuck && jar.side < 0;
+        jar.stuck = stuck;
+        jar.kit.tick(jar.full || stuck ? com.coolfreeze23.headinajar.machine.MachineLamp.WAIT : com.coolfreeze23.headinajar.machine.MachineLamp.READY, false, false, 0);
     }
 
     /** What could be sampled: a living, bloody creature that is not a player. */
@@ -214,6 +220,18 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
 
     /** One feeding: returns whether a sample was taken. */
     public boolean feed(Level level) {
+        // a placed head touching the jar gives once a day, on the first feeding it can (the Living Library); the rest
+        // of the day the jar farms creatures as it always did
+        JarredHeadBlockEntity head = level instanceof net.minecraft.server.level.ServerLevel server ? HeadDonor.leechable(server, worldPosition) : null;
+        if (head != null) {
+            for (int i = 0; i < items.getSlots(); i++) {
+                if (!items.getStackInSlot(i).isEmpty()) continue;
+                items.setStackInSlot(i, HeadDonor.leech((net.minecraft.server.level.ServerLevel) level, head, HeadJobs.staff(level, worldPosition, "butcher")));
+                level.playSound(null, worldPosition, SoundEvents.HONEY_DRINK, SoundSource.BLOCKS, 0.5f, 0.6f);
+                return true;
+            }
+            return false;
+        }
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, reach(), LeechJarBlockEntity::sampleable)) {
             // a Butcher on staff draws half again as much
             int base = Math.round((MIN + level.random.nextInt(MAX - MIN + 1)) * (1 + 0.5f * HeadJobs.staff(level, worldPosition, "butcher")));

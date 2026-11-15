@@ -106,7 +106,16 @@ public class JarredHeadItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        if (type(stack) == EntityType.VILLAGER) tooltip.add(Component.translatable("item.headinajar.jarred_head.trades").withStyle(ChatFormatting.GREEN));
+        // its title, in gold under the name, where the reader's language has one for it
+        EntityType<?> type = type(stack);
+        if (type != null) {
+            CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+            String title = com.coolfreeze23.headinajar.block.HeadSpeak.titleKey(type, data == null ? new CompoundTag() : data.getUnsafe().getCompound("Entity"));
+            if (net.minecraft.locale.Language.getInstance().has(title)) {
+                tooltip.add(Component.translatable("item.headinajar.jarred_head.title", Component.translatable(title)).withStyle(ChatFormatting.GOLD));
+            }
+        }
+        if (type == EntityType.VILLAGER) tooltip.add(Component.translatable("item.headinajar.jarred_head.trades").withStyle(ChatFormatting.GREEN));
         var jar = BuiltInRegistries.ITEM.getOptional(ResourceLocation.tryParse(jar(stack)));
         jar.ifPresent(item -> tooltip.add(Component.translatable("item.headinajar.jarred_head.jar", item.getDescription()).withStyle(ChatFormatting.GRAY)));
         var file = com.coolfreeze23.headinajar.staff.Staff.of(stack);

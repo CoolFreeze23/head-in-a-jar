@@ -403,3 +403,24 @@ N093	minecraft:spider_eye		no	BODY	block headinajar:galvanic_pile	pile placed	un
 N094	headinajar:neural_lace		no	BODY	the air (yourself)	whole	unpredicted	put the Neural Lace on your own body; expected nothing (hosts only)		(added row)	
 N095	headinajar:neural_lace		no	JAR (with arm)	entity headinajar:headless_body (own)	body standing	unpredicted	Neural Lace on your own headless body; expected nothing		(added row)	
 N096	(empty)		no	JAR (no arm)	mecha (occupied, Passenger Pod)	a pilot inside, Passenger Pod fitted	unpredicted	a friend who is a jar boards the Passenger Pod; check whether a jar can ride as passenger		(added row)	
+N097	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:jarred_head (cow)	trophy (never fed or hired)	works	lunch: the bowl fills and the head is hired	message.headinajar.staff.on_lunch	block/DeskJobs.java (feed)	
+N098	minecraft:water_bucket		no	BODY	block headinajar:jarred_head (cow)	trophy (never fed or hired)	refuses	heads eat broth only	refusal.headinajar.desk.wrong_bucket	block/DeskJobs.java (feed)	
+N099	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:jarred_head (cow)	fed (a full bowl)	refuses	the bowl is full	refusal.headinajar.desk.bowl_full	block/DeskJobs.java (feed)	
+N100	(empty)		no	BODY	block headinajar:jarred_head (cow)	trophy (never fed or hired)	works	the bell: a speech line over the jar and on the action bar	bell.headinajar.minecraft.cow.1.noise	block/JarredHeadBlock.java (useWithoutItem); block/DeskJobs.java (ring)	
+N101	minecraft:cake		no	BODY	block headinajar:jarred_head (cow)	trophy (never fed or hired)	refuses	cake is a staff benefit	refusal.headinajar.staff.cake_trophy	block/JarredHeadBlock.java (useItemOn)	
+N102	minecraft:shears		no	BODY	block headinajar:jarred_head (sheep)	trophy (never fed or hired)	refuses	desk items need a fed head	refusal.headinajar.desk.unfed	block/DeskJobs.java	
+N103	minecraft:shears		no	BODY	block headinajar:jarred_head (sheep)	fed (a full bowl)	works	shorn: wool drops, the head is drawn sheared	desk.headinajar.sheep.shorn	block/DeskJobs.java	
+N104	minecraft:blue_dye		no	BODY	block headinajar:jarred_head (sheep)	fed (a full bowl)	works	dyed: the head turns blue	desk.headinajar.sheep.dyed	block/DeskJobs.java	
+N105	minecraft:bowl		no	BODY	block headinajar:jarred_head (mooshroom)	fed (a full bowl)	works	a bowl of mushroom stew	desk.headinajar.mooshroom.stew	block/DeskJobs.java	
+N106	minecraft:gold_ingot		no	BODY	block headinajar:jarred_head (piglin, on netherrack)	fed (a full bowl)	works	the piglin inspects the gold for 6 s, then barters	desk.headinajar.piglin.inspect.noise	block/DeskJobs.java	
+N107	minecraft:gold_ingot		no	BODY	block headinajar:jarred_head (piglin, on grass)	fed (a full bowl)	works	inspects, with the warning that it will turn off a Nether floor	warning.headinajar.desk.piglin_turns	block/DeskJobs.java	
+N108	minecraft:glass_bottle		no	BODY	block headinajar:jarred_head (squid)	fed (a full bowl)	works	a bottle of ink	desk.headinajar.squid.ink	block/DeskJobs.java	
+N109	minecraft:emerald		no	BODY	block headinajar:jarred_head (villager)	fed (a full bowl)	works	the best offer read out and the trading screen	desk.headinajar.villager.best_offer	block/JarredHeadBlock.java (useWithoutItem)	
+N110	(empty)		no	BODY	block headinajar:jarred_head (goat)	fed (a full bowl)	works	the ring: a horn drops	desk.headinajar.goat.horn.noise	block/DeskJobs.java (ring)	
+N111	headinajar:precision_syringe		no	BODY	block headinajar:jarred_head (warden)	trophy (never fed or hired)	refuses	too thick a hide for the Precision Syringe	jade.headinajar.library.thick	block/HeadDonor.java	
+N112	headinajar:leviathan_needle		no	BODY	block headinajar:jarred_head (warden)	trophy (never fed or hired)	works	a blood sample and the wince		block/HeadDonor.java	
+N113	headinajar:precision_syringe		no	BODY	block headinajar:jarred_head (cow)	trophy (never fed or hired)	works	a blood sample and the wince		block/HeadDonor.java	
+N114	minecraft:cake		no	BODY	block headinajar:turret_pedestal	turret with a head	refuses	the Board does not eat cake	refusal.headinajar.staff.board_cake	block/HeadHolderBlock.java	
+N115	minecraft:cake		no	BODY	block headinajar:employee_mount	mount staffed, librarian	refuses	desk staff are paid in emeralds	refusal.headinajar.staff.mount_cake	block/HeadHolderBlock.java	
+N116	headinajar:nutrient_broth_bucket		no	BODY	block headinajar:turret_pedestal	turret with a head	unpredicted	lunch is for plinth heads; expected a refusal or the turret answer		(added row)	
+N117	headinajar:precision_syringe		no	BODY	block headinajar:cerebral_array	array with five heads	works	the Board gives blood (one sample from the directors)		block/HeadHolderBlock.java	

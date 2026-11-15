@@ -118,6 +118,9 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
         return working >= MEETING ? Math.round(sum * 1.1f) : sum;
     }
 
+    /** Broth owed to the next draw (a fraction of a mB, from a cow head's saving; not saved). */
+    private float brothCarry;
+
     public int output() {
         return output;
     }
@@ -128,8 +131,16 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
         if (heads > 0 && level.getGameTime() % 20 == 0) {
             float farmer = HeadJobs.staff(level, pos, "farmer");
             int need = Math.max(1, Math.round(heads * (1 - 0.5f * farmer)));
-            FluidStack got = a.broth.drain(need, IFluidHandler.FluidAction.EXECUTE);
-            a.getPersistentData().putBoolean("Fed", got.getAmount() >= need);
+            if (DeskJobs.cowNear(level, pos)) {
+                // a fed cow head within 8 makes it last a tenth longer: whole mB drawn, the rest carried (not saved)
+                float want = heads * (1 - 0.5f * farmer) / 1.1f + a.brothCarry;
+                need = (int) Math.floor(want);
+                a.brothCarry = want - need;
+            } else {
+                a.brothCarry = 0;
+            }
+            FluidStack got = need > 0 ? a.broth.drain(need, IFluidHandler.FluidAction.EXECUTE) : FluidStack.EMPTY;
+            a.getPersistentData().putBoolean("Fed", need > 0 ? got.getAmount() >= need : a.broth.getFluidAmount() > 0);
         }
         boolean fed = a.getPersistentData().getBoolean("Fed");
         a.output = fed ? a.potential() : 0;

@@ -79,6 +79,11 @@ public final class PersonnelFileScreen extends Screen {
             Component label = parse(r.getString("label")), value = parse(r.getString("value"));
             if (label != null || value != null) rows.add(new Component[]{label != null ? label : Component.empty(), value != null ? value : Component.empty()});
         }
+        // the head's title under its name, where this game's language has one for it
+        String titleKey = tag.getString("TitleKey");
+        if (!titleKey.isEmpty() && Language.getInstance().has(titleKey)) {
+            rows.add(Math.min(1, rows.size()), new Component[]{Component.translatable("screen.headinajar.file.title_row"), Component.translatable(titleKey)});
+        }
         ListTag lines = tag.getList("History", Tag.TAG_STRING);
         for (int i = 0; i < lines.size(); i++) {
             Component line = parse(lines.getString(i));

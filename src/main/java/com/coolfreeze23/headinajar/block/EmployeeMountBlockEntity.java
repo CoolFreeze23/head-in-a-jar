@@ -87,6 +87,11 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         return items;
     }
 
+    @Override
+    public ItemStack donorHead() {
+        return head();
+    }
+
     public ItemStack head() {
         return items.getStackInSlot(0);
     }

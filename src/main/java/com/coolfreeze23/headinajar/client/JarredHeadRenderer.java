@@ -28,6 +28,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 
 import java.lang.reflect.Field;
@@ -87,15 +88,99 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         }
         if (nod >= 0 && nod < 10) pitch += (float) (20 * Math.sin(Math.PI * nod / 10));
         if (no >= 0 && no < 12) yaw += (float) (25 * Math.sin(2 * Math.PI * no / 6) * (1 - no / 12));
+        // the desk's moments (curves M1-M5 in HeadMoments), on top of the turn and the nod
+        HeadMoments.Offsets m = HeadMoments.at(head, now);
+        pitch += m.pitch();
+        yaw += m.yaw();
+        // the bowl and spoon, in the block's own space, turned as the plinth's model is
+        PlinthBowl.draw(head, now, pose, buffers, light, overlay);
         pose.pushPose();
         pose.translate(0.5, 0, 0.5);
         pose.mulPose(Axis.YP.rotationDegrees(-head.getBlockState().getValue(JarredHeadBlock.FACING).toYRot()));
         if (head.badge() >= 0) StaffBadge.draw(pose, buffers, light, head.badge(), StaffBadge.PLINTH);
         pose.translate(0, 7 / 16.0, 0);
         CompoundTag record = head.entityTag();
-        drawJar(type, record.contains("VillagerData") ? record.getCompound("VillagerData") : null, size(record), head.jar(),
-                pose, buffers, light, age, yaw, pitch, bob);
+        Extra extra = m.roll() == 0 && m.forward() == 0 && m.rise() == 0 ? Extra.of(dress(head)) : new Extra(m.roll(), m.forward(), m.rise(), 0, dress(head));
+        draw(type, record.contains("VillagerData") ? record.getCompound("VillagerData") : null, size(record), head.jar(),
+                pose, buffers, light, age, yaw, pitch, bob, true, extra);
         pose.popPose();
+    }
+
+    /**
+     * What a head does on top of its turn and nod, all zero at rest: a roll (degrees, about its own front), a push toward
+     * where it faces and a rise (px); the saline's ripple (0 still, 1 a Lookout's alarm); and how it is dressed.
+     */
+    public record Extra(float roll, float forward, float rise, float ripple, Dress dress) {
+        public static final Extra NONE = new Extra(0, 0, 0, 0, Dress.NONE);
+
+        static Extra of(Dress dress) {
+            return dress == Dress.NONE ? NONE : new Extra(0, 0, 0, 0, dress);
+        }
+
+        /** Only the saline's ripple. */
+        public static Extra ripple(float amount) {
+            return amount <= 0 ? NONE : new Extra(0, 0, 0, amount, Dress.NONE);
+        }
+    }
+
+    /**
+     * What the record says of how a head looks (synced as the block's {@code Look}): a sheep's fleece colour (ARGB) or
+     * none when shorn, a brown mooshroom, a goat's horns gone, an allay's held item.
+     */
+    public static final class Dress {
+        public static final Dress NONE = new Dress(-1, false, false, true, true, ItemStack.EMPTY);
+        final int wool;
+        final boolean sheared, brown, leftHorn, rightHorn;
+        final ItemStack held;
+
+        Dress(int wool, boolean sheared, boolean brown, boolean leftHorn, boolean rightHorn, ItemStack held) {
+            this.wool = wool;
+            this.sheared = sheared;
+            this.brown = brown;
+            this.leftHorn = leftHorn;
+            this.rightHorn = rightHorn;
+            this.held = held;
+        }
+
+        /** Read from a look tag (the client's registries for the held item). */
+        static Dress of(EntityType<?> type, CompoundTag look) {
+            if (look.isEmpty() || type == null) return NONE;
+            int wool = -1;
+            boolean sheared = false, brown = false, left = true, right = true;
+            ItemStack held = ItemStack.EMPTY;
+            if (type == EntityType.SHEEP) {
+                sheared = look.getBoolean("Sheared");
+                if (look.contains("Color")) wool = net.minecraft.world.entity.animal.Sheep.getColor(net.minecraft.world.item.DyeColor.byId(look.getByte("Color")));
+            } else if (type == EntityType.MOOSHROOM) {
+                brown = "brown".equals(look.getString("Type"));
+            } else if (type == EntityType.GOAT) {
+                left = !look.contains("HasLeftHorn") || look.getBoolean("HasLeftHorn");
+                right = !look.contains("HasRightHorn") || look.getBoolean("HasRightHorn");
+            } else if (type == EntityType.ALLAY) {
+                var hands = look.getList("HandItems", net.minecraft.nbt.Tag.TAG_COMPOUND);
+                var level = Minecraft.getInstance().level;
+                if (!hands.isEmpty() && level != null && !hands.getCompound(0).isEmpty()) {
+                    held = ItemStack.parseOptional(level.registryAccess(), hands.getCompound(0));
+                }
+            } else {
+                return NONE;
+            }
+            if (wool == -1 && !sheared && !brown && left && right && held.isEmpty()) return NONE;
+            return new Dress(wool, sheared, brown, left, right, held);
+        }
+    }
+
+    /** Each placed head's dress, read again only when its look tag is a new one (a sync replaces the tag). */
+    private static final Map<JarredHeadBlockEntity, Object[]> DRESSES = new WeakHashMap<>();
+
+    static Dress dress(JarredHeadBlockEntity head) {
+        CompoundTag look = head.look();
+        if (look.isEmpty()) return Dress.NONE;
+        Object[] known = DRESSES.get(head);
+        if (known != null && known[0] == look) return (Dress) known[1];
+        Dress d = Dress.of(head.entityType(), look);
+        DRESSES.put(head, new Object[]{look, d});
+        return d;
     }
 
     /** A slime's or magma cube's size from its record ({@code Size} is saved one less than the size), 0 when not there. */
@@ -123,10 +208,12 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         return s[0];
     }
 
-    /** The jar's lid and valve rise 7 px over the cell. */
+    /** The jar's lid and valve rise 7 px over the cell; the bowl reaches 2 px past the plinth's front. */
     @Override
     public net.minecraft.world.phys.AABB getRenderBoundingBox(JarredHeadBlockEntity head) {
-        return new net.minecraft.world.phys.AABB(head.getBlockPos()).expandTowards(0, 0.5, 0);
+        var front = head.getBlockState().getValue(JarredHeadBlock.FACING).getOpposite();
+        return new net.minecraft.world.phys.AABB(head.getBlockPos()).expandTowards(0, 0.5, 0)
+                .expandTowards(front.getStepX() * 2 / 16.0, 0, front.getStepZ() * 2 / 16.0);
     }
 
     /** A whole jarred head (jar and the mob's head inside), at the pose's origin; {@code entityTag}: the villager data, or null. */
@@ -156,13 +243,24 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
      */
     public static void drawJar(EntityType<?> type, CompoundTag villagerData, int size, String jar, PoseStack pose, MultiBufferSource buffers, int light, float age,
                                float yaw, float pitch, float bob) {
-        draw(type, villagerData, size, jar, pose, buffers, light, age, yaw, pitch, bob, true);
+        draw(type, villagerData, size, jar, pose, buffers, light, age, yaw, pitch, bob, true, Extra.NONE);
+    }
+
+    /** As above, with what the head does on top of its turn, the saline's ripple and its dress ({@link Extra}). */
+    public static void drawJar(EntityType<?> type, CompoundTag villagerData, int size, String jar, PoseStack pose, MultiBufferSource buffers, int light, float age,
+                               float yaw, float pitch, float bob, Extra extra) {
+        draw(type, villagerData, size, jar, pose, buffers, light, age, yaw, pitch, bob, true, extra);
     }
 
     private static final Quaternionf TURN = new Quaternionf();
 
     private static void draw(EntityType<?> type, CompoundTag villagerData, int size, String jar, PoseStack pose, MultiBufferSource buffers, int light, float age,
                              float yaw, float pitch, float bobScale, boolean world) {
+        draw(type, villagerData, size, jar, pose, buffers, light, age, yaw, pitch, bobScale, world, Extra.NONE);
+    }
+
+    private static void draw(EntityType<?> type, CompoundTag villagerData, int size, String jar, PoseStack pose, MultiBufferSource buffers, int light, float age,
+                             float yaw, float pitch, float bobScale, boolean world, Extra extra) {
         boolean compact = HeadInfo.COMPACT.equals(jar);
         JarRenderer.Shape shape = compact ? JarRenderer.COMPACT : JarRenderer.WIDE;
         Look look = type == null ? null : look(type, size, villagerData);
@@ -180,11 +278,19 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
             turn = inside;
         }
         float bob = JarRenderer.openWith(pose, buffers, light, age, shape) * bobScale;
-        if (look != null) {
-            if (look.whole && !far) drawWhole(look, pose, buffers, light, age, bob, turn, pitch, compact);
-            else if (look.head != null && !(look.whole && look.headIsRoot)) drawHead(look, villagerData, pose, buffers, light, bob, turn, pitch, compact);
+        float saline = SALINE;
+        if (extra.ripple() > 0) {
+            // a Lookout's alarm: the saline stirs (its top rises and falls, never below its rest level, so no head pokes
+            // out of it) and the head bobs quicker in it
+            float r = extra.ripple();
+            saline -= r * (0.6f + 0.45f * Mth.sin(age * 1.3f) + 0.15f * Mth.sin(age * 3.1f + 1));
+            bob += r * 0.4f * Mth.sin(age * 1.9f);
         }
-        JarRenderer.closeWith(pose, buffers, light, shape, SALINE);
+        if (look != null) {
+            if (look.whole && !far) drawWhole(look, pose, buffers, light, age, bob, turn, pitch, compact, extra);
+            else if (look.head != null && !(look.whole && look.headIsRoot)) drawHead(look, villagerData, pose, buffers, light, bob, turn, pitch, compact, extra);
+        }
+        JarRenderer.closeWith(pose, buffers, light, shape, saline);
         pose.popPose();
     }
 
@@ -201,6 +307,8 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
     private static final float TOP = SALINE + 0.5f;
     /** How far from the jar's axis anything may reach (wide: turning right round; compact: facing the front). */
     private static final float[] ROOM = {5.4f, 4.0f};
+    /** How far a goat's head is raised in its jar (degrees about its own x; negative lifts the muzzle). */
+    private static final float GOAT_RAISE = -50f;
     /** The most a head is enlarged: a small head (a cat's, an allay's) fills its jar as far as this, so it reads. */
     private static final float MAX_SCALE = 1.4f;
 
@@ -219,13 +327,17 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
 
     /** The head part (and what goes with it), its box's bottom centre at the jar's neck, turned and tipped about it. */
     private static void drawHead(Look look, CompoundTag villagerData, PoseStack pose, MultiBufferSource buffers, int light, float bob,
-                                 float yaw, float pitch, boolean compact) {
+                                 float yaw, float pitch, boolean compact, Extra extra) {
         float neck = NECK[compact ? 1 : 0];
         float s = compact ? look.headScaleCompact : look.headScale;
         float lift = compact ? look.headLiftCompact : look.headLift;
+        Dress dress = extra.dress();
         pose.pushPose();
         pose.translate(0, (neck - lift + bob) / 16f, 0);
         pose.mulPose(TURN.rotationZYX(0, (yaw + look.side) * Mth.DEG_TO_RAD, pitch * Mth.DEG_TO_RAD));
+        // a moment's push toward where it looks, rise and roll (all 0 at rest)
+        if (extra.forward() != 0 || extra.rise() != 0) pose.translate(0, -extra.rise() / 16f, -extra.forward() / 16f);
+        if (extra.roll() != 0) pose.mulPose(Axis.ZP.rotationDegrees(extra.roll()));
         pose.scale(s, s, s);
         pose.translate(-look.hcx / 16f, -look.hbottom / 16f, -look.hcz / 16f);
         // the head as the creature holds it at rest (a hoglin's snout down, a goat's head bowed)
@@ -234,17 +346,28 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         // a villager's hat brim is wider than the glass: it stays outside the jar
         boolean rim = look.rim != null && look.rim.visible;
         if (look.rim != null) look.rim.visible = false;
-        VertexConsumer base = buffers.getBuffer(RenderType.entityCutoutNoCull(look.texture));
+        // a goat's horns as it still has them (the model's own switch, as the goat's renderer sets it)
+        if (look.leftHorn != null) look.leftHorn.visible = dress.leftHorn;
+        if (look.rightHorn != null) look.rightHorn.visible = dress.rightHorn;
+        ResourceLocation texture = dress.brown && look.textureBrown != null ? look.textureBrown : look.texture;
+        VertexConsumer base = buffers.getBuffer(RenderType.entityCutoutNoCull(texture));
         part(look.head, pose, base, light, overlay, 0, 0, 0, 0, 0, 0, -1);
+        if (look.leftHorn != null) look.leftHorn.visible = true;
+        if (look.rightHorn != null) look.rightHorn.visible = true;
         for (int i = 0; i < look.extras.length; i++) {
             float[] o = look.extraPose[i];
             part(look.extras[i], pose, base, light, overlay, o[0], o[1], o[2], o[3], o[4], o[5], -1);
         }
         for (int i = 0; i < look.overlays.length; i++) {
+            // a sheep's fleece: in its dye's colour, and not there once it is shorn
+            boolean wool = look.overlayWool[i];
+            if (wool && dress.sheared) continue;
             float[] o = look.overlayPose[i];
             part(look.overlays[i], pose, buffers.getBuffer(RenderType.entityCutoutNoCull(look.overlayTexture[i])), light, overlay,
-                    o[0], o[1], o[2], o[3], o[4], o[5], -1);
+                    o[0], o[1], o[2], o[3], o[4], o[5], wool ? dress.wool : -1);
         }
+        // an allay's held item, at its chin, turning with it
+        if (!dress.held.isEmpty()) held(look, dress.held, pose, buffers, light);
         // a villager's (or zombie villager's) biome clothes and trade hat, as its own layer dresses its head
         if (look.dressed && villagerData != null) {
             for (ResourceLocation layer : dress(look.dressPrefix, villagerData)) {
@@ -268,9 +391,35 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         pose.popPose();
     }
 
+    /**
+     * An item held at the head's chin (an allay's): a quarter of a block's item at the head's own scale, upright, at
+     * its chin, half below it and in front (a head scaled to fill its jar has little room under its chin), so it turns and nods with
+     * the head (head part space: px, y down, front -Z).
+     */
+    private static void held(Look look, ItemStack stack, PoseStack pose, MultiBufferSource buffers, int light) {
+        pose.pushPose();
+        pose.translate(look.hcx / 16f, (look.hbottom - 0.3f) / 16f, (look.hminZ - 1.2f) / 16f);
+        // back to the world's way up, its face to the front
+        pose.mulPose(Axis.ZP.rotationDegrees(180));
+        pose.scale(HELD_SCALE, HELD_SCALE, HELD_SCALE);
+        // an item's sheets are batches drawn after every block entity, so behind the jar's glass and saline (drawn at
+        // once) it would fail the depth test and vanish: it is drawn at once too, as the head is
+        MultiBufferSource now = type -> buffers.getBuffer(type == net.minecraft.client.renderer.Sheets.translucentItemSheet()
+                || type == net.minecraft.client.renderer.Sheets.translucentCullBlockSheet()
+                || type == net.minecraft.client.renderer.Sheets.cutoutBlockSheet() || type == net.minecraft.client.renderer.Sheets.solidBlockSheet()
+                ? RenderType.entityCutoutNoCull(net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS) : type);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, net.minecraft.world.item.ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY,
+                pose, now, Minecraft.getInstance().level, 0);
+        pose.popPose();
+    }
+
+    /** The held item's size: FIXED draws a flat item a whole block (16 px) across, so 0.22 is 3.5 px at the head's scale. */
+    private static final float HELD_SCALE = 0.22f;
+
     /** The whole creature through its own renderer (no shadow, no name), standing on the jar's floor, turned about its middle. */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void drawWhole(Look look, PoseStack pose, MultiBufferSource buffers, int light, float age, float bob, float yaw, float pitch, boolean compact) {
+    private static void drawWhole(Look look, PoseStack pose, MultiBufferSource buffers, int light, float age, float bob, float yaw, float pitch, boolean compact,
+                                  Extra extra) {
         float floor = FLOOR[compact ? 1 : 0];
         float s = compact ? look.wholeScaleCompact : look.wholeScale;
         float lift = compact ? look.wholeLiftCompact : look.wholeLift;
@@ -282,6 +431,9 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         // back to the world's way up (the renderer turns it over again itself)
         pose.scale(-1, -1, 1);
         pose.mulPose(TURN.rotationZYX(0, -(yaw + look.side) * Mth.DEG_TO_RAD, -pitch * Mth.DEG_TO_RAD));
+        // a moment's push toward where it faces (the jar's front, -Z, as the creature is turned), rise (y is up here) and roll
+        if (extra.forward() != 0 || extra.rise() != 0) pose.translate(0, extra.rise() / 16f, -extra.forward() / 16f);
+        if (extra.roll() != 0) pose.mulPose(Axis.ZP.rotationDegrees(-extra.roll()));
         pose.scale(s, s, s);
         pose.translate(-look.wcx / 16f, -look.wbottom / 16f, -look.wcz / 16f);
         ((EntityRenderer) look.renderer).render(e, FACING_YAW, age - tick, pose, buffers, light);
@@ -369,6 +521,11 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         ModelPart[] overlays = new ModelPart[0];
         float[][] overlayPose = new float[0][];
         ResourceLocation[] overlayTexture = new ResourceLocation[0];
+        /** Which overlays are a sheep's fleece (tinted by its dye, left off when shorn). */
+        boolean[] overlayWool = new boolean[0];
+        /** A brown mooshroom's texture (the stand-in is red); a goat's horns (children of its head), or null. */
+        ResourceLocation textureBrown;
+        ModelPart leftHorn, rightHorn;
         boolean dressed, pumpkin;
         /** Degrees a whole creature is turned from facing the front (a fish side-on). */
         float side;
@@ -376,7 +533,7 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         /** A villager's hat brim (a child of its head), left off in the jar. */
         ModelPart rim;
         /** The head's box (px, part space, y down): its bottom centre, and the scale it is drawn at in each jar. */
-        float hcx, hbottom, hcz, headScale = MAX_SCALE, headScaleCompact = MAX_SCALE, headLift, headLiftCompact;
+        float hcx, hbottom, hcz, hminZ, headScale = MAX_SCALE, headScaleCompact = MAX_SCALE, headLift, headLiftCompact;
         /** The head part's own turn as the model rests (null when none). */
         org.joml.Quaternionf rest;
         /** The whole creature's box (px, the renderer's space, y up): its bottom centre, and its scale in each jar. */
@@ -498,6 +655,19 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
             look.dressPrefix = type == EntityType.VILLAGER ? "villager" : "zombie_villager";
             look.pumpkin = type == EntityType.SNOW_GOLEM;
             if (type == EntityType.VILLAGER || type == EntityType.ZOMBIE_VILLAGER || type == EntityType.WANDERING_TRADER) look.rim = field(model, "hatRim");
+            if (type == EntityType.GOAT) {
+                if (head.hasChild("left_horn")) look.leftHorn = head.getChild("left_horn");
+                if (head.hasChild("right_horn")) look.rightHorn = head.getChild("right_horn");
+                // its face is a muzzle bowed 55 degrees, under 7 px of horn: as it grazes it is 20 px tall and fits the jar
+                // at a third of its size. Raised, it looks out at you, horns swept back, and fits at half.
+                look.rest = new org.joml.Quaternionf().rotationX(GOAT_RAISE * Mth.DEG_TO_RAD);
+            }
+        }
+        if (entity instanceof net.minecraft.world.entity.animal.MushroomCow cow && renderer instanceof LivingEntityRenderer living) {
+            // the stand-in is red; a brown one's texture as its renderer picks it
+            cow.setVariant(net.minecraft.world.entity.animal.MushroomCow.MushroomType.BROWN);
+            look.textureBrown = living.getTextureLocation(cow);
+            cow.setVariant(net.minecraft.world.entity.animal.MushroomCow.MushroomType.RED);
         }
         if (look.head != null && look.texture != null) look.asHead = new Head(look.head, look.texture);
         measure(look);
@@ -574,6 +744,7 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         List<ModelPart> parts = new ArrayList<>();
         List<float[]> poses = new ArrayList<>();
         List<ResourceLocation> textures = new ArrayList<>();
+        List<Boolean> wool = new ArrayList<>();
         for (RenderLayer<?, ?> layer : found) {
             if (!HEAD_LAYERS.contains(layer.getClass().getSimpleName())) continue;
             EntityModel<?> model = null;
@@ -594,10 +765,13 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
             parts.add(head);
             poses.add(relative(head, headPose));
             textures.add(texture);
+            wool.add(layer instanceof net.minecraft.client.renderer.entity.layers.SheepFurLayer);
         }
         look.overlays = parts.toArray(new ModelPart[0]);
         look.overlayPose = poses.toArray(new float[0][]);
         look.overlayTexture = textures.toArray(new ResourceLocation[0]);
+        look.overlayWool = new boolean[wool.size()];
+        for (int i = 0; i < wool.size(); i++) look.overlayWool[i] = wool.get(i);
     }
 
     /** The boxes once: the head with all that goes with it, and the whole creature as its renderer draws it. */
@@ -609,10 +783,8 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         if (look.head != null && !look.headIsRoot) {
             PoseStack pose = new PoseStack();
             var at = look.head.getInitialPose();
-            if (at.xRot != 0 || at.yRot != 0 || at.zRot != 0) {
-                look.rest = new org.joml.Quaternionf().rotationZYX(at.zRot, at.yRot, at.xRot);
-                pose.mulPose(look.rest);
-            }
+            if (at.xRot != 0 || at.yRot != 0 || at.zRot != 0) look.rest = new org.joml.Quaternionf().rotationZYX(at.zRot, at.yRot, at.xRot);
+            if (look.rest != null) pose.mulPose(look.rest);
             part(look.head, pose, b, 0, 0, 0, 0, 0, 0, 0, 0, -1);
             for (int i = 0; i < look.extras.length; i++) {
                 float[] o = look.extraPose[i];
@@ -636,6 +808,7 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
                 look.hcx = b.cx();
                 look.hcz = b.cz();
                 look.hbottom = b.maxY * 16;
+                look.hminZ = b.minZ * 16;
                 look.headReach = b.reach();
                 look.headHeight = (b.maxY - b.minY) * 16;
                 look.headScale = scale(look.headReach, look.headHeight, NECK[0], false);

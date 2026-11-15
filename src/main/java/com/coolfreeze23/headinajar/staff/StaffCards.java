@@ -75,6 +75,8 @@ public final class StaffCards {
         if (record.contains("Size")) tag.putInt("Size", record.getInt("Size"));
         tag.putString("Jar", head.jar());
         tag.putString("Title", json(title(f), registries));
+        // the head's title as a key: the card shows its row only where the reader's language has that title
+        tag.putString("TitleKey", com.coolfreeze23.headinajar.block.HeadSpeak.titleKey(type, record));
         ListTag rows = new ListTag();
         var level = head.getLevel();
         long day = Staff.day(level);
@@ -85,6 +87,9 @@ public final class StaffCards {
         row(rows, "joined", Component.translatable("screen.headinajar.file.joined_value", Staff.shown(f.joined), Math.max(0, day - f.joined)), registries);
         row(rows, "morale", morale(f, type), registries);
         row(rows, "wage", wage(f, type, day), registries);
+        // the bowl: what is in it, and how many days of lunch that is
+        row(rows, "lunch", Component.translatable("screen.headinajar.file.lunch_value", head.bowl,
+                com.coolfreeze23.headinajar.block.DeskJobs.daysLeft(head)), registries);
         var jar = BuiltInRegistries.ITEM.getOptional(ResourceLocation.tryParse(head.jar()));
         row(rows, "jar", jar.map(i -> (Component) i.getDescription()).orElse(Component.literal(head.jar())), registries);
         row(rows, "genes", genes(type), registries);

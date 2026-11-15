@@ -1020,6 +1020,55 @@
     "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:zombie\",Entity:{}}"
    ],
    "aim": "block"
+  },
+  "block headinajar:jarred_head (cow)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:cow\",Entity:{}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (sheep)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:sheep\",Entity:{Color:0b}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (mooshroom)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:mooshroom\",Entity:{Type:\"red\"}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (squid)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:squid\",Entity:{}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (goat)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:goat\",Entity:{HasLeftHorn:1b,HasRightHorn:1b}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (piglin, on netherrack)": {
+   "steps": [
+    "/setblock {T+0,-1,0} minecraft:netherrack",
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:piglin\",Entity:{}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (piglin, on grass)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:piglin\",Entity:{}}"
+   ],
+   "aim": "block"
+  },
+  "block headinajar:jarred_head (warden)": {
+   "steps": [
+    "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:warden\",Entity:{},Jar:\"headinajar:reinforced_life_support_jar\"}"
+   ],
+   "aim": "block"
   }
  },
  "setups": {
@@ -1594,6 +1643,23 @@
   "Brazil Legends present": {},
   "bare jar (also tesla_node, relay_mast_mk2, signal_jammer)": {
    "approx": "relay_mast only"
+  },
+  "trophy (never fed or hired)": {},
+  "fed (a full bowl)": {
+   "steps": [
+    "/data merge block {T} {Desk:{Bowl:1000}}"
+   ],
+   "approx": "the bowl filled by command (what a Nutrient Broth Bucket leaves), not by a bucket"
+  },
+  "mount staffed, librarian": {
+   "steps": [
+    "headblock {T} minecraft:villager"
+   ]
+  },
+  "array with five heads": {
+   "steps": [
+    "headblock {T} minecraft:zombie,minecraft:zombie,minecraft:zombie,minecraft:zombie,minecraft:zombie"
+   ]
   }
  },
  "pairs": {

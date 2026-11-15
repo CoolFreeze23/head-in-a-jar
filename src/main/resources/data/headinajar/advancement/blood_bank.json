@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:out_for_blood",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "blood_bank"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:blood_sample"
+    },
+    "title": {
+      "translate": "advancements.headinajar.blood_bank.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.blood_bank.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

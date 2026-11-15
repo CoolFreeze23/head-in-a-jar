@@ -45,7 +45,17 @@ public final class StaffTable {
         }
     }
 
-    public record Row(Wage wage, String noise) {
+    /**
+     * One species' row: its wage, its noise, how many bell lines it has ({@code bell.headinajar.<ns>.<path>.<n>}, 0 for
+     * none), its desk job's id (null for none), the sound its Lookout raises the alarm with (null: its ambient sound),
+     * and what it dislikes at dawn ({@code rain}, {@code thunder}, {@code open_sky}, {@code hot}, {@code warm},
+     * {@code not_nether}, {@code warped_fungus}, {@code noise}, {@code water}).
+     */
+    public record Row(Wage wage, String noise, int bells, String desk, ResourceLocation alarm, java.util.Set<String> dislikes,
+                      Map<String, Integer> lines) {
+        public Row(Wage wage, String noise) {
+            this(wage, noise, 0, null, null, java.util.Set.of(), Map.of());
+        }
     }
 
     private static Map<ResourceLocation, Row> rows = Map.of();
@@ -74,6 +84,38 @@ public final class StaffTable {
         return row == null || row.noise().isEmpty() ? "staff.headinajar.noise.default" : row.noise();
     }
 
+    /** How many bell lines the species has (0: a head of a creature with no row keeps its old line). */
+    public static int bells(EntityType<?> type) {
+        Row row = row(type);
+        return row == null ? 0 : row.bells();
+    }
+
+    /** The species' desk job id, or null. */
+    public static String desk(EntityType<?> type) {
+        Row row = row(type);
+        return row == null ? null : row.desk();
+    }
+
+    /** The species' Lookout alarm sound id, or null (use its ambient sound). */
+    public static ResourceLocation alarm(EntityType<?> type) {
+        Row row = row(type);
+        return row == null ? null : row.alarm();
+    }
+
+    /**
+     * How many lines of a kind the species has of its own ({@code "bells.nitwit"}, {@code "complaints"},
+     * {@code "goodbye"}, {@code "lookout"}); 0 when it has none (the default lines are used).
+     */
+    public static int lines(EntityType<?> type, String kind) {
+        Row row = row(type);
+        return row == null ? 0 : row.lines().getOrDefault(kind, 0);
+    }
+
+    public static boolean dislikes(EntityType<?> type, String what) {
+        Row row = row(type);
+        return row != null && row.dislikes().contains(what);
+    }
+
     public static int size() {
         return rows.size();
     }
@@ -93,7 +135,16 @@ public final class StaffTable {
                 if (id != null) wage = new Wage(null, TagKey.create(Registries.ITEM, id), count);
             }
         }
-        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "");
+        int bells = o.has("bells") ? Math.max(0, o.get("bells").getAsInt()) : 0;
+        String desk = o.has("desk") ? o.get("desk").getAsString() : null;
+        ResourceLocation alarm = o.has("alarm") ? ResourceLocation.tryParse(o.get("alarm").getAsString()) : null;
+        java.util.Set<String> dislikes = new java.util.HashSet<>();
+        if (o.has("dislikes") && o.get("dislikes").isJsonArray()) for (JsonElement d : o.getAsJsonArray("dislikes")) dislikes.add(d.getAsString());
+        Map<String, Integer> lines = new HashMap<>();
+        if (o.has("lines") && o.get("lines").isJsonObject()) {
+            for (var e : o.getAsJsonObject("lines").entrySet()) lines.put(e.getKey(), Math.max(0, e.getValue().getAsInt()));
+        }
+        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "", bells, desk, alarm, java.util.Set.copyOf(dislikes), Map.copyOf(lines));
     }
 
     /** Loads {@code data/<ns>/headinajar/staff/*.json}. */

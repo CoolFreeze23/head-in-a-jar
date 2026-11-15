@@ -517,6 +517,24 @@ public class RepairFourGameTests {
         TurretPedestalBlockEntity.serverTick(h.getLevel(), t.getBlockPos(), t.getBlockState(), t);
     }
 
+    @GameTest(template = "platform", timeoutTicks = 100)
+    public static void aTurretsArrowLeavesItsMountAndHits(GameTestHelper h) {
+        h.setBlock(FLOOR.below(), Blocks.CHEST);
+        ((ChestBlockEntity) h.getBlockEntity(FLOOR.below())).setItem(0, new ItemStack(Items.ARROW, 4));
+        var t = turret(h, FLOOR, EntityType.SKELETON, null);
+        // the mount's upper cell, as placing it in the game puts it there: the arrow used to start inside it and stick
+        h.setBlock(FLOOR.above(), com.coolfreeze23.headinajar.machine.TallMachine.topState(h.getBlockState(FLOOR)));
+        Zombie zombie = h.spawn(EntityType.ZOMBIE, FLOOR.east(5));
+        zombie.setNoAi(true);
+        float full = zombie.getHealth();
+        fire(h, t);
+        h.assertTrue(((ChestBlockEntity) h.getBlockEntity(FLOOR.below())).getItem(0).getCount() < 4, "no shot at a zombie in the open");
+        h.runAfterDelay(30, () -> {
+            h.assertTrue(zombie.getHealth() < full || zombie.isRemoved(), "the turret's arrow never reached the zombie (" + zombie.getHealth() + ")");
+            h.succeed();
+        });
+    }
+
     @GameTest(template = "platform")
     public static void aTurretDoesNotShootThroughWalls(GameTestHelper h) {
         h.setBlock(FLOOR.below(), Blocks.CHEST);

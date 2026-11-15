@@ -1,0 +1,16 @@
+{
+  "name": "Lookouts",
+  "icon": "headinajar:turret_pedestal",
+  "category": "headinajar:staffing",
+  "sortnum": 11,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Any head takes a $(l)Turret Pedestal$(). The thirteen that fight still fight. Any other is a $(l)Lookout$(): a hostile within 16, in sight, and it raises its species' alarm every 5 s and makes the hostile glow. 1 FE/t, 2 alarmed."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A $(l)comparator$() on the pedestal reads 15 while it is alarmed, or while a fighting head has a target, and 2 s after.$(br2)Wire it to a redstone lamp: the cow lights the hall.$(br2)$(o)Cow heads do not bite. That is not the point.$()"
+    }
+  ]
+}

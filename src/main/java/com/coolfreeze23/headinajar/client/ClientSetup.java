@@ -52,6 +52,10 @@ public class ClientSetup {
         modBus.addListener(RestBake::wrap);
         modBus.addListener(MachineRenderers3::colors);
         MachineClient5.init(modBus);
+        // the plinth's bowl and spoon (baked models and the tap curve), and the lines heads say over their jars
+        PlinthBowl.init(modBus);
+        NeoForge.EVENT_BUS.addListener(HeadSpeech::render);
+        NeoForge.EVENT_BUS.addListener(HeadSpeech::loggedOut);
         NeoForge.EVENT_BUS.addListener(RestBake::onFrame);
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent e) -> e.enqueueWork(() -> {
             com.coolfreeze23.headinajar.compat.Compat.clientSetup();

@@ -26,8 +26,9 @@ import snownee.jade.api.IServerDataProvider;
 
 /**
  * Jade's server half of the staff line (no client classes here): the number, department, employer and band for
- * anyone, and the name only for the employer and those they trust. It travels on Jade's own channel, so nothing in the
- * mod's network changes; a server without it sends nothing and the line is simply not shown.
+ * anyone, and the name only for the employer and those they trust; a head's title, lunch and desk status; why a Leech
+ * Jar cannot draw the head it touches. It travels on Jade's own channel, so nothing in the mod's network changes; a
+ * server without it sends nothing and the line is simply not shown.
  */
 final class JadeStaffData {
     static final ResourceLocation STAFF = HeadInAJar.id("staff");
@@ -57,6 +58,11 @@ final class JadeStaffData {
             Player viewer = accessor.getPlayer();
             if (be instanceof JarredHeadBlockEntity head && head.entityType() != null) {
                 write(data, head.staff(), head.entityType(), Staff.department(head.entityType()), Band.of(head.staff()), viewer);
+                desk(data, head);
+            } else if (be instanceof com.coolfreeze23.headinajar.block.LeechJarBlockEntity && accessor.getLevel() != null) {
+                // a Leech Jar touching a head it cannot draw says why
+                String why = com.coolfreeze23.headinajar.block.HeadDonor.leechRefusal(accessor.getLevel(), accessor.getPosition());
+                if (why != null) data.putString("Leech", why);
             } else if (be instanceof CerebralArrayBlockEntity array) {
                 int n = 0;
                 StaffFile first = null;
@@ -81,7 +87,44 @@ final class JadeStaffData {
         private static void station(CompoundTag data, ItemStack head, Band band, Player viewer) {
             if (!head.is(ModRegistry.JARRED_HEAD.get())) return;
             EntityType<?> type = JarredHeadItem.type(head);
-            if (type != null) write(data, Staff.of(head), type, Staff.department(type), band, viewer);
+            if (type == null) return;
+            write(data, Staff.of(head), type, Staff.department(type), band, viewer);
+            var custom = head.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
+            data.putString("TitleKey", com.coolfreeze23.headinajar.block.HeadSpeak.titleKey(type,
+                    custom == null ? new CompoundTag() : custom.getUnsafe().getCompound("Entity")));
+        }
+
+        /**
+         * A placed head's desk: its title's key (the viewer's language decides whether it shows), its lunch, and its desk
+         * status: what its job does when fed (an allay's item, a goat's horns left), "not on lunch" when its bowl is empty.
+         */
+        private static void desk(CompoundTag data, JarredHeadBlockEntity head) {
+            EntityType<?> type = head.entityType();
+            CompoundTag record = head.record();
+            data.putString("TitleKey", com.coolfreeze23.headinajar.block.HeadSpeak.titleKey(type, record));
+            data.putInt("Bowl", head.bowl);
+            String job = com.coolfreeze23.headinajar.staff.StaffTable.desk(type);
+            if (job == null) return;
+            if (!head.fed()) {
+                data.putString("Status", "unfed");
+                return;
+            }
+            if (type == EntityType.ALLAY) {
+                ItemStack held = com.coolfreeze23.headinajar.block.DeskJobs.allayItem(head.getLevel(), head);
+                if (held.isEmpty()) {
+                    data.putString("Status", "allay_empty");
+                } else {
+                    data.putString("Status", job);
+                    data.putString("StatusItem", BuiltInRegistries.ITEM.getKey(held.getItem()).toString());
+                }
+                return;
+            }
+            data.putString("Status", job);
+            if (type == EntityType.GOAT) {
+                int horns = (!record.contains("HasLeftHorn") || record.getBoolean("HasLeftHorn") ? 1 : 0)
+                        + (!record.contains("HasRightHorn") || record.getBoolean("HasRightHorn") ? 1 : 0);
+                data.putInt("StatusN", horns);
+            }
         }
 
         @Override
@@ -115,7 +158,34 @@ final class JadeStaffData {
                     data.contains("Emp") ? Component.literal(data.getString("Emp")) : Component.translatable("staff.headinajar.on_file")));
             return out;
         }
-        if (!data.contains("No")) return out;
+        if (data.contains("Leech")) out.add(Component.translatable("jade.headinajar.library." + data.getString("Leech")));
+        staff(data, out);
+        // the title, when the viewer's language has one for it
+        String title = data.getString("TitleKey");
+        if (!title.isEmpty() && net.minecraft.locale.Language.getInstance().has(title)) {
+            out.add(0, Component.translatable("jade.headinajar.title", Component.translatable(title)));
+        }
+        if (data.contains("Bowl")) out.add(Component.translatable("jade.headinajar.lunch", data.getInt("Bowl")));
+        if (data.contains("Status")) out.add(status(data));
+        return out;
+    }
+
+    /** The desk status line: its job's line (an allay's with its item's name, a goat's with its horns), or not on lunch. */
+    private static Component status(CompoundTag data) {
+        String key = "desk.headinajar.status." + data.getString("Status");
+        if (data.contains("StatusItem")) {
+            ResourceLocation id = ResourceLocation.tryParse(data.getString("StatusItem"));
+            Component item = id == null ? Component.empty() : BuiltInRegistries.ITEM.getOptional(id)
+                    .map(i -> (Component) i.getDescription()).orElse(Component.literal(id.toString()));
+            return Component.translatable(key, item);
+        }
+        if (data.contains("StatusN")) return Component.translatable(key, data.getInt("StatusN"));
+        return Component.translatable(key);
+    }
+
+    /** The staff lines: number, department and employer; the name for those allowed; the band. */
+    private static void staff(CompoundTag data, java.util.List<Component> out) {
+        if (!data.contains("No")) return;
         Component dept = Staff.departmentName(data.getString("Dept"));
         out.add(data.contains("Emp") ? Component.translatable("jade.headinajar.staff.employer", data.getString("No"), dept, data.getString("Emp"))
                 : Component.translatable("jade.headinajar.staff.on_file", data.getString("No"), dept));
@@ -125,6 +195,5 @@ final class JadeStaffData {
         else if (data.contains("NameIndex")) out.add(Component.translatable("jade.headinajar.staff.name",
                 Component.translatable("staff.headinajar.name." + data.getInt("NameIndex")), species));
         if (data.contains("Band")) out.add(Component.translatable("jade.headinajar.staff.band", Component.translatable(data.getString("Band"))));
-        return out;
     }
 }

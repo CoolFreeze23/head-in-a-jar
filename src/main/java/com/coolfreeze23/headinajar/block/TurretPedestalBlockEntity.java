@@ -108,6 +108,22 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     /** A guardian head's lock: the target and the game time it began (synced on change; -1 when none). */
     private int syncedLock = -1;
     private long lockStart;
+    /** A Lookout: until when it is alarmed (2 FE/t, the comparator at 15), when it may sound again, and the alarm as synced. */
+    private long alarmUntil, alarmAt;
+    private boolean alarmShown;
+    /** The alarm's second ding is due then (0 none). */
+    private long dingAt;
+    /** An attacker: when it last had a target (the comparator stays at 15 for 2 s after). */
+    private long engagedAt = Long.MIN_VALUE / 2;
+    /** The comparator signal as last told to neighbours. */
+    private int signal;
+    /** A Lookout's alarm repeats this often; its target glows this long; the comparator holds this long after. */
+    public static final int ALARM_EVERY = 100, GLOW = 100, HOLD = 40, LOOKOUT_FE = 2;
+    /** What the head says over the jar (synced with the kit, each client translating it). */
+    private net.minecraft.network.chat.Component sayFirst, saySecond;
+    private long sayT = Long.MIN_VALUE / 2;
+    /** How high above the pedestal's floor its head's line is drawn (blocks). */
+    public static final double SAY_HEIGHT = 2.55;
 
     public TurretPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.TURRET_BE.get(), pos, state);
@@ -124,6 +140,11 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
 
     public ItemStack head() {
         return items.getStackInSlot(0);
+    }
+
+    @Override
+    public ItemStack donorHead() {
+        return head();
     }
 
     /** What the head is (cached until the slot changes). */
@@ -191,8 +212,16 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         EntityType<?> type = t.headInfo().type();
         if (type == null) {
             t.showLock(-1);
+            t.updateSignal();
             return;
         }
+        if (!HeadJobs.turretJob(type)) {
+            t.watch((ServerLevel) level, type);
+            t.updateSignal();
+            return;
+        }
+        if (t.engaged) t.engagedAt = level.getGameTime();
+        t.updateSignal();
         // a watching turret ticks over at 1 FE/t; one with a target (shooting, or reloading between shots) runs at 10
         int cost = t.engaged ? FE_PER_TICK : IDLE_FE_PER_TICK;
         if (t.energy.getEnergyStored() < cost) {
@@ -232,6 +261,10 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         Vec3 from = Vec3.atCenterOf(worldPosition).add(0, 0.9, 0);
         Vec3 to = target.position().add(0, target.getBbHeight() * 0.6, 0);
         Vec3 dir = to.subtract(from);
+        // what it throws leaves from the mount's mouth, outside its own two cells: spawned inside them an arrow sticks
+        // in the turret and a fireball or a potion bursts on it
+        Vec3 flat = new Vec3(dir.x, 0, dir.z);
+        Vec3 muzzle = flat.lengthSqr() < 1.0E-4 ? from.add(0, 0.7, 0) : from.add(flat.normalize().scale(0.8));
         if (type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED) {
             if (!takeArrow()) {
                 // nothing to fire: one dry click, then a second's wait before it looks again (at the watching rate)
@@ -242,7 +275,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 return;
             }
             dry = false;
-            Arrow arrow = tagged(new Arrow(level, from.x, from.y, from.z, new ItemStack(Items.ARROW), null));
+            Arrow arrow = tagged(new Arrow(level, muzzle.x, muzzle.y, muzzle.z, new ItemStack(Items.ARROW), null));
             if (type == EntityType.STRAY) arrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
             if (type == EntityType.BOGGED) arrow.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
             arrow.pickup = net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED;
@@ -253,7 +286,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             cooldown = rate(20);
         } else if (type == EntityType.BLAZE) {
             Vec3 v = dir.normalize();
-            SmallFireball ball = tagged(new SmallFireball(level, from.x, from.y, from.z, v));
+            SmallFireball ball = tagged(new SmallFireball(level, muzzle.x, muzzle.y, muzzle.z, v));
             level.addFreshEntity(ball);
             level.playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1, 1);
             kit.event(EV_SHOT, CHARGE);
@@ -304,13 +337,13 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             cooldown = rate(20);
         } else if (type == EntityType.SNOW_GOLEM) {
             // the slowness comes with the snowball, on whatever it hits (TurretShots)
-            Snowball ball = tagged(new Snowball(level, from.x, from.y, from.z));
+            Snowball ball = tagged(new Snowball(level, muzzle.x, muzzle.y, muzzle.z));
             ball.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 1.6f, 1f);
             level.addFreshEntity(ball);
             kit.event(EV_SHOT, SHOT);
             cooldown = rate(10);
         } else if (type == EntityType.WITCH) {
-            ThrownPotion potion = tagged(new ThrownPotion(level, from.x, from.y, from.z));
+            ThrownPotion potion = tagged(new ThrownPotion(level, muzzle.x, muzzle.y, muzzle.z));
             potion.setItem(PotionContents.createItemStack(Items.SPLASH_POTION, Potions.WEAKNESS));
             potion.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 0.9f, 2f);
             level.addFreshEntity(potion);
@@ -328,6 +361,123 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             cooldown = 20;
         }
         setChanged();
+    }
+
+    // --- Lookouts -------------------------------------------------------------------------------------------------------
+
+    /** Whether the head here is a Lookout (a head with no attack). */
+    public boolean lookout() {
+        EntityType<?> type = headInfo().type();
+        return type != null && !HeadJobs.turretJob(type);
+    }
+
+    /**
+     * A Lookout's second: 1 FE/t watching, 2 while alarmed. It scans once a second (an attacker's scan is every tick),
+     * and on a hostile in sight raises its species' alarm every 5 s, makes it glow for everyone, and turns to it.
+     */
+    private void watch(ServerLevel level, EntityType<?> type) {
+        long now = level.getGameTime();
+        if (dingAt != 0 && now >= dingAt) {
+            dingAt = 0;
+            level.playSound(null, worldPosition.above(), com.coolfreeze23.headinajar.fx.HeadSounds.LOOKOUT_ALARM.get(), SoundSource.BLOCKS, 1.5f, 1.12f);
+        }
+        int cost = now < alarmUntil ? LOOKOUT_FE : IDLE_FE_PER_TICK;
+        if (energy.getEnergyStored() < cost) {
+            showAlarm(false);
+            return;
+        }
+        energy.set(energy.getEnergyStored() - cost);
+        engaged = false;
+        if (cooldown > 0) {
+            cooldown--;
+            showAlarm(now < alarmUntil);
+            return;
+        }
+        cooldown = 20;
+        LivingEntity target = findTarget();
+        targetId = target == null ? -1 : target.getId();
+        if (target == null) {
+            showAlarm(now < alarmUntil);
+            return;
+        }
+        boolean quiet = now >= alarmUntil;
+        alarmUntil = now + HOLD;
+        if (now >= alarmAt) {
+            alarmAt = now + ALARM_EVERY;
+            var sound = alarmSound(level, type);
+            if (sound != null) level.playSound(null, worldPosition.above(), sound, SoundSource.BLOCKS, 1.5f, 1);
+            level.playSound(null, worldPosition.above(), com.coolfreeze23.headinajar.fx.HeadSounds.LOOKOUT_ALARM.get(), SoundSource.BLOCKS, 1.5f, 1);
+            dingAt = now + 4;
+            target.addEffect(new MobEffectInstance(MobEffects.GLOWING, GLOW, 0, false, false));
+            if (quiet) {
+                var line = com.coolfreeze23.headinajar.block.HeadSpeak.lookout(type);
+                say(line[0], line[1]);
+                ServerPlayer o = owner == null ? null : level.getServer().getPlayerList().getPlayer(owner);
+                if (o != null) com.coolfreeze23.headinajar.Advance.grant(o, "neighbourhood_watch");
+            }
+        }
+        showAlarm(true);
+        setChanged();
+    }
+
+    /** A species' alarm: its staff file's sound, else its own ambient sound (a creature from another mod), or none. */
+    static net.minecraft.sounds.SoundEvent alarmSound(ServerLevel level, EntityType<?> type) {
+        var id = com.coolfreeze23.headinajar.staff.StaffTable.alarm(type);
+        if (id != null) {
+            var s = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(id);
+            if (s != null) return s;
+        }
+        STAND_INS.computeIfAbsent(type, t -> t.create(level) instanceof net.minecraft.world.entity.Mob mob ? mob : null);
+        net.minecraft.world.entity.Mob mob = STAND_INS.get(type);
+        return mob == null ? null : ((com.coolfreeze23.headinajar.mixin.MobAmbientInvoker) mob).headinajar$ambient();
+    }
+
+    /** One stand-in per species, never added to a world, to ask for its ambient sound. */
+    private static final java.util.Map<EntityType<?>, net.minecraft.world.entity.Mob> STAND_INS = new java.util.HashMap<>();
+
+    /** Server (tests): whether the Lookout is alarmed now. */
+    public boolean alarmed() {
+        return level != null && level.getGameTime() < alarmUntil;
+    }
+
+    /** Client: whether the Lookout is alarmed (its saline ripples). */
+    public boolean alarmShown() {
+        return alarmShown;
+    }
+
+    private void showAlarm(boolean on) {
+        if (on == alarmShown) return;
+        alarmShown = on;
+        if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    /** The comparator: 15 while a Lookout is alarmed, or an attacker has a target, and for 2 s after; else 0. */
+    public int signal() {
+        if (level == null || head().isEmpty()) return 0;
+        long now = level.getGameTime();
+        return now < alarmUntil || now - engagedAt <= HOLD ? 15 : 0;
+    }
+
+    private void updateSignal() {
+        int s = signal();
+        if (s == signal || level == null) return;
+        signal = s;
+        level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
+        BlockPos top = worldPosition.above();
+        level.updateNeighbourForOutputSignal(top, level.getBlockState(top).getBlock());
+    }
+
+    /** Server: the head says a line over the jar for 5 s (each watching client in its own language). */
+    public void say(net.minecraft.network.chat.Component first, net.minecraft.network.chat.Component second) {
+        if (level == null || level.isClientSide) return;
+        sayFirst = first;
+        saySecond = second;
+        sayT = level.getGameTime();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    public net.minecraft.network.chat.Component said() {
+        return sayFirst;
     }
 
     /** Tells watchers a lock began (target id) or ended (-1); sent only when it changes. */
@@ -403,8 +553,9 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.needs_head", Component.translatable("item.headinajar.jarred_head"));
                 return;
             }
-            // a head with nothing to fire (a pig, a cow) would sit there drawing power: say so instead
-            if (!HeadJobs.turretJob(type)) {
+            // a head with nothing to fire (a pig, a cow) keeps watch instead; with Lookouts off, it is refused as it was
+            boolean lookout = !HeadJobs.turretJob(type);
+            if (lookout && !Config.get(Config.LOOKOUTS, true)) {
                 com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.no_job", type.getDescription());
                 return;
             }
@@ -417,13 +568,26 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.no_arrows", Component.translatable("block.minecraft.chest"));
             } else if (type == EntityType.CREEPER) {
                 com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.creeper_once");
+            } else if (lookout) {
+                com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.lookout", type.getDescription());
             }
         } else if (held.isEmpty()) {
-            com.coolfreeze23.headinajar.form.FormActions.give(player, items.extractItem(0, 1, false));
+            ItemStack out = items.extractItem(0, 1, false);
+            goodbye(out);
+            com.coolfreeze23.headinajar.form.FormActions.give(player, out);
         } else {
             EntityType<?> type = headInfo().type();
             com.coolfreeze23.headinajar.feedback.Refusals.deny(player, refuser, "turret.occupied", type == null ? head().getHoverName() : type.getDescription());
         }
+    }
+
+    /** A head that worked here leaves: a member of staff says goodbye over the empty mount. */
+    private void goodbye(ItemStack head) {
+        var f = com.coolfreeze23.headinajar.staff.Staff.of(head);
+        EntityType<?> type = HeadJobs.type(head);
+        if (f == null || f.employer == null || type == null) return;
+        var bye = com.coolfreeze23.headinajar.block.HeadSpeak.goodbye(type);
+        say(bye[0], bye[1]);
     }
 
     /** The server's tick, then what the mount shows: the lamp, its target and power. */
@@ -435,7 +599,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         if (t.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
         else if (!t.powered) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.LOW;
         else if (t.dry) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
-        else lamp = t.engaged ? com.coolfreeze23.headinajar.machine.MachineLamp.WORK : com.coolfreeze23.headinajar.machine.MachineLamp.READY;
+        else lamp = t.engaged || t.alarmed() ? com.coolfreeze23.headinajar.machine.MachineLamp.WORK : com.coolfreeze23.headinajar.machine.MachineLamp.READY;
         t.kit.tick(lamp, t.engaged, t.engaged, 0);
     }
 
@@ -461,6 +625,13 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         tag.putInt("Lock", syncedLock);
         tag.putLong("LockStart", lockStart);
         if (badge >= 0) tag.putInt("Badge", badge);
+        // 0.6.1: a Lookout's alarm, and a line said in the last five seconds (a 0.6.0 game reads neither)
+        if (alarmShown) tag.putBoolean("Alarm", true);
+        if (sayFirst != null && level != null && level.getGameTime() - sayT < com.coolfreeze23.headinajar.block.JarredHeadBlockEntity.SAY_TICKS) {
+            tag.putString("Say", net.minecraft.network.chat.Component.Serializer.toJson(sayFirst, level.registryAccess()));
+            if (saySecond != null) tag.putString("Say2", net.minecraft.network.chat.Component.Serializer.toJson(saySecond, level.registryAccess()));
+            tag.putLong("SayT", sayT);
+        }
     }
 
     @Override
@@ -471,6 +642,13 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         syncedLock = tag.contains("Lock") ? tag.getInt("Lock") : -1;
         lockStart = tag.getLong("LockStart");
         badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
+        alarmShown = tag.getBoolean("Alarm");
+        if (level != null && tag.contains("SayT") && tag.getLong("SayT") != sayT) {
+            sayT = tag.getLong("SayT");
+            sayFirst = net.minecraft.network.chat.Component.Serializer.fromJson(tag.getString("Say"), level.registryAccess());
+            saySecond = tag.contains("Say2") ? net.minecraft.network.chat.Component.Serializer.fromJson(tag.getString("Say2"), level.registryAccess()) : null;
+            if (level.isClientSide && sayFirst != null) com.coolfreeze23.headinajar.client.HeadSpeech.heard(worldPosition, SAY_HEIGHT, sayT, sayFirst, saySecond);
+        }
     }
 
     /**

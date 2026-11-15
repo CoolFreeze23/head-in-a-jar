@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:staffed",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "lunch_is_served"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:nutrient_broth_bucket"
+    },
+    "title": {
+      "translate": "advancements.headinajar.lunch_is_served.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.lunch_is_served.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

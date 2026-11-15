@@ -37,6 +37,17 @@ public class TurretPedestalBlock extends HeadHolderBlock<TurretPedestalBlockEnti
         return UPPER;
     }
 
+    /** The comparator: 15 while its Lookout is alarmed or its head has a target, and for 2 s after. */
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof TurretPedestalBlockEntity t ? t.signal() : 0;
+    }
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return LOWER;

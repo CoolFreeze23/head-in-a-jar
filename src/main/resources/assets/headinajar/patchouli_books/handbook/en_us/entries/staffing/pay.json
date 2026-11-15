@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A placed head is a $(l)trophy$() until someone pays it by hand: use its wage on it, wheat for a cow, two rotten flesh for a zombie. That hires it, and the payer is its employer."
+      "text": "A placed head is a $(l)trophy$() until someone hires it: by paying its wage by hand (wheat for a cow, two rotten flesh for a zombie) or by giving it $(l:headinajar:staffing/desk)lunch$(/l). Whoever does is its employer."
     },
     {
       "type": "patchouli:text",
@@ -28,7 +28,20 @@
     },
     {
       "type": "patchouli:text",
-      "text": "A villager head is never paid by hand: an emerald in hand opens its trades, as it always has.$(br2)Slimes, ghasts, tadpoles and a few others draw no wage, so they stay trophies.$(br2)$(o)A pizza party is not a pay rise.$()"
+      "text": "A villager head is never paid by hand: an emerald in hand opens its trades, as it always has. Lunch hires it, and slimes, ghasts, tadpoles and the others that draw no wage."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "At dawn, on lunch: fed, +5 (up to 60); hungry, -5 (down to 30).$(br)Colleague of its department within 8: +2. Rival within 4: -5. A dislike: -5.$(br)Any time: cake, +40, once a day; sampled, -10.",
+      "title": "Form 40-M (3)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Dislikes$(): panda, thunder; bee, enderman, rain; polar bear, heat; zombie, drowned, zombie villager, skeleton, phantom, open sky; blaze, rain, water; strider, outside the Nether; snow golem, warmth, rain; hoglin, warped fungus."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Rivals$(): villager and zombie villager, pillager or vindicator; skeleton and wolf; piglin and wither skeleton; creeper and cat or ocelot; spider and armadillo.$(br2)$(o)A pizza party is not a pay rise.$()"
     }
   ]
 }

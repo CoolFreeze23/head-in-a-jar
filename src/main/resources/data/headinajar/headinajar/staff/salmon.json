@@ -1,5 +1,12 @@
 {
   "entity": "minecraft:salmon",
   "wage": "none",
-  "noise": "staff.headinajar.noise.salmon"
+  "noise": "staff.headinajar.noise.salmon",
+  "bells": 3,
+  "alarm": "minecraft:entity.salmon.flop",
+  "lines": {
+    "complaint.smell": 1,
+    "complaint.overtime": 1,
+    "lookout": 1
+  }
 }

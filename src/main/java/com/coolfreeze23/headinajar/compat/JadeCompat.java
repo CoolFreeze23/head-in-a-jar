@@ -38,6 +38,8 @@ public class JadeCompat implements IWailaPlugin {
         registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity.class);
         registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity.class);
         registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.class);
+        // a Leech Jar says why it cannot draw the head it touches (bloodless, or too thick a hide)
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.LeechJarBlockEntity.class);
         registration.registerEntityDataProvider(new JadeStaffData.Entities(), Mob.class);
     }
 

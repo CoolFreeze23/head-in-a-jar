@@ -506,6 +506,8 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, GANTRY_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, GANTRY_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.items(), com.coolfreeze23.headinajar.block.AssemblyGantryBlockEntity.ROLES, side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CRADLE_BE.get(), (be, side) -> be.saline());
+        // a placed head's bowl takes Nutrient Broth by pipe from any side but the top, once the head is staff
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, JARRED_HEAD_BE.get(), (be, side) -> side == net.minecraft.core.Direction.UP ? null : be.pipes());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, MIXER_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MIXER_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.items(), com.coolfreeze23.headinajar.block.SalineMixerBlockEntity.ROLES, side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, MIXER_BE.get(), (be, side) -> be.pipes());

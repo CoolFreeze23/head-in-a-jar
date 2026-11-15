@@ -2,6 +2,58 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.6.1 (2026-11-16)
+
+- **Every head has a title and a bell.** A placed head's tooltip, Jade and file card give its job title ("Canteen
+  Supervisor", "Grief Counsellor", "Sleep Auditor"; a villager's is its profession). **Use** a placed head with an
+  empty hand: the bell rings, it looks up, nods and says a line in its own noise with HR's translation, over the jar
+  for 5 seconds for everyone within 16 blocks and on your action bar: "Moo." (HR translates: "Is there a canteen?").
+  Every species has two to four lines and never says the same one twice running. A villager head still opens its
+  trades. A big head in a big jar (a warden in a Reinforced Jar, a ghast in an Executive one) says "It is a snug fit."
+  the first time it is ever rung. A goat's head is drawn raised in its jar, looking out, so it is no longer tiny.
+- **Lunch.** The plinth has a bowl. **Use** a Nutrient Broth Bucket on it: the bowl fills (1,000 mB, three in-game days)
+  and the empty bucket comes back. The first lunch hires a trophy, villagers and wage-less creatures included; after
+  that a pipe may top the bowl up from any side but the top. A spoon taps the bowl now and then while it eats. The
+  bowl's broth stays in the head when you break it.
+- **Desk jobs.** A fed head works. Eighteen species have a job: a cow makes broth near it last longer, a sheep gives
+  wool to shears and takes dye, a mooshroom gives stew to a bowl, a chicken clucks the hour, a cat keeps creepers off
+  and leaves its employer a gift after a night's sleep, a blaze makes furnaces beside it cook a quarter faster, a ghast
+  cries a tear at dawn (and wails at night), a piglin barters a gold ingot (and turns, off a Nether block, outside the
+  Nether), an allay fetches dropped items of the kind you gave it into a chest, a frog croaks before rain, a squid
+  gives ink to a glass bottle, a goat gives up its horns, a sniffer digs up a seed, an iron golem cheers villager heads
+  and hands out a poppy, an evoker turns blue sheep red, a warden logs every sound within 16 blocks (and does not like
+  a noisy floor), a zombie answers the door, and a fed villager reads its best offer when you ring it with an emerald.
+- **Morale does work.** Engaged heads do their timed work (a blaze's furnaces, a piglin's inspection) a fifth faster
+  and Disengaged ones at half speed, a Disengaged ghast cries two tears, and a Disengaged head complains over its jar every two minutes ("Moo." (HR translates: "I was promised dental.")). At dawn a fed head gains
+  5 (never above 60 from lunch alone) and a hungry one loses 5 (never below 30); a colleague of its department within 8
+  blocks is +2, a rival within 4 is -5, and something its species dislikes (rain for a bee, open sky for a zombie) is
+  -5. A cake used on a staff head is +40, once a day ("It is not hungry for cake."). DOLORES writes the first time one
+  of your heads is Disengaged.
+- **Every head fits a Turret Pedestal.** The thirteen heads that attacked still do, with today's numbers. Any other head
+  is a **Lookout**: "Cow head: no attack. It will keep watch and raise the alarm." It watches 16 blocks (never
+  through walls), raises its own species' alarm with a double ding every 5 seconds while a hostile is in sight, makes
+  it glow for everyone, and deals no damage; 1 FE/t watching, 2 alarmed. **A comparator** on either cell of a Turret
+  Pedestal reads 15 while its Lookout is alarmed or its head has a target, and for 2 seconds after: the mod's first
+  comparator output.
+- **The Living Library.** Any placed head, and any head at a Turret Pedestal, Employee Mount, Neural Socket or Cerebral
+  Array, gives one blood sample a day to the right sampling tool, quality 70 to 95 (50 to 75 for a trophy or a head
+  whose bowl is empty), with no harm done; it winces. A Leech Jar touching a plinth draws the head once a day and farms
+  creatures the rest of the time. "It gave blood today. HR insists on a day's rest."
+- **Staff stay with their employers.** Only a head's employer, or someone they trust, may take a head with an employer
+  off its plinth or draw its blood: "Bessie reports to Steve. Ask them to trust you." A head nobody employs is
+  anyone's, as before; whoever sets a head down employs it, trophy or not. A member of staff taken off its plinth, or out of a Turret Pedestal, says goodbye ("Clearing
+  my desk.").
+- Three advancements: Lunch Is Served, Neighbourhood Watch and Blood Bank. Four memos from DOLORES. The Employee
+  Handbook has new pages on desk jobs, Lookouts and the Living Library. New server values `heads.deskJobs`,
+  `heads.lookouts`, `heads.wardenDarkness`, `heads.livingLibrary` and `staff.complaints`.
+- Fixed: a Turret Pedestal's arrows (and its fireballs, snowballs and potions) started inside the mount itself, so a
+  skeleton, stray or bogged head's arrows stuck in it and never reached anything (0.6.0 did the same). They now leave from outside it, and turrets in old worlds start hitting.
+- Eight new sounds with subtitles ("Desk bell rings", "Lookout raises the alarm", "Warden head shushes"...).
+- Worlds from 0.6.0 load as they are. A trophy head does nothing new until it is fed or rung, except that a Leech
+  Jar beside it now draws it once a day. The Array, Mount and Socket numbers and an attacking Turret's are unchanged;
+  a Turret holding a head with no attack is now a Lookout and draws 1 to 2 FE/t instead of its old idle draw. A 0.6.1
+  game can join a 0.6.0 server; a 0.6.0 game cannot join a 0.6.1 server (new sounds). Update both.
+
 ## 0.6.0 (2026-11-15)
 
 - **The saw reads a table.** Before anything spins up, the Surgical Saw now says why it will not cut, each case in

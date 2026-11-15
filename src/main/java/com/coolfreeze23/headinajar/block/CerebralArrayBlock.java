@@ -26,6 +26,23 @@ public class CerebralArrayBlock extends KitMachineBlock<CerebralArrayBlockEntity
         builder.add(BROTH);
     }
 
+    /** A sampling tool draws from the first director that has not given today (the Living Library). */
+    @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, net.minecraft.world.level.Level level,
+                                                                  net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
+                                                                  net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
+        if (stack.getItem() instanceof com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem && level.getBlockEntity(pos) instanceof CerebralArrayBlockEntity a) {
+            if (level.isClientSide) return net.minecraft.world.ItemInteractionResult.SUCCESS;
+            if (HeadDonor.array((net.minecraft.server.level.ServerPlayer) player, stack, hand, a)) return net.minecraft.world.ItemInteractionResult.CONSUME;
+        }
+        if (stack.is(net.minecraft.world.item.Items.CAKE) && level.getBlockEntity(pos) instanceof CerebralArrayBlockEntity a && a.heads() > 0) {
+            if (!level.isClientSide) com.coolfreeze23.headinajar.feedback.Refusals.deny((net.minecraft.server.level.ServerPlayer) player,
+                    com.coolfreeze23.headinajar.feedback.Refuser.at(a), "staff.board_cake");
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+
     @Override
     public MachineTopBlock.Kind topKind() {
         return MachineTopBlock.Kind.CEREBRAL_ARRAY;

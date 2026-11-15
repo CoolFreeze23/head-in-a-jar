@@ -239,7 +239,8 @@ public class SmokeClient {
         switch (parts[0]) {
             case "station", "staffed" -> StationProbe.run(mc, parts, report); // the stations' numbers, for the old-world check
             case "card", "chatlift" -> report.add(StaffProbe.run(mc, parts)); // the Personnel File and the chat over the bars
-            case "staffbadge", "staffband", "headsize", "staffshake", "headlook", "lanyards" -> report.add(HeadBoard.run(mc, parts)); // the species board and the staff look
+            case "staffbadge", "staffband", "headsize", "staffshake", "headlook", "lanyards",
+                 "bowlforboard", "momentforfilm", "lookforboard", "curvesfornotes", "linesforbench", "bowlforbench", "headevents" -> report.add(HeadBoard.run(mc, parts)); // the species board, the staff look, the desk
             case "perf" -> {
                 // perf NAME TICKS: frame times over TICKS ticks, no capture; the frame cap is lifted; the script carries on
                 String[] args = parts[1].split(" ");
@@ -267,7 +268,7 @@ public class SmokeClient {
             case "bystander" -> {
                 // bystander VERB ...: the stand-in second player (Bystander.java); its actions are observed like inputs
                 String[] a = line.split("\\s+");
-                if (java.util.Set.of("useblock", "useitem", "useentity", "attack", "sneak", "swing", "button", "key", "drive", "chair", "operate", "form", "close").contains(a[1])) {
+                if (java.util.Set.of("useblock", "useitem", "useentity", "attack", "mine", "sneak", "swing", "button", "key", "drive", "chair", "operate", "form", "close").contains(a[1])) {
                     observer.begin(line, 0, Bystander.position());
                 } else {
                     observer.setup(line);

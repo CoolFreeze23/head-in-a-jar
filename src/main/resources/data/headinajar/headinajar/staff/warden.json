@@ -1,5 +1,17 @@
 {
   "entity": "minecraft:warden",
   "wage": "none",
-  "noise": "staff.headinajar.noise.warden"
+  "noise": "staff.headinajar.noise.warden",
+  "bells": 4,
+  "desk": "warden",
+  "alarm": "minecraft:entity.warden.sonic_charge",
+  "dislikes": [
+    "noise"
+  ],
+  "lines": {
+    "complaint.smell": 1,
+    "complaint.manager": 1,
+    "complaint.union": 1,
+    "lookout": 1
+  }
 }

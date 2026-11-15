@@ -4,5 +4,16 @@
     "item": "minecraft:rotten_flesh",
     "count": 2
   },
-  "noise": "staff.headinajar.noise.zombie_villager"
+  "noise": "staff.headinajar.noise.zombie_villager",
+  "bells": 3,
+  "alarm": "minecraft:entity.zombie_villager.ambient",
+  "dislikes": [
+    "open_sky"
+  ],
+  "lines": {
+    "complaint.manager": 1,
+    "complaint.dental": 1,
+    "goodbye": 1,
+    "lookout": 1
+  }
 }

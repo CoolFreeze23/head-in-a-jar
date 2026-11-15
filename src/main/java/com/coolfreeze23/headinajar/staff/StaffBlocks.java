@@ -66,6 +66,7 @@ public final class StaffBlocks {
         head.firstLook();
         if (fresh) Staff.numbered(by, f);
         show(head, f);
+        com.coolfreeze23.headinajar.clarity.Memos.send(by, com.coolfreeze23.headinajar.clarity.Memos.Memo.FIRST_HEAD_PLACED);
     }
 
     /** What clients see of a plinth head: the badge while on the payroll, and the band. */
@@ -117,14 +118,26 @@ public final class StaffBlocks {
             ServerPlayer employer = f.employer == null || level.getServer() == null ? null : level.getServer().getPlayerList().getPlayer(f.employer);
             if (employer != null) com.coolfreeze23.headinajar.clarity.Memos.send(employer, com.coolfreeze23.headinajar.clarity.Memos.Memo.UNPAID_DAWN, Staff.name(f));
         }
+        // lunch, colleagues, rivals and dislikes, then the daily desk jobs
+        if (level instanceof ServerLevel server) com.coolfreeze23.headinajar.block.DeskJobs.dawn(server, pos, head, f);
         f.lowDawns = f.morale < Band.DISENGAGED_AT ? f.lowDawns + 1 : 0;
         head.setStaff(f);
         show(head, f);
     }
 
     private static void move(StaffFile f, int by) {
-        if (!com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.MORALE, true)) return;
-        f.morale = Math.max(0, Math.min(100, f.morale + by));
+        f.morale = moved(f, by);
+    }
+
+    /** Morale after a change of {@code by} (0 to 100); unchanged when morale is off. */
+    public static int moved(StaffFile f, int by) {
+        if (!com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.MORALE, true)) return f.morale;
+        return Math.max(0, Math.min(100, f.morale + by));
+    }
+
+    /** Moves a member of staff's morale (a cake, a sample, a dawn's modifier); a trophy has none to move. */
+    public static void adjust(StaffFile f, int by) {
+        if (f != null && f.staff()) move(f, by);
     }
 
     private static void cheer(Level level, BlockPos pos) {

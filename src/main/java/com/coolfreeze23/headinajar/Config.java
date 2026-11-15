@@ -90,6 +90,26 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue MORALE = B
             .comment("Staff morale moves with their pay (false: morale never moves and everyone shows Content; wages are still taken).")
             .define("morale", true);
+    public static final ModConfigSpec.BooleanValue COMPLAINTS = B
+            .comment("Disengaged heads on plinths complain over their jars every two minutes (false: they sulk in silence).")
+            .define("complaints", true);
+
+    static {
+        B.pop().push("heads");
+    }
+
+    public static final ModConfigSpec.BooleanValue DESK_JOBS = B
+            .comment("Fed heads on plinths do their desk jobs (false keeps titles, bells and lunch, but no desk jobs).")
+            .define("deskJobs", true);
+    public static final ModConfigSpec.BooleanValue LOOKOUTS = B
+            .comment("A head with no attack fits a Turret Pedestal as a Lookout (false brings back the \"nothing to shoot with\" refusal).")
+            .define("lookouts", true);
+    public static final ModConfigSpec.BooleanValue WARDEN_DARKNESS = B
+            .comment("A warden head with a Grievance shrieks and gives Darkness to every player within 16 blocks.")
+            .define("wardenDarkness", true);
+    public static final ModConfigSpec.BooleanValue LIVING_LIBRARY = B
+            .comment("Placed and station heads give one blood sample a day to a sampling tool or a Leech Jar (false: tools do nothing on heads).")
+            .define("livingLibrary", true);
 
     static {
         B.pop();

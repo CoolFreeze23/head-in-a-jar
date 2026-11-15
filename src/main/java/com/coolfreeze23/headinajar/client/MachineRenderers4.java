@@ -123,13 +123,40 @@ public final class MachineRenderers4 {
             if (pitch != null) pose.mulPose(pitch.getModelSpaceMatrix());
             pose.translate(0, 2 / 16.0, 0);
             if (info.type() != null) {
-                JarredHeadRenderer.drawJar(info.type(), info.villagerData(), info.size(), info.jar(), pose, buffers, light, t.getLevel().getGameTime() + partial, 0, 0, 1);
+                float age = t.getLevel().getGameTime() + partial;
+                JarredHeadRenderer.drawJar(info.type(), info.villagerData(), info.size(), info.jar(), pose, buffers, light, age, 0, 0, 1,
+                        JarredHeadRenderer.Extra.ripple(ripple(t, age)));
             } else {
                 pose.translate(0, 0.25, 0);
                 net.minecraft.client.Minecraft.getInstance().getItemRenderer().renderStatic(t.head(), net.minecraft.world.item.ItemDisplayContext.FIXED, light,
                         net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, pose, buffers, null, 0);
             }
             pose.popPose();
+        }
+
+        /** Per turret: how stirred its saline is now (0-1), and when that was last worked out. */
+        private static final java.util.Map<com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity, float[]> RIPPLE = new java.util.WeakHashMap<>();
+
+        /**
+         * A Lookout raising the alarm stirs its jar's saline: the stir eases in (a third of the way each tick) when the
+         * alarm shows and dies away more slowly (a tenth a tick) after it, so the fluid never starts or stops in one frame.
+         */
+        private static float ripple(com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity t, float age) {
+            boolean on = t.alarmShown();
+            float[] s = RIPPLE.get(t);
+            if (s == null) {
+                if (!on) return 0;
+                s = new float[]{0, age};
+                RIPPLE.put(t, s);
+            }
+            float dt = Math.max(0, Math.min(20, age - s[1]));
+            s[1] = age;
+            s[0] += ((on ? 1 : 0) - s[0]) * (1 - (float) Math.pow(on ? 2 / 3f : 0.9f, dt));
+            if (!on && s[0] < 0.005f) {
+                RIPPLE.remove(t);
+                return 0;
+            }
+            return s[0];
         }
     }
 

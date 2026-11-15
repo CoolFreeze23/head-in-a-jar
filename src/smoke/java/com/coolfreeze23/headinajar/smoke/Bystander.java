@@ -241,6 +241,19 @@ final class Bystander {
                 return "bystander useblock -> vehicle " + vehicle() + ", menu " + player.containerMenu.getClass().getSimpleName()
                         + (pending ? ", DROPPED by the server: a teleport not yet confirmed" : "");
             }
+            case "mine" -> {
+                // mine X Y Z [FACE] | mine stop X Y Z [FACE]: starts (or finishes) breaking a block, the real
+                // ServerboundPlayerActionPacket path (in creative a start breaks at once, as a click does)
+                boolean stop = a[2].equals("stop");
+                int at = stop ? 3 : 2;
+                Direction face = a.length > at + 3 ? Direction.byName(a[at + 3]) : Direction.UP;
+                var action = stop ? net.minecraft.network.protocol.game.ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK
+                        : net.minecraft.network.protocol.game.ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK;
+                BlockPos pos = pos(a, at);
+                player.connection.handlePlayerAction(new net.minecraft.network.protocol.game.ServerboundPlayerActionPacket(action, pos, face, sequence++));
+                if (!stop) player.connection.handleAnimate(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                return "bystander mine " + (stop ? "stop " : "") + pos.toShortString() + " -> " + BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock());
+            }
             case "useitem" -> {
                 player.connection.handleUseItem(new ServerboundUseItemPacket(InteractionHand.MAIN_HAND, sequence++, player.getYRot(), player.getXRot()));
                 return "bystander useitem " + Harness.stackName(player.getMainHandItem());
