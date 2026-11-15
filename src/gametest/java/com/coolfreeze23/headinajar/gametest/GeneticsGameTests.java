@@ -123,7 +123,10 @@ public class GeneticsGameTests {
         ServerPlayer p = player(h, FLOOR);
         var guardian = h.spawn(EntityType.ELDER_GUARDIAN, FLOOR.east(3).above());
         ItemStack syringe = new ItemStack(ModRegistry.PRECISION_SYRINGE.get()), needle = new ItemStack(ModRegistry.LEVIATHAN_NEEDLE.get());
+        int refused = com.coolfreeze23.headinajar.block.HeadDonor.TOOLS_REFUSED;
         h.assertTrue(ModRegistry.PRECISION_SYRINGE.get().draw(p, syringe, guardian, InteractionHand.MAIN_HAND) == InteractionResult.FAIL, "syringe pierced a boss");
+        // the hide's no is a refusal like the same tool on its placed head: the line, the refusal sound and a shake
+        h.assertValueEqual(com.coolfreeze23.headinajar.block.HeadDonor.TOOLS_REFUSED, refused + 1, "the thick hide refused with sound and shake");
         h.assertTrue(ModRegistry.LEVIATHAN_NEEDLE.get().draw(p, needle, guardian, InteractionHand.MAIN_HAND) == InteractionResult.CONSUME, "needle failed on a boss");
         guardian.discard();
         done(h, p);
@@ -286,10 +289,13 @@ public class GeneticsGameTests {
             h.assertTrue(ModRegistry.SERUM_CASSETTE.get().inject(p, stack, chimera) == InteractionResult.CONSUME, "port " + i + " refused");
         }
         h.assertTrue(Genetics.genes(chimera).serums.size() == 3, "chimera does not hold three serums");
+        int refused = GeneticsItems.SerumItem.REFUSED;
         h.assertTrue(ModRegistry.SERUM_CASSETTE.get().inject(p, cassette(serum(100, Gene.GILLS)), chimera) == InteractionResult.FAIL, "a fourth serum fit");
         MechaEntity hopper = h.spawn(ModRegistry.HOPPER.get(), FLOOR.west(3));
         hopper.setOwner(p.getUUID());
         h.assertTrue(ModRegistry.SERUM_CASSETTE.get().inject(p, cassette(serum(100, Gene.GILLS)), hopper) == InteractionResult.FAIL, "a Hopper took a serum");
+        // each no is a refusal (its sound and visual), not the welcome sound under a line
+        h.assertValueEqual(GeneticsItems.SerumItem.REFUSED, refused + 2, "refused with the refusal sound");
         done(h, p);
     }
 

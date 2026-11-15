@@ -100,7 +100,7 @@ public class ShellWearGameTests {
             else old.add(c);
         }
         h.assertTrue(optional, "the shell channel is not optional");
-        h.assertValueEqual(Network.VERSION, "5", "the network version");
+        h.assertValueEqual(Network.VERSION, "6", "the network version");
         for (boolean oldServer : new boolean[]{false, true}) {
             var r = oldServer ? net.neoforged.neoforge.network.negotiation.NetworkComponentNegotiator.negotiate(old, ours)
                     : net.neoforged.neoforge.network.negotiation.NetworkComponentNegotiator.negotiate(ours, old);

@@ -166,6 +166,8 @@ public abstract class LabMachine extends BlockEntity implements MenuProvider, Ha
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         if (player instanceof ServerPlayer server) Network.syncArchive(server);
+        // the Sequencer's Staff Directory tab reads the key's Directory too
+        if (kind == LabMenu.Kind.DNA_SEQUENCER && player instanceof ServerPlayer server) com.coolfreeze23.headinajar.genetics.Directory.sync(server);
         return new LabMenu(kind, id, inventory, items, data, worldPosition);
     }
 }

@@ -61,6 +61,27 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
      * for a creature whose model has no turning head, the body) 25 degrees either way, period 6 ticks, over 12 ticks.
      */
     public static final int STAFF_SHAKE = 16;
+    // 0.6.2's genes and the printer (an old client drops a kind it does not know)
+    /** Phase: a = where the dash left, b = where it arrived, entityA = the body (a REVERSE_PORTAL trail between). */
+    public static final int GENE_PHASE = 17;
+    /** Tongue: a = the mouth, b = the tip's farthest point, entityA = the body, entityB = what it caught or -1, arg = 1 eaten. */
+    public static final int GENE_TONGUE = 18;
+    /** Snow Pounce lands: a = where, entityA = the body, arg = creatures caught. */
+    public static final int GENE_POUNCE = 19;
+    /** Roll Up: entityA = the body, arg = ticks it stays curled (0: uncurled), so the client mirrors the pose. */
+    public static final int GENE_ROLL_UP = 20;
+    /** Puffer: entityA = the body, arg = ticks puffed (0: deflated). */
+    public static final int GENE_PUFFER = 21;
+    /** A host printed from a template steps out: a = the doorstep, entityB = the host. Each client plays only the shake. */
+    public static final int PRINTED = 22;
+    /** Spit Gland: a = the mouth, entityA = the body (a jar's lid hops in jar form). */
+    public static final int GENE_SPIT = 23;
+    /** Fang Line cast: a = the caster's feet, entityA = the body, arg = 1 a ring, 0 a line. */
+    public static final int GENE_FANGS = 24;
+    /** Weeping Glands: entityA = the body, arg = 1 a tear dropped, 0 a sob (a mecha's cockpit fogs). */
+    public static final int GENE_WEEP = 25;
+    /** Spare kinds kept for the gene work: 26-27 Livestock and Field Office, 28 Night Shift and the rest, 29 actives. */
+    public static final int GENE_SPARE_A = 26, GENE_SPARE_B = 27, GENE_SPARE_C = 28, GENE_SPARE_D = 29;
 
     public static final int TOOL_SYRINGE = 1, TOOL_SUTURE = 2, TOOL_WRENCH = 3;
 

@@ -124,6 +124,7 @@ public class SurgicalSawItem extends Item {
             if (mob.getType() == EntityType.SLIME) com.coolfreeze23.headinajar.Advance.grant(server, "entirely_head");
             offhand.consume(1, player);
             com.coolfreeze23.headinajar.form.FormActions.give(server, head);
+            com.coolfreeze23.headinajar.genetics.Directory.file(server, mob.getType(), com.coolfreeze23.headinajar.genetics.Directory.Stamp.JARRED);
             return InteractionResult.CONSUME;
         }
         HostData data = Hosts.data(mob);

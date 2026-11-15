@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:out_for_blood",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "complete_census"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:dna_sequencer"
+    },
+    "title": {
+      "translate": "advancements.headinajar.complete_census.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.complete_census.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

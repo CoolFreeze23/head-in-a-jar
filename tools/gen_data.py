@@ -139,6 +139,7 @@ import gen_p12_machines; gen_p12_machines.run(EN, PT, write, shaped)  # machines
 import gen_p13_followups; gen_p13_followups.run(EN, PT, write, shaped)  # follow-ups seen in the game
 import gen_p15_repairs2; gen_p15_repairs2.run(EN, PT, write, shaped)  # what a new player's playthrough found
 import gen_p16_decisions; gen_p16_decisions.run(EN, PT, write, shaped)  # what a bare jar may work, the handbook, power lines
+import gen_p39_dna; gen_p39_dna.early(EN, PT)  # the 0.6.2 genes' names and carriers, before the lists of who carries what
 import gen_p16_repairs3; gen_p16_repairs3.run(EN, PT, write, shaped)  # warnings before a costly knock, deaths, lab and chair repairs
 import gen_p13_chair
 gen_p13_chair.run(EN, PT, write, shaped)
@@ -165,6 +166,7 @@ import gen_p35_sound; gen_p35_sound.run(EN, PT, write, shaped)  # the sound fami
 import gen_p36_release54; gen_p36_release54.run(EN, PT, write, shaped)  # the 0.5.4 release's own fixes
 import gen_p37_foundations; gen_p37_foundations.run(EN, PT, write, shaped)  # the 0.6.0 release: the saw's table, staff files, pay
 import gen_p38_heads; gen_p38_heads.run(EN, PT, write, shaped)  # the 0.6.1 release: titles, the bell, lunch, desk jobs, Lookouts, the Living Library
+import gen_p39_dna; gen_p39_dna.run(EN, PT, write, shaped)  # the 0.6.2 release: a gene for every creature, the Staff Directory, Print-to-Order
 import gen_p27_clarity; gen_p27_clarity.run(EN, PT, write, shaped)  # HUD, tooltips, memos, career advancements, the handbook
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)

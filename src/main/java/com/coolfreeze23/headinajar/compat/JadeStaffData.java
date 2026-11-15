@@ -138,6 +138,8 @@ final class JadeStaffData {
         @Override
         public void appendServerData(CompoundTag data, EntityAccessor accessor) {
             if (!(accessor.getEntity() instanceof Mob mob)) return;
+            // a host printed to order says so (the host line itself is drawn from the client's host data)
+            if (com.coolfreeze23.headinajar.host.PrintedHosts.printed(mob)) data.putBoolean("Printed", true);
             StaffFile f = Staff.of(mob);
             if (f == null) return;
             String dept = Hosts.isHost(mob) && Hosts.data(mob).shell ? Staff.TEMPS : Staff.department(mob.getType());
@@ -160,6 +162,7 @@ final class JadeStaffData {
         }
         if (data.contains("Leech")) out.add(Component.translatable("jade.headinajar.library." + data.getString("Leech")));
         staff(data, out);
+        if (data.getBoolean("Printed")) out.add(Component.translatable("jade.headinajar.printed.no_loot"));
         // the title, when the viewer's language has one for it
         String title = data.getString("TitleKey");
         if (!title.isEmpty() && net.minecraft.locale.Language.getInstance().has(title)) {

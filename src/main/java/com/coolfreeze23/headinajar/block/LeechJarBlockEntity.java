@@ -235,7 +235,8 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, reach(), LeechJarBlockEntity::sampleable)) {
             // a Butcher on staff draws half again as much
             int base = Math.round((MIN + level.random.nextInt(MAX - MIN + 1)) * (1 + 0.5f * HeadJobs.staff(level, worldPosition, "butcher")));
-            ItemStack sample = GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), e.getType(), GeneticsItems.SyringeItem.quality(e, base));
+            ItemStack sample = com.coolfreeze23.headinajar.genetics.Samples.mark(GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), e.getType(),
+                    GeneticsItems.SyringeItem.quality(e, base)), com.coolfreeze23.headinajar.genetics.Samples.nitwit(e));
             for (int i = 0; i < items.getSlots(); i++) {
                 if (items.getStackInSlot(i).isEmpty()) {
                     items.setStackInSlot(i, sample);
@@ -258,6 +259,8 @@ public class LeechJarBlockEntity extends BlockEntity implements HasItems, com.co
             ItemStack stack = items.getStackInSlot(i);
             if (stack.isEmpty()) continue;
             FormActions.give((ServerPlayer) player, stack.copy());
+            // the samples are the emptier's now: the Staff Directory files their species as sampled
+            com.coolfreeze23.headinajar.genetics.Directory.file((ServerPlayer) player, GeneticsItems.species(stack), com.coolfreeze23.headinajar.genetics.Directory.Stamp.SAMPLED);
             items.setStackInSlot(i, ItemStack.EMPTY);
             n++;
         }

@@ -71,6 +71,7 @@ public class ClientSetup {
         NeoForge.EVENT_BUS.register(FormChangeClient.class);
         NeoForge.EVENT_BUS.register(BlockTooltips.class);
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
+        NeoForge.EVENT_BUS.addListener(com.coolfreeze23.headinajar.client.genes.NightShiftClient::movement); // Rampage: no sneaking on a streak
         com.coolfreeze23.headinajar.client.fx.FxClient.init(modBus);
     }
 
@@ -122,14 +123,8 @@ public class ClientSetup {
                         .gauge(52, 17, 12, 56, 1, 4000, 0xFF3F76E4, "gui.headinajar.water")
                         .arrowOf(70, 37, 3, 5)
                         .gauge(100, 17, 12, 56, 2, 4000, 0xFF5FC8C0, "gui.headinajar.saline"));
-        event.register(ModRegistry.PRINTER_MENU.get(), (com.coolfreeze23.headinajar.menu.BodyPrinterMenu menu, net.minecraft.world.entity.player.Inventory inv, net.minecraft.network.chat.Component title) ->
-                new MachineScreen<>(menu, inv, title).energy(250_000)
-                        .gauge(72, 17, 12, 40, 1, 4000, 0xFF5FC8C0, "gui.headinajar.saline")
-                        .arrow(92, 30, 2, 1200)
-                        // what a print takes, under the slots and the gauge, wrapped (the Portuguese runs as long)
-                        .wrappedLine(20, 60, 148, "gui.headinajar.printer.need")
-                        .noInventoryLabel()
-                        .button(120, 26, 48, 20, "gui.headinajar.printer.print", 0));
+        // the Body Printer: the shared machine panel with the Template slot and its lines
+        event.register(ModRegistry.PRINTER_MENU.get(), PrinterScreen::new);
     }
 
     private static void keys(RegisterKeyMappingsEvent event) {

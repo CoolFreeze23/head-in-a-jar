@@ -43,7 +43,13 @@ public final class Memos {
         FIRST_HEAD_PLACED("staffing/desk"),
         DISENGAGED("staffing/pay"),
         FIRST_HEAD_DRAW("research/library"),
-        FIRST_STATION_DRAW("research/library");
+        FIRST_STATION_DRAW("research/library"),
+        // 0.6.2
+        COW_APOLOGY("research/departments"),
+        SPLICER_SORTED("research/splicing"),
+        DIRECTORY_TEN("research/directory"),
+        CENSUS("research/directory"),
+        FIRST_SPECIES_PRINT("life_support/body_printer");
 
         public final String entry;
 

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-/** Which active genes the ability and secondary keys fire, in the side column, while your body, your host or your mecha carries any. */
+/** Which active genes the ability and secondary keys fire (and any past the second, which have no key), in the side column, while your body, your host or your mecha carries any. */
 public final class GeneHud {
     private GeneHud() {
     }
@@ -36,6 +36,10 @@ public final class GeneHud {
         for (int i = 0; i < Math.min(2, actives.size()); i++) {
             if (def != null && (i == 0 ? def.primary() : def.secondary()).isPresent()) continue;
             HudStack.text(g, Component.translatable("hud.headinajar.gene_key", keys[i], LabScreens.geneName(actives.get(i))), 0xFFB080FF);
+        }
+        // only two keys: a third active or later is listed as having none, so it is never silent
+        for (int i = 2; i < actives.size(); i++) {
+            HudStack.text(g, Component.translatable("hud.headinajar.gene_no_key", LabScreens.geneName(actives.get(i))), 0xFF8A7AA0);
         }
     }
 }

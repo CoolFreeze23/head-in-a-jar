@@ -77,8 +77,10 @@ public final class LabMachines {
             }
             EntityType<?> species = GeneticsItems.species(in);
             if (species == null) return null;
-            return new ItemStack[]{GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), species, GeneticsItems.quality(in)),
-                    new ItemStack(ModRegistry.PLASMA_VIAL.get())};
+            // a Nitwit's sample spins into a Nitwit's fraction: the flag goes with it
+            ItemStack fraction = com.coolfreeze23.headinajar.genetics.Samples.mark(GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), species,
+                    GeneticsItems.quality(in)), com.coolfreeze23.headinajar.genetics.Samples.nitwit(in));
+            return new ItemStack[]{fraction, new ItemStack(ModRegistry.PLASMA_VIAL.get())};
         }
 
         public static void serverTick(Level level, BlockPos pos, BlockState state, Centrifuge c) {
@@ -396,9 +398,11 @@ public final class LabMachines {
             ItemStack in = items.getStackInSlot(0);
             EntityType<?> species = GeneticsItems.species(in);
             if (species == null) return false;
-            List<Gene> genes = Gene.of(BuiltInRegistries.ENTITY_TYPE.getKey(species).toString());
+            List<Gene> genes = com.coolfreeze23.headinajar.genetics.Samples.genes(in);
             GeneArchive archive = GeneArchive.get(level.getServer());
             float gain = Genetics.readGain(GeneticsItems.quality(in), accuracy, genes.size());
+            // a read files the species with the owner's Staff Directory (automation's samples come by no hand)
+            com.coolfreeze23.headinajar.genetics.Directory.file(level.getServer(), owner, species, com.coolfreeze23.headinajar.genetics.Directory.Stamp.SAMPLED, null);
             for (Gene g : genes) archive.add(owner, g, gain);
             for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
                 if (!GeneArchive.key(p).equals(owner)) continue;
@@ -749,6 +753,8 @@ public final class LabMachines {
         @Override
         public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, net.minecraft.world.entity.player.Inventory inventory, net.minecraft.world.entity.player.Player player) {
             kit.startOpen(player);
+            // the first Splicer a player opens since 0.6.2: the gene list is sorted by department now
+            if (player instanceof ServerPlayer sp) com.coolfreeze23.headinajar.clarity.Memos.send(sp, com.coolfreeze23.headinajar.clarity.Memos.Memo.SPLICER_SORTED);
             return super.createMenu(id, inventory, player);
         }
 

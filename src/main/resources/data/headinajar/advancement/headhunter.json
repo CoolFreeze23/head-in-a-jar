@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:staffed",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "headhunter"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:jarred_head"
+    },
+    "title": {
+      "translate": "advancements.headinajar.headhunter.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.headhunter.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

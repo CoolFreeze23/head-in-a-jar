@@ -194,9 +194,10 @@ public final class Network {
      * The version of the mod's payloads. A client and a server with different versions are refused at the handshake with
      * NeoForge's reason ("The client wants the payload to be version: 4, but the server wants it to be version: 5!"),
      * before they can disagree about anything else. Raised whenever what is sent changes shape, including a mecha's synced
-     * data (5: the remembered blows, which move the later fields' ids).
+     * data (5: the remembered blows, which move the later fields' ids; 6: the Body Printer's Template slot and the Safety
+     * Placard's wider notice property).
      */
-    public static final String VERSION = "5";
+    public static final String VERSION = "6";
 
     public static void register(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(VERSION);
@@ -253,6 +254,8 @@ public final class Network {
         });
         // the file card and its rename, optional in the same way (added in 0.6.0 under the same version)
         com.coolfreeze23.headinajar.staff.StaffNet.register(registrar.optional());
+        // the Staff Directory's sets (added in 0.6.2), optional too: the Sequencer's tab and the Bio-Scanner read them
+        com.coolfreeze23.headinajar.genetics.Directory.register(registrar.optional());
     }
 
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */

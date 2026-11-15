@@ -1660,6 +1660,76 @@
    "steps": [
     "headblock {T} minecraft:zombie,minecraft:zombie,minecraft:zombie,minecraft:zombie,minecraft:zombie"
    ]
+  },
+  "splicer stocked (lab), screen open": {
+   "late": [
+    "lab"
+   ],
+   "pre": [
+    "key use",
+    "wait 15"
+   ]
+  },
+  "splicer, empty library (a team of one), screen open": {
+   "late": [
+    "/team add cwempty",
+    "/team join cwempty @s"
+   ],
+   "pre": [
+    "key use",
+    "wait 15"
+   ],
+   "post": [
+    "/team leave @s",
+    "/team remove cwempty"
+   ],
+   "approx": "the library is emptied by putting the player on a new scoreboard team (the library key is the team)"
+  },
+  "sequencer screen open": {
+   "pre": [
+    "key use",
+    "wait 15"
+   ]
+  },
+  "sequencer screen open on the Directory tab": {
+   "pre": [
+    "key use",
+    "wait 15",
+    "at rel 40 -11",
+    "wait 10"
+   ]
+  },
+  "printer loaded, screen open, the item on the cursor": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:2000}},Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8}]}}"
+   ]
+  },
+  "printer loaded, screen open": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:2000}},Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8}]}}"
+   ],
+   "pre": [
+    "key use",
+    "wait 15"
+   ]
+  },
+  "printer loaded with a cow template (quality 70), screen open": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:2000}},Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8},{Slot:4,id:\"headinajar:dna_fraction\",count:1,components:{\"minecraft:custom_data\":{Species:\"minecraft:cow\",Quality:70}}}]}}"
+   ],
+   "pre": [
+    "key use",
+    "wait 15"
+   ]
+  },
+  "printer loaded with a cow template (quality 30), screen open": {
+   "steps": [
+    "/data merge block {T} {Energy:200000,Saline:{Fluid:{id:\"headinajar:cranial_saline\",amount:2000}},Items:{Items:[{Slot:0,id:\"minecraft:rotten_flesh\",count:16},{Slot:1,id:\"minecraft:bone_block\",count:8},{Slot:2,id:\"minecraft:redstone_block\",count:4},{Slot:3,id:\"minecraft:slime_ball\",count:8},{Slot:4,id:\"headinajar:dna_fraction\",count:1,components:{\"minecraft:custom_data\":{Species:\"minecraft:cow\",Quality:30}}}]}}"
+   ],
+   "pre": [
+    "key use",
+    "wait 15"
+   ]
   }
  },
  "pairs": {
@@ -1746,6 +1816,59 @@
   },
   "P095": {
    "aim_check": "any"
+  },
+  "N118": {
+   "action": "at rel 26 22"
+  },
+  "N119": {
+   "action": "at rel 26 22 right"
+  },
+  "N120": {
+   "action": "at rel 26 22"
+  },
+  "N121": {
+   "action": "at rel 40 -11"
+  },
+  "N122": {
+   "action": "at rel 13 -11"
+  },
+  "N123": {
+   "item": "minecraft:air",
+   "late": [
+    "/give @s headinajar:blood_sample[minecraft:custom_data={Species:\"minecraft:cow\",Quality:70}]"
+   ],
+   "pre": [
+    "key use",
+    "wait 15",
+    "slot inv:9",
+    "mouse rel 104 50",
+    "wait 3"
+   ],
+   "action": "slot 4"
+  },
+  "N124": {
+   "item": "minecraft:air",
+   "late": [
+    "/give @s minecraft:rotten_flesh 4"
+   ],
+   "pre": [
+    "key use",
+    "wait 15",
+    "slot inv:9",
+    "mouse rel 104 50",
+    "wait 3"
+   ],
+   "action": "slot 4"
+  },
+  "N125": {
+   "item": "headinajar:dna_fraction[minecraft:custom_data={Species:\"minecraft:cow\",Quality:70}]",
+   "action": "slot item:headinajar:dna_fraction shift"
+  },
+  "N126": {
+   "action": "widget Print"
+  },
+  "N127": {
+   "action": "widget Print"
   }
  },
  "items_tokens": {

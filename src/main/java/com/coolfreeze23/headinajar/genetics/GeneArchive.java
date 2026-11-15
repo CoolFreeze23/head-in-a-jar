@@ -34,6 +34,11 @@ public final class GeneArchive extends SavedData {
         return library(key).getOrDefault(gene, 0f);
     }
 
+    /** Every key with a library (the Staff Directory's backfill reads them). */
+    public java.util.Set<String> keys() {
+        return java.util.Collections.unmodifiableSet(libraries.keySet());
+    }
+
     public void add(String key, Gene gene, float amount) {
         library(key).merge(gene, amount, (a, b) -> Math.min(100f, a + b));
         setDirty();

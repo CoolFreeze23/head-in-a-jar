@@ -75,6 +75,21 @@ public final class JarRenderer {
         return compact ? COMPACT : WIDE;
     }
 
+    /** How far the lid is lifted for the jar being drawn now (blocks), and the frame split into body and lid for it. */
+    private static float lidLift;
+    private static ModelPart[] lidParts;
+
+    /**
+     * The jar's frame in two parts, everything but the lid and valve, and those two, made from the frame's own baked
+     * cubes (so the hop draws exactly the jar the layer has, with nothing copied by hand). The lid and valve are the
+     * cubes wholly above the glass's top (y 12 in the model).
+     */
+    private static ModelPart[] splitFrame() {
+        java.util.List<ModelPart.Cube> body = new java.util.ArrayList<>(), lid = new java.util.ArrayList<>();
+        jar.frame().visit(new PoseStack(), (pose, path, index, cube) -> (cube.maxY <= 12.001f ? lid : body).add(cube));
+        return new ModelPart[]{new ModelPart(body, java.util.Map.of()), new ModelPart(lid, java.util.Map.of())};
+    }
+
     private static void bake() {
         var models = Minecraft.getInstance().getEntityModels();
         jar = JarModel.Parts.of(models.bakeLayer(JarModel.JAR));
@@ -87,6 +102,7 @@ public final class JarRenderer {
     /** Clears the baked parts after a resource reload. */
     public static void reset() {
         jar = null;
+        lidParts = null;
         wheelParts = null;
         com.coolfreeze23.headinajar.client.body.CollarRing.reset();
         com.coolfreeze23.headinajar.client.body.JarLife.reset();
@@ -137,9 +153,11 @@ public final class JarRenderer {
             com.coolfreeze23.headinajar.client.body.CollarRing.render(pose, buffers, light, player.getVehicle(), state.compact(), partialTick);
         }
         // the saline, the charge light, the cracks and the slosh, from the state every watcher already has
+        lidLift = com.coolfreeze23.headinajar.client.genes.ActivesClient.lidHop(player, partialTick); // a host's Tongue or Spit Gland hops the lid
         draw(pose, buffers, light, LivingEntityRenderer.getOverlayCoords(player, 0), player.getSkin().texture(),
                 headYaw - bodyYaw, pitch, player.tickCount + partialTick, state.charge() > 0, !state.goggles().isEmpty(), shape, false,
                 Vitals.of(state, player.getId(), 180.0f - bodyYaw));
+        lidLift = 0;
         helmet(player, state, pose, buffers, light);
         pose.popPose();
         speech(state, pose, buffers, light);
@@ -206,9 +224,20 @@ public final class JarRenderer {
         pose.scale(-1.0f, -1.0f, 1.0f);
         pose.translate(0.0f, -1.501f, 0.0f);
         scaled(pose, shape);
-        jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
-        // the charge lamp, set flush into the lid's top face
-        com.coolfreeze23.headinajar.client.body.JarLife.lamp(pose, buffers, light, vitals, age);
+        if (lidLift <= 0) {
+            jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+            // the charge lamp, set flush into the lid's top face
+            com.coolfreeze23.headinajar.client.body.JarLife.lamp(pose, buffers, light, vitals, age);
+        } else {
+            // the lid (and its lamp) lifted off the jar for a moment: the frame drawn in two parts
+            if (lidParts == null) lidParts = splitFrame();
+            lidParts[0].render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+            pose.pushPose();
+            pose.translate(0, -lidLift, 0);
+            lidParts[1].render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+            com.coolfreeze23.headinajar.client.body.JarLife.lamp(pose, buffers, light, vitals, age);
+            pose.popPose();
+        }
         pose.popPose();
 
         // the head bobs a little in the fluid and looks where it is told

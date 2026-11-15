@@ -559,6 +559,40 @@ Refusals: "Bodies are for heads in jars. Come back decapitated.", "Short 4 Slime
 again.", "Needs 200 kFE; has 100. Feed its Galvanic Pile.", "Printing already, 40 s to go.
 Wait for the body."
 
+#### Print-to-Order
+
+![The Body Printer at the end of a cow print: the cow's shape stands in the booth behind the glass door, the door swings open, the headless cow host walks out onto the doorstep, shakes itself in a spray of white droplets and stands; the lamp on top turns from amber to green](docs/images/print_to_order.gif)
+
+*A cow printed from a DNA Fraction: the host steps out of the door and shakes itself dry.*
+
+The printer has a fifth slot, the **Template**. Put a **DNA Fraction** of quality 40 or better in it and the printer
+prints a **headless host** of that species instead of your own body. The screen names the species and its size and
+shows the materials it needs. Anyone in any form may press **Print** for a species; the one who pressed it is the
+host's employer. A minute later the host steps out of the door, shakes itself like a wet dog and stands: "Your new Cow
+is ready. It is a little damp." Its freshness is the fraction's quality, its sync 0, and the fraction is used up. A
+printed villager has no job ("Printed villagers come without experience."). Printed hosts drop no loot when they die;
+Jade says "Printed. Drops nothing when it dies."
+
+The door is one block wide and two tall, and the materials follow the size:
+
+| Size | For example | Materials | Saline | Energy |
+|---|---|---|---|---|
+| Tiny (a quarter) | chicken, rabbit, bat, frog, parrot, cod, salmon, tropical fish, pufferfish, axolotl | 4 rotten flesh, 2 bone blocks, 1 redstone block, 2 slime balls | 500 mB | 50 kFE |
+| Small (a half) | pig, sheep, wolf, fox, cat, ocelot, armadillo, cave spider | 8, 4, 2, 4 | 1,000 mB | 100 kFE |
+| Medium (a full print) | cow, villager, witch, zombie, skeleton, creeper, blaze, piglin, squid, guardian, strider, llama | 16, 8, 4, 8 | 2,000 mB | 200 kFE |
+
+Marine models (squid, fish, dolphins, guardians, axolotls) are delivered into water: "Marine models are delivered wet.
+Flood the doorstep first." An undead model printed under open sky by day is warned about: "It burns in daylight.
+Collect it after dark, or under a roof." Breaking the printer mid-print gives back the materials it took and the
+template. With the slot empty the printer prints your own body exactly as before.
+
+Refusals: "Templates are DNA Fractions. Spin a Blood Sample first.", "Too poor a fraction to print from (quality 32).
+Bring 40 or more.", "That model will not fit through the door." (spider, panda, turtle), "That model is too tall for
+the booth.", "Bosses are not printed. Legal has been very clear.", "Our licence does not cover that model." (warden,
+elder guardian), "We print flesh. Golems and spirits are Facilities' business.", "A Slime is all head. There is no
+body to print.", "That model is not on our approved list." (creatures from other mods), and, with
+`genetics.specimenPrinting` off, "Specimen printing is not licensed on this server."
+
 ---
 
 ## Jars and telepresence gear
@@ -846,13 +880,13 @@ alive.
 
 ### Safety Placard
 
-![A Safety Placard on a stone wall, its notice changing each time it is used](docs/images/safety_placard.gif)
+![A Safety Placard on a stone-brick wall used fourteen times, a notice a second: from "HEADS MUST BE SECURED AT ALL TIMES" through "DOLORES IS LISTENING" to the two new ones, "QUIET FLOOR: THE WARDEN IS WORKING" and "PLEASE DO NOT TAP THE GLASS"](docs/images/safety_placard.gif)
 
 *A Safety Placard changing notices: **Use** it.*
 
 **Safety Placard**: yellow dye, black dye, yellow dye; yellow dye, ingot, yellow dye (makes 4). Hangs on a wall.
-**Use** it to show the next of twelve company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "DOLORES IS
-LISTENING". The notice is painted on the board in your game's language, and read out above your hotbar.
+**Use** it to show the next of fourteen company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "PLEASE DO NOT
+TAP THE GLASS". The notice is painted on the board in your game's language, and read out above your hotbar.
 
 ### Materials
 
@@ -2169,8 +2203,8 @@ and comes back out.
   **Blood Bank**. The server value `heads.livingLibrary` turns it off.
 
 A sample's tooltip shows its quality, the creature's blood type, the genes it carries, and how many auto-reads of
-samples this good it takes to read each gene to a Draft. Creatures with no genes (a cow, a pig, a zombie) say
-"Carries no readable genes".
+samples this good it takes to read each gene to a Draft. A creature with no genes (a giant, or a creature from a mod
+with none) says "Carries no readable genes".
 
 **Blood types.** Warm, cold and ichor are all flesh and mix. Ender, brimstone, grave and arcane match only
 themselves. Marrow, oil and ecto are bloodless. Players are warm. A serum can be rejected when a gene in it comes only
@@ -2257,6 +2291,26 @@ Genes**.
 
 Refusals: "Nothing to read. Put a DNA Fraction in the slot." and "This creature isn't in this world. Take the
 fraction out." (a fraction from a mod that is not installed; nothing is spent).
+
+#### The Staff Directory
+
+![The DNA Sequencer's Directory tab: "Staff Directory, 2 of 77 on file", rows of spawn eggs under Livestock, Field Office, Logistics, Security and Night Shift, the sampled cow and pig undimmed with their stamps; pointing at the blank Mooshroom and Sheep cells shows where they live, the jar they want, their blood, the tool and their genes at 0% read; scrolled down, the blank Stray cell says "Found near: snowy plains, ice spikes and frozen places. Any jar. Marrow Drill, not a syringe."](docs/images/staff_directory.gif)
+
+*The Staff Directory: point at a blank cell for where to find the creature and what to draw it with.*
+
+The Sequencer's screen has two tabs: **Sequencer** and **Directory**. The Directory is every vanilla creature, 82 of
+them, in rows by department, each shown by its spawn egg (a personnel folder for the two that have none). A cell is
+stamped when anyone on your team **samples** the species, **jars** its head or **rides** it as a host. Point at a cell
+for its blood type, the tool it wants, its genes and your team's read of each, its title as a head and the jar its
+head needs; a blank cell gives a hint on where to find it. Three creatures show as **[REDACTED]** until filed: "Head
+Office has no record of this creature." Creatures from other mods get a row of their own per mod. When a teammate
+files a species while you have the tab open, the top of the grid says so: "Pufferfish: filed by Alex".
+
+Ten species stamped brings a memo ("Your directory is filling up. Lunch is your problem."), 25 species jarred earns
+**Headhunter**, and all 77 species on the books sampled earns **Complete Census**. The Directory belongs to your
+scoreboard team, or to you alone, like the gene library. Species already in your library from before 0.6.2 start
+stamped as sampled where the gene belongs to that species alone. A mecha's Bio-Scanner adds "Unfiled" to a creature
+your team has never sampled.
 
 ### Gene Splicer
 
@@ -2347,18 +2401,161 @@ host's own abilities. A key that can't fire says why: "No active gene in this bo
 one.", "Only one active gene here: Ender Blink, on (your **Ability** key).", "Ender Blink is still recovering. Give it
 a moment.", "Guardian Eye needs something in reach to aim at."
 
+#### Departments
+
+![A Gene Splicer's screen: the first row's department chip pressed again and again, the pointer resting on it; the title strip names each department with the start of its line ("Field Office: Out of the office...", "Logistics: Things go where...", "Legal: Fangs, contracts...", "Sales: Hrm.", "Marine Division: Our offshore..."), the chip's letters and colour change, the row picks that department's first gene (Bamboo Diet, Ender Blink, Golem Frame, Phantom Membrane, Spider Climb, Wither Ward, Phase, Hero's Blood, Dolphin Grace, Creeper Gland, Sonic Boom), and a note under the chip says "Press for the next department; the other button goes back."](docs/images/splicer_departments.gif)
+
+*A row's department chip pressed through the departments: the title strip names each one.*
+
+Eighty-nine genes need sorting, so each Splicer row starts with a **department chip**: press it for the next
+department that has a gene you can use (the other mouse button goes back), then **<** and **>** for that department's
+genes. The title strip names the department while you point at its chip ("Legal: Fangs, contracts, axes.").
+Point at a gene's name for its card: full name, department, load and stability, where it fits and, for the forty new
+genes, what it does and what it costs. Point at **Stab** for the strand's named pairs and what the Splicer says about
+each. A serum cassette shows each new gene's cost in grey ("Cost: you moo when hurt."). The first time you open a
+Splicer, DOLORES writes: "The gene list is now sorted by department. HR sorted it. HR would like that noted."
+
 ### Gene Wash
 
 **Gene Wash:** a milk bucket over two Plasma Vials with a glass bottle between them; makes two. Drink it with your
 body on and every serum and mutation is gone: "Your genes are back to factory settings". A jar cannot drink: "A jar
 has nothing to wash. Drink it with your body on." Hosts and mecha cannot be washed.
 
+### Every creature carries a gene
+
+![A Syringe jabbed into a cow: the toast "Advancement Made! An Apology to the Cow" and DOLORES's memo "Following a review, the cow has been found to carry genes after all. HR apologises to the cow."; the sample spins in a Centrifuge beside the cow; a DNA Sequencer reads its fraction ("Ruminant Gut 0%", "Reading...") and the next cow fraction shows "Ruminant Gut 8%"](docs/images/cow_gene.gif)
+
+*A cow sampled, spun and read: DOLORES apologises to the cow, and Ruminant Gut is in the library.*
+
+Every natural vanilla creature now carries at least one gene: forty new ones, eighty-nine in all. "Following a review,
+the cow has been found to carry genes after all. HR apologises to the cow." (the hidden advancement **An Apology to
+the Cow**). Old samples and fractions sequence into the new genes: a cow sample kept in a chest since an earlier
+release reads into Ruminant Gut. A Nitwit's sample "Carries no readable genes. HR has checked twice."; every other
+villager still carries Hero's Blood. The giant, the illusioner and the zombie horse still carry none.
+
+The new genes keep the old rules: stability 5 per load, load 1 to 3 fits a body, load 4 (Phase, Fang Line, Bulldoze,
+Weeping Glands, Levitation Bolt) only a host or a Gene Port, and numbers work at 70% in bodies and hosts. Food, bows,
+trades and armour genes work for players only. Six are actives: Snow Pounce, Tongue and Spit Gland fit a body, Phase,
+Fang Line and Levitation Bolt only a host or a mecha. A body that carries a third active cannot fire it; the HUD lists
+it as "No key". Phase stops at claims, bedrock and the world's edge ("That wall is protected. Phase somewhere else."),
+Bulldoze and Snow Trail never change protected ground, and the Tongue never takes a colleague ("Tongues are for items
+and small creatures. Not colleagues."). A mecha's Chimera Graft takes no gene of load 4 or more. Your own gene quirks
+(the moo, the oink, the croak, the sneeze, the sob) play for everyone; the client option `geneQuirks` mutes other
+people's. Fleece stacks with nothing but its own silence: while fleeced, your steps, landings and eating make no
+vibration, so sculk sensors stay dark and a listening Warden 8 blocks away does not hear you (sniffing still finds you
+up close). Arctic Coat and Tadpole Tail each add 30% swim speed, and they stack with Dolphin Grace.
+
+<details><summary>The 40 genes of 0.6.2</summary>
+
+| Gene | Carried by | Kind | What it does | Cost | Load | Takes it |
+|---|---|---|---|---|---|---|
+| **Ruminant Gut** | cow | passive | Food fills a quarter more. Sneak and use grass, empty-handed, to graze. Wheat is lunch. A host on grass holds off rot. | you moo when hurt. | 1 | B H M |
+| **Stew Glands** | mooshroom | passive | Small flowers are food, with their stew effect, most for three times as long. Sneak and use a bowl: stew, every 5 min. | stews fill half, and a wither rose withers you. | 2 | B H M |
+| **Swine Appetite** | pig | passive | Rotten flesh, spider eyes, raw chicken, poisonous potatoes and pufferfish never make you sick. Rotten flesh fills 2 more. | you oink at every bite. | 1 | B H M |
+| **Fleece** | sheep | passive | You grow a fleece in 5 min. Fleeced, your steps, landings and meals make no vibrations, and powder snow cannot freeze you. | fleeced, fire burns longer and 25% harder. | 2 | B H M |
+| **Mountain Hooves** | goat | passive | You walk up full blocks (not while sneaking), falls of up to 7 blocks do not hurt, and you walk on powder snow. | hooves take no boots. | 2 | B H M |
+| **Phase** | vex (Ecto Trap) | active | Active: dash 5 blocks along your look, through up to 2 blocks of wall, into open space. 6 s cooldown. Claims hold. | each phase takes 2 health from a host, 3% from a mecha. | 4 | H M |
+| **Bamboo Diet** | panda | passive | Bamboo and sugar cane are food, eaten at once. Cake slices fill double. | you sit down to eat. | 1 | B H M |
+| **Snow Pounce** | fox | active | Active: leap to the block you look at within 8. Creatures where you land take 3, are knocked back and slowed. 4 s cooldown. | by day under open sky, the cooldown is 8 s. | 3 | B H M |
+| **Pollinator** | bee | passive | Crops and saplings you pass get a growth tick, each once a minute at most. Bees never anger at you. Honey fills 4 more. | 20% slower in the rain. | 2 | B H M |
+| **Arctic Coat** | polar bear | passive | You never freeze. Slowness on you lasts half as long. You swim 30% faster. | heat and the Nether slow you and make you hungry. | 2 | B H M |
+| **Roll Up** | armadillo | passive | Sneak still for a second and you curl up low: 60% less damage and no knockback. You shed a scute every 20 minutes. | curled, you cannot move, hit or use anything. | 3 | B H M |
+| **Keen Nose** | sniffer | passive | Creatures whose gene you have not finished reading leave a scent only you see. Suspicious sand puffs. Sneak on grass for seeds. | you sneeze near flowers. | 1 | B H M |
+| **Mimicry** | parrot | passive | Every 8 s, you imitate a hostile within 32 blocks that you cannot see. Out loud. A creeper's hiss, from behind the wall. | cookies poison you. | 1 | B H M |
+| **Tongue** | frog | active | Active: lick what you look at within 8. Items and creatures up to chicken size come to you; a small slime is eaten. 2 s cooldown. | you croak when you jump. | 3 | B H M |
+| **Tadpole Tail** | tadpole | passive | You swim 30% faster. | none. It is a tadpole. | 1 | B H M |
+| **Puffer** | pufferfish | passive | A hostile within 2, or a melee hit, puffs you up for 3 s: 30% bigger, and what touches you is poisoned. Pufferfish is safe to eat. | puffed, you are 30% slower and cannot sprint. | 2 | B H M |
+| **Spit Gland** | llama, trader llama | active | Active: spit at what you look at within 12: 1 damage, and a creature loses interest in you for 4 s, once in 12 s. 2 s cooldown. | stand in front of you for 5 s and get spat at. | 2 | B H M |
+| **Dusk Draught** | wandering trader | passive | At dusk you turn invisible for 60 s. At night, the first hostile to target you in 2 min makes you vanish for 8 s. | at dawn you drink any milk you carry: every effect goes. | 2 | B H M |
+| **Undeath** | zombie | passive | Harming heals you and Healing harms. Poison and Regeneration do nothing. Zombies, husks and drowned ignore you till you hit one. | bare-headed, daylight burns you. Smite hurts. | 3 | B H M |
+| **Sun-Baked** | husk | passive | Daylight never burns you, Undeath or no Undeath. Your melee hits leave players hungry and creatures weakened. | 30 s in water slows you for a minute. | 2 | B H M |
+| **Rehabilitated** | zombie villager | passive | Villagers give you the cured-zombie discount, as if you had cured them yourself. | golden apples sicken you. Hit a villager: suspended a day. | 2 | B H M |
+| **Gilded Rot** | zombified piglin | passive | Golden swords and axes do 3 more to the undead and lose no durability on them. A zombified piglin you hit fights you alone. | gold armour wears out twice as fast. | 2 | B H M |
+| **Rampage** | zoglin | passive | Each melee hit within 3 s of the last does 1 more, up to 3 more. Three quiet seconds end the streak. | on a streak you take 15% more damage and cannot sneak. | 3 | B H M |
+| **Bowstring Arms** | skeleton (Marrow Drill) | passive | A bow draws fully in 0.7 s instead of 1, and your arrows do 1 more. | wild wolves hunt you. | 2 | B H M |
+| **Rime Arrows** | stray (Marrow Drill) | passive | Your arrows, from a bow or a crossbow, slow what they hit for 5 s. | fire burns you 20% harder. | 2 | B H M |
+| **Spore Arrows** | bogged (Marrow Drill) | passive | Your arrows, from a bow or a crossbow, poison what they hit for 4 s. | poison on you lasts 50% longer. | 2 | B H M |
+| **Undertow Stride** | skeleton horse (Marrow Drill) | passive | You walk the seabed at land speed, jump off it and do not float. | you sink, and swim up half as fast. | 2 | B H M |
+| **Snow Trail** | snow golem (Ecto Trap) | passive | You leave snow where you walk, wherever a snow golem would. Your snowballs do 2 and slow for 2 s. | you melt in hot places, the Nether and the rain. | 2 | B H M |
+| **Gold Standard** | piglin | passive | Piglins treat you as if you wore gold. Golden carrots and golden apples give half as much again. | gold in sight on the ground slows you 10%. | 2 | B H M |
+| **Brute Strength** | piglin brute | passive | Axes do 3 more, and Weakness does nothing to you. | piglins attack you, gold or no gold, and never barter. | 3 | B H M |
+| **Breaking and Entering** | vindicator | passive | With an axe, wooden doors, trapdoors and fence gates break in one hit and drop. Axes do 1 more. Claims hold. | villagers will not trade while you hold an axe. | 2 | B H M |
+| **Steady Aim** | pillager | passive | Crossbows load 40% faster. Bolts fly 25% faster, and so hit about a quarter harder. | bows draw 20% slower. | 2 | B H M |
+| **Fang Line** | evoker | active | Active: a line of eight evoker fangs toward your aim within 12, 6 to each creature caught. Look down for a ring. 4 s cooldown. | blue sheep nearby turn red. Mecha: 15% of its heat limit. | 4 | H M |
+| **Potion Tolerance** | witch | passive | Potions you drink last 50% longer. Harmful potions splashed on you last half as long. | milk does nothing for you. | 3 | B H M |
+| **Bulldoze** | ravager | passive | Leaves, crops, saplings, bamboo, vines, flowers, sugar cane and cobwebs break as you walk into them. Claims hold. | you trample everything, your own farm included. | 4 | H M |
+| **Weeping Glands** | ghast | passive | A Ghast Tear every 20 minutes: at a host's feet, or into a mecha's Cargo Hold. | it sobs every few minutes, and fogs a mecha's glass. | 4 | H M |
+| **Pearl Digestion** | endermite | passive | An ender pearl you throw flies half as far again, does you no harm, and its cooldown is halved. | endermen attack you on sight. | 2 | B H M |
+| **Levitation Bolt** | shulker | active | Active: a homing shulker bullet at what you aim at within 24: 4 damage and 3 s of Levitation. 3 s cooldown. | a mecha takes 10% of its heat limit a shot. | 4 | H M |
+| **Stone Lungs** | silverfish | passive | You never suffocate inside blocks. Stone, deepslate and cobblestone mine 20% faster. | one stone block in a hundred lets out a silverfish. | 2 | B H M |
+| **Fetch** | allay (Ecto Trap) | passive | Dropped items like the one in your off hand drift to you from 12 blocks, or to a note block played in the last 30 s. | near a playing jukebox, you dance instead of attacking. | 2 | B H M |
+
+B = body, H = host, M = mecha.
+
+</details>
+
+<details><summary>Named pairs</summary>
+
+A pair in one strand is named: a synergy adds 10 stability, a conflict takes 15. Most of the new pairs only fit a host
+or a Gene Port. Two synergies do something extra: **Spitting Cobra** (Spit Gland and Venom Sac: the spit poisons for
+3 s) and **Herbalist** (Potion Tolerance and Stew Glands: suspicious stew counts as a potion).
+
+| Pair | Genes | Kind | The Splicer says |
+|---|---|---|---|
+| **The Full Spider** | Spider Climb + Venom Sac | +10 | Climbs the wall, then bites. |
+| **Blind Jump** | Ender Blink + Echolocation | +10 | Hears where it is going before it goes. |
+| **Lava Commute** | Blaze Core + Strider Soles | +10 | Walks to work through the lava. |
+| **Night Light** | Glow Cells + Cat Eyes | +10 | Glows and sees. The night crew's favourite. |
+| **Battering Ram** | Golem Frame + Hoglin Tusks | +10 | Iron behind, tusks in front. |
+| **Winter Range** | Fleece + Arctic Coat | +10 | Two coats. HR has stopped asking about the heating. |
+| **Abominable** | Snow Trail + Arctic Coat | +10 | Leaves tracks. Feels no cold. Never in the photographs. |
+| **Mummy** | Undeath + Sun-Baked | +10 | The zombie that doesn't burn. |
+| **Caravan** | Spit Gland + Dusk Draught | +10 | Spits, vanishes, keeps walking. |
+| **Spitting Cobra** | Spit Gland + Venom Sac | +10 | And the spit poisons, 3 s. |
+| **Early Warning** | Mimicry + Echolocation | +10 | Hears it coming, and says so. |
+| **Field Biologist** | Keen Nose + Echolocation | +10 | Finds the specimen in the dark. |
+| **Garden Centre** | Pollinator + Stew Glands | +10 | Grows the flowers. Eats the flowers. |
+| **Herbalist** | Potion Tolerance + Stew Glands | +10 | Suspicious stew counts as a potion. |
+| **Hard Shell** | Roll Up + Turtle Shell | +10 | Two shells. Nothing gets in. Nothing gets done. |
+| **Cold Shoulder** | Bowstring Arms + Rime Arrows | +10 | A fast arrow and a cold reception. |
+| **Hog Wild** | Rampage + Hoglin Tusks | +10 | Hits harder the longer it goes. So does the bill. |
+| **Old Money** | Gold Standard + Gilded Rot | +10 | Gold on both sides of the family. |
+| **Community Service** | Rehabilitated + Hero's Blood | +10 | Paid its debt to the village. The village pays it back. |
+| **Wall Walker** | Phase + Stone Lungs | +10 | Goes through walls, and breathes in them. |
+| **Air Mail** | Levitation Bolt + Breeze Updraft | +10 | Posted upward. No return address. |
+| **Demolition** | Bulldoze + Golem Frame | +10 | Facilities approves. Facilities is worried. |
+| **Raid Leader** | Fang Line + Breaking and Entering | +10 | Doors first, then the fangs. |
+| **Night Prowler** | Snow Pounce + Cat Eyes | +10 | Sees it in the dark. Lands on it. |
+| **Seabed Survey** | Undertow Stride + Gills | +10 | Walks the seabed. Breathes down there. |
+| **Waterworks** | Weeping Glands + Guardian Eye | +10 | Turns on the waterworks, then the laser. |
+| **Alpine** | Mountain Hooves + Rabbit Spring | +10 | Up the cliff, and down it again. |
+| **Steam** | Blaze Core + Gills | -15 | Fire and water. Pick one. |
+| **Dry Heat** | Blaze Core + Axolotl Regrowth | -15 | The axolotl dries out next to the furnace. |
+| **Excess Baggage** | Ender Blink + Golem Frame | -15 | Iron does not teleport well. |
+| **Pressure Cooker** | Creeper Gland + Turtle Shell | -15 | A shell is a bad place to explode. |
+| **Second Opinion** | Cat Eyes + Echolocation | -15 | The cat sees it, the bat hears it. They argue. |
+| **Food Chain** | Snow Pounce + Rabbit Spring | -15 | The rabbit gene will not share a strand with the fox gene. |
+| **Phobia** | Roll Up + Spider Climb | -15 | Armadillos are afraid of spiders. |
+| **Workplace Bullying** | Pearl Digestion + Ender Blink | -15 | The enderman gene picks on the endermite gene. |
+| **Thermostat Dispute** | Arctic Coat + Blaze Core | -15 | One of these wants a coat, the other a furnace. |
+| **Meltdown** | Snow Trail + Blaze Core | -15 | You cannot be a snowman and a furnace. |
+| **Medical History** | Undeath + Axolotl Regrowth | -15 | Healing is complicated for the dead. |
+| **Bad Blood** | Breaking and Entering + Hero's Blood | -15 | The villager and the vindicator cannot share a strand. |
+| **Relapse** | Rehabilitated + Breaking and Entering | -15 | Recovery means no more doors. |
+| **Class Struggle** | Brute Strength + Gold Standard | -15 | The brute despises the gold-grubber. |
+| **Quiver Policy** | Spore Arrows + Rime Arrows | -15 | One quiver, one coating. |
+| **Job Description** | Tongue + Spit Gland | -15 | One mouth, one job. |
+| **Land Dispute** | Bulldoze + Pollinator | -15 | One grows them, one flattens them. |
+| **Health and Safety** | Phase + Golem Frame | -15 | Mass and phasing do not mix. |
+
+</details>
+
 ### All genes
 
 Numbers are at Complete, one copy, in a mecha. Bodies and hosts get 70% of the marked (*) numbers. B = body,
 H = host, M = mecha. "Foreign blood" means a player body may reject it (30%) unless it has Hero's Blood.
 
-<details><summary>All 38 genes</summary>
+<details><summary>The 38 genes before 0.6.2</summary>
 
 | Gene | Carried by | Kind | What it does | Load | Takes it |
 |---|---|---|---|---|---|
@@ -2718,6 +2915,9 @@ are in `config/headinajar-client.toml`.
 | `life.protectOfflineBodies` | true | true / false | Idle bodies, corpses and placed heads of offline players can't be hurt. |
 | `genetics.pvpTurrets` | false | true / false | Turret Pedestals may shoot players who are not on the owner's team. Off, their shots and blasts pass over players. |
 | `genetics.keepGenesOnDeath` | true | true / false | Spliced genes stay in your body when you die and respawn. |
+| `genetics.phaseThroughWalls` | true | true / false | The Phase gene may dash through walls. Off: "This server keeps its walls." |
+| `genetics.bulldozeBreaksBlocks` | true | true / false | The Bulldoze gene breaks the leaves, crops, flowers and cobwebs it walks into. Off: it only shoves. |
+| `genetics.specimenPrinting` | true | true / false | The Body Printer's Template slot prints hosts from DNA Fractions. Off, the slot is locked: "Specimen printing is not licensed on this server." |
 | `saw.allowBabies` | false | true / false | Babies may be sawn (as before 0.6.0). Off: "Child labour is against company policy. Come back when it's grown." |
 | `staff.morale` | true | true / false | Morale moves with pay. Off: it never moves and every head shows Content; wages are still taken. |
 | `staff.complaints` | true | true / false | Disengaged heads on plinths complain over their jars every two minutes. Off: they sulk in silence. |
@@ -2740,6 +2940,7 @@ are in `config/headinajar-client.toml`.
 | `memos` | true | true / false | DOLORES's memos: a line in chat with a beep, the first time something new happens. Off: none are shown, and those missed are not sent again. |
 | `hudNumbers` | false | true / false | Keep the numbers beside the jar's bars up all the time. Off: they show while a bar is under a quarter, while you hold **Sneak**, and for three seconds after a change. |
 | `lanyards` | true | true / false | The staff badge on heads and stations that work for someone. Off: no badges are drawn for you. |
+| `geneQuirks` | true | true / false | Hear other players' and hosts' gene quirks (the moos, oinks, croaks, sneezes and sobs). Off: only your own. |
 
 </details>
 
@@ -2926,6 +3127,44 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.6.2
+
+- **Every creature carries a gene.** Forty new genes, eighty-nine in all: every natural vanilla creature now carries
+  at least one (the giant, the illusioner and the zombie horse still carry none). Among them: Ruminant
+  Gut lets you graze; Fleece hides your steps from sculk sensors and a listening Warden; Mountain Hooves step up whole
+  blocks; Undeath turns Instant Damage into healing and burns you by day; Weeping Glands cry a Ghast Tear every 20
+  minutes in a host or a mecha. Six are actives: Snow Pounce, Tongue and Spit Gland fit a body; Phase, Fang Line and
+  Levitation Bolt only a host or a mecha. Every new gene's cost is printed in grey on its cassette ("Cost: you moo when
+  hurt."). Old samples and fractions read into the new genes: "Following a review, the cow has been found to carry
+  genes after all. HR apologises to the cow."
+- **A Nitwit's sample** "Carries no readable genes. HR has checked twice." Every other villager still carries Hero's
+  Blood.
+- **The Splicer is sorted by department.** Each row has a department chip: press it for the next department with a
+  gene you can use, then the arrows for its genes. The title strip names the department, a gene's name shows its
+  card, and **Stab** lists the strand's named pairs. Twenty-two new synergies and thirteen new conflicts, all named.
+- **The Staff Directory.** The DNA Sequencer has a **Directory** tab: the 82 vanilla creatures by department with
+  their spawn eggs, stamped as your team samples, jars and rides them, with a hint for every blank cell and three
+  [REDACTED] creatures to find. A teammate's filing shows at the top of the grid ("Pufferfish: filed by Alex"). The
+  Bio-Scanner adds "Unfiled" to a creature your team has never sampled.
+- **Print-to-Order.** The Body Printer has a **Template** slot: a DNA Fraction of quality 40 or better prints a headless
+  host of that species, its materials scaled by its size (a chicken is a quarter of a print, a pig half, a cow a whole
+  one), at the fraction's quality as freshness. "Your new Cow is ready. It is a little damp." The door is one block
+  wide and two tall; marine models are delivered into water; printed hosts drop no loot when they die.
+- The Safety Placard has two new notices: "QUIET FLOOR: THE WARDEN IS WORKING" and "PLEASE DO NOT TAP THE GLASS".
+- Five advancements (An Apology to the Cow, Headhunter, Complete Census, Off the Books, Made to Order) and five memos.
+  The handbook has new pages on gene departments, named pairs, the Staff Directory and Print-to-Order. New server values
+  `genetics.phaseThroughWalls`, `genetics.bulldozeBreaksBlocks` and `genetics.specimenPrinting`; new client option
+  `geneQuirks`. Ten new sounds with subtitles ("Colleague moos", "Tongue lashes", "Phases through the wall"...).
+- A sampling tool used on a live creature it cannot draw from (a Precision Syringe on a warden's thick hide, a Syringe
+  on a skeleton) now refuses with the refusal sound and the creature shaking its head, as it does on the creature's
+  placed head. A serum a host or a mecha will not take (too heavy, or no port free) is refused the same way, not
+  with the welcome sound. A mecha's genes wait for its self-test after you climb in: "Snow Pounce waits for the
+  self-test. Nothing fires before the checklist."
+- Client and server must both be on 0.6.2. Going back to 0.6.1 drops the new genes from serums and bodies and empties
+  a Body Printer's Template slot.
+
+<details><summary>What changed in 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.6.1
 
 - **Every head has a title and a bell.** A placed head's tooltip, Jade and file card give its job title ("Canteen
@@ -2977,8 +3216,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   Jar beside it now draws it once a day. The Array, Mount and Socket numbers and an attacking Turret's are unchanged;
   a Turret holding a head with no attack is now a Lookout and draws 1 to 2 FE/t instead of its old idle draw. A 0.6.1
   game can join a 0.6.0 server; a 0.6.0 game cannot join a 0.6.1 server (new sounds). Update both.
-
-<details><summary>What changed in 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.6.0
 

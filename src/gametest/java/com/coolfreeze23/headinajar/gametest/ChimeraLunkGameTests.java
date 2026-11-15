@@ -259,7 +259,8 @@ public class ChimeraLunkGameTests {
         h.runAfterDelay(26, () -> {
             press(p);
             h.assertTrue(count(p, "mecha.graft.legendary") == 1, "a Legendary gene was not refused: " + Refusals.delivered(p));
-            m.tasted = EntityType.COW;
+            // every natural creature carries a gene since 0.6.2; the giant is one of the three that still carry none
+            m.tasted = EntityType.GIANT;
             m.tastedAt = now(h);
         });
         h.runAfterDelay(38, () -> {

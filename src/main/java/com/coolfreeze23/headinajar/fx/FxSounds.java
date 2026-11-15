@@ -35,6 +35,7 @@ public final class FxSounds {
         BodySounds.load();
         HouseSounds.load();
         HeadSounds.load();
+        GeneSounds.load();
     }
 
     /** One-shots that can repeat get pitch 0.94-1.06 per play (the takes do the rest). */

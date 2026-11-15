@@ -60,7 +60,49 @@ public enum Gene {
     SHRINKAGE(Category.MUTATION, 1, 0, false),
     MAGNETIC_PERSONALITY(Category.MUTATION, 1, 0, false),
     HYBRID_VIGOUR(Category.MUTATION, 1, 0, false),
-    CHIMERIC_HARMONY(Category.MUTATION, 1, -10, false);
+    CHIMERIC_HARMONY(Category.MUTATION, 1, -10, false),
+    // 0.6.2: a gene for every natural creature that had none (appended, so the ordinals above never move: the Splicer
+    // and its sync use them). Stability 5 per load. Numbers are in GeneNumbers.
+    RUMINANT_GUT(Category.METABOLISM, 1, 5, false, "minecraft:cow"),
+    STEW_GLANDS(Category.METABOLISM, 2, 10, false, "minecraft:mooshroom"),
+    SWINE_APPETITE(Category.METABOLISM, 1, 5, false, "minecraft:pig"),
+    FLEECE(Category.DEFENCE, 2, 10, false, "minecraft:sheep"),
+    MOUNTAIN_HOOVES(Category.MOVEMENT, 2, 10, false, "minecraft:goat"),
+    PHASE(Category.MOVEMENT, 4, 20, true, "minecraft:vex"),
+    BAMBOO_DIET(Category.METABOLISM, 1, 5, false, "minecraft:panda"),
+    SNOW_POUNCE(Category.MOVEMENT, 3, 15, true, "minecraft:fox"),
+    POLLINATOR(Category.METABOLISM, 2, 10, false, "minecraft:bee"),
+    ARCTIC_COAT(Category.DEFENCE, 2, 10, false, "minecraft:polar_bear"),
+    ROLL_UP(Category.DEFENCE, 3, 15, false, "minecraft:armadillo"),
+    KEEN_NOSE(Category.SENSES, 1, 5, false, "minecraft:sniffer"),
+    MIMICRY(Category.SENSES, 1, 5, false, "minecraft:parrot"),
+    TONGUE(Category.OFFENCE, 3, 15, true, "minecraft:frog"),
+    TADPOLE_TAIL(Category.MOVEMENT, 1, 5, false, "minecraft:tadpole"),
+    PUFFER(Category.DEFENCE, 2, 10, false, "minecraft:pufferfish"),
+    SPIT_GLAND(Category.OFFENCE, 2, 10, true, "minecraft:llama", "minecraft:trader_llama"),
+    DUSK_DRAUGHT(Category.DEFENCE, 2, 10, false, "minecraft:wandering_trader"),
+    UNDEATH(Category.METABOLISM, 3, 15, false, "minecraft:zombie"),
+    SUN_BAKED(Category.DEFENCE, 2, 10, false, "minecraft:husk"),
+    REHABILITATED(Category.METABOLISM, 2, 10, false, "minecraft:zombie_villager"),
+    GILDED_ROT(Category.OFFENCE, 2, 10, false, "minecraft:zombified_piglin"),
+    RAMPAGE(Category.OFFENCE, 3, 15, false, "minecraft:zoglin"),
+    BOWSTRING_ARMS(Category.OFFENCE, 2, 10, false, "minecraft:skeleton"),
+    RIME_ARROWS(Category.OFFENCE, 2, 10, false, "minecraft:stray"),
+    SPORE_ARROWS(Category.OFFENCE, 2, 10, false, "minecraft:bogged"),
+    UNDERTOW_STRIDE(Category.MOVEMENT, 2, 10, false, "minecraft:skeleton_horse"),
+    SNOW_TRAIL(Category.DEFENCE, 2, 10, false, "minecraft:snow_golem"),
+    GOLD_STANDARD(Category.DEFENCE, 2, 10, false, "minecraft:piglin"),
+    BRUTE_STRENGTH(Category.OFFENCE, 3, 15, false, "minecraft:piglin_brute"),
+    BREAKING_AND_ENTERING(Category.OFFENCE, 2, 10, false, "minecraft:vindicator"),
+    STEADY_AIM(Category.OFFENCE, 2, 10, false, "minecraft:pillager"),
+    FANG_LINE(Category.OFFENCE, 4, 20, true, "minecraft:evoker"),
+    POTION_TOLERANCE(Category.METABOLISM, 3, 15, false, "minecraft:witch"),
+    BULLDOZE(Category.OFFENCE, 4, 20, false, "minecraft:ravager"),
+    WEEPING_GLANDS(Category.METABOLISM, 4, 20, false, "minecraft:ghast"),
+    PEARL_DIGESTION(Category.MOVEMENT, 2, 10, false, "minecraft:endermite"),
+    LEVITATION_BOLT(Category.OFFENCE, 4, 20, true, "minecraft:shulker"),
+    STONE_LUNGS(Category.DEFENCE, 2, 10, false, "minecraft:silverfish"),
+    FETCH(Category.SENSES, 2, 10, false, "minecraft:allay");
 
     public enum Category { MOVEMENT, DEFENCE, SENSES, OFFENCE, METABOLISM, LEGENDARY, MUTATION }
 
@@ -97,11 +139,61 @@ public enum Gene {
         return java.util.Arrays.stream(values()).filter(g -> g.sources.contains(entityId)).toList();
     }
 
-    /** Pairs that fight (-15 stability each) and pairs that help (+10). */
+    /**
+     * Pairs that fight (-15 stability each) and pairs that help (+10), counted per strand (one serum). Each pair's name
+     * or the Splicer's line is {@code synergy.headinajar.<a>.<b>} / {@code conflict.headinajar.<a>.<b>} (ids in this
+     * order), a synergy's comment {@code ...<a>.<b>.comment} where it does something extra.
+     */
     public static final List<Gene[]> CONFLICTS = List.of(
             new Gene[]{BLAZE_CORE, GILLS}, new Gene[]{BLAZE_CORE, AXOLOTL_REGROWTH}, new Gene[]{ENDER_BLINK, GOLEM_FRAME},
-            new Gene[]{CREEPER_GLAND, TURTLE_SHELL}, new Gene[]{CAT_EYES, ECHOLOCATION});
+            new Gene[]{CREEPER_GLAND, TURTLE_SHELL}, new Gene[]{CAT_EYES, ECHOLOCATION},
+            // 0.6.2
+            new Gene[]{SNOW_POUNCE, RABBIT_SPRING}, new Gene[]{ROLL_UP, SPIDER_CLIMB}, new Gene[]{PEARL_DIGESTION, ENDER_BLINK},
+            new Gene[]{ARCTIC_COAT, BLAZE_CORE}, new Gene[]{SNOW_TRAIL, BLAZE_CORE}, new Gene[]{UNDEATH, AXOLOTL_REGROWTH},
+            new Gene[]{BREAKING_AND_ENTERING, HEROS_BLOOD}, new Gene[]{REHABILITATED, BREAKING_AND_ENTERING},
+            new Gene[]{BRUTE_STRENGTH, GOLD_STANDARD}, new Gene[]{SPORE_ARROWS, RIME_ARROWS}, new Gene[]{TONGUE, SPIT_GLAND},
+            new Gene[]{BULLDOZE, POLLINATOR}, new Gene[]{PHASE, GOLEM_FRAME});
     public static final List<Gene[]> SYNERGIES = List.of(
             new Gene[]{SPIDER_CLIMB, VENOM_SAC}, new Gene[]{ENDER_BLINK, ECHOLOCATION}, new Gene[]{BLAZE_CORE, STRIDER_SOLES},
-            new Gene[]{GLOW_CELLS, CAT_EYES}, new Gene[]{GOLEM_FRAME, HOGLIN_TUSKS});
+            new Gene[]{GLOW_CELLS, CAT_EYES}, new Gene[]{GOLEM_FRAME, HOGLIN_TUSKS},
+            // 0.6.2
+            new Gene[]{FLEECE, ARCTIC_COAT}, new Gene[]{SNOW_TRAIL, ARCTIC_COAT}, new Gene[]{UNDEATH, SUN_BAKED},
+            new Gene[]{SPIT_GLAND, DUSK_DRAUGHT}, new Gene[]{SPIT_GLAND, VENOM_SAC}, new Gene[]{MIMICRY, ECHOLOCATION},
+            new Gene[]{KEEN_NOSE, ECHOLOCATION}, new Gene[]{POLLINATOR, STEW_GLANDS}, new Gene[]{POTION_TOLERANCE, STEW_GLANDS},
+            new Gene[]{ROLL_UP, TURTLE_SHELL}, new Gene[]{BOWSTRING_ARMS, RIME_ARROWS}, new Gene[]{RAMPAGE, HOGLIN_TUSKS},
+            new Gene[]{GOLD_STANDARD, GILDED_ROT}, new Gene[]{REHABILITATED, HEROS_BLOOD}, new Gene[]{PHASE, STONE_LUNGS},
+            new Gene[]{LEVITATION_BOLT, BREEZE_UPDRAFT}, new Gene[]{BULLDOZE, GOLEM_FRAME},
+            new Gene[]{FANG_LINE, BREAKING_AND_ENTERING}, new Gene[]{SNOW_POUNCE, CAT_EYES}, new Gene[]{UNDERTOW_STRIDE, GILLS},
+            new Gene[]{WEEPING_GLANDS, GUARDIAN_EYE}, new Gene[]{MOUNTAIN_HOOVES, RABBIT_SPRING});
+
+    /** The named pairs a strand holds (synergies or conflicts), in table order. */
+    public static List<Gene[]> pairsIn(java.util.Collection<Gene> strand, boolean synergies) {
+        List<Gene[]> out = new java.util.ArrayList<>();
+        for (Gene[] pair : synergies ? SYNERGIES : CONFLICTS) if (strand.contains(pair[0]) && strand.contains(pair[1])) out.add(pair);
+        return out;
+    }
+
+    /** A pair's language key: {@code synergy.headinajar.<a>.<b>} or {@code conflict.headinajar.<a>.<b>}. */
+    public static String pairKey(Gene[] pair, boolean synergy) {
+        return (synergy ? "synergy" : "conflict") + ".headinajar." + pair[0].id() + "." + pair[1].id();
+    }
+
+    /** Whether this gene came in 0.6.2 or later (it has a written cost line; the 49 before it have none). */
+    public boolean hasCostLine() {
+        return ordinal() > CHIMERIC_HARMONY.ordinal();
+    }
+
+    /**
+     * The gene's department: its first installed source species' department (the entity type tags; the Ender Dragon's
+     * is The Board); a gene with no installed species, or a mutation, is General Staff. Readable on both sides.
+     */
+    public String department() {
+        for (String id : sources) {
+            var rl = net.minecraft.resources.ResourceLocation.tryParse(id);
+            if (rl == null) continue;
+            var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getOptional(rl);
+            if (type.isPresent()) return com.coolfreeze23.headinajar.staff.Staff.department(type.get());
+        }
+        return com.coolfreeze23.headinajar.staff.Staff.GENERAL;
+    }
 }

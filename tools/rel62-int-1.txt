@@ -1,0 +1,36 @@
+# 0.6.2 merged tip: the game starts with every mixin; the Splicer, Sequencer and Printer screens open; a sample tooltip
+look 0 30
+setblock ~ ~ ~2 headinajar:gene_splicer
+setblock ~2 ~ ~2 headinajar:body_printer
+setblock ~-2 ~ ~2 headinajar:dna_sequencer
+setblock ~ ~ ~-3 headinajar:safety_placard[facing=south,notice=11]
+wait 40
+key use
+wait 20
+widgets
+shot splicer_empty
+at rel 26 22
+wait 5
+shot splicer_chip_hover
+press escape
+wait 10
+look 45 30
+key use
+wait 20
+shot printer_screen
+press escape
+look -45 30
+key use
+wait 20
+at rel 40 -10
+wait 10
+shot sequencer_directory
+press escape
+look 180 10
+key use
+wait 25
+shot placard_16
+key use
+wait 25
+shot placard_18
+report done

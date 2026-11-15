@@ -473,7 +473,7 @@ public class HeavyFrameGameTests {
      * The vials tell the truth: a serum clicked into a port fills its vial by its load and colours it by its genes; an
      * empty port shows nothing; a fired gene's port rests (dims) while its gene cools down.
      */
-    @GameTest(template = "platform", timeoutTicks = 60)
+    @GameTest(template = "platform", timeoutTicks = 120)
     public static void theVialsShowTheirSerums(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);
         BlockPos at = FLOOR.east(3);
@@ -489,12 +489,14 @@ public class HeavyFrameGameTests {
         p.interactOn(m, InteractionHand.MAIN_HAND);
         h.assertTrue(Executive.colour(m, 0) != Executive.colour(m, 1), "a movement serum and an offence serum look the same");
         board(h, p, m);
-        h.runAfterDelay(2, () -> {
+        // after the boot (nothing fires while the frame runs its self-test)
+        int booted = com.coolfreeze23.headinajar.mecha.HopperAnimation.BOOT_END + 1;
+        h.runAfterDelay(booted, () -> {
             // fire Ender Blink (R) at the floor ahead: its port rests
             p.setXRot(60);
             Network.action(p, new Network.JarAction(Network.Action.ABILITY));
         });
-        h.runAfterDelay(4, () -> {
+        h.runAfterDelay(booted + 2, () -> {
             h.assertTrue(Executive.resting(m, 0) && !Executive.resting(m, 1), "the fired gene's port does not rest: " + m.portsResting());
             done(h, p);
         });

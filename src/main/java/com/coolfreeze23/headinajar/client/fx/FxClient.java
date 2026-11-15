@@ -22,6 +22,7 @@ public final class FxClient {
         NeoForge.EVENT_BUS.addListener(FxClient::render);
         NeoForge.EVENT_BUS.register(CameraDesk.class);
         NeoForge.EVENT_BUS.register(PoseFx.class);
+        com.coolfreeze23.headinajar.client.genes.ActivesClient.init(); // the 0.6.2 actives: the tongue, the cockpit fog, the lid hop
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {

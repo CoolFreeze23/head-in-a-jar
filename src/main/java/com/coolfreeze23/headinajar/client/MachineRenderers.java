@@ -706,7 +706,9 @@ public class MachineRenderers {
             if (t >= 0) {
                 GeoBone ring = getGeoModel().getBone("ring").orElse(null);
                 float plane = 3 + (ring == null ? 0 : ring.getPosY());
-                body(p, pose, buffers, light, t, plane);
+                // a species print: the template's creature under the bar instead of the presser's body
+                if (p.species() != null) PrintedStandIn.render(p, pose, buffers, light, t, plane, partial);
+                else body(p, pose, buffers, light, t, plane);
                 return;
             }
             for (int i = 0; i < 4; i++) {

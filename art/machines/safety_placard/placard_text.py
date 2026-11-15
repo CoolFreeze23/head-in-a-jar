@@ -8,8 +8,8 @@ texels): the only finer-than-texel texture on the block, as vanilla's sign text 
 those texels (x right, y down from the board's top-left):
     header band   x 0..48, y 0..7     yellow, the black word NOTICE centred, letters at y 1..6
     rule          y 7..8              black
-    text field    x 2..46, y 8..48    black capitals 5 texels tall: 3 wide, but M, N, W and the 0 are 4
-                  wide (a 3-wide N reads as a lower-case n); 1 texel between letters, 6 a line; up to 6 lines,
+    text field    x 2..46, y 8..48    black capitals 5 texels tall: 3 wide, but M, N and the 0 are 4 wide
+                  (a 3-wide N reads as a lower-case n) and W 5 (a 4-wide W reads as H); 1 texel between letters, 6 a line; up to 6 lines,
                   44 texels a line, words never split; the lines and the block of lines centred (2-3 texels of
                   margin above and below a full block)
     screws        four 3x3 steel heads in the board's corners (the fixing, painted)
@@ -30,7 +30,7 @@ FONT = {  # 3x5 capitals, rows top to bottom, '#' = ink
     'M': ['#..#', '####', '#..#', '#..#', '#..#'], 'N': ['#..#', '##.#', '#.##', '#..#', '#..#'], 'O': ['.#.', '#.#', '#.#', '#.#', '.#.'],
     'P': ['##.', '#.#', '##.', '#..', '#..'], 'Q': ['.#.', '#.#', '#.#', '##.', '.##'], 'R': ['##.', '#.#', '##.', '#.#', '#.#'],
     'S': ['.##', '#..', '.#.', '..#', '##.'], 'T': ['###', '.#.', '.#.', '.#.', '.#.'], 'U': ['#.#', '#.#', '#.#', '#.#', '###'],
-    'V': ['#.#', '#.#', '#.#', '#.#', '.#.'], 'W': ['#..#', '#..#', '#..#', '####', '#..#'], 'X': ['#.#', '#.#', '.#.', '#.#', '#.#'],
+    'V': ['#.#', '#.#', '#.#', '#.#', '.#.'], 'W': ['#...#', '#...#', '#.#.#', '##.##', '#...#'], 'X': ['#.#', '#.#', '.#.', '#.#', '#.#'],
     'Y': ['#.#', '#.#', '.#.', '.#.', '.#.'], 'Z': ['###', '..#', '.#.', '#..', '###'],
     '0': ['.##.', '#..#', '#..#', '#..#', '.##.'], '1': ['.#.', '##.', '.#.', '.#.', '###'], '2': ['##.', '..#', '.#.', '#..', '###'],
     '3': ['##.', '..#', '.#.', '..#', '##.'], '4': ['#.#', '#.#', '###', '..#', '..#'], '5': ['###', '#..', '##.', '..#', '##.'],
@@ -38,13 +38,17 @@ FONT = {  # 3x5 capitals, rows top to bottom, '#' = ink
     '9': ['###', '#.#', '###', '..#', '##.'], ' ': ['...'] * 5, ',': ['...', '...', '...', '.#.', '#..'],
     '.': ['...', '...', '...', '...', '.#.'], "'": ['.#.', '.#.', '...', '...', '...'], '!': ['.#.', '.#.', '.#.', '...', '.#.'],
     '&': ['.#.', '#.#', '.#.', '#.#', '.##'], '-': ['...', '...', '###', '...', '...'], '?': ['##.', '..#', '.#.', '...', '.#.'],
+    ':': ['...', '.#.', '...', '.#.', '...'],
 }
 W_TEX, H_TEX = 48, 48
 FIELD = (2, 8, 46, 48)           # x0, y0, x1, y1 in texels
 CHARS, LINES = 11, 6          # (a guide: lines are measured in texels, M N W 0 being 4 wide)
 FIELD_W = FIELD[2] - FIELD[0]  # 44 texels
-# line breaks set by hand where the automatic ones would split a phrase (the day counter keeps "0 DAYS" together)
+# line breaks set by hand where the automatic ones would split a phrase (the day counter keeps "0 DAYS" together;
+# the quiet floor keeps "THE WARDEN" together)
 BREAKS = {('en_us', 2): ['THIS', 'FACILITY', 'HAS GONE', '0 DAYS', 'WITHOUT AN', 'INCIDENT'],
+          ('en_us', 16): ['QUIET', 'FLOOR:', 'THE WARDEN', 'IS WORKING'],
+          ('en_us', 18): ['PLEASE', 'DO NOT TAP', 'THE GLASS'],
           ('pt_br', 2): ['ESTA', 'INSTALAÇÃO', 'ESTÁ HÁ', '0 DIAS SEM', 'ACIDENTES']}
 # accented capitals: the plain letter with its mark in two rows above it (a cedilla in the row below); a notice that
 # has any is set at 8 texels a line instead of 6, so at most 5 lines

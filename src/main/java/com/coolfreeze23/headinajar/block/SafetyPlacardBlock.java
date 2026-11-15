@@ -20,10 +20,22 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** A wall notice. Use it to cycle through the twelve company safety notices; each one reads out in chat. */
+/** A wall notice. Use it to cycle through the company safety notices; each one reads out on the action bar. */
 public class SafetyPlacardBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final IntegerProperty NOTICE = IntegerProperty.create("notice", 0, 11);
+    /**
+     * The notice shown. Widened once, in 0.6.2, to 0..20 so later notices need no new block states; a notice is in the
+     * cycle only once its release ships it ({@link #SHIPPED}).
+     */
+    public static final IntegerProperty NOTICE = IntegerProperty.create("notice", 0, 20);
+    /** The notices the cycle steps through, in order: the twelve of 0.2.0, then 16 and 18 of 0.6.2. */
+    public static final int[] SHIPPED = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 18};
+
+    /** The notice after {@code now} in the cycle (a notice not in it, set by command, goes to the first). */
+    public static int next(int now) {
+        for (int i = 0; i < SHIPPED.length; i++) if (SHIPPED[i] == now) return SHIPPED[(i + 1) % SHIPPED.length];
+        return SHIPPED[0];
+    }
 
     public SafetyPlacardBlock(Properties properties) {
         super(properties);
@@ -70,7 +82,7 @@ public class SafetyPlacardBlock extends Block {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        int next = (state.getValue(NOTICE) + 1) % 12;
+        int next = next(state.getValue(NOTICE));
         if (!level.isClientSide) {
             level.setBlock(pos, state.setValue(NOTICE, next), 3);
             player.displayClientMessage(Component.translatable("placard.headinajar." + next), true);

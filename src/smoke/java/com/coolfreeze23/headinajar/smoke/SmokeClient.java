@@ -538,6 +538,17 @@ public class SmokeClient {
                 mc.gui.getChat().rescaleChat();
                 report.add("lang -> " + mc.getLanguageManager().getSelected());
             }
+            case "clientcfg" -> {
+                // clientcfg photosensitive|geneQuirks true|false: sets the mod's client option (as its config screen does)
+                String[] a = parts[1].trim().split(" ");
+                var value = switch (a[0]) {
+                    case "photosensitive" -> com.coolfreeze23.headinajar.Config.PHOTOSENSITIVE;
+                    case "geneQuirks" -> com.coolfreeze23.headinajar.Config.GENE_QUIRKS;
+                    default -> null;
+                };
+                if (value != null) value.set(Boolean.parseBoolean(a[1]));
+                report.add("clientcfg " + parts[1].trim() + " -> " + (value == null ? "unknown" : value.get()));
+            }
             case "report" -> report.add(parts[1]);
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its
             // feet (facing +Z): where the head was (centre x/z, lowest y) and the top of the body under a jar placed there
@@ -727,7 +738,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -906,9 +917,10 @@ public class SmokeClient {
                             report.add("lab stocked");
                         }
                         case "genes" -> {
-                            // genes TARGET GENE,GENE: TARGET is "me" or "mecha" (the one ridden); one full-strength serum per gene
+                            // genes TARGET GENE,GENE: TARGET is "me", "mecha" (the one ridden) or "bystander"; one full-strength serum per gene
                             String[] a = parts[1].split(" ");
-                            net.minecraft.world.entity.LivingEntity target = a[0].equals("me") ? player : (net.minecraft.world.entity.LivingEntity) player.getVehicle();
+                            net.minecraft.world.entity.LivingEntity target = a[0].equals("me") ? player : a[0].equals("bystander") ? server.getPlayerList().getPlayerByName("Bystander")
+                                    : (net.minecraft.world.entity.LivingEntity) player.getVehicle();
                             var set = target.getData(ModRegistry.GENES);
                             set.clear();
                             for (String name : a.length > 1 ? a[1].split(",") : new String[0]) {
@@ -918,6 +930,80 @@ public class SmokeClient {
                             set.changed();
                             com.coolfreeze23.headinajar.network.Network.syncGenes(target);
                             report.add("genes " + a[0] + " -> " + set.strengths().keySet());
+                        }
+                        case "library" -> {
+                            // library all PCT | library GENE:PCT,GENE:PCT: adds reads to the player's gene library (to set up a Splicer)
+                            String key = com.coolfreeze23.headinajar.genetics.GeneArchive.key(player);
+                            var archive = com.coolfreeze23.headinajar.genetics.GeneArchive.get(server);
+                            String[] a = parts[1].trim().split(" ");
+                            if (a[0].equals("all")) {
+                                for (var g : com.coolfreeze23.headinajar.genetics.Gene.values()) archive.add(key, g, Float.parseFloat(a[1]));
+                            } else {
+                                for (String e : a[0].split(",")) {
+                                    String[] kv = e.split(":");
+                                    archive.add(key, com.coolfreeze23.headinajar.genetics.Gene.valueOf(kv[0].toUpperCase(java.util.Locale.ROOT)), Float.parseFloat(kv[1]));
+                                }
+                            }
+                            com.coolfreeze23.headinajar.network.Network.syncArchive(player);
+                            report.add("library -> " + parts[1].trim());
+                        }
+                        case "cassette" -> {
+                            // cassette GENE,GENE [STABILITY]: a Serum Cassette of these genes at full strength into the inventory
+                            String[] a = parts[1].trim().split(" ");
+                            java.util.List<com.coolfreeze23.headinajar.genetics.Serum.Entry> entries = new java.util.ArrayList<>();
+                            for (String name : a[0].split(",")) entries.add(new com.coolfreeze23.headinajar.genetics.Serum.Entry(
+                                    com.coolfreeze23.headinajar.genetics.Gene.valueOf(name.toUpperCase(java.util.Locale.ROOT)), 1f));
+                            ItemStack cassette = new ItemStack(ModRegistry.SERUM_CASSETTE.get());
+                            new com.coolfreeze23.headinajar.genetics.Serum(entries, a.length > 1 ? Integer.parseInt(a[1]) : 85).writeTo(cassette);
+                            player.getInventory().add(cassette);
+                            report.add("cassette -> " + a[0]);
+                        }
+                        case "file" -> {
+                            // file SPECIES STAMP: files a species with the player's Staff Directory, as a draw, a saw or a ride does
+                            String[] a = parts[1].trim().split(" ");
+                            com.coolfreeze23.headinajar.genetics.Directory.file(player, net.minecraft.world.entity.EntityType.byString(a[0]).orElseThrow(),
+                                    com.coolfreeze23.headinajar.genetics.Directory.Stamp.valueOf(a[1].toUpperCase(java.util.Locale.ROOT)));
+                            report.add("file -> " + parts[1].trim());
+                        }
+                        case "pick" -> {
+                            // pick X Y Z ROW GENE: the Splicer there picks GENE in strand row ROW (0-2), as its buttons do
+                            String[] a = parts[1].trim().split(" ");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
+                            if (player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.LabMachines.Splicer sp) {
+                                sp.pick(player, Integer.parseInt(a[3]), com.coolfreeze23.headinajar.genetics.Gene.valueOf(a[4].toUpperCase(java.util.Locale.ROOT)));
+                                report.add("pick -> row " + a[3] + " " + a[4]);
+                            } else report.add("pick -> no Splicer at " + pos);
+                        }
+                        case "fileraw" -> {
+                            // fileraw ID STAMP: puts any id on file (a creature from a mod since removed), straight into the saved book
+                            String[] a = parts[1].trim().split(" ");
+                            try {
+                                var book = com.coolfreeze23.headinajar.genetics.Directory.get(server).book(com.coolfreeze23.headinajar.genetics.GeneArchive.key(player));
+                                var f = com.coolfreeze23.headinajar.genetics.Directory.Book.class.getDeclaredField("sets");
+                                f.setAccessible(true);
+                                @SuppressWarnings("unchecked")
+                                var sets = (java.util.Map<com.coolfreeze23.headinajar.genetics.Directory.Stamp, java.util.Set<String>>) f.get(book);
+                                sets.get(com.coolfreeze23.headinajar.genetics.Directory.Stamp.valueOf(a[1].toUpperCase(java.util.Locale.ROOT))).add(a[0]);
+                                com.coolfreeze23.headinajar.genetics.Directory.login(player);
+                                report.add("fileraw -> " + parts[1].trim());
+                            } catch (ReflectiveOperationException e) {
+                                report.add("fileraw -> " + e);
+                            }
+                        }
+                        case "sob" -> {
+                            // sob: the ridden creature (or the player) sobs now, as Weeping Glands does every four minutes
+                            var who = player.getVehicle() instanceof net.minecraft.world.entity.LivingEntity v ? v : player;
+                            com.coolfreeze23.headinajar.genetics.GeneActives.sob(who, player.serverLevel());
+                            report.add("sob -> " + who.getType());
+                        }
+                        case "fleecegrown" -> {
+                            // fleecegrown me|mecha: the carrier's fleece fully grown back, as five minutes of regrowth leave it
+                            net.minecraft.world.entity.LivingEntity who = parts[1].trim().equals("me") ? player : (net.minecraft.world.entity.LivingEntity) player.getVehicle();
+                            var set = who.getData(ModRegistry.GENES);
+                            set.fleece = com.coolfreeze23.headinajar.genetics.GeneNumbers.FLEECE_REGROW;
+                            set.changed();
+                            com.coolfreeze23.headinajar.network.Network.syncGenes(who);
+                            report.add("fleecegrown -> " + who.getType());
                         }
                         case "headblock" -> {
                             // headblock X Y Z ENTITY[,ENTITY...]: stock a turret, array, mount or socket with jarred heads (villagers as librarians)

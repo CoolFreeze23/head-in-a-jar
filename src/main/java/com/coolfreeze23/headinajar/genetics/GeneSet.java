@@ -15,10 +15,16 @@ import java.util.Map;
 public final class GeneSet {
     public static final Codec<GeneSet> CODEC = RecordCodecBuilder.create(i -> i.group(
             Serum.CODEC.listOf().optionalFieldOf("serums", List.of()).forGetter(s -> s.serums),
-            Codec.STRING.listOf().optionalFieldOf("mutations", List.of()).forGetter(s -> s.mutations.stream().map(Gene::id).toList())
-    ).apply(i, (serums, mutations) -> {
+            Codec.STRING.listOf().optionalFieldOf("mutations", List.of()).forGetter(s -> s.mutations.stream().map(Gene::id).toList()),
+            // Fleece (0.6.2): how far the fleece has grown back (ticks; grown at GeneNumbers.FLEECE_REGROW) and its dye
+            // colour; both optional, so older saves read as a bare, white fleece
+            Codec.INT.optionalFieldOf("fleece", 0).forGetter(s -> s.fleece),
+            Codec.INT.optionalFieldOf("fleece_colour", 0).forGetter(s -> s.fleeceColour)
+    ).apply(i, (serums, mutations, fleece, colour) -> {
         GeneSet set = new GeneSet();
         set.serums.addAll(serums);
+        set.fleece = fleece;
+        set.fleeceColour = colour;
         // an unknown gene id (renamed or removed in a later version) is skipped, not fatal
         mutations.forEach(m -> {
             Gene gene = Gene.byId(m);
@@ -31,7 +37,14 @@ public final class GeneSet {
     public final List<Gene> mutations = new ArrayList<>();
     /** A gene grafted for a while (the Chimera's Graft): it works at full strength, takes no port and is never saved. */
     public Gene graft;
+    /** Fleece: ticks of regrowth (fleeced from {@link GeneNumbers#FLEECE_REGROW}) and the fleece's dye colour id. */
+    public int fleece, fleeceColour;
     private Map<Gene, Float> cache;
+
+    /** Whether a Fleece carrier's fleece has grown (the gene itself is asked separately). */
+    public boolean fleeced() {
+        return fleece >= GeneNumbers.FLEECE_REGROW;
+    }
 
     public boolean isEmpty() {
         return serums.isEmpty() && mutations.isEmpty();
@@ -40,6 +53,8 @@ public final class GeneSet {
     public void clear() {
         serums.clear();
         mutations.clear();
+        fleece = 0;
+        fleeceColour = 0;
         cache = null;
     }
 
@@ -52,6 +67,8 @@ public final class GeneSet {
         serums.addAll(other.serums);
         mutations.clear();
         mutations.addAll(other.mutations);
+        fleece = other.fleece;
+        fleeceColour = other.fleeceColour;
         cache = null;
     }
 

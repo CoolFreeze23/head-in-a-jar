@@ -361,9 +361,11 @@ public final class MechaArms {
         if (!victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), damage)) return;
         m.heal(damage * 0.1f);
         int quality = com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem.quality(victim, 50 + m.getRandom().nextInt(31));
-        ItemStack sample = com.coolfreeze23.headinajar.item.GeneticsItems.sample(com.coolfreeze23.headinajar.registry.ModRegistry.BLOOD_SAMPLE.get(), victim.getType(), quality);
+        ItemStack sample = com.coolfreeze23.headinajar.genetics.Samples.mark(com.coolfreeze23.headinajar.item.GeneticsItems.sample(
+                com.coolfreeze23.headinajar.registry.ModRegistry.BLOOD_SAMPLE.get(), victim.getType(), quality), com.coolfreeze23.headinajar.genetics.Samples.nitwit(victim));
         ItemStack left = m.has(MechaModule.CARGO_HOLD) ? m.cargo().addItem(sample) : sample;
         com.coolfreeze23.headinajar.staff.Staff.sampled(victim, pilot);
+        com.coolfreeze23.headinajar.genetics.Samples.drawn(pilot, victim.getType());
         if (!left.isEmpty()) com.coolfreeze23.headinajar.form.FormActions.give(pilot, left);
         m.playSound(com.coolfreeze23.headinajar.fx.HouseSounds.SYRINGE_JAB.get(), 1, 0.8f);
     }

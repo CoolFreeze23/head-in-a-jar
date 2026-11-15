@@ -77,9 +77,10 @@ public final class HeadDonor {
 
     /**
      * The wrong tool for a head's blood: its line (said by {@link #wrongTool}) comes with the refusal sound and the
-     * head's (or the station's) own refusal, as every other no here does. Returns true (handled).
+     * head's (or the station's) own refusal, as every other no here does. Returns true (handled). The same tool on the
+     * live creature answers the same way ({@code GeneticsItems.SyringeItem#draw}).
      */
-    static boolean toolRefused(ServerPlayer player, Refuser refuser) {
+    public static boolean toolRefused(ServerPlayer player, Refuser refuser) {
         net.minecraft.world.phys.Vec3 at = refuser.refusalOrigin();
         player.serverLevel().playSound(null, at.x, at.y, at.z, com.coolfreeze23.headinajar.registry.ModSounds.FEEDBACK_REFUSED.get(),
                 refuser.refusalSource(), 1, 1);
@@ -94,8 +95,11 @@ public final class HeadDonor {
     }
 
     /** The sample, the tool's wear, the jab, and the counts every draw keeps (Out for Blood). */
-    private static void take(ServerPlayer player, ItemStack tool, InteractionHand hand, EntityType<?> type, int quality, BlockPos at) {
-        com.coolfreeze23.headinajar.form.FormActions.give(player, GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), type, quality));
+    private static void take(ServerPlayer player, ItemStack tool, InteractionHand hand, EntityType<?> type, int quality, BlockPos at,
+                             net.minecraft.nbt.CompoundTag creature) {
+        com.coolfreeze23.headinajar.form.FormActions.give(player, com.coolfreeze23.headinajar.genetics.Samples.mark(
+                GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), type, quality), com.coolfreeze23.headinajar.genetics.Samples.nitwit(creature)));
+        com.coolfreeze23.headinajar.genetics.Samples.drawn(player, type);
         int drawn = player.getPersistentData().getInt("headinajar_samples") + 1;
         player.getPersistentData().putInt("headinajar_samples", drawn);
         if (drawn >= 10) com.coolfreeze23.headinajar.Advance.grant(player, "out_for_blood");
@@ -130,7 +134,7 @@ public final class HeadDonor {
         int q = quality(level, full);
         head.libraryDay = day;
         head.libraryDays++;
-        take(player, stack, hand, type, q, head.getBlockPos());
+        take(player, stack, hand, type, q, head.getBlockPos(), head.entityTag());
         level.blockEvent(head.getBlockPos(), head.getBlockState().getBlock(), JarredHeadBlockEntity.EV_WINCE, 0);
         if (f != null) {
             f.note("sampled", day, "");
@@ -185,7 +189,8 @@ public final class HeadDonor {
             Staff.write(head, f);
         }
         station.setChanged();
-        take(player, stack, hand, type, quality(level, true), station.getBlockPos());
+        CustomData record = head.get(DataComponents.CUSTOM_DATA);
+        take(player, stack, hand, type, quality(level, true), station.getBlockPos(), record == null ? null : record.getUnsafe().getCompound("Entity"));
         com.coolfreeze23.headinajar.clarity.Memos.send(player, com.coolfreeze23.headinajar.clarity.Memos.Memo.FIRST_STATION_DRAW);
     }
 
@@ -264,7 +269,8 @@ public final class HeadDonor {
         head.setChanged();
         level.blockEvent(head.getBlockPos(), head.getBlockState().getBlock(), JarredHeadBlockEntity.EV_WINCE, 0);
         DRAWN.add(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(head.entityType()) + "|" + q);
-        return GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), head.entityType(), q);
+        return com.coolfreeze23.headinajar.genetics.Samples.mark(GeneticsItems.sample(ModRegistry.BLOOD_SAMPLE.get(), head.entityType(), q),
+                com.coolfreeze23.headinajar.genetics.Samples.nitwit(head.entityTag()));
     }
 
     // --- heads near a place ------------------------------------------------------------------------------------------

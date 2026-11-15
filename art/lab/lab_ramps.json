@@ -1,0 +1,6 @@
+{
+  "about": "Ramps the lab art needs that art/palette.json does not have yet, in the palette file's 'shared' format (the same in every style set). Meant to move into art/palette.json 'shared' as it is; until then lab_palette.py merges it over the house palette. Dark to light.",
+  "shared": {
+    "gui": {"alias": "u", "label": "vanilla screen greys (the machine screens' code-drawn panel: outline, slot shadow, edge shadow, slot, face, highlight)", "ramp": ["000000", "373737", "555555", "8b8b8b", "c6c6c6", "ffffff"]}
+  }
+}

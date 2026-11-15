@@ -176,6 +176,9 @@ public final class GeneEvents {
 
     @SubscribeEvent
     public static void login(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer p) Network.syncGenes(p);
+        if (!(event.getEntity() instanceof ServerPlayer p)) return;
+        Network.syncGenes(p);
+        // the library reaches the client at login too (not only when a lab screen opens): Keen Nose and the Bio-Scanner read it
+        Network.syncArchive(p);
     }
 }

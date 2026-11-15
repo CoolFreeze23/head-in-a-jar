@@ -364,7 +364,7 @@ public class StaffGameTests {
             h.assertTrue(new net.neoforged.neoforge.network.negotiation.NegotiableNetworkComponent(reg).optional(), reg.id() + " is not optional");
         }
         h.assertTrue(found == 2, "the staff payloads are not registered: " + found);
-        h.assertValueEqual(com.coolfreeze23.headinajar.network.Network.VERSION, "5", "the network version");
+        h.assertValueEqual(com.coolfreeze23.headinajar.network.Network.VERSION, "6", "the network version");
         h.succeed();
     }
 

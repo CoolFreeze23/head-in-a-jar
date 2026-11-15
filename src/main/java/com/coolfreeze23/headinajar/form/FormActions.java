@@ -340,6 +340,7 @@ public final class FormActions {
             }
         } else if (!data.shell) {
             com.coolfreeze23.headinajar.Advance.grant(player, "hosted");
+            com.coolfreeze23.headinajar.genetics.Directory.file(player, host.getType(), com.coolfreeze23.headinajar.genetics.Directory.Stamp.RIDDEN);
             if (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(host.getType()).toString().equals("brazil_legends:headless_mule")) {
                 com.coolfreeze23.headinajar.Advance.grant(player, "mula");
             }

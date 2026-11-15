@@ -29,6 +29,9 @@ public class HeadInAJar {
         NeoForge.EVENT_BUS.register(FormEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.host.HostEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.genetics.GeneEvents.class);
+        com.coolfreeze23.headinajar.genetics.GentleGenes.register();
+        com.coolfreeze23.headinajar.genetics.HostileGenes.register();
+        com.coolfreeze23.headinajar.genetics.GeneActives.register();
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.form.BoardEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.feedback.Refusals.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.block.MachineEvents.class);

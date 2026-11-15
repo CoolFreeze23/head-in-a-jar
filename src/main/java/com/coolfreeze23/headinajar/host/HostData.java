@@ -15,7 +15,8 @@ public final class HostData {
             Codec.LONG.optionalFieldOf("embalmed_until", 0L).forGetter(d -> d.embalmedUntil),
             Codec.BOOL.optionalFieldOf("laced", false).forGetter(d -> d.laced),
             Codec.BOOL.optionalFieldOf("handshaken", false).forGetter(d -> d.handshaken),
-            Codec.BOOL.optionalFieldOf("shell", false).forGetter(d -> d.shell)
+            Codec.BOOL.optionalFieldOf("shell", false).forGetter(d -> d.shell),
+            Codec.BOOL.optionalFieldOf("printed", false).forGetter(d -> d.printed)
     ).apply(i, HostData::new));
 
     public boolean host;
@@ -26,16 +27,18 @@ public final class HostData {
     public boolean handshaken;
     /** A Utility Shell: never decays, always fully synced. */
     public boolean shell;
+    /** Printed by the Body Printer from a template: drops no loot and no experience when it dies (older saves: false). */
+    public boolean printed;
     /** Ability cooldowns in ticks (not saved). */
     public int primaryCooldown, secondaryCooldown;
     /** Stored in a Body Locker (not saved: the locker holds the entity as NBT). */
     public boolean dirty;
 
     public HostData() {
-        this(false, 100f, 0f, 0L, false, false, false);
+        this(false, 100f, 0f, 0L, false, false, false, false);
     }
 
-    private HostData(boolean host, float freshness, float sync, long embalmedUntil, boolean laced, boolean handshaken, boolean shell) {
+    private HostData(boolean host, float freshness, float sync, long embalmedUntil, boolean laced, boolean handshaken, boolean shell, boolean printed) {
         this.host = host;
         this.freshness = freshness;
         this.sync = sync;
@@ -43,6 +46,7 @@ public final class HostData {
         this.laced = laced;
         this.handshaken = handshaken;
         this.shell = shell;
+        this.printed = printed;
     }
 
     public float effectiveSync() {

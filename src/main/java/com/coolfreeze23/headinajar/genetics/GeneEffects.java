@@ -75,7 +75,8 @@ public final class GeneEffects {
         return s(e, g) >= 0.5f;
     }
 
-    private static void set(LivingEntity e, Holder<Attribute> attr, String id, double amount, AttributeModifier.Operation op) {
+    /** Puts (or with 0 takes off) the gene modifier {@code gene_<id>} on an attribute; only touches it when it changes. */
+    static void set(LivingEntity e, Holder<Attribute> attr, String id, double amount, AttributeModifier.Operation op) {
         AttributeInstance inst = e.getAttribute(attr);
         if (inst == null) return;
         ResourceLocation key = HeadInAJar.id("gene_" + id);
@@ -106,6 +107,10 @@ public final class GeneEffects {
         boolean daylight = e.level().isDay() && e.level().canSeeSky(e.blockPosition());
         set(e, Attributes.MOVEMENT_SPEED, "photophobia", on && has(e, Gene.PHOTOPHOBIA) && daylight ? -0.15 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         if (e instanceof Player p) set(e, NeoForgeMod.CREATIVE_FLIGHT, "draconic_wings", on && has(e, Gene.DRACONIC_WINGS) ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
+        // the 0.6.2 genes' own attributes and per-tick state (each switches its modifiers off when on is false)
+        GentleGenes.tick(e, on, k);
+        HostileGenes.tick(e, on, k);
+        GeneActives.tick(e, on, k);
         java.util.Set<Entity> applied = e.level().isClientSide ? APPLIED_CLIENT : APPLIED_SERVER;
         if (!on) {
             // the modifiers above are now off; the light goes too (washed, detached, in a jar, or no genes left)
@@ -160,6 +165,9 @@ public final class GeneEffects {
             e.setDeltaMovement(now.x * 1.02, -0.12, now.z * 1.02);
             e.fallDistance = 0;
         }
+        GentleGenes.movement(e);
+        HostileGenes.movement(e);
+        GeneActives.movement(e);
     }
 
     private static void serverTick(LivingEntity e, ServerLevel level) {
@@ -205,6 +213,9 @@ public final class GeneEffects {
                 other.addEffect(new MobEffectInstance(MobEffects.WITHER, 40, 0), e);
             }
         }
+        GentleGenes.serverTick(e, level);
+        HostileGenes.serverTick(e, level);
+        GeneActives.serverTick(e, level);
         int[] cd = COOLDOWNS.get(e);
         if (cd != null) {
             if (cd[0] > 0) cd[0]--;
@@ -290,6 +301,12 @@ public final class GeneEffects {
         if (cd[which] > 0) return "gene.cooling";
         Gene gene = actives.get(which);
         ServerLevel level = (ServerLevel) body.level();
+        // a mecha still booting after its pilot climbed in stands up from parked: nothing fires and nothing cools down
+        if (body instanceof com.coolfreeze23.headinajar.entity.MechaEntity m && m.boardedAt() >= 0
+                && level.getGameTime() - m.boardedAt() < com.coolfreeze23.headinajar.mecha.HopperAnimation.BOOT_END) return "gene.booting";
+        // the 0.6.2 actives answer for themselves: null when fired, else their own refusal reason
+        String own = GeneActives.fire(gene, body, aim, level, cd, which);
+        if (!GeneActives.NOT_MINE.equals(own)) return own;
         Vec3 look = aim.getLookAngle();
         boolean done = switch (gene) {
             case ENDER_BLINK -> {
@@ -395,7 +412,8 @@ public final class GeneEffects {
         return done ? null : "gene.no_target";
     }
 
-    private static LivingEntity target(LivingEntity aim, LivingEntity body, double range) {
+    /** The living creature {@code aim} looks at within {@code range}, never {@code aim} or {@code body}. */
+    static LivingEntity target(LivingEntity aim, LivingEntity body, double range) {
         Vec3 eye = aim.getEyePosition(), end = eye.add(aim.getLookAngle().scale(range));
         EntityHitResult hit = ProjectileUtil.getEntityHitResult(aim, eye, end, new AABB(eye, end).inflate(1),
                 o -> o != aim && o != body && o instanceof LivingEntity && o.isAlive(), range * range);

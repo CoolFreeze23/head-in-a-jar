@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:out_for_blood",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "apology_to_the_cow"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:blood_sample"
+    },
+    "title": {
+      "translate": "advancements.headinajar.apology_to_the_cow.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.apology_to_the_cow.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  }
+}

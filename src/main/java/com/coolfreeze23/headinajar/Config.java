@@ -74,6 +74,15 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue KEEP_GENES = B
             .comment("Spliced genes stay in your body when you die and respawn.")
             .define("keepGenesOnDeath", true);
+    public static final ModConfigSpec.BooleanValue PHASE_THROUGH_WALLS = B
+            .comment("The Phase gene may dash through walls (false refuses it: \"This server keeps its walls.\").")
+            .define("phaseThroughWalls", true);
+    public static final ModConfigSpec.BooleanValue BULLDOZE_BREAKS_BLOCKS = B
+            .comment("The Bulldoze gene breaks leaves, crops, flowers and cobwebs it walks into (false: it only shoves).")
+            .define("bulldozeBreaksBlocks", true);
+    public static final ModConfigSpec.BooleanValue SPECIMEN_PRINTING = B
+            .comment("The Body Printer's Template slot prints hosts from DNA Fractions (false keeps the slot locked).")
+            .define("specimenPrinting", true);
 
     static {
         B.pop().push("saw");
@@ -143,6 +152,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue LANYARDS = C
             .comment("Show the staff badge on heads and stations that work for someone (off: no badges are drawn for you).")
             .define("lanyards", true);
+    public static final ModConfigSpec.BooleanValue GENE_QUIRKS = C
+            .comment("Hear other players' and hosts' gene quirks: the moos, oinks, croaks, sneezes and sobs (off: only your own).")
+            .define("geneQuirks", true);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

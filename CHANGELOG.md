@@ -2,6 +2,42 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.6.2 (2026-11-16)
+
+- **Every creature carries a gene.** Forty new genes, eighty-nine in all: every natural vanilla creature now carries
+  at least one (the giant, the illusioner and the zombie horse still carry none). Among them: Ruminant
+  Gut lets you graze; Fleece hides your steps from sculk sensors and a listening Warden; Mountain Hooves step up whole
+  blocks; Undeath turns Instant Damage into healing and burns you by day; Weeping Glands cry a Ghast Tear every 20
+  minutes in a host or a mecha. Six are actives: Snow Pounce, Tongue and Spit Gland fit a body; Phase, Fang Line and
+  Levitation Bolt only a host or a mecha. Every new gene's cost is printed in grey on its cassette ("Cost: you moo when
+  hurt."). Old samples and fractions read into the new genes: "Following a review, the cow has been found to carry
+  genes after all. HR apologises to the cow."
+- **A Nitwit's sample** "Carries no readable genes. HR has checked twice." Every other villager still carries Hero's
+  Blood.
+- **The Splicer is sorted by department.** Each row has a department chip: press it for the next department with a
+  gene you can use, then the arrows for its genes. The title strip names the department, a gene's name shows its
+  card, and **Stab** lists the strand's named pairs. Twenty-two new synergies and thirteen new conflicts, all named.
+- **The Staff Directory.** The DNA Sequencer has a **Directory** tab: the 82 vanilla creatures by department with
+  their spawn eggs, stamped as your team samples, jars and rides them, with a hint for every blank cell and three
+  [REDACTED] creatures to find. A teammate's filing shows at the top of the grid ("Pufferfish: filed by Alex"). The
+  Bio-Scanner adds "Unfiled" to a creature your team has never sampled.
+- **Print-to-Order.** The Body Printer has a **Template** slot: a DNA Fraction of quality 40 or better prints a headless
+  host of that species, its materials scaled by its size (a chicken is a quarter of a print, a pig half, a cow a whole
+  one), at the fraction's quality as freshness. "Your new Cow is ready. It is a little damp." The door is one block
+  wide and two tall; marine models are delivered into water; printed hosts drop no loot when they die.
+- The Safety Placard has two new notices: "QUIET FLOOR: THE WARDEN IS WORKING" and "PLEASE DO NOT TAP THE GLASS".
+- Five advancements (An Apology to the Cow, Headhunter, Complete Census, Off the Books, Made to Order) and five memos.
+  The handbook has new pages on gene departments, named pairs, the Staff Directory and Print-to-Order. New server values
+  `genetics.phaseThroughWalls`, `genetics.bulldozeBreaksBlocks` and `genetics.specimenPrinting`; new client option
+  `geneQuirks`. Ten new sounds with subtitles ("Colleague moos", "Tongue lashes", "Phases through the wall"...).
+- A sampling tool used on a live creature it cannot draw from (a Precision Syringe on a warden's thick hide, a Syringe
+  on a skeleton) now refuses with the refusal sound and the creature shaking its head, as it does on the creature's
+  placed head. A serum a host or a mecha will not take (too heavy, or no port free) is refused the same way, not
+  with the welcome sound. A mecha's genes wait for its self-test after you climb in: "Snow Pounce waits for the
+  self-test. Nothing fires before the checklist."
+- Client and server must both be on 0.6.2. Going back to 0.6.1 drops the new genes from serums and bodies and empties
+  a Body Printer's Template slot.
+
 ## 0.6.1 (2026-11-16)
 
 - **Every head has a title and a bell.** A placed head's tooltip, Jade and file card give its job title ("Canteen

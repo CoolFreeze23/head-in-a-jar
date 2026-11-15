@@ -428,11 +428,12 @@ public class ThirdRepairGameTests {
         // and the library agrees: three auto-reads take Spider Climb to a Draft, two don't
         float gain = Genetics.readGain(80, LabMachines.Sequencer.AUTO_ACCURACY, 1);
         h.assertTrue(gain * 2 < 30 && gain * 3 >= 30, "gain " + gain);
-        ItemStack cow = GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), EntityType.COW, 80);
+        // every natural creature carries a gene since 0.6.2: the giant is one of the three that still carry none
+        ItemStack giant = GeneticsItems.sample(ModRegistry.DNA_FRACTION.get(), EntityType.GIANT, 80);
         tip.clear();
-        cow.getItem().appendHoverText(cow, net.minecraft.world.item.Item.TooltipContext.EMPTY, tip, TooltipFlag.NORMAL);
+        giant.getItem().appendHoverText(giant, net.minecraft.world.item.Item.TooltipContext.EMPTY, tip, TooltipFlag.NORMAL);
         h.assertTrue(tip.stream().anyMatch(c -> c.getContents() instanceof TranslatableContents t && t.getKey().equals("item.headinajar.sample.no_genes")),
-                "a cow's fraction does not say it carries nothing");
+                "a giant's fraction does not say it carries nothing");
         h.succeed();
     }
 

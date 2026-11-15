@@ -14,6 +14,11 @@ public final class BodyFx {
             case Fx.TOOL -> ToolFx.used(fx);
             case Fx.CORPSE -> BodyPoses.corpse(fx.entityB());
             case Fx.STAFF_SHAKE -> StaffShake.start(fx);
+            case Fx.GENE_ROLL_UP, Fx.GENE_PUFFER, Fx.GENE_SPARE_A, Fx.GENE_SPARE_B -> com.coolfreeze23.headinajar.client.genes.LivestockClient.fx(fx);
+            case Fx.GENE_SPARE_C -> com.coolfreeze23.headinajar.client.genes.NightShiftClient.fx(fx);
+            case Fx.GENE_PHASE, Fx.GENE_TONGUE, Fx.GENE_POUNCE, Fx.GENE_SPIT, Fx.GENE_FANGS, Fx.GENE_WEEP, Fx.GENE_SPARE_D ->
+                    com.coolfreeze23.headinajar.client.genes.ActivesClient.fx(fx);
+            case Fx.PRINTED -> com.coolfreeze23.headinajar.client.PrintedFx.fx(fx);
             default -> {
             }
         }

@@ -250,10 +250,10 @@ public class WearGameTests {
             if (!reg.id().getNamespace().equals(HeadInAJar.MOD_ID)) continue;
             var c = new net.neoforged.neoforge.network.negotiation.NegotiableNetworkComponent(reg);
             ours.add(c);
-            // the last release sent the same payloads at version 4
-            old.add(new net.neoforged.neoforge.network.negotiation.NegotiableNetworkComponent(c.id(), c.version().equals(com.coolfreeze23.headinajar.network.Network.VERSION) ? "4" : c.version(), c.flow(), c.optional()));
+            // the last release sent the same payloads at version 5
+            old.add(new net.neoforged.neoforge.network.negotiation.NegotiableNetworkComponent(c.id(), c.version().equals(com.coolfreeze23.headinajar.network.Network.VERSION) ? "5" : c.version(), c.flow(), c.optional()));
         }
-        h.assertTrue(ours.stream().anyMatch(c -> c.version().equals("5")), "no payload at version 5");
+        h.assertTrue(ours.stream().anyMatch(c -> c.version().equals("6")), "no payload at version 6");
         var same = net.neoforged.neoforge.network.negotiation.NetworkComponentNegotiator.negotiate(ours, ours);
         h.assertTrue(same.success(), "the same version was refused: " + same.failureReasons());
         for (boolean oldServer : new boolean[]{false, true}) {
@@ -269,7 +269,7 @@ public class WearGameTests {
     /** NeoForge's version-mismatch reason with both versions, anywhere in the (possibly untranslated) message. */
     private static boolean namesVersions(Object part) {
         if (part instanceof net.minecraft.network.chat.Component c && c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t) {
-            if (t.getKey().endsWith("version.mismatch") && java.util.Arrays.asList(t.getArgs()).containsAll(java.util.List.of("4", "5"))) return true;
+            if (t.getKey().endsWith("version.mismatch") && java.util.Arrays.asList(t.getArgs()).containsAll(java.util.List.of("5", "6"))) return true;
             for (Object arg : t.getArgs()) if (namesVersions(arg)) return true;
         }
         return false;

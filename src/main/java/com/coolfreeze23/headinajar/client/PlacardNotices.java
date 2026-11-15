@@ -17,7 +17,8 @@ import net.minecraft.server.packs.resources.ResourceManager;
 public final class PlacardNotices implements SpriteSource {
     public static final MapCodec<PlacardNotices> CODEC = MapCodec.unit(PlacardNotices::new);
     public static final SpriteSourceType TYPE = new SpriteSourceType(CODEC);
-    public static final int NOTICES = 12;
+    /** Notice numbers 0..20 (the block's property); only the shipped ones have textures, the rest are skipped. */
+    public static final int NOTICES = 21;
 
     @Override
     public void run(ResourceManager resources, Output output) {

@@ -490,6 +490,8 @@ VERBS = {
     "inspect": rf"^inspect (?:me|aim|block {XYZ}|near \S+(?: {F})?)$",
     "widget": r'^widget (?:"[^"]+"|#\d+|\S+)(?: (?:left|right|middle|shift|double|hold \d+))*$',
     "at": rf"^at (?:rel )?{F} {F}(?: (?:left|right|middle|shift|double|hold \d+))*$",
+    "slot": r"^slot (?:\d+|inv:\d+|item:[\w:]+(?:@\S+)?)(?: (?:left|right|middle|shift|double|hold \d+))*$",
+    "mouse": rf"^mouse (?:rel )?{F} {F}$",
     "jar": r"^jar$", "separate": r"^separate$", "swap": r"^swap$", "pickup": r"^pickup$", "mount": r"^mount$",
     "pilotgenes": r"^pilotgenes$", "lab": r"^lab$",
     "fit": r"^fit [a-z_]+(?:,[a-z_]+)*$",
@@ -512,7 +514,7 @@ BYSTANDER = {
     "mark": r"^bystander mark$", "packets": r"^bystander packets.*$",
 }
 COMMANDS = {"tp", "setblock", "fill", "summon", "kill", "item", "give", "clear", "effect", "gamerule", "time", "weather",
-            "forceload", "setworldspawn", "data", "execute", "damage", "say", "headoffice"}
+            "forceload", "setworldspawn", "data", "execute", "damage", "say", "headoffice", "team"}
 DIRECTIVES = {"world", "gamemode", "difficulty", "observe", "seed", "keep", "clean"}
 
 

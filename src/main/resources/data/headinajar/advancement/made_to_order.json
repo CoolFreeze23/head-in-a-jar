@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:spliced",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "made_to_order"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:body_printer"
+    },
+    "title": {
+      "translate": "advancements.headinajar.made_to_order.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.made_to_order.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

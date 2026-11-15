@@ -380,8 +380,15 @@ public final class MechaSystems {
     public static Component bioScan(MechaEntity m, LivingEntity seen) {
         if (!m.has(MechaModule.BIO_SCANNER) || m.battery() <= 0 || !seen.isAlive()) return null;
         var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(seen);
-        return Component.translatable("hud.headinajar.bio_scan", seen.getDisplayName(), (int) Math.ceil(seen.getHealth()), (int) Math.ceil(seen.getMaxHealth()),
+        var line = Component.translatable("hud.headinajar.bio_scan", seen.getDisplayName(), (int) Math.ceil(seen.getHealth()), (int) Math.ceil(seen.getMaxHealth()),
                 Component.translatable("blood.headinajar." + blood.name().toLowerCase(java.util.Locale.ROOT)));
+        // a creature the pilot's team has never sampled is "Unfiled" (the client's copy of the Staff Directory)
+        if (m.level().isClientSide && !(seen instanceof net.minecraft.world.entity.player.Player)
+                && !com.coolfreeze23.headinajar.genetics.Directory.Client.has(com.coolfreeze23.headinajar.genetics.Directory.Stamp.SAMPLED,
+                com.coolfreeze23.headinajar.genetics.Directory.id(seen.getType()))) {
+            line.append(", ").append(Component.translatable("hud.headinajar.bio_scan.unfiled").withStyle(net.minecraft.ChatFormatting.YELLOW));
+        }
+        return line;
     }
 
     /** Moving on hover skirts and lava treads (both sides, while ridden). */

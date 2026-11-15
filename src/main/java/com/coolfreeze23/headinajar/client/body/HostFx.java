@@ -92,6 +92,11 @@ public final class HostFx {
         ToolFx.saw(fx.entityA());
     }
 
+    /** A host printed to order steps out: the cut's first moment from its second step on (no head to pop), so only the wet-dog shake. */
+    public static void printed(int hostId) {
+        CUTS.put(hostId, new Cut(now() - POP - 11, false, -1, Vec3.ZERO));
+    }
+
     static void seat(Fx fx) {
         SEATED.put(fx.entityB(), now());
         UNSEATED.remove(fx.entityB());

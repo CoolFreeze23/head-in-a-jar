@@ -119,16 +119,27 @@ public final class Chimera {
         };
     }
 
-    /** The gene a creature gives up to a Graft: its first that is not Legendary; null if it carries none at all. */
-    static Gene geneOf(EntityType<?> type, boolean[] legendary) {
+    /** A Graft takes no gene of this load or more (a vex's Phase, an evoker's Fang Line, a shulker's Levitation Bolt). */
+    public static final int GRAFT_MAX_LOAD = 3;
+
+    /**
+     * The gene a creature gives up to a Graft: its first that is not Legendary and not of load 4 or more; null if it has
+     * none of those ({@code why[0]}: it carries only Legendary genes; {@code why[1]}: only heavy ones).
+     */
+    public static Gene geneOf(EntityType<?> type, boolean[] why) {
         List<Gene> genes = Gene.of(BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
-        legendary[0] = !genes.isEmpty();
+        boolean legendary = false, heavy = false;
         for (Gene g : genes) {
-            if (g.category != Gene.Category.LEGENDARY) {
-                legendary[0] = false;
+            if (g.category == Gene.Category.LEGENDARY) legendary = true;
+            else if (g.load > GRAFT_MAX_LOAD) heavy = true;
+            else {
+                why[0] = false;
+                if (why.length > 1) why[1] = false;
                 return g;
             }
         }
+        why[0] = legendary;
+        if (why.length > 1) why[1] = heavy && !legendary;
         return null;
     }
 
@@ -180,7 +191,7 @@ public final class Chimera {
         }
         String reason = null;
         Object[] args = {};
-        boolean[] legendary = {false};
+        boolean[] legendary = {false, false};
         Gene gene = null;
         if (m.vent() > 0) reason = "mecha.graft.venting";
         else if (grafted(m) != null) {
@@ -191,7 +202,7 @@ public final class Chimera {
             gene = geneOf(m.tasted, legendary);
             Component name = m.tasted.getDescription();
             if (gene == null) {
-                reason = legendary[0] ? "mecha.graft.legendary" : "mecha.graft.no_genes";
+                reason = legendary[0] ? "mecha.graft.legendary" : legendary[1] ? "mecha.graft.heavy" : "mecha.graft.no_genes";
                 args = new Object[]{name};
             } else if (m.battery() < GRAFT_FE) {
                 reason = "mecha.graft.no_power";

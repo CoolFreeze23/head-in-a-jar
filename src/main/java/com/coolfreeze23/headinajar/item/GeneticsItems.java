@@ -81,9 +81,10 @@ public final class GeneticsItems {
             if (type == null) return;
             tooltip.add(Component.translatable("item.headinajar.sample.quality", quality(stack)).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.translatable("blood.headinajar." + BloodType.of(type).name().toLowerCase(java.util.Locale.ROOT)).withStyle(ChatFormatting.DARK_RED));
-            List<Gene> genes = Gene.of(BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
+            List<Gene> genes = com.coolfreeze23.headinajar.genetics.Samples.genes(stack);
             if (genes.isEmpty()) {
-                tooltip.add(Component.translatable("item.headinajar.sample.no_genes").withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(Component.translatable(com.coolfreeze23.headinajar.genetics.Samples.nitwit(stack)
+                        ? "item.headinajar.sample.nitwit" : "item.headinajar.sample.no_genes").withStyle(ChatFormatting.DARK_GRAY));
                 return;
             }
             // which genes, by name, and how many auto-reads of samples this good take each of them to a Draft
@@ -171,17 +172,19 @@ public final class GeneticsItems {
                 Item takes = kind.bloodless && blood.bloodless ? toolFor(blood) : null;
                 player.displayClientMessage(takes != null ? Component.translatable("message.headinajar.other_bloodless_tool", takes.getDescription())
                         : Component.translatable(blood.bloodless ? "message.headinajar.bloodless" : "message.headinajar.wrong_tool"), true);
-                return InteractionResult.FAIL;
+                return refused(player, target);
             }
             if (target.getType().is(BloodType.THICK_HIDE) && !bosses) {
                 player.displayClientMessage(Component.translatable("message.headinajar.boss_hide"), true);
-                return InteractionResult.FAIL;
+                return refused(player, target);
             }
             int quality = quality(target, min + player.getRandom().nextInt(max - min + 1));
             // the needle stings, but a sample never costs the specimen its last point of health
             if (!harmless) target.hurt(player.damageSources().playerAttack(player), Math.min(1, Math.max(0, target.getHealth() - 1)));
-            com.coolfreeze23.headinajar.form.FormActions.give(player, sample(ModRegistry.BLOOD_SAMPLE.get(), target.getType(), quality));
+            com.coolfreeze23.headinajar.form.FormActions.give(player, com.coolfreeze23.headinajar.genetics.Samples.mark(
+                    sample(ModRegistry.BLOOD_SAMPLE.get(), target.getType(), quality), com.coolfreeze23.headinajar.genetics.Samples.nitwit(target)));
             com.coolfreeze23.headinajar.staff.Staff.sampled(target, player);
+            com.coolfreeze23.headinajar.genetics.Samples.drawn(player, target.getType());
             int drawn = player.getPersistentData().getInt("headinajar_samples") + 1;
             player.getPersistentData().putInt("headinajar_samples", drawn);
             if (drawn >= 10) com.coolfreeze23.headinajar.Advance.grant(player, "out_for_blood");
@@ -189,6 +192,16 @@ public final class GeneticsItems {
             player.serverLevel().playSound(null, target.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.SYRINGE_JAB.get(), target.getSoundSource(), 0.8f, 1.4f);
             com.coolfreeze23.headinajar.body.BodyServer.tool(player, target, com.coolfreeze23.headinajar.fx.Fx.TOOL_SYRINGE);
             return InteractionResult.CONSUME;
+        }
+
+        /**
+         * The wrong tool on a live creature: its line (said above) comes with the refusal sound and the creature shaking
+         * its head, as the same tool on its placed head does.
+         */
+        private static InteractionResult refused(ServerPlayer player, LivingEntity target) {
+            com.coolfreeze23.headinajar.block.HeadDonor.toolRefused(player, target instanceof net.minecraft.world.entity.Mob mob
+                    ? com.coolfreeze23.headinajar.staff.StaffShake.at(mob) : com.coolfreeze23.headinajar.feedback.Refuser.at(target));
+            return InteractionResult.FAIL;
         }
 
         /** The collection tool for a bloodless kind (Marrow Drill, Oil Tap, Ecto Trap), or null for a kind with blood. */
@@ -240,11 +253,11 @@ public final class GeneticsItems {
             if (target instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha) {
                 if (mecha.genePorts() == 0) {
                     player.displayClientMessage(Component.translatable("message.headinajar.mecha_gene_port"), true);
-                    return InteractionResult.FAIL;
+                    return refused(player, target);
                 }
                 if (!mecha.isOwnedBy(player)) {
                     player.displayClientMessage(Component.translatable("message.headinajar.not_your_mecha"), true);
-                    return InteractionResult.FAIL;
+                    return refused(player, target);
                 }
                 kind = Genetics.Target.MECHA;
             } else if (target instanceof Mob host && Hosts.isHost(host)) {
@@ -256,14 +269,33 @@ public final class GeneticsItems {
                 return InteractionResult.FAIL;
             }
             Genetics.Result result = Genetics.inject(target, serum.get(), kind, player.getRandom());
+            if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) {
+                // a no: its line with the refusal sound and the body shaking it off, never the welcome sound
+                player.displayClientMessage(Component.translatable("message.headinajar.inject." + result.name().toLowerCase(java.util.Locale.ROOT)), true);
+                return refused(player, target);
+            }
             report(player, result);
             if (result == Genetics.Result.OK || result == Genetics.Result.MUTATED) injected(player, serum.get(), target);
-            if (result == Genetics.Result.FULL || result == Genetics.Result.TOO_HEAVY) return InteractionResult.FAIL;
             stack.shrink(1);
             com.coolfreeze23.headinajar.form.FormActions.give(player, new ItemStack(net.minecraft.world.item.Items.GLASS_BOTTLE));
             Network.syncGenes(target);
             return InteractionResult.CONSUME;
         }
+
+        /** A serum the host or mecha will not take: the refusal sound and its refusal (a host shakes its head, a mecha its cockpit). */
+        private static InteractionResult refused(ServerPlayer player, LivingEntity target) {
+            com.coolfreeze23.headinajar.feedback.Refuser refuser = target instanceof Mob mob && !(target instanceof com.coolfreeze23.headinajar.entity.MechaEntity)
+                    ? com.coolfreeze23.headinajar.staff.StaffShake.at(mob) : com.coolfreeze23.headinajar.feedback.Refuser.at(target);
+            net.minecraft.world.phys.Vec3 at = refuser.refusalOrigin();
+            player.serverLevel().playSound(null, at.x, at.y, at.z, com.coolfreeze23.headinajar.registry.ModSounds.FEEDBACK_REFUSED.get(),
+                    refuser.refusalSource(), 1, 1);
+            refuser.showRefusal(player, "gene.serum_refused");
+            REFUSED++;
+            return InteractionResult.FAIL;
+        }
+
+        /** How many serums by hand were refused with the sound (tests). */
+        public static int REFUSED;
 
         /** Used in the air: serums are never self-injected by hand. */
         @Override
@@ -303,6 +335,12 @@ public final class GeneticsItems {
                 for (Serum.Entry e : serum.genes()) {
                     tooltip.add(Component.translatable("item.headinajar.serum.gene", Component.translatable("gene.headinajar." + e.gene().id()),
                             Math.round(e.potency() * 100)).withStyle(ChatFormatting.AQUA));
+                    String cost = "gene.headinajar." + e.gene().id() + ".cost";
+                    if (e.gene().hasCostLine() && net.minecraft.locale.Language.getInstance().has(cost)) {
+                        tooltip.add(Component.translatable(cost).withStyle(ChatFormatting.GRAY));
+                    }
+                    // Fetch needs an off hand: a host or a mecha has none
+                    if (e.gene() == Gene.FETCH) tooltip.add(Component.translatable("gene.headinajar.fetch.no_hand").withStyle(ChatFormatting.DARK_GRAY));
                 }
                 tooltip.add(Component.translatable("item.headinajar.serum.stats", serum.stability(), serum.load(),
                         Math.round(Genetics.mutationChance(serum.stability()) * 100)).withStyle(ChatFormatting.GRAY));
