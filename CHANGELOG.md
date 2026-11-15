@@ -2,6 +2,25 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.5.4 (2026-11-15)
+
+- **A Board Meeting's motion can fall.** The Board announced every motion as carried, even 1 to 8. A motion now
+  carries only when the ayes outnumber the nays (a tie does not), and one that falls is announced as such:
+  "[Board Meeting] Motion: unionise. Not carried: 1 for, 4 against."
+- **The right tool, named.** A Marrow Drill, Oil Tap or Ecto Trap used on a bloodless creature of another kind now
+  names the tool that creature takes ("Wrong tool for this creature. Use the Oil Tap." for a Marrow Drill on an iron
+  golem), instead of the syringe's line listing all three, the tool in your hand among them.
+- **The Hemo-Syringe stops at a thick hide.** On a mecha's arm it drew blood from bosses, the Elder Guardian and the
+  Warden, which by hand only a Leviathan Needle gets through. It now refuses them as the hand syringes do ("Its hide
+  is too thick: use a Leviathan Needle") and does not jab them.
+- **The Hemo-Syringe no longer jabs the bloodless.** On a mecha's arm it hurt a bloodless creature, an iron golem
+  say, and drew nothing. It now refuses with the line that names the tool that creature takes ("Wrong tool for this
+  creature. Use the Oil Tap." at an iron golem), and does not hurt it.
+- **JEI says half.** The Surgical Saw's JEI page said it takes a creature below 25% of its health; since 0.5.2 it takes
+  one at half its health or less, and the page now says so.
+- **The README quotes the game.** Eleven lines it quoted had drifted from what the game says, among them the glass's
+  warnings, running out of saline, the EMP's line and the wrong-tool line; each now reads as the game's own.
+
 ## 0.5.3 (2026-11-15)
 
 - **Dents from every side.** A damaged machine now shows its dents about as plainly from its front, its back and

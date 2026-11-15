@@ -13,7 +13,7 @@ once the modulo bug is fixed); the client computes T-10 itself and starts the cl
   c 50     = T+40: the cards drop together onto the lids (contact at 53), a little bounce
   c 60     end, at rest.
 vote_anyway is the same clip with two more bangs (contacts c 43 and c 50: the second knocks the cards down), played
-when the event says the nays outnumber the ayes ("Carried anyway."); the two clips are identical to c 36, so the
+when the event says the nays outnumber the ayes (the motion falls); the two clips are identical to c 36, so the
 controller may switch from `vote` to `vote_anyway` at the same tick when the event arrives.
 refuse: the gavel taps twice (house rhythm, 30 degrees). No idle or loaded clip: asleep nothing moves; the heads' bob,
 turns and eurekas are code on the drawn heads.

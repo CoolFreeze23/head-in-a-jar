@@ -254,8 +254,6 @@ def lang(EN, PT, mods):
         ('message.headinajar.tesla_linked', 'Tesla Nodes linked', 'Nós de Tesla ligados'),
         ('message.headinajar.tesla_unlinked', 'Tesla Node unlinked', 'Nó de Tesla desligado'),
         ('message.headinajar.tesla_too_far', 'Too far: Tesla Nodes reach 16 blocks', 'Longe demais: Nós de Tesla alcançam 16 blocos'),
-        ('message.headinajar.printer_has_head', 'Only a head in its jar can order a new body', 'Só uma cabeça no pote pode encomendar um corpo novo'),
-        ('message.headinajar.printer_missing', 'The printer needs all its materials and 2000 mB of saline', 'A impressora precisa de todos os materiais e 2000 mB de soro'),
         ('message.headinajar.printed', 'Your new body is ready. It is a little damp.', 'Seu corpo novo está pronto. Está um pouco úmido.'),
         ('gui.headinajar.energy', '%s / %s FE', '%s / %s FE'),
         ('gui.headinajar.water', 'Water: %s / %s mB', 'Água: %s / %s mB'),

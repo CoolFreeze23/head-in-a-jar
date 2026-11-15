@@ -130,7 +130,10 @@ public final class GeneticsItems {
             BloodType blood = BloodType.of(target);
             boolean right = kind.bloodless ? blood == kind : !blood.bloodless;
             if (!right) {
-                player.displayClientMessage(Component.translatable(blood.bloodless ? "message.headinajar.bloodless" : "message.headinajar.wrong_tool"), true);
+                // a bloodless tool on another bloodless kind names the one tool that creature takes
+                Item takes = kind.bloodless && blood.bloodless ? toolFor(blood) : null;
+                player.displayClientMessage(takes != null ? Component.translatable("message.headinajar.other_bloodless_tool", takes.getDescription())
+                        : Component.translatable(blood.bloodless ? "message.headinajar.bloodless" : "message.headinajar.wrong_tool"), true);
                 return InteractionResult.FAIL;
             }
             if (target.getType().is(BloodType.THICK_HIDE) && !bosses) {
@@ -148,6 +151,16 @@ public final class GeneticsItems {
             player.serverLevel().playSound(null, target.blockPosition(), com.coolfreeze23.headinajar.fx.HouseSounds.SYRINGE_JAB.get(), target.getSoundSource(), 0.8f, 1.4f);
             com.coolfreeze23.headinajar.body.BodyServer.tool(player, target, com.coolfreeze23.headinajar.fx.Fx.TOOL_SYRINGE);
             return InteractionResult.CONSUME;
+        }
+
+        /** The collection tool for a bloodless kind (Marrow Drill, Oil Tap, Ecto Trap), or null for a kind with blood. */
+        public static Item toolFor(BloodType blood) {
+            return switch (blood) {
+                case MARROW -> ModRegistry.MARROW_DRILL.get();
+                case OIL -> ModRegistry.OIL_TAP.get();
+                case ECTO -> ModRegistry.ECTO_TRAP.get();
+                default -> null;
+            };
         }
 
         /** Used in the air: say what it is for. */

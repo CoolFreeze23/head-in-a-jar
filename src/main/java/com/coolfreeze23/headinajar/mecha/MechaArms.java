@@ -161,8 +161,10 @@ public final class MechaArms {
                 if (pressed && s.cooldown <= 0) {
                     Entity target = MechaLogic.lookEntity(pilot, m, 4);
                     if (target instanceof net.minecraft.world.entity.player.Player) refuse(m, pilot, s, "mecha.arm.hemo_player");
-                    else if (!(target instanceof LivingEntity)) refuse(m, pilot, s, "mecha.arm.no_target");
-                    else if (m.spend(20)) {
+                    else if (!(target instanceof LivingEntity living)) refuse(m, pilot, s, "mecha.arm.no_target");
+                    else if (hemoRefused(m, pilot, s, living)) {
+                        // refused with the hand syringes' line: no jab
+                    } else if (m.spend(20)) {
                         // the jab lands with the strike's contact
                         s.cooldown = 10;
                         s.contactAt = m.level().getGameTime() + ArmAim.STRIKE_CONTACT;
@@ -324,6 +326,25 @@ public final class MechaArms {
         m.level().playSound(null, at.x, at.y, at.z, event, net.minecraft.sounds.SoundSource.NEUTRAL, 1, ArmSounds.pitch(m.getRandom()));
     }
 
+    /**
+     * The hand syringes' rules, refused before the jab (true: refused, nothing is hurt). A bloodless creature has nothing
+     * to draw: the line names the tool it takes. A creature with blood under a thick hide (bosses, the Elder Guardian,
+     * the Warden) is not jabbed at all; only a Leviathan Needle gets through.
+     */
+    private static boolean hemoRefused(MechaEntity m, ServerPlayer pilot, MechaLogic.ArmState s, LivingEntity target) {
+        var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(target);
+        if (blood.bloodless) {
+            refuse(m, pilot, s, "mecha.arm.hemo_bloodless",
+                    com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem.toolFor(blood).getDescription());
+            return true;
+        }
+        if (target.getType().is(com.coolfreeze23.headinajar.genetics.BloodType.THICK_HIDE)) {
+            refuse(m, pilot, s, "mecha.arm.hemo_hide");
+            return true;
+        }
+        return false;
+    }
+
     /** Hemo-Syringe: a jab that draws a Blood Sample (quality 50-80) and patches the frame with 10% of the damage. */
     private static void hemo(MechaEntity m, ServerPlayer pilot, int side, float eff) {
         Entity target = MechaLogic.lookEntity(pilot, m, 4);
@@ -335,11 +356,10 @@ public final class MechaArms {
             refuse(m, pilot, m.armState[side], "mecha.arm.no_target");
             return;
         }
+        if (hemoRefused(m, pilot, m.armState[side], victim)) return;
         float damage = 4 * eff;
         if (!victim.hurt(by(m, pilot, DamageTypes.MOB_ATTACK), damage)) return;
         m.heal(damage * 0.1f);
-        var blood = com.coolfreeze23.headinajar.genetics.BloodType.of(victim);
-        if (blood.bloodless) return;
         int quality = com.coolfreeze23.headinajar.item.GeneticsItems.SyringeItem.quality(victim, 50 + m.getRandom().nextInt(31));
         ItemStack sample = com.coolfreeze23.headinajar.item.GeneticsItems.sample(com.coolfreeze23.headinajar.registry.ModRegistry.BLOOD_SAMPLE.get(), victim.getType(), quality);
         ItemStack left = m.has(MechaModule.CARGO_HOLD) ? m.cargo().addItem(sample) : sample;

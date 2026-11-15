@@ -223,7 +223,7 @@ Only the first missing thing is named, in DOLORES's words:
 | Your head is already off | "Our records show your head is already off." |
 | Room | "The chair needs room to work. Clear the block in front." (or whichever) |
 | Tray space, when loading a jar | "The jar tray can't come out. Clear the block to its left." |
-| Not seated | "Sit in the chair to sign" |
+| Not seated | "Sit down to sign" (on the Sign button) |
 
 Mid-operation, others are told "Operation in progress. Kindly wait behind the line." The chair cannot be broken until
 it is done: "Not mid-operation. It comes apart once it is done." Broken when idle, it drops what it holds.
@@ -411,16 +411,16 @@ A head out in the world drinks 1 mB every 12 seconds (half that with a Saline Re
 hours 20 minutes. A docked or carried head drinks nothing. A **Saline Bottle** adds 250 mB; its tooltip says how long
 your jar's saline lasts out in the world on this server's settings.
 
-Run dry and "Your head is dehydrating! Find saline." Every 30 seconds after that the jar loses a point of glass; once
-the glass is gone, a jar loses half a heart every 30 seconds, and **a set-down head dies for real**. A basic head left
-dry dies five minutes after it runs out.
+Run dry and "Out of saline: the glass cracks every 30 s, then you die. Find saline." Every 30 seconds after that the
+jar loses a point of glass; once the glass is gone, a jar loses half a heart every 30 seconds, and **a set-down head
+dies for real**. A basic head left dry dies five minutes after it runs out.
 
 ### Jar Integrity
 
 The glass soaks up damage before you do. Life Support and Compact Jars have 10 points, Reinforced 20, Executive 30.
-Any hit on a jar costs at least one point. The jar tells you: "The glass took a knock: 7/10 left." At 3 or fewer:
-"the next bad knock is a real death". At 0: "No glass left: every hit now is real. Get away, then rest in a Life
-Support Cradle."
+Any hit on a jar costs at least one point. The jar tells you: "Glass hit: 7/10 left. A Glass Patch mends it." At 3 or
+fewer: "Glass 3/10: deadly. Flee, then a Glass Patch." At 0: "No glass left: every hit now is real. Get away, then
+rest in a Life Support Cradle."
 
 A **Glass Patch** mends 5 points. A Cradle mends one point every 10 seconds, for a head docked in it or a jar sitting
 on its cushion.
@@ -554,7 +554,7 @@ top down; at the end the door swings open and the body steps out. With all four 
 in the middle. Short of power mid-print, the bar sags and the lamp dims.
 
 Refusals: "Bodies are for heads in jars. Come back decapitated.", "Short 4 Slime Ball. Load it and press Print
-again.", "A print takes 200 kFE stored; it has 100. Feed its Galvanic Pile first.", "Printing already, 40 s to go.
+again.", "Needs 200 kFE; has 100. Feed its Galvanic Pile.", "Printing already, 40 s to go.
 Wait for the body."
 
 ---
@@ -626,8 +626,9 @@ let a linked body use portals without its head.
 ### EMP Grenade
 
 Two iron ingots, two copper ingots and a redstone block (iron above and below, copper either side). **Use** to throw.
-Within 8 blocks of where it lands: linked bodies drop back into their heads ("EMP! The link is down"), jars lose half
-their charge, mecha half their battery, turrets go dark. Shielded Housing protects you. Two seconds between throws.
+Within 8 blocks of where it lands: linked bodies drop back into their heads ("EMP! The link dropped: you're back in
+your head. Swap to go back."), jars lose half their charge, mecha half their battery, turrets go dark. Shielded
+Housing protects you. Two seconds between throws.
 
 ### Head Satchel, Suture Kit, Glass Patch
 
@@ -694,8 +695,8 @@ the flesh). A Volta press over a glass pan of meat.
 - At work the handle turns the press screw a quarter at a time, a spark jumps the terminals, the meat smokes a little
   and now and then twitches. The press sinks as each piece burns. A new piece winds the handle back; the last one
   leaves the press with a sigh.
-- Refusals: "The pile is full of Rotten Flesh. Let it burn some first." and, for food it doesn't burn, "The Galvanic
-  Pile burns Rotten Flesh and Spider Eye, not Cooked Beef." (raw meat and fish burn too).
+- Refusals: "The pile is full of Rotten Flesh. Let it burn some first." and, for food it doesn't burn, "The Pile burns
+  Rotten Flesh and Spider Eye, not Cooked Beef." (raw meat and fish burn too).
 
 ### Leyden Jar
 
@@ -1915,7 +1916,7 @@ something." and "That arm is still cycling. One moment." apply throughout.
 | **Excavator Scoop** | 80 kg | 4 Iron Shovel, 1 Servo | Digs 3x3 of dirt, sand and gravel at a time, 20 FE a block, into the Cargo Hold if fitted. | hold | none |
 | **Flamethrower** | 50 kg | 2 Blaze Powder, 1 Fire Charge, 1 Servo | A cone of fire 7 blocks long. Sets creatures alight for 4 seconds, 1 fire damage a hit. 60 FE and 8 heat a tick. | hold | Spread: narrow to wide cone |
 | **Arc Cannon** | 85 kg | 2 Lightning Rod, 1 Tesla Node, 1 Servo | A bolt to the first creature within 16 that jumps on to up to three hostiles nearby. 6,000 FE, 25 heat. "That arm needs 6 kFE. Recharge at the Assembly Gantry." | press | Charge: 8 to 16 damage, 0.5 to 2 seconds between shots |
-| **Hemo-Syringe** | 25 kg | 1 Precision Syringe, 1 Servo | On a creature within 4: 4 damage, the frame mends a tenth of it, and a Blood Sample (quality up to 80, less from a hurt, poisoned or burning creature; none from a bloodless one) goes to the Cargo Hold or your inventory. 20 FE. "Players don't give blood here. Aim at a creature." | press | none |
+| **Hemo-Syringe** | 25 kg | 1 Precision Syringe, 1 Servo | On a creature within 4: 4 damage, the frame mends a tenth of it, and a Blood Sample (quality up to 80, less from a hurt, poisoned or burning creature) goes to the Cargo Hold or your inventory. 20 FE. "Players don't give blood here. Aim at a creature." Like the hand syringes it does not get through the thick hide of a boss, the Elder Guardian or the Warden: "Its hide is too thick: use a Leviathan Needle". A bloodless creature is not jabbed either; the line names the tool it takes, "Wrong tool for this creature. Use the Oil Tap." for an iron golem. | press | none |
 | **Harvester** | 10 kg | 3 Iron Hoe, 1 Servo | Picks and replants every ripe crop in a 5x5 around where you aim, 10 FE a crop. "Nothing ripe there. Come back at harvest." | press | none |
 | **Welding Torch** | 30 kg | 1 Blaze Rod, 1 Flint and Steel, 1 Servo | Mends the mecha you aim at within 5, or your own, 2 health a second; one Mecha Plating from the Cargo Hold per 20 health. 80 FE and 6 heat a tick. | hold | none |
 | **Plasma Lance** | 120 kg | 2 End Rod, 1 Plasma Pellet, 1 Servo | A beam 32 blocks long. 1 damage a hit and sets the target alight for 3 seconds. 600 FE and 15 heat a tick. | hold | none |
@@ -1991,8 +1992,9 @@ and comes back out.
   a tenth), and cut by 20 more if it is poisoned, withering or on fire. Healthy, calm creatures give the best blood.
 - **Thick hide:** bosses, the Elder Guardian and the Warden. "Its hide is too thick: use a Leviathan Needle". The
   bloodless tools get through too, so the Marrow Drill samples the Wither.
-- **Bloodless** creatures: "No blood here: use a Marrow Drill, Oil Tap or Ecto Trap". A bloodless tool on the wrong
-  creature: "This tool does not work on that creature".
+- **Bloodless** creatures: "No blood here: use a Marrow Drill, Oil Tap or Ecto Trap". A bloodless tool on a creature
+  with blood: "Wrong tool for this creature. Its tooltip says what it draws from." On another bloodless kind it names
+  the tool that creature takes: a Marrow Drill on an iron golem says "Wrong tool for this creature. Use the Oil Tap."
 - Players are not specimens: "Colleagues are not samples. Draw from a creature."
 - The Ender Dragon can be sampled with the Leviathan Needle, or the easy way: put **Dragon's Breath** in the
   Centrifuge.
@@ -2127,7 +2129,8 @@ Refusals, among others: "No genes picked. Pick at least one with the arrows.", "
 strand. Pick another gene.", "Out of Bio-Gel. Load some in the second slot.", "The last Serum Cassette is still in.
 Take it out first.", "Splicing in progress. Wait for the cassette." Taking the gel or bottle out mid-run pauses it.
 
-The cassette's tooltip lists each gene and its strength, then "Stability, load, mutation".
+The cassette's tooltip lists each gene and its strength, then its stability, load and mutation odds ("Stability 85,
+load 4, mutation 0%").
 
 ### Injecting
 
@@ -2155,8 +2158,8 @@ a **Bio-Integration Port** module adds one to any frame. Load up to 8 per serum,
 mecha has no Gene Port. Fit a Bio-Integration Port at the Gantry." Not yours: "That mecha belongs to someone else". The genes stay with the
 frame when it is taken apart at the Assembly Gantry. A mecha carrying five or more genes earns **Chimera**.
 
-Anything else (a plain creature, another player, a Headless Body): "Serums go into hosts. Use the Injection Rig, or
-make a host with the Surgical Saw."
+Anything else (a plain creature, another player, a Headless Body): "Serums go in hosts. Use the Injection Rig, or make
+one: Surgical Saw."
 
 **What can happen.** In a body or a host, a serum holding a gene whose blood does not match is rejected 30% of the
 time: "REJECTED: the blood types fought", with nausea and poison, and the serum is lost. **Hero's Blood**, in the serum
@@ -2328,7 +2331,9 @@ a second; **Use** a broth bucket on the Array or pipe it in (tank 8,000 mB, show
 - Fed, the heads sit up and bob a little and the chairman lifts his gavel every few seconds; unfed, they sag.
 - Five or more heads hold a **Board Meeting**: output +10%, and every five minutes a vote: the gavel comes down, the
   jurors' cards flip up one by one, and the result is announced to everyone within 32 blocks: "[Board Meeting] Motion:
-  dental cover. Carried 4 to 1." The Board can be heard murmuring.
+  dental cover. Carried 4 to 1." A motion carries only when the ayes outnumber the nays (a tie does not), and the line
+  says when it falls: "[Board Meeting] Motion: a team picnic. Not carried: 1 for, 4 against." The Board can be heard
+  murmuring.
 - The **Dragon Head** is the vanilla one. It makes nothing without a Board Room Core, and only one sits at the head of
   the table: a second makes nothing.
 - The Array holds 500,000 FE and pushes power into every machine touching its lower half. The screen shows broth, FE/t
@@ -2413,7 +2418,7 @@ key to unplug first." If the socket is broken or you are moved away: "The socket
 | Villager | a staircase, 1 up to 15 in eight steps, one step every half second |
 | Enderman | full signal while any player within 16 blocks looks straight at it |
 
-Other heads have no program: "That head (Pig) has no program. Try a zombie, villager or enderman." A socket with
+Other heads have no program: "That head (Pig) has no program. Try zombie, villager, enderman." A socket with
 someone plugged in: "Steve is plugged in. Wait until they unplug." Refused, the open clamps hop, or the shut ones
 chatter.
 
@@ -2723,6 +2728,27 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.5.4
+
+- **A Board Meeting's motion can fall.** The Board announced every motion as carried, even 1 to 8. A motion now
+  carries only when the ayes outnumber the nays (a tie does not), and one that falls is announced as such:
+  "[Board Meeting] Motion: unionise. Not carried: 1 for, 4 against."
+- **The right tool, named.** A Marrow Drill, Oil Tap or Ecto Trap used on a bloodless creature of another kind now
+  names the tool that creature takes ("Wrong tool for this creature. Use the Oil Tap." for a Marrow Drill on an iron
+  golem), instead of the syringe's line listing all three, the tool in your hand among them.
+- **The Hemo-Syringe stops at a thick hide.** On a mecha's arm it drew blood from bosses, the Elder Guardian and the
+  Warden, which by hand only a Leviathan Needle gets through. It now refuses them as the hand syringes do ("Its hide
+  is too thick: use a Leviathan Needle") and does not jab them.
+- **The Hemo-Syringe no longer jabs the bloodless.** On a mecha's arm it hurt a bloodless creature, an iron golem
+  say, and drew nothing. It now refuses with the line that names the tool that creature takes ("Wrong tool for this
+  creature. Use the Oil Tap." at an iron golem), and does not hurt it.
+- **JEI says half.** The Surgical Saw's JEI page said it takes a creature below 25% of its health; since 0.5.2 it takes
+  one at half its health or less, and the page now says so.
+- **The README quotes the game.** Eleven lines it quoted had drifted from what the game says, among them the glass's
+  warnings, running out of saline, the EMP's line and the wrong-tool line; each now reads as the game's own.
+
+<details><summary>What changed in 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.5.3
 
 - **Dents from every side.** A damaged machine now shows its dents about as plainly from its front, its back and
@@ -2757,8 +2783,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 - **Setting up a Utility Shell is heard:** a Lunk, a Rover or a Spider Walker set up from its chassis makes the
   machines' "Servo settles" where it stands.
 - 0.5.2 and 0.5.3 connect to each other, either way round.
-
-<details><summary>What changed in 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.2
 

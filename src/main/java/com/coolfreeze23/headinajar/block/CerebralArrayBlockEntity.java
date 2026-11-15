@@ -149,20 +149,30 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
         PowerBlockEntities.share(level, pos, energy, 20_000);
     }
 
-    /** The motion and its count, decided as the gavel lifts; the cards show them as it falls. */
+    /** The motion and its count, decided as the gavel lifts; the cards show them as it falls. Its mover votes aye. */
     private void callVote(Level level) {
-        voteAyes = 1 + level.random.nextInt(heads());
-        voteMotion = level.random.nextInt(MOTIONS.length);
+        callVote(level, 1 + level.random.nextInt(heads()), level.random.nextInt(MOTIONS.length));
+    }
+
+    /** Lifts the gavel on motion {@code motion} with {@code ayes} for it and the other heads against; taken ten ticks on. */
+    public void callVote(Level level, int ayes, int motion) {
+        voteAyes = ayes;
+        voteMotion = motion;
         voteAt = level.getGameTime() + 10;
         int nays = heads() - voteAyes;
         kit.event(EV_VOTE, voteAyes | nays << 4 | voteMotion << 8);
     }
 
+    /** A motion carries with more ayes than nays; a tie does not carry. */
+    public static boolean carried(int ayes, int nays) {
+        return ayes > nays;
+    }
+
     private void vote(Level level) {
         voteAt = -1;
-        int ayes = Math.min(voteAyes, heads());
-        Component line = Component.translatable("array.headinajar.vote", Component.translatable("array.headinajar.motion." + MOTIONS[voteMotion]),
-                ayes, heads() - ayes);
+        int ayes = Math.min(voteAyes, heads()), nays = heads() - ayes;
+        Component line = Component.translatable(carried(ayes, nays) ? "array.headinajar.vote" : "array.headinajar.vote_lost",
+                Component.translatable("array.headinajar.motion." + MOTIONS[voteMotion]), ayes, nays);
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(32))) p.displayClientMessage(line, false);
         // the gavel's strike and the room's murmur
         level.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.ARRAY_GAVEL.get(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);

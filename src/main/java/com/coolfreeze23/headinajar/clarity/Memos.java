@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DOLORES's pager: six memos, each sent once to each player the first time the moment it is about happens (the
+ * DOLORES's pager: seven memos, each sent once to each player the first time the moment it is about happens (the
  * moments a new employee is most likely to be lost in, or about to lose something). A memo is one chat line with a link
  * to the handbook entry that says more; the reader's client plays one beep for it, and can switch memos off
  * ({@code memos} in the client config). Which memos a player has had is kept in the part of their data that survives

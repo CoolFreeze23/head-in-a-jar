@@ -10,9 +10,14 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * A host creature's data file, {@code data/<ns>/headinajar/host/<name>.json}: where its neck is, its blood type, how
- * fast it decays, and what a jar gets from piloting it at each sync level (attributes at 0%, traits at 25%, a primary
- * ability at 50%, a secondary at 75%, +10% stats at 100%). A creature with no file is still a host with no extras.
+ * A host creature's data file, {@code data/<ns>/headinajar/host/<name>.json}: where its neck is, a blood type (unused,
+ * below), how fast it decays, and what a jar gets from piloting it at each sync level (attributes at 0%, traits at 25%,
+ * a primary ability at 50%, a secondary at 75%, +10% stats at 100%). A creature with no file is still a host with no
+ * extras.
+ * <p>
+ * {@code blood} is read and kept, but nothing uses it: a creature's blood type comes only from the entity tags
+ * {@code headinajar:blood/<type>} ({@link com.coolfreeze23.headinajar.genetics.BloodType#of}). The field is kept so the
+ * file format stays as it was; changing it in a host file changes nothing.
  */
 public record HostDefinition(ResourceLocation entity, List<Double> neck, String blood, float decayPerMinute, Map<String, Double> attributes,
                              List<String> flags, List<String> drawbacks, Optional<Ability> primary, Optional<Ability> secondary,
