@@ -36,7 +36,19 @@ import java.util.UUID;
  * clock, a Villager steps through an 8-step staircase, an Enderman fires when a player looks at it.
  */
 public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
-        software.bernie.geckolib.animatable.GeoBlockEntity {
+        software.bernie.geckolib.animatable.GeoBlockEntity, com.coolfreeze23.headinajar.staff.Badged {
+    /** The staff badge's colour (-1 none), worked out on the server and synced with the kit. */
+    private int badge = -1;
+
+    @Override
+    public int badge() {
+        return badge;
+    }
+
+    @Override
+    public void setBadge(int colour) {
+        badge = colour;
+    }
     public static final int CHANNELS = 6, PULSE_TICKS = 2;
     /** What the clients are told runs the outputs: the levels themselves (0), or a head's program they reckon from the clock. */
     public static final int PROG_LEVELS = 0, PROG_CLOCK = 1, PROG_STAIRS = 2;
@@ -159,6 +171,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, NeuralSocketBlockEntity s) {
         work(level, pos, state, s);
+        com.coolfreeze23.headinajar.staff.StaffBlocks.stationTick(s, s.items, 1, null);
         // what it shows: the clamps (a jar or a head on it), the bars, the lamp
         s.occupied = s.occupant != null || !s.head().isEmpty();
         EntityType<?> type = s.occupant == null ? s.headInfo().type() : null;
@@ -202,6 +215,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         if (occupied) tag.putBoolean("occ", true);
         if (program != 0) tag.putByte("prog", (byte) program);
         if (shownLevels != 0) tag.putInt("lv", shownLevels);
+        if (badge >= 0) tag.putInt("Badge", badge);
     }
 
     @Override
@@ -209,6 +223,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         occupied = tag.getBoolean("occ");
         program = tag.getByte("prog");
         shownLevels = tag.getInt("lv");
+        badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
     }
 
     /** The refusal's clip: the open clamps hop, or the shut ones chatter. */
@@ -331,6 +346,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
             return;
         }
         items.setStackInSlot(0, held.split(1));
+        com.coolfreeze23.headinajar.staff.StaffBlocks.fitted(this, head(), player);
     }
 
     public boolean plugIn(ServerPlayer player) {

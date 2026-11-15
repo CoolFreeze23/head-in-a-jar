@@ -402,7 +402,9 @@ def emit_handbook(EN, PT, write):
         EN[ck], PT[ck] = en_n, pt_n
         contents += [{'translate': ck, 'color': 'dark_blue', 'underlined': True,
                       'clickEvent': {'action': 'change_page', 'value': str(first_of[cid])}}, '\n']
-    assert len(pages) <= 100, f'the written edition is {len(pages)} pages; a written book holds 100'
+    # a written book has no page limit (only a book and quill stops at 100: WritableBookContent.MAX_PAGES); this cap
+    # keeps the edition readable
+    assert len(pages) <= 120, f'the written edition is {len(pages)} pages; keep it at 120 or under'
     book = {'id': 'minecraft:written_book', 'count': 1, 'components': {
         'minecraft:written_book_content': {'title': 'Employee Handbook', 'author': 'Noggin & Sons', 'generation': 0,
                                            'pages': [json.dumps(p[0] if len(p) == 1 else [''] + p, ensure_ascii=False) for p in pages],
@@ -730,8 +732,8 @@ if __name__ == '__main__' and sys.argv[1:2] == ['fit']:
     bad = fit_problems(_entries)
     for b in bad:
         print('TOO LONG' if isinstance(b[3], int) else 'BAD MARKUP', b)
-    print(f'{len(_entries)} entries, {total} pages (the written edition holds 100 with its title and contents pages: '
-          f'keep this at 98 or under); {len(bad)} problems')
+    print(f'{len(_entries)} entries, {total} pages (the written edition adds its title and contents pages: '
+          f'keep this at 118 or under); {len(bad)} problems')
     for k, (en, pt) in _jei.items():
         for lang, t in (('en', en), ('pt', pt)):
             if '$(' in t:

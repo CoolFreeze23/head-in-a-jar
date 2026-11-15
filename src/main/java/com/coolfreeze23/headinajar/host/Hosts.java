@@ -85,12 +85,9 @@ public final class Hosts {
         return h > w * 1.5f ? new Vec3(0, h - 0.5, 0) : new Vec3(0, h * 0.85, w * 0.35);
     }
 
-    /** Whether the saw may take this mob. */
+    /** Whether the saw may take this mob at all (its table's rules about who; the jar and the health are not asked). */
     public static boolean canSaw(Mob mob, Player by) {
-        if (mob.getType().is(Tags.EntityTypes.BOSSES) || mob.getType().is(NOT_A_HOST)) return false;
-        if (mob.hasCustomName()) return false;
-        if (mob instanceof TamableAnimal tame && tame.isTame() && !by.getUUID().equals(tame.getOwnerUUID())) return false;
-        return !isHost(mob);
+        return com.coolfreeze23.headinajar.staff.SawTable.verdict(mob, by, net.minecraft.world.item.ItemStack.EMPTY, false).ok();
     }
 
     /** The jar riding this host, if any. */

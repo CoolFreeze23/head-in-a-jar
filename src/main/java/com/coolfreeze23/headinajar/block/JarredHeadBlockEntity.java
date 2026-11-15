@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * A placed jarred head. A villager's head keeps its whole villager record, so it can trade: using the jar opens the
  * normal trading screen with a stand-in villager that is saved back when trading ends. It restocks twice a day.
  */
-public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze23.headinajar.feedback.Refuser {
+public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze23.headinajar.feedback.Refuser, com.coolfreeze23.headinajar.staff.Badged {
     /** Block events: the head shakes no (a refusal), the bell (trading opens), a nod (a trade done). */
     public static final int EV_REFUSE = 1, EV_BELL = 2, EV_NOD = 3;
     /** The head looks at the nearest player this close (client only). */
@@ -40,6 +40,15 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
     /** {@link #type} parsed once (it is drawn every frame). */
     private String parsed;
     private EntityType<?> parsedType;
+    /** The jar it went into (an item id), or null when none is recorded (a head cut before 0.6.0: a Life Support Jar). */
+    private String jar;
+    /** Its Personnel File (server; null until it is registered). */
+    private com.coolfreeze23.headinajar.staff.StaffFile staff;
+    /** Whether this load has been checked for a file yet (not saved: the first tick after every load looks). */
+    private boolean filed;
+    /** Client and server: the badge's colour (0xRRGGBB, -1 none) and the morale band, as the update tag carries them. */
+    private int badge = -1;
+    private com.coolfreeze23.headinajar.staff.Band band = com.coolfreeze23.headinajar.staff.Band.NONE;
 
     public JarredHeadBlockEntity(BlockPos pos, BlockState state) {
         super(ModRegistry.JARRED_HEAD_BE.get(), pos, state);
@@ -50,7 +59,62 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         type = tag.getString("Type");
         entity = tag.getCompound("Entity");
         if (tag.contains("LastRestock")) lastRestock = tag.getLong("LastRestock");
+        jar = tag.contains("Jar") ? tag.getString("Jar") : null;
+        staff = com.coolfreeze23.headinajar.staff.Staff.fromHeadTag(tag);
+        // the file goes on the block, not also inside the stored mob
+        com.coolfreeze23.headinajar.staff.Staff.stripEntity(entity);
         setChanged();
+    }
+
+    /** The jar this head is in (an item id; a Life Support Jar when none is recorded). */
+    public String jar() {
+        return jar == null ? HeadInfo.LIFE_SUPPORT : jar;
+    }
+
+    /** Whether it is drawn in the Compact Jar's shape. */
+    public boolean compact() {
+        return HeadInfo.COMPACT.equals(jar());
+    }
+
+    /** The Personnel File (server), or null. */
+    public com.coolfreeze23.headinajar.staff.StaffFile staff() {
+        return staff;
+    }
+
+    public void setStaff(com.coolfreeze23.headinajar.staff.StaffFile file) {
+        staff = file;
+        setChanged();
+    }
+
+    /** The badge's colour as clients see it (0xRRGGBB), or -1 for no badge (a trophy, or a head nobody employs). */
+    @Override
+    public int badge() {
+        return badge;
+    }
+
+    /** The morale band as clients see it. */
+    public com.coolfreeze23.headinajar.staff.Band band() {
+        return band;
+    }
+
+    @Override
+    public void setBadge(int colour) {
+        show(colour, band);
+    }
+
+    /** Server: sets what clients are told (the badge colour and band), and tells them if it changed. */
+    public void show(int badge, com.coolfreeze23.headinajar.staff.Band band) {
+        if (this.badge == badge && this.band == band) return;
+        this.badge = badge;
+        this.band = band;
+        if (level != null && !level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
+    /** Server: true once, on the first tick after this head was loaded or placed (the retroactive register's look). */
+    public boolean firstLook() {
+        if (filed) return false;
+        filed = true;
+        return true;
     }
 
     public EntityType<?> entityType() {
@@ -68,6 +132,8 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         tag.putString("Type", type);
         tag.put("Entity", entity.copy());
         if (lastRestock != 0) tag.putLong("LastRestock", lastRestock);
+        if (jar != null) tag.putString("Jar", jar);
+        if (staff != null) tag.put("Staff", staff.save());
         CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         return stack;
     }
@@ -189,6 +255,8 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
             head.trader = null;
             head.setChanged();
         }
+        // its Personnel File: registered on the first tick after a load, its dawn, its badge
+        com.coolfreeze23.headinajar.staff.StaffBlocks.tick(level, pos, head);
     }
 
     @Override
@@ -197,6 +265,9 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         tag.putString("Type", type);
         tag.put("Entity", entity);
         tag.putLong("LastRestock", lastRestock);
+        // written only once known, so an old head's save keeps exactly its old keys until it is registered
+        if (jar != null) tag.putString("Jar", jar);
+        if (staff != null) tag.put("Staff", staff.save());
     }
 
     @Override
@@ -205,14 +276,23 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         type = tag.getString("Type");
         entity = tag.getCompound("Entity");
         lastRestock = tag.getLong("LastRestock");
+        jar = tag.contains("Jar") ? tag.getString("Jar") : null;
+        staff = com.coolfreeze23.headinajar.staff.StaffFile.load(tag.get("Staff"));
+        filed = false;
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         tag.putString("Type", type);
-        // the client only needs what draws the head: a villager's profession and biome type
+        // the client only needs what draws the head: a villager's profession and biome type, the jar, the badge and the
+        // band (never the name: that is for the employer's eyes, through Jade and the file card)
         if (entity.contains("VillagerData")) tag.put("VillagerData", entity.get("VillagerData"));
+        // a slime's or magma cube's size (it is drawn whole, at its size)
+        if (entity.contains("Size")) tag.putInt("Size", entity.getInt("Size"));
+        if (jar != null) tag.putString("Jar", jar);
+        if (badge >= 0) tag.putInt("Badge", badge);
+        if (band != com.coolfreeze23.headinajar.staff.Band.NONE) tag.putByte("Band", (byte) band.ordinal());
         return tag;
     }
 
@@ -221,7 +301,11 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         type = tag.getString("Type");
         CompoundTag e = new CompoundTag();
         if (tag.contains("VillagerData")) e.put("VillagerData", tag.get("VillagerData"));
+        if (tag.contains("Size")) e.putInt("Size", tag.getInt("Size"));
         entity = e;
+        jar = tag.contains("Jar") ? tag.getString("Jar") : null;
+        badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
+        band = com.coolfreeze23.headinajar.staff.Band.byId(tag.getByte("Band"));
     }
 
     @Override

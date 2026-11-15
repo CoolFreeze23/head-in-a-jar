@@ -382,6 +382,8 @@ public final class MachineRenderers3 {
         @Override
         protected void contents(com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity a, com.mojang.blaze3d.vertex.PoseStack pose, net.minecraft.client.renderer.MultiBufferSource buffers, int light, float partial) {
             float age = a.getLevel() == null ? 0 : a.getLevel().getGameTime() + partial;
+            // one staff badge for the whole Board, on the lowest rail
+            StaffBadge.draw(pose, buffers, light, a.badge(), StaffBadge.ARRAY);
             for (int i = 0; i < com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity.HEAD_SLOTS; i++) {
                 var stack = a.items().getStackInSlot(i);
                 if (stack.isEmpty()) continue;
@@ -473,6 +475,8 @@ public final class MachineRenderers3 {
         /** The villager's head in its jar (the head part alone, 7/16), the day's emerald on the tray while paid. */
         @Override
         protected void contents(com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity m, com.mojang.blaze3d.vertex.PoseStack pose, net.minecraft.client.renderer.MultiBufferSource buffers, int light, float partial) {
+            // the staff badge on the desk's edge
+            StaffBadge.draw(pose, buffers, light, m.badge(), StaffBadge.MOUNT);
             if (m.head().isEmpty() || m.getLevel() == null) return;
             if (m.paid()) item(pose, buffers, light, m, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.EMERALD), -5, 7, -5.5, 0.25f, 0, 0);
             var info = m.headInfo();

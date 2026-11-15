@@ -251,6 +251,8 @@ public final class Network {
                 shell.setHitBearings(msg.bearings());
             }
         });
+        // the file card and its rename, optional in the same way (added in 0.6.0 under the same version)
+        com.coolfreeze23.headinajar.staff.StaffNet.register(registrar.optional());
     }
 
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */

@@ -76,6 +76,22 @@ public final class Config {
             .define("keepGenesOnDeath", true);
 
     static {
+        B.pop().push("saw");
+    }
+
+    public static final ModConfigSpec.BooleanValue ALLOW_BABIES = B
+            .comment("Babies may be sawn (true brings back the behaviour before 0.6.0).")
+            .define("allowBabies", false);
+
+    static {
+        B.pop().push("staff");
+    }
+
+    public static final ModConfigSpec.BooleanValue MORALE = B
+            .comment("Staff morale moves with their pay (false: morale never moves and everyone shows Content; wages are still taken).")
+            .define("morale", true);
+
+    static {
         B.pop();
     }
 
@@ -104,6 +120,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue HUD_NUMBERS = C
             .comment("Show the numbers beside the jar's bars all the time (off: only while low, or for a few seconds after they change).")
             .define("hudNumbers", false);
+    public static final ModConfigSpec.BooleanValue LANYARDS = C
+            .comment("Show the staff badge on heads and stations that work for someone (off: no badges are drawn for you).")
+            .define("lanyards", true);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

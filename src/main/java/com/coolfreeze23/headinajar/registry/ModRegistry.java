@@ -81,6 +81,10 @@ public final class ModRegistry {
     public static final Supplier<AttachmentType<com.coolfreeze23.headinajar.genetics.GeneSet>> GENES = ATTACHMENTS.register("genes",
             () -> AttachmentType.builder(() -> new com.coolfreeze23.headinajar.genetics.GeneSet()).serialize(com.coolfreeze23.headinajar.genetics.GeneSet.CODEC,
                     g -> !g.isEmpty()).build());
+    /** A creature's Personnel File (saved only once it has a number; attachments are not synced to clients). */
+    public static final Supplier<AttachmentType<com.coolfreeze23.headinajar.staff.StaffFile>> STAFF = ATTACHMENTS.register("staff",
+            () -> AttachmentType.builder(() -> new com.coolfreeze23.headinajar.staff.StaffFile())
+                    .serialize(com.coolfreeze23.headinajar.staff.StaffFile.CODEC, com.coolfreeze23.headinajar.staff.StaffFile::filed).build());
 
     // --- blocks ------------------------------------------------------------------------------
     private static BlockBehaviour.Properties steel() {
@@ -222,6 +226,9 @@ public final class ModRegistry {
     public static final DeferredItem<Item> NEURAL_LACE = plain("neural_lace");
     public static final DeferredItem<com.coolfreeze23.headinajar.item.JarredHeadItem> JARRED_HEAD = item("jarred_head",
             () -> new com.coolfreeze23.headinajar.item.JarredHeadItem(new Item.Properties().stacksTo(1)));
+    /** Dropped where a member of staff left the company; never crafted. */
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.CondolenceCardItem> CONDOLENCE_CARD = item("condolence_card",
+            () -> new com.coolfreeze23.headinajar.item.CondolenceCardItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<com.coolfreeze23.headinajar.item.ShellChassisItem> LUNK_CHASSIS = item("lunk_chassis",
             () -> new com.coolfreeze23.headinajar.item.ShellChassisItem(() -> ModRegistry.LUNK.get(), new Item.Properties().stacksTo(1)));
     public static final DeferredItem<com.coolfreeze23.headinajar.item.ShellChassisItem> ROVER_CHASSIS = item("rover_chassis",

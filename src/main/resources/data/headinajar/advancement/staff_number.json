@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:out_for_blood",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "staff_number"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:paper"
+    },
+    "title": {
+      "translate": "advancements.headinajar.staff_number.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.staff_number.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

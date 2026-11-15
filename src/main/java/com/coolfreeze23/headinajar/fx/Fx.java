@@ -56,6 +56,11 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
      * at a block), arg = the tool's flat slot + 64 x the jump's number.
      */
     public static final int ARM_ARC = 15;
+    /**
+     * A creature the saw refused shakes its head no: a = its centre, entityB = the creature. Each client turns the head (or,
+     * for a creature whose model has no turning head, the body) 25 degrees either way, period 6 ticks, over 12 ticks.
+     */
+    public static final int STAFF_SHAKE = 16;
 
     public static final int TOOL_SYRINGE = 1, TOOL_SUTURE = 2, TOOL_WRENCH = 3;
 
@@ -103,6 +108,29 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
 
     public static synchronized void clearSent() {
         SENT.clear();
+        COUNTS.clear();
+    }
+
+    /**
+     * How many memos of each kind have been sent about each entity (as either of its two entities), for tests. Kept apart
+     * from the last 64, which tests running side by side can push a memo out of. At most {@value #COUNTED} pairs, oldest
+     * dropped.
+     */
+    private static final int COUNTED = 4096;
+    private static final java.util.LinkedHashMap<Long, Integer> COUNTS = new java.util.LinkedHashMap<>(256, 0.75f, false) {
+        @Override
+        protected boolean removeEldestEntry(java.util.Map.Entry<Long, Integer> eldest) {
+            return size() > COUNTED;
+        }
+    };
+
+    private static long countKey(int kind, int entity) {
+        return (long) kind << 32 | (entity & 0xFFFFFFFFL);
+    }
+
+    /** How many memos of {@code kind} have named {@code entity} (by id) since the server started. */
+    public static synchronized int count(int kind, int entity) {
+        return COUNTS.getOrDefault(countKey(kind, entity), 0);
     }
 
     /** Sends one memo to every player within {@link #RANGE} of its first point. Returns how many got it. */
@@ -118,6 +146,8 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
         synchronized (Fx.class) {
             SENT.addLast(new Sent(fx, n, level.getGameTime()));
             while (SENT.size() > 64) SENT.removeFirst();
+            if (fx.entityA >= 0) COUNTS.merge(countKey(fx.kind, fx.entityA), 1, Integer::sum);
+            if (fx.entityB >= 0 && fx.entityB != fx.entityA) COUNTS.merge(countKey(fx.kind, fx.entityB), 1, Integer::sum);
         }
         return n;
     }

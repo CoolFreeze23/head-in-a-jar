@@ -79,6 +79,8 @@ public final class MachineRenderers5 {
         protected void contents(NeuralSocketBlockEntity s, PoseStack pose, MultiBufferSource buffers, int light, float partial) {
             var level = s.getLevel();
             if (level == null) return;
+            // the staff badge on the foot, under the level slot
+            StaffBadge.draw(pose, buffers, light, s.badge(), StaffBadge.SOCKET);
             if (!s.head().isEmpty()) {
                 // the real jar at 1:1, its base on the deck at (0, 16, 0) px, square to the socket's front
                 int above = LevelRenderer.getLightColor(level, s.getBlockPos().above());

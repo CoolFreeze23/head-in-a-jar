@@ -279,19 +279,56 @@ public final class JarRenderer {
 
     /** A jar with something else inside: {@code inside} draws in jar model space and gets the bob offset. */
     public static void drawWith(PoseStack pose, MultiBufferSource buffers, int light, float age, java.util.function.BiConsumer<PoseStack, Float> inside) {
+        float bob = openWith(pose, buffers, light, age, WIDE);
+        inside.accept(pose, bob);
+        closeWith(pose, buffers, light, WIDE);
+    }
+
+    /**
+     * The first half of a jar with something else inside, in {@code shape}: draws the frame and leaves the pose in jar model
+     * space (y down, the base's underside at y = 24 px, unscaled by the shape); returns the fluid's bob offset (px) now.
+     * Draw the inside, then {@link #closeWith} with the same shape, which gives the caller its pose back.
+     */
+    public static float openWith(PoseStack pose, MultiBufferSource buffers, int light, float age, Shape shape) {
         if (jar == null) bake();
-        int overlay = OverlayTexture.NO_OVERLAY;
         pose.pushPose();
         pose.scale(-1.0f, -1.0f, 1.0f);
         pose.translate(0.0f, -1.501f, 0.0f);
-        scaled(pose, WIDE);
-        jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, overlay);
+        scaled(pose, shape);
+        jar.frame().render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
-        inside.accept(pose, Mth.sin(age * 0.08f) * 0.35f);
-        scaled(pose, WIDE);
+        return Mth.sin(age * 0.08f) * 0.35f;
+    }
+
+    /** The saline's top as the jar model has it (px, y down): the fluid stands from here to the base at 23. */
+    public static final float SALINE_TOP = 16.5f;
+
+    /**
+     * As {@link #closeWith(PoseStack, MultiBufferSource, int, Shape)}, the saline standing up to {@code salineTop} (px, y
+     * down; the jar model's own level is {@link #SALINE_TOP}): a creature's head kept in a jar is kept in a fuller one.
+     */
+    public static void closeWith(PoseStack pose, MultiBufferSource buffers, int light, Shape shape, float salineTop) {
+        int overlay = OverlayTexture.NO_OVERLAY;
+        scaled(pose, shape);
+        pose.pushPose();
+        // the same fluid, taller: stretched up from the base, so its sides keep their colour and its top its meniscus
+        pose.translate(0, 23 / 16f, 0);
+        pose.scale(1, (23 - salineTop) / (23 - SALINE_TOP), 1);
+        pose.translate(0, -23 / 16f, 0);
+        jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
+        jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
+        pose.popPose();
+        pose.popPose();
+    }
+
+    /** The second half: the fluid and the glass over what was drawn inside, and the pose back as {@link #openWith} found it. */
+    public static void closeWith(PoseStack pose, MultiBufferSource buffers, int light, Shape shape) {
+        int overlay = OverlayTexture.NO_OVERLAY;
+        scaled(pose, shape);
         jar.fluid().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
         jar.glass().render(pose, buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), light, overlay);
-        // one pop for the second scaled(...), one for the push at the top: the caller gets its pose back as it gave it
+        // one pop for the second scaled(...), one for the push in openWith: the caller gets its pose back as it gave it
         pose.popPose();
         pose.popPose();
     }

@@ -40,10 +40,10 @@ public class HandshakeGameTests {
         var result = net.neoforged.neoforge.common.CommonHooks.onInteractEntityAt(p, stand, stand.position().add(0, 1, 0),
                 net.minecraft.world.InteractionHand.MAIN_HAND);
         h.assertTrue(result != null && !result.consumesAction(), "the stand took the saw's click: " + result);
-        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "item.air.saw", "the saw on an armour stand");
+        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "saw.furniture", "the saw on an armour stand");
         // and as a plain interaction with it
         p.interactOn(stand, net.minecraft.world.InteractionHand.MAIN_HAND);
-        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "item.air.saw", "the saw on an armour stand");
+        h.assertValueEqual(com.coolfreeze23.headinajar.feedback.Refusals.lastDelivered(p), "saw.furniture", "the saw on an armour stand");
         h.getLevel().getServer().getPlayerList().remove(p);
         h.succeed();
     }

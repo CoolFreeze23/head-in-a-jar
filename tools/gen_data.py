@@ -163,6 +163,7 @@ import gen_p26_body; gen_p26_body.run(EN, PT, write, shaped)  # the head and the
 import gen_p32_release5; gen_p32_release5.run(EN, PT, write, shaped)  # the 0.5.0 release's own fixes (before the handbook's text check)
 import gen_p35_sound; gen_p35_sound.run(EN, PT, write, shaped)  # the sound families: house sounds, getting about, the link, the switchboard, a subtitle on every event
 import gen_p36_release54; gen_p36_release54.run(EN, PT, write, shaped)  # the 0.5.4 release's own fixes
+import gen_p37_foundations; gen_p37_foundations.run(EN, PT, write, shaped)  # the 0.6.0 release: the saw's table, staff files, pay
 import gen_p27_clarity; gen_p27_clarity.run(EN, PT, write, shaped)  # HUD, tooltips, memos, career advancements, the handbook
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)

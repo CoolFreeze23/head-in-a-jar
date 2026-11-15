@@ -109,10 +109,30 @@ ENTRIES = [
      'en': 'The Surgical Saw', 'pt': 'A Serra Cirúrgica',
      'pages': [
          ('spotlight', 'headinajar:surgical_saw',
-          'Use it on a creature at half its health or less: the body stays up as a $(l)host$(). With a jar of any '
-          'kind in your off hand, you keep the $(l)head$() and the body falls.',
-          'Use numa criatura com metade da vida ou menos: o corpo fica de pé como $(l)hospedeiro$(). Com um pote de '
-          'qualquer tipo na outra mão, você fica com a $(l)cabeça$() e o corpo cai.'),
+          'Use it on a creature at half its health or less: the body stays up as a $(l)host$(). With a jar in your '
+          'off hand, you keep the $(l)head$().',
+          'Use numa criatura com metade da vida ou menos: o corpo fica de pé como $(l)hospedeiro$(). Com um pote na '
+          'outra mão, fica a $(l)cabeça$().'),
+         ('form', ('Form 4-S: Who Gives What', 'Formulário 4-S: Quem Dá o Quê'),
+          'Any jar takes a head, and the body falls.$(br)$(l)Head only$(), in a jar, which takes all of it: slime, '
+          'magma cube, shulker, vex, bee, silverfish, endermite, tadpole.',
+          'Qualquer pote leva a cabeça, e o corpo cai.$(br)$(l)Só cabeça$(), num pote, que leva tudo: slime, cubo de '
+          'magma, shulker, vex, abelha, traça, endermite, girino.'),
+         ('form', ('Form 4-S (2)', 'Formulário 4-S (2)'),
+          '$(l)Big heads$(): a Reinforced Life Support Jar or bigger for a warden, elder guardian, hoglin, zoglin, '
+          'sniffer or medium slime; an Executive one for a ghast, ravager or big slime.',
+          '$(l)Cabeças grandes$(): Pote de Suporte Vital Reforçado ou maior para warden, guardião-ancião, hoglin, '
+          'zoglin, farejador ou slime médio; Executivo para ghast, devastador ou slime grande.'),
+         ('form', ('Form 4-S (3)', 'Formulário 4-S (3)'),
+          "$(l)Neither$(): the Dragon, the Wither, other bosses, babies, named creatures, other people's pets, hosts, "
+          'armour stands.$(br)A refused cut costs nothing: no jar, no wear.',
+          '$(l)Nada$(): o Dragão, o Wither, outros chefões, filhotes, criaturas com nome, bichos dos outros, '
+          'hospedeiros, suportes de armadura.$(br)Corte recusado não custa nada.'),
+         ('text',
+          '$(l)Snow golem$(): the first cut takes its pumpkin off. Saw again for the head.$(br2)$(l)Babies$(): come '
+          'back when it is grown. A server may allow them.',
+          '$(l)Golem de neve$(): o primeiro corte tira a abóbora. Serre de novo para a cabeça.$(br2)$(l)Filhotes$(): '
+          'volte quando crescer. Um servidor pode permitir.'),
      ]},
 
     {'cat': 'staffing', 'id': 'riding', 'sort': 2, 'icon': 'minecraft:saddle',

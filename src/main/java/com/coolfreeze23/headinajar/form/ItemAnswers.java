@@ -86,7 +86,8 @@ public final class ItemAnswers {
         if (!event.getItemStack().is(ModRegistry.SURGICAL_SAW.get())) return;
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.FAIL);
-        Refusals.deny(player, "item.air.saw");
+        // it came headless and empty: it is furniture
+        Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(event.getTarget()), "saw.furniture");
     }
 
     /**

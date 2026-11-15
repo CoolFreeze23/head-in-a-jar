@@ -147,15 +147,17 @@ dependencies {
     ].each { compileOnly(it) { transitive = false } }
     // the local folders below are for the hidden dev client only (tools/smoke.sh), not for building the mod
     // the hidden smoke client also runs them, so their screens and tooltips can be checked
-    // (SMOKE_MODS containing "noemf" leaves Entity Model Features and Entity Texture Features out)
+    // (SMOKE_MODS containing "noemf" leaves Entity Model Features and Entity Texture Features out, "nopatchouli" Patchouli,
+    // so the written handbook is used)
     def smokeMods = (System.getenv('SMOKE_MODS') ?: '').toLowerCase().split('[ ,]+').findAll { it } as Set
-    smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'],
-            exclude: smokeMods.contains('noemf') ? ['entity_model_features*', 'entity_texture_features*'] : [])
+    def smokeLeftOut = (smokeMods.contains('noemf') ? ['entity_model_features*', 'entity_texture_features*'] : []) +
+            (smokeMods.contains('nopatchouli') ? ['Patchouli*'] : [])
+    smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'], exclude: smokeLeftOut)
     // SMOKE_PACK_MODS=1 (or SMOKE_MODS=anim) also runs the pack's animation mods (libs-smoke/*.jar, not committed)
     if (System.getenv('SMOKE_PACK_MODS') || smokeMods.contains('anim')) smokeRuntimeOnly fileTree(dir: 'libs-smoke', include: ['*.jar'])
     // SMOKE_MODS=sodium,iris,shoulder,camera,culling,...: each group is the folder libs-smoke/<group> (iris brings sodium)
     if (smokeMods.contains('iris')) smokeMods += 'sodium'
-    smokeMods.findAll { !(it in ['anim', 'noemf']) }.each { group ->
+    smokeMods.findAll { !(it in ['anim', 'noemf', 'nopatchouli']) }.each { group ->
         smokeRuntimeOnly fileTree(dir: "libs-smoke/${group}", include: ['*.jar'])
     }
 }

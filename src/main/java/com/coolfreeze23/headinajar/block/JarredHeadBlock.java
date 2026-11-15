@@ -82,6 +82,43 @@ public class JarredHeadBlock extends BaseEntityBlock {
         return new JarredHeadBlockEntity(pos, state);
     }
 
+    /**
+     * Something held and used on the head. In order: a villager head trades whatever is in hand (an emerald included:
+     * a villager on a plinth is never paid by hand); this species' wage pays it for today (the first time, that hires
+     * it); anything else that is some species' wage is refused as the wrong wage; and anything else does what it always
+     * did (the head's own answer, below).
+     */
+    @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+                                                                  net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof JarredHeadBlockEntity head) || head.entityType() == null) {
+            return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        var type = head.entityType();
+        if (type == net.minecraft.world.entity.EntityType.VILLAGER) return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        var wage = com.coolfreeze23.headinajar.staff.StaffTable.wage(type);
+        boolean someWage = com.coolfreeze23.headinajar.staff.StaffTable.anyWage(stack);
+        if (wage.matches(stack)) {
+            if (player instanceof ServerPlayer server) com.coolfreeze23.headinajar.staff.StaffBlocks.payByHand(head, server, stack);
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        // (the next release's other things used on a head go here, before the wrong wage: broth, desk items, cake)
+        if (someWage) {
+            if (player instanceof ServerPlayer server) {
+                var refuser = com.coolfreeze23.headinajar.feedback.Refuser.at(head);
+                if (wage.none()) com.coolfreeze23.headinajar.feedback.Refusals.deny(server, refuser, "staff.no_wage", type.getDescription());
+                else {
+                    var file = head.staff();
+                    Component name = file != null ? com.coolfreeze23.headinajar.staff.Staff.name(file) : type.getDescription();
+                    com.coolfreeze23.headinajar.feedback.Refusals.deny(server, refuser, "staff.wrong_wage", name,
+                            com.coolfreeze23.headinajar.staff.StaffBlocks.wageName(wage));
+                }
+            }
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof JarredHeadBlockEntity head)) return InteractionResult.PASS;

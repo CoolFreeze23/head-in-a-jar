@@ -40,6 +40,7 @@ default key for each is in [Controls](#controls).
 - [Hostile Takeover: mob bodies](#hostile-takeover-mob-bodies)
 - [Utility Shells](#utility-shells)
 - [Jarred heads](#jarred-heads)
+- [Staff files, pay and lanyards](#staff-files-pay-and-lanyards)
 - [Mecha Division](#mecha-division)
 - [Genetics Department](#genetics-department)
 - [Board of Directors: heads at work](#board-of-directors-heads-at-work)
@@ -271,7 +272,7 @@ slider; the patient hears her muffled through the anaesthetic. Her refusals are 
 
 ### Memos from DOLORES
 
-![A jar on the grass with its headless body behind it, and a memo from DOLORES in chat saying jars have no hands and where a Manipulator Arm comes from](docs/images/memo.png)
+![Close in front of a jar, its headless body standing behind it with its arms over the lid; a memo from DOLORES in chat saying jars have no hands and where a Manipulator Arm comes from, its lines sitting above the jar's glass, saline and charge bars](docs/images/memo.png)
 
 *A memo arriving: the first time you are a jar without a Manipulator Arm.*
 
@@ -1051,9 +1052,30 @@ The **Surgical Saw** takes the head off a weakened creature. It has 200 uses.
   lively. Wear it down to half its health or less first." Every plain weapon, a fist to a diamond sword or axe, leaves
   a cow, pig, sheep, villager, skeleton or zombie there for at least one hit before the hit that kills it (a stone
   sword takes a cow 10, 5, dead: saw after the first hit). Only a stone, iron or diamond axe kills a sheep outright.
-- **Off limits:** bosses (the Ender Dragon, the Wither), players, armour stands, **any creature with a name tag**,
-  someone else's tamed pet (yours is fine), and anything that is already a host, a shell or a mecha. The saw says "The
-  saw refuses: bosses, named mobs, other people's pets and hosts are off limits."
+- **The saw's table** is read before anything spins up. Whatever it refuses costs nothing (no use, no jar): the line,
+  the refusal sound, and the creature shakes its head once (a villager shakes its own).
+
+| Creature | What the saw says |
+|---|---|
+| A baby (anything the game calls a baby) | "Child labour is against company policy. Come back when it's grown." (the server value `saw.allowBabies` allows them) |
+| The Ender Dragon | "The Dragon is a Board matter. See the Board Room Core." |
+| The Wither | "The Wither has three heads and no Human Resources department." |
+| Any other boss | "Bosses are off limits. Legal has been very clear." |
+| **Any creature with a name tag** | "This one has a name. Somebody cares. The saw does not cut named creatures." (the names HR gives staff are not name tags and never stop the saw) |
+| Someone else's tamed pet (yours is fine) | "That is Steve's pet. The saw does not cut other people's pets." |
+| Already a host | "Already a host. One cut per creature." |
+| A Utility Shell or a mecha | "That is company equipment, not a colleague. Nothing to cut." |
+| An armour stand | "That one came headless and empty. It is furniture." |
+| A player, or a colleague's headless body | "Colleagues aren't specimens. Use the Surgical Saw on a creature." |
+| A snow golem with its pumpkin | Not a refusal: the first cut takes the pumpkin off (it drops, one use) with "Pumpkin removed. The head underneath is snow. Saw again." The next cut is a normal cut. |
+
+- **All head:** a slime, magma cube, shulker, vex, bee, silverfish, endermite or tadpole has no body to keep, so it is
+  sawn only into a jar ("A slime is all head. Bring a jar; there would be no body to keep.", and a line of its own for
+  each). In the jar goes the whole creature: nothing is left behind, nothing drops, and a slime does not split.
+- **Big heads need a big jar:** a warden, elder guardian, hoglin, zoglin, sniffer, or a slime or magma cube of size 2,
+  needs a Reinforced Life Support Jar or bigger ("The Warden's head needs a Reinforced Life Support Jar or bigger."); a
+  ghast, a ravager, or a slime or magma cube of size 4 or more, an Executive Life Support Jar. A bigger jar always takes
+  a smaller head. Without a jar these give a body as any creature does.
 - Every cut costs one use. The creature holds perfectly still while the saw spins up, then its head comes out of the
   neck like a champagne cork ("Head pops off"), with the snip of the blade and a small sanitary puff at the neck. The
   head rises, turns over and is gone in a puff at the top. A moment later the desk dings: the paperwork is done.
@@ -1071,7 +1093,11 @@ The saw does one of two things, depending on your **off hand**:
 | Off hand | Result |
 |---|---|
 | Anything but a Life Support Jar | The head comes off and the body stays standing as a **host**: "Cow is now a host body". It is raised to a quarter of its health if it was lower. |
-| An empty Life Support Jar (basic, Compact, Reinforced or Executive) | The head does not fly off: it arcs from the neck into the jar in your hand. You keep the **head** in the jar, and the body falls (normal drops). See [Jarred heads](#jarred-heads). |
+| An empty Life Support Jar (basic, Compact, Reinforced or Executive, big enough for the head) | The head does not fly off: it arcs from the neck into the jar in your hand. You keep the **head** in the jar, and the body falls (normal drops). A creature that is all head goes into the jar whole and leaves nothing. The head remembers which jar it went into. See [Jarred heads](#jarred-heads). |
+
+![A size-4 slime sawn whole into an Executive Life Support Jar and set down on its plinth: the green cube floats in the middle of the saline, its face to you](docs/images/slime_executive.png)
+
+Every creature the saw cuts is put on file: see [Staff files](#staff-files-pay-and-lanyards).
 
 A jar in your main hand does not count. If the creature somehow survives the cut (a totem, Resistance, a claim), you
 keep your jar and hear "Cow pulled through. Weaken it further and try again."
@@ -1411,13 +1437,73 @@ Saw a creature with an empty Life Support Jar in your **off hand** and you keep 
 its owner ("Jarred Villager Head"). It keeps everything the creature was.
 
 - **Place it:** **Use** it on any surface, with hands (not as a bare jar). It needs nothing under it. It stands in its
-  jar on a small plinth with a push bell, and the head turns to look at the nearest player within 6 blocks.
+  jar on a small plinth with a push bell, facing you, and the head turns to look at the nearest player within 6 blocks.
 - **Use the placed head** (a jar can do this): a jarred villager opens its usual trading screen with all its trades
   (the bell rings), keeps the uses and experience you give it, nods at each trade, and restocks if 10 minutes have
   passed since it last did. If someone else is trading, it shakes its head: "This head is with another customer. Come
   back shortly." Any other head: "A jarred Cow head. It looks at you."
 - **Break it** to get the item back with everything in it, mid-trade included.
+- **Every creature's head is drawn** in its jar, scaled to float inside the saline (the jar is kept fuller than a
+  player's own); the creatures that are all head (a slime, a shulker, a bee) are drawn whole, a ghast as its face. A head in a Compact Jar is drawn in the Compact Jar's shape; the Life Support, Reinforced
+  and Executive jars look alike. Its tooltip says which jar it is in ("In a Reinforced Life Support Jar").
+- **Sneak** and **Use** the placed head with an empty hand to open its file card (see below). A plain **Use** does what
+  it always did.
 - Only villagers trade. Other heads have work to do: see [Heads at work](#board-of-directors-heads-at-work).
+
+## Staff files, pay and lanyards
+
+*"We do not lose staff. We occasionally misplace them."*
+
+![Turning from the grass onto a placed cow head in its jar: Jade shows "Jarred Head", "No. 0001 · Livestock · Dev's staff", "Bessie (Cow)" and "Morale: Content" to its employer](docs/images/jade_staff.gif)
+
+The first time the company touches a creature (a syringe or any sampling tool, the Leech Jar or the Hemo-Syringe, the
+saw, placing a jarred head, fitting one to a station, putting down a Utility Shell) it gets a **staff number** and a
+**Personnel File**: its number (four digits, then five after 9999), a name HR gives it from a pool in your language, its
+species and department (Livestock, Field Office, Logistics, Security, Night Shift, Facilities, Accounts, Legal, Sales,
+Marine Division, Demolitions, Senior Management; heads at a Cerebral Array sit on The Board; Utility Shells come from
+the Temp Agency; creatures from other mods are General Staff), its employer, the day it joined, and its last eight
+history lines ("Sampled day 3.", "Jarred day 5.", "Put on the payroll by Steve day 6."). The first time one of yours is
+numbered, DOLORES writes: "Staff No. 0001 (Cow) has been entered in the register. We do not lose staff. We
+occasionally misplace them."
+
+- **Who employs it:** whoever sawed it (head or host), placed its head, fitted it to a station or put the shell down.
+  A creature that was only sampled works for nobody. Heads and hosts from worlds before 0.6.0 are put on file the first
+  time they load, with "Registered retroactively"; a Turret Pedestal's owner employs its head, everyone else's is
+  "on file" until it is fitted or paid again. Nothing about how a Turret, Array, Mount or Socket works changes.
+- **Jade** shows anyone "No. 0012 · Livestock · Steve's staff" (or "Employer: on file") on a creature, a placed head
+  or a station; the name, "Bessie (Cow)", only to the employer and players they trust.
+- **The file card:** **Sneak** and **Use** a placed head with an empty main hand (whatever is in your other hand): its
+  number, name, species, department, employer, the day it joined, morale, wage, jar, genes and history. Its employer, or
+  someone they trust, can rename it there (16 characters; the name lives in the file and is never a name tag, so it
+  never stops the saw). Anyone else: "Bessie reports to Steve. Ask them to trust you."
+
+![From 10 blocks, two players' staff side by side: on the left a Turret Pedestal and two paid plinth heads wearing blue badges, on the right two more and a Turret wearing red ones](docs/images/badges_teams.gif)
+
+- **Pay:** a placed head is a **trophy** until someone pays it by hand. **Use** its wage on it (wheat for a cow, a
+  carrot for a pig, rotten flesh for a zombie; the card says which) and it is on the payroll: "Bessie is on the
+  payroll. Wages at dawn, from a chest beside it." The payer is its employer. From then on, at each dawn it takes one
+  wage from a chest, barrel or anything that holds items touching its plinth: paid, a clink and a green sparkle;
+  unpaid, a sigh and a grey puff, and the first time ever, DOLORES: "Payroll was short this morning. Bessie noticed.
+  Bessie will remember." A head that was away (unloaded) for days takes one wage when it comes back, never more. Paying
+  twice in a day: "It was paid today." The wrong wage: "Bessie is paid in Wheat. HR has the paperwork." Creatures that
+  want nothing (a slime, a ghast) count as paid and cannot be hired by hand: "A Slime draws no wage. HR files it as a
+  trophy." A trophy never takes anything from a chest beside it.
+- **Villager heads** are never paid by hand: an emerald in hand still trades. Villagers are paid on the Employee Mount.
+- **Morale**, for heads on the payroll: they start at 50, gain 10 for each paid dawn (to 100) and lose 15 for each
+  unpaid one. 75 and over is **Engaged** (the head tips up a little and bobs more), 40 to 74 **Content**, under 40
+  **Disengaged** (it sags and turns a little away from you); under 15 at two dawns running Jade and the card say
+  **Grievance**. In this release morale changes nothing a head does. An Employee Mount's villager shows a band read from
+  its pay record (paid today and yesterday Engaged, paid today Content, unpaid one or two days Disengaged, three or more
+  Grievance); nothing about the Mount changes. The server value `staff.morale` turns morale off.
+- **Lanyards:** a head on the payroll, and every Turret Pedestal, Employee Mount, Neural Socket and Cerebral Array with
+  a head in it, wears a small badge in its employer's scoreboard team colour, or the company's teal. The client value
+  `lanyards` hides them.
+- **Leaving:** when a host or a Utility Shell with an employer dies, the employer (only) gets one line in chat, or at
+  their next login: "[Exit Interview] Bessie (Cow), Livestock, 12 days: 'Moo.' Reason for leaving: fell from a high
+  place." The reasons: a fall, lava (or fire), drowning, an explosion, "management" (killed by its employer), the name
+  of whatever killed it, "natural wastage" (a host that rotted away) or "a workplace incident". A **Condolence Card**
+  drops where it happened: "HR is sorry for your loss of Bessie. The desk will be cleared by Tuesday." In lava or the
+  void it is lost with everything else. A host farm sends a line for every host that rots away.
 
 ## Mecha Division
 
@@ -2263,7 +2349,7 @@ it back.
 
 ### Turret Pedestal
 
-![A Turret Pedestal swinging round onto a zombie standing nearby](docs/images/turret_pedestal.gif)
+![A Turret Pedestal with a blaze head in its jar swinging round as a zombie in an iron helmet stands nearby, a flame flaring over the jar](docs/images/turret_pedestal.gif)
 
 *A Turret Pedestal swinging onto a zombie: fit a jarred mob head and give it power.*
 
@@ -2305,7 +2391,7 @@ head goes off once and is spent. Choose the spot."
 
 ### Cerebral Array
 
-![A Cerebral Array with its rack of heads, the gavel on the desk lifting and dropping](docs/images/cerebral_array.gif)
+![A Cerebral Array with its rack of nine heads (a pig's and a creeper's among them) in their small jars, the gavel on top lifting and dropping](docs/images/cerebral_array.gif)
 
 *A fed Cerebral Array at work, the chairman's gavel lifting.*
 
@@ -2534,6 +2620,8 @@ are in `config/headinajar-client.toml`.
 | `life.protectOfflineBodies` | true | true / false | Idle bodies, corpses and placed heads of offline players can't be hurt. |
 | `genetics.pvpTurrets` | false | true / false | Turret Pedestals may shoot players who are not on the owner's team. Off, their shots and blasts pass over players. |
 | `genetics.keepGenesOnDeath` | true | true / false | Spliced genes stay in your body when you die and respawn. |
+| `saw.allowBabies` | false | true / false | Babies may be sawn (as before 0.6.0). Off: "Child labour is against company policy. Come back when it's grown." |
+| `staff.morale` | true | true / false | Morale moves with pay. Off: it never moves and every head shows Content; wages are still taken. |
 
 </details>
 
@@ -2548,12 +2636,13 @@ are in `config/headinajar-client.toml`.
 | `screenShake` | 100 | 0 to 100 | How much the mod's effects may move the camera (shake, kicks, field-of-view pulls), in percent. It also tones down, to no less than about a third, how much bodies, jars and tools in hand move. |
 | `memos` | true | true / false | DOLORES's memos: a line in chat with a beep, the first time something new happens. Off: none are shown, and those missed are not sent again. |
 | `hudNumbers` | false | true / false | Keep the numbers beside the jar's bars up all the time. Off: they show while a bar is under a quarter, while you hold **Sneak**, and for three seconds after a change. |
+| `lanyards` | true | true / false | The staff badge on heads and stations that work for someone. Off: no badges are drawn for you. |
 
 </details>
 
 ## Advancements
 
-Thirty-seven, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
+Forty, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
 arrive. The steps from there to your first mecha are a career ladder: each says what to do next.
 
 <details><summary>All advancements</summary>
@@ -2567,6 +2656,7 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Take a Seat** | Meat-Based Economy | Place a **Separation Chair** beside a fed **Galvanic Pile** (fuel in it, or power made), or feed a pile next to a chair. |
 | **Signed in Triplicate** | Take a Seat | Sign Form 27-B in the **Separation Chair**. |
 | **Head Start** | Signed in Triplicate | Have the chair's cut go through. |
+| **Entirely Head** (hidden) | Head Start | Saw a slime into a jar. "The jar holds the whole slime. The slime has opinions about this." |
 | **Some Assembly Required** | Head Start | As a jar, fit a module from the **Jar menu**. |
 | **Hands-Free No More** | Some Assembly Required | Fit a **Manipulator Arm**. |
 | **Plugged In** | Head Start | Charge your jar: a fed Charging Dock, a Cradle, or redstone in the feed slot. |
@@ -2588,12 +2678,14 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Heavy Is the Head** | Corporate Ladder | Board a Colossus or an Executive. |
 | **Chairman of the Board** | Heavy Is the Head | Assemble an Executive. |
 | **Out for Blood** | Orientation Day | Draw 10 Blood Samples. |
+| **Staff Number** | Out for Blood | Have any creature entered in the register: sample it, saw it, or place or fit its head. |
 | **Splice of Life** | Out for Blood | Have a Gene Splicer finish a serum from your library while you are within 16 blocks. |
 | **Mutually Assured** | Splice of Life | Suffer a mutation from a serum. |
 | **Synergy!** | Splice of Life | Inject a serum that holds both genes of a synergy pair. |
 | **Chimera** | Splice of Life | Inject a serum into a mecha that leaves it carrying five or more genes. Any frame counts. |
 | **Legendary Genes** | Splice of Life | Read a Legendary gene to 100% in your library. |
 | **Employee of the Month** | Orientation Day | Hang a jarred villager on an **Employee Mount**. |
+| **Pay Grade** | Employee of the Month | Pay a placed jarred head that is not a villager its wage by hand. |
 | **Board Meeting** | Employee of the Month | Be within 16 blocks of a fed Cerebral Array holding five or more heads. |
 | **Brain Trust** | Board Meeting | Be within 16 blocks of a fed Cerebral Array making 500 FE/t. |
 | **Ask Me Anything** | Orientation Day | Pulse a face from a **Neural Socket** with **Ability**. |
@@ -2609,7 +2701,7 @@ the hotbar, never the one in your hand (then your inventory; only a full one dro
 crafted from a Book and a **Surgical Steel Blend** (shapeless, any crafting grid).
 
 This is the Second Edition: ten chapters in the order you will need them (Orientation, Facilities, Life Support,
-Separation, Life as a Jar, Getting Home, Temporary Staffing, Mecha Division, Research, Human Resources), 47 entries.
+Separation, Life as a Jar, Getting Home, Temporary Staffing, Mecha Division, Research, Human Resources), 49 entries.
 Alongside the explanations it carries the company's paperwork: Form 1-A, the shopping list for one operation; Form
 27-B, the chair's checklist; Form 12-M, which frame takes how many of each module; Form 3-P, the pilot's warnings;
 Form 9-H, which host does what; Form 31-E, villager staff. Two memos from DOLORES, five Incident Reports, and the odd
@@ -2728,6 +2820,54 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.6.0
+
+- **The saw reads a table.** Before anything spins up, the Surgical Saw now says why it will not cut, each case in
+  its own line, with the refusal sound, and the creature shakes its head once. Nothing is spent on a refusal. Babies:
+  "Child labour is against company policy. Come back when it's grown." (a server can allow them again with
+  `saw.allowBabies`). The Ender Dragon: "The Dragon is a Board matter. See the Board Room Core." The Wither: "The
+  Wither has three heads and no Human Resources department." Other bosses, named creatures, other people's pets,
+  hosts, shells and armour stands each have their own line too.
+- **Some creatures are all head.** A slime, magma cube, shulker, vex, bee, silverfish, endermite or tadpole gives only
+  its head, and only into a jar: without one, "A slime is all head. Bring a jar; there would be no body to keep." With
+  one, the whole creature goes into the jar: no body is left, nothing drops and a slime does not split.
+- **Big heads need a big jar.** A warden, elder guardian, hoglin, zoglin, sniffer or a size-2 slime or magma cube needs
+  a Reinforced Life Support Jar or bigger; a ghast, a ravager or a slime of size 4 or more an Executive one ("The
+  Ghast's head needs an Executive Life Support Jar."). Without a jar they give a body as before. A snow golem loses its
+  pumpkin to the first cut ("Pumpkin removed. The head underneath is snow. Saw again.").
+- **Every head is drawn in its jar.** Until now only heads of people-shaped creatures (zombies, skeletons, villagers,
+  illagers and the like) were drawn: a placed cow head, a creeper on a Turret Pedestal or a blaze in a Cerebral Array
+  sat in an empty jar. Every vanilla creature's head now shows, scaled to float inside the saline (a creature's jar is
+  kept fuller than your own), and the creatures that are all head are drawn whole. Heads in worlds from 0.5.4 appear in jars that looked empty. A head records the jar it went into, and one
+  in a Compact Jar is drawn in that jar's shape; the other three jars still look alike.
+- **The Personnel File.** Every creature the company touches (sampled, cut, placed or fitted to a station) gets a staff
+  number, a name from HR's pool, a department and up to eight history lines. With Jade: "No. 0012 · Livestock · Steve's
+  staff", and the name for the employer and those they trust. **Sneak** and **Use** a placed head with an empty hand to
+  open its file card; its employer can rename it there (16 characters). Sneaking and using a villager head with an
+  empty hand now opens its file instead of its trades.
+- **Paying a head.** Use a placed head's wage on it by hand (wheat for a cow, a carrot for a pig) and it is on the
+  payroll: "Bessie is on the payroll. Wages at dawn, from a chest beside it." At each dawn it takes one wage from a
+  chest beside it, and its morale goes up when paid and down when not (Engaged, Content, Disengaged). A head that has
+  never been paid by hand is a trophy and never takes anything. Villager heads still trade and are never paid by hand.
+- **Lanyards.** A head on the payroll, and every Turret Pedestal, Employee Mount, Neural Socket and Cerebral Array with
+  a head in it, wears a small badge in the employer's team colour, or the company's teal (the client setting
+  `lanyards` hides them).
+- **Leaving.** When a host or a Utility Shell dies, its employer (the player who sawed it, or placed the shell) gets
+  one Exit Interview line ("[Exit Interview] Bessie (Cow), Livestock, 12 days: 'Moo.' Reason for leaving: lava.")
+  and a Condolence Card drops where it happened. A host farm sends one line for each host that rots away.
+- **DOLORES keeps to the rules.** Her memos now come at most one a minute, and never while a Separation Chair near you
+  is operating. Two new memos, the first time one of your creatures is numbered and the first unpaid dawn. Her memos
+  no longer cross the jar's bars: the chat sits above them while they show.
+- **A head set down by hand faces you.** A jarred head placed by hand used to be set facing away from whoever placed
+  it, turned only partway round to look at them; it now looks at the player who set it down, its plinth's front (and
+  its badge) to them. Heads already placed keep the way they face.
+- Three advancements: Entirely Head, Staff Number and Pay Grade. The Employee Handbook has new pages on staff files and
+  pay, and its saw page has the table.
+- Worlds from 0.5.4 load as they are. A 0.6.0 game can join a 0.5.4 server; a 0.5.4 game cannot join a 0.6.0
+  server. Update both.
+
+<details><summary>What changed in 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.5.4
 
 - **A Board Meeting's motion can fall.** The Board announced every motion as carried, even 1 to 8. A motion now
@@ -2746,8 +2886,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   one at half its health or less, and the page now says so.
 - **The README quotes the game.** Eleven lines it quoted had drifted from what the game says, among them the glass's
   warnings, running out of saline, the EMP's line and the wrong-tool line; each now reads as the game's own.
-
-<details><summary>What changed in 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.5.3
 

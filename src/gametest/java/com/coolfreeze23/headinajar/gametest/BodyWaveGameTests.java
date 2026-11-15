@@ -75,7 +75,9 @@ public class BodyWaveGameTests {
         // the pop, the snip and the ding are played later by the server's own tick: the cow stays a calm host meanwhile
         h.runAfterDelay(14, () -> {
             h.assertTrue(cow.isAlive() && Hosts.isHost(cow), "the cow did not survive its own cork");
-            h.assertTrue(memos(Fx.HOST_CUT, t0, cow).size() == 1, "the cut was told more than once");
+            int told = Fx.count(Fx.HOST_CUT, cow.getId());
+            // counted apart from the last 64 memos, which tests running alongside can push this one out of
+            h.assertTrue(told == 1, told == 0 ? "the cut memo was dropped" : "the cut was told " + told + " times");
             done(h, p);
         });
     }
@@ -115,7 +117,8 @@ public class BodyWaveGameTests {
         h.assertTrue(off.size() == 1 && off.get(0).fx().entityB() == pig.getId(), "one unseat memo at the pig: " + off);
         h.runAfterDelay(2, () -> {
             h.assertTrue(FormActions.state(jar).form() == Form.JAR, "the jar is a plain jar again");
-            h.assertTrue(memos(Fx.HOST_UNSEAT, t0, pig).size() == 1, "leaving was told twice");
+            int told = Fx.count(Fx.HOST_UNSEAT, pig.getId());
+            h.assertTrue(told == 1, told == 0 ? "the unseat memo was dropped" : "leaving was told " + told + " times");
             done(h, cutter, jar);
         });
     }

@@ -1,0 +1,33 @@
+{
+  "name": "Personnel Files",
+  "icon": "minecraft:paper",
+  "category": "headinajar:staffing",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The first time the company touches a creature (a sample, a cut, a head set down or fitted) it gets a staff number and a Personnel File. Old heads and hosts are filed as they turn up."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Jade shows anyone the number, department and employer; the name only to the employer and those they trust.$(br2)We do not lose staff. We occasionally misplace them."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(k:key.sneak) and use a placed head with an empty hand: its file card opens, with its wage, jar, genes and last eight lines of history.$(br2)The employer, or anyone they trust, may rename it there."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Names take 16 characters; a blank keeps the old one. A staff name is not a name tag: the saw does not mind it.$(br2)Departments go by species: cows are Livestock, creepers Demolitions. Shells are Temp Agency."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A head at a Cerebral Array sits on the Board while it is there.$(br2)A wild creature has a file but no employer. Nobody is told when it goes."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:condolence_card",
+      "text": "When a host that worked for someone dies, its employer gets an $(l)Exit Interview$() in chat, and this drops where it fell.$(br2)$(o)Your own file is also on file.$()"
+    }
+  ]
+}

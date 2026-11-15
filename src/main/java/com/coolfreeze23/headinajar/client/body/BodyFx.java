@@ -13,6 +13,7 @@ public final class BodyFx {
             case Fx.HOST_EMBALMED -> HostFx.embalmed(fx);
             case Fx.TOOL -> ToolFx.used(fx);
             case Fx.CORPSE -> BodyPoses.corpse(fx.entityB());
+            case Fx.STAFF_SHAKE -> StaffShake.start(fx);
             default -> {
             }
         }

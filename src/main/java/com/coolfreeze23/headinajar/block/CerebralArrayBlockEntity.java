@@ -21,7 +21,21 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
  * second). Five or more heads hold a Board Meeting: +10% output, and now and then a vote. A Dragon Head needs the Board Room
  * Core in the tenth slot. Power goes out to every neighbour that takes FE.
  */
-public class CerebralArrayBlockEntity extends LabMachine implements com.coolfreeze23.headinajar.machine.KitMachine, software.bernie.geckolib.animatable.GeoBlockEntity {
+public class CerebralArrayBlockEntity extends LabMachine implements com.coolfreeze23.headinajar.machine.KitMachine, software.bernie.geckolib.animatable.GeoBlockEntity,
+        com.coolfreeze23.headinajar.staff.Badged {
+    /** One staff badge for the whole Board (-1 none), worked out on the server and synced with the kit. */
+    private int badge = -1;
+
+    @Override
+    public int badge() {
+        return badge;
+    }
+
+    @Override
+    public void setBadge(int colour) {
+        badge = colour;
+    }
+
     /** Block event: the gavel lifts for a vote (it falls ten ticks later, as the vote is taken); param ayes | nays << 4 | motion << 8. */
     public static final int EV_VOTE = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN;
     private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
@@ -182,6 +196,7 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
     /** The server's tick, then what the stand shows: the lamp, the urn's broth, whether the heads are fed. */
     public static void kitTick(Level level, BlockPos pos, BlockState state, CerebralArrayBlockEntity a) {
         serverTick(level, pos, state, a);
+        com.coolfreeze23.headinajar.staff.StaffBlocks.stationTick(a, a.items, HEAD_SLOTS, null);
         boolean fed = a.getPersistentData().getBoolean("Fed");
         int heads = a.heads();
         a.fedShown = fed && heads > 0;
@@ -208,12 +223,14 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
     public void writeSync(CompoundTag tag) {
         if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
         if (fedShown) tag.putBoolean("fed", true);
+        if (badge >= 0) tag.putInt("Badge", badge);
     }
 
     @Override
     public void readSync(CompoundTag tag) {
         if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
         fedShown = tag.getBoolean("fed");
+        badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
     }
 
     @Override

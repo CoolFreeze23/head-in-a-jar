@@ -2,6 +2,52 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.6.0 (2026-11-15)
+
+- **The saw reads a table.** Before anything spins up, the Surgical Saw now says why it will not cut, each case in
+  its own line, with the refusal sound, and the creature shakes its head once. Nothing is spent on a refusal. Babies:
+  "Child labour is against company policy. Come back when it's grown." (a server can allow them again with
+  `saw.allowBabies`). The Ender Dragon: "The Dragon is a Board matter. See the Board Room Core." The Wither: "The
+  Wither has three heads and no Human Resources department." Other bosses, named creatures, other people's pets,
+  hosts, shells and armour stands each have their own line too.
+- **Some creatures are all head.** A slime, magma cube, shulker, vex, bee, silverfish, endermite or tadpole gives only
+  its head, and only into a jar: without one, "A slime is all head. Bring a jar; there would be no body to keep." With
+  one, the whole creature goes into the jar: no body is left, nothing drops and a slime does not split.
+- **Big heads need a big jar.** A warden, elder guardian, hoglin, zoglin, sniffer or a size-2 slime or magma cube needs
+  a Reinforced Life Support Jar or bigger; a ghast, a ravager or a slime of size 4 or more an Executive one ("The
+  Ghast's head needs an Executive Life Support Jar."). Without a jar they give a body as before. A snow golem loses its
+  pumpkin to the first cut ("Pumpkin removed. The head underneath is snow. Saw again.").
+- **Every head is drawn in its jar.** Until now only heads of people-shaped creatures (zombies, skeletons, villagers,
+  illagers and the like) were drawn: a placed cow head, a creeper on a Turret Pedestal or a blaze in a Cerebral Array
+  sat in an empty jar. Every vanilla creature's head now shows, scaled to float inside the saline (a creature's jar is
+  kept fuller than your own), and the creatures that are all head are drawn whole. Heads in worlds from 0.5.4 appear in jars that looked empty. A head records the jar it went into, and one
+  in a Compact Jar is drawn in that jar's shape; the other three jars still look alike.
+- **The Personnel File.** Every creature the company touches (sampled, cut, placed or fitted to a station) gets a staff
+  number, a name from HR's pool, a department and up to eight history lines. With Jade: "No. 0012 · Livestock · Steve's
+  staff", and the name for the employer and those they trust. **Sneak** and **Use** a placed head with an empty hand to
+  open its file card; its employer can rename it there (16 characters). Sneaking and using a villager head with an
+  empty hand now opens its file instead of its trades.
+- **Paying a head.** Use a placed head's wage on it by hand (wheat for a cow, a carrot for a pig) and it is on the
+  payroll: "Bessie is on the payroll. Wages at dawn, from a chest beside it." At each dawn it takes one wage from a
+  chest beside it, and its morale goes up when paid and down when not (Engaged, Content, Disengaged). A head that has
+  never been paid by hand is a trophy and never takes anything. Villager heads still trade and are never paid by hand.
+- **Lanyards.** A head on the payroll, and every Turret Pedestal, Employee Mount, Neural Socket and Cerebral Array with
+  a head in it, wears a small badge in the employer's team colour, or the company's teal (the client setting
+  `lanyards` hides them).
+- **Leaving.** When a host or a Utility Shell dies, its employer (the player who sawed it, or placed the shell) gets
+  one Exit Interview line ("[Exit Interview] Bessie (Cow), Livestock, 12 days: 'Moo.' Reason for leaving: lava.")
+  and a Condolence Card drops where it happened. A host farm sends one line for each host that rots away.
+- **DOLORES keeps to the rules.** Her memos now come at most one a minute, and never while a Separation Chair near you
+  is operating. Two new memos, the first time one of your creatures is numbered and the first unpaid dawn. Her memos
+  no longer cross the jar's bars: the chat sits above them while they show.
+- **A head set down by hand faces you.** A jarred head placed by hand used to be set facing away from whoever placed
+  it, turned only partway round to look at them; it now looks at the player who set it down, its plinth's front (and
+  its badge) to them. Heads already placed keep the way they face.
+- Three advancements: Entirely Head, Staff Number and Pay Grade. The Employee Handbook has new pages on staff files and
+  pay, and its saw page has the table.
+- Worlds from 0.5.4 load as they are. A 0.6.0 game can join a 0.5.4 server; a 0.5.4 game cannot join a 0.6.0
+  server. Update both.
+
 ## 0.5.4 (2026-11-15)
 
 - **A Board Meeting's motion can fall.** The Board announced every motion as carried, even 1 to 8. A motion now

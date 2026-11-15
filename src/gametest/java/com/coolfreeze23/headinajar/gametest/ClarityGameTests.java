@@ -77,8 +77,8 @@ public class ClarityGameTests {
     }
 
     private static int memos(ServerPlayer p, Memos.Memo memo) {
-        String want = p.getUUID() + ":" + memo.name();
-        return (int) Memos.history().stream().filter(want::equals).count();
+        // delivered, or waiting its turn (a memo less than a minute after the last waits)
+        return Memos.told(p, memo);
     }
 
     // --- the career ladder ------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ public class ClarityGameTests {
         }
         ItemStack book = recipe.get().value().getResultItem(h.getLevel().registryAccess());
         var content = book.get(DataComponents.WRITTEN_BOOK_CONTENT);
-        h.assertTrue(content != null && content.pages().size() >= 80 && content.pages().size() <= 100,
+        h.assertTrue(content != null && content.pages().size() >= 80 && content.pages().size() <= 120,
                 "the written edition has " + (content == null ? 0 : content.pages().size()) + " pages");
         // the contents page sends the reader to each chapter
         int links = 0;

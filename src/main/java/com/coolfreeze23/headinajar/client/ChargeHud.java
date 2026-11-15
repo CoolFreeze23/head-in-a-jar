@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 public final class ChargeHud {
     public static void render(GuiGraphics graphics, DeltaTracker delta) {
         HudStack.reset(); // the first of the mod's layers each frame
+        drewBars = false;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null || mc.options.hideGui || mc.gameMode == null || !mc.gameMode.canHurtPlayer()) return;
@@ -45,11 +46,39 @@ public final class ChargeHud {
                     state.integrity() + "/" + state.maxIntegrity()};
             for (int i = 0; i < 3; i++) graphics.drawString(mc.font, text[i], right + 4, rows[i] - 1, 0xFFE0E0E0);
         }
+        int top = y3 - 1; // the glass bar's frame
         if (state.has(com.coolfreeze23.headinajar.module.ModuleType.LIFE_SIGN_MONITOR) && state.bodyMaxHealth() > 0) {
             String text = net.minecraft.network.chat.Component.translatable("hud.headinajar.life_signs",
                     Math.round(state.bodyHealth()), Math.round(state.bodyMaxHealth())).getString();
-            graphics.drawString(mc.font, text, left, graphics.guiHeight() - mc.gui.rightHeight - 8, state.bodyHealth() > 0 ? 0x55FF77 : 0xFF5555);
+            top = graphics.guiHeight() - mc.gui.rightHeight - 8;
+            graphics.drawString(mc.font, text, left, top, state.bodyHealth() > 0 ? 0x55FF77 : 0xFF5555);
+            top--;
         }
+        // where the bars stood this frame, for the chat to stand clear of them (ChatRoom: the CHAT layer comes later)
+        barsTop = top;
+        barsLeft = left - 10; // the marks left of the bars
+        drewBars = true;
+    }
+
+    private static int barsTop, barsLeft;
+    private static boolean drewBars;
+
+    /** Whether the jar's bars were drawn this frame; their top edge and left edge (screen px) when they were. */
+    public static boolean drewBars() {
+        return drewBars;
+    }
+
+    public static int barsTop() {
+        return barsTop;
+    }
+
+    public static int barsLeft() {
+        return barsLeft;
+    }
+
+    /** A new frame (or this layer not drawn): no bars until they are drawn again. */
+    static void forget() {
+        drewBars = false;
     }
 
     private static final String[] BOLT = {"...##", "..##.", ".####", "..##.", ".##..", "##..."},

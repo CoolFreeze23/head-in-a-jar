@@ -30,7 +30,21 @@ public class JadeCompat implements IWailaPlugin {
             GENES = HeadInAJar.id("genes"), HEADS = HeadInAJar.id("heads"), OWN_HEAD = HeadInAJar.id("own_head");
 
     @Override
+    public void register(snownee.jade.api.IWailaCommonRegistration registration) {
+        // the staff line's data, decided on the server for each viewer (the name only for those allowed to see it)
+        JadeStaffData.Blocks blocks = new JadeStaffData.Blocks();
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.JarredHeadBlockEntity.class);
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity.class);
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.CerebralArrayBlockEntity.class);
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.EmployeeMountBlockEntity.class);
+        registration.registerBlockDataProvider(blocks, com.coolfreeze23.headinajar.block.NeuralSocketBlockEntity.class);
+        registration.registerEntityDataProvider(new JadeStaffData.Entities(), Mob.class);
+    }
+
+    @Override
     public void registerClient(IWailaClientRegistration registration) {
+        registration.registerEntityComponent(new StaffLine(), Mob.class);
+        registration.registerBlockComponent(new StaffBlockLine(), Block.class);
         registration.registerEntityComponent(new Mecha(), MechaEntity.class);
         registration.registerEntityComponent(new Host(), Mob.class);
         registration.registerEntityComponent(new Body(), HeadlessBody.class);
@@ -141,12 +155,38 @@ public class JadeCompat implements IWailaPlugin {
             if (head.isEmpty()) return;
             String job = HeadJobs.profession(head);
             tooltip.add(job.isEmpty() ? head.getHoverName()
-                    : Component.translatable("jade.headinajar.staff", Component.translatable("entity.minecraft.villager." + job)));
+                    : Component.translatable("jade.headinajar.mount_staff", Component.translatable("entity.minecraft.villager." + job)));
         }
 
         @Override
         public ResourceLocation getUid() {
             return HEADS;
+        }
+    }
+
+    /** The staff line on a creature on file: "No. 0012 · Livestock · Steve's staff", and the name for those allowed. */
+    static class StaffLine implements IEntityComponentProvider {
+        @Override
+        public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+            for (Component line : JadeStaffData.lines(accessor.getServerData())) tooltip.add(line.copy().withStyle(ChatFormatting.GRAY));
+        }
+
+        @Override
+        public ResourceLocation getUid() {
+            return JadeStaffData.STAFF;
+        }
+    }
+
+    /** The staff line on a placed head or a station's head (the Board's on a Cerebral Array). */
+    static class StaffBlockLine implements IBlockComponentProvider {
+        @Override
+        public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+            for (Component line : JadeStaffData.lines(accessor.getServerData())) tooltip.add(line.copy().withStyle(ChatFormatting.GRAY));
+        }
+
+        @Override
+        public ResourceLocation getUid() {
+            return JadeStaffData.STAFF;
         }
     }
 }

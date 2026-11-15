@@ -468,6 +468,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
     public static void serverTick(Level level, BlockPos pos, BlockState state, SeparationChairBlockEntity chair) {
         if (chair.onTray != null && level.getGameTime() % 5 == 0) chair.watchTray();
         if (chair.afterLine != null) chair.afterLine(level.getGameTime());
+        // DOLORES holds her memos for anyone near while it operates
+        com.coolfreeze23.headinajar.block.ChairQuiet.mark(level, pos, chair.running());
         if (!chair.running()) return;
         ServerPlayer player = chair.seated();
         if (player == null || !player.getUUID().equals(chair.patient)) {

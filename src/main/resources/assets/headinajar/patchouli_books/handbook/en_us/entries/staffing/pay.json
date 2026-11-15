@@ -1,0 +1,34 @@
+{
+  "name": "Pay and Morale",
+  "icon": "minecraft:wheat",
+  "category": "headinajar:staffing",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A placed head is a $(l)trophy$() until someone pays it by hand: use its wage on it, wheat for a cow, two rotten flesh for a zombie. That hires it, and the payer is its employer."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Staff wear a badge in the employer's team colour, company teal without one.$(br2)At each dawn a head on the payroll takes one wage from a chest, barrel or other container touching it."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A head left unloaded for a week takes one wage, not seven. A trophy never touches the chest beside it.$(br2)Paying by hand twice in a day does nothing: it was paid today."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Starts at 50: +10 a wage paid, -15 a dawn unpaid.$(br)$(l)Engaged$(), 75-100: chin up$(br)$(l)Content$(), 40-74$(br)$(l)Disengaged$(), 15-39: sags, looks away$(br)$(l)Grievance$(): under 15 two dawns running. A label, for now.",
+      "title": "Form 40-M: Morale"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Heads at stations show Content.$(br)An Employee Mount's villager, by its pay: today and yesterday, Engaged; today, Content; unpaid 1-2 days, Disengaged; 3 or more, Grievance.",
+      "title": "Form 40-M (2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A villager head is never paid by hand: an emerald in hand opens its trades, as it always has.$(br2)Slimes, ghasts, tadpoles and a few others draw no wage, so they stay trophies.$(br2)$(o)A pizza party is not a pay rise.$()"
+    }
+  ]
+}

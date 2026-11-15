@@ -50,7 +50,24 @@ import java.util.UUID;
  * golems.
  */
 public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
-        software.bernie.geckolib.animatable.GeoBlockEntity {
+        software.bernie.geckolib.animatable.GeoBlockEntity, com.coolfreeze23.headinajar.staff.Badged {
+    /** The staff badge's colour (-1 none), worked out on the server and synced with the kit. */
+    private int badge = -1;
+
+    @Override
+    public int badge() {
+        return badge;
+    }
+
+    @Override
+    public void setBadge(int colour) {
+        badge = colour;
+    }
+
+    /** Who fitted the turret first (its employer for the head's file), or null. */
+    public UUID owner() {
+        return owner;
+    }
     /** Block event: a shot, its param the kind (0 a shot, 1 a blaze's charge, 2 a lunge, 3 a creeper's pulse, 4 a lob, 5 a beam, 6 a nod). */
     public static final int EV_SHOT = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN;
     public static final int SHOT = 0, CHARGE = 1, LUNGE = 2, PULSE = 3, LOB = 4, BEAM = 5, NOD = 6;
@@ -392,6 +409,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 return;
             }
             items.setStackInSlot(0, held.split(1));
+            com.coolfreeze23.headinajar.staff.StaffBlocks.fitted(this, head(), player);
             if (owner == null) setOwner(player.getUUID());
             level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_FIT.get(), SoundSource.BLOCKS, 1, 1.2f);
             // what the head will need, or use up, said as it goes in
@@ -411,6 +429,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     /** The server's tick, then what the mount shows: the lamp, its target and power. */
     public static void kitTick(Level level, BlockPos pos, BlockState state, TurretPedestalBlockEntity t) {
         serverTick(level, pos, state, t);
+        com.coolfreeze23.headinajar.staff.StaffBlocks.stationTick(t, t.items, 1, t.owner);
         t.powered = t.energy.getEnergyStored() > 0;
         com.coolfreeze23.headinajar.machine.MachineLamp lamp;
         if (t.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
@@ -441,6 +460,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         // a guardian head's lock, for the beam every watcher draws (-1 none)
         tag.putInt("Lock", syncedLock);
         tag.putLong("LockStart", lockStart);
+        if (badge >= 0) tag.putInt("Badge", badge);
     }
 
     @Override
@@ -450,6 +470,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         powered = tag.getBoolean("on");
         syncedLock = tag.contains("Lock") ? tag.getInt("Lock") : -1;
         lockStart = tag.getLong("LockStart");
+        badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
     }
 
     /**

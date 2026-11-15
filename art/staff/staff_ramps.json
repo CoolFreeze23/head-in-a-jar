@@ -1,0 +1,10 @@
+{
+  "about": "Ramps the staff art needs that art/palette.json does not have yet, in the palette file's 'shared' format (the same in every style set). Each is meant to move into art/palette.json 'shared' as it is; until then staff_palette.py merges them over the house palette. Dark to light.",
+  "shared": {
+    "tint": {"alias": "n", "label": "neutral grey for vertex-colour tinting (the badge and its cord; the game multiplies it by the team colour)", "ramp": ["3c3c3c", "5e5e5e", "858585", "adadad", "d2d2d2", "eeeeee"]},
+    "manila": {"alias": "m", "label": "manila card stock (the personnel file)", "ramp": ["5e4128", "86613a", "ad8550", "cba66a", "e2c387", "f0dba6", "f8ebc6"]},
+    "ink": {"alias": "k", "label": "blue office ink (ruled lines)", "ramp": ["34405e", "4f6087", "7387ab", "9fb1c9"]},
+    "red_ink": {"alias": "d", "label": "red office ink (the margin rule)", "ramp": ["6a2424", "96362f", "bd5444"]},
+    "leaf": {"alias": "z", "label": "leaf green (the lily's stem and leaf)", "ramp": ["2c4424", "45622f", "62823c", "8aa653"]}
+  }
+}

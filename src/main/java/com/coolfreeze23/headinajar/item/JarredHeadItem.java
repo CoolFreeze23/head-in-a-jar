@@ -31,16 +31,35 @@ public class JarredHeadItem extends Item {
         super(properties);
     }
 
+    /** A head with no jar recorded (as heads cut before 0.6.0 are: it shows as a Life Support Jar). */
     public static ItemStack of(Mob mob) {
+        return of(mob, ItemStack.EMPTY);
+    }
+
+    /**
+     * The creature's head in {@code jar} (recorded as {@code "Jar"}). Any file the creature has moves to the head's own
+     * {@code "Staff"}, out of the stored mob, so there is one copy.
+     */
+    public static ItemStack of(Mob mob, ItemStack jar) {
         ItemStack stack = new ItemStack(ModRegistry.JARRED_HEAD.get());
         CompoundTag tag = new CompoundTag();
         tag.putString("Type", BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString());
         CompoundTag entity = new CompoundTag();
         mob.saveWithoutId(entity);
         entity.remove("Passengers");
+        com.coolfreeze23.headinajar.staff.Staff.stripEntity(entity);
         tag.put("Entity", entity);
+        if (!jar.isEmpty()) tag.putString("Jar", BuiltInRegistries.ITEM.getKey(jar.getItem()).toString());
+        var file = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+        if (file != null) tag.put(com.coolfreeze23.headinajar.staff.Staff.ON_HEAD, file.save());
         CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         return stack;
+    }
+
+    /** The jar recorded on a jarred head item (a Life Support Jar when none is). */
+    public static String jar(ItemStack stack) {
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        return com.coolfreeze23.headinajar.block.HeadInfo.jar(data == null ? null : data.getUnsafe());
     }
 
     public static EntityType<?> type(ItemStack stack) {
@@ -63,8 +82,10 @@ public class JarredHeadItem extends Item {
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         if (!level.getBlockState(pos).canBeReplaced()) return InteractionResult.FAIL;
         if (level.isClientSide) return InteractionResult.SUCCESS;
+        // the head looks the opposite way to the block's facing (the plinth's front and the badge with it): facing the
+        // way the placer looks, it looks back at them
         BlockState state = ModRegistry.JARRED_HEAD_BLOCK.get().defaultBlockState()
-                .setValue(com.coolfreeze23.headinajar.block.JarredHeadBlock.FACING, context.getHorizontalDirection().getOpposite());
+                .setValue(com.coolfreeze23.headinajar.block.JarredHeadBlock.FACING, context.getHorizontalDirection());
         // placed as any block is, so claim and protection mods can say no
         var snapshot = net.neoforged.neoforge.common.util.BlockSnapshot.create(level.dimension(), level, pos);
         level.setBlockAndUpdate(pos, state);
@@ -75,6 +96,8 @@ public class JarredHeadItem extends Item {
         if (level.getBlockEntity(pos) instanceof JarredHeadBlockEntity head) {
             CustomData data = context.getItemInHand().get(DataComponents.CUSTOM_DATA);
             if (data != null) head.load(data.copyTag());
+            // on file from here: numbered now if it never was, and the placer is its employer if nobody is
+            if (context.getPlayer() instanceof net.minecraft.server.level.ServerPlayer placer) com.coolfreeze23.headinajar.staff.StaffBlocks.placed(head, placer);
         }
         context.getItemInHand().shrink(1);
         level.playSound(null, pos, net.minecraft.sounds.SoundEvents.GLASS_PLACE, net.minecraft.sounds.SoundSource.BLOCKS, 1, 1);
@@ -84,6 +107,11 @@ public class JarredHeadItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         if (type(stack) == EntityType.VILLAGER) tooltip.add(Component.translatable("item.headinajar.jarred_head.trades").withStyle(ChatFormatting.GREEN));
+        var jar = BuiltInRegistries.ITEM.getOptional(ResourceLocation.tryParse(jar(stack)));
+        jar.ifPresent(item -> tooltip.add(Component.translatable("item.headinajar.jarred_head.jar", item.getDescription()).withStyle(ChatFormatting.GRAY)));
+        var file = com.coolfreeze23.headinajar.staff.Staff.of(stack);
+        if (file != null) tooltip.add(Component.translatable("item.headinajar.jarred_head.staff", com.coolfreeze23.headinajar.staff.Staff.number(file.number),
+                com.coolfreeze23.headinajar.staff.Staff.departmentName(com.coolfreeze23.headinajar.staff.Staff.department(type(stack)))).withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.headinajar.jarred_head.how").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

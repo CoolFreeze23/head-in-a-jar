@@ -15,8 +15,21 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * What a jarred head in a slot is: its creature, a villager's profession and the villager data a renderer needs. Read
  * once from the item, without copying the stored mob, and kept until the slot holds a different stack.
  */
-public record HeadInfo(EntityType<?> type, String profession, CompoundTag villagerData) {
-    public static final HeadInfo NONE = new HeadInfo(null, "", null);
+public record HeadInfo(EntityType<?> type, String profession, CompoundTag villagerData, String jar, int size) {
+    public static final HeadInfo NONE = new HeadInfo(null, "", null, HeadInfo.LIFE_SUPPORT, 0);
+
+    /** The jar a head went into, as recorded on it ({@code "Jar"}); none recorded is a Life Support Jar. */
+    public static final String LIFE_SUPPORT = "headinajar:life_support_jar", COMPACT = "headinajar:compact_life_support_jar";
+
+    /** Whether this head is in the Compact Jar (drawn in its own shape; the other three jars are drawn alike). */
+    public boolean compact() {
+        return COMPACT.equals(jar);
+    }
+
+    /** The recorded jar of a jarred head's data, or the Life Support Jar when none is recorded (heads cut before 0.6.0). */
+    public static String jar(CompoundTag tag) {
+        return tag != null && tag.contains("Jar") ? tag.getString("Jar") : LIFE_SUPPORT;
+    }
 
     /** The stored tag, read-only (never copied: a traded villager's record is several KB). */
     static CompoundTag data(ItemStack stack) {
@@ -38,7 +51,10 @@ public record HeadInfo(EntityType<?> type, String profession, CompoundTag villag
             int colon = job.indexOf(':');
             profession = colon < 0 ? job : job.substring(colon + 1);
         }
-        return new HeadInfo(type, profession, villager);
+        // a slime's or magma cube's size as drawn (its record saves one less), 0 for anything else
+        CompoundTag stored = tag.getCompound("Entity");
+        int size = (type == EntityType.SLIME || type == EntityType.MAGMA_CUBE) && stored.contains("Size") ? stored.getInt("Size") + 1 : 0;
+        return new HeadInfo(type, profession, villager, jar(tag), size);
     }
 
     /** A one-slot cache: worked out again only when the slot holds a different stack. */
@@ -82,9 +98,11 @@ public record HeadInfo(EntityType<?> type, String profession, CompoundTag villag
         if (tag == null) return out;
         CompoundTag kept = new CompoundTag();
         kept.putString("Type", tag.getString("Type"));
+        if (tag.contains("Jar")) kept.putString("Jar", tag.getString("Jar"));
         CompoundTag entity = new CompoundTag();
         CompoundTag stored = tag.getCompound("Entity");
         if (stored.contains("VillagerData")) entity.put("VillagerData", stored.getCompound("VillagerData").copy());
+        if (stored.contains("Size")) entity.putInt("Size", stored.getInt("Size"));
         kept.put("Entity", entity);
         CustomData.set(DataComponents.CUSTOM_DATA, out, kept);
         return out;

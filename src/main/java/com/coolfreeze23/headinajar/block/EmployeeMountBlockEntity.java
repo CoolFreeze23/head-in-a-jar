@@ -27,7 +27,37 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * chest touching the mount. Unpaid staff work at half bonus and complain; nitwits do nothing and say so.
  */
 public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, HeadHolderBlock.Holder, com.coolfreeze23.headinajar.machine.KitMachine,
-        software.bernie.geckolib.animatable.GeoBlockEntity {
+        software.bernie.geckolib.animatable.GeoBlockEntity, com.coolfreeze23.headinajar.staff.Badged {
+    /** The staff badge's colour (-1 none), worked out on the server and synced with the kit. */
+    private int badge = -1;
+    /** Days paid running (saved only once known; an old mount reads 0 until its second paid day). Read for the band only. */
+    private int paidStreak;
+
+    @Override
+    public int badge() {
+        return badge;
+    }
+
+    @Override
+    public void setBadge(int colour) {
+        badge = colour;
+    }
+
+    /**
+     * The villager's band, read from its pay record and nothing else: paid today and yesterday Engaged, paid today
+     * Content, unpaid one or two days Disengaged, three or more Grievance (the days it already faces the wall).
+     */
+    public com.coolfreeze23.headinajar.staff.Band band() {
+        if (head().isEmpty()) return com.coolfreeze23.headinajar.staff.Band.NONE;
+        if (!com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.MORALE, true)) return com.coolfreeze23.headinajar.staff.Band.CONTENT;
+        if (paid()) return paidStreak >= 2 ? com.coolfreeze23.headinajar.staff.Band.ENGAGED : com.coolfreeze23.headinajar.staff.Band.CONTENT;
+        return daysMissed() >= 3 ? com.coolfreeze23.headinajar.staff.Band.GRIEVANCE : com.coolfreeze23.headinajar.staff.Band.DISENGAGED;
+    }
+
+    /** Days paid running (tests). */
+    public int paidStreak() {
+        return paidStreak;
+    }
     /** Block events: a complaint (param: days unpaid), payday (param: days it had gone unpaid). */
     public static final int EV_COMPLAINT = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN, EV_PAYDAY = EV_COMPLAINT + 1;
     private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
@@ -99,6 +129,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
                 if (handler.getStackInSlot(i).is(Items.EMERALD) && !handler.extractItem(i, 1, false).isEmpty()) {
                     long missed = Math.max(0, day() - 1 - paidThrough);
                     if (paidThrough >= 0 || missed > 0) kit.event(EV_PAYDAY, (int) Math.min(255, missed));
+                    paidStreak = missed == 0 && paidThrough >= 0 ? paidStreak + 1 : 1;
                     paidThrough = day();
                     setChanged();
                     return true;
@@ -134,6 +165,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
                 return;
             }
             items.setStackInSlot(0, held.split(1));
+            com.coolfreeze23.headinajar.staff.StaffBlocks.fitted(this, head(), player);
             // hired today: counted from today, not from the world's first day, if the first wage isn't there yet
             if (!payroll()) {
                 paidThrough = day() - 1;
@@ -157,6 +189,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         super.saveAdditional(tag, registries);
         tag.put("Items", items.serializeNBT(registries));
         tag.putLong("PaidThrough", paidThrough);
+        if (paidStreak > 0) tag.putInt("PaidStreak", paidStreak);
     }
 
     @Override
@@ -164,11 +197,13 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         super.loadAdditional(tag, registries);
         MachineItems.load(items, tag.getCompound("Items"), registries);
         paidThrough = tag.contains("PaidThrough") ? tag.getLong("PaidThrough") : -1;
+        paidStreak = tag.getInt("PaidStreak");
     }
 
     /** The server's tick, then what the cubicle shows: the lamp, the head, the day it is paid through. */
     public static void kitTick(Level level, BlockPos pos, BlockState state, EmployeeMountBlockEntity mount) {
         serverTick(level, pos, state, mount);
+        com.coolfreeze23.headinajar.staff.StaffBlocks.stationTick(mount, mount.items, 1, null);
         com.coolfreeze23.headinajar.machine.MachineLamp lamp;
         if (mount.head().isEmpty()) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.OFF;
         else if ("nitwit".equals(mount.profession())) lamp = com.coolfreeze23.headinajar.machine.MachineLamp.WAIT;
@@ -191,12 +226,14 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     public void writeSync(CompoundTag tag) {
         if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
         tag.putLong("paid", paidThrough);
+        if (badge >= 0) tag.putInt("Badge", badge);
     }
 
     @Override
     public void readSync(CompoundTag tag) {
         if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
         paidThrough = tag.getLong("paid");
+        badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
     }
 
     @Override

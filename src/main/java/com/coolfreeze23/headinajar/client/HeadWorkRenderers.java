@@ -45,7 +45,7 @@ public final class HeadWorkRenderers {
         if (type == null) return;
         pose.pushPose();
         pose.scale(scale, scale, scale);
-        JarredHeadRenderer.drawJar(type, info.villagerData(), pose, buffers, light, age);
+        JarredHeadRenderer.drawJar(type, info.villagerData(), info.size(), info.jar(), pose, buffers, light, age, 0, 0, 1);
         pose.popPose();
     }
 

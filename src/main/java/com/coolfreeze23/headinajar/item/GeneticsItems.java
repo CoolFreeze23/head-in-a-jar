@@ -144,6 +144,7 @@ public final class GeneticsItems {
             // the needle stings, but a sample never costs the specimen its last point of health
             if (!harmless) target.hurt(player.damageSources().playerAttack(player), Math.min(1, Math.max(0, target.getHealth() - 1)));
             com.coolfreeze23.headinajar.form.FormActions.give(player, sample(ModRegistry.BLOOD_SAMPLE.get(), target.getType(), quality));
+            com.coolfreeze23.headinajar.staff.Staff.sampled(target, player);
             int drawn = player.getPersistentData().getInt("headinajar_samples") + 1;
             player.getPersistentData().putInt("headinajar_samples", drawn);
             if (drawn >= 10) com.coolfreeze23.headinajar.Advance.grant(player, "out_for_blood");

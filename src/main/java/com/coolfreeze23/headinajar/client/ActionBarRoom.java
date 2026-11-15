@@ -83,6 +83,7 @@ public final class ActionBarRoom {
         }
         if (shown == 0) return height - CHAT_BOTTOM;
         int bottom = Mth.floor((height - CHAT_BOTTOM) / scale);
-        return (int) Math.floor((bottom - shown * lineHeight) * scale);
+        // standing on the jar's bars when they are in its way (ChatRoom)
+        return (int) Math.floor((bottom - shown * lineHeight) * scale) - ChatRoom.lift();
     }
 }

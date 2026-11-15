@@ -1,0 +1,33 @@
+{
+  "name": "Fichas Funcionais",
+  "icon": "minecraft:paper",
+  "category": "headinajar:staffing",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Na primeira vez que a empresa encosta numa criatura (amostra, corte, cabeça pousada ou instalada), ela ganha matrícula e ficha. Cabeças e hospedeiros antigos são fichados quando aparecem."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O Jade mostra a todos a matrícula, o departamento e o empregador; o nome, só ao empregador e a quem ele confia.$(br2)Não perdemos funcionários. Às vezes os extraviamos."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(k:key.sneak) e use uma cabeça pousada com a mão vazia: a ficha abre, com salário, pote, genes e as oito últimas linhas do histórico.$(br2)O empregador, ou quem ele confia, pode renomear ali."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Nomes levam 16 letras; em branco, fica o antigo. Nome de funcionário não é etiqueta: a serra não liga.$(br2)O departamento vem da espécie: vacas na Pecuária, creepers em Demolições. Robôs, na Agência."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Uma cabeça na Matriz Cerebral é do Conselho enquanto estiver lá.$(br2)Criatura selvagem tem ficha, mas não empregador. Ninguém é avisado quando ela se vai."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:condolence_card",
+      "text": "Morreu um hospedeiro com empregador? Este recebe a $(l)Entrevista de Desligamento$() no chat, e isto cai no lugar.$(br2)$(o)Sua ficha também está arquivada.$()"
+    }
+  ]
+}

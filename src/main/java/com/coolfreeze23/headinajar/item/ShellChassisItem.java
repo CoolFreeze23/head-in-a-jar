@@ -31,6 +31,7 @@ public class ShellChassisItem extends Item {
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         ShellEntity shell = type.get().spawn(level, context.getItemInHand(), context.getPlayer(), pos, MobSpawnType.SPAWN_EGG, true, false);
         if (shell == null) return InteractionResult.FAIL;
+        if (context.getPlayer() instanceof net.minecraft.server.level.ServerPlayer placer) com.coolfreeze23.headinajar.staff.Staff.register(shell, placer, "shell", true);
         if (context.getPlayer() != null) shell.setYRot(context.getPlayer().getYRot() + 180);
         // the folded chassis stands up: its servos settle (heard by everyone near, the one who placed it too)
         var settle = com.coolfreeze23.headinajar.mecha.HopperSounds.get("servo_settle");

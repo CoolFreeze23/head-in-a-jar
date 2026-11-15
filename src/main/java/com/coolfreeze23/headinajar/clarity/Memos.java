@@ -37,7 +37,9 @@ public final class Memos {
         HEAD_DRYING("separation/when_it_goes_wrong"),
         FIRST_HOST("staffing/riding"),
         MECHA_BUILT("mecha/piloting"),
-        WELCOME("orientation/welcome");
+        WELCOME("orientation/welcome"),
+        STAFF_NUMBER("staffing/personnel"),
+        UNPAID_DAWN("staffing/pay");
 
         public final String entry;
 
@@ -95,15 +97,31 @@ public final class Memos {
         return (player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getInt(SENT) & (1 << memo.ordinal())) != 0;
     }
 
-    /** Sends a memo if this player has never had it. Returns whether it was sent. */
+    /**
+     * Sends a memo if this player has never had it. Returns whether it was sent or is on its way: a memo due less than a
+     * minute after the reader's last one, or while a Separation Chair near them operates, waits ({@link MemoQueue}).
+     */
     public static boolean send(ServerPlayer player, Memo memo, Object... args) {
         if (player instanceof net.neoforged.neoforge.common.util.FakePlayer || sent(player, memo)) return false;
         CompoundTag kept = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
         kept.putInt(SENT, kept.getInt(SENT) | (1 << memo.ordinal()));
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, kept);
+        if (MemoQueue.mustWait(player)) MemoQueue.hold(player, memo, args);
+        else deliver(player, memo, args);
+        return true;
+    }
+
+    /** The memo goes out now. */
+    static void deliver(ServerPlayer player, Memo memo, Object... args) {
         player.sendSystemMessage(line(memo, args));
         HISTORY.add(player.getUUID() + ":" + memo.name());
-        return true;
+        MemoQueue.delivered(player);
+    }
+
+    /** Whether a memo has gone out to this player or waits to (tests: delivered, or waiting in the queue). */
+    public static int told(Player player, Memo memo) {
+        String want = player.getUUID() + ":" + memo.name();
+        return (int) HISTORY.stream().filter(want::equals).count() + MemoQueue.waiting(player, memo);
     }
 
     /** The memo as its reader sees it: who it is from, the text, and the handbook entry that says more. */

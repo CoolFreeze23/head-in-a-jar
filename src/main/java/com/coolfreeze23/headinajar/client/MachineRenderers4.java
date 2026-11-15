@@ -114,6 +114,8 @@ public final class MachineRenderers4 {
         /** The real jar at full size, standing on the cradle's tray (its anchor 2 px above the pin line), turning and tilting with it. */
         @Override
         protected void contents(com.coolfreeze23.headinajar.block.TurretPedestalBlockEntity t, com.mojang.blaze3d.vertex.PoseStack pose, net.minecraft.client.renderer.MultiBufferSource buffers, int light, float partial) {
+            // the staff badge on the base drum, for the head that works here
+            StaffBadge.draw(pose, buffers, light, t.badge(), StaffBadge.TURRET);
             if (t.head().isEmpty() || t.getLevel() == null) return;
             var info = t.headInfo();
             GeoBone pitch = getGeoModel().getBakedModel(getGeoModel().getModelResource(t)).getBone("pitch").orElse(null);
@@ -121,7 +123,7 @@ public final class MachineRenderers4 {
             if (pitch != null) pose.mulPose(pitch.getModelSpaceMatrix());
             pose.translate(0, 2 / 16.0, 0);
             if (info.type() != null) {
-                JarredHeadRenderer.drawJar(info.type(), info.villagerData(), pose, buffers, light, t.getLevel().getGameTime() + partial);
+                JarredHeadRenderer.drawJar(info.type(), info.villagerData(), info.size(), info.jar(), pose, buffers, light, t.getLevel().getGameTime() + partial, 0, 0, 1);
             } else {
                 pose.translate(0, 0.25, 0);
                 net.minecraft.client.Minecraft.getInstance().getItemRenderer().renderStatic(t.head(), net.minecraft.world.item.ItemDisplayContext.FIXED, light,
