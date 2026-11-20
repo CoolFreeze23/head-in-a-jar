@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:powered",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "corporate_wellness"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:treadmill"
+    },
+    "title": {
+      "translate": "advancements.headinajar.corporate_wellness.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.corporate_wellness.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

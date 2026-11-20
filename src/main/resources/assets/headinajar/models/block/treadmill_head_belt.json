@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/treadmill",
+    "particle": "headinajar:block/machine/treadmill",
+    "belt": "headinajar:block/machine/treadmill_belt"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        4,
+        6
+      ],
+      "to": [
+        14,
+        6,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ],
+          "texture": "#belt"
+        }
+      }
+    }
+  ]
+}

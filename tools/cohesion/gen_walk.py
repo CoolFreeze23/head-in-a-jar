@@ -493,7 +493,7 @@ VERBS = {
     "slot": r"^slot (?:\d+|inv:\d+|item:[\w:]+(?:@\S+)?)(?: (?:left|right|middle|shift|double|hold \d+))*$",
     "mouse": rf"^mouse (?:rel )?{F} {F}$",
     "jar": r"^jar$", "separate": r"^separate$", "swap": r"^swap$", "pickup": r"^pickup$", "mount": r"^mount$",
-    "pilotgenes": r"^pilotgenes$", "lab": r"^lab$",
+    "pilotgenes": r"^pilotgenes$", "lab": r"^lab$", "sync": r"^sync \d+$",
     "fit": r"^fit [a-z_]+(?:,[a-z_]+)*$",
     "hostify": rf"^hostify [a-z_]+:[a-z_]+ {XYZ}$",
     "jarhead": rf"^jarhead [a-z_]+:[a-z_]+ {XYZ}$",

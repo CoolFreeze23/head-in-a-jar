@@ -121,6 +121,17 @@ public final class Config {
             .define("livingLibrary", true);
 
     static {
+        B.pop().push("bodies");
+    }
+
+    public static final ModConfigSpec.IntValue TREADMILL_OUTPUT = B
+            .comment("What a Corporate Wellness Treadmill makes, in percent of its species' rate (100: a cow makes 10 FE/t).")
+            .defineInRange("treadmillOutput", 100, 0, 1000);
+    public static final ModConfigSpec.BooleanValue HEADLESS_CHICKEN = B
+            .comment("A chicken host nobody rides runs in circles round where it was cut, never more than 12 blocks out (false: it stands still like any host).")
+            .define("headlessChicken", true);
+
+    static {
         B.pop();
     }
 

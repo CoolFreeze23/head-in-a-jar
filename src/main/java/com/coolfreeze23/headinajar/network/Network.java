@@ -256,6 +256,8 @@ public final class Network {
         com.coolfreeze23.headinajar.staff.StaffNet.register(registrar.optional());
         // the Staff Directory's sets (added in 0.6.2), optional too: the Sequencer's tab and the Bio-Scanner read them
         com.coolfreeze23.headinajar.genetics.Directory.register(registrar.optional());
+        // the tricks' host state and the pilot's cues (added in 0.6.3), optional too: a game without them is not told
+        com.coolfreeze23.headinajar.host.TrickNet.register(registrar.optional());
     }
 
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */

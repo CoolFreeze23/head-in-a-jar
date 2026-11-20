@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:corporate_wellness",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "cardio_department"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:leather"
+    },
+    "title": {
+      "translate": "advancements.headinajar.cardio_department.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.cardio_department.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

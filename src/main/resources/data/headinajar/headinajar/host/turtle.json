@@ -12,5 +12,13 @@
     "water_breathing"
   ],
   "drawbacks": [],
-  "neutral_to": []
+  "neutral_to": [],
+  "primary": {
+    "type": "withdraw",
+    "cooldown": 300,
+    "params": {
+      "duration": 100.0,
+      "factor": 0.2
+    }
+  }
 }

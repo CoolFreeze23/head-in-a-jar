@@ -36,10 +36,22 @@ HEAD = {
 }
 
 
+# The Corporate Wellness Treadmill's whir (event treadmill.run, played every 40 ticks while a belt runs; its sounds.json
+# entry and subtitle come from tools/gen_p40_bodies.py). Two seconds of soft rubber-belt hiss over a low motor hum, a
+# faint slap each time the belt's seam passes the roller (four a second), faded in and out so back-to-back plays join.
+# Nobody has listened to it in the game yet. name: (duration s, aevalsrc expression in t, ffmpeg filters)
+BELT = {
+    'treadmill/run': (2.0, '((random(0)*2-1)*0.5*(0.75+0.25*sin(2*PI*4*t)) + sin(2*PI*96*t)*0.35 + sin(2*PI*192*t)*0.12'
+                           ' + (random(1)*2-1)*0.6*exp(-60*mod(t,0.25)))*min(1,t/0.12)*min(1,(2-t)/0.12)',
+                      'highpass=f=70,lowpass=f=1800,volume=0.35'),
+}
+
+
 def head(names):
-    """Renders the named HEAD sounds only (python tools/make_sounds.py head/warden_shush); sounds.json is not touched."""
+    """Renders the named HEAD (or BELT) sounds only (python tools/make_sounds.py head/warden_shush); sounds.json is not
+    touched."""
     for name in names:
-        dur, expr, filters = HEAD[name]
+        dur, expr, filters = {**HEAD, **BELT}[name]
         out = os.path.join(OUT, name + '.ogg')
         os.makedirs(os.path.dirname(out), exist_ok=True)
         cmd = [FFMPEG, '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', f"aevalsrc='{expr}':s=44100:d={dur}",

@@ -8,7 +8,17 @@
   "blood": "warm",
   "decay_per_minute": 2.0,
   "attributes": {},
-  "flags": [],
+  "flags": [
+    "half_fall_damage"
+  ],
   "drawbacks": [],
-  "neutral_to": []
+  "neutral_to": [],
+  "primary": {
+    "type": "shed",
+    "cooldown": 1200,
+    "params": {
+      "min": 1.0,
+      "max": 3.0
+    }
+  }
 }

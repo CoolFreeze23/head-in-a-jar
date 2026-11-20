@@ -1,0 +1,36 @@
+# 0.6.3 merged tip: the game starts with every mixin; a cow host on a Treadmill clocks in and walks in place; a
+# headless chicken runs
+# (setup verbs place the blocks; the saw is real input)
+@world flat
+look 0 30
+setblock ~ ~ ~3 headinajar:treadmill[facing=south,part=foot]
+setblock ~ ~ ~4 headinajar:treadmill[facing=south,part=head]
+give @s headinajar:surgical_saw
+summon minecraft:cow ~ ~0.4 ~3 {Health:1f}
+wait 3
+lookat cow 0.6
+key use
+wait 80
+report the cow on the belt (clocked in after the 20-tick check)
+inspect near cow 8
+shot belt_cow
+tp @s ~4 ~0.5 ~
+wait 5
+lookat cow 0.6
+wait 5
+frames belt_walk 40
+wait 45
+summon minecraft:chicken ~2 ~ ~ {Health:1f}
+wait 2
+lookat chicken 0.25
+key use
+wait 60
+report the chicken after 3 s
+inspect near chicken 16
+wait 100
+inspect near chicken 16
+shot chicken_run
+wait 100
+inspect near chicken 16
+wait 100
+inspect near chicken 16

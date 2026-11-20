@@ -49,7 +49,9 @@ public final class Memos {
         SPLICER_SORTED("research/splicing"),
         DIRECTORY_TEN("research/directory"),
         CENSUS("research/directory"),
-        FIRST_SPECIES_PRINT("life_support/body_printer");
+        FIRST_SPECIES_PRINT("life_support/body_printer"),
+        // 0.6.3
+        TREADMILL_POWERED("staffing/treadmill");
 
         public final String entry;
 

@@ -434,3 +434,32 @@ N124	minecraft:rotten_flesh		no	BODY	block headinajar:body_printer	printer loade
 N125	headinajar:dna_fraction		no	BODY	block headinajar:body_printer	printer loaded, screen open	works	a cow fraction shift-clicked from the inventory goes into the Template slot		menu/BodyPrinterMenu.java	
 N126	(empty)		no	BODY	block headinajar:body_printer	printer loaded with a cow template (quality 70), screen open	works	Print with a cow template: a species print starts (any presser form)		block/BodyPrinterBlockEntity.java (start)	
 N127	(empty)		no	BODY	block headinajar:body_printer	printer loaded with a cow template (quality 30), screen open	refuses	Print with a template under quality 40: refused, nothing taken	refusal.headinajar.printer.poor	block/BodyPrinterBlockEntity.java (start)	
+N128	(empty)		no	BODY	block headinajar:treadmill (bare)		refuses	Use on a bare belt: "Belt idle. Ride a body on and get off to clock it in."	message.headinajar.treadmill.idle	block/TreadmillBlockEntity.java (use)	
+N129	(empty)		no	BODY	block headinajar:treadmill, a cow host walking on it		refuses	Use on a running belt: the status line (Cow: 10 FE/t, fresh, sync)	message.headinajar.treadmill.status	block/TreadmillBlockEntity.java (use)	
+N130	(empty)		no	BODY	block headinajar:treadmill, a laced cow host walking on it		refuses	Use: the status line at 5 FE/t and "Tired" in chat	message.headinajar.treadmill.tired	block/TreadmillBlockEntity.java (use)	
+N131	(empty)		no	BODY	block headinajar:treadmill, a living cow on it		refuses	a living cow on the belt: "Staff with heads use the stairs."	refusal.headinajar.treadmill.living	block/TreadmillBlockEntity.java (use)	
+N132	(empty)		no	BODY	block headinajar:treadmill, an iron golem host on it		refuses	too heavy: the Industrial Treadmill line	refusal.headinajar.treadmill.heavy	block/TreadmillBlockEntity.java (verdict)	
+N133	(empty)		no	BODY	block headinajar:treadmill, a bat host on it		refuses	a flier: "A Bat doesn't walk. Try a cow."	refusal.headinajar.treadmill.flier	block/TreadmillBlockEntity.java (verdict)	
+N134	(empty)		no	BODY	block headinajar:treadmill, a strider host on it		refuses	a strider: "It won't walk on anything but lava." (a slime cannot be a host: the saw takes only its head)	refusal.headinajar.treadmill.strider	block/TreadmillBlockEntity.java (verdict)	
+N135	(empty)		no	BODY	block headinajar:treadmill, a Lunk shell on it		refuses	a shell: "Shells run on charge, not cardio."	refusal.headinajar.treadmill.shell	block/TreadmillBlockEntity.java (verdict)	
+N136	headinajar:treadmill		no	BODY	ground (any free block face)	room for the belt	works	the belt is placed on two cells, the head away from you		block/TreadmillBlock.java (getStateForPlacement)	
+N137	headinajar:treadmill		no	BODY	ground (any free block face)	no room: a block where the head would go	refuses	no room: "The belt needs two clear blocks in front of you."	refusal.headinajar.treadmill.no_room	block/TreadmillBlock.java	
+N138	(empty)		no	HOSTED cow (sync 80)	the air (an Ability press)	two cows and a sheep 8 blocks off	works	Moo: the wheat-eaters follow ("3 colleagues are following you")	message.headinajar.host.herded	host/HostTricks.java (herd)	
+N139	(empty)		no	HOSTED cow (sync 80)	the air (an Ability press)	no wheat-eater within 16	refuses	Moo with nobody to herd	refusal.headinajar.host.no_herd	host/HostTricks.java (herd)	
+N140	(empty)		no	HOSTED pig (sync 80)	the air (an Ability press)	carrots and potatoes within 8	works	Rooting: outlines on the crops for the rider, the count in the action bar	message.headinajar.host.rooted	host/HostTricks.java (rooting); client/RootingOutlines.java	
+N141	(empty)		no	HOSTED sheep (sync 80)	the air (an Ability press)	a red sheep	works	Shed: 1-3 red wool at its feet, the fleece stays on		host/HostTricks.java (shed)	
+N142	(empty)		no	HOSTED llama (sync 80)	the air (an Ability press)	a husk 8 ahead	works	Spit: a llama spit flies at the look		host/HostTricks.java (spit)	
+N143	(empty)		no	HOSTED villager (sync 80)	the air (an Ability press)	a pillager 12 off	works	Sound the Bell: the bell rings, raiders glow		host/HostTricks.java (bell)	
+N144	(empty)		no	HOSTED piglin (sync 80)	the air (an Ability press)	a gold ingot in the pockets	works	Barter: an ingot from the pockets into its off hand; the loot 6 s later		host/HostTricks.java (barter)	
+N145	(empty)		no	HOSTED piglin (sync 80)	the air (an Ability press)	no gold in the pockets	refuses	Barter with no gold	refusal.headinajar.host.no_gold	host/HostTricks.java (barter)	
+N146	(empty)		no	HOSTED strider (sync 80)	the air (an Ability press)	standing on stone, not lava	refuses	Warm Up off lava	refusal.headinajar.host.warm_up_lava	host/HostTricks.java (warm_up)	
+N147	(empty)		no	HOSTED turtle (sync 80)	the air (an Ability press)	open ground	works	Withdraw: the shell shuts for 5 s		host/HostTricks.java (withdraw)	
+N148	(empty)		no	HOSTED frog (sync 80)	the air (an Ability press)	open ground	works	Long Jump: about 6 blocks forward		host/HostTricks.java (leap)	
+N149	(empty)		no	HOSTED cat (sync 80)	the air (an Ability press)	no creeper within 8	refuses	Hiss with no creeper near	refusal.headinajar.host.no_creepers	host/HostTricks.java (hiss)	
+N150	(empty)		no	HOSTED camel (sync 80)	the air (a Secondary press)	open ground	works	Dash: about 8 blocks forward		host/HostTricks.java (dash)	
+N151	(empty)		no	HOSTED horse (sync 80)	the air (a Secondary press)	open ground	works	Rear: the horse rears, a knock-back ring		host/HostTricks.java (rear)	
+N152	(empty)		no	HOSTED iron_golem (sync 80)	the air (a Secondary press)	hurt, an iron ingot in the pockets	works	Mend: an ingot spent, +25 health		host/HostTricks.java (mend)	
+N153	(empty)		no	HOSTED iron_golem (sync 80)	the air (a Secondary press)	hurt, no iron in the pockets	refuses	Mend with no iron	refusal.headinajar.host.no_iron	host/HostTricks.java (mend)	
+N154	(empty)		no	HOSTED wolf (sync 80)	the air (a Secondary press)	no tame wolf of yours within 16	refuses	Howl with no wolf of yours	refusal.headinajar.host.no_wolves	host/HostTricks.java (howl)	
+N155	(empty)		no	HOSTED sheep (sync 30)	the air (an Ability press)	sync 30 (under the Ability's 50%)	refuses	an Ability under 50% sync: the sync line	message.headinajar.sync_locked	host/HostAbilities.java:65-67	
+N156	(empty)		no	HOSTED cow (sync 80)	the air (a Secondary press)	sync 80	refuses	a cow has no Secondary: "Cow has no trick for that."	refusal.headinajar.host.no_ability	host/HostAbilities.java:64	

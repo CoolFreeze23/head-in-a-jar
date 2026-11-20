@@ -29,16 +29,89 @@ final class Bench {
     private static long lastFrame;
     private static long tickStart;
     private static long startNanos;
+    // Long frames (over SPIKE_MS): when in the window, how long, the garbage collector's time in that frame, and stack
+    // samples of the render and server threads taken while the frame was still running (by a watchdog thread), so a
+    // one-second frame says what ran in it. Written to bench-spikes.txt beside the report.
+    static final long SPIKE_MS = 200;
+    private static volatile Thread renderThread;
+    private static volatile Thread serverThread;
+    private static volatile long frameStart;
+    private static long lastGcMs;
+    private static long lastGcCount;
+    private static final List<String> spikes = new ArrayList<>();
+    private static final java.util.Map<Long, List<String>> samples = new java.util.concurrent.ConcurrentHashMap<>();
+    private static Thread watchdog;
 
     static void onFrame(RenderFrameEvent.Post event) {
         if (!on) return;
         long now = System.nanoTime();
-        if (lastFrame != 0) frames.add(now - lastFrame);
+        renderThread = Thread.currentThread();
+        long gcMs = 0, gcCount = 0;
+        for (var gc : java.lang.management.ManagementFactory.getGarbageCollectorMXBeans()) {
+            gcMs += Math.max(0, gc.getCollectionTime());
+            gcCount += Math.max(0, gc.getCollectionCount());
+        }
+        if (lastFrame != 0) {
+            long d = now - lastFrame;
+            frames.add(d);
+            if (d / 1_000_000 >= SPIKE_MS) {
+                List<String> st = samples.remove(lastFrame);
+                synchronized (spikes) {
+                    spikes.add(String.format(Locale.ROOT, "t=%.2fs %d ms gc %d ms (%d collections)%s", (lastFrame - startNanos) / 1e9, d / 1_000_000,
+                            gcMs - lastGcMs, gcCount - lastGcCount, st == null ? " no sample" : "\n" + String.join("\n", st)));
+                }
+            }
+        }
+        samples.keySet().removeIf(k -> k < now - 5_000_000_000L);
+        lastGcMs = gcMs;
+        lastGcCount = gcCount;
         lastFrame = now;
+        frameStart = now;
+    }
+
+    /** The watchdog: every 20 ms, if the current frame has run past 250 ms, samples both threads (at most every 200 ms). */
+    private static void watch() {
+        long sampledFrame = 0, lastSample = 0;
+        while (true) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                return;
+            }
+            long f = frameStart;
+            if (!on || f == 0) continue;
+            long now = System.nanoTime();
+            if (now - f < 250_000_000L) continue;
+            if (sampledFrame == f && now - lastSample < 200_000_000L) continue;
+            sampledFrame = f;
+            lastSample = now;
+            StringBuilder b = new StringBuilder(String.format(Locale.ROOT, "  sample at +%d ms", (now - f) / 1_000_000));
+            try {
+                var os = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+                if (os instanceof com.sun.management.OperatingSystemMXBean sun)
+                    b.append(String.format(Locale.ROOT, ", machine cpu %.0f%%, this process %.0f%%", sun.getCpuLoad() * 100, sun.getProcessCpuLoad() * 100));
+                long javas = ProcessHandle.allProcesses().filter(h -> h.info().command().map(c -> c.toLowerCase(Locale.ROOT).endsWith("java.exe")).orElse(false)).count();
+                b.append(", java processes ").append(javas);
+            } catch (Throwable ignored) {
+            }
+            stack(b, "render", renderThread);
+            stack(b, "server", serverThread);
+            samples.computeIfAbsent(f, k -> java.util.Collections.synchronizedList(new ArrayList<>())).add(b.toString());
+        }
+    }
+
+    private static void stack(StringBuilder b, String label, Thread t) {
+        if (t == null) return;
+        var info = java.lang.management.ManagementFactory.getThreadMXBean().getThreadInfo(new long[]{t.threadId()}, true, false)[0];
+        b.append("\n    ").append(label).append(" ").append(t.getState());
+        if (info != null && info.getLockName() != null) b.append(" on ").append(info.getLockName()).append(" held by ").append(info.getLockOwnerName());
+        StackTraceElement[] st = t.getStackTrace();
+        for (int i = 0; i < Math.min(st.length, 28); i++) b.append("\n      at ").append(st[i]);
     }
 
     static void onServerPre(ServerTickEvent.Pre event) {
         if (on) tickStart = System.nanoTime();
+        serverThread = Thread.currentThread();
     }
 
     static void onServerPost(ServerTickEvent.Post event) {
@@ -59,6 +132,16 @@ final class Bench {
         tickStart = 0;
         name = n;
         startNanos = System.nanoTime();
+        synchronized (spikes) {
+            spikes.clear();
+        }
+        samples.clear();
+        frameStart = 0;
+        if (watchdog == null) {
+            watchdog = new Thread(Bench::watch, "bench-watchdog");
+            watchdog.setDaemon(true);
+            watchdog.start();
+        }
         on = true;
         return "bench " + n + " started";
     }
@@ -89,6 +172,23 @@ final class Bench {
         if (conn != null) sb.append(String.format(Locale.ROOT, "; packets rx %.1f/s tx %.1f/s", conn.getAverageReceivedPackets(), conn.getAverageSentPackets()));
         if (mc.level != null) sb.append("; client entities ").append(mc.level.getEntityCount());
         sb.append("; debug \"").append(mc.fpsString).append("\"");
+        long over100 = java.util.Arrays.stream(f).filter(x -> x >= 100_000_000L).count();
+        List<String> sp;
+        synchronized (spikes) {
+            sp = new ArrayList<>(spikes);
+        }
+        sb.append(String.format(Locale.ROOT, "; frames >=100 ms %d, >=%d ms %d", over100, SPIKE_MS, sp.size()));
+        for (String x : sp) sb.append(" [").append(x.split("\n", 2)[0]).append("]");
+        if (!sp.isEmpty()) {
+            try {
+                var out = java.nio.file.Path.of(System.getProperty("headinajar.smoke.out", "."), "bench-spikes.txt");
+                java.nio.file.Files.createDirectories(out.getParent());
+                java.nio.file.Files.writeString(out, "== " + name + "\n" + String.join("\n", sp) + "\n",
+                        java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+            } catch (Exception e) {
+                sb.append(" (spike file: ").append(e).append(")");
+            }
+        }
         return sb.toString();
     }
 

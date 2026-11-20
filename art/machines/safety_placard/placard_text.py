@@ -49,6 +49,7 @@ FIELD_W = FIELD[2] - FIELD[0]  # 44 texels
 BREAKS = {('en_us', 2): ['THIS', 'FACILITY', 'HAS GONE', '0 DAYS', 'WITHOUT AN', 'INCIDENT'],
           ('en_us', 16): ['QUIET', 'FLOOR:', 'THE WARDEN', 'IS WORKING'],
           ('en_us', 18): ['PLEASE', 'DO NOT TAP', 'THE GLASS'],
+          ('en_us', 12): ['A HEALTHY', 'BODY', 'IS A', 'PRODUCTIVE', 'BODY'],
           ('pt_br', 2): ['ESTA', 'INSTALAÇÃO', 'ESTÁ HÁ', '0 DIAS SEM', 'ACIDENTES']}
 # accented capitals: the plain letter with its mark in two rows above it (a cedilla in the row below); a notice that
 # has any is set at 8 texels a line instead of 6, so at most 5 lines

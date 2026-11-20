@@ -2,6 +2,37 @@
 
 What changed for players in each release of Head in a Jar, newest first.
 
+## 0.6.3 (2026-11-21)
+
+- **Every body does something.** The ten hosts that had no trick have an Ability at 50% sync: the cow's **Moo**
+  (animals that eat wheat within 16 blocks follow you for 10 seconds), the pig's **Rooting** (carrots, potatoes,
+  beetroots and mushrooms within 16 blocks are outlined for you alone, through the ground, for 10 seconds), the
+  sheep's **Shed** (1 to 3 wool of its colour; the fleece stays on), the llama's **Spit** (1 damage and a shove, 12
+  blocks), the villager's **Sound the Bell** (raiders within 32 blocks glow, villagers run indoors), the piglin's
+  **Barter** (a gold ingot from your pockets, admired for 6 seconds, then a barter's loot), the strider's **Warm Up**
+  (on or off: standing still on lava heals you), the turtle's **Withdraw** (80% less damage for 5 seconds, going
+  nowhere), the frog's **Long Jump** and the cat's **Hiss** (creepers within 8 blocks back off for 5 seconds). Five
+  more have a Secondary at 75%: the camel's **Dash**, the horse's, donkey's and mule's **Rear** (a ring of knockback;
+  players only where PvP is on), the iron golem's **Mend** (an iron ingot, +25 health), the wolf's **Howl** (your own
+  tame wolves within 16 blocks follow you for a minute) and the dolphin's **Treasure Sense** (bubbles point to the
+  nearest shipwreck, ocean ruin or buried treasure within 4 chunks). At 25% a sheep takes half fall damage, iron golems
+  leave a villager alone and piglins a piglin. "No gold in your pockets. Piglins check."
+- **The headless chicken.** A chicken sawn without a jar runs in tight, flapping circles round where it was cut, never
+  more than 12 blocks out, round ponds and pits. "DOLORES: It will be fine. Probably." Riding it, a lead or a Treadmill
+  stops it; the server value `bodies.headlessChicken` turns it off. A chicken host from an older world runs round where
+  it stands. Watching one run for 10 seconds earns a hidden advancement.
+- **The Corporate Wellness Treadmill.** Two blocks long. Ride a host onto the belt and get off: "Clocked in." It walks
+  in place and makes 4 to 24 FE/t by species (a cow 10, a chicken 12, a camel 24, anything not listed 8), holds 10 kFE
+  and pushes up to 1,000 FE/t from its near end, as the Galvanic Pile does. A body on the belt rots twice as fast; a
+  laced one is Tired and makes half; full sync adds 10%. **Use** it to read it. Fliers, swimmers, ghasts, striders,
+  slimes, shells and the heavy ones refuse ("Ghasts do not do cardio."), and a creature with its head on gets "Staff
+  with heads use the stairs." The rates are a data map (`headinajar:treadmill`) a modpack can change, and the server
+  value `bodies.treadmillOutput` scales them all. Advancements **Corporate Wellness** and **Cardio Department**.
+- The Safety Placard has a new notice: "A HEALTHY BODY IS A PRODUCTIVE BODY".
+- A memo the first time a Treadmill powers a machine, and handbook pages on the Treadmill and on every body's trick.
+- Worlds from 0.6.2 load as they are. A 0.6.3 game can join a 0.6.2 server; a 0.6.2 game cannot join a 0.6.3 server.
+  Update both.
+
 ## 0.6.2 (2026-11-16)
 
 - **Every creature carries a gene.** Forty new genes, eighty-nine in all: every natural vanilla creature now carries

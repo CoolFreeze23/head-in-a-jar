@@ -73,7 +73,9 @@ public final class HostEvents {
 
     @SubscribeEvent
     public static void levelTick(LevelTickEvent.Post event) {
-        if (event.getLevel() instanceof ServerLevel level && level.getGameTime() % 20 == 0) HostAbilities.tickWebs(level);
+        if (!(event.getLevel() instanceof ServerLevel level)) return;
+        if (level.getGameTime() % 20 == 0) HostAbilities.tickWebs(level);
+        HostTricks.levelTick(level);
     }
 
     @SubscribeEvent
@@ -86,11 +88,14 @@ public final class HostEvents {
         long time = host.level().getGameTime();
         if (data.primaryCooldown > 0) data.primaryCooldown--;
         if (data.secondaryCooldown > 0) data.secondaryCooldown--;
+        if (host.isVehicle()) data.lastRidden = time;
 
         // decay: 2% a minute by default, half while embalmed, none with a Neural Lace or for shells
         if (!data.shell && !data.laced) {
             float perTick = (def == null ? 2f : def.decayPerMinute()) / 1200f;
             if (time < data.embalmedUntil) perTick /= 2;
+            // a body walking a Treadmill rots twice as fast (an embalmed one at the usual rate)
+            if (com.coolfreeze23.headinajar.block.Treadmills.isWalker(host)) perTick *= 2;
             data.freshness -= perTick;
             // a ripe host's flies and sag are drawn by each client from the freshness it is sent: no particle packets
             if (data.freshness <= 0) {
@@ -109,6 +114,7 @@ public final class HostEvents {
         float sync = data.effectiveSync();
         attributes(host, def, data, sync);
         if (def != null && sync >= 25) traits(host, def, pilot);
+        HostTricks.tick(host, data, def, pilot, time);
         // a Utility Shell runs on the jar's charge; a mecha has its own battery
         if (pilot != null && data.shell && !(host instanceof com.coolfreeze23.headinajar.entity.MechaEntity)) FormActions.state(pilot).spend(SHELL_DRAIN);
         // a shell's or mecha's host data never changes after it is made: watchers got it when they started tracking
@@ -174,9 +180,11 @@ public final class HostEvents {
     public static void hostHurt(LivingIncomingDamageEvent event) {
         LivingEntity e = event.getEntity();
         if (!Hosts.isHost(e)) return;
+        if (e instanceof Mob mob) HostTricks.hurt(event, mob, Hosts.data(e));
         HostDefinition def = Hosts.definition(e);
         if (def == null || Hosts.data(e).effectiveSync() < 25) return;
         var src = event.getSource();
+        if (def.has("half_fall_damage") && src.is(DamageTypeTags.IS_FALL)) event.setAmount(event.getAmount() * 0.5f);
         if (def.has("fire_immune") && src.is(DamageTypeTags.IS_FIRE)) event.setCanceled(true);
         if (def.has("no_fall_damage") && src.is(DamageTypeTags.IS_FALL)) event.setCanceled(true);
         if (def.has("water_breathing") && src.is(DamageTypes.DROWN)) event.setCanceled(true);

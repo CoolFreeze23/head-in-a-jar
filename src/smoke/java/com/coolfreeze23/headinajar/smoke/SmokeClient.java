@@ -1131,13 +1131,19 @@ public class SmokeClient {
                             if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) m.armsHeld = Integer.parseInt(parts[1]);
                         }
                         case "mount" -> {
-                            var hosts = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(6),
+                            // mount [bystander]: the player (or the stand-in) boards the nearest host within 6
+                            var who = parts.length > 1 && parts[1].trim().equals("bystander") ? server.getPlayerList().getPlayerByName("Bystander") : player;
+                            var hosts = who.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, who.getBoundingBox().inflate(6),
                                     com.coolfreeze23.headinajar.host.Hosts::isHost);
-                            hosts.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
-                            report.add("mount -> " + (!hosts.isEmpty() && FormActions.mountHost(player, hosts.get(0))));
+                            hosts.sort(java.util.Comparator.comparingDouble(who::distanceToSqr));
+                            report.add("mount -> " + (!hosts.isEmpty() && FormActions.mountHost(who, hosts.get(0))));
                         }
                         case "sync" -> {
-                            if (player.getVehicle() != null) com.coolfreeze23.headinajar.host.Hosts.data(player.getVehicle()).sync = Float.parseFloat(parts[1]);
+                            // sync N [bystander]: the sync of the host the player (or the stand-in) rides
+                            String[] a = parts[1].split(" ");
+                            var who = a.length > 1 && a[1].equals("bystander") ? server.getPlayerList().getPlayerByName("Bystander") : player;
+                            if (who != null && who.getVehicle() != null) com.coolfreeze23.headinajar.host.Hosts.data(who.getVehicle()).sync = Float.parseFloat(a[0]);
+                            report.add("sync -> " + (who != null && who.getVehicle() != null ? who.getVehicle().getType().toShortString() + " " + a[0] : "not riding"));
                         }
                         case "chair", "sign" -> {
                             // chair X Y Z: fill the chair at X Y Z with parts and 50 kFE; sign X Y Z: sign Form 27-B as the seated player

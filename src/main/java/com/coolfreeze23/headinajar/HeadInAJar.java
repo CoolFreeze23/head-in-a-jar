@@ -32,6 +32,8 @@ public class HeadInAJar {
         com.coolfreeze23.headinajar.genetics.GentleGenes.register();
         com.coolfreeze23.headinajar.genetics.HostileGenes.register();
         com.coolfreeze23.headinajar.genetics.GeneActives.register();
+        com.coolfreeze23.headinajar.host.HostTricks.register();
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.block.Treadmills.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.form.BoardEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.feedback.Refusals.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.block.MachineEvents.class);

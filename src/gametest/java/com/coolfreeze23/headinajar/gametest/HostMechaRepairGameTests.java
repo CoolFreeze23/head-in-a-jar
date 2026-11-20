@@ -600,7 +600,8 @@ public class HostMechaRepairGameTests {
     @GameTest(template = "platform", timeoutTicks = 40)
     public static void hostKeysSayWhyNot(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);
-        Cow cow = host(h, EntityType.COW, FLOOR.east(2), p);
+        // a body with no trick (0.6.3 gave every vanilla body with a file one; a rabbit has no file)
+        var cow = host(h, EntityType.RABBIT, FLOOR.east(2), p);
         Hosts.data(cow).sync = 100;
         FormActions.detach(p, 3);
         FormActions.mountHost(p, cow);

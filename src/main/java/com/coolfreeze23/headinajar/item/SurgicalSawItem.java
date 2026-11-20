@@ -42,6 +42,8 @@ public class SurgicalSawItem extends Item {
     public static final float MAX_HEALTH_FRACTION = 0.5f;
     /** A host body is raised to this share of its health if it was lower when sawn. */
     public static final float HOST_HEALTH_FLOOR = 0.25f;
+    /** Ticks after the host line before DOLORES's word on a headless chicken. */
+    public static final int CHICKEN_LINE_DELAY = 40;
 
     public SurgicalSawItem(Properties properties) {
         super(properties);
@@ -138,6 +140,12 @@ public class SurgicalSawItem extends Item {
         Network.syncHost(mob);
         Staff.register(mob, server, "host", true);
         player.displayClientMessage(Component.translatable("message.headinajar.host_made", mob.getDisplayName()), true);
+        if (mob instanceof net.minecraft.world.entity.animal.Chicken) {
+            // it runs round where it was cut; DOLORES has a word, every time
+            com.coolfreeze23.headinajar.host.HeadlessChicken.anchorAt(mob, mob.blockPosition());
+            com.coolfreeze23.headinajar.body.BodyServer.later(level, CHICKEN_LINE_DELAY,
+                    () -> player.displayClientMessage(Component.translatable("message.headinajar.chicken_fine"), true));
+        }
         return InteractionResult.CONSUME;
     }
 

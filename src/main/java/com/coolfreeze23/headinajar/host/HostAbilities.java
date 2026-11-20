@@ -38,7 +38,7 @@ import net.minecraft.world.phys.Vec3;
 public final class HostAbilities {
     private static final String NO_TARGET = "host.no_target";
     /** A refusal {@link #fire} has already said itself (one that names someone). */
-    private static final String SAID = "";
+    static final String SAID = "";
 
     private HostAbilities() {
     }
@@ -263,7 +263,8 @@ public final class HostAbilities {
                 return null;
             }
             default -> {
-                return "host.no_ability";
+                // the 0.6.3 tricks (or "no trick for that" for a type nobody knows)
+                return HostTricks.fire(pilot, host, a);
             }
         }
     }

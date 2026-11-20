@@ -18,10 +18,12 @@ public final class HostControl {
 
     public static Vec3 riddenInput(LivingEntity host, Player pilot) {
         if (host instanceof com.coolfreeze23.headinajar.entity.MechaEntity m) return com.coolfreeze23.headinajar.mecha.MechaLogic.riddenInput(m, pilot);
-        if (!powered(host, pilot)) return Vec3.ZERO;
+        if (!powered(host, pilot) || HostTricks.heldStill(host)) return Vec3.ZERO;
         float strafe = pilot.xxa * 0.5f;
         float forward = pilot.zza;
         if (forward <= 0) forward *= 0.25f;
+        // on a running Treadmill the body walks in place: forward moves it nowhere (back, strafe and jump still do)
+        else if (com.coolfreeze23.headinajar.block.Treadmills.holdsForward(host)) forward = 0;
         return new Vec3(strafe, 0, forward);
     }
 

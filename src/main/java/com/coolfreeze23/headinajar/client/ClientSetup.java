@@ -73,6 +73,7 @@ public class ClientSetup {
         NeoForge.EVENT_BUS.addListener(PilotClient::cameraDistance);
         NeoForge.EVENT_BUS.addListener(com.coolfreeze23.headinajar.client.genes.NightShiftClient::movement); // Rampage: no sneaking on a streak
         com.coolfreeze23.headinajar.client.fx.FxClient.init(modBus);
+        RootingOutlines.init(); // a pig's Rooting: outlines for its pilot alone (0.6.3)
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {

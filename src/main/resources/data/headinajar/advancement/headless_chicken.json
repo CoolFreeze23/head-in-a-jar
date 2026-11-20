@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:hosted",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "headless_chicken"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:feather"
+    },
+    "title": {
+      "translate": "advancements.headinajar.headless_chicken.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.headless_chicken.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  }
+}

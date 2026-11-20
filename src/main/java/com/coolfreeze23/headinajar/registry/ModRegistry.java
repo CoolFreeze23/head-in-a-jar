@@ -98,6 +98,9 @@ public final class ModRegistry {
             () -> new LifeSupportCradleBlock(steel().noOcclusion().dynamicShape().lightLevel(s -> 5)));
     public static final DeferredBlock<GalvanicPileBlock> GALVANIC_PILE = BLOCKS.register("galvanic_pile",
             () -> new GalvanicPileBlock(steel().noOcclusion().lightLevel(s -> s.getValue(GalvanicPileBlock.LAMP) == com.coolfreeze23.headinajar.machine.MachineLamp.WORK ? 6 : 0)));
+    /** The Corporate Wellness Treadmill: two cells, like a bed (the foot's block entity makes the FE). */
+    public static final DeferredBlock<com.coolfreeze23.headinajar.block.TreadmillBlock> TREADMILL = BLOCKS.register("treadmill",
+            () -> new com.coolfreeze23.headinajar.block.TreadmillBlock(steel().noOcclusion().pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)));
     /** The upper cell of a tall machine (no item; it draws the machine's upper half, the machine below answers for it). */
     public static final DeferredBlock<com.coolfreeze23.headinajar.machine.MachineTopBlock> MACHINE_TOP = BLOCKS.register("machine_top",
             () -> new com.coolfreeze23.headinajar.machine.MachineTopBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(3.0f, 6.0f)
@@ -205,6 +208,7 @@ public final class ModRegistry {
     public static final DeferredItem<BlockItem> SEPARATION_CHAIR_ITEM = blockItem(SEPARATION_CHAIR);
     public static final DeferredItem<BlockItem> CRADLE_ITEM = tallItem(CRADLE);
     public static final DeferredItem<BlockItem> GALVANIC_PILE_ITEM = tallItem(GALVANIC_PILE);
+    public static final DeferredItem<BlockItem> TREADMILL_ITEM = blockItem(TREADMILL);
     public static final DeferredItem<BlockItem> CHARGING_DOCK_ITEM = tallItem(CHARGING_DOCK);
     public static final DeferredItem<BlockItem> SALINE_MIXER_ITEM = tallItem(SALINE_MIXER);
     public static final DeferredItem<BlockItem> BODY_PRINTER_ITEM = tallItem(BODY_PRINTER);
@@ -390,6 +394,8 @@ public final class ModRegistry {
             () -> BlockEntityType.Builder.of(LifeSupportCradleBlockEntity::new, CRADLE.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GalvanicPileBlockEntity>> PILE_BE = BLOCK_ENTITIES.register("galvanic_pile",
             () -> BlockEntityType.Builder.of(GalvanicPileBlockEntity::new, GALVANIC_PILE.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.coolfreeze23.headinajar.block.TreadmillBlockEntity>> TREADMILL_BE = BLOCK_ENTITIES.register("treadmill",
+            () -> BlockEntityType.Builder.of(com.coolfreeze23.headinajar.block.TreadmillBlockEntity::new, TREADMILL.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChargingDockBlock.Entity>> DOCK_BE = BLOCK_ENTITIES.register("charging_dock",
             () -> BlockEntityType.Builder.of(ChargingDockBlock.Entity::new, CHARGING_DOCK.get()).build(null));
 
@@ -499,6 +505,8 @@ public final class ModRegistry {
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CHAIR_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CHAIR_BE.get(), (be, side) -> be.items());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, PILE_BE.get(), (be, side) -> be.energy());
+        // the Treadmill's foot: extract only (its buffer takes nothing in)
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, TREADMILL_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PILE_BE.get(), (be, side) -> com.coolfreeze23.headinajar.block.MachineItems.sided(be.fuel(), com.coolfreeze23.headinajar.block.MachineItems.all(1, com.coolfreeze23.headinajar.block.MachineItems.Role.INPUT), side));
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, DOCK_BE.get(), (be, side) -> be.energy());
         event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, CRADLE_BE.get(), (be, side) -> be.energy());

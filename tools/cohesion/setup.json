@@ -146,6 +146,291 @@
     "pilotgenes",
     "wait 5"
    ]
+  },
+  "HOSTED cow (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:cow {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:cow,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED pig (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:pig {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:pig,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED llama (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:llama {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:llama,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED villager (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:villager {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:villager,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED strider (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:strider {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:strider,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED turtle (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:turtle {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:turtle,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED frog (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:frog {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:frog,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED cat (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:cat {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:cat,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED camel (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:camel {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:camel,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED horse (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:horse {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:horse,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED iron_golem (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:iron_golem {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:iron_golem,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED wolf (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:wolf {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:wolf,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED sheep (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:sheep {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:sheep,{NEAR_S},limit=1] {NoAI:1b,Color:14b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED sheep (sync 30)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:sheep {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:sheep,{NEAR_S},limit=1] {NoAI:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 30",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
+  },
+  "HOSTED piglin (sync 80)": {
+   "eye": 1.3,
+   "check": "HOSTED",
+   "riding": true,
+   "approx_eye": "host seat height estimated",
+   "steps": [
+    "hostify minecraft:piglin {S}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:piglin,{NEAR_S},limit=1] {NoAI:1b,IsImmuneToZombification:1b}",
+    "/tp @s {BODYAT} 0 0",
+    "jar",
+    "wait 5",
+    "mount",
+    "wait 10",
+    "sync 80",
+    "report waiting out the first-ride handshake",
+    "wait 140"
+   ]
   }
  },
  "targets": {
@@ -1069,6 +1354,135 @@
     "/setblock {T} headinajar:jarred_head[facing=north]{Type:\"minecraft:warden\",Entity:{},Jar:\"headinajar:reinforced_life_support_jar\"}"
    ],
    "aim": "block"
+  },
+  "block headinajar:treadmill (bare)": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, a cow host walking on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "hostify minecraft:cow {B}",
+    "wait 3",
+    "/tp @e[type=minecraft:cow,{NEAR_B},limit=1] {TC+0,0.4,0.5} 0 0",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, a laced cow host walking on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "hostify minecraft:cow {B}",
+    "wait 3",
+    "/data merge entity @e[type=minecraft:cow,{NEAR_B},limit=1] {\"neoforge:attachments\":{\"headinajar:host\":{laced:1b}}}",
+    "/tp @e[type=minecraft:cow,{NEAR_B},limit=1] {TC+0,0.4,0.5} 0 0",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, a living cow on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "/summon minecraft:cow {TC+0,0.4,0.5} {NoAI:1b,Rotation:[0f,0f]}",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, an iron golem host on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "hostify minecraft:iron_golem {B}",
+    "wait 3",
+    "/tp @e[type=minecraft:iron_golem,{NEAR_B},limit=1] {TC+0,0.4,0.5} 0 0",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, a bat host on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "hostify minecraft:bat {B}",
+    "wait 3",
+    "/tp @e[type=minecraft:bat,{NEAR_B},limit=1] {TC+0,0.4,0.5} 0 0",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "block headinajar:treadmill, a Lunk shell on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "/summon headinajar:lunk {TC+0,0.4,0.5} {Rotation:[0f,0f]}",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
+  },
+  "the air (an Ability press)": {
+   "aim": "air",
+   "action": "key ability"
+  },
+  "the air (a Secondary press)": {
+   "aim": "air",
+   "action": "key secondary"
+  },
+  "block headinajar:treadmill, a strider host on it": {
+   "steps": [
+    "/setblock {T} headinajar:treadmill[facing=south,part=foot]",
+    "/setblock {T+0,0,1} headinajar:treadmill[facing=south,part=head]",
+    "hostify minecraft:strider {B}",
+    "wait 3",
+    "/tp @e[type=minecraft:strider,{NEAR_B},limit=1] {TC+0,0.4,0.5} 0 0",
+    "wait 30"
+   ],
+   "aim": [
+    0.5,
+    0.38,
+    0.05
+   ],
+   "aim_check": "block:T"
   }
  },
  "setups": {
@@ -1730,7 +2144,63 @@
     "key use",
     "wait 15"
    ]
-  }
+  },
+  "room for the belt": {},
+  "no room: a block where the head would go": {
+   "steps": [
+    "/setblock {T+0,0,1} minecraft:stone"
+   ]
+  },
+  "two cows and a sheep 8 blocks off": {
+   "late": [
+    "/summon minecraft:cow {SC+8,0,2} {PersistenceRequired:1b}",
+    "/summon minecraft:cow {SC+9,0,4} {PersistenceRequired:1b}",
+    "/summon minecraft:sheep {SC+8,0,6} {PersistenceRequired:1b}",
+    "wait 5"
+   ]
+  },
+  "no wheat-eater within 16": {},
+  "carrots and potatoes within 8": {
+   "late": [
+    "/fill {S+3,-1,-3} {S+7,-1,3} minecraft:farmland",
+    "/fill {S+3,0,-3} {S+7,0,-1} minecraft:carrots[age=7]",
+    "/fill {S+3,0,1} {S+7,0,3} minecraft:potatoes[age=7]",
+    "wait 5"
+   ]
+  },
+  "a red sheep": {},
+  "a husk 8 ahead": {
+   "late": [
+    "/summon minecraft:husk {SC+0,0,8} {NoAI:1b,PersistenceRequired:1b}",
+    "wait 5"
+   ]
+  },
+  "a pillager 12 off": {
+   "late": [
+    "/summon minecraft:pillager {SC+12,0,4} {NoAI:1b,PersistenceRequired:1b}",
+    "wait 5"
+   ]
+  },
+  "a gold ingot in the pockets": {
+   "late": [
+    "/give @s minecraft:gold_ingot 2",
+    "wait 5"
+   ]
+  },
+  "no gold in the pockets": {},
+  "standing on stone, not lava": {},
+  "open ground": {},
+  "no creeper within 8": {},
+  "hurt, an iron ingot in the pockets": {
+   "late": [
+    "/give @s minecraft:iron_ingot 2",
+    "wait 5"
+   ]
+  },
+  "hurt, no iron in the pockets": {},
+  "no tame wolf of yours within 16": {},
+  "sync 30 (under the Ability's 50%)": {},
+  "sync 80": {}
  },
  "pairs": {
   "P094": {

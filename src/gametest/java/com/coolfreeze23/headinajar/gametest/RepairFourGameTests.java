@@ -462,7 +462,8 @@ public class RepairFourGameTests {
     @GameTest(template = "platform")
     public static void aHostsOwnGenesFireFromItsKeys(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR);
-        Cow cow = host(h, EntityType.COW, FLOOR.east(), p);
+        // a body with no Ability of its own (a rabbit has no host file; 0.6.3 gave the cow Moo)
+        var cow = host(h, EntityType.RABBIT, FLOOR.east(), p);
         giveGene(cow, Gene.GUARDIAN_EYE);
         FormActions.detach(p, 3);
         h.assertTrue(FormActions.mountHost(p, cow), "could not board");

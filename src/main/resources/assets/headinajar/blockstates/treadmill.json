@@ -1,0 +1,469 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "part": "foot"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "foot",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "foot",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt_running"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt_running"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "dial": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_0"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "dial": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_1"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "dial": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_2"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "dial": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_3"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "part": "head",
+        "dial": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_4"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "foot"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "foot",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "foot",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt_running",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt_running",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "dial": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "dial": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "dial": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "dial": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "part": "head",
+        "dial": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "foot"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "foot",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "foot",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt_running",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt_running",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "dial": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "dial": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "dial": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "dial": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "part": "head",
+        "dial": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "foot"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "foot",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "foot",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_foot_belt_running",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "running": "false"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "running": "true"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_head_belt_running",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "dial": "0"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "dial": "1"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "dial": "2"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "dial": "3"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "part": "head",
+        "dial": "4"
+      },
+      "apply": {
+        "model": "headinajar:block/treadmill_dial_4",
+        "y": 270
+      }
+    }
+  ]
+}

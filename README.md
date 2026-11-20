@@ -885,8 +885,8 @@ alive.
 *A Safety Placard changing notices: **Use** it.*
 
 **Safety Placard**: yellow dye, black dye, yellow dye; yellow dye, ingot, yellow dye (makes 4). Hangs on a wall.
-**Use** it to show the next of fourteen company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "PLEASE DO NOT
-TAP THE GLASS". The notice is painted on the board in your game's language, and read out above your hotbar.
+**Use** it to show the next of fifteen company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "PLEASE DO NOT
+TAP THE GLASS", "A HEALTHY BODY IS A PRODUCTIVE BODY" among them. The notice is painted on the board in your game's language, and read out above your hotbar.
 
 ### Materials
 
@@ -1294,56 +1294,71 @@ sync and abilities (see [Other mods](#other-mods)).
 | Hover | the body floats up, then drifts down |
 | Sprint | Speed III for 5 seconds |
 | Lay Egg | an egg |
+| Moo | every animal within 16 blocks that eats wheat (cows, sheep, goats...) follows you for 10 seconds, 24 at most. Nobody there: "Nobody here eats wheat. The moo has been noted." |
+| Rooting | carrots, potatoes, beetroots and mushrooms within 16 blocks are outlined for you alone, through the ground, for 10 seconds, and counted: "12 things worth digging up. The snout has filed its report." |
+| Shed | 1 to 3 wool of the sheep's colour; the fleece stays on |
+| Spit | a llama spit where you look: 1 damage and a shove, up to 12 blocks, the blow yours |
+| Sound the Bell | raiders within 32 blocks glow for 10 seconds; villagers within 32 run indoors, as for the village bell |
+| Barter | a gold ingot from your pockets goes to the piglin's hand; 6 seconds later a barter's loot drops. No gold: "No gold in your pockets. Piglins check." |
+| Warm Up | on or off; while on, standing still on lava heals 1 a second ("Warm Up: on" on the host panel). Off lava: "Warm Up needs lava underfoot. Stand still on it." |
+| Withdraw | 5 seconds in the shell: 80% less damage, and the body goes nowhere |
+| Long Jump | the frog's own leap, about 6 blocks where you look, in its jump pose |
+| Hiss | creepers within 8 blocks back off for 5 seconds, their fuse put out |
+| Dash | the camel's leap, about 8 blocks forward |
+| Rear | the body rears; everything within 3 blocks is knocked back (players only where PvP is on) |
+| Mend | an iron ingot from your pockets, +25 health. No iron: "No iron in your pockets. Golems are particular." |
+| Howl | your own tame wolves within 16 blocks get up and follow you for a minute, then sit where they are |
+| Treasure Sense | a stream of bubbles from the body toward the nearest shipwreck, ocean ruin or buried treasure within 4 chunks, for 10 seconds. None: "No treasure in range. Try the sea." |
 
 Aimed abilities with nothing in sight: "Nothing there to aim at. Look at a target." Times below are the cooldowns.
 
 <details><summary>Every vanilla host</summary>
 
 Any creature the saw accepts can be a host. One not listed here just walks: no traits, no abilities. All rot at 2% a
-minute. Traits other than flight, climbing and slow fall need 25% sync.
+minute. Traits other than flight, climbing, slow fall and walking on lava need 25% sync.
 
 | Creature | Ability (50%) | Secondary (75%) | Traits |
 |---|---|---|---|
 | Bat | Echolocation, 10 s | – | flight, night vision |
 | Blaze | 3 fireballs, 5 s | Hover (4 s up, 7 s down), 8 s | fire immune, slow fall |
 | Breeze | Wind Charge, 2 s | – | no fall damage |
-| Camel | Charge (a shove, no damage), 4 s | – | – |
-| Cat | – | – | no fall damage |
+| Camel | Charge (a shove, no damage), 4 s | Dash (the camel's leap, about 8 blocks), 5 s | – |
+| Cat | Hiss (creepers within 8 back off for 5 s), 10 s | – | no fall damage; phantoms keep off (as they always have) |
 | Cave Spider | Web Shot (12 blocks), 3 s | – | climbs, night vision |
 | Chicken | Lay Egg, 60 s | – | slow fall |
-| Cow | – | – | – |
+| Cow | Moo (wheat-eaters within 16 follow you for 10 s), 20 s | – | – |
 | Creeper | Explode | – | – |
-| Dolphin | Charge (4 damage), 3 s | – | water breathing, Dolphin's Grace for you |
-| Donkey | Sprint, 10 s | – | – |
+| Dolphin | Charge (4 damage), 3 s | Treasure Sense (4 chunks), 60 s | water breathing, Dolphin's Grace for you |
+| Donkey | Sprint, 10 s | Rear (knockback ring, 3 blocks), 8 s | – |
 | Drowned | Groan, 10 s | – | water breathing; zombies leave you alone |
 | Enderman | Teleport (24 blocks), 3 s | Teleport (48 blocks), 10 s | endermen leave you alone |
 | Fox | Pounce (3 damage), 3 s | – | night vision |
-| Frog | – | – | no fall damage |
+| Frog | Long Jump (about 6 blocks), 4 s | – | no fall damage |
 | Ghast | 1 large fireball, 3 s | – | flight, fire immune |
 | Glow Squid | Ink, 10 s | – | water breathing, night vision |
 | Goat | Charge (2 damage, big knockback), 4 s | – | no fall damage |
-| Horse | Sprint, 10 s | – | – |
+| Horse | Sprint, 10 s | Rear (knockback ring, 3 blocks), 8 s | – |
 | Husk | Groan, 10 s | – | zombies leave you alone |
-| Iron Golem | Toss, 2 s | – | knockback immune; cannot jump |
-| Llama | – | – | – |
-| Mule | Sprint, 10 s | – | – |
+| Iron Golem | Toss, 2 s | Mend (an iron ingot, +25 health), 10 s | knockback immune; cannot jump |
+| Llama | Spit (1 damage, 12 blocks), 2 s | – | – |
+| Mule | Sprint, 10 s | Rear (knockback ring, 3 blocks), 8 s | – |
 | Ocelot | Sprint, 8 s | – | no fall damage |
 | Phantom | Pounce (6 damage), 4 s | – | flight |
-| Pig | – | – | – |
-| Piglin | – | – | – |
+| Pig | Rooting (crops and mushrooms within 16 outlined for 10 s), 15 s | – | – |
+| Piglin | Barter (a gold ingot; loot after 6 s), 6 s | – | piglins leave you alone |
 | Polar Bear | Roar (4 blocks, 1.5 s), 10 s | – | – |
 | Ravager | Charge (12 damage), 5 s | Roar (6 blocks, 2 s), 10 s | – |
-| Sheep | – | – | – |
+| Sheep | Shed (1 to 3 wool), 60 s | – | half fall damage |
 | Skeleton | 3 arrows, 6 s | – | 2.5 hearts less health |
 | Spider | Web Shot (16 blocks), 3 s | – | climbs, night vision |
 | Squid | Ink, 10 s | – | water breathing |
 | Stray | 3 arrows, 6 s | – | – |
-| Strider | – | – | fire immune |
-| Turtle | – | – | water breathing |
-| Villager | – | – | – |
+| Strider | Warm Up (on or off: still on lava, heal 1 a second) | – | fire immune; walks on lava |
+| Turtle | Withdraw (80% less damage, no moving, 5 s), 15 s | – | water breathing |
+| Villager | Sound the Bell (32 blocks), 60 s | – | iron golems leave you alone |
 | Warden | Sonic Boom, 10 s | – | night vision, knockback immune |
 | Witch | Splash, 5 s | – | – |
-| Wolf | Pounce (4 damage), 3 s | – | – |
+| Wolf | Pounce (4 damage), 3 s | Howl (your tame wolves within 16 follow for 60 s), 30 s | – |
 | Zombie | Groan, 10 s | – | zombies leave you alone |
 
 </details>
@@ -1397,6 +1412,60 @@ Each works only when its mod is installed. Rot is 2% a minute unless the last co
 | Twilight Forest | Yeti | Toss, 3 s | Roar, 10 s | – | |
 
 </details>
+
+### The headless chicken
+
+![A headless chicken runs and flaps across a small farmyard past a pond and the hay, stops for a breath, then sets off again](docs/images/headless_chicken.gif)
+
+A chicken sawn without a jar does not stand still: it runs in tight, flapping circles round the spot where it was cut,
+hopping every half second and stopping for breath every six, and never goes more than **12 blocks** from that spot. It
+goes round ponds, lava and drops of more than a block; knocked further out, it heads straight back. DOLORES has a word,
+every time: "DOLORES: It will be fine. Probably." It stops while someone rides it (and starts again two seconds after),
+on a lead, in a boat or on a Treadmill, and it still lays its eggs. A chicken host from before 0.6.3 runs round where it
+stands. The server value `bodies.headlessChicken` turns the running off. Watching one run for 10 seconds, within 16
+blocks, earns the hidden advancement **Running Around Like a Headless Chicken**.
+
+### The Corporate Wellness Treadmill
+
+![The company gym: a headless cow, chicken, horse and spider walk in place on Treadmills in a row against a brick wall, under two Safety Placards showing "A HEALTHY BODY IS A PRODUCTIVE BODY"](docs/images/company_gym.gif)
+
+**Corporate Wellness Treadmill** (shaped: three Leather / Servo, Neuro-Copper Wire, Servo / three Surgical Steel
+Ingots). Two blocks long, placed like a bed: the near end where you click, the console end away from you. No room:
+"The belt needs two clear blocks in front of you." Breaking either end breaks both and drops one Treadmill.
+
+Ride a host onto the belt, stop on it and get off with **Sneak**: "Clocked in." The body walks in place, facing the
+console, and makes FE by species:
+
+| FE/t | Bodies |
+|---|---|
+| 2 | silverfish, endermite |
+| 4 | skeleton, stray, bogged, wither skeleton, skeleton horse, turtle |
+| 6 | zombie, husk, drowned, zombified piglin, zombie villager, zombie horse, cat, armadillo, snow golem |
+| 8 | pig, sheep, fox, creeper, cave spider, frog, rabbit, ocelot, and any body not listed here |
+| 10 | cow, mooshroom, villager, wandering trader, goat, wolf, witch, pillager, vindicator, evoker, illusioner, piglin, piglin brute |
+| 12 | chicken (it never stops), panda |
+| 14 | llama, trader llama, spider |
+| 16 | donkey, enderman |
+| 18 | mule, polar bear |
+| 20 | horse, sniffer |
+| 24 | camel |
+
+It holds 10 kFE and pushes up to 1,000 FE/t from its **near end** into the machines touching it, as the Galvanic Pile
+does; the dial on its console shows the rate. A body on the belt rots **twice as fast** (an embalmed one at the usual
+rate); a laced body is Tired and makes half, for good; full sync adds 10%. A jar riding a body on the belt makes the FE
+too, and syncs as on any ride, but forward goes nowhere: back, strafe or jump step off. **Use** it with an empty hand
+to read it ("Cow: 10 FE/t. Fresh 92%, sync 40%."), or "Belt idle. Ride a body on and get off to clock it in." The
+first time a Treadmill powers a machine, its owner gets a memo ("Your colleague is walking for the company. Please
+keep the belt clear and the body fresh.") and **Corporate Wellness**; 100 FE/t from Treadmills within 16 blocks earns
+**Cardio Department**. Whatever falls from a body on the belt lands at the near end, so a hopper under it collects.
+
+Some bodies refuse: fliers ("A Bat doesn't walk. Try a cow."), swimmers ("Out of its depth."), the ghast ("Ghasts do
+not do cardio."), the strider ("It won't walk on anything but lava."), slimes and magma cubes ("A Slime bounces. The
+belt needs feet."), the iron golem, ravager, warden, hoglin and zoglin ("Iron Golem needs the Industrial Treadmill.
+Head Office has it on order."), Utility Shells and mechas ("Shells run on charge, not cardio."), and any creature with
+its head still on ("Staff with heads use the stairs."). The rates and refusals are a data map,
+`data/<namespace>/data_maps/entity_type/treadmill.json` (`{"fe": 10}` or `{"refuse": "flier"}`), so a modpack can
+add its own creatures; the server value `bodies.treadmillOutput` (100%) scales every rate.
 
 ### The Headless Mule
 
@@ -2817,7 +2886,8 @@ uses the key you chose.
 | **Drive** (Jar wheels / tip over) | V | Refused: "Nothing to drive on foot. Drive is for jars and mecha." | Refused: "Your body has legs. Walk." | Wheels down or up; without Wheels (or charge), tip over or sit up | Refused: "Not from up here. Get down first." | The frame's own move (see [Each frame's own move](#each-frames-own-move)) | Refused: "Plugged into the socket. Sneak with the jar menu key to unplug first." |
 | **Collar zoom** (Collar zoom) | C | - | Zooms x3 while held, with a **Zoom Optic** on the **Collar Cam** | - | - | - | - |
 
-A dash means the key does nothing there. For these keys, carrying your head counts as linked.
+A dash means the key does nothing there. For these keys, carrying your head counts as linked. Iris binds Reload
+Shaders to R by default as well: with Iris installed, move one of the two in the Controls screen.
 
 **Swap** defaults to Home and **Secondary** to mouse button 5 (a side button), keys no other common mod uses; until
 0.4.0 they were K and G, which Curios also uses. A key you set yourself is kept. When one of the mod's keys shares
@@ -2925,6 +2995,8 @@ are in `config/headinajar-client.toml`.
 | `heads.lookouts` | true | true / false | A head with no attack fits a Turret Pedestal as a Lookout. Off: "That head (Pig) has nothing to shoot with." |
 | `heads.wardenDarkness` | true | true / false | A warden head at a Grievance gives Darkness to every player within 16 blocks when it shrieks. |
 | `heads.livingLibrary` | true | true / false | Placed and station heads give one sample a day to a tool or a Leech Jar. Off: tools do nothing on heads. |
+| `bodies.treadmillOutput` | 100 | 0 to 1,000 | What a Corporate Wellness Treadmill makes, in percent of its body's rate. |
+| `bodies.headlessChicken` | true | true / false | A chicken host nobody rides runs in circles round where it was cut. Off: it stands still like any host. |
 
 </details>
 
@@ -2946,7 +3018,7 @@ are in `config/headinajar-client.toml`.
 
 ## Advancements
 
-Forty-three, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
+Fifty-one, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
 arrive. The steps from there to your first mecha are a career ladder: each says what to do next.
 
 <details><summary>All advancements</summary>
@@ -2957,6 +3029,8 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Steel Yourself** | Orientation Day | Get a **Surgical Steel Ingot** into your inventory. |
 | **Stay Hydrated** | Orientation Day | Get a bottle of **Cranial Saline** into your inventory. |
 | **Meat-Based Economy** | Steel Yourself | **Use** meat on a **Galvanic Pile**. |
+| **Corporate Wellness** | Meat-Based Economy | Power a machine from a **Corporate Wellness Treadmill** (its owner, else the nearest player). |
+| **Cardio Department** | Corporate Wellness | Be within 16 blocks of Treadmills making 100 FE/t between them. |
 | **Take a Seat** | Meat-Based Economy | Place a **Separation Chair** beside a fed **Galvanic Pile** (fuel in it, or power made), or feed a pile next to a chair. |
 | **Signed in Triplicate** | Take a Seat | Sign Form 27-B in the **Separation Chair**. |
 | **Head Start** | Signed in Triplicate | Have the chair's cut go through. |
@@ -2973,6 +3047,7 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Hostile Takeover** | Head Start | Board a mob host as a jar (shells and mecha don't count). |
 | **Fully Synced** | Hostile Takeover | Reach 100% sync with a host. Sync grows 1% per 12 seconds of riding. |
 | **Mula-sem-cabeça** | Hostile Takeover | Board the Headless Mule. Needs the Brazil Legends mod. |
+| **Running Around Like a Headless Chicken** (hidden) | Hostile Takeover | Watch a headless chicken run for 10 seconds, within 16 blocks. |
 | **Temp Agency** | Head Start | As a jar, climb into a Lunk, Rover or Spider Walker. |
 | **Facilities Request** | Steel Yourself | Place an **Assembly Gantry**. |
 | **Corporate Ladder** | Facilities Request | Assemble a mecha at the Assembly Gantry. |
@@ -2989,6 +3064,11 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Synergy!** | Splice of Life | Inject a serum that holds both genes of a synergy pair. |
 | **Chimera** | Splice of Life | Inject a serum into a mecha that leaves it carrying five or more genes. Any frame counts. |
 | **Legendary Genes** | Splice of Life | Read a Legendary gene to 100% in your library. |
+| **An Apology to the Cow** (hidden) | Out for Blood | Sample a cow, now that it counts. |
+| **Complete Census** | Out for Blood | Sample all 77 species on the books. |
+| **Off the Books** (hidden) | Complete Census | File a creature Head Office has no record of. |
+| **Headhunter** | Staff Number | Jar the heads of 25 different species. |
+| **Made to Order** | Splice of Life | Print a host from a DNA Fraction. |
 | **Employee of the Month** | Orientation Day | Hang a jarred villager on an **Employee Mount**. |
 | **Pay Grade** | Employee of the Month | Pay a placed jarred head that is not a villager its wage by hand. |
 | **Lunch Is Served** | Employee of the Month | Feed a jarred head on its plinth a Nutrient Broth Bucket. |
@@ -3127,6 +3207,39 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.6.3
+
+- **Every body does something.** The ten hosts that had no trick have an Ability at 50% sync: the cow's **Moo**
+  (animals that eat wheat within 16 blocks follow you for 10 seconds), the pig's **Rooting** (carrots, potatoes,
+  beetroots and mushrooms within 16 blocks are outlined for you alone, through the ground, for 10 seconds), the
+  sheep's **Shed** (1 to 3 wool of its colour; the fleece stays on), the llama's **Spit** (1 damage and a shove, 12
+  blocks), the villager's **Sound the Bell** (raiders within 32 blocks glow, villagers run indoors), the piglin's
+  **Barter** (a gold ingot from your pockets, admired for 6 seconds, then a barter's loot), the strider's **Warm Up**
+  (on or off: standing still on lava heals you), the turtle's **Withdraw** (80% less damage for 5 seconds, going
+  nowhere), the frog's **Long Jump** and the cat's **Hiss** (creepers within 8 blocks back off for 5 seconds). Five
+  more have a Secondary at 75%: the camel's **Dash**, the horse's, donkey's and mule's **Rear** (a ring of knockback;
+  players only where PvP is on), the iron golem's **Mend** (an iron ingot, +25 health), the wolf's **Howl** (your own
+  tame wolves within 16 blocks follow you for a minute) and the dolphin's **Treasure Sense** (bubbles point to the
+  nearest shipwreck, ocean ruin or buried treasure within 4 chunks). At 25% a sheep takes half fall damage, iron golems
+  leave a villager alone and piglins a piglin. "No gold in your pockets. Piglins check."
+- **The headless chicken.** A chicken sawn without a jar runs in tight, flapping circles round where it was cut, never
+  more than 12 blocks out, round ponds and pits. "DOLORES: It will be fine. Probably." Riding it, a lead or a Treadmill
+  stops it; the server value `bodies.headlessChicken` turns it off. A chicken host from an older world runs round where
+  it stands. Watching one run for 10 seconds earns a hidden advancement.
+- **The Corporate Wellness Treadmill.** Two blocks long. Ride a host onto the belt and get off: "Clocked in." It walks
+  in place and makes 4 to 24 FE/t by species (a cow 10, a chicken 12, a camel 24, anything not listed 8), holds 10 kFE
+  and pushes up to 1,000 FE/t from its near end, as the Galvanic Pile does. A body on the belt rots twice as fast; a
+  laced one is Tired and makes half; full sync adds 10%. **Use** it to read it. Fliers, swimmers, ghasts, striders,
+  slimes, shells and the heavy ones refuse ("Ghasts do not do cardio."), and a creature with its head on gets "Staff
+  with heads use the stairs." The rates are a data map (`headinajar:treadmill`) a modpack can change, and the server
+  value `bodies.treadmillOutput` scales them all. Advancements **Corporate Wellness** and **Cardio Department**.
+- The Safety Placard has a new notice: "A HEALTHY BODY IS A PRODUCTIVE BODY".
+- A memo the first time a Treadmill powers a machine, and handbook pages on the Treadmill and on every body's trick.
+- Worlds from 0.6.2 load as they are. A 0.6.3 game can join a 0.6.2 server; a 0.6.2 game cannot join a 0.6.3 server.
+  Update both.
+
+<details><summary>What changed in 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.6.2
 
 - **Every creature carries a gene.** Forty new genes, eighty-nine in all: every natural vanilla creature now carries
@@ -3162,8 +3275,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
   self-test. Nothing fires before the checklist."
 - Client and server must both be on 0.6.2. Going back to 0.6.1 drops the new genes from serums and bodies and empties
   a Body Printer's Template slot.
-
-<details><summary>What changed in 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.6.1
 

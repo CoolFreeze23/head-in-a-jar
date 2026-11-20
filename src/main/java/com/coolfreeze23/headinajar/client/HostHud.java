@@ -62,6 +62,7 @@ public final class HostHud {
         if (secondary) HudStack.text(g, Component.translatable(sync >= 75 ? "hud.headinajar.clarity.ability_ready" : "hud.headinajar.clarity.ability_locked",
                 Component.keybind(ClientSetup.SECONDARY.getName()), secondName(def), 75), sync >= 75 ? 0x55FF77 : 0x808080);
         if (!primary && !secondary) HudStack.text(g, Component.translatable("hud.headinajar.no_abilities"), 0x808080);
+        if (data.warming) HudStack.text(g, Component.translatable("hud.headinajar.warm_up_on"), 0xFFA040); // a strider's Warm Up (0.6.3)
         // a Utility Shell runs on the jar's charge: a flat jar can't move it
         if (data.shell && mc.player.getData(ModRegistry.JAR_STATE).charge() <= 0) {
             HudStack.text(g, Component.translatable("hud.headinajar.shell_flat", Component.translatable("block.headinajar.charging_dock"))
