@@ -37,6 +37,9 @@ public final class FxManager {
             case Fx.SWAP -> SwapFx.handle(fx);
             case Fx.LASER -> laser(fx);
             case Fx.ARM_ARC -> ArmBeams.arc(fx);
+            // 0.7.2: the Promotion's confetti
+            case Fx.CONFETTI -> com.coolfreeze23.headinajar.client.staff.CeremonyClient.confetti(fx);
+            case Fx.CHANT -> com.coolfreeze23.headinajar.client.StrikeClient.chant(fx);
             case Fx.TURRET_SHOT -> {
                 FxParticle r = FxParticle.make(FxParticle.Look.RING, fx.a(), Vec3.ZERO);
                 if (r != null) r.color(FxColors.WARN).size(0.45f).grow(2f).life(7).add();

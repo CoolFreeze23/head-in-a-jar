@@ -10,6 +10,8 @@ import com.coolfreeze23.headinajar.client.staff.WorkerLines;
 import com.coolfreeze23.headinajar.host.Hosts;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
 import com.coolfreeze23.headinajar.registry.WorkRegistry;
+import com.coolfreeze23.headinajar.staff.Grades;
+import com.coolfreeze23.headinajar.staff.work.WorkerNet;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -135,9 +137,14 @@ public final class SecondeeLayer {
             if (look != null && look.colour >= 0) {
                 pose.pushPose();
                 pose.mulPose(Axis.YP.rotation(-twist));
-                StaffBadge.draw(pose, buffers, light, look.colour, compact ? BADGE_COMPACT : BADGE_WIDE);
+                StaffBadge.Anchor badge = compact ? BADGE_COMPACT : BADGE_WIDE;
+                int grade = WorkerNet.grade(look.bits);
+                StaffBadge.draw(pose, buffers, light, look.colour, grade, badge);
+                if (grade == Grades.TEAM_LEAD) StaffBadge.tie(pose, buffers, light, badge);
                 pose.popPose();
             }
+            // 0.7.2 strikes: the Rep's rosette, the chant's bob (it moves the jar and hat drawn next) and the sign taped to the jar
+            com.coolfreeze23.headinajar.client.StrikeClient.collar(host, s, pose, buffers, light, compact, twist, pt);
             jar(host, s, pt, pose, buffers, light, bodyYaw);
             hat(host, pose, buffers, light);
         }

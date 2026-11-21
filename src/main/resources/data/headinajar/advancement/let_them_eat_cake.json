@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:pay_grade",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "let_them_eat_cake"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.headinajar.let_them_eat_cake.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.let_them_eat_cake.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

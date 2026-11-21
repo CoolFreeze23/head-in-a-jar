@@ -56,7 +56,12 @@ public final class Memos {
         FIRST_HIRE("staffing/workforce"),
         FIRST_CLOCK("staffing/time_clock"),
         DETAIL_HOME("staffing/whistle"),
-        SECONDMENT("staffing/secondment");
+        SECONDMENT("staffing/secondment"),
+        REVIEW_DUE("staffing/grades"),
+        TEAM_LEAD("staffing/grades"),
+        PROMOTION("staffing/promotion"),
+        GRIEVANCE("staffing/pay"),
+        STRIKE("staffing/strikes");
 
         public final String entry;
 

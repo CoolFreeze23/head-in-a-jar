@@ -123,6 +123,13 @@ public final class HopperSounds {
                 PITCH.put(name, n.equals("knuckle") || n.equals("step_lunk") ? new float[]{0.94f, 1.06f} : new float[]{1, 1});
             }
         }
+        // the Spider Walker's own (mecha.spider_walker.*, its other sounds are borrowed): the thump of each pad its legs
+        // set down, played by its own client code (tools/snd/recipes_spider_walker.py)
+        for (String n : new String[]{"pad"}) {
+            String name = "spider_walker." + n;
+            EVENTS.put(name, ModSounds.SOUNDS.register("mecha." + name, () -> SoundEvent.createVariableRangeEvent(HeadInAJar.id("mecha." + name))));
+            PITCH.put(name, new float[]{0.94f, 1.06f});
+        }
         // its horn carries 48 blocks
         EVENTS.put("wheelhouse.horn", ModSounds.SOUNDS.register("mecha.wheelhouse.horn", () -> SoundEvent.createFixedRangeEvent(HeadInAJar.id("mecha.wheelhouse.horn"), 48)));
         PITCH.put("wheelhouse.horn", new float[]{1, 1});

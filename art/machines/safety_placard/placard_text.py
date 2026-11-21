@@ -55,7 +55,8 @@ BREAKS = {('en_us', 2): ['THIS', 'FACILITY', 'HAS GONE', '0 DAYS', 'WITHOUT AN',
           ('pt_br', 14): ['TURNO', 'DA NOITE', 'SÓ APÓS', 'ESCURECER'],
           ('pt_br', 19): ['TODOS DE', 'CRACHÁ.', 'ATÉ VOCÊ,', 'MIMOSA'],
           ('pt_br', 20): ['COLEGA', 'NÃO É', 'ALMOÇO'],
-          ('pt_br', 2): ['ESTA', 'INSTALAÇÃO', 'ESTÁ HÁ', '0 DIAS SEM', 'ACIDENTES']}
+          ('pt_br', 2): ['ESTA', 'INSTALAÇÃO', 'ESTÁ HÁ', '0 DIAS SEM', 'ACIDENTES'],
+          ('pt_br', 17): ['BOLO', 'RESOLVE', 'A MAIORIA', 'DAS QUEIXAS']}
 # accented capitals: the plain letter with its mark in two rows above it (a cedilla in the row below); a notice that
 # has any is set at 8 texels a line instead of 6, so at most 5 lines
 ACUTE, GRAVE, CIRCUMFLEX, TILDE = ['..#', '.#.'], ['#..', '.#.'], ['.#.', '#.#'], ['.#.#', '#.#.']
@@ -92,6 +93,50 @@ def pitch(text):
 
 def max_lines(text):
     return 5 if accented(text) else LINES
+
+
+def marks_above(line):
+    """Whether a line has a capital whose mark sits above it (a cedilla hangs below, in the row under its line)."""
+    return any(ch in ACCENTS and ACCENTS[ch][1] is not None for ch in line)
+
+
+def line_tops(text, n=None, lang='en_us'):
+    """The y of each line's letters (their top row). A notice is set at its pitch (6 texels a line, 8 with any accent),
+    the block centred under the rule; one that would then run off the board or into a corner screw (pt_br 0, 3 and 6 did
+    until 0.7.2: a cedilla hangs a row below the last line, and five lines at 8 fill the field to its last row) is set
+    line by line instead: 6 a line, 2 more above a line with a mark over a letter, 1 more under a line with a cedilla."""
+    lines = wrap(text, n, lang)
+    step = pitch(text)
+    lead = step - 6
+    block = lead + (len(lines) - 1) * step + 5
+    top = 8 + (H_TEX - 8 - block + 1) // 2
+    tops = [top + lead + i * step for i in range(len(lines))]
+    foot = tops[-1] + 4 + (1 if 'Ç' in lines[-1] else 0)    # the last row inked
+    if foot <= H_TEX - 2 and not _hits_screw(lines, tops):
+        return tops
+    rows, ys = 0, []
+    for i, ln in enumerate(lines):
+        rows += 2 if marks_above(ln) else 0
+        ys.append(rows)
+        rows += 5 + (1 if 'Ç' in ln else 0) + (1 if i < len(lines) - 1 else 0)
+    top = 8 + (H_TEX - 8 - rows + 1) // 2
+    if _hits_screw(lines, [top + y for y in ys]):
+        top = 9                                       # up under the rule, clear of the lower screws
+    return [top + y for y in ys]
+
+
+SCREWS = ((1, 9), (W_TEX - 4, 9), (1, H_TEX - 4), (W_TEX - 4, H_TEX - 4))
+
+
+def _hits_screw(lines, tops):
+    for ln, y in zip(lines, tops):
+        y0, y1 = y - (2 if marks_above(ln) else 0), y + 4 + (1 if 'Ç' in ln else 0)
+        x0 = FIELD[0] + (FIELD_W - width(ln)) // 2
+        x1 = x0 + width(ln) - 1
+        for sx, sy in SCREWS:
+            if not (x1 < sx or x0 > sx + 2 or y1 < sy or y0 > sy + 2):
+                return True
+    return False
 
 
 def wrap(text, n=None, lang='en_us'):
@@ -170,12 +215,8 @@ def draw(text, scale=4, n=None, lang='en_us'):
     header = HEADER.get(lang, 'NOTICE')
     put(header, (W_TEX - width(header)) // 2, 1)
     lines = wrap(text, n, lang)
-    step = pitch(text)
-    lead = step - 6                                   # the accents' two rows above each line
-    block = lead + (len(lines) - 1) * step + 5        # from the first line's accent rows to the last line's foot
-    top = 8 + (H_TEX - 8 - block + 1) // 2          # the block of lines centred under the rule
-    for i, ln in enumerate(lines):
-        put(ln, FIELD[0] + (FIELD_W - width(ln)) // 2, top + lead + i * step)
+    for ln, y in zip(lines, line_tops(text, n, lang)):  # the block of lines centred under the rule
+        put(ln, FIELD[0] + (FIELD_W - width(ln)) // 2, y)
     return im.resize((W_TEX * scale, H_TEX * scale), Image.NEAREST)
 
 

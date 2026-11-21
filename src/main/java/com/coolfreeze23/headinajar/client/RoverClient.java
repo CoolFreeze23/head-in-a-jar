@@ -217,6 +217,8 @@ public final class RoverClient {
             if (p.length < 2) continue;
             switch (p[0]) {
                 case "step" -> {
+                    // while its legs find their own footing, its pads are heard as each goes down (pad), not by the clip
+                    if (s.walker.stride.weight > 0.5) continue;
                     String[] pads = p[1].equals("a") ? com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.SET_A
                             : p[1].equals("b") ? com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.SET_B : new String[0];
                     if (pads.length == 0) {
@@ -250,6 +252,31 @@ public final class RoverClient {
         var type = state.getSoundType(level, below, s);
         level.playLocalSound(at.x, at.y, at.z, type.getStepSound(), SoundSource.NEUTRAL, type.getVolume() * 0.08f, type.getPitch() * 1.6f, false);
         level.addParticle(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, state), at.x, s.getY() + 0.05, at.z, 0, 0.02, 0);
+    }
+
+    /**
+     * One pad set down by the legs that find their own footing, at its world place on a surface of that normal: its
+     * metal thump (a random take, pitch 0.94-1.06, a lighter tap on a wall's face; quieter and lower under water), the
+     * block's own step sound over it, high and very quiet (on a wall its hit sound), and a speck of its dust. One for
+     * every pad, as the walkers this gait comes from do it.
+     */
+    public static void pad(ShellEntity s, double[] at, double[] normal) {
+        if (!near(s)) return;
+        var level = s.level();
+        var r = level.random;
+        boolean wall = normal[1] < 0.5;
+        boolean wet = level.getFluidState(net.minecraft.core.BlockPos.containing(at[0], at[1] + 0.05, at[2])).is(net.minecraft.tags.FluidTags.WATER);
+        float damp = wet ? 0.5f : 1, low = wet ? 0.75f : 1;
+        SoundEvent thump = HopperSounds.get("spider_walker.pad");
+        if (thump != null) level.playLocalSound(at[0], at[1], at[2], thump, SoundSource.NEUTRAL, (0.85f + 0.15f * r.nextFloat()) * damp,
+                HopperSounds.pitch("spider_walker.pad", wall ? 1.12f : 1, r) * low, false);
+        var block = net.minecraft.core.BlockPos.containing(at[0] - normal[0] * 0.08, at[1] - normal[1] * 0.08, at[2] - normal[2] * 0.08);
+        var state = level.getBlockState(block);
+        if (state.isAir()) return;
+        var type = state.getSoundType(level, block, s);
+        level.playLocalSound(at[0], at[1], at[2], wall ? type.getHitSound() : type.getStepSound(), SoundSource.NEUTRAL,
+                type.getVolume() * (wall ? 0.06f : 0.08f) * damp, type.getPitch() * 1.6f * low, false);
+        level.addParticle(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, state), at[0], at[1] + 0.03, at[2], 0, 0.02, 0);
     }
 
     /** The front points on the wall's block: its own hit sound, quiet. */

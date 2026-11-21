@@ -87,6 +87,12 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
      * (1-4; 4 is 100%). Each client runs the sync ring down the body, the pale one on the ground at 4.
      */
     public static final int TEAM_SYNC_PULSE = 30;
+    /** A striker's chant (0.7.2): entityA the striker, arg its beat count; clients pump its arms, head or jar twice. */
+    public static final int CHANT = 31;
+    /** The Promotion's confetti (0.7.2): at a, over entityA; teal and gold dust, a single grey puff under photosensitive. */
+    public static final int CONFETTI = 32;
+    /** A Promotion begins (0.7.2): entityA the candidate, entityB the presser, arg its length in ticks. */
+    public static final int CEREMONY_LOOK = 33;
 
     public static final int TOOL_SYRINGE = 1, TOOL_SUTURE = 2, TOOL_WRENCH = 3;
 

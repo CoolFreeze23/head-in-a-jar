@@ -386,6 +386,62 @@ public class WheeledGameTests {
         });
     }
 
+    /** The Spider Walker driven fast at something it stops against, {@code height} blocks of stone 4 ahead. */
+    private static void spiderInto(GameTestHelper h, int height, boolean crashes, String what) {
+        ServerPlayer p = player(h, FLOOR.west(3));
+        ShellEntity s = h.spawn(ModRegistry.SPIDER_WALKER.get(), FLOOR);
+        face(s);
+        board(h, p, s, Form.HOSTED);
+        var state = FormActions.state(p);
+        int integrity = state.integrity();
+        BlockPos wall = FLOOR.south(4);
+        for (int y = 0; y < height; y++) h.setBlock(wall.above(y), Blocks.STONE);
+        double stop = h.absoluteVec(Vec3.atLowerCornerOf(wall)).z - s.getBbWidth() / 2 - 0.05;
+        // the rider's client drives it there at 0.4 a tick and it stops dead against it
+        for (int i = 1; i <= 6; i++) {
+            int k = i;
+            h.runAfterDelay(i, () -> s.setPos(s.getX(), s.getY(), stop - 0.4 * (6 - k)));
+        }
+        h.runAfterDelay(12, () -> {
+            if (crashes) h.assertTrue(s.crashedAt() >= 0 && state.integrity() < integrity, what + ": no crash");
+            else h.assertTrue(s.crashedAt() == -1 && state.integrity() == integrity, what + ": crashed (" + s.crashedAt() + "), jar " + integrity + " -> " + state.integrity());
+            done(h, p);
+        });
+    }
+
+    /** A wall it climbs is not a crash: the Spider Walker goes up it. */
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void theSpiderWalkerClimbsAWallWithoutACrash(GameTestHelper h) {
+        spiderInto(h, 3, false, "a wall it climbs");
+    }
+
+    /** A step is not a crash: it steps up a block. */
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void theSpiderWalkerStepsUpWithoutACrash(GameTestHelper h) {
+        spiderInto(h, 1, false, "a step");
+    }
+
+    /** A Rover still crashes into a wall two high it cannot step (its step is 1.5) or climb. */
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void aRoverStillCrashesIntoAWallItCannotStep(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR.west(3));
+        ShellEntity r = h.spawn(ModRegistry.ROVER.get(), FLOOR);
+        face(r);
+        board(h, p, r, Form.HOSTED);
+        BlockPos wall = FLOOR.south(4);
+        h.setBlock(wall, Blocks.STONE);
+        h.setBlock(wall.above(), Blocks.STONE);
+        double stop = h.absoluteVec(Vec3.atLowerCornerOf(wall)).z - r.getBbWidth() / 2 - 0.05;
+        for (int i = 1; i <= 6; i++) {
+            int k = i;
+            h.runAfterDelay(i, () -> r.setPos(r.getX(), r.getY(), stop - 0.4 * (6 - k)));
+        }
+        h.runAfterDelay(12, () -> {
+            h.assertTrue(r.crashedAt() >= 0, "a Rover into a wall two high did not crash");
+            done(h, p);
+        });
+    }
+
     @GameTest(template = "platform", timeoutTicks = 20)
     public static void theRoversSprintPlaysItsClip(GameTestHelper h) {
         ServerPlayer p = player(h, FLOOR.west(3));

@@ -696,6 +696,11 @@ public class StaffJobGameTests {
         }
         chest(h, new BlockPos(11, 6, 20), new ItemStack(Items.SHEARS));
         chest(h, new BlockPos(11, 6, 24));
+        // paid ahead: a dawn that falls during the test (the world's hour is whatever the run has reached) finds it paid,
+        // so it never leaves the sheep to ask about its wage
+        com.coolfreeze23.headinajar.staff.StaffFile f = com.coolfreeze23.headinajar.staff.Staff.of(v);
+        f.paidThrough = com.coolfreeze23.headinajar.staff.Staff.day(h.getLevel()) + 10;
+        v.setData(com.coolfreeze23.headinajar.registry.ModRegistry.STAFF, f);
         return work(h, p, v, card(clock, WorkTable.FARMING, List.of(pickUp(h, new BlockPos(11, 6, 20)), dropOff(h, new BlockPos(11, 6, 24), ItemStack.EMPTY, false)),
                 List.of(area(h, new BlockPos(4, 5, 20), new BlockPos(9, 5, 25)))));
     }
@@ -704,6 +709,8 @@ public class StaffJobGameTests {
     public static void shearingWearsShearsAndToolsmithsHalf(GameTestHelper h) {
         ServerPlayer p = boss(h);
         TimeClockBlockEntity clock = clock(h, p, CLOCK);
+        // a villager works the day shift: the clock reads mid-morning, so the test never depends on the world's hour
+        clock.timeOverride = 3000;
         Villager v = villager(h, p, clock, new BlockPos(12, 6, 22), null);
         WorkerData d = shearing(h, p, clock, v);
         h.succeedWhen(() -> {
@@ -720,13 +727,15 @@ public class StaffJobGameTests {
     public static void aToolsmithWearsShearsHalfAsFast(GameTestHelper h) {
         ServerPlayer p = boss(h);
         TimeClockBlockEntity clock = clock(h, p, CLOCK);
+        // a villager works the day shift: the clock reads mid-morning, so the test never depends on the world's hour
+        clock.timeOverride = 3000;
         Villager v = villager(h, p, clock, new BlockPos(12, 6, 22), VillagerProfession.TOOLSMITH);
         WorkerData d = shearing(h, p, clock, v);
         h.succeedWhen(() -> {
             var sheep = h.getLevel().getEntitiesOfClass(Sheep.class, new net.minecraft.world.phys.AABB(h.absolutePos(new BlockPos(3, 5, 19))).inflate(8));
             int shorn = 0;
             for (Sheep s : sheep) if (s.isSheared()) shorn++;
-            h.assertTrue(shorn == 4, "shorn " + shorn);
+            h.assertTrue(shorn == 4, "shorn " + shorn + " of " + sheep.size() + "; " + d.state + " " + d.status + ", tool " + d.tool + " worn " + d.tool.getDamageValue() + ", at " + v.blockPosition() + ", carrying " + d.carried);
             h.assertTrue(d.tool.is(Items.SHEARS) && d.tool.getDamageValue() == 2, "a toolsmith's shears worn " + d.tool.getDamageValue());
             h.getLevel().getServer().getPlayerList().remove(p);
         });

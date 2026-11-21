@@ -64,8 +64,11 @@ public class TimeClockMenu extends AbstractContainerMenu {
     private int selected = -1;
     /** Client: the rows as last sent (null until the first arrives, or for a game without the channel). */
     public ClockNet.ClockRoster roster;
+    /** Client (0.7.2): the grades, reviews and strike as last sent (null until the first, or without the channel). */
+    public ClockNet.ClockCareer career;
     /** Server: the rows last sent, and the ticks since the screen opened. */
     private ClockNet.ClockRoster sent;
+    private ClockNet.ClockCareer careerSent;
     private int ticks;
 
     /** The client's side, from the clock's position. */
@@ -195,12 +198,34 @@ public class TimeClockMenu extends AbstractContainerMenu {
         if (clock == null || !clock.trusts(sp) || !clock.has(id)) return;
         Mob mob = worker(id);
         if (mob == null) {
-            Refusals.deny(sp, clock, "clock.not_here", rowName(id));
+            Refusals.deny(sp, clock, kind == ClockNet.REVIEW ? "review.away" : "clock.not_here", rowName(id));
             return;
         }
         if (kind == ClockNet.RECALL) Shifts.recall(sp, clock, mob);
+        else if (kind == ClockNet.REVIEW) com.coolfreeze23.headinajar.staff.Reviews.review(sp, clock, mob);
+        else if (kind == ClockNet.PROMOTE) promote(sp, mob);
         else if (kind == ClockNet.SHIFT && arg >= 0 && arg < WorkerData.Shift.values().length) Shifts.setShift(sp, clock, mob, WorkerData.Shift.values()[arg]);
         sent = null; // the rows go again on the next tick
+        careerSent = null;
+    }
+
+    /**
+     * 0.7.2: the Roster's Promote. The Board takes Team Leads (below one: its grade's line, as the saw says); a Team Lead
+     * goes to {@code Promotion.fromRoster}, which decides the rest (a seconded one's ceremony at the clock).
+     */
+    private void promote(ServerPlayer sp, Mob mob) {
+        var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+        int grade = com.coolfreeze23.headinajar.staff.Grades.of(f);
+        var shake = com.coolfreeze23.headinajar.staff.StaffShake.at(mob);
+        if (!Workforce.mayOrder(mob, sp) || f == null || !sp.getUUID().equals(f.employer)) {
+            Refusals.deny(sp, shake, "promotion.others", Workforce.name(mob), Workforce.employerName(mob));
+        } else if (grade == com.coolfreeze23.headinajar.staff.Grades.INTERN) {
+            Refusals.deny(sp, shake, "promotion.intern");
+        } else if (grade < com.coolfreeze23.headinajar.staff.Grades.TEAM_LEAD) {
+            Refusals.deny(sp, shake, "promotion.below", Workforce.name(mob), com.coolfreeze23.headinajar.staff.Grades.name(grade));
+        } else {
+            com.coolfreeze23.headinajar.staff.Promotion.fromRoster(sp, clock, mob);
+        }
     }
 
     /** A worker of this clock's, if it is in this level and still this clock's; else null. */
@@ -270,9 +295,16 @@ public class TimeClockMenu extends AbstractContainerMenu {
         if (!(player instanceof ServerPlayer sp) || clock == null) return;
         if (ticks++ % 20 != 0 && sent != null) return;
         ClockNet.ClockRoster now = ClockNet.rows(containerId, clock);
-        if (now.equals(sent)) return;
-        sent = now;
-        ClockNet.send(sp, now);
+        if (!now.equals(sent)) {
+            sent = now;
+            ClockNet.send(sp, now);
+        }
+        // 0.7.2: the grades, reviews and strike, in their own payload
+        ClockNet.ClockCareer career = com.coolfreeze23.headinajar.staff.Reviews.career(containerId, clock);
+        if (!career.equals(careerSent)) {
+            careerSent = career;
+            ClockNet.send(sp, career);
+        }
     }
 
     @Override

@@ -71,6 +71,9 @@ public final class ItemAnswers {
             Refusals.deny(player, "item.air.saw");
         } else if (held.is(ModRegistry.SURGICAL_WRENCH.get())) {
             Refusals.deny(player, "item.air.wrench");
+        } else if (held.is(com.coolfreeze23.headinajar.registry.WorkRegistry.PERFORMANCE_REVIEW.get())) {
+            // 0.7.2: the slip is read by hovering over it
+            Refusals.deny(player, "review.read");
         } else if (form == Form.BODY && (held.is(ModRegistry.SALINE_BOTTLE.get()) || held.is(ModRegistry.GLASS_PATCH.get()))) {
             Refusals.deny(player, "item.air.head_on", held.getHoverName());
         }

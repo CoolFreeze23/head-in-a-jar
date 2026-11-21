@@ -44,7 +44,7 @@ LINES = {
     'hud.headinajar.lift_vented': ('Load released: the fists vent with the rest.', 'Carga solta: os punhos expelem calor com o resto.'),
     'message.headinajar.severance_frame': ('Noggin & Sons regrets the loss of your %s at %s, %s, %s. '
                                            'Your Severance Form is in the post.',
-                                           'A Noggin & Sons lamenta a perda do seu %s em %s, %s, %s. '
+                                           'A Noggin & Sons lamenta a perda do seu mecha (%s) em %s, %s, %s. '
                                            'Seu Termo de Desligamento segue pelo correio.'),
 }
 

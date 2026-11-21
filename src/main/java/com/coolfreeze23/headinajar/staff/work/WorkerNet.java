@@ -50,6 +50,16 @@ public final class WorkerNet {
     }
 
     public static final int CARRYING = 1, NOTICE = 1 << 1, HIRED = 1 << 2, HAT = 1 << 3, READING = 1 << 4;
+    /**
+     * 0.7.2: the grade (0 Intern .. 3 Team Lead) in two bits at {@link #GRADE_SHIFT}, a picket sign ({@link #PICKET}),
+     * the Union Rep's rosette ({@link #REP}) and a grievance ({@link #GRIEVANCE}). An older game ignores them.
+     */
+    public static final int GRADE_SHIFT = 5, GRADE_MASK = 3 << GRADE_SHIFT, PICKET = 1 << 7, REP = 1 << 8, GRIEVANCE = 1 << 9;
+
+    /** The grade in a look's bits. */
+    public static int grade(int bits) {
+        return (bits & GRADE_MASK) >> GRADE_SHIFT;
+    }
 
     /** A name typed on a screen: {@link #RENAME} a worker (its entity id), or {@link #ORDER} name the held Clipboard's order. */
     public record Text(int kind, int target, String text) implements CustomPacketPayload {

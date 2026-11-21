@@ -514,6 +514,8 @@ public final class DeskJobs {
         head.cakeDay = day;
         stack.consume(1, player);
         StaffBlocks.adjust(f, CAKE);
+        // 0.7.2: a cake that brings a grievance back to 40 ends it (Let Them Eat Cake)
+        com.coolfreeze23.headinajar.staff.Grievances.check(head, f, player);
         head.setStaff(f);
         level.playSound(null, head.getBlockPos(), SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 1, 1);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, head.getBlockPos().getX() + 0.5, head.getBlockPos().getY() + 1.0, head.getBlockPos().getZ() + 0.5, 6, 0.25, 0.2, 0.25, 0);

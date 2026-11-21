@@ -40,9 +40,24 @@ public final class StaffFit {
     public record Frame(Bone bone, float[] at, float[] rot) {
     }
 
-    /** The loop (cord boxes in the ring's frame) and the hang (pivot, its turn, strands, the badge's top centre). */
+    /**
+     * The loop (cord boxes in the ring's frame) and the hang (pivot, its turn, strands, the badge's top centre), and a
+     * Team Lead's tie on the hang (null: none on this species).
+     */
     public record Lanyard(Frame frame, float[][] cord, float[] pivot, float[] hangRot, float[][] strands, float[] badgeAt,
-                          boolean mini, float sway) {
+                          boolean mini, float sway, Tie tie) {
+        public Lanyard(Frame frame, float[][] cord, float[] pivot, float[] hangRot, float[][] strands, float[] badgeAt,
+                       boolean mini, float sway) {
+            this(frame, cord, pivot, hangRot, strands, badgeAt, mini, sway, null);
+        }
+    }
+
+    /**
+     * The tie in the hang frame, flat quads facing -z: the blade's top-left {@code at} (px), 1 px wide and {@code length}
+     * long ({@code bladeUv} its column's top {@code length} texels), and its 3 x 2 broad end's top-left {@code tip} (null:
+     * the blade alone, hidden behind the card).
+     */
+    public record Tie(float[] at, float length, float[] tip, float[] bladeUv) {
     }
 
     /** The Hard Hat: drawn by the armour layer ({@code armor}) or the baked hat of {@code size} at the frame. */
@@ -160,7 +175,7 @@ public final class StaffFit {
             JsonObject badge = hang.getAsJsonObject("badge");
             lanyard = new Lanyard(frame(l), boxes(l.getAsJsonArray("cord")), vec(hang.get("pivot")), vec(hang.get("rot")),
                     boxes(hang.getAsJsonArray("cord")), vec(badge.get("at")), "mini".equals(string(badge, "size", "full")),
-                    hang.has("sway") ? hang.get("sway").getAsFloat() : 1);
+                    hang.has("sway") ? hang.get("sway").getAsFloat() : 1, tie(hang.get("tie")));
         }
         Hat hat = null;
         if (o.get("hat") instanceof JsonObject h) {
@@ -178,6 +193,14 @@ public final class StaffFit {
             render = new Render(r.has("scale") ? r.get("scale").getAsFloat() : 1, vec(r.get("offset")));
         }
         return new Fit(lanyard, hat, crate, render);
+    }
+
+    private static Tie tie(JsonElement e) {
+        if (!(e instanceof JsonObject t) || !t.has("length")) return null;
+        float length = Math.max(0, Math.min(16, t.get("length").getAsFloat()));
+        float[] blade = com.coolfreeze23.headinajar.client.StaffBadge.TIE;
+        return new Tie(vec(t.get("at")), length, t.has("tip") && !t.get("tip").isJsonNull() ? vec(t.get("tip")) : null,
+                new float[]{blade[0], blade[1], blade[2], blade[1] + length});
     }
 
     private static Frame frame(JsonObject o) {

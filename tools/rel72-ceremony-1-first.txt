@@ -1,0 +1,58 @@
+# The first promotion (0.7.2): a cow hired with the Staff Lanyard by real use, made a Team Lead by the setup verb
+# named for the reason (no press gives 1,000 tasks), two more hired cows to watch; then the Surgical Saw by real use
+# with an empty Life Support Jar in the off hand: the ceremony (offer, the staff turn, the nod, confetti, jingle, cut,
+# bell, "Congratulations on your promotion."), the head in hand and the body standing as a host.
+@world flat
+@gamemode survival
+@difficulty peaceful
+@clean
+@observe 20
+time set 6000
+weather clear
+gamerule doDaylightCycle false
+gamerule doMobSpawning false
+tp @s 0 -60 0 0 10
+summon cow 0 -60 4 {Rotation:[180f,0f]}
+summon cow -3 -60 7 {Rotation:[180f,0f]}
+summon cow 3 -60 7 {Rotation:[180f,0f]}
+item replace entity @s hotbar.0 with headinajar:staff_lanyard 8
+item replace entity @s hotbar.1 with headinajar:surgical_saw 1
+wait 25
+hotbar 1
+lookat cow 0.8
+key use
+wait 20
+tp @s -3 -60 4.5 0 10
+lookat cow 0.8
+key use
+wait 20
+tp @s 3 -60 4.5 0 10
+lookat cow 0.8
+key use
+wait 20
+tp @s 0 -60 1 0 10
+wait 5
+teamleadforpromotion
+wait 30
+inspect near cow 10
+item replace entity @s weapon.offhand with headinajar:life_support_jar 1
+hotbar 2
+wait 25
+tp @s 0 -60 1 0 10
+lookat cow 0.8
+shot before
+observe 200
+frames promotion 190
+key use
+wait 60
+shot nod
+wait 30
+shot confetti
+wait 40
+shot cut
+wait 40
+shot done
+wait 20
+inspect me
+inspect near cow 10
+observe 20

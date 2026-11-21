@@ -15,8 +15,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * What a jarred head in a slot is: its creature, a villager's profession and the villager data a renderer needs. Read
  * once from the item, without copying the stored mob, and kept until the slot holds a different stack.
  */
-public record HeadInfo(EntityType<?> type, String profession, CompoundTag villagerData, String jar, int size) {
-    public static final HeadInfo NONE = new HeadInfo(null, "", null, HeadInfo.LIFE_SUPPORT, 0);
+public record HeadInfo(EntityType<?> type, String profession, CompoundTag villagerData, String jar, int size, boolean promoted) {
+    public static final HeadInfo NONE = new HeadInfo(null, "", null, HeadInfo.LIFE_SUPPORT, 0, false);
 
     /** The jar a head went into, as recorded on it ({@code "Jar"}); none recorded is a Life Support Jar. */
     public static final String LIFE_SUPPORT = "headinajar:life_support_jar", COMPACT = "headinajar:compact_life_support_jar";
@@ -54,7 +54,10 @@ public record HeadInfo(EntityType<?> type, String profession, CompoundTag villag
         // a slime's or magma cube's size as drawn (its record saves one less), 0 for anything else
         CompoundTag stored = tag.getCompound("Entity");
         int size = (type == EntityType.SLIME || type == EntityType.MAGMA_CUBE) && stored.contains("Size") ? stored.getInt("Size") + 1 : 0;
-        return new HeadInfo(type, profession, villager, jar(tag), size);
+        // promoted to the Board (0.7.2): read from its file once per stack; never sent to clients (the slots' sync tag is trimmed)
+        com.coolfreeze23.headinajar.staff.StaffFile file = com.coolfreeze23.headinajar.staff.Staff.fromHeadTag(tag);
+        boolean promoted = file != null && file.career.promotedDay >= 0;
+        return new HeadInfo(type, profession, villager, jar(tag), size, promoted);
     }
 
     /** A one-slot cache: worked out again only when the slot holds a different stack. */

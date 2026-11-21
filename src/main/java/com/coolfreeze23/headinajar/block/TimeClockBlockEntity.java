@@ -118,6 +118,10 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
     public long timeOverride = -1;
     /** Client: how many cards the rack shows. */
     private int cardsShown;
+    /** 0.7.2: the site's strike (staff.Strikes): saved here, its flag synced (the lamp, the card, the red pulse). */
+    public final com.coolfreeze23.headinajar.staff.Strikes.Record strike = new com.coolfreeze23.headinajar.staff.Strikes.Record();
+    /** Client: whether the site is on strike (the card on the bell, the pulse on the lens). */
+    private boolean strikeShown;
 
     private final ItemStackHandler rack = new ItemStackHandler(RACK) {
         @Override
@@ -221,6 +225,8 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
     public boolean join(Mob mob) {
         if (!has(mob.getUUID())) {
             if (room() <= 0) return false;
+            // 0.7.2: new staff won't cross the picket line
+            if (strike.active()) return false;
             roster.add(mob.getUUID());
             setChanged();
         }
@@ -550,9 +556,13 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
                 for (UUID id : List.copyOf(roster)) {
                     if (server.getEntity(id) instanceof Mob mob && Workforce.isWorker(mob)) Shifts.dawn(this, mob);
                 }
+                // 0.7.2: the strike test, once a clock, after everyone's dawn
+                com.coolfreeze23.headinajar.staff.SiteState.afterDawn(this);
             }
         }
         punchTick(server, now);
+        // 0.7.2: a strike's ring and chant (nothing while there is none)
+        com.coolfreeze23.headinajar.staff.Strikes.tick(this, server, now);
         long phase = Math.floorMod(now + worldPosition.asLong(), (long) TIDY_TICKS);
         if (phase == 0) tidy(server);
         if (phase % LAMP_TICKS == 0) lamp = lampNow(server);
@@ -563,6 +573,8 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
     /** What the lamp says: nobody on the roster OFF; anyone held up WAIT; anyone on the job WORK; else READY. */
     private MachineLamp lampNow(ServerLevel server) {
         if (roster.isEmpty() || !Workforce.enabled()) return MachineLamp.OFF;
+        // 0.7.2: on strike, the lamp is the steady red of a fault (the renderer pulses it)
+        if (strike.active()) return MachineLamp.FAULT;
         boolean work = false;
         for (UUID id : roster) {
             WorkerData d = server.getEntity(id) instanceof Mob mob ? Workforce.data(mob) : null;
@@ -678,6 +690,8 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
             tag.putLong("punch", shownPunch);
             if (shownLate) tag.putBoolean("late", true);
         }
+        // 0.7.2: on strike (an older game ignores the key)
+        if (strike.active()) tag.putBoolean("strike", true);
     }
 
     @Override
@@ -687,11 +701,17 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
             shownPunch = tag.getLong("punch");
             shownLate = tag.getBoolean("late");
         }
+        strikeShown = tag.getBoolean("strike");
     }
 
     /** Client: cards the rack shows. */
     public int cardsShown() {
         return cardsShown;
+    }
+
+    /** Client: whether its site is on strike (synced). */
+    public boolean strikeShown() {
+        return strikeShown;
     }
 
     /** Both sides: the game time the last punch started (its clip's tick 0), and whether it was late (a ding follows). */
@@ -792,6 +812,7 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         if (powered) tag.putBoolean("Powered", true);
         tag.putLong("PoweredAt", poweredAt);
         if (!broth.isEmpty()) tag.put("Broth", broth.writeToNBT(registries, new CompoundTag()));
+        strike.save(tag);
     }
 
     @Override
@@ -816,5 +837,6 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         poweredAt = tag.getLong("PoweredAt");
         broth.setFluid(net.neoforged.neoforge.fluids.FluidStack.EMPTY);
         if (tag.contains("Broth")) broth.readFromNBT(registries, tag.getCompound("Broth"));
+        strike.load(tag);
     }
 }

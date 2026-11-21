@@ -60,7 +60,12 @@ public final class HostFx {
     /** The head pops this many ticks after the cut's memo (the cork's whine). */
     public static final int POP = 3;
 
-    private record Cut(long at, boolean intoJar, int cutter, Vec3 neck) {
+    /**
+     * One cut: {@code intoJar} when the head goes into the cutter's jar, {@code bodyKept} when the body lives on after it
+     * (the Promotion's cut, {@code Fx.HOST_CUT} arg 2: the head arcs into the jar and the body shakes). A game older than
+     * 0.7.2 reads arg 2 only as "into a jar" and shows no shake.
+     */
+    private record Cut(long at, boolean intoJar, boolean bodyKept, int cutter, Vec3 neck) {
     }
 
     private static final Map<Integer, Cut> CUTS = new HashMap<>();
@@ -77,7 +82,7 @@ public final class HostFx {
     // --- memos -------------------------------------------------------------------------------------------------
 
     static void cut(Fx fx) {
-        CUTS.put(fx.entityB(), new Cut(now(), fx.arg() > 0.5f, fx.entityA(), fx.a()));
+        CUTS.put(fx.entityB(), new Cut(now(), fx.arg() > 0.5f, fx.arg() > 1.5f, fx.entityA(), fx.a()));
         BodyFx.later(POP, () -> {
             // the pop: a white ring at the neck and a small puff (the server sends the sanitary puff itself)
             FxParticle r = FxParticle.make(FxParticle.Look.RING, fx.a(), Vec3.ZERO);
@@ -94,7 +99,7 @@ public final class HostFx {
 
     /** A host printed to order steps out: the cut's first moment from its second step on (no head to pop), so only the wet-dog shake. */
     public static void printed(int hostId) {
-        CUTS.put(hostId, new Cut(now() - POP - 11, false, -1, Vec3.ZERO));
+        CUTS.put(hostId, new Cut(now() - POP - 11, false, false, -1, Vec3.ZERO));
     }
 
     static void seat(Fx fx) {
@@ -230,7 +235,7 @@ public final class HostFx {
         Vec3 fwd = new Vec3(-Mth.sin(yaw), 0, Mth.cos(yaw));
         float h = e.getBbHeight();
         float dy = 0, back = 0, roll = 0, pitch = 0;
-        if (cut != null && !cut.intoJar) {
+        if (cut != null && (!cut.intoJar || cut.bodyKept)) {
             float t = now - cut.at - POP + pt;
             boolean biped = event.getRenderer().getModel() instanceof HumanoidModel<?>;
             if (t > 0 && t < 10) {

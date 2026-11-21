@@ -1,0 +1,77 @@
+{
+  "textures": {
+    "slogan": "headinajar:block/picket/sign_1",
+    "particle": "headinajar:block/picket/sign_1"
+  },
+  "elements": [
+    {
+      "name": "board",
+      "from": [
+        2.0,
+        0,
+        7.5
+      ],
+      "to": [
+        14.0,
+        8,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.3333333333333333,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.3333333333333333,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ],
+          "texture": "#slogan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ],
+          "texture": "#slogan"
+        }
+      }
+    }
+  ]
+}

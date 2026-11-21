@@ -3,6 +3,7 @@ package com.coolfreeze23.headinajar.client.staff;
 import com.coolfreeze23.headinajar.HeadInAJar;
 import com.coolfreeze23.headinajar.client.StaffBadge;
 import com.coolfreeze23.headinajar.registry.WorkRegistry;
+import com.coolfreeze23.headinajar.staff.Grades;
 import com.coolfreeze23.headinajar.staff.work.WorkerNet;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -41,19 +42,39 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
     public static final ResourceLocation LANYARD = HeadInAJar.id("textures/entity/staff_lanyard.png");
     public static final String[] HAT_SIZES = {"xs", "s", "m", "l", "xl"};
     public static final ResourceLocation CRATE = HeadInAJar.id("entity/staff_crate");
-    /** The sheet's regions (px of 16): the full badge's frame and face, the mini's, the cord's lit and shaded columns. */
-    private static final float[] FRAME = {0, 0, 5, 5}, FACE = {6, 0, 9, 2}, MINI_FRAME = {0, 6, 3, 9}, MINI_FACE = {6, 6, 7, 7};
+    /**
+     * The sheet's regions (px of 16): the full badge's face (its frame by grade is {@link StaffBadge#FRAMES}, at the same
+     * places on both sheets), the mini's frame and face, the cord's lit and shaded columns.
+     */
+    private static final float[] FACE = {6, 0, 9, 2}, MINI_FRAME = {0, 6, 3, 9}, MINI_FACE = {6, 6, 7, 7};
     private static final float CORD_LIT = 14, CORD_SHADE = 15;
+    /** The mini badge's frame by grade (the full one's are {@link StaffBadge#FRAMES}, at the same places on this sheet). */
+    private static final float[][] MINI_FRAMES = {MINI_FRAME, {6, 2, 9, 5}, {10, 10, 13, 13}, {3, 6, 6, 9}};
     /**
      * A snow golem without its pumpkin (sheared): the size-l hat's brim 3 px (its dome) below the snow head's top
      * (y -8 in the head part), as the art seats every hat; the crate comes down by the 2.5 px the pumpkin stood above it.
      */
     private static final float SNOW_HAT_Y = -5, SNOW_DROP = 2.5f;
-    /** Whether the art's sheet is loaded (checked once a resource load). */
-    static boolean artSheet = true;
+    /** Whether the art's sheet is loaded (checked once a resource load). Public for the picket straps (StrikeClient). */
+    public static boolean artSheet = true;
+    /**
+     * Whether the art's sheet has the grade frames and the tie painted, and the mini badge's grade frames (checked once a
+     * resource load): without them every grade wears the plain frame and no tie.
+     */
+    static boolean graded, gradedMini;
 
     public StaffLayer(RenderLayerParent<T, M> parent) {
         super(parent);
+    }
+
+    /** Reads which sheet is in and what it has painted (a resource load). */
+    static void check(net.minecraft.server.packs.resources.ResourceManager manager) {
+        artSheet = manager.getResource(LANYARD).isPresent();
+        float[][] full = {StaffBadge.FRAMES[1], StaffBadge.FRAMES[2], StaffBadge.FRAMES[3], StaffBadge.TIE, StaffBadge.TIE_TIP};
+        boolean[] has = StaffBadge.painted(manager, LANYARD, full, new float[][]{MINI_FRAMES[1], MINI_FRAMES[2], MINI_FRAMES[3]});
+        graded = has[0];
+        gradedMini = has[1];
+        StaffBadge.check(manager);
     }
 
     public static ResourceLocation hatModel(String size) {
@@ -89,6 +110,8 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
                 }
                 pose.popPose();
             }
+            // 0.7.2 strikes: a striker's picket sign (and its straps), at the fit's sign frame
+            if (!collared) com.coolfreeze23.headinajar.client.StrikeClient.sign(pose, buffers, light, overlay, entity, model, look);
             if (look.colour >= 0 && StaffBadge.shown() && !collared) lanyard(pose, buffers, light, overlay, entity, model, fit, look, partialTick);
         }
         pose.popPose();
@@ -174,7 +197,14 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
         pose.mulPose(Axis.ZP.rotationDegrees(roll));
         pose.mulPose(Axis.XP.rotationDegrees(pitch));
         for (float[] b : l.strands()) box(v, pose.last(), b, tint, light, overlay);
-        badge(v, pose.last(), l.badgeAt(), l.mini(), tint, light, overlay);
+        int grade = WorkerNet.grade(look.bits);
+        // the sheet drawn from (the block badge's when the art's is not there) has the grades, or every grade is plain
+        boolean grades = artSheet ? graded : StaffBadge.graded;
+        boolean miniDrawn = l.mini() && artSheet;
+        badge(v, pose.last(), l.badgeAt(), l.mini(), grades && (!miniDrawn || gradedMini) ? grade : 0, tint, light, overlay);
+        if (grades && grade == Grades.TEAM_LEAD && l.tie() != null) tie(v, pose.last(), l.tie(), light, overlay);
+        // 0.7.2 strikes: the Union Rep's rosette beside the badge (the fit's hang frame; not on the fallback hang)
+        if (on) com.coolfreeze23.headinajar.client.StrikeClient.rosette(v, pose.last(), entity, look, light, overlay);
         pose.popPose();
         pose.popPose();
     }
@@ -211,7 +241,7 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
     }
 
     /** A cord box (px): every face a 1-texel column of the cord strip, lit or shaded, running along the box's long side. */
-    private static void box(VertexConsumer v, PoseStack.Pose m, float[] b, int argb, int light, int overlay) {
+    public static void box(VertexConsumer v, PoseStack.Pose m, float[] b, int argb, int light, int overlay) {
         float x0 = b[0] / 16, y0 = b[1] / 16, z0 = b[2] / 16, x1 = b[3] / 16, y1 = b[4] / 16, z1 = b[5] / 16;
         float[] cordUv = artSheet ? new float[]{CORD_LIT, CORD_SHADE} : new float[]{0, 0};
         // -y (up), +y (down), -z (north), +z (south), -x, +x
@@ -245,15 +275,27 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
     }
 
     /** The badge: its frame (untinted) and its face in the employer's colour a hair in front, facing -z, top centre at {@code at}. */
-    private static void badge(VertexConsumer v, PoseStack.Pose m, float[] at, boolean mini, int tint, int light, int overlay) {
+    private static void badge(VertexConsumer v, PoseStack.Pose m, float[] at, boolean mini, int grade, int tint, int light, int overlay) {
         boolean small = mini && artSheet;
         float w = small ? 3 : 5;
-        float[] frame = small ? MINI_FRAME : FRAME, face = small ? MINI_FACE : FACE;
+        // grade 0 (an Intern, or any grade on a sheet without them) is the plain frame
+        int g = Mth.clamp(grade, 0, 3);
+        float[] frame = small ? MINI_FRAMES[g] : StaffBadge.FRAMES[g], face = small ? MINI_FACE : FACE;
         float fx = small ? 1 : 1, fy = small ? 1 : 2, fw = small ? 1 : 3, fh = small ? 1 : 2;
         float s = (mini && !artSheet) ? 0.6f : 1;
         float x0 = at[0] - w * s / 2, y0 = at[1];
         quad(v, m, x0, y0, x0 + w * s, y0 + w * s, at[2], frame, 0xFFFFFFFF, light, overlay);
         quad(v, m, x0 + fx * s, y0 + fy * s, x0 + (fx + fw) * s, y0 + (fy + fh) * s, at[2] - 0.02f, face, tint, light, overlay);
+    }
+
+    /**
+     * A Team Lead's tie in the hang frame, untinted: the blade from its knot under the ring down {@code length} px (behind
+     * the card, or beside it where the card hangs low), and its broad end where the fit has room for it.
+     */
+    private static void tie(VertexConsumer v, PoseStack.Pose m, StaffFit.Tie tie, int light, int overlay) {
+        float[] a = tie.at(), t = tie.tip();
+        quad(v, m, a[0], a[1], a[0] + 1, a[1] + tie.length(), a[2], tie.bladeUv(), 0xFFFFFFFF, light, overlay);
+        if (t != null) quad(v, m, t[0], t[1], t[0] + 3, t[1] + 2, t[2], StaffBadge.TIE_TIP, 0xFFFFFFFF, light, overlay);
     }
 
     /** A quad facing -z in px: u grows with +x (the viewer's right), v with +y (down). */
@@ -271,7 +313,7 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
     }
 
     /** A head part a pose can dip: the fit's hat bone's last part, or the model's own head. */
-    static ModelPart head(EntityModel<?> model, StaffFit.Fit fit) {
+    public static ModelPart head(EntityModel<?> model, StaffFit.Fit fit) {
         if (model instanceof HeadedModel h) return h.getHead();
         if (fit != null && fit.hat() != null && fit.hat().frame() != null) {
             ModelPart[] chain = StaffFit.chain(model, fit.hat().frame().bone());

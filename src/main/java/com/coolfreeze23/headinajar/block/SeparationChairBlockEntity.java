@@ -392,6 +392,8 @@ public class SeparationChairBlockEntity extends BlockEntity implements MenuProvi
         changed();
         say(player, "start");
         voice("start", DoloresVoice.BOTH);
+        // a Promotion to the Board near by gives way to the operation
+        Operations.started(level, worldPosition);
         com.coolfreeze23.headinajar.Advance.grant(player, "signed");
         return true;
     }

@@ -97,11 +97,17 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
         return n;
     }
 
-    /** FE/t right now, before broth: each head's output, +10% at a Board Meeting. */
+    /**
+     * FE/t right now, before broth: each head's output, +10% at a Board Meeting. The first
+     * {@code staff.promotedArrayCap} heads promoted to the Board (in slot order) make {@code staff.promotedArrayBonus}
+     * percent of their species' rate, rounded; every other head exactly its rate. A promoted head is one head of five.
+     */
     public int potential() {
         boolean boardRoom = !items.getStackInSlot(SLOT_CORE).isEmpty();
         int sum = 0, working = 0;
         boolean dragon = false;
+        int promotedLeft = com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.PROMOTED_ARRAY_CAP, 3);
+        int bonus = com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.PROMOTED_ARRAY_BONUS, 150);
         for (int i = 0; i < HEAD_SLOTS; i++) {
             ItemStack head = items.getStackInSlot(i);
             if (head.isEmpty()) continue;
@@ -111,11 +117,22 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
                 dragon = true;
                 sum += boardRoom ? HeadJobs.DRAGON_HEAD : 0;
             } else {
-                sum += HeadJobs.arrayOutput(headInfo(i).type());
+                HeadInfo info = headInfo(i);
+                int rate = HeadJobs.arrayOutput(info.type());
+                if (info.promoted() && promotedLeft > 0) {
+                    promotedLeft--;
+                    rate = promotedRate(rate, bonus);
+                }
+                sum += rate;
             }
             working++;
         }
         return working >= MEETING ? Math.round(sum * 1.1f) : sum;
+    }
+
+    /** A promoted head's rate: its species' rate times the bonus in percent, rounded half up (cow 10 at 150: 15). */
+    public static int promotedRate(int rate, int bonusPercent) {
+        return Math.round(rate * bonusPercent / 100f);
     }
 
     /** Broth owed to the next draw (a fraction of a mB, from a cow head's saving; not saved). */
@@ -196,7 +213,10 @@ public class CerebralArrayBlockEntity extends LabMachine implements com.coolfree
     private void vote(Level level) {
         voteAt = -1;
         int ayes = Math.min(voteAyes, heads()), nays = heads() - ayes;
-        Component line = Component.translatable(carried(ayes, nays) ? "array.headinajar.vote" : "array.headinajar.vote_lost",
+        // 0.7.2: "unionise", honestly carried, walks out every site within 48 that already meets the strike test
+        boolean walkout = carried(ayes, nays) && "union".equals(MOTIONS[voteMotion]) && level instanceof net.minecraft.server.level.ServerLevel server
+                && com.coolfreeze23.headinajar.staff.Strikes.boardCarried(server, worldPosition, ayes, nays) > 0;
+        Component line = Component.translatable(walkout ? "array.headinajar.vote_walkout" : carried(ayes, nays) ? "array.headinajar.vote" : "array.headinajar.vote_lost",
                 Component.translatable("array.headinajar.motion." + MOTIONS[voteMotion]), ayes, nays);
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(32))) p.displayClientMessage(line, false);
         // the gavel's strike and the room's murmur

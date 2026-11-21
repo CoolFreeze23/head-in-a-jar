@@ -72,6 +72,11 @@ public final class WorkerLooks {
         long now = mob.level().getGameTime();
         if (m != null && now - m.hired < HIRE_TICKS) bits |= WorkerNet.HIRED;
         if (m != null && now - m.reading < READ_TICKS) bits |= WorkerNet.READING;
+        // 0.7.2: the grade on the badge, the picket sign and the Rep's rosette, a grievance
+        bits |= com.coolfreeze23.headinajar.staff.Grades.of(Staff.of(mob)) << WorkerNet.GRADE_SHIFT;
+        if (com.coolfreeze23.headinajar.staff.SiteState.striker.test(mob)) bits |= WorkerNet.PICKET;
+        if (com.coolfreeze23.headinajar.staff.SiteState.rep.test(mob)) bits |= WorkerNet.REP;
+        if (com.coolfreeze23.headinajar.staff.SiteState.grievance.test(mob)) bits |= WorkerNet.GRIEVANCE;
         return bits;
     }
 
@@ -113,6 +118,12 @@ public final class WorkerLooks {
         for (ServerPlayer p : level.players()) {
             if (p.distanceToSqr(mob) < range * range) send(mob, p);
         }
+    }
+
+    /** The look bits last sent for this worker (tests), or -1 when none has gone out. */
+    public static int sentBits(Mob mob) {
+        Moments m = MOMENTS.get(mob);
+        return m == null ? -1 : m.bits;
     }
 
     /** Just hired: the loop drops over its head. */

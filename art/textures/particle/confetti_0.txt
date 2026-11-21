@@ -1,0 +1,18 @@
+# confetti frame 0: face-on, lit: a 2x2 paper fleck. A paper fleck turning over as it falls (the client plays the frames 0 1 2 3 2 1 round, a
+# frame every 2 ticks, each fleck from its own frame); a light mask the code tints teal or gold. Paper, so drawn lit
+# by the world, not full bright.
+texture: particle/confetti_0.png
+size: 8x8
+key:
+  .  clear
+  W  enamel.5
+  e  enamel.3
+pixels:
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .
+. . W W . . . .
+. . W W . . . .
+. . . . . . . .
+. . . . . . . .
+. . . . . . . .

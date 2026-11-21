@@ -184,10 +184,12 @@
    "trigger": "sign() refused: no Collar Cam",
    "tick": null,
    "en": "Collar Cam required. Your neck needs a hat.",
-   "pt": "Câmera de Colarinho necessária. Seu pescoço precisa de um chapéu.",
+   "pt": "Câmera de Colar necessária. Seu pescoço precisa de um chapéu.",
    "alt": {
     "pt": [
-     "Falta a Câmera de Colarinho. Seu pescoço precisa de um chapéu."
+     "Falta a Câmera de Colar. Seu pescoço precisa de um chapéu.",
+     "Precisamos de uma Câmera de Colar. Seu pescoço precisa de um chapéu.",
+     "A Câmera de Colar é obrigatória. Seu pescoço precisa de um chapéu."
     ]
    }
   },
@@ -264,6 +266,27 @@
    "tick": null,
    "en": "Our colleague has been let go. Security will see them out.",
    "pt": "Nosso colega foi dispensado. A Segurança vai acompanhá-lo até a saída."
+  },
+  {
+   "id": "promotion_offer",
+   "key": "dolores.headinajar.promotion_offer",
+   "trigger": "Promotion to the Board, tick 0 of the ceremony, at the candidate (the screen line names it; the voice does not)",
+   "tick": null,
+   "en": "Your work has been exceptional. The company would like to offer you a seat on the Board.",
+   "pt": "Seu trabalho tem sido excepcional. A empresa gostaria de lhe oferecer uma cadeira no Conselho.",
+   "alt": {
+    "pt": [
+     "O seu trabalho tem sido excepcional. A empresa gostaria de lhe oferecer uma cadeira no Conselho."
+    ]
+   }
+  },
+  {
+   "id": "promotion_done",
+   "key": "dolores.headinajar.promotion_done",
+   "trigger": "Promotion to the Board, tick 145 of the ceremony, at the cut",
+   "tick": null,
+   "en": "Congratulations on your promotion.",
+   "pt": "Parabéns pela promoção."
   }
  ]
 }

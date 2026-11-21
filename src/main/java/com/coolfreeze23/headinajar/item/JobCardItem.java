@@ -8,6 +8,7 @@ import com.coolfreeze23.headinajar.registry.WorkRegistry;
 import com.coolfreeze23.headinajar.staff.StaffShake;
 import com.coolfreeze23.headinajar.staff.work.Order;
 import com.coolfreeze23.headinajar.staff.work.Sites;
+import com.coolfreeze23.headinajar.staff.work.WorkTable;
 import com.coolfreeze23.headinajar.staff.work.WorkerData;
 import com.coolfreeze23.headinajar.staff.work.WorkerLooks;
 import com.coolfreeze23.headinajar.staff.work.Workforce;
@@ -70,6 +71,9 @@ public class JobCardItem extends Item {
             return Refusals.deny(player, StaffShake.at(mob), "staff.not_yours", Workforce.name(mob), Workforce.employerName(mob));
         }
         if (d.state == WorkerData.State.NOTICE) return Refusals.deny(player, StaffShake.at(mob), "staff.already_let_go", Workforce.name(mob));
+        // 0.7.2: a striker takes no card, nor does a striking site
+        String strike = com.coolfreeze23.headinajar.staff.Strikes.cardRefusal(mob);
+        if (strike != null) return Refusals.deny(player, StaffShake.at(mob), strike);
         Order.Card card = Order.card(stack);
         if (card == null || card.order().clock().isEmpty()) return Refusals.deny(player, StaffShake.at(mob), "card.blank");
         GlobalPos site = card.order().clock().get();
@@ -136,6 +140,12 @@ public class JobCardItem extends Item {
             return;
         }
         describe(card.order(), lines);
+        // a 0.7.2 Sorting card with more than one filter on a Drop-Off
+        com.coolfreeze23.headinajar.staff.work.CardFilters extras = com.coolfreeze23.headinajar.staff.work.CardFilters.of(stack);
+        if (extras != null && extras.printed() && WorkTable.SORTING.equals(card.order().job())) {
+            int most = extras.most(card.order());
+            if (most > 1) lines.add(Component.translatable("tooltip.headinajar.job_card.filters", most).withStyle(ChatFormatting.GRAY));
+        }
         if (!card.printer().isEmpty()) {
             lines.add(Component.translatable("tooltip.headinajar.job_card.printed", card.printer(),
                     com.coolfreeze23.headinajar.staff.Staff.shown(card.day())).withStyle(ChatFormatting.DARK_GRAY));

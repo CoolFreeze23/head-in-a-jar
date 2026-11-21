@@ -219,6 +219,11 @@ public final class Detail {
             Refusals.deny(p, StaffShake.at(mob), "staff.already_let_go", Workforce.name(mob));
             return true;
         }
+        // 0.7.2: a striker answers to its rep
+        if (com.coolfreeze23.headinajar.staff.Strikes.clockOf(mob) != null) {
+            Refusals.deny(p, StaffShake.at(mob), "strike.striker");
+            return true;
+        }
         List<UUID> roll = prune(p, members(p));
         if (d.state == WorkerData.State.DETAIL && p.getUUID().equals(d.detail) && roll.contains(mob.getUUID())) {
             roll.remove(mob.getUUID());

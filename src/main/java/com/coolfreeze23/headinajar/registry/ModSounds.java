@@ -22,6 +22,8 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GENE_MUTATION = sound("gene_mutation");
     public static final DeferredHolder<SoundEvent, SoundEvent> ARRAY_MURMUR = sound("array_murmur");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAFF_COMPLAIN = sound("staff_complain");
+    /** 0.7.2: staff files a grievance (Form 66-G): a stamp and a sigh. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAFF_GRIEVANCE = sound("staff.grievance");
     /** The feedback family: one voice for "no", "done", "careful" and "get out". */
     public static final DeferredHolder<SoundEvent, SoundEvent> FEEDBACK_REFUSED = sound("feedback.refused");
     public static final DeferredHolder<SoundEvent, SoundEvent> FEEDBACK_DONE = sound("feedback.done");

@@ -232,8 +232,8 @@ public class SmokeClient {
         }
         String[] parts = line.split(" ", 2);
         // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
-        if (!java.util.Set.of("wait", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
-                "frames", "perf", "flip", "machdebug", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap", "station", "staffed", "chunkloads").contains(parts[0])) {
+        if (!java.util.Set.of("wait", "waitchant", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
+                "frames", "perf", "flip", "machdebug", "walk", "rightclick", "bystander", "bench", "legbench", "cmdout", "fpscap", "station", "staffed", "chunkloads").contains(parts[0])) {
             observer.setup(line);
         }
         switch (parts[0]) {
@@ -453,6 +453,18 @@ public class SmokeClient {
                 wait = 2;
             }
             case "wait" -> wait = Integer.parseInt(parts[1]);
+            case "waitchant" -> {
+                // waitchant X Y Z LEAD: waits until LEAD ticks before the next strike chant of the clock at X Y Z (a chant
+                // falls when the game time plus the clock's packed position is a multiple of Strikes.CHANT_TICKS)
+                String[] a = parts[1].trim().split(" +");
+                long packed = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2])).asLong();
+                long now = mc.getSingleplayerServer().overworld().getGameTime();
+                int period = com.coolfreeze23.headinajar.staff.Strikes.CHANT_TICKS, lead = Integer.parseInt(a[3]);
+                int until = (int) Math.floorMod(-(now + packed), (long) period) - lead;
+                if (until < 1) until += period;
+                wait = until;
+                report.add("waitchant -> " + until + " ticks");
+            }
             case "shot" -> {
                 Screenshot.grab(dir.toFile(), parts[1] + ".png", mc.getMainRenderTarget(), m -> {
                 });
@@ -553,6 +565,8 @@ public class SmokeClient {
                 report.add("clientcfg " + parts[1].trim() + " -> " + (value == null ? "unknown" : value.get()));
             }
             case "report" -> report.add(parts[1]);
+            // legbench N FRAMES: the Spider Walker's leg code timed on this client (LegBench.java)
+            case "legbench" -> report.add(LegBench.run(mc, parts.length > 1 ? parts[1].trim().split(" +") : new String[0]));
             // seatprobe ID,ID,...: renders each body with and without its head into a recorder and reports, in blocks from its
             // feet (facing +Z): where the head was (centre x/z, lowest y) and the top of the body under a jar placed there
             case "seatprobe" -> {
@@ -741,7 +755,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown", "secondee", "secondmentforwalk" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown", "secondee", "secondmentforwalk", "teamleadforpromotion", "gradeforstrike", "gradeforbadge", "tasksforreview", "stafffile", "strikeprobe", "gradeforcheck", "strikeforcheck", "grievanceforcheck" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -1146,6 +1160,192 @@ public class SmokeClient {
                             // (no command sets the server option staff.secondment); each such row puts it back on after itself
                             com.coolfreeze23.headinajar.Config.SECONDMENT.set(parts[1].trim().equals("on"));
                             report.add("secondmentforwalk -> " + com.coolfreeze23.headinajar.Config.SECONDMENT.get());
+                        }
+                        case "strikeprobe" -> {
+                            // strikeprobe X Y Z: reads (changes nothing) the strike at the clock there: its record, and for each
+                            // striker whether it is loaded, held by the strike (clockOf), standing in the ring, its state and status
+                            String[] a = parts[1].trim().split(" +");
+                            var pos = new net.minecraft.core.BlockPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]), Integer.parseInt(a[2]));
+                            if (!(player.serverLevel().getBlockEntity(pos) instanceof com.coolfreeze23.headinajar.block.TimeClockBlockEntity c)) {
+                                report.add("strikeprobe -> no clock");
+                            } else {
+                                StringBuilder out = new StringBuilder("strikeprobe -> active " + c.strike.active() + ", ring " + c.strike.ring().size() + ":");
+                                for (var id : c.strike.ring()) {
+                                    var e = player.serverLevel().getEntity(id);
+                                    if (!(e instanceof net.minecraft.world.entity.Mob m)) { out.append(" [unloaded]"); continue; }
+                                    var d = com.coolfreeze23.headinajar.staff.work.Workforce.data(m);
+                                    out.append(" [").append(m.getType().toShortString()).append(" held ").append(com.coolfreeze23.headinajar.staff.Strikes.clockOf(m) != null)
+                                            .append(" standing ").append(com.coolfreeze23.headinajar.staff.Strikes.standing(m))
+                                            .append(" slot ").append(com.coolfreeze23.headinajar.staff.Strikes.slotOf(m))
+                                            .append(" state ").append(d == null ? "-" : d.state).append(" status ").append(d == null ? "-" : d.status)
+                                            .append(" at ").append(m.blockPosition().toShortString()).append("]");
+                                }
+                                report.add(out.toString());
+                            }
+                        }
+                        case "stafffile" -> {
+                            // stafffile TYPE: reads (changes nothing) the staff file of the nearest creature whose type id
+                            // contains TYPE within 16: morale, low dawns, grade, tasks, the career's fields
+                            String t = parts[1].trim();
+                            var mobs = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(16),
+                                    m -> net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).toString().contains(t));
+                            mobs.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            var f = mobs.isEmpty() ? null : com.coolfreeze23.headinajar.staff.Staff.of(mobs.get(0));
+                            report.add("stafffile " + t + " -> " + (f == null ? "none" : "morale " + f.morale + ", lowDawns " + f.lowDawns + ", lastDawn " + f.lastDawn
+                                    + ", paidThrough " + f.paidThrough + ", tasks " + f.tasks + ", grade " + f.career.grade + ", grievance " + f.career.grievance + ", unpaidRun " + f.career.unpaidRun + ", cakeDay " + f.career.cakeDay
+                                    + ", worker " + com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mobs.get(0))));
+                        }
+                        case "tasksforreview" -> {
+                            // tasksforreview N: setup for the Review check (no press gives tasks): the nearest hired worker
+                            // within 8 gets N finished tasks, its grade untouched, so the Roster shows it due
+                            var workers = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(8),
+                                    com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                            workers.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            if (workers.isEmpty()) {
+                                report.add("tasksforreview -> no worker within 8");
+                            } else {
+                                var mob = workers.get(0);
+                                var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                f.tasks = Integer.parseInt(parts[1].trim());
+                                mob.setData(ModRegistry.STAFF, f);
+                                report.add("tasksforreview -> " + mob.getType().toShortString() + " tasks " + f.tasks + ", grade " + com.coolfreeze23.headinajar.staff.Grades.of(f)
+                                        + ", due " + com.coolfreeze23.headinajar.staff.Grades.due(f));
+                            }
+                        }
+                        case "gradeforstrike", "gradeforbadge" -> {
+                            // gradeforstrike N [R]: setup for the strike check (Interns never strike, and no press gives
+                            // tasks): every hired worker within R (default 16) gets grade N and that grade's tasks.
+                            // gradeforbadge N: setup for the badge board: the nearest hired worker within 8 only.
+                            // Each look is sent as a Review would send it.
+                            String[] a = parts[1].trim().split(" +");
+                            int grade = Integer.parseInt(a[0]);
+                            boolean one = parts[0].equals("gradeforbadge");
+                            double r = one ? 8 : a.length > 1 ? Double.parseDouble(a[1]) : 16;
+                            var workers = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(r),
+                                    com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                            workers.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            if (one && workers.size() > 1) workers = workers.subList(0, 1);
+                            StringBuilder out = new StringBuilder(parts[0] + " -> ");
+                            for (var mob : workers) {
+                                var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                f.career.grade = grade;
+                                f.tasks = Math.max(f.tasks, com.coolfreeze23.headinajar.staff.Grades.TASKS[grade]);
+                                mob.setData(ModRegistry.STAFF, f);
+                                com.coolfreeze23.headinajar.staff.work.WorkerLooks.changed(mob);
+                                out.append(mob.getType().toShortString()).append(' ').append(com.coolfreeze23.headinajar.staff.Grades.of(f)).append("; ");
+                            }
+                            report.add(workers.isEmpty() ? parts[0] + " -> no worker within " + r : out.toString());
+                        }
+                        case "teamleadforpromotion" -> {
+                            // teamleadforpromotion: setup for the promotion check (a Team Lead takes 1,000 tasks; no press
+                            // gives tasks): the nearest hired worker within 8 gets the Team Lead grade and 1,000 tasks, its
+                            // look sent as a Review would send it
+                            var workers = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(8),
+                                    com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                            workers.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            if (workers.isEmpty()) {
+                                report.add("teamleadforpromotion -> no worker within 8");
+                            } else {
+                                var mob = workers.get(0);
+                                var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                f.career.grade = com.coolfreeze23.headinajar.staff.Grades.TEAM_LEAD;
+                                f.tasks = Math.max(f.tasks, com.coolfreeze23.headinajar.staff.Grades.TASKS[com.coolfreeze23.headinajar.staff.Grades.TEAM_LEAD]);
+                                mob.setData(ModRegistry.STAFF, f);
+                                com.coolfreeze23.headinajar.staff.work.WorkerLooks.changed(mob);
+                                report.add("teamleadforpromotion -> " + mob.getType().toShortString() + " grade " + com.coolfreeze23.headinajar.staff.Grades.of(f));
+                            }
+                        }
+                        case "gradeforcheck" -> {
+                            // gradeforcheck G [R]: setup for the 0.7.2 client checks (no press gives tasks; a grade takes
+                            // 50 to 1,000 of them): every hired worker within R blocks (default 8) gets grade G (0-3) and
+                            // the tasks it takes, its look sent as a Review would send it
+                            String[] a = parts[1].trim().split(" ");
+                            int g = Math.max(0, Math.min(3, Integer.parseInt(a[0])));
+                            double r = a.length > 1 ? Double.parseDouble(a[1]) : 8;
+                            var workers = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(r),
+                                    com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                            for (var mob : workers) {
+                                var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                f.career.grade = g;
+                                f.tasks = Math.max(f.tasks, com.coolfreeze23.headinajar.staff.Grades.TASKS[g]);
+                                mob.setData(ModRegistry.STAFF, f);
+                                com.coolfreeze23.headinajar.staff.work.WorkerLooks.changed(mob);
+                            }
+                            report.add("gradeforcheck -> " + workers.size() + " worker(s) at grade " + g);
+                        }
+                        case "strikeforcheck" -> {
+                            // strikeforcheck [UNPAID] [R]: setup for the strike checks and the cost benches (a strike
+                            // otherwise needs a week of neglect and a dawn): the nearest Time Clock within R (default 24)
+                            // walks out now, as its dawn would start it; each of its staff first gets UNPAID dawns gone
+                            // unpaid (default 0), so the Rep's demands carry that back pay
+                            String[] a = parts.length > 1 ? parts[1].trim().split(" ") : new String[0];
+                            int unpaid = a.length > 0 && !a[0].isEmpty() ? Integer.parseInt(a[0]) : 0;
+                            int r = a.length > 1 ? Integer.parseInt(a[1]) : 24;
+                            com.coolfreeze23.headinajar.block.TimeClockBlockEntity clock = null;
+                            double best = Double.MAX_VALUE;
+                            var lvl = player.serverLevel();
+                            for (var bp : net.minecraft.core.BlockPos.betweenClosed(player.blockPosition().offset(-r, -6, -r), player.blockPosition().offset(r, 6, r))) {
+                                if (lvl.getBlockEntity(bp) instanceof com.coolfreeze23.headinajar.block.TimeClockBlockEntity c && bp.distSqr(player.blockPosition()) < best) {
+                                    best = bp.distSqr(player.blockPosition());
+                                    clock = c;
+                                }
+                            }
+                            if (clock == null) {
+                                report.add("strikeforcheck -> no Time Clock within " + r);
+                            } else {
+                                var workers = lvl.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new net.minecraft.world.phys.AABB(clock.getBlockPos()).inflate(48),
+                                        com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                                for (var mob : workers) {
+                                    var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                    if (unpaid > 0) f.career.unpaidRun = unpaid;
+                                    mob.setData(ModRegistry.STAFF, f);
+                                }
+                                boolean ok = com.coolfreeze23.headinajar.staff.Strikes.start(clock, "check");
+                                report.add("strikeforcheck -> " + (ok ? "on strike, ring " + clock.strike.ring().size() : "not started (fewer than two who strike)") + " at " + clock.getBlockPos().toShortString());
+                            }
+                        }
+                        case "grievanceforcheck" -> {
+                            // grievanceforcheck head|worker: setup for the Grievance checks (a grievance otherwise takes
+                            // two dawns under 15): the nearest plinth head (or hired worker) within 8 gets morale 5 and two
+                            // low dawns, then its own dawn hook files Form 66-G as a dawn would
+                            String what = parts.length > 1 ? parts[1].trim() : "head";
+                            var lvl = player.serverLevel();
+                            if (what.equals("worker")) {
+                                var workers = lvl.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(8),
+                                        com.coolfreeze23.headinajar.staff.work.Workforce::isWorker);
+                                workers.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                                if (workers.isEmpty()) {
+                                    report.add("grievanceforcheck -> no worker within 8");
+                                } else {
+                                    var mob = workers.get(0);
+                                    var f = com.coolfreeze23.headinajar.staff.Staff.of(mob);
+                                    f.morale = 5;
+                                    f.lowDawns = 2;
+                                    com.coolfreeze23.headinajar.staff.Grievances.dawn(mob, f);
+                                    report.add("grievanceforcheck -> " + mob.getType().toShortString() + " grievance " + com.coolfreeze23.headinajar.staff.Staff.of(mob).career.grievance);
+                                }
+                            } else {
+                                com.coolfreeze23.headinajar.block.JarredHeadBlockEntity head = null;
+                                double best = Double.MAX_VALUE;
+                                for (var bp : net.minecraft.core.BlockPos.betweenClosed(player.blockPosition().offset(-8, -4, -8), player.blockPosition().offset(8, 4, 8))) {
+                                    if (lvl.getBlockEntity(bp) instanceof com.coolfreeze23.headinajar.block.JarredHeadBlockEntity h && h.staff() != null && h.staff().staff()
+                                            && bp.distSqr(player.blockPosition()) < best) {
+                                        best = bp.distSqr(player.blockPosition());
+                                        head = h;
+                                    }
+                                }
+                                if (head == null) {
+                                    report.add("grievanceforcheck -> no staff head within 8");
+                                } else {
+                                    var f = head.staff();
+                                    f.morale = 5;
+                                    f.lowDawns = 2;
+                                    com.coolfreeze23.headinajar.staff.Grievances.dawn(head, f);
+                                    head.setStaff(f);
+                                    com.coolfreeze23.headinajar.staff.StaffBlocks.show(head, f);
+                                    report.add("grievanceforcheck -> head at " + head.getBlockPos().toShortString() + " grievance " + f.career.grievance);
+                                }
+                            }
                         }
                         case "secondee" -> {
                             // secondee canister|glass|teamsync N: setup (no press sets these) for the look's pictures of the

@@ -1,6 +1,7 @@
 package com.coolfreeze23.headinajar.client;
 
 import com.coolfreeze23.headinajar.mecha.Legs;
+import com.coolfreeze23.headinajar.mecha.ProceduralLegs;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,6 +105,54 @@ public final class LegBones {
             hip.setRotY((float) Math.atan2(-dx, -dz));
             leg.setRotX((float) a[0]);
             shin.setRotX((float) (a[1] - a[0]));
+        }
+    }
+
+    /** Where every pad is as the bones stand now (model px), into {@code out}; a leg the model lacks stays where it was. */
+    public static void feet(Legs.Spec spec, Function<String, GeoBone> bones, double[][] out) {
+        GeoBone body = bones.apply("body");
+        if (body == null) return;
+        Matrix3f rb = new Matrix3f().rotationZYX(body.getRotZ(), body.getRotY(), body.getRotX());
+        Vector3f bp = new Vector3f(-body.getPosX(), body.getPosY(), body.getPosZ());
+        for (int i = 0; i < spec.count(); i++) {
+            double[] f = foot(spec, i, bones, rb, bp);
+            if (f != null) System.arraycopy(f, 0, out[i], 0, 3);
+        }
+    }
+
+    /**
+     * The legs finding their own footing ({@link ProceduralLegs}), drawn over the clip by the state's weight: the body
+     * raised and leaned from its clip pose ({@code rawPitch}, {@code rawRoll}, {@code rawY}: the clip's own, before any
+     * ground code), and every leg solved, knee up, from its hip as the body now stands to its pad.
+     */
+    public static void stride(Legs.Spec spec, ProceduralLegs.State st, Function<String, GeoBone> bones, float rawPitch, float rawRoll, float rawY) {
+        float w = (float) st.weight;
+        GeoBone body = bones.apply("body");
+        if (w <= 0 || body == null) return;
+        body.setRotX(Mth.lerp(w, body.getRotX(), rawPitch + (float) st.offPitch * Mth.DEG_TO_RAD));
+        body.setRotZ(Mth.lerp(w, body.getRotZ(), rawRoll + (float) st.offRoll * Mth.DEG_TO_RAD));
+        body.setPosY(Mth.lerp(w, body.getPosY(), rawY + (float) st.offY));
+        Matrix3f back = new Matrix3f().rotationZYX(body.getRotZ(), body.getRotY(), body.getRotX()).transpose();
+        Vector3f bp = new Vector3f(-body.getPosX(), body.getPosY(), body.getPosZ());
+        for (int i = 0; i < spec.count(); i++) {
+            String name = spec.names()[i];
+            GeoBone hip = bones.apply("hip_" + name), leg = bones.apply("leg_" + name), shin = bones.apply("shin_" + name);
+            if (hip == null || leg == null || shin == null) continue;
+            double[] f = st.model[i];
+            Vector3f t = new Vector3f((float) f[0], (float) f[1], (float) f[2]);
+            // into the body's rest frame: undo its position and turn about its pivot
+            t.sub(bp).sub(0, (float) spec.bodyY(), 0);
+            back.transform(t);
+            t.add(0, (float) spec.bodyY(), 0);
+            double dx = t.x - spec.hipX()[i], dy = t.y - spec.bodyY(), dz = t.z - spec.hipZ()[i];
+            double r = Math.hypot(dx, dz);
+            // a pad out of reach is reached for with the knee still a little bent, not with a straight stick
+            double d = Math.hypot(r, dy), most = (spec.femur() + spec.tibia()) * ProceduralLegs.REACH;
+            double[] a = d > most ? Legs.solve(r * most / d, dy * most / d, spec.femur(), spec.tibia()) : Legs.solve(r, dy, spec.femur(), spec.tibia());
+            float yaw = r < 0.5 ? hip.getRotY() : (float) Math.atan2(-dx, -dz);
+            hip.setRotY(hip.getRotY() + Mth.wrapDegrees((yaw - hip.getRotY()) * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD * w);
+            leg.setRotX(Mth.lerp(w, leg.getRotX(), (float) a[0]));
+            shin.setRotX(Mth.lerp(w, shin.getRotX(), (float) (a[1] - a[0])));
         }
     }
 

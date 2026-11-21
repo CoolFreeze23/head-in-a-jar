@@ -375,7 +375,8 @@ public class SecondmentGameTests {
 
     // --- 19. the switch -----------------------------------------------------------------------------------------------
 
-    @GameTest(template = "platform", timeoutTicks = 120)
+    // its own batch: it holds staff.secondment off for 60 ticks, which no other test running alongside may see
+    @GameTest(template = "platform", timeoutTicks = 120, batch = "secondment_switch")
     public static void staffSecondmentOffRefusesTheCollar(GameTestHelper h) {
         ServerPlayer p = player(h);
         Mob seated = secondee(h, p, FLOOR.east(2));

@@ -1,0 +1,147 @@
+{
+  "textures": {
+    "slogan": "headinajar:block/picket/sign_0",
+    "particle": "headinajar:block/picket/sign_0",
+    "stick": "minecraft:block/stripped_spruce_log"
+  },
+  "elements": [
+    {
+      "name": "stick",
+      "from": [
+        7.5,
+        0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        20,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            0,
+            8,
+            20
+          ],
+          "texture": "#stick"
+        },
+        "south": {
+          "uv": [
+            7,
+            0,
+            8,
+            20
+          ],
+          "texture": "#stick"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            8,
+            20
+          ],
+          "texture": "#stick"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            8,
+            20
+          ],
+          "texture": "#stick"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            8,
+            8
+          ],
+          "texture": "#stick"
+        },
+        "down": {
+          "uv": [
+            7,
+            7,
+            8,
+            8
+          ],
+          "texture": "#stick"
+        }
+      }
+    },
+    {
+      "name": "board",
+      "from": [
+        2.0,
+        12,
+        6.5
+      ],
+      "to": [
+        14.0,
+        20,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0.3333333333333333,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.3333333333333333,
+            16
+          ],
+          "texture": "#slogan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ],
+          "texture": "#slogan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.5
+          ],
+          "texture": "#slogan"
+        }
+      }
+    }
+  ]
+}

@@ -42,7 +42,8 @@ CHOICE = {  # id: {lang: variant}
     'oopsie': {'en': 'main', 'pt': 'alt0'},
     'refuse_goggles': {'en': 'main', 'pt': 'alt0'},
     'refuse_saline': {'en': 'main', 'pt': 'alt0'},
-    'refuse_collar': {'en': 'main', 'pt': 'alt0'},
+    'refuse_collar': {'en': 'main', 'pt': 'alt2'},
+    'promotion_offer': {'en': 'main', 'pt': 'alt0'},  # the plain take loses its first sound ("Meu trabalho")
 }
 FIXED_OFFSET = {
     'done': 24,    # lets the level-up chime at 240 (vanilla, volume 0.6, 1.17 s heard) and the hand-over land first

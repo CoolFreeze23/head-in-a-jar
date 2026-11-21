@@ -25,6 +25,8 @@ FROM_HANDOFF = [
     'socket.relay_up', 'socket.relay_down', 'socket.channel_on', 'socket.channel_off', 'socket.metronome',
     'dock.lever', 'dock.unclack', 'dock.tap', 'rig.cancel', 'rig.fill', 'rig.drain', 'leech.bite',
     'module.arc_cannon', 'module.tesla_coil',
+    # the Spider Walker's pad thump (tools/snd/recipes_spider_walker.py), played by its legs as each pad lands
+    'mecha.spider_walker.pad',
 ]
 
 # A sound another event (the mod's or vanilla's) already makes, played under an event of its own whose subtitle names

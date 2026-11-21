@@ -1,8 +1,8 @@
 package com.coolfreeze23.headinajar.staff;
 
 /**
- * A member of staff's morale, as a word: Engaged 75 to 100, Content 40 to 74, Disengaged 15 to 39, and Grievance (a
- * label only in this release) for under 15 at two dawns running. A trophy has none. Sent to clients as its ordinal in a
+ * A member of staff's morale, as a word: Engaged 75 to 100, Content 40 to 74, Disengaged 15 to 39, and Grievance for
+ * under 15 at two dawns running (0.7.2: Form 66-G is filed, and the band holds until morale is back to 40). A trophy has none. Sent to clients as its ordinal in a
  * byte ({@code "Band"}), so the order is never changed.
  */
 public enum Band {
@@ -27,6 +27,8 @@ public enum Band {
         if (file == null) return NONE;
         if (!file.staff()) return TROPHY;
         if (!com.coolfreeze23.headinajar.Config.get(com.coolfreeze23.headinajar.Config.MORALE, true)) return CONTENT;
+        // 0.7.2: Form 66-G is open until morale is back to 40, whatever the number says meanwhile
+        if (file.career != null && file.career.grievance) return GRIEVANCE;
         return of(file.morale, file.lowDawns);
     }
 

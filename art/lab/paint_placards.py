@@ -1,4 +1,4 @@
-"""Safety Placard notices 12, 13, 14, 16, 18, 19 and 20, in English and Brazilian Portuguese, drawn the way the twelve are.
+"""Safety Placard notices 12 to 20, in English and Brazilian Portuguese, drawn the way the twelve are.
 
     python art/lab/paint_placards.py            # writes textures/placard/<lang>/notice_<n>.png for each
     python art/lab/paint_placards.py --check    # no writes: fails if a notice does not fit or a PNG differs
@@ -33,6 +33,10 @@ NOTICES = {
     20: {'en_us': 'STAFF ARE NOT LUNCH', 'pt_br': 'COLEGA NÃO É ALMOÇO'},   # pt: FUNCIONÁRIO is 45 texels, one more than
     # the field's 44, so "FUNCIONÁRIO NÃO É ALMOÇO" cannot set; COLEGA ("colleague") keeps the deadpan; hand break
     # COLEGA / NÃO É / ALMOÇO (the natural wrap splits NÃO from É)
+    15: {'en_us': 'STRIKES WILL BE MET WITH CAKE', 'pt_br': 'GREVES SERÃO RECEBIDAS COM BOLO'},   # both wrap by
+    # themselves in four lines, CAKE and COM BOLO last
+    17: {'en_us': 'CAKE RESOLVES MOST GRIEVANCES', 'pt_br': 'BOLO RESOLVE A MAIORIA DAS QUEIXAS'},   # pt: hand break
+    # BOLO / RESOLVE / A MAIORIA / DAS QUEIXAS (the natural wrap leaves the article at the end of a line: RESOLVE A)
 }
 
 
@@ -40,20 +44,7 @@ def screws(text, n, lang):
     """The lines that run into one of the board's four 3x3 corner screws (the field check does not look at them)."""
     P = placard_text
     lines = P.wrap(text, n, lang)
-    step = P.pitch(text)
-    lead = step - 6
-    block = lead + (len(lines) - 1) * step + 5
-    top = 8 + (P.H_TEX - 8 - block + 1) // 2
-    hit = []
-    for i, ln in enumerate(lines):
-        y1 = top + lead + i * step + 5
-        y0 = y1 - 5 - (2 if P.accented(ln) else 0)
-        x0 = P.FIELD[0] + (P.FIELD_W - P.width(ln)) // 2
-        x1 = x0 + P.width(ln) - 1
-        for sx, sy in ((1, 9), (P.W_TEX - 4, 9), (1, P.H_TEX - 4), (P.W_TEX - 4, P.H_TEX - 4)):
-            if not (x1 < sx or x0 > sx + 2 or y1 < sy or y0 > sy + 2):
-                hit.append(ln)
-    return hit
+    return [ln for ln, y in zip(lines, P.line_tops(text, n, lang)) if P._hits_screw([ln], [y])]
 
 
 def png(text, n, lang):

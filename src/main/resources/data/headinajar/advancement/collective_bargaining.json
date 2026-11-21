@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:industrial_action",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "collective_bargaining"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:emerald"
+    },
+    "title": {
+      "translate": "advancements.headinajar.collective_bargaining.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.collective_bargaining.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

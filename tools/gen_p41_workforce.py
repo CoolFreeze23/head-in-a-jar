@@ -547,7 +547,7 @@ ADVANCEMENTS = [  # (id, parent, icon, hidden, en title, en description, pt titl
     ('in_writing', 'clocking_in', 'headinajar:job_card', False, 'In Writing', 'Give a worker a Job Card', 'Por Escrito',
      'Entregue um Cartão de Tarefa a um funcionário'),
     ('away_day', 'clocking_in', 'headinajar:supervisors_whistle', False, 'Away Day', 'Take a detail of six out of their site',
-     'Dia de Integração', 'Leve uma equipe de seis para fora do local'),
+     'Passeio da Firma', 'Leve uma equipe de seis para fora do local'),
 ]
 
 # Action-bar lines with arguments: key -> lambda lang_index: [argument lists] (the longest real ones).
@@ -1041,7 +1041,7 @@ WORKFORCE_ENTRIES = [
           'Deixados longe, ou cinco minutos sem você, voltam ao relógio no transporte da firma. Nada é carregado '
           'para buscá-los.$(br2)O pote precisa de uma Grade de Alto-Falante para apitar.'),
      ],
-     'note': ('An away day is still a working day.', 'Dia de integração ainda é dia útil.')},
+     'note': ('An away day is still a working day.', 'Passeio da firma ainda é dia útil.')},
 
     {'cat': 'staffing', 'id': 'workforce_rules', 'sort': 17, 'icon': 'minecraft:clock',
      'en': 'Server Rules', 'pt': 'Regras do Servidor',

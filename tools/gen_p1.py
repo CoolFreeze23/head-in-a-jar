@@ -196,7 +196,7 @@ def add(EN, PT, write, shaped):
         ('dolores.headinajar.refuse.goggles', 'DOLORES: Relay Goggles required. You will want to see.',
          'DOLORES: Óculos Retransmissores necessários. Você vai querer enxergar.'),
         ('dolores.headinajar.refuse.collar', 'DOLORES: Collar Cam required. Your neck needs a hat.',
-         'DOLORES: Câmera de Colarinho necessária. Seu pescoço precisa de um chapéu.'),
+         'DOLORES: Câmera de Colar necessária. Seu pescoço precisa de um chapéu.'),
         ('dolores.headinajar.refuse.saline', 'DOLORES: Four bottles of Cranial Saline, please. Heads get thirsty.',
          'DOLORES: Quatro frascos de Soro Craniano, por favor. Cabeças sentem sede.'),
         ('dolores.headinajar.refuse.already', 'DOLORES: Our records show your head is already off.',

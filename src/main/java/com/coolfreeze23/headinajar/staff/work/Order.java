@@ -226,10 +226,16 @@ public record Order(Optional<GlobalPos> clock, String job, List<Stop> stops, Lis
      * clock's chunk is loaded). Null: none.
      */
     public static Card working(ServerLevel level, WorkerData d) {
-        if (!d.card.isEmpty()) return card(d.card);
+        ItemStack stack = workingStack(level, d);
+        return stack == null ? null : card(stack);
+    }
+
+    /** The Job Card item a worker is working ({@link #working}), or null. */
+    public static ItemStack workingStack(ServerLevel level, WorkerData d) {
+        if (!d.card.isEmpty()) return d.card;
         if (d.rackSlot < 0 || d.clock == null || !d.clock.dimension().equals(level.dimension()) || !level.isLoaded(d.clock.pos())) return null;
         if (!(level.getBlockEntity(d.clock.pos()) instanceof com.coolfreeze23.headinajar.block.TimeClockBlockEntity clock)) return null;
-        return card(clock.rack().getStackInSlot(d.rackSlot));
+        return clock.rack().getStackInSlot(d.rackSlot);
     }
 
     /** The job a worker is working, or null. */

@@ -552,8 +552,14 @@ public final class Shifts {
         long day = Staff.day(level);
         if (f.lastDawn >= day) return;
         f.lastDawn = day;
-        StaffTable.Wage wage = StaffTable.wage(com.coolfreeze23.headinajar.staff.second.Secondees.payType(mob));
+        StaffTable.Wage wage = com.coolfreeze23.headinajar.staff.Grades.wage(mob);
         boolean paid = f.paidThrough >= day || wage.none() || c.takeWage(wage);
+        // 0.7.2: dawns gone unpaid in a row (the strike test) and since the last review (the slip)
+        if (paid) f.career.unpaidRun = 0;
+        else {
+            f.career.unpaidRun++;
+            f.career.unpaidSinceReview++;
+        }
         if (paid) {
             f.paidThrough = Math.max(f.paidThrough, day);
             StaffBlocks.adjust(f, StaffBlocks.PAID);
@@ -568,6 +574,8 @@ public final class Shifts {
         if (spec != null && (spec.quirk("pleasant") || spec.quirk("nitwit"))) StaffBlocks.adjust(f, PLEASANT);
         f.lowDawns = f.morale < Band.DISENGAGED_AT ? f.lowDawns + 1 : 0;
         mob.setData(ModRegistry.STAFF, f);
+        // 0.7.2: under 15 two dawns running files Form 66-G
+        com.coolfreeze23.headinajar.staff.Grievances.dawn(mob, f);
         if (mob instanceof Villager v) v.restock();
     }
 
@@ -581,7 +589,7 @@ public final class Shifts {
     static boolean payLate(TimeClockBlockEntity c, Mob mob) {
         StaffFile f = Staff.of(mob);
         if (f == null || !(mob.level() instanceof ServerLevel level)) return false;
-        if (!c.takeWage(StaffTable.wage(com.coolfreeze23.headinajar.staff.second.Secondees.payType(mob)))) return false;
+        if (!c.takeWage(com.coolfreeze23.headinajar.staff.Grades.wage(mob))) return false;
         f.paidThrough = Staff.day(level);
         mob.setData(ModRegistry.STAFF, f);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ(), 5, 0.25, 0.2, 0.25, 0);
@@ -630,6 +638,11 @@ public final class Shifts {
         }
         if (d.state == WorkerData.State.NOTICE) {
             Refusals.deny(player, StaffShake.at(mob), "staff.already_let_go", Workforce.name(mob));
+            return;
+        }
+        // 0.7.2: a striker answers to its rep
+        if (com.coolfreeze23.headinajar.staff.Strikes.clockOf(mob) != null) {
+            Refusals.deny(player, StaffShake.at(mob), "strike.striker");
             return;
         }
         if (!d.card.isEmpty()) {

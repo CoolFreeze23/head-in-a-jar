@@ -1,0 +1,25 @@
+{
+  "name": "Grades and Reviews",
+  "icon": "headinajar:performance_review",
+  "category": "headinajar:staffing",
+  "sortnum": 19,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Staff climb by tasks: $(l)Intern$(), $(l)Associate$() at 50, $(l)Senior Associate$() at 300, $(l)Team Lead$() at 1,000. A grade takes effect at a $(l)Performance Review$(), never by itself."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When the tasks are there, the Roster says \"Review due\". Press $(l)Review$() on its line with Paper in your inventory: one sheet becomes the slip, and the grade jumps to the highest the tasks earn.$(br2)+5 morale, once a day."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Associate: 10%% faster, 3 filters a stop$(br)Senior: 20%% faster, 6 filters, carries half again$(br)Team Lead: 30%% faster, 9 filters, carries half again, two wages a dawn, a tie; staff within 8 blocks work 10%% faster",
+      "title": "Form 50-G: Grades"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The slip: tasks since the last review, days unpaid, grievances, strengths, areas for growth, a rating. A Grievance since the last review means a Performance Plan, whatever else it did.$(br2)Interns never strike.$(br2)$(o)Areas for growth: hands.$()"
+    }
+  ]
+}

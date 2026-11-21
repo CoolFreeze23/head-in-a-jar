@@ -11380,6 +11380,33 @@
       "clip_keys": "sample, timeline instruction \"leech:bite;\" at 0.3 s (key 6): not a sound key; play leech.bite from the instruction handler",
       "needs_patient_muffled_version": false,
       "how_to_play": "Leech Jar clip sample at 0.3 s (key 6, the instruction leech:bite), at the nozzle, volume 1.0: the tsk at 3 ms, gone in about 0.1 s. The server plays vanilla hurt and honey-drink sounds on the same tick; this is the nip under them."
+    },
+    {
+      "id": "headinajar:mecha.spider_walker.pad",
+      "files": [
+        "headinajar:mecha/spider_walker/pad_1",
+        "headinajar:mecha/spider_walker/pad_2",
+        "headinajar:mecha/spider_walker/pad_3",
+        "headinajar:mecha/spider_walker/pad_4",
+        "headinajar:mecha/spider_walker/pad_5"
+      ],
+      "volume": 1.0,
+      "pitch": [
+        0.94,
+        1.06
+      ],
+      "attenuation": 12,
+      "fixed_range": false,
+      "category": "NEUTRAL",
+      "loudness_class": "medium step (a heavy metal leg landing; 2 under the mecha step: eight feet) (M max target -29.0)",
+      "hit_ms": 3,
+      "contact_offset_ticks": 0,
+      "subtitle": {
+        "en_us": "Spider Walker steps",
+        "pt_br": "Andador Aranha pisa"
+      },
+      "needs_patient_muffled_version": false,
+      "how_to_play": "Client, by the legs that find their own footing: at each pad the moment it lands, at the pad. Random take, pitch 0.94-1.06 (x 1.12 on a wall's face, a lighter tap), volume 0.85-1.0; under water volume x 0.5 and pitch x 0.75. The block's own step sound (on a wall its hit sound) over it at volume 0.08, pitch x 1.6."
     }
   ]
 }

@@ -1,0 +1,48 @@
+# Spider Walker legs, frame cost: run exclusive (GAME_EXCLUSIVE=1) on the old build and the new one, interleaved.
+# Riding one Spider Walker round in circles (flat out, turning) with seven parked ones in view, uncapped, three
+# 15-second windows; then (new build only) the leg code itself timed for 8, 16 and 32 walkers.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+/summon headinajar:spider_walker -6 -60 8 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker -3 -60 9 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 0 -60 10 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 3 -60 9 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 6 -60 8 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker -4 -60 13 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 4 -60 13 {Rotation:[0f,0f]}
+/summon headinajar:spider_walker 0.5 -60 0.5 {Rotation:[0f,0f]}
+/tp @s 0.5 -60 -2 0 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 -0.6 0 -20
+wait 5
+lookat headinajar:spider_walker
+view 1
+key use
+wait 40
+riding spider
+look 0 15
+fpscap 260 vsync 0
+wait 100
+key forward down
+bench start ride1
+turn 600 0 300
+bench stop
+bench start ride2
+turn 600 0 300
+bench stop
+bench start ride3
+turn 600 0 300
+bench stop
+key forward up
+wait 20
+legbench 8 600
+legbench 16 600
+legbench 32 300
+report done

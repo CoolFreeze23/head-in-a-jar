@@ -9,7 +9,9 @@ import com.coolfreeze23.headinajar.host.HostEvents;
 import com.coolfreeze23.headinajar.menu.ClipboardMenu;
 import com.coolfreeze23.headinajar.registry.WorkRegistry;
 import com.coolfreeze23.headinajar.staff.Staff;
+import com.coolfreeze23.headinajar.staff.Grades;
 import com.coolfreeze23.headinajar.staff.StaffShake;
+import com.coolfreeze23.headinajar.staff.work.CardFilters;
 import com.coolfreeze23.headinajar.staff.work.Order;
 import com.coolfreeze23.headinajar.staff.work.Sites;
 import com.coolfreeze23.headinajar.staff.work.WorkSounds;
@@ -74,6 +76,7 @@ public class ClipboardItem extends Item {
     /** Changes the order on a Clipboard. */
     public static void edit(ItemStack board, UnaryOperator<Order> change) {
         board.set(WorkRegistry.ORDER.get(), change.apply(Order.of(board)));
+        CardFilters.tidy(board);
     }
 
     /** The state of the order's site for its screen ({@code ClipboardMenu.UNBOUND} ...). Never loads a chunk. */
@@ -117,6 +120,7 @@ public class ClipboardItem extends Item {
             List<Order.Stop> l = new ArrayList<>(o.stops());
             l.remove(stop);
             board.set(WorkRegistry.ORDER.get(), o.withStops(l));
+            CardFilters.tidy(board);
             return said(player, level, pos, "message.headinajar.clipboard.unmarked");
         }
         Order.Area area = o.areaAt(pos);
@@ -172,6 +176,7 @@ public class ClipboardItem extends Item {
         // a new site: the old site's marks mean nothing here
         if (o.clock().isEmpty() || !o.clock().get().equals(site)) o = Order.EMPTY.withJob(o.job()).withName(o.name()).withClock(site);
         board.set(WorkRegistry.ORDER.get(), o);
+        CardFilters.tidy(board);
         player.displayClientMessage(Component.translatable("message.headinajar.clipboard.bound"), true);
         scribble((ServerLevel) clock.getLevel(), clock.getBlockPos());
         return true;
@@ -210,7 +215,9 @@ public class ClipboardItem extends Item {
     /**
      * Print: one Paper from the inventory becomes a Job Card of the order. Refused unbound, for a closed site, with
      * nothing a job needs marked (Hauling and Sorting: a Pick-Up and a Drop-Off, Sorting only one Pick-Up; Farming: a
-     * field and a Drop-Off for the harvest; Security may patrol the whole site with nothing marked), or with no paper.
+     * field and a Drop-Off for the harvest; Security may patrol the whole site with nothing marked), for a Sorting order
+     * whose most filters on a Drop-Off need a grade nobody on the site's roster has (when its clock is loaded), or with no
+     * paper. Every card printed carries {@code headinajar:filters} at version 1 (a Sorting order's extras with it).
      */
     public static boolean print(ServerPlayer player, ItemStack board) {
         Order o = Order.of(board);
@@ -232,6 +239,14 @@ public class ClipboardItem extends Item {
             default -> {
             }
         }
+        // Sorting's extra filters: the grade they need must be on the site's roster, if anyone can tell (the clock is loaded)
+        boolean sorting = o.job().equals(WorkTable.SORTING);
+        CardFilters extras = sorting ? CardFilters.onBoard(board).kept(o) : CardFilters.NONE;
+        int most = extras.most(o), need = CardFilters.gradeFor(most);
+        if (need > Grades.INTERN) {
+            TimeClockBlockEntity clock = Sites.clock(player.serverLevel(), o.clock().get());
+            if (clock != null && !CardFilters.staffed(clock, need)) return Refusals.deny(player, "print.grade", Grades.name(need), String.valueOf(most));
+        }
         if (!player.getAbilities().instabuild) {
             int slot = -1;
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -245,6 +260,8 @@ public class ClipboardItem extends Item {
         }
         ItemStack card = new ItemStack(WorkRegistry.JOB_CARD.get());
         card.set(WorkRegistry.JOB_CARD_DATA.get(), new Order.Card(o.withCorner(null), player.getGameProfile().getName(), Staff.day(player.serverLevel())));
+        // printed from 0.7.2: read by grade, extras or none
+        card.set(WorkRegistry.FILTERS.get(), extras.stamped());
         if (!player.getInventory().add(card)) player.drop(card, false);
         player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), WorkSounds.CARD_PRINTED.get(), SoundSource.PLAYERS, 1, 1);
         player.displayClientMessage(Component.translatable(player.getAbilities().instabuild ? "message.headinajar.clipboard.printed_free" : "message.headinajar.clipboard.printed"), true);
@@ -278,6 +295,8 @@ public class ClipboardItem extends Item {
         }
         if (d.state == WorkerData.State.NOTICE) return Refusals.deny(player, StaffShake.at(mob), "staff.already_let_go", Workforce.name(mob));
         if (d.state == WorkerData.State.DETAIL) return Refusals.deny(player, StaffShake.at(mob), "clipboard.on_detail", Workforce.name(mob));
+        // 0.7.2: a striker stays on the picket line (as the card, the Whistle, Recall and Let go)
+        if (com.coolfreeze23.headinajar.staff.Strikes.clockOf(mob) != null) return Refusals.deny(player, StaffShake.at(mob), "strike.striker");
         Order o = Order.of(board);
         if (o.clock().isEmpty()) return Refusals.deny(player, StaffShake.at(mob), "clipboard.unbound");
         GlobalPos site = o.clock().get();
@@ -291,6 +310,8 @@ public class ClipboardItem extends Item {
             return Refusals.deny(player, StaffShake.at(mob), "clipboard.not_their_site", clock.ownerName(), Workforce.name(mob), Workforce.employerName(mob));
         }
         if (site.equals(d.clock) && clock.has(mob.getUUID())) return Refusals.deny(player, StaffShake.at(mob), "clipboard.already_here", Workforce.name(mob));
+        // 0.7.2: a striking site takes nobody new (checked before the worker leaves its old site)
+        if (clock.strike.active()) return Refusals.deny(player, Refuser.at(clock), "strike.hire");
         if (clock.room() <= 0) return Refusals.deny(player, Refuser.at(clock), "clock.full", Config.get(Config.MAX_PER_CLOCK, 8));
         // off the old site: its task ends, a card of the old site's goes back to that rack (or to whoever assigns it)
         Jobs.end(mob, d);

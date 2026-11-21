@@ -45,7 +45,7 @@ public class FxParticle extends TextureSheetParticle {
     private boolean fade = true;
     private int fixedFrame = -1;
     /** Drawn full bright whatever its kind (a flame's body), and the colour it turns to over its life (-1: none). */
-    private boolean bright;
+    private boolean bright, lit;
     private int fromColor = -1, toColor = -1;
 
     protected FxParticle(ClientLevel level, double x, double y, double z, double vx, double vy, double vz, Look kind) {
@@ -137,6 +137,12 @@ public class FxParticle extends TextureSheetParticle {
     /** Full bright, whatever the sheet (a flame's core glows; its smoke does not). */
     public FxParticle bright() {
         bright = true;
+        return this;
+    }
+
+    /** Lit by the world, whatever the sheet (paper is not a light: the Promotion's confetti on the mote sprite). */
+    public FxParticle lit() {
+        lit = true;
         return this;
     }
 
@@ -252,7 +258,7 @@ public class FxParticle extends TextureSheetParticle {
 
     @Override
     protected int getLightColor(float partialTick) {
-        return kind.emissive || bright ? 0xF000F0 : super.getLightColor(partialTick);
+        return (kind.emissive && !lit) || bright ? 0xF000F0 : super.getLightColor(partialTick);
     }
 
     @Override

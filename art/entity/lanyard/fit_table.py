@@ -24,6 +24,22 @@ Badges are 'full' (rel60's 5 x 5) or 'mini' (3 x 3) for creatures under 5 px acr
 The hat: the baked size that fits the head (hard_hat_geo.SIZES), its brim's underside centre at `at`; by default the
 dome's top clears the head's top by 1 px: at = (cx, top + dome height, cz).
 The crate: the baked crate's underside centre at `at`; or a vanilla way to carry; or None (does not haul).
+
+0.7.2 adds three optional keys (older readers ignore them; see moments() below):
+- `lanyard.hang.tie`: the Team Lead's tie, flat quads facing -z in the hang frame: the blade `at` its top-left (px),
+  1 px wide and `length` px long, from its knot just under the cord down behind the badge; and its broad end `tip`
+  (the top-left of a 3 x 2 quad), just under the card, or, where the strands are long, under the blade above the
+  card. Left out (no `tie` key) where the card hangs too near the ground for the broad end to show under it: those
+  species' Team Leads show by the gold card alone.
+- `lanyard.hang.rosette`: the Union Rep's rosette, a flat 3 x 5 quad facing -z in the hang frame: `at` its top-left;
+  beside the badge (on the creature's left of it), a pixel below the card's top.
+- `sign`: the picket sign. `held`: the baked `picket_sign_<n>` (stick and board) at a frame on the arm, with the arm's
+  pose while it holds it (`pose.rot`, degrees, ZYX like a model part, in place of the part's own rotation), the stick
+  upright in that pose; parts that keep their own pose (crossed arms, a snow golem's stick arm) have no `pose`.
+  `strapped`: the baked `picket_board_<n>` or, on small creatures, `picket_card_<n>`, standing across the back with
+  its faces to the front and the back (a striker in the ring faces the clock, so the crowd outside reads its back face;
+  edge-on to the front, a board along the spine read as a horn), and `straps`: lanyard-cord boxes (px, y down) round
+  the back either side of the board's foot, in their own frame.
 """
 import json
 import math
@@ -36,6 +52,7 @@ ROOT = os.path.normpath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(ROOT, 'art', 'item', 'hard_hat'))
 from vanilla_bones import BONES  # noqa: E402
+from vanilla_backs import BACKS, ARMS  # noqa: E402
 import hard_hat_geo  # noqa: E402
 
 OUT = os.path.join(ROOT, 'src', 'main', 'resources', 'assets', 'headinajar', 'staff_fit')
@@ -45,7 +62,7 @@ FORMAT = 1
 # 'fields': the first part is a Java field of the model class (Mojang names; the rest of the path is getChild below it)
 # 'root': HierarchicalModel.root() is the baked root (the whole path is getChild below it)
 # 'root_child': HierarchicalModel.root() is the baked root's child "root" (the path below it drops "root/")
-HUMANOID = ('fields', {'head': 'head', 'body': 'body'})
+HUMANOID = ('fields', {'head': 'head', 'body': 'body', 'right_arm': 'rightArm'})
 QUAD = ('fields', {'head': 'head', 'body': 'body'})
 ACCESS = {
     'allay': ('root_child', 'AllayModel'), 'armadillo': ('root', 'ArmadilloModel'),
@@ -421,6 +438,173 @@ def table():
     return F
 
 
+# ---------------------------------------------------------------- 0.7.2: the tie, the rosette, the picket sign
+GROUND = 23.5          # model y (px, y down) a hanging piece's lowest point may reach: half a pixel above the feet
+TIE_Z = -0.25          # the tie lies against the chest, behind the badge (-0.51), level with the strands
+SIGN_POSE = {          # the holding arm's pose (degrees), its grip (px from the arm's far end), the stick's foot below
+    'humanoid': ((-105, 0, 0), 2, 2),     # raised just above level: the board clears the head
+    'enderman': ((-100, 0, 0), 2, 2),     # the long arms reach further, so a little lower
+    'iron_golem': ((-100, 0, 0), 2, 2),
+}
+CROSSED = ('villager', 'wandering_trader', 'witch', 'vindicator', 'pillager', 'evoker', 'illusioner')
+NO_SIGN = {'wolf', 'allay'}     # wolves never strike; nothing on an allay's 3 x 5 body takes a card (it chants without one)
+
+
+def _m(at, rot=(0, 0, 0)):
+    return _mul(_t(*at), _rot(rot))
+
+
+def _apply(m, v):
+    return [sum(m[i][k] * v[k] for k in range(3)) + m[i][3] for i in range(3)]
+
+
+def _chain(chain):
+    m = _t(0, 0, 0)
+    for x, y, z, rx, ry, rz in chain:
+        m = _mul(m, _mul(_t(x, y, z), _rot((rx, ry, rz))))
+    return m
+
+
+def hang_matrix(lan):
+    """The hang frame in model space at rest."""
+    h = lan['hang']
+    return _mul(_m(lan['_model']['at'], (lan['_model']['tilt'], 0, 0)), _m(h['pivot'], h['rot']))
+
+
+def tie_and_rosette(lan):
+    """The tie and the rosette in the hang frame (see the module's notes), kept clear of the ground."""
+    h = lan['hang']
+    full = h['badge']['size'] == 'full'
+    top = h['badge']['at'][1]                      # the card's top (drop - 1)
+    bottom = top + (5 if full else 3)
+    z = h['badge']['at'][2]
+    M = hang_matrix(lan)
+
+    def low(y0, y1, x0, x1, zz):
+        return max(_apply(M, (x, y, zz))[1] for x in (x0, x1) for y in (y0, y1))
+    # the tie: the knot just under the cord, the blade down behind the card and its broad end just under it; on
+    # strands of 5 px or more it hangs whole above the card (the knot, a 2 px blade, the broad end)
+    if top >= 5:
+        length, tip_y = 3, 3
+    else:
+        length, tip_y = bottom, bottom
+    tie = None
+    if low(tip_y, tip_y + 2, -1.5, 1.5, TIE_Z) <= GROUND:
+        # the blade from the knot under the cord down behind the card, the broad end touching the card's foot (or, on
+        # long strands, the blade's): it touches the cord and the card, and nothing of it hangs in the air
+        tie = {'at': _r([-0.5, 0, TIE_Z]), 'length': length, 'tip': _r([-1.5, tip_y, TIE_Z])}
+        if top < 1:
+            # the card's top covers the blade's knot: the knot is drawn on the cord itself, in front of it, so the tie
+            # shows its knot at the cord and its broad end under the card (round 4: the end alone read as a drip)
+            tie['knot'] = _r([-0.5, -1, -CORD - 0.05])
+    # else no tie: the card hangs too near the ground for the broad end to show under it, and a tie beside the card
+    # (tried) touched neither the card nor the cord (round 3: "sticks out sideways into the air")
+    # the rosette, beside the card on the creature's left, a pixel below its top; lifted (up to 3 px) if its tails
+    # would reach the ground
+    if not full:
+        # a 3 x 5 rosette beside a 3 x 3 card stood taller than the card, off it into the air or into the chest (round
+        # 4, the fox and the turtle): small badges carry none
+        return tie, None
+    x0 = 2.5
+    y0 = top + 1
+    while y0 > top - 3 and low(y0, y0 + 5, x0, x0 + 3, z) > GROUND:
+        y0 -= 1
+    return tie, {'at': _r([x0, y0, z])}
+
+
+def _frame(species, path, m, foot_model):
+    """A frame on the part whose model-space matrix is m: at the stick's foot, upright in model space."""
+    local = _mul(_inv(m), _t(*foot_model))
+    return {'bone': bone_ref(species, path), 'at': _r([local[0][3], local[1][3], local[2][3]]),
+            'rot': _r(_euler(local), 2)}
+
+
+def _held(species):
+    """Held in the hand of an arm the strike poses: the arm's chain with `pose` in place of its own rotation."""
+    path, chain, (o, size) = ARMS[species]
+    pose, grip, foot = SIGN_POSE.get(species, SIGN_POSE['humanoid'])
+    # the hand: the middle of the arm's cube, `grip` px from its far end (an arm hangs along +y)
+    hand = (o[0] + size[0] / 2, o[1] + size[1] - grip, o[2] + size[2] / 2)
+    m = _chain(chain[:-1] + [chain[-1][:3] + list(pose)])
+    h = _apply(m, hand)
+    out = {'mode': 'held', 'model': 'sign'}
+    out.update(_frame(species, path, m, (h[0], h[1] + foot, h[2])))
+    out['pose'] = {'bone': bone_ref(species, path), 'rot': _r(list(pose), 2)}
+    return out
+
+
+def _held_static(species, path, chain, grip_local):
+    """Held by a part that keeps its own pose: the stick's foot at `grip_local` in the part's space, upright."""
+    m = _chain(chain)
+    out = {'mode': 'held', 'model': 'sign'}
+    out.update(_frame(species, path, m, _apply(m, grip_local)))
+    return out
+
+
+def _straps(x0, y0, x1, y1, zs, ground):
+    """A ring of cord round a box section (px, relative to the sign's foot), 1 px wide along z at zs..zs+1; no run
+    underneath where the box stands on the ground."""
+    t = CORD
+    out = [[x0 - t, y0 - t, zs, x1 + t, y0, zs + 1], [x0 - t, y0, zs, x0, y1, zs + 1], [x1, y0, zs, x1 + t, y1, zs + 1]]
+    if not ground:
+        out.append([x0 - t, y1, zs, x1 + t, y1 + t, zs + 1])
+    return out
+
+
+def _strapped(species):
+    path, (x0, y0, z0, x1, y1, z1) = BACKS[species]
+    if species == 'goat':                           # straps round the body, not the shaggy chest below it
+        x0, y0, z0, x1, y1, z1 = -4, 7, -7, 5, 18, 9
+    g = 1.75 if species == 'sheep' else 0.0         # the sheep's wool stands 1.75 px off its body
+    x0, y0, z0, x1, y1, z1 = x0 - g, y0 - g, z0 - g, x1 + g, y1 + g, z1 + g
+    if species in ('slime', 'magma_cube'):          # the whole cube, not the inner core or one slice
+        x0, y0, z0, x1, y1, z1 = -4, 16, -4, 4, 24, 4
+    if species == 'camel':                          # on top of the hump (y -13 to -8 over z -6 to 5), straps round both
+        y0 = -13
+    big = (z1 - z0) >= 12 and (x1 - x0) >= 8 and species != 'dolphin'   # the dolphin's fin is mid-back
+    cx, cz = (x0 + x1) / 2, {'camel': -0.5, 'dolphin': 4.5}.get(species, (z0 + z1) / 2)
+    at = (cx, y0, cz)
+    a, r = placement(species, path, at, (0, 0, 0))
+    sa, sr = a, r
+    cord = []
+    for zs in (-2, 1):          # a strap a pixel in front of the board's foot and one behind it
+        cord += _straps(x0 - cx, 0, x1 - cx, y1 - y0, zs, y1 >= GROUND)
+    return {'mode': 'strapped', 'model': 'board' if big else 'card', 'bone': bone_ref(species, path), 'at': a, 'rot': r,
+            'straps': {'bone': bone_ref(species, path), 'at': sa, 'rot': sr, 'cord': [_r(b) for b in cord]}}
+
+
+def sign(species):
+    if species in NO_SIGN:
+        return None
+    if species == 'snow_golem':
+        path, chain, (o, size) = ARMS[species]
+        # the stick arm's tip (the arm runs along its own +x), the stick's foot there
+        return _held_static(species, path, chain, (o[0] + size[0] - 1.5, o[1] + 1, o[2] + 1))
+    if species in ARMS:
+        return _held(species)
+    if species in CROSSED:
+        # gripped in the crossed arms: the stick's foot inside the right forearm near its top, so the stick rises out
+        # of the folded arms beside the head and the board clears the head
+        return _held_static(species, 'arms', [BONES[species]['arms'][0]], (-6, 0, -1))
+    if species in BACKS:
+        return _strapped(species)
+    return None
+
+
+def moments(species, fit, out):
+    """The 0.7.2 keys on a species file."""
+    if out.get('lanyard') is not None:
+        tie, rosette = tie_and_rosette(fit['lanyard'])
+        if tie is not None:
+            out['lanyard']['hang']['tie'] = tie
+        if rosette is not None:
+            out['lanyard']['hang']['rosette'] = rosette
+    sg = sign(species)
+    if sg is not None:
+        out['sign'] = sg
+    return out
+
+
 def species_file(species, fit):
     kind, model = ACCESS[species]
     out = {'format': FORMAT, 'entity': 'minecraft:' + species, 'model': model}
@@ -430,7 +614,7 @@ def species_file(species, fit):
     out['crate'] = fit['crate']
     if fit.get('render'):
         out['render'] = fit['render']
-    return out
+    return moments(species, fit, out)
 
 
 def files():

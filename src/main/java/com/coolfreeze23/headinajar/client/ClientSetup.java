@@ -56,6 +56,8 @@ public class ClientSetup {
         PlinthBowl.init(modBus);
         // the workforce (0.7.0): item looks, screens, layers
         com.coolfreeze23.headinajar.client.staff.WorkClient.init(modBus);
+        // strikes (0.7.2): the fit's sign and rosette keys and the picket sign models
+        StrikeClient.init(modBus);
         NeoForge.EVENT_BUS.addListener(HeadSpeech::render);
         NeoForge.EVENT_BUS.addListener(HeadSpeech::loggedOut);
         NeoForge.EVENT_BUS.addListener(RestBake::onFrame);

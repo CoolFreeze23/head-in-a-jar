@@ -353,13 +353,27 @@ public class ShellEntity extends PathfinderMob implements software.bernie.geckol
         double pace = 0;
         for (double s : recent) pace = Math.max(pace, s);
         if (pace >= CRASH_SPEED && speed < pace * 0.5 && crashCooldown == 0 && getFirstPassenger() instanceof ServerPlayer pilot
-                && (horizontalCollision || !level().noCollision(this, getBoundingBox().move(lastMove.normalize().scale(0.25))))) {
+                && hitWall()) {
             crash(pilot);
         }
         lastSpeed = speed;
         recent[recentAt++ % recent.length] = speed;
         if (speed > 1e-3) lastMove = moved;
         lastPos = position();
+    }
+
+    /**
+     * Whether what stopped it is a wall it truly ran into: something solid just ahead that it can neither step up (its
+     * step height, with room over it) nor, for the Spider Walker, climb (room above it to go up the face). A stair or a
+     * kerb is stepped and a climbable wall is climbed, so neither is a crash.
+     */
+    boolean hitWall() {
+        Vec3 ahead = lastMove.lengthSqr() < 1e-6 ? Vec3.ZERO : lastMove.normalize().scale(0.25);
+        net.minecraft.world.phys.AABB box = getBoundingBox();
+        if (!horizontalCollision && level().noCollision(this, box.move(ahead))) return false;
+        net.minecraft.world.phys.AABB up = box.move(0, maxUpStep(), 0);
+        if (level().noCollision(this, up) && level().noCollision(this, up.move(ahead))) return false;
+        return !(kind == Kind.SPIDER_WALKER && level().noCollision(this, box.move(0, 1, 0)));
     }
 
     /** The spit lands: the cobweb where it was aimed, if that spot is still free air (it melts after 10 seconds). */

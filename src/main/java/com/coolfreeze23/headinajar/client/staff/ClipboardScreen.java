@@ -42,6 +42,8 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
     private static final int SITE_Y = 18, JOB_Y = 38, JOB_W = 94, JOB_H = 13, DESC_Y = 69, AREAS_Y = 90, NAME_Y = 142, NAME_H = 14, LINE = 9;
     /** The "Everything else" box and where a row's text must stop (the box, then the ghost slot's frame). */
     private static final int CHECK = 12, CHECK_X = ClipboardMenu.FILTER_X - 15, TEXT_END = ClipboardMenu.FILTER_X - 18;
+    /** A Sorting Drop-Off's "more filters" box, left of its "Everything else" box; its line then stops before it. */
+    private static final int MORE_X = CHECK_X - CHECK - 2, MORE_TEXT_END = MORE_X - 3;
     /** Ink and paper. Typed values in blue-black ink, printed labels in faded brown, a Drop-Off in green ink. */
     private static final int INK = 0xFF34405E, LABEL = 0xFF7A6544, DROP_INK = 0xFF2F5D3A, RED = 0xFFA02828, EDGE = 0xFFB89B62;
     private static final int PAPER = 0xFFF3ECDA, FIELD = 0xFFFBF7EC, RULE = 0xFFE2D5B6, MARGIN = 0xFFDDA6A0, HIGHLIGHT = 0xFFF4E07A;
@@ -51,6 +53,8 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
 
     private final Tab[] jobs = new Tab[WorkTable.JOBS.size()];
     private final Tab[] unmarkStop = new Tab[ClipboardMenu.GHOSTS], everything = new Tab[ClipboardMenu.GHOSTS];
+    /** A Sorting Drop-Off's "more filters" box (0.7.2): opens its eight extra filter slots in the left column. */
+    private final Tab[] more = new Tab[ClipboardMenu.GHOSTS];
     private final Tab[] unmarkArea = new Tab[Order.MAX_AREAS];
     /** What the pointer may ask about, drawn this frame (sheet px). */
     private final List<Tip> tips = new ArrayList<>();
@@ -86,6 +90,13 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
             everything[i] = addRenderableWidget(new Tab(leftPos + CHECK_X, y + 3, CHECK, CHECK, Component.translatable("gui.headinajar.clipboard.everything_else"), Tab.CHECK,
                     () -> press(toggle)));
             everything[i].setTooltip(Tooltip.create(Component.translatable("gui.headinajar.clipboard.everything_else")));
+            int stop = i, pick = ClipboardMenu.MORE + i;
+            more[i] = addRenderableWidget(new Tab(leftPos + MORE_X, y + 3, CHECK, CHECK, Component.translatable("gui.headinajar.clipboard.more"), Tab.MORE, () -> {
+                // picked at once on this side; the server agrees (or refuses, and puts it back)
+                menu.pick(stop);
+                press(pick);
+            }));
+            more[i].setTooltip(Tooltip.create(Component.translatable("gui.headinajar.clipboard.more")));
         }
         for (int i = 0; i < unmarkArea.length; i++) {
             int unmark = ClipboardMenu.UNMARK_AREA + i;
@@ -137,8 +148,12 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
             unmarkStop[i].visible = s != null;
             everything[i].visible = s != null && s.dropOff();
             everything[i].on = s != null && s.dropOff() && s.everythingElse();
+            more[i].visible = ClipboardMenu.pickable(o, i);
+            more[i].on = more[i].visible && menu.picked() == i;
         }
-        for (int i = 0; i < unmarkArea.length; i++) unmarkArea[i].visible = i < o.areas().size();
+        // a Drop-Off's extra filters take the areas' place while they are open
+        boolean extras = menu.picked() >= 0;
+        for (int i = 0; i < unmarkArea.length; i++) unmarkArea[i].visible = !extras && i < o.areas().size();
     }
 
     @Override
@@ -272,10 +287,16 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
         String job = o.job();
         for (int i = 0; i < jobs.length; i++) if (jobs[i].isHovered()) job = WorkTable.JOBS.get(i);
         if (WorkTable.JOBS.contains(job)) wrapped(g, Component.translatable("gui.headinajar.clipboard.job." + job), LX, DESC_Y, LW, 2, LABEL);
-        // the areas, then a first corner waiting for its second
-        g.drawString(font, Component.translatable("gui.headinajar.clipboard.areas"), LX, AREAS_Y, LABEL, false);
-        int k = 0;
-        for (Order.Area a : o.areas()) {
+        // the areas, then a first corner waiting for its second; or a Sorting Drop-Off's extra filters, while open
+        int picked = menu.picked();
+        if (picked >= 0) {
+            Component head = Component.translatable("gui.headinajar.clipboard.extras", pos(o.stops().get(picked).pos()));
+            line(g, head, LX, AREAS_Y, LW, DROP_INK, font.split(Component.translatable("gui.headinajar.clipboard.more"), 220));
+        } else {
+            g.drawString(font, Component.translatable("gui.headinajar.clipboard.areas"), LX, AREAS_Y, LABEL, false);
+        }
+        int k = picked >= 0 ? Order.MAX_AREAS : 0;
+        for (Order.Area a : picked >= 0 ? List.<Order.Area>of() : o.areas()) {
             if (k >= Order.MAX_AREAS) break;
             Component full = Component.translatable("gui.headinajar.clipboard.area", a.sizeX(), a.sizeZ(), pos(a.min()));
             Component shortLine = Component.literal(a.sizeX() + "×" + a.sizeZ() + "  " + pos(a.min()));
@@ -302,7 +323,8 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
                 shortLine = shortLine.copy().withStyle(ChatFormatting.STRIKETHROUGH);
             }
             Component goneLine = gone ? Component.translatable("gui.headinajar.clipboard.stop_gone").withStyle(ChatFormatting.RED) : null;
-            fitted(g, full, shortLine, TEXT_X, rowY(i) + 5, TEXT_END - TEXT_X, gone ? RED : s.dropOff() ? DROP_INK : INK, goneLine);
+            int end = ClipboardMenu.pickable(o, i) ? MORE_TEXT_END : TEXT_END;
+            fitted(g, full, shortLine, TEXT_X, rowY(i) + 5, end - TEXT_X, gone ? RED : s.dropOff() ? DROP_INK : INK, goneLine);
         }
     }
 
@@ -372,6 +394,14 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
             g.renderTooltip(font, lines, x, y);
             return;
         }
+        if (hoveredSlot instanceof ClipboardMenu.ExtraSlot slot) {
+            // an extra filter of the open Drop-Off: its item, if any, and who reads it
+            List<FormattedCharSequence> lines = new ArrayList<>();
+            if (slot.hasItem()) for (Component c : getTooltipFromContainerItem(slot.getItem())) lines.add(c.getVisualOrderText());
+            lines.addAll(font.split(Component.translatable("gui.headinajar.clipboard.extra").withStyle(ChatFormatting.GRAY), 200));
+            g.renderTooltip(font, lines, x, y);
+            return;
+        }
         if (hoveredSlot != null || !menu.getCarried().isEmpty()) {
             super.renderTooltip(g, x, y);
             return;
@@ -389,7 +419,7 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
 
     /** A press on the sheet: a job tab (marked when chosen), Print, an unmark cross, or an "Everything else" box (ticked when on). */
     private final class Tab extends AbstractButton {
-        static final int TAB = 0, PRINT = 1, CROSS = 2, CHECK = 3;
+        static final int TAB = 0, PRINT = 1, CROSS = 2, CHECK = 3, MORE = 4;
         private final int style;
         private final Runnable press;
         boolean on;
@@ -417,6 +447,14 @@ public class ClipboardScreen extends AbstractContainerScreen<ClipboardMenu> {
                         g.fill(x + i, y + i, x + i + 1, y + i + 1, c);
                         g.fill(x + w - 1 - i, y + i, x + w - i, y + i + 1, c);
                     }
+                }
+                case MORE -> {
+                    // a plus in green ink; filled in while its extra filters are open
+                    g.fill(x, y, x + w, y + h, hot || on ? DROP_INK : EDGE);
+                    g.fill(x + 1, y + 1, x + w - 1, y + h - 1, on ? HIGHLIGHT : FIELD);
+                    int c = DROP_INK, mx = x + w / 2, my = y + h / 2;
+                    g.fill(x + 3, my - 1, x + w - 3, my + 1, c);
+                    g.fill(mx - 1, y + 3, mx + 1, y + h - 3, c);
                 }
                 case CHECK -> {
                     g.fill(x, y, x + w, y + h, hot ? INK : EDGE);

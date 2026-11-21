@@ -1,0 +1,40 @@
+{
+  "parent": "headinajar:middle_management",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "promoted"
+      }
+    },
+    "also": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "board_meeting"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:life_support_jar"
+    },
+    "title": {
+      "translate": "advancements.headinajar.promoted.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.promoted.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "done"
+    ],
+    [
+      "also"
+    ]
+  ]
+}

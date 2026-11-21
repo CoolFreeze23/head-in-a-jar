@@ -105,10 +105,55 @@ public final class ClockNet {
         }
     }
 
-    public static final int RECALL = 0, SHIFT = 1;
+    /** 0.7.2: the Roster's Review and Promote ({@code staff.Reviews}, {@code staff.Promotion#fromRoster}). */
+    public static final int RECALL = 0, SHIFT = 1, REVIEW = 2, PROMOTE = 3;
+
+    /**
+     * 0.7.2: one roster worker's career, beside its {@link Row} (by UUID; only workers here): its grade, the grade its
+     * tasks earn, and {@link #DUE}, {@link #TODAY} (reviewed today), {@link #STRIKER}, {@link #SECONDED}.
+     */
+    public record CareerRow(UUID id, int grade, int earned, int flags) {
+        public static final int DUE = 1, TODAY = 2, STRIKER = 4, SECONDED = 8;
+        public static final StreamCodec<RegistryFriendlyByteBuf, CareerRow> STREAM = StreamCodec.composite(
+                net.minecraft.core.UUIDUtil.STREAM_CODEC, CareerRow::id, ByteBufCodecs.VAR_INT, CareerRow::grade, ByteBufCodecs.VAR_INT, CareerRow::earned,
+                ByteBufCodecs.VAR_INT, CareerRow::flags, CareerRow::new);
+
+        public boolean has(int flag) {
+            return (flags & flag) != 0;
+        }
+    }
+
+    /**
+     * 0.7.2, a payload of its own so {@link ClockRoster} keeps its shape: the roster's grades and reviews, and a striking
+     * site's demands (one line a striker), sent with the rows while the clock's screen is open.
+     */
+    public record ClockCareer(int menu, List<CareerRow> rows, boolean striking, List<Component> demands) implements CustomPacketPayload {
+        public static final Type<ClockCareer> TYPE = new Type<>(HeadInAJar.id("clock_career"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, ClockCareer> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, ClockCareer::menu,
+                CareerRow.STREAM.apply(ByteBufCodecs.list(64)), ClockCareer::rows,
+                ByteBufCodecs.BOOL, ClockCareer::striking,
+                ComponentSerialization.STREAM_CODEC.apply(ByteBufCodecs.list(64)), ClockCareer::demands,
+                ClockCareer::new);
+
+        /** The career of the worker with this UUID, or null (not here, or no channel). */
+        public CareerRow of(UUID id) {
+            for (CareerRow r : rows) if (r.id.equals(id)) return r;
+            return null;
+        }
+
+        @Override
+        public Type<ClockCareer> type() {
+            return TYPE;
+        }
+    }
 
     static void register(PayloadRegistrar registrar) {
         registrar.playToClient(ClockRoster.TYPE, ClockRoster.CODEC, (msg, ctx) -> received(ctx.player(), msg));
+        registrar.playToClient(ClockCareer.TYPE, ClockCareer.CODEC, (msg, ctx) -> {
+            Player p = ctx.player();
+            if (p != null && p.containerMenu instanceof TimeClockMenu menu && menu.containerId == msg.menu()) menu.career = msg;
+        });
         registrar.playToServer(ClockOrder.TYPE, ClockOrder.CODEC, (msg, ctx) -> {
             if (ctx.player() instanceof ServerPlayer sp && sp.containerMenu instanceof TimeClockMenu menu) menu.order(sp, msg.kind(), msg.worker(), msg.arg());
         });
@@ -117,6 +162,11 @@ public final class ClockNet {
     /** Client: rows for the open clock screen. */
     static void received(Player player, ClockRoster msg) {
         if (player != null && player.containerMenu instanceof TimeClockMenu menu && menu.containerId == msg.menu()) menu.roster = msg;
+    }
+
+    /** Server: sends the career rows if this player's game has the channel (0.7.2). */
+    public static void send(ServerPlayer player, ClockCareer career) {
+        if (player.connection != null && player.connection.hasChannel(ClockCareer.TYPE)) PacketDistributor.sendToPlayer(player, career);
     }
 
     /** Server: sends the rows if this player's game has the channel. */

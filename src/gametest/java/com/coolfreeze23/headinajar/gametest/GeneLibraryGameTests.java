@@ -245,9 +245,9 @@ public class GeneLibraryGameTests {
             n = SafetyPlacardBlock.next(n);
             seen.add(n);
         }
-        h.assertValueEqual(seen, List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20, 0), "the cycle (12 from 0.6.3; 13, 14, 19, 20 from 0.7.0)");
-        // a notice not yet shipped (set by command) goes back to the first
-        h.assertValueEqual(SafetyPlacardBlock.next(15), 0, "an unshipped notice's next");
+        h.assertValueEqual(seen, List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0), "the cycle (12 from 0.6.3; 13, 14, 19, 20 from 0.7.0; 15, 17 from 0.7.2)");
+        // every notice is shipped now: the last goes back to the first
+        h.assertValueEqual(SafetyPlacardBlock.next(20), 0, "the last notice's next");
         h.assertTrue(SafetyPlacardBlock.NOTICE.getPossibleValues().size() == 21, "the property is not 0..20");
         h.succeed();
     }

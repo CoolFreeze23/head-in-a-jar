@@ -58,6 +58,16 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
     public int paidStreak() {
         return paidStreak;
     }
+
+    /**
+     * 0.7.2: a strike on the site it stands in: it faces the wall and its complaints are the picket's (its pay, bonus and
+     * their cadence unchanged). Not saved: looked up again with its payroll, every 100 ticks; synced.
+     */
+    private boolean solidarity;
+
+    public boolean solidarity() {
+        return solidarity;
+    }
     /** Block events: a complaint (param: days unpaid), payday (param: days it had gone unpaid). */
     public static final int EV_COMPLAINT = com.coolfreeze23.headinajar.machine.MachineKit.EV_OWN, EV_PAYDAY = EV_COMPLAINT + 1;
     private final com.coolfreeze23.headinajar.machine.MachineKit kit = new com.coolfreeze23.headinajar.machine.MachineKit(this);
@@ -76,6 +86,8 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         }
     };
     private long paidThrough = -1;
+    /** 0.7.2: its Grievance (three days unpaid) has been filed: the history line, the stamp and the memo, once. */
+    private boolean grievance;
     private final HeadInfo.Cache info = new HeadInfo.Cache();
 
     public EmployeeMountBlockEntity(BlockPos pos, BlockState state) {
@@ -146,15 +158,64 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, EmployeeMountBlockEntity mount) {
         if (mount.head().isEmpty()) return;
-        if (level.getGameTime() % 100 == 0) mount.payroll();
+        if (level.getGameTime() % 100 == 0) {
+            mount.payroll();
+            mount.grievanceBookkeeping();
+            boolean s = com.coolfreeze23.headinajar.staff.Strikes.solidarity(level, pos);
+            if (s != mount.solidarity) {
+                mount.solidarity = s;
+                level.sendBlockUpdated(pos, state, state, 3);
+            }
+        }
         // a block at negative x has a negative long: its slot in the cycle is counted from zero up, like every other block's
         if (level.getGameTime() % COMPLAINT_TICKS == Math.floorMod(pos.asLong(), (long) COMPLAINT_TICKS) && !mount.paid()) mount.complain();
+    }
+
+    /**
+     * 0.7.2: the Grievance read from its pay record (three days unpaid; a Nitwit is never on the payroll and files none)
+     * is filed once on the head's file (the history line, the stamp and the sigh, the memo), and withdrawn when it is
+     * paid again ("Grievance withdrawn. Form 66-G has been shredded.", to players within 12, as its complaints are).
+     * Nothing it makes or says otherwise changes.
+     */
+    public void grievanceBookkeeping() {
+        if (level == null || head().isEmpty()) return;
+        boolean now = !"nitwit".equals(profession()) && band() == com.coolfreeze23.headinajar.staff.Band.GRIEVANCE;
+        if (now == grievance) return;
+        grievance = now;
+        setChanged();
+        com.coolfreeze23.headinajar.staff.StaffFile f = com.coolfreeze23.headinajar.staff.Staff.of(head());
+        long d = day();
+        if (now) {
+            if (f != null) {
+                f.career.grievancesSinceReview++;
+                f.note("grievance", d, "");
+                com.coolfreeze23.headinajar.staff.Staff.write(head(), f);
+                ServerPlayer employer = f.employer == null || level.getServer() == null ? null : level.getServer().getPlayerList().getPlayer(f.employer);
+                if (employer != null) com.coolfreeze23.headinajar.clarity.Memos.send(employer, com.coolfreeze23.headinajar.clarity.Memos.Memo.GRIEVANCE);
+            }
+            level.playSound(null, worldPosition, com.coolfreeze23.headinajar.registry.ModSounds.STAFF_GRIEVANCE.get(), SoundSource.BLOCKS, 1, 1);
+        } else {
+            if (f != null) {
+                f.note("grievance_withdrawn", d, "");
+                com.coolfreeze23.headinajar.staff.Staff.write(head(), f);
+            }
+            Component line = Component.translatable("staff.headinajar.says", Component.translatable("entity.minecraft.villager." + profession()),
+                    Component.translatable("staff.headinajar.say.grievance_withdrawn"));
+            for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(12))) p.displayClientMessage(line, false);
+        }
+    }
+
+    /** 0.7.2: whether its Grievance is on file (tests). */
+    public boolean grievanceFiled() {
+        return grievance;
     }
 
     private void complain() {
         String job = profession();
         String key = "nitwit".equals(job) ? "staff.headinajar.nitwit." + level.random.nextInt(4)
                 : "staff.headinajar.complaint." + COMPLAINTS[level.random.nextInt(COMPLAINTS.length)];
+        // 0.7.2: in solidarity with a strike on its site (the same draw, so the cadence and the dice are unchanged)
+        if (solidarity && !"nitwit".equals(job)) key = "staff.headinajar.complaint." + (key.hashCode() % 2 == 0 ? "picket" : "dental_now");
         Component line = Component.translatable("staff.headinajar.says", Component.translatable("entity.minecraft.villager." + job), Component.translatable(key));
         kit.event(EV_COMPLAINT, (int) Math.min(255, Math.max(0, day() - paidThrough)));
         for (Player p : level.getEntitiesOfClass(Player.class, new net.minecraft.world.phys.AABB(worldPosition).inflate(12))) p.displayClientMessage(line, false);
@@ -195,6 +256,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         tag.put("Items", items.serializeNBT(registries));
         tag.putLong("PaidThrough", paidThrough);
         if (paidStreak > 0) tag.putInt("PaidStreak", paidStreak);
+        if (grievance) tag.putBoolean("Grievance", true);
     }
 
     @Override
@@ -203,6 +265,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         MachineItems.load(items, tag.getCompound("Items"), registries);
         paidThrough = tag.contains("PaidThrough") ? tag.getLong("PaidThrough") : -1;
         paidStreak = tag.getInt("PaidStreak");
+        grievance = tag.getBoolean("Grievance");
     }
 
     /** The server's tick, then what the cubicle shows: the lamp, the head, the day it is paid through. */
@@ -232,6 +295,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         if (level != null) tag.put("Items", HeadInfo.syncTag(items, level.registryAccess()));
         tag.putLong("paid", paidThrough);
         if (badge >= 0) tag.putInt("Badge", badge);
+        if (solidarity) tag.putBoolean("Strike", true);
     }
 
     @Override
@@ -239,6 +303,7 @@ public class EmployeeMountBlockEntity extends BlockEntity implements HasItems, H
         if (level != null && tag.contains("Items")) MachineItems.load(items, tag.getCompound("Items"), level.registryAccess());
         paidThrough = tag.getLong("paid");
         badge = tag.contains("Badge") ? tag.getInt("Badge") : -1;
+        solidarity = tag.getBoolean("Strike");
     }
 
     @Override

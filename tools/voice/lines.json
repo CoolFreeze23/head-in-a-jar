@@ -43,14 +43,14 @@
  },
  "totals": {
   "en": {
-   "lines": 22,
-   "heard_s": 63.7,
-   "bytes": 788810
+   "lines": 24,
+   "heard_s": 71.1,
+   "bytes": 865108
   },
   "pt": {
-   "lines": 22,
-   "heard_s": 68.4,
-   "bytes": 844884
+   "lines": 24,
+   "heard_s": 76.4,
+   "bytes": 929896
   }
  },
  "lines": [
@@ -1054,13 +1054,13 @@
     "event_muffled": null
    },
    "pt": {
-    "variant": "alt0",
-    "spoken": "Falta a Câmera de Colarinho. Seu pescoço precisa de um chapéu.",
-    "heard_s": 3.8,
-    "file_s": 4.024,
-    "heard_ticks": 76,
-    "wer": 0.091,
-    "asr_heard": "Falta a câmera de colarinha Seu pescoço precisa de um chapéu",
+    "variant": "alt2",
+    "spoken": "A Câmera de Colar é obrigatória. Seu pescoço precisa de um chapéu.",
+    "heard_s": 4.25,
+    "file_s": 4.474,
+    "heard_ticks": 85,
+    "wer": 0.0,
+    "asr_heard": "A câmera de colar é obrigatória Seu pescoço precisa de um chapéu",
     "offset_ticks": 0,
     "duck": [],
     "overlaps_without_duck": [],
@@ -1068,7 +1068,7 @@
     "file": "assets/headinajar/sounds/voice/pt/refuse_collar.ogg",
     "sound_id": "headinajar:voice/pt/refuse_collar",
     "event": "headinajar:dolores.pt.refuse_collar",
-    "bytes": 39552,
+    "bytes": 44902,
     "file_muffled": null,
     "sound_id_muffled": null,
     "event_muffled": null
@@ -1493,6 +1493,112 @@
     "sound_id": "headinajar:voice/pt/escort",
     "event": "headinajar:dolores.pt.escort",
     "bytes": 45934,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "promotion_offer",
+   "key": "dolores.headinajar.promotion_offer",
+   "trigger": "Promotion to the Board, tick 0 of the ceremony, at the candidate (the screen line names it; the voice does not)",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Your work has been exceptional. The company would like to offer you a seat on the Board.",
+    "heard_s": 5.24,
+    "file_s": 5.454,
+    "heard_ticks": 105,
+    "wer": 0.0,
+    "asr_heard": "Your work has been exceptional. The company would like to offer you a seat on the board.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/promotion_offer.ogg",
+    "sound_id": "headinajar:voice/en/promotion_offer",
+    "event": "headinajar:dolores.en.promotion_offer",
+    "bytes": 52425,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "alt0",
+    "spoken": "O seu trabalho tem sido excepcional. A empresa gostaria de lhe oferecer uma cadeira no Conselho.",
+    "heard_s": 5.72,
+    "file_s": 5.944,
+    "heard_ticks": 115,
+    "wer": 0.0,
+    "asr_heard": "O seu trabalho tem sido excepcional. A empresa gostaria de lhe oferecer uma cadeira no conselho.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/promotion_offer.ogg",
+    "sound_id": "headinajar:voice/pt/promotion_offer",
+    "event": "headinajar:dolores.pt.promotion_offer",
+    "bytes": 57150,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "subtitle": {
+    "key": "subtitles.headinajar.dolores.speaks",
+    "en_us": "DOLORES speaks",
+    "pt_br": "DOLORES fala"
+   }
+  },
+  {
+   "id": "promotion_done",
+   "key": "dolores.headinajar.promotion_done",
+   "trigger": "Promotion to the Board, tick 145 of the ceremony, at the cut",
+   "trigger_tick": null,
+   "muffled": false,
+   "voiced_in_operation": true,
+   "en": {
+    "variant": "main",
+    "spoken": "Congratulations on your promotion.",
+    "heard_s": 2.11,
+    "file_s": 2.324,
+    "heard_ticks": 43,
+    "wer": 0.0,
+    "asr_heard": "Congratulations on your promotion.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/en/promotion_done.ogg",
+    "sound_id": "headinajar:voice/en/promotion_done",
+    "event": "headinajar:dolores.en.promotion_done",
+    "bytes": 23873,
+    "file_muffled": null,
+    "sound_id_muffled": null,
+    "event_muffled": null
+   },
+   "pt": {
+    "variant": "main",
+    "spoken": "Parabéns pela promoção.",
+    "heard_s": 1.92,
+    "file_s": 2.144,
+    "heard_ticks": 39,
+    "wer": 0.0,
+    "asr_heard": "Parabéns pela promoção.",
+    "offset_ticks": 0,
+    "duck": [],
+    "overlaps_without_duck": [],
+    "over_no_room": [],
+    "file": "assets/headinajar/sounds/voice/pt/promotion_done.ogg",
+    "sound_id": "headinajar:voice/pt/promotion_done",
+    "event": "headinajar:dolores.pt.promotion_done",
+    "bytes": 22512,
     "file_muffled": null,
     "sound_id_muffled": null,
     "event_muffled": null

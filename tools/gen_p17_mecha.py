@@ -39,7 +39,7 @@ LINES = {
     'hud.headinajar.self_test': ('SELF-TEST ... OK. %s modules answered.', 'AUTOTESTE ... OK. %s módulos responderam.'),
     'message.headinajar.severance': ('Noggin & Sons regrets the loss of your Hopper at %s, %s, %s. '
                                      'Your Severance Form is in the post.',
-                                     'A Noggin & Sons lamenta a perda do seu Hopper em %s, %s, %s. '
+                                     'A Noggin & Sons lamenta a perda do seu Saltador em %s, %s, %s. '
                                      'Seu Termo de Desligamento segue pelo correio.'),
 }
 

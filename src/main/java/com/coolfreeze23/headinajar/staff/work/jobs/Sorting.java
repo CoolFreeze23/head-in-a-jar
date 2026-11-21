@@ -12,7 +12,8 @@ import java.util.List;
 
 /**
  * Sorting: the card's one Pick-Up emptied into its Drop-Offs, each stack to the Drop-Off whose filter names it, or,
- * failing that, to the one marked "Everything else" (0.7.0: one filter a Drop-Off; grades open more in a later release).
+ * failing that, to the one marked "Everything else". A card printed before 0.7.2 has one filter a Drop-Off; on one printed
+ * from 0.7.2 a Drop-Off may have nine, and a worker reads as many as its grade allows ({@code CardFilters}).
  * The walking and carrying are Hauling's. At Disengaged morale 1 item in 20 goes to a random other Drop-Off with room
  * ("Misfiled."); a worker with the {@code never_misfiles} quirk (the Librarian) never misfiles.
  */

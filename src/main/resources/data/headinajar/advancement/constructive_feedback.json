@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:clocking_in",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "constructive_feedback"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:performance_review"
+    },
+    "title": {
+      "translate": "advancements.headinajar.constructive_feedback.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.constructive_feedback.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

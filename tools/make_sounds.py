@@ -138,6 +138,33 @@ WORK = {
         (None, _struck(0.23, 3600, (1, 1.48), (0.35, 0.2), (180, 260)), 'anull'),
         (None, _struck(0.24, 880, (1, 2.32), (0.12, 0.05), (7, 11)), 'anull'),
     ], 'highpass=f=120,volume=0.62'),
+    # A strike's chant (0.7.2; its sounds.json entry and subtitle come from tools/gen_p43_moments.py): a crowd's murmur
+    # under the strikers' own voices, two swells 0.3 s apart (the chant's two beats), breath through two vowel bands and a
+    # low hum of mouths, let go by 1.4 s. Nobody has listened to it in the game yet.
+    'staff/chant': (1.4, [
+        (81, '(exp(-((t-0.22)/0.11)^2)+exp(-((t-0.52)/0.11)^2)+0.25*min(1,t/0.1))*max(0,(1.4-t)/1.1)*0.55',
+         'bandpass=f=560:width_type=h:w=380'),
+        (82, '(exp(-((t-0.24)/0.12)^2)+exp(-((t-0.54)/0.12)^2))*max(0,(1.4-t)/1.1)*0.3', 'bandpass=f=1250:width_type=h:w=600'),
+        (None, '(sin(2*PI*(132+6*sin(2*PI*4.3*t))*t)+0.7*sin(2*PI*(167+5*sin(2*PI*3.7*t))*t))'
+               '*(exp(-((t-0.22)/0.12)^2)+exp(-((t-0.52)/0.12)^2))*0.08', 'lowpass=f=900'),
+    ], 'highpass=f=100,lowpass=f=3200,volume=0.5'),
+    # The Union Rep accepts terms (0.7.2): a small cheer, an open "ah" of a few voices rising and falling away with a
+    # patter of claps under it, about 6 dB under the Noggin & Sons jingle (a strike's end is heard over the crowd).
+    'staff/rep_accepts': (1.3, [
+        (91, 'min(1,t/0.06)*exp(-2.2*t)*(0.8+0.2*sin(2*PI*7*t))*0.6', 'bandpass=f=820:width_type=h:w=500'),
+        (92, 'min(1,t/0.08)*exp(-2.6*t)*0.35', 'bandpass=f=1500:width_type=h:w=700'),
+        (None, '(sin(2*PI*(260*t+60*t*t))+0.6*sin(2*PI*(330*t+50*t*t)))*min(1,t/0.05)*exp(-3*t)*0.12', 'lowpass=f=1400'),
+        (93, 'if(between(t,0.15,1.1),exp(-280*mod(t*1.07,0.083))*(0.6+0.4*sin(31*floor(t/0.083))),0)*0.45*exp(-1.5*t)',
+         'highpass=f=900,lowpass=f=5000'),
+    ], 'highpass=f=90,volume=1.25'),
+    # Staff files a grievance (0.7.2; Form 66-G): a rubber stamp comes down on the form (a dull thud and the paper's
+    # slap), then a long sigh through the nose falling away. Nobody has listened to it in the game yet.
+    'staff/grievance': (1.2, [
+        (None, _struck(0.02, 190, (1, 2.1), (0.4, 0.15), (45, 70)), 'lowpass=f=1200'),
+        (101, 'if(gte(t,0.02),exp(-180*(t-0.02)),0)*0.3', 'highpass=f=1500,lowpass=f=6000'),
+        (102, 'if(between(t,0.35,1.2),sin(PI*(t-0.35)/0.85)^1.5,0)*0.32*(1-0.4*(t-0.35))', 'bandpass=f=700:width_type=h:w=500'),
+        (103, 'if(between(t,0.35,1.2),sin(PI*(t-0.35)/0.85)^2,0)*0.12', 'highpass=f=2500,lowpass=f=6000'),
+    ], 'highpass=f=60,volume=1.6'),
 }
 
 

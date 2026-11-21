@@ -20,7 +20,7 @@ HEAD_OPERABLE = ['separation_chair', 'assembly_gantry', 'body_locker', 'tesla_no
 PAGES = [
     ('Noggin & Sons\nEMPLOYEE HANDBOOK\n\nThe opening chapters.\n\nThe full handbook, with every department, comes '
      'with the Patchouli mod. Lost this copy? A book and a Surgical Steel Blend make another.',
-     'Noggin & Filhos\nMANUAL DO FUNCIONÁRIO\n\nOs capítulos iniciais.\n\nO manual completo, com todos os departamentos, '
+     'Noggin & Sons\nMANUAL DO FUNCIONÁRIO\n\nOs capítulos iniciais.\n\nO manual completo, com todos os departamentos, '
      'vem com o mod Patchouli. Perdeu esta cópia? Um livro e uma Mistura de Aço Cirúrgico fazem outra.', []),
     ('WELCOME\n\nCongratulations on joining Head Office. This handbook covers what an employee needs, from the '
      'Separation Chair to keeping your head topped up with Cranial Saline.',
@@ -33,14 +33,14 @@ PAGES = [
     ('THE SEPARATION CHAIR\n\nLoad the chair with a Life Support Jar, Relay Goggles, a Collar Cam and four bottles of '
      'Cranial Saline, and give it 40 kFE. Sit down and hold Sign on Form 27-B.',
      'A CADEIRA DE SEPARAÇÃO\n\nCarregue a cadeira com um Pote de Suporte Vital, Óculos Retransmissores, uma Câmera de '
-     'Colarinho e quatro frascos de Soro Craniano, e dê 40 kFE a ela. Sente e segure Assinar no Formulário 27-B.', []),
+     'Colar e quatro frascos de Soro Craniano, e dê 40 kFE a ela. Sente e segure Assinar no Formulário 27-B.', []),
     ('You may get up until the cut. After that, DOLORES will finish what she started. A worn blade can botch the job: '
      'keep a Replacement Blade handy.',
      'Você pode levantar até o corte. Depois disso, a DOLORES termina o que começou. Uma lâmina gasta pode estragar o '
      'serviço: tenha uma Lâmina de Reposição à mão.', []),
     ('THE NEURO-LINK\n\nAfter the cut you walk around in your own headless body and see through the Collar Cam. Your '
      'head wears the goggles and sends the signal. The further apart they are, the worse the picture.',
-     'A NEUROCONEXÃO\n\nDepois do corte você anda no seu próprio corpo sem cabeça e enxerga pela Câmera de Colarinho. '
+     'A NEUROCONEXÃO\n\nDepois do corte você anda no seu próprio corpo sem cabeça e enxerga pela Câmera de Colar. '
      'Sua cabeça usa os óculos e envia o sinal. Quanto mais longe, pior a imagem.', []),
     ('Water, rock, storms, portals and the Warden all hurt the signal. At zero for five seconds you wake up in your '
      'head. Press %s to swap between body and head yourself.',
@@ -65,7 +65,7 @@ PAGES = [
      ['key.headinajar.drive']),
     ('Stranded anyway? Press Courier in the jar menu. A Noggin & Sons courier delivers your body to your head in 30 '
      'seconds, from anywhere, for 20 kFE of charge (or all you have, if less). Then press %s.',
-     'Sem saída mesmo assim? Aperte Entregador no menu do pote. A Noggin & Filhos leva seu corpo até sua cabeça em 30 '
+     'Sem saída mesmo assim? Aperte Entregador no menu do pote. A Noggin & Sons leva seu corpo até sua cabeça em 30 '
      'segundos, de qualquer lugar, por 20 kFE de carga (ou toda a que houver). Depois aperte %s.', ['key.headinajar.swap']),
 ]
 

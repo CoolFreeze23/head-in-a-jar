@@ -486,8 +486,8 @@ public final class MachineRenderers3 {
             float age = m.getLevel().getGameTime() + partial;
             boolean paid = m.paid();
             long missed = m.daysMissed();
-            // paid: a small glance now and then; unpaid: head down; three days or more: turned to the wall
-            float yaw = missed >= 3 && !paid ? 150 : (float) (8 * Math.sin(age * 0.02 + m.getBlockPos().asLong()));
+            // paid: a small glance now and then; unpaid: head down; three days or more, or a strike on its site: turned to the wall
+            float yaw = missed >= 3 && !paid || m.solidarity() ? 150 : (float) (8 * Math.sin(age * 0.02 + m.getBlockPos().asLong()));
             float pitch = paid ? 0 : 10;
             var part = head.part();
             var saved = part.storePose();

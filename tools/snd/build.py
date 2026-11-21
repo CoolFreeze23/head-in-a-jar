@@ -32,6 +32,7 @@ import recipes_fx  # noqa: E402
 import recipes_body  # noqa: E402
 import recipes_house, recipes_travel, recipes_switchboard  # noqa: E402
 import recipes_arms  # noqa: E402
+import recipes_spider_walker  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 SOUNDS_DIR = os.path.join(ROOT, 'src', 'main', 'resources', 'assets', 'headinajar', 'sounds')
@@ -44,7 +45,7 @@ ALL = (recipes_feedback.SOUNDS + recipes_jar.SOUNDS + recipes_chair.SOUNDS + rec
        + recipes_machines3.SOUNDS + recipes_machines4.SOUNDS + recipes_machines5.SOUNDS + recipes_gantry.SOUNDS + recipes_fx.SOUNDS + recipes_body.SOUNDS
        + recipes_bulwark.SOUNDS + recipes_heavy.SOUNDS + recipes_wheelhouse.SOUNDS + recipes_chimera.SOUNDS + recipes_lunk.SOUNDS
        + recipes_kite.SOUNDS + recipes_parachute.SOUNDS + recipes_mecha.SOUNDS + recipes_arms.SOUNDS
-       + recipes_house.SOUNDS + recipes_travel.SOUNDS + recipes_switchboard.SOUNDS)
+       + recipes_house.SOUNDS + recipes_travel.SOUNDS + recipes_switchboard.SOUNDS + recipes_spider_walker.SOUNDS)
 
 
 def seed(sid, take):

@@ -1,0 +1,86 @@
+# Spider Walker legs, before and after: the same course filmed on both builds. Turning on the spot, a strafe (half
+# speed), backing (a quarter), then flat out north up three stairs, over a platform, down a slab ramp, across the flat
+# and up a wall four high, over the top and off the far side; then the wall's back face climbed again from three
+# quarters behind. Ground is y -60.
+@observe 20
+wait 60
+/time set 6000
+/gamerule doMobSpawning false
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+hud off
+# --- the course, north of the start --------------------------------------------------------------------------------
+/setblock -3 -60 -6 minecraft:air
+/fill -3 -60 -6 3 -60 -6 minecraft:stone_brick_stairs[facing=north]
+/fill -3 -60 -7 3 -60 -7 minecraft:stone_bricks
+/fill -3 -59 -7 3 -59 -7 minecraft:stone_brick_stairs[facing=north]
+/fill -3 -60 -8 3 -59 -8 minecraft:stone_bricks
+/fill -3 -58 -8 3 -58 -8 minecraft:stone_brick_stairs[facing=north]
+/fill -3 -60 -9 3 -58 -12 minecraft:stone_bricks
+/fill -3 -60 -13 3 -59 -13 minecraft:stone_bricks
+/fill -3 -58 -13 3 -58 -13 minecraft:smooth_stone_slab[type=bottom]
+/fill -3 -60 -14 3 -59 -14 minecraft:stone_bricks
+/fill -3 -60 -15 3 -60 -15 minecraft:stone_bricks
+/fill -3 -59 -15 3 -59 -15 minecraft:smooth_stone_slab[type=bottom]
+/fill -3 -60 -16 3 -60 -16 minecraft:stone_bricks
+/fill -3 -60 -17 3 -60 -17 minecraft:smooth_stone_slab[type=bottom]
+/fill -4 -60 -26 4 -57 -27 minecraft:stone
+/summon headinajar:spider_walker 0.5 -60 0.5 {Rotation:[180f,0f]}
+/tp @s 0.5 -60 3 180 0
+jar
+charge 100000
+wait 10
+/tp @s 0.5 -60 1.9 180 -20
+wait 5
+lookat headinajar:spider_walker
+view 1
+key use
+wait 40
+riding spider
+look 180 10
+wait 10
+# --- turning on the spot (a fixed camera, three quarters in front) --------------------------------------------------
+watch at 2.2 1.5 -2.2 45 28
+wait 5
+frames t01_turn 90
+wait 5
+turn 120 0 25
+wait 15
+turn -120 0 25
+wait 25
+watch off
+# --- a strafe left then right, from in front (half speed) -----------------------------------------------------------
+watch follow 0 1.0 -3.2 0 12
+wait 5
+frames t02_strafe 80
+key left hold 35
+wait 2
+key right hold 35
+wait 8
+watch off
+# --- backing (a quarter of the speed), from the side ------------------------------------------------------------------
+watch follow -3.2 0.9 0 -90 10
+wait 5
+frames t03_back 70
+key back hold 60
+wait 10
+watch off
+# --- flat out north: stairs, platform, slab ramp, flat, the wall, over the top and off --------------------------------
+watch follow -3.6 1.1 0 -90 8
+wait 5
+frames t04_course_side 170
+key forward hold 150
+wait 15
+watch off
+inspect near headinajar:spider_walker 4
+# --- turned round: up the wall's back face from three quarters behind -------------------------------------------------
+look 0 10
+wait 20
+watch follow 2.4 1.6 -3.2 35 20
+wait 5
+frames t05_climb_3q 120
+key forward hold 100
+wait 20
+watch off
+inspect near headinajar:spider_walker 4
+report done

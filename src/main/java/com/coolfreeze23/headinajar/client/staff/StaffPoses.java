@@ -25,8 +25,13 @@ public final class StaffPoses {
 
     /** From {@code LivingRendererPoseMixin}, right after {@code setupAnim}. */
     public static void after(EntityModel<?> model, LivingEntity entity, float pt) {
+        // vanilla never poses a villager's or an illager's folded arms: put them back at rest before anything is added
+        // to them (a chant's lift added frame on frame to the one model every villager shares turned them right over)
+        restFoldedArms(model);
         WorkerLines.Look look = WorkerLines.look(entity);
         if (look == null) return;
+        // 0.7.2 strikes: a held picket sign's arm pose and the chant's lifts
+        com.coolfreeze23.headinajar.client.StrikeClient.pose(model, entity, look, pt);
         float sinceRead = WorkerLines.since(look.readAt, pt);
         if (model instanceof HumanoidModel<?> h) {
             humanoid(h, entity, look, pt, sinceRead);
@@ -53,6 +58,13 @@ public final class StaffPoses {
      * An illager whose arms hang free (a pillager never crosses them) holds its crate in both hands as a biped does; one
      * with crossed arms rests the crate on them, and one that carries nothing (evoker, illusioner) is left alone.
      */
+    /** A villager's (witch's, trader's) or an illager's folded arms back at their part's rest turn. */
+    private static void restFoldedArms(EntityModel<?> model) {
+        ModelPart arms = model instanceof net.minecraft.client.model.VillagerModel<?> v ? v.root().getChild("arms")
+                : model instanceof IllagerModel<?> i ? i.root().getChild("arms") : null;
+        if (arms != null) arms.xRot = arms.getInitialPose().xRot;
+    }
+
     private static void illager(IllagerModel<?> model, LivingEntity entity, WorkerLines.Look look, float pt) {
         StaffFit.Fit fit = StaffFit.of(entity.getType());
         if (fit == null || fit.crate() == null || fit.crate().frame() == null) return;

@@ -1,5 +1,7 @@
 # Head in a Jar
 
+**English** · [Português (Brasil)](README.pt-BR.md)
+
 *Head Office, Noggin & Sons' employee programme for the ambitious and the slightly unhinged.*
 
 A Minecraft mod for **NeoForge 1.21.1**. Sit in the Separation Chair, sign Form 27-B, and lose your head on purpose. Your
@@ -7,12 +9,15 @@ head lives in a life-support jar; your headless body walks around on a wireless 
 on its neck. From there it gets stranger. Jars can ride the headless bodies of mobs, pilot mecha you build part by part,
 splice genes from the creatures you sample, and put other people's heads to work.
 
+Prospective employees may tour the premises first at the
+[showcase site](https://coolfreeze23.github.io/head-in-a-jar/). Visitors keep their heads; HR keeps their names.
+
 ![The Separation Chair at work: the barrier comes down, the hood scans the patient, the claw carries the head into the jar on the tray](docs/images/operation.gif)
 
 *The operation, seen by a colleague (shown at double speed). Sit down with **Use** and hold the Sign button on its screen.*
 
 Fully playable in **English** and **Brazilian Portuguese** (every line of text, the handbook, the advancements and
-DOLORES's voice). This page describes release **0.5.0**.
+DOLORES's voice). This page describes release **0.7.2**.
 
 ## Requirements
 
@@ -47,6 +52,7 @@ default key for each is in [Controls](#controls).
 - [Board of Directors: heads at work](#board-of-directors-heads-at-work)
 - [The workforce](#the-workforce)
 - [Secondment](#secondment)
+- [Careers: grades, the Board, grievances and strikes](#careers-grades-the-board-grievances-and-strikes)
 - [Controls](#controls)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -1480,6 +1486,11 @@ It never rots, is fire immune once synced, throws fireballs and sprints. Riding 
 
 *A Spider Walker climbing: walk into the wall.*
 
+Since 0.7.2 the Spider Walker's legs find their own footing: each foot reaches for the block under it, up a wall and
+down a stair, and each pad lands with a metal thump.
+
+<img src="docs/images/spider_walker_legs.gif" width="420" alt="Side by side, the same Spider Walker run before (left) and after (right): it walks up to a stone wall, climbs its face and over the top, and goes down a flight of stone steps onto a stone floor; on the left the legs swing in a fixed rhythm whatever is under them, on the right each foot reaches for the block beneath it, the legs fold up the wall and step down the stairs one by one">
+
 Robot bodies for a jar, for when a cow will not do. A shell needs no saw and no handshake, never rots, and counts as
 fully synced from the start. It runs on your jar's charge.
 
@@ -1602,8 +1613,8 @@ occasionally misplace them."
   wants no wage, is hired by lunch instead (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)).
 - **Morale**, for heads on the payroll: they start at 50, gain 10 for each paid dawn (to 100) and lose 15 for each
   unpaid one. 75 and over is **Engaged** (the head tips up a little and bobs more), 40 to 74 **Content**, under 40
-  **Disengaged** (it sags and turns a little away from you); under 15 at two dawns running Jade and the card say
-  **Grievance**. Morale changes how a fed head works (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)).
+  **Disengaged** (it sags and turns a little away from you); under 15 at two dawns running it files a **Grievance**
+  (see [Grievances](#grievances)). Morale changes how a fed head works (see [Heads at work](#heads-at-work-the-bell-lunch-and-desk-jobs)).
   An Employee Mount's villager shows a band read from
   its pay record (paid today and yesterday Engaged, paid today Content, unpaid one or two days Disengaged, three or more
   Grievance); nothing about the Mount changes. The server value `staff.morale` turns morale off.
@@ -3113,6 +3124,80 @@ broth.
 DOLORES has a remark for sixteen famous pairings, once each: "Security has taken the stairs. All of them." (a skeleton
 head on a spider), "Please do not make eye contact with the pig." (an enderman head on a pig), and fourteen more.
 
+## Careers: grades, the Board, grievances and strikes
+
+*"Noggin & Sons respects its staff's right to organise. Noggin & Sons is also keeping a list."* Living staff and
+secondees climb by tasks, may be promoted to the Board, and object when they are neglected.
+
+<img src="docs/images/promotion.gif" width="420" alt="First person, a Surgical Saw in hand and an empty jar in the off hand, at a work site with a llama, a chest and a Time Clock: a working cow with a gold-edged staff badge turns round to face the camera and nods, teal and gold confetti bursts over its head and flutters down past its face, its head flies out of its neck toward the camera and into the jar in a white puff, and the headless body stays standing beside the llama">
+
+### Grades and the Performance Review
+
+Staff earn tasks at work (a haul trip, 8 crops or 4 animals, a hostile seen off, an hour on guard). Enough tasks make
+a grade due, and the Time Clock's Roster says "Review due" on its row. Press **Review** on that row with Paper in your
+inventory: one sheet becomes a **Performance Review**, the grade goes to the highest the tasks earn, and the worker
+gets +5 morale. Once a day per worker, by its employer or someone they trust. Hover the slip to read it.
+
+| Grade | Tasks | Work speed | Sorting filters a stop | Carry | Wage | Badge |
+|---|---|---|---|---|---|---|
+| **Intern** | 0 | x1.0 | 1 | as its species | x1 | plain |
+| **Associate** | 50 | x1.1 | 3 | as its species | x1 | a brass stripe |
+| **Senior Associate** | 300 | x1.2 | 6 | half again | x1 | two stripes |
+| **Team Lead** | 1,000 | x1.3 | 9 | half again | x2 | a gold card and a navy tie |
+
+A Team Lead makes staff of its site within 8 blocks work 10% faster (two do not add up). The rating on the slip:
+"Placed on a Performance Plan" if it filed a grievance since its last review, else "Exceeds Expectations" at 100
+tasks or more and Engaged, "Meets Expectations" at 25 or more, else "Needs Improvement". Sorting cards printed from
+0.7.2 open more filters per Drop-Off (the green **+** on the Clipboard); the Clipboard refuses to print one nobody on
+the site can read. Cards printed before keep working. Interns never strike.
+
+### Promotion to the Board
+
+Hold an empty jar big enough for its head in your off hand and **Use** the Surgical Saw on your own living Team Lead.
+The half-health rule is waived (it has agreed). Eight seconds: DOLORES makes the offer aloud, staff within 16 blocks
+stop and turn to watch, the candidate nods, teal and gold confetti, the jingle, the cut, the desk bell, and
+"Congratulations on your promotion." You keep both halves: the head, with "Promoted to the Board" on its file, and the
+body, a plain host already at 50% sync with you, handshake done. The lanyard and a Hard Hat come back to you. A slime,
+a bee or anything else that is all head goes whole.
+
+A seconded Team Lead is promoted from the Roster: **Promote** on its row within 8 blocks of the clock. It walks to the
+clock, the same ceremony plays, and the collar unclips the jar into your hands.
+
+At a **Cerebral Array** the first three promoted heads make half again their species' rate (a cow 15, a villager 60,
+an evoker 180); the rest make the plain rate. Refused: anyone below Team Lead ("The Board does not take interns. It
+has tried."), someone else's staff (trusted players may review, never promote), a vanilla name tag, a boss, during a
+strike, and while a Separation Chair within 32 blocks is operating. A chair that starts mid-ceremony stops it before
+the cut, with nothing spent, or silences the rest after it. Nobody may hurt the candidate meanwhile.
+
+### Grievances
+
+Staff on the payroll under 15 morale at two dawns running file **Form 66-G**: a stamp, a sigh, and a memo to the
+employer. Living staff stop work, turn to the nearest wall within 4 blocks and stand; a head on a plinth turns away and
+stops turning to people. Once morale is back to 40 the grievance ends: "Grievance withdrawn. Form 66-G has been
+shredded." A cake does it in one (+40, once a day; living staff take cake too), and earns **Let Them Eat Cake**. An
+Employee Mount's villager has its grievance on file after three days unpaid and withdrawn when it is paid; its bonus
+and complaints do not change.
+
+### Strikes
+
+<img src="docs/images/strike.gif" width="420" alt="First person behind the Union Rep, a villager holding up a WARMER BROTH sign in a ring of striking staff round a Time Clock with a red lens and a card on its bell; a cow with MOO, a sheep with THE JAR IS NOT AN OFFICE and a llama with FAIR WAGES strapped to their backs; the ring chants, the signs bob and &quot;Warmer broth now!&quot; floats over the Rep; then a cake from the player's hand, green sparkles, every sign comes down and the staff leave the ring for work, a zombie in a Hard Hat walking past the camera">
+
+At dawn a site strikes if half or more of its staff that can strike (two at least) are under 40 morale, or any two
+have gone unpaid two dawns running. Interns, wolves and Nitwits never strike, and nothing strikes in a world's first
+week. The strikers walk to the clock and stand in a ring 3 to 5 blocks out with picket signs (held, strapped to a
+back, or taped to a secondee's jar), the clock pulses red with an ON STRIKE card on its bell, and they chant every 20
+seconds. Nothing is broken and nobody is hurt.
+
+The **Union Rep** wears a red rosette. **Use** it with an empty hand for the demands: each striker's wage for every
+dawn it went unpaid, up to 7. Put that in the Pay Drawer, then **Use** a cake on the Rep: "Terms agreed. Back pay
+settled. There will be cake." Everyone goes back at 50 morale. A cake without the back pay is eaten anyway ("A pizza
+party is not a pay rise."). Left alone for three loaded days a strike collapses, everyone at 20, and that clock has
+three days' peace. While it lasts the site hires nobody and takes no cards, and strikers cannot be let go, whistled,
+recalled or promoted. An Employee Mount on the site turns to the wall in solidarity.
+
+The Board's "unionise" motion is no longer only words: when a vote on it really carries, every site within 48 blocks of
+the Array that already meets the test walks out at once, and the vote's line gives the real count.
+
 ## Controls
 
 Six keys of your own, under **Head in a Jar** in the Controls screen. Rebind them as you like; every line the game shows
@@ -3250,6 +3335,11 @@ are in `config/headinajar-client.toml`.
 | `staff.detailSize` | 6 | 0 to 16 | Most staff on one player's detail. |
 | `staff.detailShuttle` | true | true / false | A detail left far from home takes the company shuttle back to its clock. Off: it stays where it was left, on Hold. |
 | `staff.secondment` | true | true / false | A Secondment Collar can be fitted and a jarred head seated on it. Off: the collar refuses, and heads already seated stand by where they are. |
+| `staff.promotion` | true | true / false | A Team Lead of your own can be promoted to the Board. Off: "Promotions are frozen on this server."; reviews and grades go on. |
+| `staff.promotedArrayCap` | 3 | 0 to 9 | Promoted heads per Cerebral Array that make the promoted rate; any more make their species' plain rate. |
+| `staff.promotedArrayBonus` | 150 | 100 to 300 | What a promoted head makes at a Cerebral Array, in percent of its species' rate. |
+| `staff.strikes` | true | true / false | Neglected sites go on strike at dawn (never in a world's first week). Off: no strikes. |
+| `staff.boardUnionises` | true | true / false | A "unionise" motion that really carries walks out a site near the Array that already meets the strike test. Off: the motion is only words. |
 | `bodies.headlessChicken` | true | true / false | A chicken host nobody rides runs in circles round where it was cut. Off: it stands still like any host. |
 
 </details>
@@ -3333,10 +3423,17 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Secondment** | Hostile Takeover | Seat a mob head on a host with a **Secondment Collar**. |
 | **Team Spirit** | Secondment | A secondee reaches 100% team sync. |
 | **Redundancy Package** | Secondment | Have a seconded head land safely under its canopy. |
+| **Constructive Feedback** | Clocking In | Print a Performance Review. |
+| **Middle Management** | Constructive Feedback | Have a member of staff reach Team Lead. |
+| **Promoted to the Board** | Middle Management | Promote a Team Lead to the Board, and hold a Board Meeting. |
+| **Industrial Action** | Clocking In | Have a strike. |
+| **Collective Bargaining** | Industrial Action | End a strike by agreement. |
+| **Pizza Party** (hidden) | Industrial Action | Give the Union Rep a cake without the back pay. |
 | **Employee of the Month** | Orientation Day | Hang a jarred villager on an **Employee Mount**. |
 | **Pay Grade** | Employee of the Month | Pay a placed jarred head that is not a villager its wage by hand. |
 | **Lunch Is Served** | Employee of the Month | Feed a jarred head on its plinth a Nutrient Broth Bucket. |
 | **Neighbourhood Watch** | Lunch Is Served | Have a Lookout raise the alarm. |
+| **Let Them Eat Cake** | Pay Grade | End a Grievance with a cake. |
 | **Board Meeting** | Employee of the Month | Be within 16 blocks of a fed Cerebral Array holding five or more heads. |
 | **Brain Trust** | Board Meeting | Be within 16 blocks of a fed Cerebral Array making 500 FE/t. |
 | **Ask Me Anything** | Orientation Day | Pulse a face from a **Neural Socket** with **Ability**. |
@@ -3469,10 +3566,148 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 - **The Secondment Collar** clasps shut with "Collar fitted"; a seconded jar seats with the jar's own twist and seal,
   and the Redundancy Package opens and folds with the Golden Parachute's sounds, higher. Nobody has listened to the
   clasp in the game yet.
+- **Careers (0.7.2):** a strike's crowd ("Staff chants") under each striker's own voice, the Union Rep's small cheer
+  ("Union Rep accepts terms"), a rubber stamp and a sigh for a grievance ("Staff files a grievance"), and DOLORES's
+  two ceremony lines aloud in English and Portuguese. The Spider Walker's pads land with a metal thump. Nobody has
+  listened to the chant, the cheer or the stamp in the game yet.
 
 ## Release notes
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
+
+### What's new in 0.7.2 · The moments
+
+Your staff now have careers. They earn grades by working, get promoted to the Board in a short ceremony, file
+grievances when they are neglected, and go on strike when a whole site is.
+
+#### New
+
+- **Grades.** Site staff climb by tasks: Intern, Associate at 50, Senior Associate at 300, Team Lead at 1,000. Higher
+  grades work faster, Senior Associates and Team Leads carry half again, and a Team Lead makes staff within 8 blocks
+  work 10% faster. The badge shows it: brass stripes, a gold card for a Team Lead, and a small navy tie.
+- **The Performance Review.** A grade takes effect only when someone presses **Review** on the Time Clock's Roster:
+  one Paper becomes a slip with the tasks, the days unpaid, strengths ("punctual, warm"), areas for growth ("hands")
+  and a rating. Once a day, +5 morale, and a review can skip grades.
+- **Promotion to the Board.** Hold an empty jar in your off hand and use the Surgical Saw on your own Team Lead. In
+  eight seconds DOLORES makes the offer aloud, your staff turn to watch, the candidate nods, confetti falls, the jingle
+  plays, and you keep both halves: the head, and the body standing as a host already half synced to you.
+
+  <img src="docs/images/promotion.gif" width="420" alt="First person, a Surgical Saw in hand and an empty jar in the off hand, at a work site with a llama, a chest and a Time Clock: a working cow with a gold-edged staff badge turns round to face the camera and nods, teal and gold confetti bursts over its head and flutters down past its face, its head flies out of its neck toward the camera and into the jar in a white puff, and the headless body stays standing beside the llama">
+
+- **Promoted heads make half again** at a Cerebral Array (a cow 15, a villager 60, an evoker 180), three to an Array.
+- **Grievances.** Staff under 15 morale at two dawns running file Form 66-G: a stamp, a sigh, and they turn to face
+  the wall and stop work until their morale is back to 40. A cake does it nicely, and living staff now take cake too.
+- **Strikes.** A neglected site walks out at dawn: a ring of picket signs round a red-lit Time Clock, chanting. The
+  Union Rep in a red rosette has the demands: back pay in the Pay Drawer, then a cake. Never in a world's first week.
+
+  <img src="docs/images/strike.gif" width="420" alt="First person behind the Union Rep, a villager holding up a WARMER BROTH sign in a ring of striking staff round a Time Clock with a red lens and a card on its bell; a cow with MOO, a sheep with THE JAR IS NOT AN OFFICE and a llama with FAIR WAGES strapped to their backs; the ring chants, the signs bob and &quot;Warmer broth now!&quot; floats over the Rep; then a cake from the player's hand, green sparkles, every sign comes down and the staff leave the ring for work, a zombie in a Hard Hat walking past the camera">
+
+- **The Board's "unionise" motion** now does something, when it honestly carries near a site that already meets
+  the strike test: the staff walk out at once.
+- **The Spider Walker's legs find their own footing.** Each foot reaches for the block under it, up walls and down
+  steps, and lands with a metal thump.
+
+  <img src="docs/images/spider_walker_legs.gif" width="420" alt="Side by side, the same Spider Walker run before (left) and after (right): it walks up to a stone wall, climbs its face and over the top, and goes down a flight of stone steps onto a stone floor; on the left the legs swing in a fixed rhythm whatever is under them, on the right each foot reaches for the block beneath it, the legs fold up the wall and step down the stairs one by one">
+
+- **This page in Brazilian Portuguese:** [README.pt-BR.md](README.pt-BR.md).
+- Seven advancements, five memos, three handbook entries and two Safety Placard notices ("STRIKES WILL BE MET WITH
+  CAKE", "CAKE RESOLVES MOST GRIEVANCES").
+
+#### Changed
+
+- **Sorting cards printed from 0.7.2** can name up to 9 items a Drop-Off, as many as the worker's grade can read.
+  Cards printed before keep working as they did.
+
+#### Fixed
+
+- **Portuguese text:** Away Day no longer shares Orientation Day's name, the Hopper's ejection letter and the Body
+  Locker's lines agree in gender, the Collar Cam has one name, and the company is Noggin & Sons everywhere.
+- **Portuguese Safety Placards 0, 2, 3, 4 and 6** no longer run off their boards.
+- **The Spider Walker** no longer crashes into the walls and stairs it climbs: a shell crashes only into what it can
+  neither step up nor climb.
+
+#### Updating
+
+- A 0.7.2 game can join a 0.7.1 server; a 0.7.1 game cannot join a 0.7.2 server. Update both.
+- Staff hired before 0.7.2 start as Interns with the tasks they have done, so a long-serving worker may be "Review
+  due" on day one.
+
+<details><summary>Full details</summary>
+
+**Grades**
+
+| Grade | Tasks | Work speed | Filters a stop | Carry | Wage |
+|---|---|---|---|---|---|
+| Intern | 0 | x1.0 | 1 | as its species | x1 |
+| Associate | 50 | x1.1 | 3 | as its species | x1 |
+| Senior Associate | 300 | x1.2 | 6 | half again | x1 |
+| Team Lead | 1,000 | x1.3 | 9 | half again | x2 |
+
+- A task is a haul trip, 8 crops or 4 animals, a hostile seen off or an hour on guard. Tasks counted since 0.7.0
+  count.
+- The Team Lead's 10% is for staff of the same site within 8 blocks, and two Team Leads do not add up.
+- A worker due a review keeps working at its old grade and says "Still waiting on that review." now and then.
+- Carrying half again is for hauling and sorting.
+
+**The Review**
+- The employer or someone they trust presses it, with the worker loaded and on that clock, once a day.
+- The rating: "Placed on a Performance Plan" if it filed a grievance since its last review; else "Exceeds
+  Expectations" at 100 tasks or more and Engaged, "Meets Expectations" at 25 or more, else "Needs Improvement". A
+  review with nothing since the last still prints: "HR appreciates the effort."
+- The Roster shows each worker's grade beside its name and "Review due" in its status; Review and Promote are the two
+  small buttons on its row.
+
+**Promotion to the Board**
+- Only your own Team Lead, with an empty jar big enough for its head. Never a creature with a vanilla name tag, a
+  boss, another player's staff (trusted players may review, not promote), and never during a strike.
+- The candidate cannot be hurt during the ceremony ("HR has asked for quiet.").
+- Never while a Separation Chair within 32 blocks is operating. A chair that starts during the ceremony stops it before
+  the cut with nothing spent ("The Board will reconvene. Nothing was spent."), or silences what is left of it after.
+- Walking more than 16 blocks away, or the candidate unloading or dying, stops it the same way.
+- The head keeps its file, grade and tasks, with "Promoted to the Board" on its history. The body keeps no file: it is
+  a plain host at 50% sync or more with the handshake done ("%s's body remembers its training."). The lanyard and a
+  Hard Hat come back to you.
+- A creature that is all head (a slime, a bee) goes to the Board whole: "There is no body to keep."
+- A seconded Team Lead: press **Promote** on its Roster row within 8 blocks of the clock. It walks to the clock, the
+  same ceremony plays there, and the collar unclips the jar into your hands; the body stays with the empty collar.
+- At a Cerebral Array the first three promoted heads make 1.5 times their species' rate; a promoted head counts as one
+  head toward a Board Meeting.
+
+**Grievances**
+- Site staff turn to the nearest wall within 4 blocks and stand; a head on a plinth turns away and stops turning to
+  people. It ends at 40 morale: "Grievance withdrawn. Form 66-G has been shredded."
+- A cake on a living member of staff: +40 morale, once a day.
+- An Employee Mount's villager has its grievance on file after three days unpaid (it already faced the wall), and it
+  is withdrawn when it is paid. Its bonus and complaints are as they were.
+- With morale switched off there are no grievances and no strikes.
+
+**Strikes**
+- The test, at each Time Clock's dawn: half or more of the staff that can strike (two at least) under 40 morale, or
+  any two unpaid two dawns running. Interns, wolves and Nitwits never strike.
+- Strikers stand in a ring 3 to 5 blocks from the clock, never inside a block and never breaking anything; they hurt
+  nobody. Bipeds hold their signs, four-legged staff wear them on their backs, secondees have them taped to the jar.
+- A chant every 20 seconds, in each striker's own voice, while no Separation Chair near by is operating.
+- Back pay: each striker's wage for every dawn it went unpaid, up to 7. Pay it into the Pay Drawer, then use a cake on
+  the Rep: "Terms agreed. Back pay settled. There will be cake." Everyone goes back at 50 morale.
+- A cake without the back pay is eaten anyway: "A pizza party is not a pay rise."
+- Left alone for three loaded days, it collapses: everyone at 20. No new strike at that clock for three days.
+- While it lasts the site hires nobody, takes no cards, and strikers cannot be let go, whistled, recalled or promoted.
+  An Employee Mount on the site turns to the wall in solidarity ("Dental now.").
+- The Board: when a vote on "unionise" really carries, every clock within 48 blocks of the Array whose site meets the
+  test walks out, and the vote's line gives the real count.
+
+**Also**
+- New server values: `staff.promotion`, `staff.promotedArrayCap`, `staff.promotedArrayBonus`, `staff.strikes`,
+  `staff.boardUnionises`.
+- Advancements: Constructive Feedback, Middle Management, Promoted to the Board, Let Them Eat Cake, Industrial Action,
+  Collective Bargaining, Pizza Party (hidden).
+- New sounds: "Staff chants", "Union Rep accepts terms", "Staff files a grievance", the Spider Walker's foot thump, and
+  DOLORES's two ceremony lines in English and Portuguese. Nobody has listened to the chant, the cheer or the stamp in
+  the game yet.
+
+</details>
+
+<details><summary>What changed in 0.7.1, 0.7.0, 0.6.3, 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.7.1 · Secondment
 
@@ -3556,7 +3791,6 @@ staff: the head brings the skills, the body brings the hardware.
 
 </details>
 
-<details><summary>What changed in 0.7.0, 0.6.3, 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.7.0 · The workforce
 

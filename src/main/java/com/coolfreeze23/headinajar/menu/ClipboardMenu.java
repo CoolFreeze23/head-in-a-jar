@@ -1,9 +1,12 @@
 package com.coolfreeze23.headinajar.menu;
 
+import com.coolfreeze23.headinajar.feedback.Refusals;
 import com.coolfreeze23.headinajar.item.ClipboardItem;
 import com.coolfreeze23.headinajar.registry.WorkRegistry;
+import com.coolfreeze23.headinajar.staff.work.CardFilters;
 import com.coolfreeze23.headinajar.staff.work.Order;
 import com.coolfreeze23.headinajar.staff.work.WorkTable;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -18,14 +21,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The Clipboard's order screen: the job, the stops and areas, one ghost filter slot for each Drop-Off (0.7.0: one filter
- * a Drop-Off, no grades), "Everything else", the name, Print. The order lives on the held Clipboard (its data component,
- * synced like any item), so the screen reads it from the hand; changes go to the server by {@link #clickMenuButton} (the
- * job, "Everything else", unmarking, Print), a ghost slot click (a filter: the carried item's kind, or empty to clear),
- * or {@code WorkerNet.Text} ORDER (the name, {@link #name}). The site's state comes in a data slot.
+ * The Clipboard's order screen: the job, the stops and areas, one ghost filter slot for each Drop-Off (and on a Sorting
+ * order, eight more for the Drop-Off picked for them, 0.7.2), "Everything else", the name, Print. The order lives on the
+ * held Clipboard (its data components, synced like any item), so the screen reads it from the hand; changes go to the
+ * server by {@link #clickMenuButton} (the job, "Everything else", unmarking, Print), a ghost slot click (a filter: the
+ * carried item's kind, or empty to clear), or {@code WorkerNet.Text} ORDER (the name, {@link #name}). The site's state
+ * comes in a data slot.
  * <p>
  * Slots: 0 to {@link #GHOSTS}-1 are the filters, stop by stop (active only for a Drop-Off); then the player's
- * inventory (27) and hotbar (9). The held Clipboard's hotbar slot cannot be picked up.
+ * inventory (27) and hotbar (9); then (0.7.2) the {@link CardFilters#EXTRA} extra filters of the Drop-Off picked for
+ * them on a Sorting order (active only while one is picked). The held Clipboard's hotbar slot cannot be picked up. The
+ * picked Drop-Off is a data slot: the screen sets it at once and tells the server by the {@link #MORE} button.
  */
 public class ClipboardMenu extends AbstractContainerMenu {
     /** Ghost filter slots: one for each possible stop (the stop of the same index). */
@@ -41,6 +47,13 @@ public class ClipboardMenu extends AbstractContainerMenu {
     public static final int UNMARK_AREA = 50;
     /** Print a Job Card. */
     public static final int PRINT = 70;
+    /** Pick a Sorting Drop-Off for its extra filters, or put them away when it is picked already (+ the stop's index). */
+    public static final int MORE = 80;
+
+    /** The player's inventory and hotbar, then the extra filter slots (appended, so no older slot moves). */
+    public static final int INV_START = GHOSTS, INV_END = GHOSTS + 36, EXTRA_START = INV_END, EXTRA_END = EXTRA_START + CardFilters.EXTRA;
+    /** Where the extra filter slots sit: a row in the left column, where a Sorting order has no areas. */
+    public static final int EXTRA_X = 9, EXTRA_Y = 101;
 
     /** The site, as the data slot says: not bound, bound and standing, closed (the clock is gone), out of reach (not loaded). */
     public static final int UNBOUND = 0, BOUND = 1, CLOSED = 2, AWAY = 3;
@@ -51,6 +64,8 @@ public class ClipboardMenu extends AbstractContainerMenu {
     public final InteractionHand hand;
     private final Player player;
     private final DataSlot site = DataSlot.standalone();
+    /** The stop picked for its extra filters, or -1. */
+    private final DataSlot picked = DataSlot.standalone();
 
     public ClipboardMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buf) {
         this(id, inventory, buf.readEnum(InteractionHand.class));
@@ -73,8 +88,28 @@ public class ClipboardMenu extends AbstractContainerMenu {
                 }
             } : new Slot(inventory, c, INV_X + c * 18, INV_Y + 58));
         }
+        Container extras = new SimpleContainer(CardFilters.EXTRA);
+        for (int k = 0; k < CardFilters.EXTRA; k++) addSlot(new ExtraSlot(extras, k, EXTRA_X + k * 18, EXTRA_Y));
         addDataSlot(site);
+        picked.set(-1);
+        addDataSlot(picked);
         if (player instanceof ServerPlayer sp) site.set(ClipboardItem.siteState(sp, order()));
+    }
+
+    /** The Drop-Off picked for its extra filters (a Sorting order's), or -1. */
+    public int picked() {
+        int i = picked.get();
+        return pickable(order(), i) ? i : -1;
+    }
+
+    /** Client: picks a Drop-Off for its extra filters at once, or puts them away (the server is told by the button and agrees). */
+    public void pick(int stop) {
+        picked.set(picked() == stop ? -1 : stop);
+    }
+
+    /** Whether a stop may have extra filters: a Drop-Off of a Sorting order. */
+    public static boolean pickable(Order o, int stop) {
+        return o.job().equals(WorkTable.SORTING) && stop >= 0 && stop < o.stops().size() && o.stops().get(stop).dropOff();
     }
 
     /** The held Clipboard. */
@@ -131,6 +166,21 @@ public class ClipboardMenu extends AbstractContainerMenu {
                 l.remove(i);
                 return x.withStops(l);
             });
+            // the extras' annex follows its Drop-Off up the list, and goes with it
+            int was = picked.get();
+            picked.set(was == i ? -1 : was > i ? was - 1 : was);
+            return true;
+        }
+        if (id >= MORE && id < MORE + GHOSTS) {
+            int i = id - MORE;
+            String no = !o.job().equals(WorkTable.SORTING) ? "clipboard.more_sorting" : !pickable(o, i) ? "clipboard.more_drop_off" : null;
+            if (no != null) {
+                // the screen picked it at once: put it back as it was
+                sendAllDataToRemote();
+                return Refusals.deny(sp, no);
+            }
+            // as the screen did at once: the same stop again puts the annex away
+            pick(i);
             return true;
         }
         if (id >= UNMARK_AREA && id < UNMARK_AREA + Order.MAX_AREAS) {
@@ -154,7 +204,23 @@ public class ClipboardMenu extends AbstractContainerMenu {
             if (type == ClickType.PICKUP || type == ClickType.QUICK_MOVE) setFilter(slotId, button == 1 ? ItemStack.EMPTY : getCarried());
             return;
         }
+        if (slotId >= EXTRA_START && slotId < EXTRA_END) {
+            // an extra filter: the same, for the picked Drop-Off
+            if (type == ClickType.PICKUP || type == ClickType.QUICK_MOVE) setExtra(slotId - EXTRA_START, button == 1 ? ItemStack.EMPTY : getCarried());
+            return;
+        }
         super.clicked(slotId, button, type, p);
+    }
+
+    /** Sets (or clears) one extra filter of the picked Drop-Off. Returns whether it changed. */
+    public boolean setExtra(int slot, ItemStack kind) {
+        int i = picked();
+        if (i < 0 || slot < 0 || slot >= CardFilters.EXTRA) return false;
+        ItemStack board = clipboard();
+        BlockPos pos = order().stops().get(i).pos();
+        CardFilters.put(board, CardFilters.onBoard(board).withExtra(pos, slot, kind));
+        CardFilters.tidy(board);
+        return true;
     }
 
     /** Sets (or clears) the filter of the Drop-Off at a stop index. Returns whether it changed. */
@@ -165,13 +231,33 @@ public class ClipboardMenu extends AbstractContainerMenu {
         return true;
     }
 
-    /** Shift-click from the inventory: that item becomes the filter of the first Drop-Off without one. */
+    /**
+     * Shift-click from the inventory: that item becomes the filter of the first Drop-Off without one; with a Drop-Off
+     * picked for its extras, its own filter if it has none, else its first free extra (all nine full: refused).
+     */
     @Override
     public ItemStack quickMoveStack(Player p, int index) {
-        if (index < GHOSTS || index >= slots.size()) return ItemStack.EMPTY;
+        if (index < INV_START || index >= INV_END) return ItemStack.EMPTY;
         ItemStack stack = slots.get(index).getItem();
         if (stack.isEmpty() || stack.is(WorkRegistry.CLIPBOARD.get())) return ItemStack.EMPTY;
         Order o = order();
+        int at = picked();
+        if (at >= 0) {
+            Order.Stop s = o.stops().get(at);
+            if (s.filter().isEmpty()) {
+                setFilter(at, stack);
+                return ItemStack.EMPTY;
+            }
+            java.util.List<ItemStack> extras = CardFilters.onBoard(clipboard()).extras(s.pos());
+            for (int k = 0; k < extras.size(); k++) {
+                if (extras.get(k).isEmpty()) {
+                    setExtra(k, stack);
+                    return ItemStack.EMPTY;
+                }
+            }
+            if (p instanceof ServerPlayer sp) Refusals.deny(sp, "clipboard.filters_full");
+            return ItemStack.EMPTY;
+        }
         for (int i = 0; i < o.stops().size(); i++) {
             Order.Stop s = o.stops().get(i);
             if (s.dropOff() && s.filter().isEmpty()) {
@@ -185,6 +271,8 @@ public class ClipboardMenu extends AbstractContainerMenu {
     @Override
     public void broadcastChanges() {
         if (player instanceof ServerPlayer sp) site.set(ClipboardItem.siteState(sp, order()));
+        // a picked stop that is no longer a Sorting Drop-Off (another job, unmarked) is put away
+        if (picked.get() >= 0 && picked() < 0) picked.set(-1);
         super.broadcastChanges();
     }
 
@@ -240,6 +328,55 @@ public class ClipboardMenu extends AbstractContainerMenu {
         public boolean isActive() {
             Order o = order();
             return stop < o.stops().size() && o.stops().get(stop).dropOff();
+        }
+    }
+
+    /** An extra ghost filter slot (0.7.2): shows that extra filter of the picked Drop-Off; nothing goes in or out. */
+    public class ExtraSlot extends Slot {
+        public final int extra;
+
+        ExtraSlot(Container ghosts, int extra, int x, int y) {
+            super(ghosts, extra, x, y);
+            this.extra = extra;
+        }
+
+        @Override
+        public ItemStack getItem() {
+            int i = picked();
+            return i < 0 ? ItemStack.EMPTY : CardFilters.onBoard(clipboard()).extras(order().stops().get(i).pos()).get(extra);
+        }
+
+        @Override
+        public boolean hasItem() {
+            return !getItem().isEmpty();
+        }
+
+        @Override
+        public void set(ItemStack stack) {
+        }
+
+        @Override
+        public void setByPlayer(ItemStack stack, ItemStack previous) {
+        }
+
+        @Override
+        public ItemStack remove(int amount) {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public boolean mayPickup(Player p) {
+            return false;
+        }
+
+        @Override
+        public boolean isActive() {
+            return picked() >= 0;
         }
     }
 }

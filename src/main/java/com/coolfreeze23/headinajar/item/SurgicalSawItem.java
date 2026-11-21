@@ -71,6 +71,9 @@ public class SurgicalSawItem extends Item {
     public static InteractionResult saw(ServerPlayer server, ItemStack stack, Mob mob, InteractionHand hand) {
         Player player = server;
         ItemStack offhand = player.getOffhandItem();
+        // living staff first: the staff rules decide (a Promotion to the Board, or a refusal); nobody else reaches them
+        InteractionResult staff = com.coolfreeze23.headinajar.staff.Promotion.saw(server, stack, mob, hand);
+        if (staff != null) return staff;
         SawTable.Verdict verdict = SawTable.verdict(mob, player, offhand, true);
         if (verdict.refused()) {
             // nothing spins up and nothing is spent: the line, the refusal sound, and the creature shakes its head

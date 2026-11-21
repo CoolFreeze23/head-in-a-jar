@@ -64,6 +64,65 @@ public final class StaffFile {
     public long lastDawn = -1;
     /** Tasks finished at work (a trip, 8 crops or 4 animals, a hostile seen off, an hour of patrol); grades read it. */
     public int tasks;
+    /** Its career (0.7.2): grade, reviews, grievances, the Board. A file saved before has the defaults. */
+    public Career career = new Career();
+
+    /**
+     * The career half of a file (0.7.2), saved as one field ({@code career}) so a file saved by 0.7.1 reads with every
+     * value at its default: an Intern, never reviewed, no grievance, never promoted.
+     */
+    public static final class Career {
+        /** 0 Intern, 1 Associate, 2 Senior Associate, 3 Team Lead ({@code staff.Grades}). */
+        public int grade;
+        /** {@link StaffFile#tasks} at its last review. */
+        public int tasksAtReview;
+        /** The day of its last review (-1 never). */
+        public long reviewedDay = -1;
+        /** Grievances filed and dawns gone unpaid since its last review (the slip's counts). */
+        public int grievancesSinceReview, unpaidSinceReview;
+        /** Dawns running at which it went unpaid (0 once paid); the strike test reads it. */
+        public int unpaidRun;
+        /** The day it was promoted to the Board (-1 never): set on the head; its body's file names the head's number. */
+        public long promotedDay = -1;
+        /** The staff number of its other half after a promotion (the head's on the body's file, the body's on the head's), 0 none. */
+        public int link;
+        /** A Grievance is open (Form 66-G): it faces the wall and does no work until morale is back to 40. */
+        public boolean grievance;
+        /** The last day a living worker had cake (-1 never): one a day, as a plinth head's. */
+        public long cakeDay = -1;
+
+        public static final Codec<Career> CODEC = RecordCodecBuilder.create(i -> i.group(
+                Codec.INT.optionalFieldOf("grade", 0).forGetter(c -> c.grade),
+                Codec.INT.optionalFieldOf("tasksAtReview", 0).forGetter(c -> c.tasksAtReview),
+                Codec.LONG.optionalFieldOf("reviewedDay", -1L).forGetter(c -> c.reviewedDay),
+                Codec.INT.optionalFieldOf("grievances", 0).forGetter(c -> c.grievancesSinceReview),
+                Codec.INT.optionalFieldOf("unpaid", 0).forGetter(c -> c.unpaidSinceReview),
+                Codec.INT.optionalFieldOf("unpaidRun", 0).forGetter(c -> c.unpaidRun),
+                Codec.LONG.optionalFieldOf("promotedDay", -1L).forGetter(c -> c.promotedDay),
+                Codec.INT.optionalFieldOf("link", 0).forGetter(c -> c.link),
+                Codec.BOOL.optionalFieldOf("grievance", false).forGetter(c -> c.grievance),
+                Codec.LONG.optionalFieldOf("cakeDay", -1L).forGetter(c -> c.cakeDay)
+        ).apply(i, (grade, tasksAtReview, reviewedDay, grievances, unpaid, unpaidRun, promotedDay, link, grievance, cakeDay) -> {
+            Career c = new Career();
+            c.grade = Math.max(0, Math.min(3, grade));
+            c.tasksAtReview = tasksAtReview;
+            c.reviewedDay = reviewedDay;
+            c.grievancesSinceReview = grievances;
+            c.unpaidSinceReview = unpaid;
+            c.unpaidRun = unpaidRun;
+            c.promotedDay = promotedDay;
+            c.link = link;
+            c.grievance = grievance;
+            c.cakeDay = cakeDay;
+            return c;
+        }));
+
+        /** Whether every value is its default (then nothing is saved: an old file stays byte for byte as it was). */
+        public boolean blank() {
+            return grade == 0 && tasksAtReview == 0 && reviewedDay == -1 && grievancesSinceReview == 0 && unpaidSinceReview == 0
+                    && unpaidRun == 0 && promotedDay == -1 && link == 0 && !grievance && cakeDay == -1;
+        }
+    }
 
     public static final Codec<StaffFile> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.INT.fieldOf("number").forGetter(f -> f.number),
@@ -79,14 +138,16 @@ public final class StaffFile {
             Codec.LONG.optionalFieldOf("paidThrough", -1L).forGetter(f -> f.paidThrough),
             Codec.INT.optionalFieldOf("lowDawns", 0).forGetter(f -> f.lowDawns),
             Codec.LONG.optionalFieldOf("lastDawn", -1L).forGetter(f -> f.lastDawn),
-            Codec.INT.optionalFieldOf("tasks", 0).forGetter(f -> f.tasks)
+            Codec.INT.optionalFieldOf("tasks", 0).forGetter(f -> f.tasks),
+            Career.CODEC.optionalFieldOf("career").forGetter(f -> f.career == null || f.career.blank() ? Optional.empty() : Optional.of(f.career))
     ).apply(i, StaffFile::of));
 
     public StaffFile() {
     }
 
     private static StaffFile of(int number, String species, int nameIndex, Optional<String> customName, Optional<UUID> employer, String employerName,
-                                long joined, List<Entry> history, Optional<Left> left, int morale, long paidThrough, int lowDawns, long lastDawn, int tasks) {
+                                long joined, List<Entry> history, Optional<Left> left, int morale, long paidThrough, int lowDawns, long lastDawn, int tasks,
+                                Optional<Career> career) {
         StaffFile f = new StaffFile();
         f.number = number;
         f.species = species;
@@ -103,6 +164,7 @@ public final class StaffFile {
         f.lowDawns = lowDawns;
         f.lastDawn = lastDawn;
         f.tasks = tasks;
+        f.career = career.orElseGet(Career::new);
         return f;
     }
 

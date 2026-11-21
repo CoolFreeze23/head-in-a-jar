@@ -54,6 +54,10 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     private static final int SHIFT_H = 11, SHIFT_BUTTON_H = 10;
     /** Columns of a roster row: species, name, job card, shift, morale, status. */
     private static final int COL_NAME = 18, NAME_ROOM = 50, COL_JOB = 70, COL_SHIFT = 80, COL_FACE = 89, COL_STATUS = 99;
+    /** 0.7.2: the grade's mark at the name's end (the name gives up its room), and the Review and Promote buttons' width. */
+    private static final int COL_GRADE = 62, GRADE_NAME_ROOM = 43, ICON_W = 16;
+    /** The strike's lines in the Roster (0.7.2): red ink; the grade marks' brass and the tie's red. */
+    private static final int STRIKE = 0xA02020, DUE = 0x9A5A10, BRASS = 0xFFD99A35, BRASS_LIGHT = 0xFFF2C650, TIE = 0xFF7A1E1E;
     private static final int SCROLL_W = 3;
     /** The Broth tab (0.7.1): the tank's line and gauge, then six rows of canisters, each with its own small gauge. */
     private static final int BROTH_Y = BODY_Y + 4, GAUGE_Y = BROTH_Y + 11, GAUGE_H = 10, CAN_Y = GAUGE_Y + GAUGE_H + 4, CAN_ROWS = 6,
@@ -63,7 +67,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     private static final int TEXT = 0x404040, FAINT = 0x8A8A8A, NOTE = 0x5A5A5A;
     private static final Pattern ARG = Pattern.compile("%(\\d+\\$)?s");
 
-    private Button rename, recall;
+    private Button rename, recall, review, promote;
     private EditBox nameBox;
     private Tooltip pickFirst, outOfReach;
     /** The first row shown (the Roster and the Shifts share it). */
@@ -97,8 +101,14 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         nameBox.setValue(typed);
         nameBox.setHint(Component.translatable("screen.headinajar.file.rename").withStyle(ChatFormatting.DARK_GRAY));
         addRenderableWidget(nameBox);
+        // 0.7.2: Review and Promote, two small buttons with their pictures, between Recall and Rename
+        int promoteX = renameX - 2 - ICON_W, reviewX = promoteX - 1 - ICON_W;
         recall = addRenderableWidget(Button.builder(Component.translatable(KEY + "recall"), b -> recall())
-                .bounds(leftPos + X0, topPos + BUTTON_Y, renameX - leftPos - X0 - 2, BUTTON_H).build());
+                .bounds(leftPos + X0, topPos + BUTTON_Y, reviewX - leftPos - X0 - 2, BUTTON_H).build());
+        review = addRenderableWidget(new IconButton(reviewX, topPos + BUTTON_Y, Component.translatable(KEY + "review"),
+                new ItemStack(WorkRegistry.PERFORMANCE_REVIEW.get()), b -> pressCareer(ClockNet.REVIEW)));
+        promote = addRenderableWidget(new IconButton(promoteX, topPos + BUTTON_Y, Component.translatable(KEY + "promote"),
+                new ItemStack(com.coolfreeze23.headinajar.registry.ModRegistry.LIFE_SUPPORT_JAR.get()), b -> pressCareer(ClockNet.PROMOTE)));
         rename = addRenderableWidget(Button.builder(renameLabel, b -> pressRename()).bounds(renameX, topPos + BUTTON_Y, renameW, BUTTON_H).build());
         pickFirst = Tooltip.create(Component.translatable(KEY + "pick_first"));
         outOfReach = Tooltip.create(Component.translatable(KEY + "out_of_reach"));
@@ -140,7 +150,13 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         recall.active = row != null;
         recall.setTooltip(row == null ? pickFirst : null);
         nameBox.visible = roster && typing;
-        scroll = Math.max(0, Math.min(scroll, rows.size() - visibleRows()));
+        review.visible = promote.visible = roster && !typing;
+        ClockNet.CareerRow career = row == null ? null : career(row);
+        review.active = career != null && !career.has(ClockNet.CareerRow.TODAY);
+        review.setTooltip(Tooltip.create(reviewTip(row, career)));
+        promote.active = career != null && career.grade() == com.coolfreeze23.headinajar.staff.Grades.TEAM_LEAD;
+        promote.setTooltip(Tooltip.create(promoteTip(row, career)));
+        scroll = Math.max(0, Math.min(scroll, size(rows) - visibleRows()));
     }
 
     private int visibleRows() {
@@ -187,6 +203,12 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         ClockNet.Row row = picked();
         if (row == null) return;
         order(ClockNet.RECALL, row, 0);
+    }
+
+    /** Review or Promote on the picked row (the server checks everything again, and refuses with a line). */
+    private void pressCareer(int kind) {
+        ClockNet.Row row = picked();
+        if (row != null) order(kind, row, 0);
     }
 
     private void pressShift(int row, int shift) {
@@ -259,7 +281,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
             int tab = menu.tab();
             if (!rows.isEmpty() && (tab == TimeClockMenu.ROSTER || tab == TimeClockMenu.SHIFTS)) {
                 int h = tab == TimeClockMenu.ROSTER ? ROW_H : SHIFT_H, x1 = listRight(rows);
-                if (rows.size() > visibleRows() && x >= x1 + 1 && x < X1 && y >= ROW_Y && y < ROW_Y + visibleRows() * h) {
+                if (size(rows) > visibleRows() && x >= x1 + 1 && x < X1 && y >= ROW_Y && y < ROW_Y + visibleRows() * h) {
                     // the scroll bar's track pages up or down
                     scroll += y < ROW_Y + thumbY(rows, h) ? -visibleRows() : visibleRows();
                     sync();
@@ -298,7 +320,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
                 return true;
             }
         }
-        if ((tab == TimeClockMenu.ROSTER || tab == TimeClockMenu.SHIFTS) && rows.size() > visibleRows() && sy != 0) {
+        if ((tab == TimeClockMenu.ROSTER || tab == TimeClockMenu.SHIFTS) && size(rows) > visibleRows() && sy != 0) {
             scroll += sy > 0 ? -1 : 1;
             sync();
             return true;
@@ -307,7 +329,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     }
 
     private int listRight(List<ClockNet.Row> rows) {
-        return rows.size() > visibleRows() ? X1 - SCROLL_W - 2 : X1;
+        return size(rows) > visibleRows() ? X1 - SCROLL_W - 2 : X1;
     }
 
     /** The roster row under the pointer (panel px), or -1. */
@@ -321,11 +343,11 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
 
     private int thumbH(List<ClockNet.Row> rows, int h) {
         int track = visibleRows() * h;
-        return Math.max(6, track * visibleRows() / rows.size());
+        return Math.max(6, track * visibleRows() / size(rows));
     }
 
     private int thumbY(List<ClockNet.Row> rows, int h) {
-        int track = visibleRows() * h, room = rows.size() - visibleRows();
+        int track = visibleRows() * h, room = size(rows) - visibleRows();
         return room <= 0 ? 0 : (track - thumbH(rows, h)) * scroll / room;
     }
 
@@ -357,13 +379,15 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         // the open tab's name top right, opposite the clock's; where the two do not fit side by side, the tab's alone
-        Component tab = Component.translatable(KEY + TAB_KEYS[menu.tab()]);
+        // 0.7.2: a striking site's clock says so where the tab's name was, on every tab
+        boolean striking = menu.career != null && menu.career.striking();
+        Component tab = striking ? Component.translatable(KEY + "strike") : Component.translatable(KEY + TAB_KEYS[menu.tab()]);
         int tabX = X1 - font.width(tab);
         if (titleLabelX + font.width(title) + 6 > tabX) {
-            g.drawString(font, cut(tab, X1 - X0), titleLabelX, titleLabelY, TEXT, false);
+            g.drawString(font, cut(tab, X1 - X0), titleLabelX, titleLabelY, striking ? STRIKE : TEXT, false);
         } else {
             g.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
-            g.drawString(font, tab, tabX, titleLabelY, NOTE, false);
+            g.drawString(font, tab, tabX, titleLabelY, striking ? STRIKE : NOTE, false);
         }
         g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
     }
@@ -434,18 +458,28 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
             return;
         }
         int x1 = listRight(rows), hovered = rowAt(rows, mx, my, ROW_H, x1);
-        for (int i = 0; i < visibleRows() && scroll + i < rows.size(); i++) {
+        List<Component> strike = strikeLines();
+        for (int i = 0; i < visibleRows() && scroll + i < rows.size() + strike.size(); i++) {
             int r = scroll + i, y = ROW_Y + i * ROW_H;
+            if (r >= rows.size()) {
+                // the strike's section under the staff: its heading, then each striker's back pay (0.7.2)
+                g.drawString(font, cut(strike.get(r - rows.size()), x1 - X0), X0, y + 1, STRIKE, false);
+                continue;
+            }
             ClockNet.Row row = rows.get(r);
             rowBand(g, r, y, ROW_H, x1, hovered);
             boolean far = row.entity() < 0;
             int color = far ? FAINT : TEXT;
+            ClockNet.CareerRow career = career(row);
             icon(g, egg(row), X0, y + 1, far);
-            g.drawString(font, cut(row.name(), NAME_ROOM), COL_NAME, y + 1, color, false);
+            g.drawString(font, cut(row.name(), career == null ? NAME_ROOM : GRADE_NAME_ROOM), COL_NAME, y + 1, color, false);
+            if (career != null) gradeMark(g, career.grade(), COL_GRADE, y + 1);
             if (!row.job().isEmpty()) icon(g, card(row.job()), COL_JOB, y + 1, far);
             shiftPip(g, row.shift(), COL_SHIFT, y + 1);
             face(g, row.face(), COL_FACE, y + 1);
-            g.drawString(font, cut(status(row), x1 - COL_STATUS - 1), COL_STATUS, y + 1, color, false);
+            boolean due = career != null && career.has(ClockNet.CareerRow.DUE) && !career.has(ClockNet.CareerRow.STRIKER);
+            Component status = due ? Component.translatable("staff.headinajar.review_due") : status(row);
+            g.drawString(font, cut(status, x1 - COL_STATUS - 1), COL_STATUS, y + 1, due ? DUE : color, false);
         }
         scrollBar(g, rows, ROW_H);
     }
@@ -620,7 +654,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     }
 
     private void scrollBar(GuiGraphics g, List<ClockNet.Row> rows, int h) {
-        if (rows.size() <= visibleRows()) return;
+        if (size(rows) <= visibleRows()) return;
         int x0 = X1 - SCROLL_W, track = visibleRows() * h;
         g.fill(x0 - 1, ROW_Y - 1, X1 + 1, ROW_Y + track + 1, 0xFF373737);
         g.fill(x0, ROW_Y, X1, ROW_Y + track, 0xFF8B8B8B);
@@ -800,7 +834,19 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         switch (menu.tab()) {
             case TimeClockMenu.ROSTER -> {
                 int r = rowAt(rows, x, y, ROW_H, listRight(rows));
-                return r < 0 ? null : rowTooltip(rows.get(r));
+                if (r < 0) return null;
+                List<Component> tip = rowTooltip(rows.get(r));
+                ClockNet.CareerRow career = career(rows.get(r));
+                if (career != null) {
+                    // 0.7.2: the grade, and a review due (the grade it would give) or done today
+                    tip.add(1, Component.translatable(KEY + "grade_line", com.coolfreeze23.headinajar.staff.Grades.name(career.grade())).withStyle(ChatFormatting.GRAY));
+                    if (career.has(ClockNet.CareerRow.DUE)) {
+                        tip.add(2, Component.translatable(KEY + "review_due_line", com.coolfreeze23.headinajar.staff.Grades.name(career.earned())).withStyle(ChatFormatting.GOLD));
+                    } else if (career.has(ClockNet.CareerRow.TODAY)) {
+                        tip.add(2, Component.translatable(KEY + "reviewed_today").withStyle(ChatFormatting.GRAY));
+                    }
+                }
+                return tip;
             }
             case TimeClockMenu.SHIFTS -> {
                 int x1 = listRight(rows), r = rowAt(rows, x, y, SHIFT_H, x1);
@@ -836,6 +882,92 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
             }
         }
         return null;
+    }
+
+    // --- the career (0.7.2) -------------------------------------------------------------------------------------------
+
+    /** A row's career as last sent, or null (not here, or a server without it). */
+    private ClockNet.CareerRow career(ClockNet.Row row) {
+        ClockNet.ClockCareer c = menu.career;
+        return c == null || row == null ? null : c.of(row.id());
+    }
+
+    /** The rows' count, and on the Roster the strike's lines under them. */
+    private int size(List<ClockNet.Row> rows) {
+        return rows.size() + (menu.tab() == TimeClockMenu.ROSTER ? strikeLines().size() : 0);
+    }
+
+    /** A striking site's section of the Roster: "ON STRIKE" and the demands' heading, then a line a striker. */
+    private List<Component> strikeLines() {
+        ClockNet.ClockCareer c = menu.career;
+        if (c == null || !c.striking()) return List.of();
+        List<Component> out = new ArrayList<>();
+        out.add(Component.translatable(KEY + "strike").append(" Â· ").append(Component.translatable(KEY + "demands")));
+        out.addAll(c.demands());
+        return out;
+    }
+
+    /** A button's tooltip: its name, then what it would do or why it cannot. */
+    private static Component tip(String button, Component why, ChatFormatting style) {
+        return Component.translatable(KEY + button).withStyle(ChatFormatting.WHITE).append("\n").append(why.copy().withStyle(style));
+    }
+
+    /** What Review would do for the picked row, or why it cannot. */
+    private static Component reviewTip(ClockNet.Row row, ClockNet.CareerRow career) {
+        if (row == null) return tip("review", Component.translatable(KEY + "pick_first"), ChatFormatting.GRAY);
+        if (career == null) return tip("review", Component.translatable(KEY + "review_away"), ChatFormatting.GRAY);
+        if (career.has(ClockNet.CareerRow.TODAY)) return tip("review", Component.translatable("refusal.headinajar.review.today", row.name()), ChatFormatting.RED);
+        return tip("review", Component.translatable(KEY + "review_hint"), ChatFormatting.GRAY);
+    }
+
+    /** What Promote would do for the picked row, or why it cannot. */
+    private static Component promoteTip(ClockNet.Row row, ClockNet.CareerRow career) {
+        if (row == null) return tip("promote", Component.translatable(KEY + "pick_first"), ChatFormatting.GRAY);
+        if (career == null) return tip("promote", Component.translatable(KEY + "out_of_reach"), ChatFormatting.GRAY);
+        int g = career.grade();
+        if (g == com.coolfreeze23.headinajar.staff.Grades.INTERN) return tip("promote", Component.translatable("refusal.headinajar.promotion.intern"), ChatFormatting.RED);
+        if (g < com.coolfreeze23.headinajar.staff.Grades.TEAM_LEAD) {
+            return tip("promote", Component.translatable("refusal.headinajar.promotion.below", row.name(), com.coolfreeze23.headinajar.staff.Grades.name(g)), ChatFormatting.RED);
+        }
+        return tip("promote", Component.translatable(KEY + "promote_hint"), ChatFormatting.GRAY);
+    }
+
+    /** A grade's mark beside the name, 5 x 7: nothing for an Intern, one brass stripe, two, a Team Lead's tie. */
+    private static void gradeMark(GuiGraphics g, int grade, int x, int y) {
+        switch (grade) {
+            case 1 -> g.fill(x, y + 5, x + 5, y + 7, BRASS);
+            case 2 -> {
+                g.fill(x, y + 1, x + 5, y + 3, BRASS);
+                g.fill(x, y + 5, x + 5, y + 7, BRASS);
+            }
+            case 3 -> pixels(g, x, y, TIE_MARK, TIE_COLORS);
+            default -> {
+            }
+        }
+    }
+
+    private static final String[] TIE_MARK = {".kkk.", "..t..", ".ttt.", ".ttt.", ".ttt.", "..t..", "....."};
+    private static final Map<Character, Integer> TIE_COLORS = Map.of('k', BRASS_LIGHT, 't', TIE);
+
+    /** A small button with an item's picture at half size in place of its words (the words in its tooltip and narration). */
+    private static final class IconButton extends Button {
+        private final ItemStack picture;
+
+        IconButton(int x, int y, Component label, ItemStack picture, OnPress press) {
+            super(x, y, ICON_W, BUTTON_H, label, press, DEFAULT_NARRATION);
+            this.picture = picture;
+        }
+
+        @Override
+        public void renderString(GuiGraphics g, net.minecraft.client.gui.Font font, int color) {
+            var pose = g.pose();
+            pose.pushPose();
+            pose.translate(getX() + (width - 8) / 2f, getY() + (height - 8) / 2f, 0);
+            pose.scale(0.5f, 0.5f, 0.5f);
+            g.renderItem(picture, 0, 0);
+            pose.popPose();
+            if (!active) g.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, 0x80555555);
+        }
     }
 
     /** A worker's whole row: name, number and species, job, shift, morale, status. */

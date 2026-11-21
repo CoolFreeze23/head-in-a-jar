@@ -506,6 +506,9 @@ VERBS = {
     "genes": r"^genes (?:me|mecha) [a-z_]+(?:,[a-z_]+)*$",
     # set-up verbs of the secondment rows: a collared host's canister, glass or team sync; the server option staff.secondment
     "secondee": rf"^secondee (?:canister|glass|teamsync) {F}$", "secondmentforwalk": r"^secondmentforwalk (?:on|off)$",
+    # set-up verbs of the 0.7.2 career rows: a grade for the workers near by, a walk-out at the nearest clock, a grievance
+    "gradeforcheck": rf"^gradeforcheck [0-3](?: {F})?$", "strikeforcheck": r"^strikeforcheck(?: \d+(?: \d+)?)?$",
+    "grievanceforcheck": r"^grievanceforcheck (?:head|worker)$",
     "bystander": None,
 }
 BYSTANDER = {

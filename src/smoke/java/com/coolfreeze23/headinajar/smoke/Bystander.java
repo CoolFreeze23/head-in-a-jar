@@ -112,6 +112,30 @@ final class Bystander {
         return present() ? player.getVehicle() : null;
     }
 
+    private static final List<ServerPlayer> CONVOY = new ArrayList<>();
+    private static final List<Vec3> CONVOY_AT = new ArrayList<>();
+    private static boolean convoying;
+
+    private static void convoy(MinecraftServer server) {
+        if (server.getPlayerList().getPlayers().isEmpty()) return;
+        Entity lead = server.getPlayerList().getPlayers().get(0).getVehicle();
+        if (lead == null) return;
+        double yaw = Math.toRadians(lead.getYRot());
+        double fx = -Math.sin(yaw), fz = Math.cos(yaw), rx = -Math.cos(yaw), rz = -Math.sin(yaw);
+        for (int i = 0; i < CONVOY.size(); i++) {
+            Entity v = CONVOY.get(i).getVehicle();
+            if (v == null || v.level() != lead.level()) continue;
+            Vec3 o = CONVOY_AT.get(i);
+            v.setPos(lead.getX() + rx * o.x + fx * o.z, lead.getY(), lead.getZ() + rz * o.x + fz * o.z);
+            v.setYRot(lead.getYRot());
+            if (v instanceof net.minecraft.world.entity.LivingEntity le && lead instanceof net.minecraft.world.entity.LivingEntity ll) {
+                le.setYBodyRot(ll.yBodyRot);
+                le.setYHeadRot(ll.getYHeadRot());
+            }
+            v.setOnGround(lead.onGround());
+        }
+    }
+
     private static void pace(MinecraftServer server) {
         if (pace == null || !present() || !(player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mine)) return;
         for (ServerPlayer p : server.getPlayerList().getPlayers()) {
@@ -199,6 +223,42 @@ final class Bystander {
             player.teleportTo(level, Double.parseDouble(a[2]) + 0.5, Double.parseDouble(a[3]), Double.parseDouble(a[4]) + 0.5, yaw, 0);
             confirmTeleport();
             return "bystander spawned at " + player.blockPosition().toShortString();
+        }
+        if (verb.equals("convoy")) {
+            // convoy RIGHT FORWARD: set-up for the frame bench of several machines walking at once (one player can only
+            // pilot one): a further stand-in player boards the nearest machine nobody rides within 24 of the real
+            // player, and every server tick its machine is put at the real player's machine plus this offset in that
+            // machine's own frame (blocks to its right and ahead), facing the same way, so each walks at the pilot's
+            // speed and its clips and legs play from its own measured movement
+            ServerPlayer real = server.getPlayerList().getPlayers().get(0);
+            var level = real.serverLevel();
+            Entity free = null;
+            for (Entity e : level.getEntities((Entity) null, real.getBoundingBox().inflate(24),
+                    e -> (e instanceof com.coolfreeze23.headinajar.entity.ShellEntity || e instanceof com.coolfreeze23.headinajar.entity.MechaEntity)
+                            && !e.isVehicle() && e != real.getVehicle())) {
+                if (free == null || e.distanceToSqr(real) < free.distanceToSqr(real)) free = e;
+            }
+            if (free == null) return "bystander convoy -> no machine free within 24";
+            int n = CONVOY.size() + 1;
+            GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(("convoy" + n).getBytes()), "Convoy" + n);
+            CommonListenerCookie cookie = CommonListenerCookie.createInitial(profile, false);
+            ServerPlayer p = new ServerPlayer(server, level, profile, cookie.clientInformation());
+            RecordingConnection c = new RecordingConnection();
+            new EmbeddedChannel(c);
+            Connection realConnection = real.connection.getConnection();
+            ChannelAttributes.setPayloadSetup(c, ChannelAttributes.getPayloadSetup(realConnection));
+            ChannelAttributes.setConnectionType(c, ChannelAttributes.getConnectionType(realConnection));
+            server.getPlayerList().placeNewPlayer(c, p, cookie);
+            p.setGameMode(GameType.CREATIVE);
+            p.teleportTo(level, free.getX(), free.getY(), free.getZ(), free.getYRot(), 0);
+            boolean on = p.startRiding(free, true);
+            CONVOY.add(p);
+            CONVOY_AT.add(new Vec3(Double.parseDouble(a[2]), 0, Double.parseDouble(a[3])));
+            if (!convoying) {
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) -> convoy(e.getServer()));
+                convoying = true;
+            }
+            return "bystander convoy " + n + " -> " + BuiltInRegistries.ENTITY_TYPE.getKey(free.getType()) + " riding " + on + " at " + CONVOY_AT.get(n - 1);
         }
         if (!present()) return "bystander " + verb + " -> no bystander (spawn it first)";
         var level = player.serverLevel();

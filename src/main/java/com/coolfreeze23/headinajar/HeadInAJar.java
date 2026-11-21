@@ -43,6 +43,7 @@ public class HeadInAJar {
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.StaffEvents.class);
         // the secondment (0.7.1)
         com.coolfreeze23.headinajar.staff.second.SecondeeEvents.register();
+        com.coolfreeze23.headinajar.staff.MomentsEvents.register(); // 0.7.2: promotions, grades, reviews, grievances, strikes
         // the workforce (0.7.0)
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.item.StaffLanyardItem.class);
         com.coolfreeze23.headinajar.staff.work.WorkRules.register();

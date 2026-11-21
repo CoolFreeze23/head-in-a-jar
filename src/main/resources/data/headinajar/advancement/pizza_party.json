@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:industrial_action",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "pizza_party"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.headinajar.pizza_party.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.pizza_party.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  }
+}

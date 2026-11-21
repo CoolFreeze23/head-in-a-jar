@@ -132,6 +132,21 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue SECONDMENT = B
             .comment("A Secondment Collar can be fitted to a host and a jarred head seated on it (false: the collar refuses; heads already seated stand by where they are).")
             .define("secondment", true);
+    public static final ModConfigSpec.BooleanValue PROMOTION = B
+            .comment("A Team Lead of your own can be promoted to the Board with the Surgical Saw and an empty jar (false: the saw refuses; reviews and grades go on).")
+            .define("promotion", true);
+    public static final ModConfigSpec.IntValue PROMOTED_ARRAY_CAP = B
+            .comment("Promoted heads per Cerebral Array that make the promoted rate; any more make their species' normal rate.")
+            .defineInRange("promotedArrayCap", 3, 0, 9);
+    public static final ModConfigSpec.IntValue PROMOTED_ARRAY_BONUS = B
+            .comment("What a promoted head makes at a Cerebral Array, in percent of its species' rate (100: no bonus).")
+            .defineInRange("promotedArrayBonus", 150, 100, 300);
+    public static final ModConfigSpec.BooleanValue STRIKES = B
+            .comment("Neglected sites go on strike at dawn (never in a world's first week; false: no strikes, ever).")
+            .define("strikes", true);
+    public static final ModConfigSpec.BooleanValue BOARD_UNIONISES = B
+            .comment("When the Board really carries a motion to unionise, a site near it that already meets the strike test walks out at once (false: the motion is only words).")
+            .define("boardUnionises", true);
 
     static {
         B.pop().push("heads");

@@ -32,11 +32,16 @@ public final class ChairQuiet {
 
     /** Whether a chair is operating within {@value #RADIUS} blocks of this player. */
     public static boolean near(Player player) {
+        return near(player.level(), player.position(), RADIUS);
+    }
+
+    /** Whether a chair is operating within {@code radius} blocks of a point in this level. */
+    public static boolean near(Level level, net.minecraft.world.phys.Vec3 at, double radius) {
         if (RUNNING.isEmpty()) return false;
-        long now = player.level().getGameTime();
+        long now = level.getGameTime();
         RUNNING.values().removeIf(t -> now - t > STALE || t > now);
         for (Seat seat : RUNNING.keySet()) {
-            if (seat.dimension() == player.level().dimension() && seat.pos().getCenter().distanceToSqr(player.position()) <= RADIUS * RADIUS) return true;
+            if (seat.dimension() == level.dimension() && seat.pos().getCenter().distanceToSqr(at) <= radius * radius) return true;
         }
         return false;
     }

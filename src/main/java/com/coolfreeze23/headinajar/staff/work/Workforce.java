@@ -149,6 +149,13 @@ public final class Workforce {
             if (!MobMotor.idle(mob) || Movers.moving(mob)) WorkerPaths.stop(mob);
             return;
         }
+        // a Promotion to the Board: the candidate and the staff watching stand still, their heads the ceremony's
+        if (com.coolfreeze23.headinajar.staff.Promotion.holds(mob)) {
+            if (!MobMotor.idle(mob) || Movers.moving(mob)) WorkerPaths.stop(mob);
+            return;
+        }
+        // a strike or a grievance runs the worker this tick in place of its work
+        if (com.coolfreeze23.headinajar.staff.SiteState.held(mob, d)) return;
         if ((mob.tickCount & 31) == 0) keepRange(mob);
         MobMotor.tick(mob);
         Movers.tick(mob);
@@ -245,6 +252,8 @@ public final class Workforce {
         if (spec == null) return new Object[]{"lanyard.unknown", mob.getType().getDescription()};
         if (spec.refusal() != null) return new Object[]{spec.refusal(), mob.getType().getDescription()};
         if (!Movers.canMove(mob, spec)) return new Object[]{"lanyard.unknown", mob.getType().getDescription()};
+        // 0.7.2: new staff won't cross the picket line
+        if (com.coolfreeze23.headinajar.staff.Strikes.hireRefused(player, mob)) return new Object[]{"strike.hire"};
         int max = Config.get(Config.MAX_PER_PLAYER, 24);
         int have = WorkerIndex.get(player.server).count(player.getUUID());
         if (have >= max) return new Object[]{"lanyard.headcount", have};
@@ -440,6 +449,11 @@ public final class Workforce {
         }
         if (d.state == WorkerData.State.NOTICE) {
             Refusals.deny(player, StaffShake.at(mob), "staff.already_let_go", name(mob));
+            return true;
+        }
+        // 0.7.2: not during industrial action
+        if (com.coolfreeze23.headinajar.staff.Strikes.clockOf(mob) != null) {
+            Refusals.deny(player, StaffShake.at(mob), "strike.let_go");
             return true;
         }
         // a seconded head is not let go from its body: it is unseated, file and grade kept

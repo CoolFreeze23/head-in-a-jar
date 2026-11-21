@@ -61,6 +61,14 @@ public final class WorkRegistry {
             () -> DataComponentType.<Order>builder().persistent(Order.CODEC).networkSynchronized(Order.STREAM).cacheEncoding().build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Order.Card>> JOB_CARD_DATA = COMPONENTS.register("job_card",
             () -> DataComponentType.<Order.Card>builder().persistent(Order.Card.CODEC).networkSynchronized(Order.Card.STREAM).cacheEncoding().build());
+    /** Sorting's extra filters a Drop-Off and the print version (0.7.2), on a Clipboard and on a Job Card. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<com.coolfreeze23.headinajar.staff.work.CardFilters>> FILTERS = COMPONENTS.register("filters",
+            () -> DataComponentType.<com.coolfreeze23.headinajar.staff.work.CardFilters>builder().persistent(com.coolfreeze23.headinajar.staff.work.CardFilters.CODEC)
+                    .networkSynchronized(com.coolfreeze23.headinajar.staff.work.CardFilters.STREAM).cacheEncoding().build());
+    /** What a Performance Review slip says (0.7.2). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<com.coolfreeze23.headinajar.item.PerformanceReviewItem.Slip>> REVIEW = COMPONENTS.register("review",
+            () -> DataComponentType.<com.coolfreeze23.headinajar.item.PerformanceReviewItem.Slip>builder().persistent(com.coolfreeze23.headinajar.item.PerformanceReviewItem.Slip.CODEC)
+                    .networkSynchronized(com.coolfreeze23.headinajar.item.PerformanceReviewItem.Slip.STREAM).cacheEncoding().build());
 
     /** The equip sound is the Chimera's "Hard hat issued". */
     private static final Holder<net.minecraft.sounds.SoundEvent> CLONK = com.coolfreeze23.headinajar.mecha.HopperSounds.holder("chimera.hard_hat_clonk");
@@ -92,6 +100,9 @@ public final class WorkRegistry {
     public static final DeferredItem<WhistleItem> SUPERVISORS_WHISTLE = item("supervisors_whistle", () -> new WhistleItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<SeparationNoticeItem> SEPARATION_NOTICE = item("separation_notice",
             () -> new SeparationNoticeItem(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)));
+    /** The Performance Review (0.7.2): printed from Paper at the Time Clock's Roster. */
+    public static final DeferredItem<com.coolfreeze23.headinajar.item.PerformanceReviewItem> PERFORMANCE_REVIEW = item("performance_review",
+            () -> new com.coolfreeze23.headinajar.item.PerformanceReviewItem(new Item.Properties().stacksTo(16)));
 
     private WorkRegistry() {
     }

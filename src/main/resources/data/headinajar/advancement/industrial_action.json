@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:clocking_in",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "industrial_action"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:oak_sign"
+    },
+    "title": {
+      "translate": "advancements.headinajar.industrial_action.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.industrial_action.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

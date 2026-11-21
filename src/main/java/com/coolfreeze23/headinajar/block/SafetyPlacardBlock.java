@@ -28,8 +28,8 @@ public class SafetyPlacardBlock extends Block {
      * cycle only once its release ships it ({@link #SHIPPED}).
      */
     public static final IntegerProperty NOTICE = IntegerProperty.create("notice", 0, 20);
-    /** The notices the cycle steps through, in order: the twelve of 0.2.0, 12 of 0.6.3, 16 and 18 of 0.6.2, 13, 14, 19 and 20 of 0.7.0. */
-    public static final int[] SHIPPED = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20};
+    /** The notices the cycle steps through, in order: the twelve of 0.2.0, 12 of 0.6.3, 16 and 18 of 0.6.2, 13, 14, 19 and 20 of 0.7.0, 15 and 17 of 0.7.2. */
+    public static final int[] SHIPPED = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 
     /** The notice after {@code now} in the cycle (a notice not in it, set by command, goes to the first). */
     public static int next(int now) {

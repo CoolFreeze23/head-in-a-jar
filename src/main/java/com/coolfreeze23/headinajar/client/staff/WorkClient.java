@@ -46,8 +46,8 @@ public final class WorkClient {
                 });
         modBus.addListener((net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent e) -> {
             e.registerReloadListener(new StaffFit.Loader());
-            e.registerReloadListener((net.minecraft.server.packs.resources.ResourceManagerReloadListener) manager ->
-                    StaffLayer.artSheet = manager.getResource(StaffLayer.LANYARD).isPresent());
+            // which badge sheets are in, and whether they have the grades and the tie painted
+            e.registerReloadListener((net.minecraft.server.packs.resources.ResourceManagerReloadListener) StaffLayer::check);
         });
         modBus.addListener((net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional e) -> {
             for (String size : StaffLayer.HAT_SIZES) e.register(net.minecraft.client.resources.model.ModelResourceLocation.standalone(StaffLayer.hatModel(size)));

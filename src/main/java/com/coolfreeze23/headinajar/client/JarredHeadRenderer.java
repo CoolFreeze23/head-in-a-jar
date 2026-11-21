@@ -79,7 +79,11 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
         // morale: the band the server sent
         Band band = head.band();
         float bob = 1;
-        if (band == Band.ENGAGED) {
+        if (band == Band.GRIEVANCE) {
+            // Form 66-G: turned to the wall (the Employee Mount's 150 degrees), not turning to anyone
+            yaw = GRIEVANCE_YAW;
+            pitch = 12;
+        } else if (band == Band.ENGAGED) {
             pitch -= 4;
             bob = 1.4f;
         } else if (band.low()) {
@@ -195,6 +199,9 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
      * A low head turns 20 degrees away from the player it would look at: to the side away from them, chosen again only
      * once they are well to one side (so a player in front does not flip it from side to side), and eased over.
      */
+    /** A plinth head with a grievance open faces this far round from its facing (the Employee Mount's wall yaw). */
+    static final float GRIEVANCE_YAW = 150;
+
     private static float away(JarredHeadBlockEntity head, float yaw, float partialTick) {
         float[] s = AWAY.computeIfAbsent(head, h -> new float[]{0, (h.getBlockPos().hashCode() & 1) == 0 ? 1 : -1, -1});
         if (yaw > 8) s[1] = -1;

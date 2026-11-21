@@ -81,10 +81,10 @@ HANDBOOK = {
                 'Parabéns por entrar para a $(l)Cabeça no Pote$(). Este manual cobre tudo o que um funcionário precisa: da $(item)Cadeira de Separação$() a manter sua cabeça abastecida de $(item)Soro Craniano$().',
                 'Comece pelo $(item)Aço Cirúrgico$(): funda uma mistura de ferro, farinha de osso e carvão. Depois faça $(item)Fio de Neurocobre$(), uma $(item)Lente$() e um $(item)Servo$(). A energia vem de uma $(item)Pilha Galvânica$() alimentada com carne.']),
             ('separation', 'the_chair', 'A Cadeira de Separação', 'headinajar:separation_chair', [
-                'Carregue a cadeira com um $(item)Pote de Suporte Vital$(), $(item)Óculos Retransmissores$(), uma $(item)Câmera de Colarinho$() e quatro frascos de $(item)Soro Craniano$(), e dê 40 kFE a ela. Sente e segure $(l)Assinar$() no Formulário 27-B.',
+                'Carregue a cadeira com um $(item)Pote de Suporte Vital$(), $(item)Óculos Retransmissores$(), uma $(item)Câmera de Colar$() e quatro frascos de $(item)Soro Craniano$(), e dê 40 kFE a ela. Sente e segure $(l)Assinar$() no Formulário 27-B.',
                 'Você pode levantar até o corte. Depois disso, a DOLORES termina o que começou. Uma lâmina gasta pode estragar o serviço: tenha uma $(item)Lâmina de Reposição$() à mão.']),
             ('separation', 'the_link', 'A Neuroconexão', 'headinajar:relay_goggles', [
-                'Depois do corte você anda no seu próprio corpo sem cabeça e enxerga pela $(item)Câmera de Colarinho$(). Sua cabeça usa os óculos e envia o sinal. Quanto mais longe, pior a imagem.',
+                'Depois do corte você anda no seu próprio corpo sem cabeça e enxerga pela $(item)Câmera de Colar$(). Sua cabeça usa os óculos e envia o sinal. Quanto mais longe, pior a imagem.',
                 'Água, rocha, tempestades, portais e o Warden prejudicam o sinal. Com sinal zero por cinco segundos, você acorda na sua cabeça. Aperte $(k:key.headinajar.swap) para trocar entre corpo e cabeça você mesmo.',
                 'Leve sua cabeça numa $(item)Bolsa de Cabeça$() para uma conexão perfeita, ou deixe-a num $(item)Berço de Suporte Vital$(). $(item)Mastros Retransmissores$() passam o sinal adiante: alcançam uns aos outros e o seu corpo dentro do raio.']),
             ('separation', 'when_it_goes_wrong', 'Quando Dá Errado', 'headinajar:suture_kit', [

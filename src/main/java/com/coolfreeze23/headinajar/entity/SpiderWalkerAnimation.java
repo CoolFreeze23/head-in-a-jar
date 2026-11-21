@@ -3,6 +3,7 @@ package com.coolfreeze23.headinajar.entity;
 import com.coolfreeze23.headinajar.anim.SeekingController;
 import com.coolfreeze23.headinajar.mecha.Legs;
 import com.coolfreeze23.headinajar.mecha.MechaRig;
+import com.coolfreeze23.headinajar.mecha.ProceduralLegs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -43,6 +44,16 @@ public final class SpiderWalkerAnimation {
     public static final String[] SET_A = {"fl", "r2", "l3", "rr"}, SET_B = {"fr", "l2", "r3", "rl"};
     /** Blocks a tick the walk, the backing gait, the limp and the climb were authored at. */
     public static final double WALK = 0.34, BACK = 0.085, LIMP = 0.085, CLIMB = 0.2;
+    /**
+     * The legs finding their own footing (standing, walking, turning, climbing): each leg's rest point under the body (px,
+     * as the model stands), the gait's pairs front to back (left, right) as leg indices, the box's half width and the
+     * flat-out pace.
+     */
+    public static final ProceduralLegs.Rig RIG = new ProceduralLegs.Rig(LEGS,
+            new double[]{-14.5, -18, -18, -14.5, 14.5, 18, 18, 14.5}, new double[]{-15.5, -5.5, 5.5, 15.5, -15.5, -5.5, 5.5, 15.5},
+            new int[]{0, 4, 1, 5, 2, 6, 3, 7}, 0.7, WALK);
+    /** Ticks it takes to turn onto a wall it climbs, and back off it over the top (the Skitter's). */
+    public static final int WALL_TURN = 6;
     /** The collapse's length: the shell is removed when it ends. */
     public static final int DESTROYED = 40;
     /** The get-off clip hides its stand-in jar from this tick: the real jar is drawn hopping off until then. */
@@ -81,6 +92,9 @@ public final class SpiderWalkerAnimation {
         public float aimYaw, aimPitch;
         /** The player last seen riding (the get-off clip draws their jar hopping off), by entity id. */
         public int lastPilot = -1;
+        /** The legs finding their own footing, and whether they have them this frame (else the clip has them). */
+        public final ProceduralLegs.State stride = new ProceduralLegs.State();
+        public boolean striding;
         /** The bones' world matrices as last drawn (the effects' locators). */
         public final Map<String, org.joml.Matrix4f> bones = new HashMap<>();
         double dt;
@@ -171,6 +185,18 @@ public final class SpiderWalkerAnimation {
         return at("idle", now, 5);
     }
 
+    /**
+     * Whether the legs find their own footing under {@code main}'s choice: piloted, standing, walking, turning or
+     * climbing, and nothing over it but a flinch (the hop on or off, the web and the hand-washing are the clips' own).
+     */
+    public static boolean strides(ShellEntity s, double now, Choice main) {
+        if (s.isDeadOrDying() || !piloted(s) || cockpit(s, now) != null || web(s, now) != null) return false;
+        return switch (main.clip().name()) {
+            case "idle", "walk", "walk_back", "turn_l", "turn_r", "limp", "climb", "climb_top" -> true;
+            default -> false;
+        };
+    }
+
     /** Hopping on, or off. */
     public static Choice cockpit(ShellEntity s, double now) {
         long boarded = s.boardedAt();
@@ -220,7 +246,17 @@ public final class SpiderWalkerAnimation {
         double now = now(state);
         if (s.getFirstPassenger() instanceof Player p) s.walker.lastPilot = p.getId();
         s.walker.update(s, now);
-        return pick(state, main(s, s.walker, now));
+        Choice choice = main(s, s.walker, now);
+        s.walker.striding = strides(s, now, choice);
+        // the legs are the code's: the stepping clips give way to the standing one (its breath, its look, its key)
+        if (s.walker.striding) {
+            switch (choice.clip().name()) {
+                case "walk", "walk_back", "turn_l", "turn_r", "climb" -> choice = at("idle", now, 5);
+                default -> {
+                }
+            }
+        }
+        return pick(state, choice);
     }
 
     @SuppressWarnings("unchecked")

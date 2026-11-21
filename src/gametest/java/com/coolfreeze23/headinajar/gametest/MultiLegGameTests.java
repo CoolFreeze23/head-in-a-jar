@@ -20,6 +20,7 @@ import com.coolfreeze23.headinajar.mecha.MechaFrame;
 import com.coolfreeze23.headinajar.mecha.MechaLogic;
 import com.coolfreeze23.headinajar.mecha.MechaModule;
 import com.coolfreeze23.headinajar.mecha.MechaRig;
+import com.coolfreeze23.headinajar.mecha.ProceduralLegs;
 import com.coolfreeze23.headinajar.mecha.Skitter;
 import com.coolfreeze23.headinajar.network.Network;
 import com.coolfreeze23.headinajar.registry.ModRegistry;
@@ -646,6 +647,154 @@ public class MultiLegGameTests {
         h.assertTrue(clip(SpiderWalkerAnimation.cockpit(s, now(h) + 3)).equals("get_off"), "no get_off clip");
         h.assertTrue(SpiderWalkerAnimation.still(s, now(h) + 60), "an empty Spider Walker is not parked and still afterwards");
         done(h, p);
+    }
+
+    /** The Spider Walker's legs as the rig rests them (model px, on the ground): where the code takes them over. */
+    private static double[][] restFeet() {
+        var rig = SpiderWalkerAnimation.RIG;
+        double[][] feet = new double[rig.count()][];
+        for (int i = 0; i < rig.count(); i++) feet[i] = new double[]{rig.restX()[i], 0, rig.restZ()[i]};
+        return feet;
+    }
+
+    /** Gait neighbours (in front, behind, across) by leg index, as the rig pairs them. */
+    private static List<int[]> neighbours() {
+        int[] gait = SpiderWalkerAnimation.RIG.gait();
+        List<int[]> pairs = new ArrayList<>();
+        for (int g = 0; g < gait.length; g++) {
+            if (g + 2 < gait.length) pairs.add(new int[]{gait[g], gait[g + 2]});
+            if (g % 2 == 0) pairs.add(new int[]{gait[g], gait[g + 1]});
+        }
+        return pairs;
+    }
+
+    /** Pads that are down and were down last frame, and did not just land, must not have moved. */
+    private static void noSliding(ProceduralLegs.State st, int down, double[][] was, boolean[] wasDown, List<String> faults, String when) {
+        for (int i = 0; i < was.length; i++) {
+            double[] foot = st.footWorld(i);
+            boolean isDown = !st.swinging(i);
+            if (isDown && wasDown[i] && (down & (1 << i)) == 0
+                    && Math.abs(foot[0] - was[i][0]) + Math.abs(foot[1] - was[i][1]) + Math.abs(foot[2] - was[i][2]) > 1e-9) {
+                faults.add("pad " + i + " slid " + when);
+            }
+            System.arraycopy(foot, 0, was[i], 0, 3);
+            wasDown[i] = isDown;
+        }
+    }
+
+    /**
+     * The Spider Walker's legs find their own footing, run frame by frame (three a tick) against real blocks as its
+     * client draws them: walking south up a step a block high, then turning on the spot. A pad that is down never
+     * slides; no leg lifts while a neighbour (in front, behind, across) is up; every pad that is down stands on the top
+     * of the block under it; every leg steps; on the upper level the body comes back to its height.
+     */
+    @GameTest(template = "platform32", timeoutTicks = 40)
+    public static void spiderWalkerLegsFindTheirFooting(GameTestHelper h) {
+        var rig = SpiderWalkerAnimation.RIG;
+        var level = h.getLevel();
+        int n = rig.count();
+        Vec3 at = h.absoluteVec(Vec3.atBottomCenterOf(new BlockPos(16, 2, 4)));
+        // the template's floor, wherever it is: the raised step is one block on top of it
+        double floor = ProceduralLegs.groundAt(level, at.x, at.z, at.y + 3, at.y - 4);
+        h.assertTrue(!Double.isNaN(floor), "no floor under the start");
+        BlockPos raised = BlockPos.containing(at.x, floor + 0.5, at.z);
+        for (int x = -7; x <= 7; x++) for (int z = 10; z <= 26; z++) level.setBlockAndUpdate(raised.offset(x, 0, z), Blocks.STONE.defaultBlockState());
+        at = new Vec3(at.x, floor, at.z);
+        double stepZ = raised.getZ() + 10;
+        var st = new ProceduralLegs.State();
+        double[][] clip = restFeet();
+        int[] steps = new int[n], off = new int[n];
+        double[][] was = new double[n][3];
+        boolean[] wasDown = new boolean[n];
+        double x = at.x, y = at.y, z = at.z, now = 1000;
+        List<String> faults = new ArrayList<>();
+        for (int f = 0; f <= 3 * 70; f++) {
+            now += 1 / 3.0;
+            if (f > 15 && f <= 3 * 55) z += 0.25 / 3;
+            // the box steps up the block as its front meets it (vanilla's step height: all at once)
+            y = at.y + (z + 0.7 > stepZ ? 1 : 0);
+            int down = ProceduralLegs.update(rig, st, level, x, y, z, 0, now, null, null, 0, true, false, clip);
+            for (int i = 0; i < n; i++) {
+                if ((down & (1 << i)) != 0) steps[i]++;
+                double[] foot = st.footWorld(i);
+                // a pad with somewhere to stand stands on a block's top (or steps there within a tick)
+                double top = ProceduralLegs.groundAt(level, foot[0], foot[2], foot[1] + 0.5, foot[1] - 0.5);
+                boolean onTop = !Double.isNaN(top) && Math.abs(top - foot[1]) < 1e-6;
+                off[i] = !st.swinging(i) && st.grounded(i) && !onTop && f > 6 ? off[i] + 1 : 0;
+                if (off[i] > 3) faults.add("pad " + i + " not on a block top at frame " + f + ": " + foot[1] + " vs " + top);
+            }
+            noSliding(st, down, was, wasDown, faults, "at frame " + f);
+            for (int[] pr : neighbours()) {
+                // the rule binds legs with somewhere to stand (a dangling leg moves as it likes, as in Cymaera's)
+                if (st.swinging(pr[0]) && st.swinging(pr[1]) && st.grounded(pr[0]) && st.grounded(pr[1])) faults.add("neighbours " + pr[0] + " and " + pr[1] + " up together at frame " + f);
+            }
+        }
+        for (int i = 0; i < n; i++) if (steps[i] < 5) faults.add("leg " + i + " stepped only " + steps[i] + " times");
+        if (Math.abs(st.offY) > 1.5) faults.add("the body did not come back to its height on the upper level: " + st.offY);
+        // turning on the spot: every leg steps round, none slides
+        int[] turnSteps = new int[n];
+        float yaw = 0;
+        for (int f = 0; f <= 3 * 30; f++) {
+            now += 1 / 3.0;
+            if (f <= 3 * 20) yaw += 9 / 3f;
+            int down = ProceduralLegs.update(rig, st, level, x, y, z, yaw, now, null, null, 0, true, false, clip);
+            for (int i = 0; i < n; i++) if ((down & (1 << i)) != 0) turnSteps[i]++;
+            noSliding(st, down, was, wasDown, faults, "turning at frame " + f);
+        }
+        for (int i = 0; i < n; i++) if (turnSteps[i] < 2) faults.add("leg " + i + " stepped only " + turnSteps[i] + " times turning");
+        h.assertTrue(faults.isEmpty(), faults.size() + " faults, first: " + String.join("; ", faults.subList(0, Math.min(5, faults.size()))));
+        h.succeed();
+    }
+
+    /**
+     * Up a wall: rising against a wall to its front, the body turns onto the face and the front pads go onto it (on its
+     * plane) and step up it as the body climbs; the back pads stay on the ground at the wall's foot until the turned body
+     * lifts them onto the face too.
+     */
+    @GameTest(template = "platform", timeoutTicks = 40)
+    public static void spiderWalkerLegsClimbTheWallsFace(GameTestHelper h) {
+        var rig = SpiderWalkerAnimation.RIG;
+        var level = h.getLevel();
+        BlockPos wall = FLOOR.south(2);
+        for (int dx = -2; dx <= 2; dx++) post(h, wall.east(dx), 6);
+        Vec3 base = h.absoluteVec(Vec3.atBottomCenterOf(FLOOR));
+        double face = h.absoluteVec(Vec3.atLowerCornerOf(wall)).z;
+        double x = base.x, z = face - 0.7, y = base.y, now = 1000;
+        var st = new ProceduralLegs.State();
+        double[][] clip = restFeet();
+        int[] steps = new int[rig.count()];
+        double[] firstY = new double[2];
+        for (int f = 0; f <= 3 * 20; f++) {
+            now += 1 / 3.0;
+            if (f > 6) y += 0.2 / 3;
+            // turned onto the wall over the climb's first ticks, as the renderer turns the model
+            double turned = f > 6 ? Math.min(1, (f - 6) / 3.0 / SpiderWalkerAnimation.WALL_TURN) : 0;
+            Direction wallFace = f > 6 ? Direction.SOUTH : null;
+            int down = ProceduralLegs.update(rig, st, level, x, y, z, 0, now, wallFace, wallFace, turned, true, false, clip);
+            for (int i = 0; i < rig.count(); i++) if ((down & (1 << i)) != 0) steps[i]++;
+            if (f == 12) {
+                firstY[0] = st.footWorld(0)[1];
+                firstY[1] = st.footWorld(4)[1];
+                // just off the ground, the back pads are still on it
+                for (int i : new int[]{3, 7}) {
+                    h.assertTrue(st.normal(i)[1] > 0.9 && Math.abs(st.footWorld(i)[1] - base.y) < 1e-6, "back pad " + i + " left the ground while it was in reach");
+                }
+            }
+        }
+        StringBuilder legs = new StringBuilder();
+        for (int i = 0; i < rig.count(); i++) {
+            double[] foot = st.footWorld(i), nn = st.normal(i);
+            legs.append(String.format(java.util.Locale.ROOT, " [%d: %d steps, y%+.2f z%+.2f n %.0f,%.0f,%.0f%s]", i, steps[i], foot[1] - y, foot[2] - face,
+                    nn[0], nn[1], nn[2], st.swinging(i) ? " up" : ""));
+        }
+        for (int i : new int[]{0, 4}) {
+            double[] foot = st.footWorld(i);
+            boolean onFace = Math.abs(foot[2] - face) < 0.05 && st.normal(i)[2] < -0.9;
+            h.assertTrue(onFace || st.swinging(i), "front pad " + i + " is not on the wall's face:" + legs);
+            h.assertTrue(steps[i] >= 2, "front pad " + i + " did not step up the wall:" + legs);
+        }
+        h.assertTrue(st.footWorld(0)[1] > firstY[0] + 0.3 || st.footWorld(4)[1] > firstY[1] + 0.3, "the front pads did not go up the wall:" + legs);
+        h.succeed();
     }
 
     private static ListTag pos(GameTestHelper h) {

@@ -1,5 +1,6 @@
 package com.coolfreeze23.headinajar.staff.work.jobs;
 
+import com.coolfreeze23.headinajar.staff.work.CardFilters;
 import com.coolfreeze23.headinajar.staff.work.Order;
 import com.coolfreeze23.headinajar.staff.work.Quirks;
 import com.coolfreeze23.headinajar.staff.work.WorkTable;
@@ -46,9 +47,17 @@ final class Hauling {
         long retryAt;
         /** Pick-Ups found with nothing to take, in a row. */
         int empty;
+        /** Sorting's extra filters on the card (null: printed before 0.7.2, or Hauling) and how many a stop the worker reads. */
+        CardFilters filters;
+        int allowance = 1;
 
         Trip(Order.Card card) {
             this.card = card;
+        }
+
+        /** Where a stack may go on this card, read with the worker's grade on a 0.7.2 Sorting card. */
+        List<Order.Stop> to(ItemStack stack, boolean sorting) {
+            return CardFilters.destinations(card.order(), stack, sorting, filters, allowance);
         }
 
         void aim(Order.Stop s) {
@@ -62,12 +71,21 @@ final class Hauling {
     static void think(ServerLevel level, Mob mob, WorkerData d, WorkTable.Spec spec, Order.Card card, boolean sorting) {
         String job = sorting ? WorkTable.SORTING : WorkTable.HAULING;
         Trip t = d.task instanceof Trip trip && trip.card.equals(card) ? trip : null;
+        // a 0.7.2 Sorting card's extra filters, read from the card each think, and the worker's grade's share of them
+        CardFilters filters = sorting ? CardFilters.of(stackOf(level, d)) : null;
+        int allowance = filters == null ? 1 : CardFilters.allowance(mob);
+        if (t != null) {
+            t.filters = filters;
+            t.allowance = allowance;
+        }
         if (t == null) {
             t = new Trip(card);
+            t.filters = filters;
+            t.allowance = allowance;
             d.task = t;
             // a load carried over from before (another card, a reload): where it goes on this card
             for (ItemStack s : d.carried) {
-                List<Order.Stop> to = card.order().destinations(s, sorting);
+                List<Order.Stop> to = t.to(s, sorting);
                 t.dest.add(to.isEmpty() ? null : to.get(0));
                 t.misfiled.add(false);
             }
@@ -78,6 +96,12 @@ final class Hauling {
         AABB box = Jobs.box(d);
         if (d.carrying()) deliver(level, mob, d, t, pace, box, sorting);
         else fetch(level, mob, d, spec, t, pace, box, sorting);
+    }
+
+    /** The card item being worked (its own, or the rack's posting), or an empty stack. */
+    private static ItemStack stackOf(ServerLevel level, WorkerData d) {
+        ItemStack s = Order.workingStack(level, d);
+        return s == null ? ItemStack.EMPTY : s;
     }
 
     // --- to the Pick-Up and back with a load ------------------------------------------------------------------------
@@ -150,12 +174,21 @@ final class Hauling {
     static boolean take(ServerLevel level, Mob mob, WorkerData d, WorkTable.Spec spec, Trip t, IItemHandler from, boolean sorting) {
         int stacks = Math.max(1, Math.min(WorkerData.MAX_CARRIED, spec.carry()));
         int budget = spec.carryItems() > 0 ? spec.carryItems() : Integer.MAX_VALUE;
+        // 0.7.2: a Senior Associate and a Team Lead carry half again (in 64ths of a stack, so a half stack is half)
+        float more = com.coolfreeze23.headinajar.staff.work.GradeWork.carry(mob);
+        int share = Integer.MAX_VALUE;
+        if (more != 1) {
+            int carry = Math.max(1, spec.carry());
+            stacks = Math.max(1, Math.min(WorkerData.MAX_CARRIED, (int) Math.ceil(carry * more)));
+            if (spec.carryItems() > 0) budget = (int) Math.floor(spec.carryItems() * more);
+            share = (int) Math.floor(carry * more * 64);
+        }
         boolean took = false;
-        for (int slot = 0; slot < from.getSlots() && d.carried.size() < stacks && budget > 0; slot++) {
+        for (int slot = 0; slot < from.getSlots() && d.carried.size() < stacks && budget > 0 && share > 0; slot++) {
             ItemStack seen = from.extractItem(slot, 64, true);
             if (seen.isEmpty()) continue;
             Order o = t.card.order();
-            List<Order.Stop> to = o.destinations(seen, sorting);
+            List<Order.Stop> to = t.to(seen, sorting);
             int room = 0;
             Order.Stop first = null;
             for (Order.Stop s : to) {
@@ -165,6 +198,8 @@ final class Hauling {
             }
             if (first == null) continue;
             int n = Math.min(Math.min(seen.getCount(), room), Math.min(budget, spec.carryLimit(seen.getMaxStackSize())));
+            int cost = 64 / Math.max(1, Math.min(64, seen.getMaxStackSize()));
+            if (share != Integer.MAX_VALUE) n = Math.min(n, share / cost);
             if (n <= 0) continue;
             ItemStack got = from.extractItem(slot, n, false);
             if (got.isEmpty()) continue;
@@ -172,6 +207,7 @@ final class Hauling {
             took = true;
             if (got.isEmpty()) continue;
             budget -= got.getCount();
+            if (share != Integer.MAX_VALUE) share -= got.getCount() * cost;
             ItemStack wrong = sorting ? Sorting.misfile(mob, got) : ItemStack.EMPTY;
             if (!got.isEmpty()) {
                 d.carried.add(got);
@@ -210,7 +246,7 @@ final class Hauling {
         long now = level.getGameTime();
         // keep the bookkeeping beside the carry
         while (t.dest.size() < d.carried.size()) {
-            List<Order.Stop> to = t.card.order().destinations(d.carried.get(t.dest.size()), sorting);
+            List<Order.Stop> to = t.to(d.carried.get(t.dest.size()), sorting);
             t.dest.add(to.isEmpty() ? null : to.get(0));
             t.misfiled.add(false);
         }
@@ -293,7 +329,7 @@ final class Hauling {
 
     /** Another Drop-Off on the card that takes this stack and has room; false when there is none (it waits). */
     private static boolean reroute(ServerLevel level, Trip t, ItemStack load, Order.Stop not, boolean sorting) {
-        for (Order.Stop s : t.card.order().destinations(load, sorting)) {
+        for (Order.Stop s : t.to(load, sorting)) {
             if (s.equals(not)) continue;
             if (room(level, s, load) > 0) {
                 t.dest.set(0, s);

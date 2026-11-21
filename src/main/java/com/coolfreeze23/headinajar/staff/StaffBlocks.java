@@ -94,6 +94,11 @@ public final class StaffBlocks {
         if (f.staff() && Staff.day(level) > f.lastDawn) dawn(level, pos, head, f);
         if (every(level, pos, BADGE_TICKS)) {
             Staff.refresh(f, level.getServer());
+            // 0.7.2: a grievance ends once morale is back to 40 (a wage, a lunch, a colleague)
+            if (Grievances.ends(f)) {
+                Grievances.check(head, f, null);
+                head.setStaff(f);
+            }
             show(head, f);
         }
     }
@@ -121,6 +126,8 @@ public final class StaffBlocks {
         // lunch, colleagues, rivals and dislikes, then the daily desk jobs
         if (level instanceof ServerLevel server) com.coolfreeze23.headinajar.block.DeskJobs.dawn(server, pos, head, f);
         f.lowDawns = f.morale < Band.DISENGAGED_AT ? f.lowDawns + 1 : 0;
+        // 0.7.2: under 15 two dawns running files Form 66-G
+        Grievances.dawn(head, f);
         head.setStaff(f);
         show(head, f);
     }

@@ -14,6 +14,9 @@ public final class WorkSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> WHISTLE_TWICE = sound("whistle.two_short");
     public static final DeferredHolder<SoundEvent, SoundEvent> LANYARD_ON = sound("lanyard.on");
     public static final DeferredHolder<SoundEvent, SoundEvent> LANYARD_OFF = sound("lanyard.off");
+    /** 0.7.2: a strike's chant (a crowd's murmur under each striker's own voice) and the Union Rep accepting terms. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAFF_CHANT = sound("staff.chant");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REP_ACCEPTS = sound("staff.rep_accepts");
 
     private WorkSounds() {
     }

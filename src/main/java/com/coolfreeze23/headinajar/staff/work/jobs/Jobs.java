@@ -68,6 +68,8 @@ public final class Jobs {
             return;
         }
         if (!card.equals(READ.get(mob))) read(mob, card);
+        // 0.7.2: a review due is remembered while it works
+        com.coolfreeze23.headinajar.staff.work.GradeWork.worked(mob, Workforce.thinkTicks());
         if (Quirks.holds(mob, d)) return;
         WorkTable.Spec spec = WorkTable.of(mob);
         if (spec == null) return;
@@ -234,10 +236,10 @@ public final class Jobs {
         return b == Band.DISENGAGED || b == Band.GRIEVANCE;
     }
 
-    /** How fast it does a job: its aptitude times its morale's speed. */
+    /** How fast it does a job: its aptitude times its morale's speed, and (0.7.2) its grade's and a Team Lead's near by. */
     static float pace(Mob mob, WorkTable.Spec spec, String job) {
         float a = spec.speed(job);
-        return Math.max(0.1f, (a <= 0 ? 1 : a) * morale(mob));
+        return Math.max(0.1f, (a <= 0 ? 1 : a) * morale(mob) * com.coolfreeze23.headinajar.staff.work.GradeWork.speed(mob));
     }
 
     /** Ticks an action takes at this pace. */

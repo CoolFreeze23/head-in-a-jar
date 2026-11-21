@@ -227,27 +227,59 @@ public class RoverRenderer extends GeoEntityRenderer<ShellEntity> {
         }
 
         /**
-         * The Spider Walker: its eight pads on the ground under them (it climbs upright, so on a wall or in the air the
-         * clip alone poses them), the flinch mirrored for a blow from the right, and the nozzle aimed at the web.
+         * The Spider Walker: piloted and standing, walking, turning or climbing, its legs find their own footing
+         * ({@link com.coolfreeze23.headinajar.mecha.ProceduralLegs}): each pad stays where it was put down and steps when
+         * left behind, the body riding the ground under them; the key winds as the pads go down. Otherwise the clip poses
+         * them, on the ground under them where it stands. The flinch is mirrored for a blow from the right, and the
+         * nozzle aimed at the web.
          */
         private void legs(ShellEntity s, float partial) {
             var v = s.walker;
+            var spec = com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.LEGS;
             double now = s.level().getGameTime() + partial;
-            boolean grounded = s.isAlive() && s.onGround() && v.climb.face == null;
-            LegBones.ground(com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.LEGS, s, v.legs, this::cached, grounded, partial, v.frameDelta());
             long hit = s.hitAt();
             GeoBone body = cached("body");
             if (body != null && s.hurtTime > 0 && hit >= 0 && (hit & 1) == 1) {
                 body.setRotZ(-body.getRotZ());
                 body.setPosX(-body.getPosX());
             }
+            float rawPitch = body == null ? 0 : body.getRotX(), rawRoll = body == null ? 0 : body.getRotZ(), rawY = body == null ? 0 : body.getPosY();
+            var st = v.stride;
+            if (st.weight < 1) {
+                boolean grounded = s.isAlive() && s.onGround() && v.climb.face == null;
+                LegBones.ground(spec, s, v.legs, this::cached, grounded, partial, v.frameDelta());
+            } else {
+                // the clip's own ground code rests while the legs are the code's; it starts from level when it is back
+                java.util.Arrays.fill(v.legs.ground, 0);
+                v.legs.pitch = v.legs.roll = 0;
+            }
+            LegBones.feet(spec, this::cached, st.clip);
+            double x = Mth.lerp(partial, s.xo, s.getX()), y = Mth.lerp(partial, s.yo, s.getY()), z = Mth.lerp(partial, s.zo, s.getZ());
+            float yawNow = Mth.rotLerp(partial, s.yBodyRotO, s.yBodyRot);
+            // up a wall it turns onto the face (front up, belly to it), as the Skitter does, about its middle
+            double turned = v.striding ? v.climb.turned(now, com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.WALL_TURN) : 0;
+            int down = com.coolfreeze23.headinajar.mecha.ProceduralLegs.update(com.coolfreeze23.headinajar.entity.SpiderWalkerAnimation.RIG, st,
+                    s.level(), x, y, z, yawNow, now, v.climb.face, v.climb.turningFace(), turned, v.striding && s.isAlive(), RoverAnimation.flat(s), st.clip);
+            LegBones.stride(spec, st, this::cached, rawPitch, rawRoll, rawY);
+            double ts = com.coolfreeze23.headinajar.mecha.ProceduralLegs.turned(st);
+            if (ts > 0) {
+                double[] d = com.coolfreeze23.headinajar.mecha.ProceduralLegs.turnDirection(st);
+                float half = s.getBbWidth() * 8;
+                LegBones.turnRoot(cached("root"), new org.joml.Vector3f((float) -d[1], 0, (float) d[0]), (float) (ts * Math.PI / 2),
+                        new org.joml.Vector3f(0, (float) spec.bodyY(), 0),
+                        new org.joml.Vector3f((float) d[0], 0, (float) d[1]).mul((float) ((half - spec.bodyY()) * ts)));
+            }
+            if (down != 0 && st.weight > 0.5) {
+                for (int i = 0; i < spec.count(); i++) if ((down & (1 << i)) != 0) RoverClient.pad(s, st.footWorld(i), st.normal(i));
+            }
+            GeoBone reel = cached("reel");
+            if (reel != null && st.weight > 0) reel.setRotZ(reel.getRotZ() + (float) (st.windShown * st.weight) * Mth.DEG_TO_RAD);
             // the nozzle takes the aim at the web while it spits (or coughs), else the rider's look, a little
             float yaw = 0, pitch = 0;
             long web = s.webAt();
             float bodyYaw = Mth.rotLerp(partial, s.yBodyRotO, s.yBodyRot);
             if (web >= 0 && now - web / 2 < 22 && (web & 1) == 0) {
                 var at = s.webTarget();
-                double x = Mth.lerp(partial, s.xo, s.getX()), y = Mth.lerp(partial, s.yo, s.getY()), z = Mth.lerp(partial, s.zo, s.getZ());
                 double[] w = com.coolfreeze23.headinajar.mecha.Legs.world(x, z, bodyYaw, 0, -9);
                 org.joml.Vector3f d = LegBones.toModel(at.getX() + 0.5 - w[0], at.getY() + 0.5 - (y + 5.5 / 16), at.getZ() + 0.5 - w[1], bodyYaw);
                 yaw = (float) Math.toDegrees(Math.atan2(-d.x, -d.z));
