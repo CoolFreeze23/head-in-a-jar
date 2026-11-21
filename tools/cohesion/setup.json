@@ -6,6 +6,7 @@
   "a C suffix ({SC}, {TC}, {BC}, {TC+0,0,1}) gives the block's bottom centre as decimals,",
   "{NEAR_T} / {NEAR_S} / {NEAR_B} a selector filter for entities within 1.5 blocks of that centre,",
   "{SEL} a selector filter for the whole spot, {LONG X+dx,dy,dz} a block position packed as a long (Tesla Node Target).",
+  "{POS_X+dx,dy,dz} a block position as x,y,z (inside [I;...] for an NBT or component position); tokens also work in item strings.",
   "Fields: steps (placed before the form change), late (after it), nbt (extra NBT for a generic mob summon),",
   "aim (block | ground | air | [dx, dy, dz] from the T corner), body_at / head_at (T or B), form_steps (replace the form's",
   "own steps), item / offhand (replace the row's), action (use | attack | a whole input line), pre (input lines before",
@@ -1483,6 +1484,23 @@
     0.05
    ],
    "aim_check": "block:T"
+  },
+  "the air (your worker 2 ahead is on your detail)": {
+   "steps": [
+    "/summon minecraft:cow {TC} {NoAI:1b,Rotation:[180f,0f],\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;940439953,-167562164,-1601161573,-1389718966]}}}",
+    "wait 5"
+   ],
+   "aim": "air",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with headinajar:supervisors_whistle",
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "key use",
+    "wait 20",
+    "look 0 -60",
+    "wait 3"
+   ],
+   "approx": "the worker is a cow given a worker record by /data (employer Dev, NoAI); it joins the detail by a real Whistle click (pre) before the act"
   }
  },
  "setups": {
@@ -2200,7 +2218,124 @@
   "hurt, no iron in the pockets": {},
   "no tame wolf of yours within 16": {},
   "sync 30 (under the Ability's 50%)": {},
-  "sync 80": {}
+  "sync 80": {},
+  "below half health (8 of 20), an iron helmet against the sun": {
+   "nbt": "Health:8f,ArmorItems:[{},{},{},{id:\"minecraft:iron_helmet\",count:1}]",
+   "approx": "the helmet keeps the noon sun off (a burning zombie would lose health in the window)"
+  },
+  "full health, an iron helmet against the sun": {
+   "nbt": "ArmorItems:[{},{},{},{id:\"minecraft:iron_helmet\",count:1}]"
+  },
+  "a calf": {
+   "nbt": "Age:-24000",
+   "aim": [
+    0.5,
+    0.35,
+    0.5
+   ]
+  },
+  "a worker of yours (data merge, employer Dev)": {
+   "nbt": "\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;940439953,-167562164,-1601161573,-1389718966]}}",
+   "approx": "the worker record is put on at summon (employer Dev, no clock, NoAI), not by a Lanyard"
+  },
+  "a worker of another employer's (data merge)": {
+   "nbt": "\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;1,2,3,4]}}",
+   "approx": "the worker record is put on at summon (a dummy employer, NoAI), not by a Lanyard"
+  },
+  "not player-made (a village's)": {},
+  "room for the clock": {},
+  "another Time Clock 3 blocks to the side": {
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ]
+  },
+  "your own clock (placed by command: no owner), the screen closed after": {
+   "post": [
+    "press escape"
+   ]
+  },
+  "another player's clock (Owner set by /data)": {
+   "steps": [
+    "/data merge block {T} {Owner:[I;1,2,3,4],OwnerName:\"Bystander\"}"
+   ],
+   "approx": "the owner is a dummy UUID named Bystander, set by /data"
+  },
+  "an unbound clipboard, the screen closed after": {
+   "post": [
+    "press escape"
+   ]
+  },
+  "an unbound clipboard": {},
+  "clipboard bound to a clock 3 blocks to the side": {
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ],
+   "item": "headinajar:clipboard[headinajar:order={clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]}}]",
+   "approx": "the binding is the clipboard's order component, given with the item (the bind itself is its own row)"
+  },
+  "clipboard bound to a clock 10 blocks overhead (outside the site's 8 up)": {
+   "steps": [
+    "/setblock {T+0,10,0} headinajar:time_clock",
+    "wait 5"
+   ],
+   "item": "headinajar:clipboard[headinajar:order={clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_T+0,10,0}]}}]",
+   "approx": "the binding is the clipboard's order component, given with the item"
+  },
+  "a worker of yours; clipboard bound to a clock 3 blocks to the side": {
+   "nbt": "\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;940439953,-167562164,-1601161573,-1389718966]}}",
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ],
+   "item": "headinajar:clipboard[headinajar:order={clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]}}]",
+   "approx": "worker record put on at summon (employer Dev, no clock, NoAI); the binding is the clipboard's order component"
+  },
+  "clipboard bound, a Pick-Up and a Drop-Off marked (Hauling), paper in the pockets, screen open": {
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ],
+   "late": [
+    "/give @s minecraft:paper 4"
+   ],
+   "item": "headinajar:clipboard[headinajar:order={clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]},job:\"hauling\",stops:[{pos:[I;{POS_T+0,0,0}],drop_off:0b},{pos:[I;{POS_T+1,0,0}],drop_off:1b}]}]",
+   "pre": [
+    "/item replace entity @s weapon.mainhand with headinajar:clipboard[headinajar:order={clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]},job:\"hauling\",stops:[{pos:[I;{POS_T+0,0,0}],drop_off:0b},{pos:[I;{POS_T+1,0,0}],drop_off:1b}]}]",
+    "key use",
+    "wait 15"
+   ],
+   "action": "widget \"Print\"",
+   "post": [
+    "press escape"
+   ],
+   "approx": "the order (clock, two stops) is the clipboard's component, given with the item; the stops need not be chests to print"
+  },
+  "the screen closed after": {
+   "post": [
+    "press escape"
+   ]
+  },
+  "a worker of yours on a clock 3 blocks to the side, a Hauling card printed for that site": {
+   "nbt": "\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;940439953,-167562164,-1601161573,-1389718966],clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]}}}",
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ],
+   "item": "headinajar:job_card[headinajar:job_card={order:{clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]},job:\"hauling\",stops:[{pos:[I;{POS_T+0,0,0}],drop_off:0b},{pos:[I;{POS_T+1,0,0}],drop_off:1b}]},printer:\"Dev\",day:0L}]",
+   "approx": "worker record (employer Dev, its clock) put on at summon, NoAI; the card is given with its component, not printed"
+  },
+  "a worker of yours with no site, a Hauling card printed for a clock 3 blocks to the side": {
+   "nbt": "\"neoforge:attachments\":{\"headinajar:worker\":{employer:[I;940439953,-167562164,-1601161573,-1389718966]}}",
+   "steps": [
+    "/setblock {S+-3,0,2} headinajar:time_clock",
+    "wait 5"
+   ],
+   "item": "headinajar:job_card[headinajar:job_card={order:{clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]},job:\"hauling\",stops:[{pos:[I;{POS_T+0,0,0}],drop_off:0b},{pos:[I;{POS_T+1,0,0}],drop_off:1b}]},printer:\"Dev\",day:0L}]",
+   "approx": "worker record (employer Dev, no clock) put on at summon, NoAI; the card is given with its component"
+  },
+  "no detail": {}
  },
  "pairs": {
   "P094": {

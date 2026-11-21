@@ -1,0 +1,50 @@
+{
+  "format": 1,
+  "entity": "minecraft:snow_golem",
+  "model": "SnowGolemModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "upper_body"
+    },
+    "at": [0, -10, 0],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-5.5, 0, -5.5, 5.5, 1, -5],
+      [-5.5, 0, 5, 5.5, 1, 5.5],
+      [-5.5, 0, -5, -5, 1, 5],
+      [5, 0, -5, 5.5, 1, 5]
+    ],
+    "hang": {
+      "pivot": [0, 1, -5],
+      "rot": [0, 0, 0],
+      "cord": [
+        [-1.5, 0, -0.5, -0.5, 2, 0],
+        [0.5, 0, -0.5, 1.5, 2, 0]
+      ],
+      "badge": {
+        "at": [0, 1, -0.51],
+        "size": "full"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, -6.5, 0],
+    "rot": [0, 0, 0],
+    "size": "xl"
+  },
+  "crate": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, -10.5, 0],
+    "rot": [0, 0, 0],
+    "hat_lift": 8
+  }
+}

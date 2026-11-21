@@ -11,5 +11,23 @@
     "complaint.chair": 1,
     "complaint.broth": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "carry_items": 16,
+    "hands": false,
+    "walk": 0.72,
+    "move": "walk",
+    "attack": "melee",
+    "quirks": [
+      "never_strikes"
+    ]
   }
 }

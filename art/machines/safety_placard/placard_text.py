@@ -8,8 +8,9 @@ texels): the only finer-than-texel texture on the block, as vanilla's sign text 
 those texels (x right, y down from the board's top-left):
     header band   x 0..48, y 0..7     yellow, the black word NOTICE centred, letters at y 1..6
     rule          y 7..8              black
-    text field    x 2..46, y 8..48    black capitals 5 texels tall: 3 wide, but M, N and the 0 are 4 wide
-                  (a 3-wide N reads as a lower-case n) and W 5 (a 4-wide W reads as H); 1 texel between letters, 6 a line; up to 6 lines,
+    text field    x 2..46, y 8..48    black capitals 5 texels tall: 3 wide, but N and the 0 are 4 wide, and M, V
+                  and W 5 (N's diagonal runs to the foot: one that stopped half way read as M, as a 4-wide M did; a 3-wide V
+                  read as U, a 4-wide W as H); 1 texel between letters, 6 a line; up to 6 lines,
                   44 texels a line, words never split; the lines and the block of lines centred (2-3 texels of
                   margin above and below a full block)
     screws        four 3x3 steel heads in the board's corners (the fixing, painted)
@@ -27,10 +28,10 @@ FONT = {  # 3x5 capitals, rows top to bottom, '#' = ink
     'D': ['##.', '#.#', '#.#', '#.#', '##.'], 'E': ['###', '#..', '##.', '#..', '###'], 'F': ['###', '#..', '##.', '#..', '#..'],
     'G': ['.##', '#..', '#.#', '#.#', '.##'], 'H': ['#.#', '#.#', '###', '#.#', '#.#'], 'I': ['###', '.#.', '.#.', '.#.', '###'],
     'J': ['..#', '..#', '..#', '#.#', '.#.'], 'K': ['#.#', '#.#', '##.', '#.#', '#.#'], 'L': ['#..', '#..', '#..', '#..', '###'],
-    'M': ['#..#', '####', '#..#', '#..#', '#..#'], 'N': ['#..#', '##.#', '#.##', '#..#', '#..#'], 'O': ['.#.', '#.#', '#.#', '#.#', '.#.'],
+    'M': ['#...#', '##.##', '#.#.#', '#...#', '#...#'], 'N': ['#..#', '##.#', '##.#', '#.##', '#.##'], 'O': ['.#.', '#.#', '#.#', '#.#', '.#.'],
     'P': ['##.', '#.#', '##.', '#..', '#..'], 'Q': ['.#.', '#.#', '#.#', '##.', '.##'], 'R': ['##.', '#.#', '##.', '#.#', '#.#'],
     'S': ['.##', '#..', '.#.', '..#', '##.'], 'T': ['###', '.#.', '.#.', '.#.', '.#.'], 'U': ['#.#', '#.#', '#.#', '#.#', '###'],
-    'V': ['#.#', '#.#', '#.#', '#.#', '.#.'], 'W': ['#...#', '#...#', '#.#.#', '##.##', '#...#'], 'X': ['#.#', '#.#', '.#.', '#.#', '#.#'],
+    'V': ['#...#', '#...#', '.#.#.', '.#.#.', '..#..'], 'W': ['#...#', '#...#', '#.#.#', '##.##', '#...#'], 'X': ['#.#', '#.#', '.#.', '#.#', '#.#'],
     'Y': ['#.#', '#.#', '.#.', '.#.', '.#.'], 'Z': ['###', '..#', '.#.', '#..', '###'],
     '0': ['.##.', '#..#', '#..#', '#..#', '.##.'], '1': ['.#.', '##.', '.#.', '.#.', '###'], '2': ['##.', '..#', '.#.', '#..', '###'],
     '3': ['##.', '..#', '.#.', '..#', '##.'], '4': ['#.#', '#.#', '###', '..#', '..#'], '5': ['###', '#..', '##.', '..#', '##.'],
@@ -50,6 +51,10 @@ BREAKS = {('en_us', 2): ['THIS', 'FACILITY', 'HAS GONE', '0 DAYS', 'WITHOUT AN',
           ('en_us', 16): ['QUIET', 'FLOOR:', 'THE WARDEN', 'IS WORKING'],
           ('en_us', 18): ['PLEASE', 'DO NOT TAP', 'THE GLASS'],
           ('en_us', 12): ['A HEALTHY', 'BODY', 'IS A', 'PRODUCTIVE', 'BODY'],
+          ('en_us', 13): ['HARD HATS', 'MUST BE', 'WORN', 'BEYOND', 'THIS POINT'],
+          ('pt_br', 14): ['TURNO', 'DA NOITE', 'SÓ APÓS', 'ESCURECER'],
+          ('pt_br', 19): ['TODOS DE', 'CRACHÁ.', 'ATÉ VOCÊ,', 'MIMOSA'],
+          ('pt_br', 20): ['COLEGA', 'NÃO É', 'ALMOÇO'],
           ('pt_br', 2): ['ESTA', 'INSTALAÇÃO', 'ESTÁ HÁ', '0 DIAS SEM', 'ACIDENTES']}
 # accented capitals: the plain letter with its mark in two rows above it (a cedilla in the row below); a notice that
 # has any is set at 8 texels a line instead of 6, so at most 5 lines

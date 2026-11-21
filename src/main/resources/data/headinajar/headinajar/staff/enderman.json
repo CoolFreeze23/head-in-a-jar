@@ -14,5 +14,25 @@
     "complaint.view": 1,
     "complaint.jar": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.5,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "carry_items": 16,
+    "hands": true,
+    "walk": 0.72,
+    "move": "teleport",
+    "attack": "melee",
+    "quirks": [
+      "shy",
+      "out_of_the_rain"
+    ]
   }
 }

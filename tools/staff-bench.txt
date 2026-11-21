@@ -1,0 +1,1041 @@
+# The 0.7.0 server cost bench (plan section 5, "The cost bench"): what staff cost the server.
+# Windows, each settled 20 s and timed 60 s by "bench start/stop" (server tick median and p99, frame time), then
+# "/tick query" and the staff counters (thinks a second, paths a second, longest path ms) read back by cmdout:
+#   A: three Time Clocks 40 apart, no staff; 24 villagers and iron golems penned wild beside them (the "village").
+#   B: a full site of 8 (two haulers, a sorter and its return haul, two farmers, two guards) and nothing else.
+#   C: a player's 24 on three sites (8 haulers; 8 farmers on four wheat fields; 4 sorters and 4 guards, a zombie
+#      spawner at a corner of the third site).
+#   D: C with /headoffice staff pause.   E: C with the player 300 blocks away (the sites unloaded).
+#   F: C with a detail of six (taken from the haulers) following the player up and down.
+# Three rounds of A B C D F E in turn (18 windows, about 30 minutes: SMOKE_TIMEOUT_MIN=45).
+# Regions: A at x -1200, B at x -600, C at x 0 (sites at -40, 0, 40), E at z 300; far enough apart that only the one
+# the player stands in is loaded (spawn chunks off: C is at the world spawn). Day shift species only (villagers, built iron golems) at a fixed noon, so no
+# Hard Hats and no shift changes; random ticks left on (the farms regrow), the same in every window.
+# Gate (plan section 4): C at most 1.0 ms median and 2.5 ms p99 over E; D at most 0.1 ms over E; C no more than A.
+# Run: GAME_EXCLUSIVE=1 SMOKE_TIMEOUT_MIN=45 bash tools/smoke.sh tools/staff-bench.txt
+# Summary: python tools/bench_summary.py LABEL=run-smoke/smoke-out   (every scenario letter, A to F)
+# Against 0.6.3: the same script on a 0.6.3 build sets up nothing staff (its lines are refused) and times A and E.
+@world flat
+@difficulty easy
+@observe 20
+wait 60
+fpscap 260 vsync 0
+/gamemode creative
+/time set 6000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/gamerule doImmediateRespawn true
+/gamerule spawnChunkRadius 0
+/gamerule keepInventory true
+/kill @e[type=!player]
+/item replace entity @s hotbar.0 with headinajar:staff_lanyard 64
+/item replace entity @s hotbar.1 with headinajar:time_clock 16
+/item replace entity @s hotbar.2 with headinajar:supervisors_whistle 1
+hotbar 1
+# ---- region A (x -1200): three clocks, no staff, 24 penned wild
+/tp @s -1200.5 -60 -10.5 0 20
+wait 40
+/tp @s -1239.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem -1240 -61 0
+wait 3
+hotbar 1
+/fill -1245 -60 3 -1235 -60 13 minecraft:oak_fence hollow
+/summon villager -1243 -60 7 {PersistenceRequired:1b}
+/summon villager -1242 -60 7 {PersistenceRequired:1b}
+/summon villager -1241 -60 7 {PersistenceRequired:1b}
+/summon villager -1240 -60 7 {PersistenceRequired:1b}
+/summon villager -1239 -60 7 {PersistenceRequired:1b}
+/summon villager -1238 -60 7 {PersistenceRequired:1b}
+/summon villager -1237 -60 7 {PersistenceRequired:1b}
+/summon iron_golem -1240 -60 10 {PersistenceRequired:1b}
+/tp @s -1199.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem -1200 -61 0
+wait 3
+hotbar 1
+/fill -1205 -60 3 -1195 -60 13 minecraft:oak_fence hollow
+/summon villager -1203 -60 7 {PersistenceRequired:1b}
+/summon villager -1202 -60 7 {PersistenceRequired:1b}
+/summon villager -1201 -60 7 {PersistenceRequired:1b}
+/summon villager -1200 -60 7 {PersistenceRequired:1b}
+/summon villager -1199 -60 7 {PersistenceRequired:1b}
+/summon villager -1198 -60 7 {PersistenceRequired:1b}
+/summon villager -1197 -60 7 {PersistenceRequired:1b}
+/summon iron_golem -1200 -60 10 {PersistenceRequired:1b}
+/tp @s -1159.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem -1160 -61 0
+wait 3
+hotbar 1
+/fill -1165 -60 3 -1155 -60 13 minecraft:oak_fence hollow
+/summon villager -1163 -60 7 {PersistenceRequired:1b}
+/summon villager -1162 -60 7 {PersistenceRequired:1b}
+/summon villager -1161 -60 7 {PersistenceRequired:1b}
+/summon villager -1160 -60 7 {PersistenceRequired:1b}
+/summon villager -1159 -60 7 {PersistenceRequired:1b}
+/summon villager -1158 -60 7 {PersistenceRequired:1b}
+/summon iron_golem -1160 -60 10 {PersistenceRequired:1b}
+/summon iron_golem -1158 -60 10 {PersistenceRequired:1b}
+# ---- region B (x -600): one site of 8, hired by the stand-in second player (a player may employ 24 at most, and
+# C is the player's 24); it leaves when they are hired, so nothing holds region B loaded but the player
+/tp @s -599.5 -60 -20.5 0 20
+wait 40
+bystander spawn -600 -60 -2 0
+wait 20
+bystander hold headinajar:time_clock 1
+bystander useblock -600 -61 0
+wait 5
+bystander tp -600 -60 -12 0 10
+bystander hold headinajar:staff_lanyard 64
+/setblock -612 -60 -10 minecraft:chest{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:cobblestone",count:64},{Slot:2b,id:"minecraft:cobblestone",count:64},{Slot:3b,id:"minecraft:cobblestone",count:64},{Slot:4b,id:"minecraft:cobblestone",count:64},{Slot:5b,id:"minecraft:cobblestone",count:64},{Slot:6b,id:"minecraft:cobblestone",count:64},{Slot:7b,id:"minecraft:cobblestone",count:64},{Slot:8b,id:"minecraft:cobblestone",count:64},{Slot:9b,id:"minecraft:cobblestone",count:64},{Slot:10b,id:"minecraft:cobblestone",count:64},{Slot:11b,id:"minecraft:cobblestone",count:64},{Slot:12b,id:"minecraft:cobblestone",count:64},{Slot:13b,id:"minecraft:cobblestone",count:64},{Slot:14b,id:"minecraft:cobblestone",count:64},{Slot:15b,id:"minecraft:cobblestone",count:64},{Slot:16b,id:"minecraft:cobblestone",count:64},{Slot:17b,id:"minecraft:cobblestone",count:64},{Slot:18b,id:"minecraft:cobblestone",count:64},{Slot:19b,id:"minecraft:cobblestone",count:64},{Slot:20b,id:"minecraft:cobblestone",count:64},{Slot:21b,id:"minecraft:cobblestone",count:64},{Slot:22b,id:"minecraft:cobblestone",count:64},{Slot:23b,id:"minecraft:cobblestone",count:64},{Slot:24b,id:"minecraft:cobblestone",count:64},{Slot:25b,id:"minecraft:cobblestone",count:64},{Slot:26b,id:"minecraft:cobblestone",count:64}]}
+/setblock -588 -60 -10 minecraft:chest
+/setblock -612 -60 10 minecraft:chest{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:dirt",count:64},{Slot:2b,id:"minecraft:sand",count:64},{Slot:3b,id:"minecraft:gravel",count:64},{Slot:4b,id:"minecraft:cobblestone",count:64},{Slot:5b,id:"minecraft:dirt",count:64},{Slot:6b,id:"minecraft:sand",count:64},{Slot:7b,id:"minecraft:gravel",count:64},{Slot:8b,id:"minecraft:cobblestone",count:64},{Slot:9b,id:"minecraft:dirt",count:64},{Slot:10b,id:"minecraft:sand",count:64},{Slot:11b,id:"minecraft:gravel",count:64},{Slot:12b,id:"minecraft:cobblestone",count:64},{Slot:13b,id:"minecraft:dirt",count:64},{Slot:14b,id:"minecraft:sand",count:64},{Slot:15b,id:"minecraft:gravel",count:64},{Slot:16b,id:"minecraft:cobblestone",count:64},{Slot:17b,id:"minecraft:dirt",count:64},{Slot:18b,id:"minecraft:sand",count:64},{Slot:19b,id:"minecraft:gravel",count:64},{Slot:20b,id:"minecraft:cobblestone",count:64},{Slot:21b,id:"minecraft:dirt",count:64},{Slot:22b,id:"minecraft:sand",count:64},{Slot:23b,id:"minecraft:gravel",count:64},{Slot:24b,id:"minecraft:cobblestone",count:64},{Slot:25b,id:"minecraft:dirt",count:64},{Slot:26b,id:"minecraft:sand",count:64}]}
+/setblock -608 -60 12 minecraft:chest
+/setblock -604 -60 12 minecraft:chest
+/fill -594 -61 6 -588 -61 12 minecraft:farmland[moisture=7]
+/fill -594 -60 6 -588 -60 12 minecraft:wheat[age=7]
+/setblock -591 -60 9 minecraft:air
+/setblock -591 -61 9 minecraft:water
+/setblock -591 -60 4 minecraft:chest
+/data merge block -600 -60 0 {Rack:{Size:8,Items:[{Slot:0,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"hauling",stops:[{pos:[I;-612,-60,-10],face:"up",drop_off:0b},{pos:[I;-588,-60,-10],face:"up",drop_off:1b}],areas:[],name:"A to B"},printer:"Bench",day:0L}}},{Slot:1,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"hauling",stops:[{pos:[I;-588,-60,-10],face:"up",drop_off:0b},{pos:[I;-612,-60,-10],face:"up",drop_off:1b}],areas:[],name:"B to A"},printer:"Bench",day:0L}}},{Slot:2,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"sorting",stops:[{pos:[I;-612,-60,10],face:"up",drop_off:0b},{pos:[I;-608,-60,12],face:"up",drop_off:1b,filter:{id:"minecraft:cobblestone",count:1}},{pos:[I;-604,-60,12],face:"up",drop_off:1b,everything_else:1b}],areas:[],name:"Sort"},printer:"Bench",day:0L}}},{Slot:3,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"hauling",stops:[{pos:[I;-608,-60,12],face:"up",drop_off:0b},{pos:[I;-604,-60,12],face:"up",drop_off:0b},{pos:[I;-612,-60,10],face:"up",drop_off:1b}],areas:[],name:"Returns"},printer:"Bench",day:0L}}},{Slot:4,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"farming",stops:[{pos:[I;-591,-60,4],face:"up",drop_off:1b}],areas:[{a:[I;-594,-60,6],b:[I;-588,-60,12]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:5,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"farming",stops:[{pos:[I;-591,-60,4],face:"up",drop_off:1b}],areas:[{a:[I;-594,-60,6],b:[I;-588,-60,12]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:6,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"security",stops:[],areas:[{a:[I;-616,-60,-16],b:[I;-584,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}},{Slot:7,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-600,-60,0]},job:"security",stops:[],areas:[{a:[I;-616,-60,-16],b:[I;-584,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}}]}}
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 1"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -602.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 2"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -601.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 3"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -600.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 4"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -599.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 5"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -598.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 6"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+bystander useentity nearest villager
+wait 3
+/tp @e[tag=bench_new] -597.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 7"',PlayerCreated:1b}
+wait 5
+bystander useentity nearest iron_golem
+wait 3
+/tp @e[tag=bench_new] -595.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem -599.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 8"',PlayerCreated:1b}
+wait 5
+bystander useentity nearest iron_golem
+wait 3
+/tp @e[tag=bench_new] -593.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+wait 10
+bystander remove
+# ---- region C (x 0): three sites of 8 (haulers at -40, farmers at 0, sorters and guards at 40)
+/tp @s 0.5 -60 -20.5 0 20
+wait 40
+/tp @s -39.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem -40 -61 0
+wait 3
+hotbar 1
+/setblock -52 -60 -10 minecraft:chest{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:cobblestone",count:64},{Slot:2b,id:"minecraft:cobblestone",count:64},{Slot:3b,id:"minecraft:cobblestone",count:64},{Slot:4b,id:"minecraft:cobblestone",count:64},{Slot:5b,id:"minecraft:cobblestone",count:64},{Slot:6b,id:"minecraft:cobblestone",count:64},{Slot:7b,id:"minecraft:cobblestone",count:64},{Slot:8b,id:"minecraft:cobblestone",count:64},{Slot:9b,id:"minecraft:cobblestone",count:64},{Slot:10b,id:"minecraft:cobblestone",count:64},{Slot:11b,id:"minecraft:cobblestone",count:64},{Slot:12b,id:"minecraft:cobblestone",count:64},{Slot:13b,id:"minecraft:cobblestone",count:64},{Slot:14b,id:"minecraft:cobblestone",count:64},{Slot:15b,id:"minecraft:cobblestone",count:64},{Slot:16b,id:"minecraft:cobblestone",count:64},{Slot:17b,id:"minecraft:cobblestone",count:64},{Slot:18b,id:"minecraft:cobblestone",count:64},{Slot:19b,id:"minecraft:cobblestone",count:64},{Slot:20b,id:"minecraft:cobblestone",count:64},{Slot:21b,id:"minecraft:cobblestone",count:64},{Slot:22b,id:"minecraft:cobblestone",count:64},{Slot:23b,id:"minecraft:cobblestone",count:64},{Slot:24b,id:"minecraft:cobblestone",count:64},{Slot:25b,id:"minecraft:cobblestone",count:64},{Slot:26b,id:"minecraft:cobblestone",count:64}]}
+/setblock -28 -60 -10 minecraft:chest
+/setblock -52 -60 10 minecraft:chest{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:cobblestone",count:64},{Slot:2b,id:"minecraft:cobblestone",count:64},{Slot:3b,id:"minecraft:cobblestone",count:64},{Slot:4b,id:"minecraft:cobblestone",count:64},{Slot:5b,id:"minecraft:cobblestone",count:64},{Slot:6b,id:"minecraft:cobblestone",count:64},{Slot:7b,id:"minecraft:cobblestone",count:64},{Slot:8b,id:"minecraft:cobblestone",count:64},{Slot:9b,id:"minecraft:cobblestone",count:64},{Slot:10b,id:"minecraft:cobblestone",count:64},{Slot:11b,id:"minecraft:cobblestone",count:64},{Slot:12b,id:"minecraft:cobblestone",count:64},{Slot:13b,id:"minecraft:cobblestone",count:64},{Slot:14b,id:"minecraft:cobblestone",count:64},{Slot:15b,id:"minecraft:cobblestone",count:64},{Slot:16b,id:"minecraft:cobblestone",count:64},{Slot:17b,id:"minecraft:cobblestone",count:64},{Slot:18b,id:"minecraft:cobblestone",count:64},{Slot:19b,id:"minecraft:cobblestone",count:64},{Slot:20b,id:"minecraft:cobblestone",count:64},{Slot:21b,id:"minecraft:cobblestone",count:64},{Slot:22b,id:"minecraft:cobblestone",count:64},{Slot:23b,id:"minecraft:cobblestone",count:64},{Slot:24b,id:"minecraft:cobblestone",count:64},{Slot:25b,id:"minecraft:cobblestone",count:64},{Slot:26b,id:"minecraft:cobblestone",count:64}]}
+/setblock -28 -60 10 minecraft:chest
+/data merge block -40 -60 0 {Rack:{Size:8,Items:[{Slot:0,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-52,-60,-10],face:"up",drop_off:0b},{pos:[I;-28,-60,-10],face:"up",drop_off:1b}],areas:[],name:"West to east"},printer:"Bench",day:0L}}},{Slot:1,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-52,-60,-10],face:"up",drop_off:0b},{pos:[I;-28,-60,-10],face:"up",drop_off:1b}],areas:[],name:"West to east"},printer:"Bench",day:0L}}},{Slot:2,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-28,-60,-10],face:"up",drop_off:0b},{pos:[I;-52,-60,-10],face:"up",drop_off:1b}],areas:[],name:"East to west"},printer:"Bench",day:0L}}},{Slot:3,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-28,-60,-10],face:"up",drop_off:0b},{pos:[I;-52,-60,-10],face:"up",drop_off:1b}],areas:[],name:"East to west"},printer:"Bench",day:0L}}},{Slot:4,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-52,-60,10],face:"up",drop_off:0b},{pos:[I;-28,-60,10],face:"up",drop_off:1b}],areas:[],name:"West to east"},printer:"Bench",day:0L}}},{Slot:5,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-52,-60,10],face:"up",drop_off:0b},{pos:[I;-28,-60,10],face:"up",drop_off:1b}],areas:[],name:"West to east"},printer:"Bench",day:0L}}},{Slot:6,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-28,-60,10],face:"up",drop_off:0b},{pos:[I;-52,-60,10],face:"up",drop_off:1b}],areas:[],name:"East to west"},printer:"Bench",day:0L}}},{Slot:7,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;-40,-60,0]},job:"hauling",stops:[{pos:[I;-28,-60,10],face:"up",drop_off:0b},{pos:[I;-52,-60,10],face:"up",drop_off:1b}],areas:[],name:"East to west"},printer:"Bench",day:0L}}}]}}
+/tp @s -39.5 -60 -11.5 0 10
+wait 5
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 9"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -43.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 10"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -42.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 11"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -41.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 12"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -40.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 13"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -39.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 14"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -38.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 15"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -37.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager -39.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 16"',VillagerData:{profession:"minecraft:none",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -36.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/tp @s 0.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem 0 -61 0
+wait 3
+hotbar 1
+/fill -11 -61 -11 -5 -61 -5 minecraft:farmland[moisture=7]
+/fill -11 -60 -11 -5 -60 -5 minecraft:wheat[age=7]
+/setblock -8 -60 -8 minecraft:air
+/setblock -8 -61 -8 minecraft:water
+/setblock -8 -60 -13 minecraft:chest
+/fill 5 -61 -11 11 -61 -5 minecraft:farmland[moisture=7]
+/fill 5 -60 -11 11 -60 -5 minecraft:wheat[age=7]
+/setblock 8 -60 -8 minecraft:air
+/setblock 8 -61 -8 minecraft:water
+/setblock 8 -60 -13 minecraft:chest
+/fill -11 -61 5 -5 -61 11 minecraft:farmland[moisture=7]
+/fill -11 -60 5 -5 -60 11 minecraft:wheat[age=7]
+/setblock -8 -60 8 minecraft:air
+/setblock -8 -61 8 minecraft:water
+/setblock -8 -60 13 minecraft:chest
+/fill 5 -61 5 11 -61 11 minecraft:farmland[moisture=7]
+/fill 5 -60 5 11 -60 11 minecraft:wheat[age=7]
+/setblock 8 -60 8 minecraft:air
+/setblock 8 -61 8 minecraft:water
+/setblock 8 -60 13 minecraft:chest
+/data merge block 0 -60 0 {Rack:{Size:8,Items:[{Slot:0,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;-8,-60,-13],face:"up",drop_off:1b}],areas:[{a:[I;-11,-60,-11],b:[I;-5,-60,-5]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:1,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;-8,-60,-13],face:"up",drop_off:1b}],areas:[{a:[I;-11,-60,-11],b:[I;-5,-60,-5]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:2,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;8,-60,-13],face:"up",drop_off:1b}],areas:[{a:[I;5,-60,-11],b:[I;11,-60,-5]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:3,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;8,-60,-13],face:"up",drop_off:1b}],areas:[{a:[I;5,-60,-11],b:[I;11,-60,-5]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:4,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;-8,-60,13],face:"up",drop_off:1b}],areas:[{a:[I;-11,-60,5],b:[I;-5,-60,11]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:5,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;-8,-60,13],face:"up",drop_off:1b}],areas:[{a:[I;-11,-60,5],b:[I;-5,-60,11]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:6,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;8,-60,13],face:"up",drop_off:1b}],areas:[{a:[I;5,-60,5],b:[I;11,-60,11]}],name:"Wheat"},printer:"Bench",day:0L}}},{Slot:7,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;0,-60,0]},job:"farming",stops:[{pos:[I;8,-60,13],face:"up",drop_off:1b}],areas:[{a:[I;5,-60,5],b:[I;11,-60,11]}],name:"Wheat"},printer:"Bench",day:0L}}}]}}
+/tp @s 0.5 -60 -11.5 0 10
+wait 5
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 17"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -3.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 18"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -2.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 19"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -1.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 20"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] -0.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 21"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 0.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 22"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 1.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 23"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 2.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 0.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 24"',VillagerData:{profession:"minecraft:farmer",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 3.5 -60 2.5
+/tag @e[tag=bench_new] remove bench_new
+/tp @s 40.5 -60 -3.5 0 30
+wait 3
+hotbar 2
+useitem 40 -61 0
+wait 3
+hotbar 1
+/setblock 52 -60 -8 minecraft:chest{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:dirt",count:64},{Slot:2b,id:"minecraft:sand",count:64},{Slot:3b,id:"minecraft:gravel",count:64},{Slot:4b,id:"minecraft:cobblestone",count:64},{Slot:5b,id:"minecraft:dirt",count:64},{Slot:6b,id:"minecraft:sand",count:64},{Slot:7b,id:"minecraft:gravel",count:64},{Slot:8b,id:"minecraft:cobblestone",count:64},{Slot:9b,id:"minecraft:dirt",count:64},{Slot:10b,id:"minecraft:sand",count:64},{Slot:11b,id:"minecraft:gravel",count:64},{Slot:12b,id:"minecraft:cobblestone",count:64},{Slot:13b,id:"minecraft:dirt",count:64},{Slot:14b,id:"minecraft:sand",count:64},{Slot:15b,id:"minecraft:gravel",count:64},{Slot:16b,id:"minecraft:cobblestone",count:64},{Slot:17b,id:"minecraft:dirt",count:64},{Slot:18b,id:"minecraft:sand",count:64},{Slot:19b,id:"minecraft:gravel",count:64},{Slot:20b,id:"minecraft:cobblestone",count:64},{Slot:21b,id:"minecraft:dirt",count:64},{Slot:22b,id:"minecraft:sand",count:64},{Slot:23b,id:"minecraft:gravel",count:64},{Slot:24b,id:"minecraft:cobblestone",count:64},{Slot:25b,id:"minecraft:dirt",count:64},{Slot:26b,id:"minecraft:sand",count:64}]}
+/setblock 52 -60 -4 minecraft:chest
+/setblock 52 -60 0 minecraft:chest
+/setblock 52 -60 4 minecraft:chest
+/data merge block 40 -60 0 {Rack:{Size:8,Items:[{Slot:0,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"sorting",stops:[{pos:[I;52,-60,-8],face:"up",drop_off:0b},{pos:[I;52,-60,-4],face:"up",drop_off:1b,filter:{id:"minecraft:cobblestone",count:1}},{pos:[I;52,-60,0],face:"up",drop_off:1b,filter:{id:"minecraft:dirt",count:1}},{pos:[I;52,-60,4],face:"up",drop_off:1b,everything_else:1b}],areas:[],name:"Sort"},printer:"Bench",day:0L}}},{Slot:1,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"sorting",stops:[{pos:[I;52,-60,-8],face:"up",drop_off:0b},{pos:[I;52,-60,-4],face:"up",drop_off:1b,filter:{id:"minecraft:cobblestone",count:1}},{pos:[I;52,-60,0],face:"up",drop_off:1b,filter:{id:"minecraft:dirt",count:1}},{pos:[I;52,-60,4],face:"up",drop_off:1b,everything_else:1b}],areas:[],name:"Sort"},printer:"Bench",day:0L}}},{Slot:2,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"hauling",stops:[{pos:[I;52,-60,-4],face:"up",drop_off:0b},{pos:[I;52,-60,0],face:"up",drop_off:0b},{pos:[I;52,-60,4],face:"up",drop_off:0b},{pos:[I;52,-60,-8],face:"up",drop_off:1b}],areas:[],name:"Returns"},printer:"Bench",day:0L}}},{Slot:3,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"hauling",stops:[{pos:[I;52,-60,-4],face:"up",drop_off:0b},{pos:[I;52,-60,0],face:"up",drop_off:0b},{pos:[I;52,-60,4],face:"up",drop_off:0b},{pos:[I;52,-60,-8],face:"up",drop_off:1b}],areas:[],name:"Returns"},printer:"Bench",day:0L}}},{Slot:4,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"security",stops:[],areas:[{a:[I;24,-60,-16],b:[I;56,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}},{Slot:5,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"security",stops:[],areas:[{a:[I;24,-60,-16],b:[I;56,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}},{Slot:6,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"security",stops:[],areas:[{a:[I;24,-60,-16],b:[I;56,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}},{Slot:7,id:"headinajar:job_card",count:1,components:{"headinajar:job_card":{order:{clock:{dimension:"minecraft:overworld",pos:[I;40,-60,0]},job:"security",stops:[],areas:[{a:[I;24,-60,-16],b:[I;56,-60,16]}],name:"Patrol"},printer:"Bench",day:0L}}}]}}
+/setblock 28 -60 -14 minecraft:spawner{SpawnData:{entity:{id:"minecraft:zombie"},custom_spawn_rules:{block_light_limit:[0,15],sky_light_limit:[0,15]}},MinSpawnDelay:1200,MaxSpawnDelay:1600,SpawnCount:1,MaxNearbyEntities:1,RequiredPlayerRange:64,SpawnRange:2}
+/tp @s 40.5 -60 -11.5 0 10
+wait 5
+/summon villager 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 25"',VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 36.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 26"',VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 37.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 27"',VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 38.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon villager 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 28"',VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
+wait 5
+lookat villager 1
+key use
+wait 3
+/tp @e[tag=bench_new] 39.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 29"',PlayerCreated:1b}
+wait 5
+lookat iron_golem 1
+key use
+wait 3
+/tp @e[tag=bench_new] 41.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 30"',PlayerCreated:1b}
+wait 5
+lookat iron_golem 1
+key use
+wait 3
+/tp @e[tag=bench_new] 43.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 31"',PlayerCreated:1b}
+wait 5
+lookat iron_golem 1
+key use
+wait 3
+/tp @e[tag=bench_new] 45.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/summon iron_golem 40.5 -60 -9.5 {Tags:["bench_new","bench_staff"],CustomName:'"Staff 32"',PlayerCreated:1b}
+wait 5
+lookat iron_golem 1
+key use
+wait 3
+/tp @e[tag=bench_new] 47.5 -60 3.5
+/tag @e[tag=bench_new] remove bench_new
+/kill @e[type=minecraft:slime]
+/kill @e[type=minecraft:item]
+wait 200
+# every worker should now be on its site, punched in and working: the record before the first window
+inspect near villager 60
+inspect near iron_golem 60
+cmdout headoffice staff list
+# ---- window A1
+/tp @s -1200.5 -60 -14.5 0 20
+wait 400
+shot staff_bench_A1
+report census before A1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start A1
+wait 1200
+bench stop
+cmdout tick query
+report census after A1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window B1
+/tp @s -599.5 -60 -20.5 0 20
+wait 400
+shot staff_bench_B1
+report census before B1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start B1
+wait 1200
+bench stop
+cmdout tick query
+report census after B1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window C1
+/tp @s 0.5 -60 -24.5 0 20
+wait 400
+shot staff_bench_C1
+report census before C1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start C1
+wait 1200
+bench stop
+cmdout tick query
+report census after C1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window D1
+/tp @s 0.5 -60 -24.5 0 20
+/headoffice staff pause
+wait 400
+shot staff_bench_D1
+report census before D1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start D1
+wait 1200
+bench stop
+cmdout tick query
+report census after D1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+/headoffice staff pause
+# ---- window F1
+/tp @s -39.5 -60 -24.5 0 10
+wait 10
+hotbar 3
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+hotbar 1
+/tp @s 0.5 -60 -24.5 90 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 400
+shot staff_bench_F1
+report census before F1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start F1
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 80
+bench stop
+cmdout tick query
+report census after F1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+hotbar 3
+look 0 -70
+key sneak down
+key use
+key sneak up
+hotbar 1
+/tag @e[tag=bench_detail] remove bench_detail
+/tp @s 0.5 -60 -24.5 0 20
+wait 200
+inspect near villager 60
+# ---- window E1
+/tp @s 0.5 -60 300.5 0 20
+wait 400
+shot staff_bench_E1
+report census before E1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start E1
+wait 1200
+bench stop
+cmdout tick query
+report census after E1
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window A2
+/tp @s -1200.5 -60 -14.5 0 20
+wait 400
+shot staff_bench_A2
+report census before A2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start A2
+wait 1200
+bench stop
+cmdout tick query
+report census after A2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window B2
+/tp @s -599.5 -60 -20.5 0 20
+wait 400
+shot staff_bench_B2
+report census before B2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start B2
+wait 1200
+bench stop
+cmdout tick query
+report census after B2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window C2
+/tp @s 0.5 -60 -24.5 0 20
+wait 400
+shot staff_bench_C2
+report census before C2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start C2
+wait 1200
+bench stop
+cmdout tick query
+report census after C2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window D2
+/tp @s 0.5 -60 -24.5 0 20
+/headoffice staff pause
+wait 400
+shot staff_bench_D2
+report census before D2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start D2
+wait 1200
+bench stop
+cmdout tick query
+report census after D2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+/headoffice staff pause
+# ---- window F2
+/tp @s -39.5 -60 -24.5 0 10
+wait 10
+hotbar 3
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+hotbar 1
+/tp @s 0.5 -60 -24.5 90 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 400
+shot staff_bench_F2
+report census before F2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start F2
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 80
+bench stop
+cmdout tick query
+report census after F2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+hotbar 3
+look 0 -70
+key sneak down
+key use
+key sneak up
+hotbar 1
+/tag @e[tag=bench_detail] remove bench_detail
+/tp @s 0.5 -60 -24.5 0 20
+wait 200
+inspect near villager 60
+# ---- window E2
+/tp @s 0.5 -60 300.5 0 20
+wait 400
+shot staff_bench_E2
+report census before E2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start E2
+wait 1200
+bench stop
+cmdout tick query
+report census after E2
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window A3
+/tp @s -1200.5 -60 -14.5 0 20
+wait 400
+shot staff_bench_A3
+report census before A3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start A3
+wait 1200
+bench stop
+cmdout tick query
+report census after A3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window B3
+/tp @s -599.5 -60 -20.5 0 20
+wait 400
+shot staff_bench_B3
+report census before B3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start B3
+wait 1200
+bench stop
+cmdout tick query
+report census after B3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window C3
+/tp @s 0.5 -60 -24.5 0 20
+wait 400
+shot staff_bench_C3
+report census before C3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start C3
+wait 1200
+bench stop
+cmdout tick query
+report census after C3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+# ---- window D3
+/tp @s 0.5 -60 -24.5 0 20
+/headoffice staff pause
+wait 400
+shot staff_bench_D3
+report census before D3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start D3
+wait 1200
+bench stop
+cmdout tick query
+report census after D3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+/headoffice staff pause
+# ---- window F3
+/tp @s -39.5 -60 -24.5 0 10
+wait 10
+hotbar 3
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+/tag @e[type=villager,x=-40,y=-60,z=0,distance=..24,tag=!bench_detail,limit=1,sort=nearest] add bench_pick
+/tp @e[tag=bench_detail] -39.5 -60 -31.5
+/tp @e[tag=bench_pick] -39.5 -60 -22.5
+wait 2
+lookat villager
+key use
+wait 3
+/tag @e[tag=bench_pick] add bench_detail
+/tag @e[tag=bench_pick] remove bench_pick
+hotbar 1
+/tp @s 0.5 -60 -24.5 90 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 400
+shot staff_bench_F3
+report census before F3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start F3
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+key forward hold 100
+turn 180 0 10
+wait 80
+bench stop
+cmdout tick query
+report census after F3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+hotbar 3
+look 0 -70
+key sneak down
+key use
+key sneak up
+hotbar 1
+/tag @e[tag=bench_detail] remove bench_detail
+/tp @s 0.5 -60 -24.5 0 20
+wait 200
+inspect near villager 60
+# ---- window E3
+/tp @s 0.5 -60 300.5 0 20
+wait 400
+shot staff_bench_E3
+report census before E3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+bench start E3
+wait 1200
+bench stop
+cmdout tick query
+report census after E3
+cmdout execute if entity @e[tag=bench_staff]
+cmdout execute if entity @e[type=villager,tag=bench_staff]
+cmdout execute if entity @e[type=iron_golem,tag=bench_staff]
+cmdout execute if entity @e[type=zombie]
+cmdout headoffice staff list
+inspect near all 40
+report bench done

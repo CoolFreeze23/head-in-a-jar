@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:non_human_resources",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "restructuring"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:separation_notice"
+    },
+    "title": {
+      "translate": "advancements.headinajar.restructuring.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.restructuring.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

@@ -116,6 +116,8 @@ public final class SawTable {
         if (mob instanceof com.coolfreeze23.headinajar.entity.MechaEntity || mob instanceof com.coolfreeze23.headinajar.entity.ShellEntity) {
             return Verdict.no("saw.machine");
         }
+        // living staff are let go before anything else is done to them
+        if (com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mob)) return Verdict.no("staff.saw", com.coolfreeze23.headinajar.staff.work.Workforce.name(mob));
         if (Hosts.isHost(mob)) return Verdict.no("saw.host");
         if (type.is(NEVER)) return Verdict.no("saw.never");
         if (mob.hasCustomName()) return Verdict.no("saw.named");

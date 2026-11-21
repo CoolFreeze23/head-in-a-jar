@@ -1,0 +1,39 @@
+{
+  "format": 1,
+  "entity": "minecraft:cat",
+  "model": "CatModel",
+  "lanyard": {
+    "bone": {
+      "field": "body",
+      "path": ""
+    },
+    "at": [0, 3, -5],
+    "rot": [-90, 0, 0],
+    "cord": [
+      [-2.5, -3.5, 0, 2.5, -3, 1],
+      [-2.5, 3, 0, 2.5, 3.5, 1],
+      [-2.5, -3, 0, -2, 3, 1],
+      [2, -3, 0, 2.5, 3, 1]
+    ],
+    "hang": {
+      "pivot": [0, 4, 0],
+      "rot": [0, 0, 0],
+      "cord": [],
+      "badge": {
+        "at": [0, -1, -0.51],
+        "size": "mini"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "head",
+      "path": ""
+    },
+    "at": [0, -2, -0.5],
+    "rot": [0, 0, 0],
+    "size": "xs"
+  },
+  "crate": null
+}

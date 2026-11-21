@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Summarises benchmark runs of tools/bench-lab*.txt: one table row per window (A1, A2, ..., B3, C3) per run, and
+"""Summarises benchmark runs of tools/bench-lab*.txt and tools/staff-bench.txt: one table row per window (A1, A2, ...,
+B3, C3, ...) per run, a mean per scenario letter, and
 the median and spread of each number over the runs given.
 
   python tools/bench_summary.py LABEL=RUN_DIR[,RUN_DIR...] [LABEL=...] [--md OUT.md]
@@ -75,7 +76,7 @@ def main():
             lines.append(f"| {w} | " + " | ".join(spread(vals[k]) for k in ("frame_avg", "frame_p99", "frame_max", "fps", "low1", "tick_avg",
                                                                               "tick_p95", "tick_p99", "tick_max", "rx", "entities")) + " |")
         # per-scenario medians over the three windows of each run, then the spread over runs
-        for sc in ("A", "B", "C"):
+        for sc in sorted({w[0] for r in runs for w in r}):
             per_run = []
             for r in runs:
                 ws = [r[w] for w in r if re.fullmatch(sc + r"\d", w)]
@@ -85,6 +86,13 @@ def main():
                 lines.append(f"| **{sc} (mean of windows, spread over runs)** | " + spread([p["frame_avg"] for p in per_run]) + " | | | "
                              + spread([p["fps"] for p in per_run]) + " | " + spread([p["low1"] for p in per_run]) + " | "
                              + spread([p["tick_avg"] for p in per_run]) + " | " + spread([p["tick_p95"] for p in per_run]) + " | | | | |")
+        lines.append("")
+        # the staff bench's gate reads the median and the p99 server tick of each scenario (median over its windows)
+        for sc in sorted({w[0] for r in runs for w in r}):
+            ws = [r[w] for r in runs for w in r if re.fullmatch(sc + r"\d", w)]
+            if ws:
+                lines.append(f"- {sc}: server tick p50 {statistics.median(x['tick_p50'] for x in ws):.2f} ms, p99 "
+                             f"{statistics.median(x['tick_p99'] for x in ws):.2f} ms (median of {len(ws)} windows)")
         lines.append("")
         for i, r in enumerate(runs):
             for w in sorted(r):

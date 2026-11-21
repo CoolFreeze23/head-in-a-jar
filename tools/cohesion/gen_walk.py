@@ -77,7 +77,7 @@ def pack_long(x, y, z):
     return v - (1 << 64) if v >= (1 << 63) else v
 
 
-TOKEN = re.compile(r"\{(LONG |NEAR_)?([STB])(C)?(?:\+(-?[\d.]+),(-?[\d.]+),(-?[\d.]+))?\}")
+TOKEN = re.compile(r"\{(LONG |NEAR_|POS_)?([STB])(C)?(?:\+(-?[\d.]+),(-?[\d.]+),(-?[\d.]+))?\}")
 
 
 def expand(line, spot, ctx):
@@ -87,6 +87,8 @@ def expand(line, spot, ctx):
         dx, dy, dz = (float(m.group(i)) if m.group(i) else 0.0 for i in (4, 5, 6))
         if kind == "LONG ":
             return str(pack_long(int(bx + dx), int(by + dy), int(bz + dz)))
+        if kind == "POS_":
+            return f"{int(bx + dx)},{int(by + dy)},{int(bz + dz)}"
         if kind == "NEAR_":
             return f"x={fmt(bx + 0.5 + dx)},y={fmt(by + dy)},z={fmt(bz + 0.5 + dz)},distance=..1.5"
         if centre:
@@ -334,8 +336,9 @@ def pair_lines(r, index, spec, shots=True):
         out += pre
         if any(is_input(x) for x in pre):
             out.append(f"wait {OBSERVE + 3}")
-    out.append(f"/item replace entity @s weapon.mainhand with {r['item']}")
-    out.append(f"/item replace entity @s weapon.offhand with {r['offhand'] or 'minecraft:air'}")
+    # an item may name a block of the scene ({POS_T+dx,dy,dz}: a Clipboard bound to a clock, a Job Card of a site)
+    out.append(E(f"/item replace entity @s weapon.mainhand with {r['item']}"))
+    out.append(E(f"/item replace entity @s weapon.offhand with {r['offhand'] or 'minecraft:air'}"))
     out.append("wait 10")
     out.append(f"riding PRE-{pid}")
     out.append("inspect me")
@@ -543,7 +546,7 @@ def lint_line(line, ids, enums):
         return None
     if line.startswith("@"):
         return None if line[1:].split()[0] in DIRECTIVES else "unknown directive"
-    if re.search(r"\{(?:[STB]C?|NEAR_\w+|SEL|MODS|NBTC?|BODYAT|HEADFROM|SERUM|HEAD:[^}]*)(?:\+[^}]*)?\}", line):
+    if re.search(r"\{(?:[STB]C?|NEAR_\w+|POS_[STB]|SEL|MODS|NBTC?|BODYAT|HEADFROM|SERUM|HEAD:[^}]*)(?:\+[^}]*)?\}", line):
         return "unexpanded token"
     w = line.split(" ", 1)[0]
     if line.startswith("/"):
@@ -553,7 +556,7 @@ def lint_line(line, ids, enums):
         if not balanced(line):
             return "unbalanced brackets or quotes"
         for ident in re.findall(r"\bheadinajar:([a-z0-9_]+)", line):
-            if "headinajar:" + ident not in ids and ident not in ("host", "cranial_saline", "nutrient_broth"):
+            if "headinajar:" + ident not in ids and ident not in ("host", "cranial_saline", "nutrient_broth", "worker", "order"):
                 return f"unknown id headinajar:{ident}"
         return None
     if w == "grab":

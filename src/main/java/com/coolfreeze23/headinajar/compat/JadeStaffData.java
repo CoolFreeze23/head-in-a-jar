@@ -144,6 +144,26 @@ final class JadeStaffData {
             if (f == null) return;
             String dept = Hosts.isHost(mob) && Hosts.data(mob).shell ? Staff.TEMPS : Staff.department(mob.getType());
             write(data, f, mob.getType(), dept, Band.NONE, accessor.getPlayer());
+            work(data, mob);
+        }
+
+        /** A worker's job (its card's, if it holds or works one) and its status, as the Roster shows them (0.7.0). */
+        private static void work(CompoundTag data, Mob mob) {
+            var d = com.coolfreeze23.headinajar.staff.work.Workforce.data(mob);
+            if (d == null || !(mob.level() instanceof net.minecraft.server.level.ServerLevel level)) return;
+            String job = com.coolfreeze23.headinajar.staff.work.Order.jobOf(level, d);
+            if (job != null) data.putString("WJob", "staff.headinajar.job." + job);
+            String state = com.coolfreeze23.headinajar.staff.work.Workforce.paused ? "break" : switch (d.state) {
+                case AWAITING -> "awaiting";
+                case TO_CLOCK -> "waiting";
+                case OFF_SHIFT -> "off_shift";
+                case ON_JOB -> "on_job";
+                case OFF_SITE, SHUTTLE -> "off_site";
+                case NOTICE -> "notice";
+                case DETAIL -> "detail";
+            };
+            data.putString("WState", "staff.headinajar.status." + state);
+            if (d.status != null) data.putString("WStatus", d.status);
         }
 
         @Override
@@ -162,6 +182,7 @@ final class JadeStaffData {
         }
         if (data.contains("Leech")) out.add(Component.translatable("jade.headinajar.library." + data.getString("Leech")));
         staff(data, out);
+        work(data, out);
         if (data.getBoolean("Printed")) out.add(Component.translatable("jade.headinajar.printed.no_loot"));
         // the title, when the viewer's language has one for it
         String title = data.getString("TitleKey");
@@ -184,6 +205,20 @@ final class JadeStaffData {
         }
         if (data.contains("StatusN")) return Component.translatable(key, data.getInt("StatusN"));
         return Component.translatable(key);
+    }
+
+    /**
+     * A worker's line under the staff lines: its job and status. A status that is a stop line needing its words (a
+     * "%s") shows the plain status of its state instead, since the words are not kept.
+     */
+    private static void work(CompoundTag data, java.util.List<Component> out) {
+        if (!data.contains("WState")) return;
+        String status = data.getString("WStatus");
+        if (status.isEmpty() || !net.minecraft.locale.Language.getInstance().has(status)
+                || net.minecraft.locale.Language.getInstance().getOrDefault(status).contains("%")) status = data.getString("WState");
+        Component s = Component.translatable(status);
+        out.add(data.contains("WJob") ? Component.translatable("jade.headinajar.staff.job", Component.translatable(data.getString("WJob")), s)
+                : Component.translatable("jade.headinajar.staff.status", s));
     }
 
     /** The staff lines: number, department and employer; the name for those allowed; the band. */

@@ -1,0 +1,77 @@
+# The look part with the other parts in (0.7.0): hires by real use (the drop), a Hard Hat issued by real use, a Time
+# Clock placed by real use (staff walk to it: the sway, any stop lines), Let go by the Clipboard (the unpin and the
+# off-pop; the wolf's shake). Night with night vision for the camera, so no undead burn.
+@world flat
+@difficulty easy
+@clean
+@observe 20
+time set 18000
+weather clear
+gamerule doDaylightCycle false
+gamerule doMobSpawning false
+effect give @s night_vision infinite 0 true
+tp @s 0 -60 0 0 0
+summon zombie 0 -60 3 {Health:6f,Rotation:[180f,0f],PersistenceRequired:1b}
+summon cow -3 -60 3 {Rotation:[180f,0f]}
+summon wolf 3 -60 3 {Rotation:[180f,0f]}
+give @s headinajar:staff_lanyard 4
+wait 5
+tp @s 0 -60 1.2 0 0
+lookat zombie 1.2
+frames hire_zombie 24
+key use
+wait 30
+tp @s -3 -60 1.2 0 0
+lookat cow 0.8
+key use
+wait 10
+tp @s 3 -60 1.2 0 0
+lookat wolf 0.5
+key use
+wait 10
+# a Hard Hat issued by real use
+item replace entity @s weapon.mainhand with headinajar:hard_hat
+tp @s 0 -60 1.2 0 0
+lookat zombie 1.2
+key use
+wait 20
+# a Time Clock placed by real use 6 blocks off: the staff walk to it
+item replace entity @s weapon.mainhand with headinajar:time_clock
+tp @s 0 -60 6 0 60
+key use
+wait 5
+tp @s -6 -59 2 -60 15
+hud off
+frames walk_to_clock 80
+wait 100
+shot at_clock
+hud on
+inspect near all 12
+# Let go by the Clipboard: Sneak + Use twice (the cow, then the zombie, then the wolf)
+item replace entity @s weapon.mainhand with headinajar:clipboard
+tp @s -1 -60 3 0 0
+lookat cow 0.8
+sneak down
+key use
+wait 5
+frames letgo_cow 40
+key use
+wait 40
+sneak up
+lookat zombie 1.2
+sneak down
+key use
+wait 5
+frames letgo_zombie 40
+key use
+wait 40
+sneak up
+lookat wolf 0.5
+sneak down
+key use
+wait 5
+frames letgo_wolf 40
+key use
+wait 40
+sneak up
+inspect near all 16

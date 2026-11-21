@@ -151,6 +151,8 @@ public final class ClientEvents {
             PacketDistributor.sendToServer(new Network.JarAction(Network.Action.THROW));
             return;
         }
+        // the Supervisor's Whistle blows through a Speaker Grille; without one the jar is told it can't whistle (WhistleClient)
+        if (com.coolfreeze23.headinajar.client.staff.WhistleClient.grille(event)) return;
         if (!FormEvents.lockedOut(player)) return;
         if (state.form() == Form.HOSTED && event.isAttack()) return;
         if (state.form() == Form.PILOT) {

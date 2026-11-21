@@ -102,6 +102,33 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue COMPLAINTS = B
             .comment("Disengaged heads on plinths complain over their jars every two minutes (false: they sulk in silence).")
             .define("complaints", true);
+    public static final ModConfigSpec.BooleanValue STAFF_ENABLED = B
+            .comment("Living staff can be hired with a Staff Lanyard (false: the Lanyard refuses, Time Clocks only keep time, every staff brain is off).")
+            .define("enabled", true);
+    public static final ModConfigSpec.BooleanValue HIRE_HOSTILES = B
+            .comment("Hostile creatures can be hired, at half their health or less (false: only passive and neutral ones).")
+            .define("hireHostiles", true);
+    public static final ModConfigSpec.IntValue MAX_PER_PLAYER = B
+            .comment("Most living staff one player may employ.")
+            .defineInRange("maxPerPlayer", 24, 0, 1000);
+    public static final ModConfigSpec.IntValue MAX_PER_CLOCK = B
+            .comment("Most staff on one Time Clock's roster.")
+            .defineInRange("maxPerClock", 8, 1, 64);
+    public static final ModConfigSpec.IntValue THINK_TICKS = B
+            .comment("Ticks between a worker's thinks (staggered by entity id). Higher is cheaper and slower.")
+            .defineInRange("thinkTicks", 10, 5, 40);
+    public static final ModConfigSpec.IntValue CLOCK_SPACING = B
+            .comment("Blocks needed between two Time Clocks (on the level, at any height).")
+            .defineInRange("clockSpacing", 8, 1, 64);
+    public static final ModConfigSpec.IntValue SITE_RADIUS = B
+            .comment("How far a site reaches out from its Time Clock on the level (it reaches 8 up and 8 down). Never larger than 16.")
+            .defineInRange("siteRadius", 16, 8, 16);
+    public static final ModConfigSpec.IntValue DETAIL_SIZE = B
+            .comment("Most staff on one player's detail (the Supervisor's Whistle).")
+            .defineInRange("detailSize", 6, 0, 16);
+    public static final ModConfigSpec.BooleanValue DETAIL_SHUTTLE = B
+            .comment("A detail left far from home takes the company shuttle back to its Time Clock (false: it stays where it was left, on Hold).")
+            .define("detailShuttle", true);
 
     static {
         B.pop().push("heads");
@@ -166,6 +193,12 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue GENE_QUIRKS = C
             .comment("Hear other players' and hosts' gene quirks: the moos, oinks, croaks, sneezes and sobs (off: only your own).")
             .define("geneQuirks", true);
+    public static final ModConfigSpec.BooleanValue STAFF_CHALK = C
+            .comment("Show the Clipboard's chalk outlines round marked stops and areas while you hold one.")
+            .define("staffChalk", true);
+    public static final ModConfigSpec.BooleanValue STAFF_NAMEPLATES = C
+            .comment("Show a worker's given name over it when you look at it from close by (off: no names; their stop lines still show).")
+            .define("staffNameplates", true);
     public static final ModConfigSpec CLIENT_SPEC = C.build();
 
     public static int goggleRange(int tier) {

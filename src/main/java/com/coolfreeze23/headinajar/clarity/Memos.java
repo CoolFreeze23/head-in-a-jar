@@ -51,7 +51,11 @@ public final class Memos {
         CENSUS("research/directory"),
         FIRST_SPECIES_PRINT("life_support/body_printer"),
         // 0.6.3
-        TREADMILL_POWERED("staffing/treadmill");
+        TREADMILL_POWERED("staffing/treadmill"),
+        // 0.7.0
+        FIRST_HIRE("staffing/workforce"),
+        FIRST_CLOCK("staffing/time_clock"),
+        DETAIL_HOME("staffing/whistle");
 
         public final String entry;
 

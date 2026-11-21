@@ -1,0 +1,43 @@
+{
+  "format": 1,
+  "entity": "minecraft:allay",
+  "model": "AllayModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "body"
+    },
+    "at": [0, 0, 0],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-2, 0, -1.5, 2, 1, -1],
+      [-2, 0, 1, 2, 1, 1.5],
+      [-2, 0, -1, -1.5, 1, 1],
+      [1.5, 0, -1, 2, 1, 1]
+    ],
+    "hang": {
+      "pivot": [0, 1, -1],
+      "rot": [0, 0, 0],
+      "cord": [
+        [-0.5, 0, -0.5, 0.5, 1, 0]
+      ],
+      "badge": {
+        "at": [0, 0, -0.51],
+        "size": "mini"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, -3.01, 0],
+    "rot": [0, 0, 0],
+    "size": "s"
+  },
+  "crate": {
+    "vanilla": "hands"
+  }
+}

@@ -121,6 +121,22 @@ public class ArmVerbGameTests {
         return c == null ? "none" : c.clip().name();
     }
 
+    /** A pilot holding the Supervisor's Whistle works no arm with the buttons; with an empty hand the same buttons do. */
+    @GameTest(template = "platform", timeoutTicks = 60)
+    public static void aPilotHoldingTheWhistleWorksNoArm(GameTestHelper h) {
+        ServerPlayer p = player(h, FLOOR);
+        MechaEntity m = mecha(h, MechaFrame.HOPPER, FLOOR.east(2), p.getUUID(), MechaModule.HYDRAULIC_LEGS, MechaModule.DRILL);
+        board(h, p, m);
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(com.coolfreeze23.headinajar.registry.WorkRegistry.SUPERVISORS_WHISTLE.get()));
+        Network.arms(p, 3);
+        h.assertTrue(m.armsHeld == 0, "the arms answered the Whistle's press: " + m.armsHeld);
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        Network.arms(p, 1);
+        h.assertTrue(m.armsHeld != 0, "an empty hand works no arm either: " + m.armsHeld);
+        Network.arms(p, 0);
+        done(h, p);
+    }
+
     /**
      * The left arm's Arc Cannon, tapped while the pilot looks at a cow: nothing is hit at the press (the capacitor
      * charges while the arm winds up); with the recoil's contact one arc goes out, from the cannon on the machine's

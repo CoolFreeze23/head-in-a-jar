@@ -228,6 +228,9 @@ def main():
             '(volume x 10^(dB/20)) for that client; the cut, the latch at 100, the barrier latch, the clamp and the ding '
             'never duck.',
             'Refusal and blade lines: at most one per chair every 60 ticks, and the same refusal at most once per sitting.',
+            'The escort line (escort) belongs to no chair: when a worker is let go its notice starts, and the line plays '
+            'once at the worker for every player within 16 blocks, by the same language rule, category, volume and '
+            'range. It never names the worker; the action-bar line does.',
             'Off switch: a client config doloresVoice (default true); off means the payload is ignored and the text stays.',
             'Subtitles: register the subtitle key on each event; the action-bar line keeps the full written text.',
         ],

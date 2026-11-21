@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:clocking_in",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "away_day"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:supervisors_whistle"
+    },
+    "title": {
+      "translate": "advancements.headinajar.away_day.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.away_day.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

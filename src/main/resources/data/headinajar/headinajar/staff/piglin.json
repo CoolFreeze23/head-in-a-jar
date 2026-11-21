@@ -12,5 +12,24 @@
     "complaint.pension": 1,
     "complaint.dental": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "hands": true,
+    "walk": 0.617,
+    "move": "walk",
+    "attack": "crossbow",
+    "quirks": [
+      "pocket",
+      "zombifies"
+    ]
   }
 }

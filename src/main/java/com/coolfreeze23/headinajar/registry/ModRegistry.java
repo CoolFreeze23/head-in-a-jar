@@ -180,6 +180,12 @@ public final class ModRegistry {
         return item;
     }
 
+    /** An item registered elsewhere (WorkRegistry) joins the creative tab here, in the order it was registered. */
+    static <T extends Item> DeferredItem<T> tabbed(DeferredItem<T> item) {
+        TAB_ORDER.add(item);
+        return item;
+    }
+
     private static DeferredItem<Item> plain(String name) {
         return item(name, () -> new Item(new Item.Properties()));
     }
@@ -480,6 +486,8 @@ public final class ModRegistry {
     }
 
     public static void register(IEventBus bus) {
+        // the workforce's entries (0.7.0) join these registers before they are handed over
+        WorkRegistry.register(bus);
         ITEMS.register(bus);
         BLOCKS.register(bus);
         ENTITIES.register(bus);

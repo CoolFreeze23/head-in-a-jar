@@ -52,9 +52,9 @@ public final class StaffTable {
      * {@code not_nether}, {@code warped_fungus}, {@code noise}, {@code water}).
      */
     public record Row(Wage wage, String noise, int bells, String desk, ResourceLocation alarm, java.util.Set<String> dislikes,
-                      Map<String, Integer> lines) {
+                      Map<String, Integer> lines, com.coolfreeze23.headinajar.staff.work.WorkTable.Spec work) {
         public Row(Wage wage, String noise) {
-            this(wage, noise, 0, null, null, java.util.Set.of(), Map.of());
+            this(wage, noise, 0, null, null, java.util.Set.of(), Map.of(), null);
         }
     }
 
@@ -144,7 +144,9 @@ public final class StaffTable {
         if (o.has("lines") && o.get("lines").isJsonObject()) {
             for (var e : o.getAsJsonObject("lines").entrySet()) lines.put(e.getKey(), Math.max(0, e.getValue().getAsInt()));
         }
-        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "", bells, desk, alarm, java.util.Set.copyOf(dislikes), Map.copyOf(lines));
+        // what it does at work, if HR has a job description for it (0.7.0)
+        var work = com.coolfreeze23.headinajar.staff.work.WorkTable.parse(o.get("work"), null);
+        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "", bells, desk, alarm, java.util.Set.copyOf(dislikes), Map.copyOf(lines), work);
     }
 
     /** Loads {@code data/<ns>/headinajar/staff/*.json}. */

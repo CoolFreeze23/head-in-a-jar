@@ -13,5 +13,114 @@
     "complaint.pension": 1,
     "complaint.manager": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "day",
+    "carry": 1,
+    "hands": true,
+    "walk": 0.432,
+    "move": "walk",
+    "attack": "melee",
+    "melee": 3,
+    "quirks": [
+      "no_trade_on_shift"
+    ],
+    "professions": {
+      "minecraft:farmer": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.0,
+          "farming": 1.5,
+          "security": 1.0
+        }
+      },
+      "minecraft:librarian": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.25,
+          "farming": 1.0,
+          "security": 1.0
+        },
+        "quirks": [
+          "no_trade_on_shift",
+          "never_misfiles"
+        ]
+      },
+      "minecraft:shepherd": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.0,
+          "farming": 1.5,
+          "security": 1.0
+        },
+        "quirks": [
+          "no_trade_on_shift",
+          "shepherd"
+        ]
+      },
+      "minecraft:leatherworker": {
+        "carry": 2
+      },
+      "minecraft:fletcher": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.0,
+          "farming": 1.0,
+          "security": 1.25
+        },
+        "attack": "bow"
+      },
+      "minecraft:armorer": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.0,
+          "farming": 1.0,
+          "security": 1.25
+        },
+        "melee": 3.75
+      },
+      "minecraft:weaponsmith": {
+        "jobs": {
+          "hauling": 1.0,
+          "sorting": 1.0,
+          "farming": 1.0,
+          "security": 1.25
+        },
+        "melee": 3.75
+      },
+      "minecraft:toolsmith": {
+        "quirks": [
+          "no_trade_on_shift",
+          "toolsmith"
+        ]
+      },
+      "minecraft:cleric": {
+        "quirks": [
+          "no_trade_on_shift",
+          "cleric"
+        ]
+      },
+      "minecraft:nitwit": {
+        "jobs": {},
+        "cannot": {
+          "hauling": "card.cannot.nitwit",
+          "sorting": "card.cannot.nitwit",
+          "farming": "card.cannot.nitwit",
+          "security": "card.cannot.nitwit"
+        },
+        "quirks": [
+          "nitwit"
+        ],
+        "card": false,
+        "carry": 0
+      }
+    }
   }
 }

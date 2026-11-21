@@ -1,0 +1,46 @@
+{
+  "format": 1,
+  "entity": "minecraft:sniffer",
+  "model": "SnifferModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "bone/body"
+    },
+    "at": [0, 0.5, -19],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-13, -15, 0, 13, -14.5, 1],
+      [-13, 14.5, 0, 13, 15, 1],
+      [-13, -14.5, 0, -12.5, 14.5, 1],
+      [12.5, -14.5, 0, 13, 14.5, 1]
+    ],
+    "hang": {
+      "pivot": [13, 0, 1],
+      "rot": [0, -90, 0],
+      "cord": [],
+      "badge": {
+        "at": [0, -1, -0.51],
+        "size": "full"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "bone/body/head"
+    },
+    "at": [0, -3.5, -6.02],
+    "rot": [0, 0, 0],
+    "size": "xl"
+  },
+  "crate": {
+    "bone": {
+      "field": "root",
+      "path": "bone/body"
+    },
+    "at": [0, -14.5, 0],
+    "rot": [0, 0, 0]
+  }
+}

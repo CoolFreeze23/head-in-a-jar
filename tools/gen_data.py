@@ -168,6 +168,7 @@ import gen_p37_foundations; gen_p37_foundations.run(EN, PT, write, shaped)  # th
 import gen_p38_heads; gen_p38_heads.run(EN, PT, write, shaped)  # the 0.6.1 release: titles, the bell, lunch, desk jobs, Lookouts, the Living Library
 import gen_p39_dna; gen_p39_dna.run(EN, PT, write, shaped)  # the 0.6.2 release: a gene for every creature, the Staff Directory, Print-to-Order
 import gen_p40_bodies; gen_p40_bodies.run(EN, PT, write, shaped)  # the 0.6.3 release: every body's trick, the headless chicken, the Treadmill
+import gen_p41_workforce; gen_p41_workforce.run(EN, PT, write, shaped)  # the 0.7.0 release: the Staff Lanyard, the Time Clock, jobs, the Whistle
 import gen_p27_clarity; gen_p27_clarity.run(EN, PT, write, shaped)  # HUD, tooltips, memos, career advancements, the handbook
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)

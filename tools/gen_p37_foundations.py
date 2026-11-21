@@ -260,6 +260,7 @@ LINES = [
      "[Entrevista de Desligamento] %s (%s), %s, %s dias: '%s' Motivo da saída: %s."),
     ('staff.headinajar.reason.fall', 'fell from a high place', 'caiu de um lugar alto'),
     ('staff.headinajar.reason.lava', 'lava', 'lava'),
+    ('staff.headinajar.reason.burned', 'combustion', 'pegou fogo'),
     ('staff.headinajar.reason.drowned', 'drowned', 'afogou-se'),
     ('staff.headinajar.reason.explosion', 'an explosion', 'uma explosão'),
     ('staff.headinajar.reason.management', 'management', 'a gerência'),

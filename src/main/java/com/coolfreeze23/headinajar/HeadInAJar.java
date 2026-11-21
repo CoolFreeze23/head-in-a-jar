@@ -41,6 +41,12 @@ public class HeadInAJar {
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.RegisterCommandsEvent e) ->
                 com.coolfreeze23.headinajar.command.HeadOfficeCommand.register(e.getDispatcher()));
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.StaffEvents.class);
+        // the workforce (0.7.0)
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.item.StaffLanyardItem.class);
+        com.coolfreeze23.headinajar.staff.work.WorkRules.register();
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.work.jobs.JobEvents.class);
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.work.DetailEvents.class);
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.clarity.MemoQueue.class);
+        NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.work.WorkerLooks.class); // what others see of a worker
     }
 }

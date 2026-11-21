@@ -11,5 +11,25 @@
     "complaint.manager": 1,
     "complaint.chair": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {},
+    "cannot": {
+      "hauling": "card.cannot.cat",
+      "sorting": "card.cannot.cat",
+      "farming": "card.cannot.cat",
+      "security": "card.cannot.cat"
+    },
+    "shift": "any",
+    "carry": 0,
+    "hands": false,
+    "walk": 0.72,
+    "move": "walk",
+    "attack": "none",
+    "quirks": [
+      "keeps_creepers_out"
+    ],
+    "card": false
   }
 }

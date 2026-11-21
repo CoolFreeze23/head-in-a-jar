@@ -244,6 +244,8 @@ public final class HostEvents {
     public static void hostedUse(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
         if (FormActions.state(player).form() != Form.HOSTED || event.getTarget() == player.getVehicle()) return;
+        // the Supervisor's Whistle blows through a Speaker Grille; without one the jar is told it can't whistle (WhistleItem)
+        if (com.coolfreeze23.headinajar.item.WhistleItem.grille(player, event)) return;
         event.setCanceled(true);
         event.setCancellationResult(net.minecraft.world.InteractionResult.CONSUME);
         if (!(player instanceof ServerPlayer sp)) return;

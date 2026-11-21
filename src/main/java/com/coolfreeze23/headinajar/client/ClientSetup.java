@@ -54,6 +54,8 @@ public class ClientSetup {
         MachineClient5.init(modBus);
         // the plinth's bowl and spoon (baked models and the tap curve), and the lines heads say over their jars
         PlinthBowl.init(modBus);
+        // the workforce (0.7.0): item looks, screens, layers
+        com.coolfreeze23.headinajar.client.staff.WorkClient.init(modBus);
         NeoForge.EVENT_BUS.addListener(HeadSpeech::render);
         NeoForge.EVENT_BUS.addListener(HeadSpeech::loggedOut);
         NeoForge.EVENT_BUS.addListener(RestBake::onFrame);

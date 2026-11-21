@@ -1,0 +1,109 @@
+# The look part's own check (0.7.0): a cow, a zombie and a spider hired with a Staff Lanyard by real use (the ghast
+# by setup: flying staff are the movers part's), then each wearing the loop, a Hard Hat and a crate; the nameplate;
+# a refused hire's glint; the bystander's payloads; a body turn (the badge's swing).
+@world flat
+@difficulty easy
+@clean
+@observe 20
+# setup: night (no undead burn) with night vision for the camera; the creatures still (NoAI); hostiles under half
+time set 18000
+weather clear
+gamerule doDaylightCycle false
+gamerule doMobSpawning false
+effect give @s night_vision infinite 0 true
+tp @s 0 -60 0 0 0
+summon cow -4 -60 4 {NoAI:1b,Rotation:[180f,0f]}
+summon zombie 0 -60 4 {NoAI:1b,Health:6f,Rotation:[180f,0f],PersistenceRequired:1b}
+summon spider 4 -60 4 {NoAI:1b,Health:6f,Rotation:[180f,0f],PersistenceRequired:1b}
+summon ghast 0 -58 12 {NoAI:1b,Rotation:[180f,0f],PersistenceRequired:1b}
+summon zombie 9 -60 4 {NoAI:1b,Rotation:[180f,0f],PersistenceRequired:1b,Tags:["healthy"]}
+give @s headinajar:staff_lanyard 8
+wait 25
+bystander spawn 2 -60 -3 0
+wait 10
+bystander mark
+# hire the zombie by real use: the loop drops (every frame of it)
+tp @s 0 -60 2 0 0
+lookat zombie 1.2
+frames hire_zombie 24
+key use
+wait 30
+bystander packets payload
+tp @s -4 -60 2 0 0
+lookat cow 0.8
+key use
+wait 20
+tp @s 4 -60 2 0 0
+lookat spider 0.5
+key use
+wait 20
+tp @s 0 -60 8.5 0 0
+lookat ghast 2
+key use
+wait 20
+# a refused hire: the healthy zombie (above half health): the line, the shake, the glint
+tp @s 9 -60 2 0 0
+lookat zombie 1.2
+key use
+wait 20
+data merge entity @e[type=ghast,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[type=ghast,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[type=ghast,limit=1] armor.head with air
+wait 25
+hud off
+tp @s 0 -59.5 -3 0 0
+look 0 5
+shot loop_front
+tp @s -9 -59 0 -50 10
+shot loop_threequarter
+tp @s -4 -60 1.5 0 0
+lookat cow 0.8
+shot loop_cow_close
+tp @s 0 -60 1.5 0 0
+lookat zombie 1.5
+shot loop_zombie_nameplate
+tp @s 4 -60 1.5 0 0
+lookat spider 0.5
+shot loop_spider_close
+tp @s 0 -60 6 0 0
+lookat ghast 2
+shot loop_ghast
+# a turn: the badge swings out (every frame)
+tp @s -4 -60 1 0 10
+lookat cow 0.8
+frames turn_cow 30
+tp @e[type=cow,limit=1] ~ ~ ~ 120 0
+wait 30
+tp @e[type=cow,limit=1] ~ ~ ~ 180 0
+wait 10
+# hats and crates: the carry by setup (saved data), then the hat (its change sends the look)
+data merge entity @e[type=cow,limit=1] {"neoforge:attachments":{"headinajar:worker":{carried:[{id:"minecraft:wheat",count:4}]}}}
+data merge entity @e[type=zombie,limit=1,tag=!healthy] {"neoforge:attachments":{"headinajar:worker":{carried:[{id:"minecraft:wheat",count:4}]}}}
+data merge entity @e[type=spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{carried:[{id:"minecraft:wheat",count:4}]}}}
+data merge entity @e[type=ghast,limit=1] {"neoforge:attachments":{"headinajar:worker":{carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[type=cow,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[type=zombie,limit=1,tag=!healthy] armor.head with headinajar:hard_hat
+item replace entity @e[type=spider,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[type=ghast,limit=1] armor.head with headinajar:hard_hat
+wait 25
+tp @s 0 -59.5 -3 0 0
+look 0 5
+shot all_front
+tp @s -9 -59 0 -50 10
+shot all_threequarter
+tp @s -10 -59.5 4 -90 5
+shot all_side
+tp @s -4 -60 1.5 0 0
+lookat cow 0.8
+shot all_cow_close
+tp @s 0 -60 1.5 0 0
+lookat zombie 1.5
+shot all_zombie_close
+tp @s 4 -60 1.5 0 0
+lookat spider 0.5
+shot all_spider_close
+tp @s 3 -60 9 0 0
+lookat ghast 1
+shot all_ghast_under
+hud on
+inspect near all 16

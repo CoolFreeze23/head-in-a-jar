@@ -1,0 +1,49 @@
+{
+  "format": 1,
+  "entity": "minecraft:spider",
+  "model": "SpiderModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, 0, -2],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-4.5, -4.5, 0, 4.5, -4, 1],
+      [-4.5, 4, 0, 4.5, 4.5, 1],
+      [-4.5, -4, 0, -4, 4, 1],
+      [4, -4, 0, 4.5, 4, 1]
+    ],
+    "hang": {
+      "pivot": [0, 5, 0],
+      "rot": [0, 0, 0],
+      "cord": [
+        [-1.5, 0, -0.5, -0.5, 1, 0],
+        [0.5, 0, -0.5, 1.5, 1, 0]
+      ],
+      "badge": {
+        "at": [0, 0, -0.51],
+        "size": "full"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, -1, -4],
+    "rot": [0, 0, 0],
+    "size": "l"
+  },
+  "crate": {
+    "bone": {
+      "field": "root",
+      "path": "body1"
+    },
+    "at": [0, -4, 0],
+    "rot": [0, 0, 0]
+  }
+}

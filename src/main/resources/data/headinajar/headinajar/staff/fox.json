@@ -11,5 +11,25 @@
     "complaint.smell": 1,
     "complaint.dental": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "night",
+    "carry": 1,
+    "carry_items": 1,
+    "hands": false,
+    "walk": 0.72,
+    "move": "walk",
+    "attack": "melee",
+    "quirks": [
+      "mouth",
+      "berries_x2"
+    ]
   }
 }

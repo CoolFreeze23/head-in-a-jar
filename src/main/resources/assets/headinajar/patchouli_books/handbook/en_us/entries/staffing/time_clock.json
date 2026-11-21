@@ -1,0 +1,30 @@
+{
+  "name": "The Time Clock",
+  "icon": "headinajar:time_clock",
+  "category": "headinajar:staffing",
+  "sortnum": 13,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:time_clock",
+      "text": "A Time Clock makes a $(l)site$(): 16 blocks out on the level, 8 up and 8 down. Clocks need 8 blocks between them. Use it for the Roster, the Job Rack, the Pay Drawer and the Shifts."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "At each shift staff walk up, punch in one at a time, take a card and go. Off shift they stand in a line by the clock, facing it. The late get the bell."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Day: 1,000 to 11,000$(br)Night: 13,000 to 23,000$(br)Redstone: while the clock is powered$(br2)Times are the Overworld's everywhere. Undead start on Night; Day needs a Hard Hat.",
+      "title": "Form 11-T: Shifts"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "At dawn each worker takes its wage from the Pay Drawer, as a plinth head does from its chest. A hopper may fill the drawer; nothing takes from it but staff.$(br2)Untrusted players are refused at the clock."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Undead within 2 blocks of their own clock do not burn: the clock has an awning.$(br2)A broken clock drops its drawer and rack; its staff wait for another clock within 16 blocks.$(br2)$(o)Punch in. Punch out. Punch nothing else.$()"
+    }
+  ]
+}

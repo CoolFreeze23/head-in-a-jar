@@ -89,7 +89,10 @@ public final class StaffEvents {
         Entity killer = source.getEntity();
         if (killer != null && f.employer != null && f.employer.equals(killer.getUUID())) return "staff.headinajar.reason.management";
         if (source.is(DamageTypes.FALL)) return "staff.headinajar.reason.fall";
-        if (source.is(DamageTypes.LAVA) || source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE)) return "staff.headinajar.reason.lava";
+        if (source.is(DamageTypes.LAVA)) return "staff.headinajar.reason.lava";
+        // burning: in a fire, a campfire or on a magma block, or still alight (the sun on the undead, a fire left behind)
+        if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.CAMPFIRE)
+                || source.is(DamageTypes.HOT_FLOOR)) return "staff.headinajar.reason.burned";
         if (source.is(DamageTypes.DROWN)) return "staff.headinajar.reason.drowned";
         if (source.is(DamageTypeTags.IS_EXPLOSION)) return "staff.headinajar.reason.explosion";
         if (killer instanceof LivingEntity living && killer != dead) return living.getName().getString();
@@ -103,22 +106,31 @@ public final class StaffEvents {
         StaffFile f = Staff.of(dead);
         // a creature cut into a jar goes on as a head: it has not left
         if (f == null || f.left != null || swallowed(dead) || f.employer == null) return;
-        if (!Hosts.isHost(dead)) return;
+        if (!Hosts.isHost(dead) && !com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(dead)) return;
         long day = Staff.day(level);
         String why = reason(dead, event.getSource(), f);
         f.left = new StaffFile.Left(day, why);
         f.note("left", day, why);
         dead.setData(com.coolfreeze23.headinajar.registry.ModRegistry.STAFF, f);
-        String dept = Hosts.data(dead).shell ? Staff.TEMPS : Staff.department(dead.getType());
+        exitInterview(level, dead, f, why, true);
+    }
+
+    /**
+     * The Exit Interview for a member of staff who has left ({@code why}: a reason key or a killer's name), to its
+     * employer now or when they next log in; and, for a death, HR's Condolence Card where it happened.
+     */
+    public static void exitInterview(ServerLevel level, LivingEntity leaver, StaffFile f, String why, boolean card) {
+        long day = Staff.day(level);
+        String dept = Hosts.isHost(leaver) && Hosts.data(leaver).shell ? Staff.TEMPS : Staff.department(leaver.getType());
         Component line = Component.translatable("staff.headinajar.exit", Staff.name(f), Staff.species(f), Staff.departmentName(dept),
-                Math.max(0, day - f.joined), Component.translatable(StaffTable.noise(dead.getType())), Staff.reason(why));
+                Math.max(0, day - f.joined), Component.translatable(StaffTable.noise(leaver.getType())), Staff.reason(why));
         Staff.refresh(f, level.getServer());
         ServerPlayer employer = level.getServer().getPlayerList().getPlayer(f.employer);
         if (employer != null) employer.sendSystemMessage(line);
         else StaffRegister.get(level.getServer()).hold(f.employer, Component.Serializer.toJson(line, level.registryAccess()));
         EXITS.add(f.employer + "|" + why + "|" + f.number);
         // HR's card, where it happened (lost with everything else in lava or the void)
-        dead.spawnAtLocation(CondolenceCardItem.of(f, day));
+        if (card) leaver.spawnAtLocation(CondolenceCardItem.of(f, day));
     }
 
     /** Exit Interviews that waited for an offline employer. */

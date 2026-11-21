@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:clocking_in",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "in_writing"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:job_card"
+    },
+    "title": {
+      "translate": "advancements.headinajar.in_writing.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.in_writing.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

@@ -62,6 +62,8 @@ public final class StaffFile {
     public int lowDawns;
     /** The last day a dawn was run (-1 none). */
     public long lastDawn = -1;
+    /** Tasks finished at work (a trip, 8 crops or 4 animals, a hostile seen off, an hour of patrol); grades read it. */
+    public int tasks;
 
     public static final Codec<StaffFile> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.INT.fieldOf("number").forGetter(f -> f.number),
@@ -76,14 +78,15 @@ public final class StaffFile {
             Codec.INT.optionalFieldOf("morale", -1).forGetter(f -> f.morale),
             Codec.LONG.optionalFieldOf("paidThrough", -1L).forGetter(f -> f.paidThrough),
             Codec.INT.optionalFieldOf("lowDawns", 0).forGetter(f -> f.lowDawns),
-            Codec.LONG.optionalFieldOf("lastDawn", -1L).forGetter(f -> f.lastDawn)
+            Codec.LONG.optionalFieldOf("lastDawn", -1L).forGetter(f -> f.lastDawn),
+            Codec.INT.optionalFieldOf("tasks", 0).forGetter(f -> f.tasks)
     ).apply(i, StaffFile::of));
 
     public StaffFile() {
     }
 
     private static StaffFile of(int number, String species, int nameIndex, Optional<String> customName, Optional<UUID> employer, String employerName,
-                                long joined, List<Entry> history, Optional<Left> left, int morale, long paidThrough, int lowDawns, long lastDawn) {
+                                long joined, List<Entry> history, Optional<Left> left, int morale, long paidThrough, int lowDawns, long lastDawn, int tasks) {
         StaffFile f = new StaffFile();
         f.number = number;
         f.species = species;
@@ -99,6 +102,7 @@ public final class StaffFile {
         f.paidThrough = paidThrough;
         f.lowDawns = lowDawns;
         f.lastDawn = lastDawn;
+        f.tasks = tasks;
         return f;
     }
 

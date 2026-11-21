@@ -258,6 +258,8 @@ public final class Network {
         com.coolfreeze23.headinajar.genetics.Directory.register(registrar.optional());
         // the tricks' host state and the pilot's cues (added in 0.6.3), optional too: a game without them is not told
         com.coolfreeze23.headinajar.host.TrickNet.register(registrar.optional());
+        // the workforce's lines, looks, names and the whistle's point (added in 0.7.0), optional too
+        com.coolfreeze23.headinajar.staff.work.WorkerNet.register(registrar.optional());
     }
 
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */
@@ -265,7 +267,9 @@ public final class Network {
         if (player.getVehicle() instanceof com.coolfreeze23.headinajar.entity.MechaEntity mecha && mecha.getFirstPassenger() == player) {
             // four arm slots, a bit each (left, right, left shoulder, right shoulder): a shoulder weapon answers the
             // button of its side, with the arm below it
-            int buttons = held & 3;
+            // a Supervisor's Whistle in hand: the buttons are the Whistle's (it blows through a Speaker Grille, or the
+            // jar is told it can't whistle), never the arms'
+            int buttons = com.coolfreeze23.headinajar.item.WhistleItem.holding(player) ? 0 : held & 3;
             mecha.armsHeld = buttons | (mecha.frame().hasShoulders() ? buttons << 2 : 0);
         }
     }

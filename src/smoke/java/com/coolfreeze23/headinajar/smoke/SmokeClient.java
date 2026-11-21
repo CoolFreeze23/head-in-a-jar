@@ -233,10 +233,11 @@ public class SmokeClient {
         String[] parts = line.split(" ", 2);
         // commands and setup verbs open an unreported observation window, so their effects are not put on the last input
         if (!java.util.Set.of("wait", "shot", "burst", "report", "inspect", "lookat", "riding", "clienthosts", "seatprobe", "hud", "tooltip", "hitboxes",
-                "frames", "perf", "flip", "machdebug", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap", "station", "staffed").contains(parts[0])) {
+                "frames", "perf", "flip", "machdebug", "walk", "rightclick", "bystander", "bench", "cmdout", "fpscap", "station", "staffed", "chunkloads").contains(parts[0])) {
             observer.setup(line);
         }
         switch (parts[0]) {
+            case "chunkloads" -> report.add(ChunkWatch.run(parts)); // server chunk loads, and those while staff think
             case "station", "staffed" -> StationProbe.run(mc, parts, report); // the stations' numbers, for the old-world check
             case "card", "chatlift" -> report.add(StaffProbe.run(mc, parts)); // the Personnel File and the chat over the bars
             case "staffbadge", "staffband", "headsize", "staffshake", "headlook", "lanyards",

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "headinajar:item/job_card"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "headinajar:job": 0.25
+      },
+      "model": "headinajar:item/job_card_hauling"
+    },
+    {
+      "predicate": {
+        "headinajar:job": 0.5
+      },
+      "model": "headinajar:item/job_card_sorting"
+    },
+    {
+      "predicate": {
+        "headinajar:job": 0.75
+      },
+      "model": "headinajar:item/job_card_farming"
+    },
+    {
+      "predicate": {
+        "headinajar:job": 1.0
+      },
+      "model": "headinajar:item/job_card_security"
+    }
+  ]
+}

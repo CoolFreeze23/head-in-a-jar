@@ -1,0 +1,39 @@
+{
+  "format": 1,
+  "entity": "minecraft:parrot",
+  "model": "ParrotModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "body"
+    },
+    "at": [0, 0.5, 0],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-2, 0, -2, 2, 1, -1.5],
+      [-2, 0, 1.5, 2, 1, 2],
+      [-2, 0, -1.5, -1.5, 1, 1.5],
+      [1.5, 0, -1.5, 2, 1, 1.5]
+    ],
+    "hang": {
+      "pivot": [0, 1, -1.5],
+      "rot": [0, 0, 0],
+      "cord": [],
+      "badge": {
+        "at": [0, -1, -0.51],
+        "size": "mini"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "head"
+    },
+    "at": [0, -0.49, -0.74],
+    "rot": [0, 0, 0],
+    "size": "xs"
+  },
+  "crate": null
+}

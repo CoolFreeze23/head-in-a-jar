@@ -1,0 +1,49 @@
+{
+  "format": 1,
+  "entity": "minecraft:squid",
+  "model": "SquidModel",
+  "lanyard": {
+    "bone": {
+      "field": "root",
+      "path": "body"
+    },
+    "at": [0, 4, 0],
+    "rot": [0, 0, 0],
+    "cord": [
+      [-6.5, 0, -6.5, 6.5, 1, -6],
+      [-6.5, 0, 6, 6.5, 1, 6.5],
+      [-6.5, 0, -6, -6, 1, 6],
+      [6, 0, -6, 6.5, 1, 6]
+    ],
+    "hang": {
+      "pivot": [0, 1, -6],
+      "rot": [0, 0, 0],
+      "cord": [
+        [-1.5, 0, -0.5, -0.5, 1, 0],
+        [0.5, 0, -0.5, 1.5, 1, 0]
+      ],
+      "badge": {
+        "at": [0, 0, -0.51],
+        "size": "full"
+      },
+      "sway": 1
+    }
+  },
+  "hat": {
+    "bone": {
+      "field": "root",
+      "path": "body"
+    },
+    "at": [0, -4, 0],
+    "rot": [0, 0, 0],
+    "size": "xl"
+  },
+  "crate": {
+    "bone": {
+      "field": "root",
+      "path": "body"
+    },
+    "at": [0, -8, 0],
+    "rot": [0, 0, 0]
+  }
+}

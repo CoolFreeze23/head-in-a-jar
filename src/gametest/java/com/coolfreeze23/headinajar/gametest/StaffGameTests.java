@@ -324,7 +324,10 @@ public class StaffGameTests {
         var src = h.getLevel().damageSources();
         h.assertValueEqual(StaffEvents.reason(cow, src.fall(), f), "staff.headinajar.reason.fall", "a fall");
         h.assertValueEqual(StaffEvents.reason(cow, src.lava(), f), "staff.headinajar.reason.lava", "lava");
-        h.assertValueEqual(StaffEvents.reason(cow, src.inFire(), f), "staff.headinajar.reason.lava", "fire counts as lava");
+        h.assertValueEqual(StaffEvents.reason(cow, src.inFire(), f), "staff.headinajar.reason.burned", "a fire");
+        h.assertValueEqual(StaffEvents.reason(cow, src.onFire(), f), "staff.headinajar.reason.burned", "burning (the sun on the undead)");
+        h.assertValueEqual(StaffEvents.reason(cow, src.campfire(), f), "staff.headinajar.reason.burned", "a campfire");
+        h.assertValueEqual(StaffEvents.reason(cow, src.hotFloor(), f), "staff.headinajar.reason.burned", "a magma block");
         h.assertValueEqual(StaffEvents.reason(cow, src.drown(), f), "staff.headinajar.reason.drowned", "drowning");
         h.assertValueEqual(StaffEvents.reason(cow, src.explosion(null, null), f), "staff.headinajar.reason.explosion", "an explosion");
         h.assertValueEqual(StaffEvents.reason(cow, src.playerAttack(p), f), "staff.headinajar.reason.management", "the employer");

@@ -45,6 +45,7 @@ default key for each is in [Controls](#controls).
 - [Mecha Division](#mecha-division)
 - [Genetics Department](#genetics-department)
 - [Board of Directors: heads at work](#board-of-directors-heads-at-work)
+- [The workforce](#the-workforce)
 - [Controls](#controls)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -885,7 +886,7 @@ alive.
 *A Safety Placard changing notices: **Use** it.*
 
 **Safety Placard**: yellow dye, black dye, yellow dye; yellow dye, ingot, yellow dye (makes 4). Hangs on a wall.
-**Use** it to show the next of fifteen company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "PLEASE DO NOT
+**Use** it to show the next of nineteen company notices, from "HEADS MUST BE SECURED AT ALL TIMES" to "PLEASE DO NOT
 TAP THE GLASS", "A HEALTHY BODY IS A PRODUCTIVE BODY" among them. The notice is painted on the board in your game's language, and read out above your hotbar.
 
 ### Materials
@@ -2872,6 +2873,137 @@ Other heads have no program: "That head (Pig) has no program. Try zombie, villag
 someone plugged in: "Steve is plugged in. Wait until they unplug." Refused, the open clamps hop, or the shut ones
 chatter.
 
+## The workforce
+
+*"Wear your badge at all times. It is how we know you are staff."* Living creatures, heads still on, hired with a
+lanyard and put to work at a Time Clock.
+
+![A zombie walks up and attacks the player, who hits it twice with an iron sword; the player then uses the Staff Lanyard on it: the loop and the teal badge drop onto its chest, it stops and faces the player, turns, and walks to the Time Clock to stand beside it, facing it](docs/images/lanyard_hire.gif)
+
+### The Staff Lanyard
+
+Shaped, makes 2: String, Neuro-Copper Wire, String across the top; Paper in the centre; a Gold Nugget at the bottom.
+With hands (a body, a linked body, or a jar with a Manipulator Arm), **Use** it on a creature. The loop and badge drop
+over its head; it stops, looks at you, and stands awaiting assignment until a Time Clock of yours with room is within
+16 blocks. From then on its own mind is off: it never despawns (not even a monster on Peaceful), attacks nobody, can be
+led, and works for you. The badge is worn in your team's colour (company teal with none), and Jade reads its job and
+status under its staff line.
+
+| Who | Hired? |
+|---|---|
+| Passive and neutral creatures, your own pets, golems you built | yes |
+| Hostile creatures | at half their health or less ("The candidate is not ready to listen.") |
+| Babies | "Child labour is against company policy. Come back when it's grown." |
+| A village's iron golem | "Already employed by the village. We do not poach from the public sector." |
+| Someone else's pet or staff | "Already employed by %s. Poaching staff is against policy." |
+| Hosts | "Hosts don't wear lanyards. A lanyard needs a neck with a head on it." |
+| Bosses, the warden, the elder guardian | "This candidate is overqualified. And very loud." |
+| Creepers | "A creeper goes off once. HR is drawing up a job for it." |
+| Fish, tadpoles, bats, guardians | "This candidate has no legs and no prospects." |
+| Vexes; shulkers | "There is nothing to a vex but intention."; "Shulkers do not commute." |
+| Players | "Colleagues are hired by HR, not by lanyard." |
+| Your 25th | "Headcount frozen: %s staff on file. Let someone go first." |
+
+**Let go:** **Sneak** + **Use** a Clipboard on the worker, twice within 3 seconds ("Let %s go? Do it again to
+confirm."). Only its employer, or someone they trust, may. The lanyard comes back with a **Notice of Separation (Form
+45-S)** and any Hard Hat; what it carried is set down; its file reads "Left the company: restructuring" and its
+employer gets an Exit Interview. It then serves 10 seconds' notice: it targets nobody and walks, head down, to a spot
+12 blocks from the nearest player while a Security colleague from its site walks beside it and DOLORES says so. After
+that it is an ordinary creature, free to despawn as it could before; a hostile is hostile again.
+
+A worker that dies drops its lanyard, its load, its tools and its Hard Hat; its employer gets the Exit Interview and a
+Condolence Card, and colleagues within 16 blocks lose 5 morale.
+
+### The Time Clock
+
+![Six lanyarded zombies at dusk leave their ring round the Time Clock, queue in front of it and step up one at a time to punch in, each walking off to a chest with its card; then, close up under a pink sky, a late zombie steps up, the card goes into the slot and the lever is pulled](docs/images/dusk_queue.gif)
+
+Shaped: Surgical Steel Ingot, Clock, Surgical Steel Ingot; Neuro-Copper Wire, Chest, Neuro-Copper Wire; a Surgical Steel
+Ingot at the bottom. It makes a **site**: 16 blocks out from the clock on the level (33 by 33), 8 up and 8 down. A clock
+needs 8 blocks between it and any other ("Too close to another site."). Staff within 16 blocks with no clock join one
+with room; a clock takes 8 ("Site full: %s staff."). **Use** it (its owner, or someone they trust) for four tabs:
+
+| Tab | What it holds |
+|---|---|
+| **Roster** | each worker: number, name, species, job, shift, a morale face and its status; **Rename** (the file's name, never a name tag) and **Recall** (drop the card, come back) |
+| **Job Rack** | 8 Job Cards printed for this site, and how many work each |
+| **Pay Drawer** | 9 slots and the day's wages owed. At dawn each worker takes its wage, as a plinth head does; a hopper may fill it, nothing takes from it but staff |
+| **Shifts** | Day (1,000 to 11,000), Night (13,000 to 23,000) or Redstone (while the clock is powered) for each worker, by the Overworld's time in every dimension. Undead and foxes start on Night; undead on Day need a Hard Hat |
+
+At each shift staff queue in front of the clock and step up to punch in one at a time (the clock rings its bell for one
+more than 30 seconds late), take a card and go. Off shift they stand round the clock, within 2 blocks of it, facing it.
+The dial shows the time of day. Undead
+within 2 blocks of their own clock do not burn: the clock has an awning. The lamp is green with staff and nothing
+wrong, amber when someone is held up, pulsing amber while they work, red for a refusal. A broken clock drops its drawer
+and rack; its staff stand off site until another clock within 16 blocks takes them.
+
+### The Clipboard and Job Cards
+
+Shaped: an Iron Nugget at the top, three Paper across the middle, any wooden slab at the bottom. **Use** it on your
+clock to bind it ("Clipboard bound to this site."). Then, inside the site:
+
+- **Use** a container: a **Pick-Up**. **Sneak** + **Use** one: a **Drop-Off**. The face you clicked is the one used (a
+  furnace's top, side or bottom).
+- **Use** two blocks that are not containers: the corners of an **area** (a field, a pen or a patrol; at most 16 by 16).
+- **Use** a marked stop again to unmark it. A container you may not open (claims, locks) is refused.
+- **Use** it in the air: the order screen. Choose the job, set one filter for each Drop-Off, mark one "Everything
+  else", name the order, and **Print**: one Paper from your inventory becomes a **Job Card**.
+
+Cards go in the clock's Job Rack, where idle staff take, top to bottom, the first card they can do among those with
+the fewest workers on it (one card, eight workers; eight cards, one each). **Use** a card on one worker to give it to
+it alone. While you hold the Clipboard its marks show as chalk lines; nobody else sees them.
+
+| Job | What it does |
+|---|---|
+| **Hauling** | a trip at a time from a Pick-Up to a Drop-Off that accepts it, up to the worker's carry; it waits at a full Drop-Off ("Drop-off full. Waiting.") and for a cat on the chest |
+| **Sorting** | empties one Pick-Up into Drop-Offs by filter, the rest to "Everything else"; Disengaged staff misfile 1 item in 20 (a Librarian never) |
+| **Farming** | harvests ripe crops in its field and replants, planting bare farmland from the Pick-Up's seeds; in a pen, shears sheep and milks cows with shears and buckets from the Pick-Up; never tramples |
+| **Security** | patrols its area or the whole site and sees hostiles off with its own attack; ranged staff take arrows from the Pick-Up; it never leaves the site ("Off site. Not our problem.") |
+
+What each species can do comes from its staff file (a data pack can change it): villagers do all four (a Farmer farms
+faster, a Librarian sorts, a Fletcher shoots), zombies haul and guard but "cannot read the labels", skeletons guard
+with bows, endermen teleport between stops, slimes carry their load inside them, spiders climb to high stops, ghasts
+and allays fly, dolphins and squid work in water, cats and ocelots keep creepers and phantoms off the site with no
+card at all ("Cats have one job."). When a worker stops it says why over its head ("Nothing on the rack for me.",
+"Can't get there. Moving on.").
+
+### The Hard Hat
+
+Shaped: Yellow Dye, Iron Ingot, Yellow Dye; a Leather Helmet in the centre. **Use** it on a worker to put it on (any
+helmet it wore comes back to you): undead staff wearing one may work the Day shift and do not burn, and falling blocks
+do staff no harm. Only a Hard Hat counts ("Policy 4.1: hard hats, not helmets."). You can wear one too: a leather
+helmet's armour, and half the harm from falling blocks. It never wears out, and it sits on a jar's Hat Mount.
+
+### The Supervisor's Whistle
+
+![At sunset a player walks backwards across a field while a detail of six keeps close in front of them, each wearing a teal staff badge: a zombie in a yellow Hard Hat named Ernest, two spiders, a skeleton, a wolf and a cat](docs/images/detail_of_six.gif)
+
+Shapeless: Iron Nugget, Copper Ingot, String. **Use** it on your staff to add them to your **detail** (six at most).
+**Use** it in the air: Follow (one blast) or Hold (two short). **Attack** with it in hand: the fighters go for what you
+point at; pets stay with you. **Sneak** + **Use**: the detail is stood down and goes home. Members walk home within 48
+blocks; further, or left 5 minutes without you, they take the company shuttle back to their clock and arrive the next
+time its chunk is loaded. A detail never follows you through a portal ("Waiting at the portal. They don't do
+travel."). Your cat keeps creepers away, your wolf sits by your idle body while you are a jar, your parrot rides your
+shoulder and your fox brings you what it finds. A jar whistles through a Speaker Grille ("A jar can't whistle. It has
+tried.").
+
+### Quirks
+
+The enderman stops while you stare at it ("Do you mind?") and shelters from the rain at its clock; a cat sits on the
+chests; a piglin skims one item in 64 into its pocket (**Use** it with an empty hand: "Fine. It was resting in my
+pocket.") and zombifies outside the Nether, staying on staff; a chicken lays its eggs into what it carries; a goat
+rams a colleague now and then; an unpaid llama spits at whoever opens its clock; a dolphin surfaces for air; a villager
+will not trade on shift ("I'm on the clock. Come back after my shift.") and trades off shift; an iron golem offers
+villager staff a poppy; a witch splashes hurt colleagues with Regeneration; a Nitwit, a cow or a pig is pleasant to
+work with (+2 morale at dawn for colleagues within 8).
+
+### Server rules
+
+A site costs what a village costs: staff think every 10 ticks, each in turn; paths are rationed and stay inside the
+site; nothing loads a chunk, and an unloaded site simply stops. Turret Pedestals, iron golems, snow golems and wolves
+spare staff unless staff start it. Operators have `/headoffice staff list [player]`, `/headoffice staff recall
+<player>` and `/headoffice staff pause` (kept with the world, and shown by `/headoffice status`).
+
 ## Controls
 
 Six keys of your own, under **Head in a Jar** in the Controls screen. Rebind them as you like; every line the game shows
@@ -2959,6 +3091,9 @@ Everything is under `/headoffice`.
 | `/headoffice status <player>` | operators | The same for another player. |
 | `/headoffice separate <player>` | operators | Takes the player's head off on the spot, with a new **Life Support Jar**, **Relay Goggles Mk I** and **Collar Cam**. No chair, saline or power needed. |
 | `/headoffice restore <player>` | operators | Puts the player's head back on their body (the body must be loaded). |
+| `/headoffice staff list [player]` | operators | One line per worker (number, name, species, site, job, status), and what staff thinking costs the server. |
+| `/headoffice staff recall <player>` | operators | Every worker of that player drops its card back in its rack and goes back to its clock (by the company shuttle if far away). |
+| `/headoffice staff pause` | operators | Every worker stops where it is: "All staff are on a mandatory break." Again: "Back to work." Kept with the world. |
 
 </details>
 
@@ -2996,6 +3131,15 @@ are in `config/headinajar-client.toml`.
 | `heads.wardenDarkness` | true | true / false | A warden head at a Grievance gives Darkness to every player within 16 blocks when it shrieks. |
 | `heads.livingLibrary` | true | true / false | Placed and station heads give one sample a day to a tool or a Leech Jar. Off: tools do nothing on heads. |
 | `bodies.treadmillOutput` | 100 | 0 to 1,000 | What a Corporate Wellness Treadmill makes, in percent of its body's rate. |
+| `staff.enabled` | true | true / false | Living staff can be hired. Off: the Lanyard refuses ("Staffing is not licensed on this server."), Time Clocks only keep time, every staff brain is off. |
+| `staff.hireHostiles` | true | true / false | Hostile creatures can be hired at half their health. Off: "Head Office does not hire hostiles on this server." |
+| `staff.maxPerPlayer` | 24 | 0 to 1,000 | Most living staff one player may employ. |
+| `staff.maxPerClock` | 8 | 1 to 64 | Most staff on one Time Clock's roster. |
+| `staff.thinkTicks` | 10 | 5 to 40 | Ticks between a worker's thinks. Higher is cheaper and slower. |
+| `staff.clockSpacing` | 8 | 1 to 64 | Blocks needed between two Time Clocks, on the level. |
+| `staff.siteRadius` | 16 | 8 to 16 | How far a site reaches from its clock on the level (8 up and 8 down). |
+| `staff.detailSize` | 6 | 0 to 16 | Most staff on one player's detail. |
+| `staff.detailShuttle` | true | true / false | A detail left far from home takes the company shuttle back to its clock. Off: it stays where it was left, on Hold. |
 | `bodies.headlessChicken` | true | true / false | A chicken host nobody rides runs in circles round where it was cut. Off: it stands still like any host. |
 
 </details>
@@ -3012,13 +3156,15 @@ are in `config/headinajar-client.toml`.
 | `memos` | true | true / false | DOLORES's memos: a line in chat with a beep, the first time something new happens. Off: none are shown, and those missed are not sent again. |
 | `hudNumbers` | false | true / false | Keep the numbers beside the jar's bars up all the time. Off: they show while a bar is under a quarter, while you hold **Sneak**, and for three seconds after a change. |
 | `lanyards` | true | true / false | The staff badge on heads and stations that work for someone. Off: no badges are drawn for you. |
+| `staffChalk` | true | true / false | The Clipboard's chalk lines round marked stops and areas while you hold one. |
+| `staffNameplates` | true | true / false | A worker's given name over it when you look at it from close by. Off: no names (their stop lines still show). |
 | `geneQuirks` | true | true / false | Hear other players' and hosts' gene quirks (the moos, oinks, croaks, sneezes and sobs). Off: only your own. |
 
 </details>
 
 ## Advancements
 
-Fifty-one, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
+Fifty-six, in their own tab, starting at **Orientation Day**, which every employee is given the moment they
 arrive. The steps from there to your first mecha are a career ladder: each says what to do next.
 
 <details><summary>All advancements</summary>
@@ -3069,6 +3215,11 @@ arrive. The steps from there to your first mecha are a career ladder: each says 
 | **Off the Books** (hidden) | Complete Census | File a creature Head Office has no record of. |
 | **Headhunter** | Staff Number | Jar the heads of 25 different species. |
 | **Made to Order** | Splice of Life | Print a host from a DNA Fraction. |
+| **Non-Human Resources** | Orientation Day | Hire your first member of staff with a **Staff Lanyard**. |
+| **Restructuring** | Non-Human Resources | Let a member of staff go. |
+| **Clocking In** | Non-Human Resources | Have a worker punch in at a **Time Clock**. |
+| **In Writing** | Clocking In | Give a worker a **Job Card** by hand. |
+| **Away Day** | Clocking In | Take a detail of six more than 16 blocks out of their sites. |
 | **Employee of the Month** | Orientation Day | Hang a jarred villager on an **Employee Mount**. |
 | **Pay Grade** | Employee of the Month | Pay a placed jarred head that is not a villager its wage by hand. |
 | **Lunch Is Served** | Employee of the Month | Feed a jarred head on its plinth a Nutrient Broth Bucket. |
@@ -3207,6 +3358,60 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 
+### What's new in 0.7.0
+
+- **The Staff Lanyard.** **Use** one on a living creature to hire it: a string loop and a brass badge drop over its
+  head, it stops, looks at you and stands awaiting assignment. Its own mind is off: it never despawns, attacks nobody,
+  can be led, and keeps its temperament as a quirk. Hostiles must first be worn down to half their health; babies,
+  bosses, hosts, creepers, fish, bats, vexes and shulkers, a village's iron golem and anyone else's pet or staff are
+  refused, each with its line ("Shulkers do not commute."). A player employs 24 at most. The badge is worn in your
+  team's colour; staff names float over them when you look (the client value `staffNameplates`).
+- **Let go.** **Sneak** + **Use** a Clipboard on a worker, twice within 3 seconds: the lanyard comes back with a
+  **Notice of Separation (Form 45-S)** (and its Hard Hat), the file says "restructuring", and the creature serves 10
+  seconds' notice, head down, walking 12 blocks from you while a Security colleague sees it out and DOLORES says so.
+  Then it is an ordinary creature again: "%s has left the company and may not take it well."
+- **The Time Clock.** A punch clock that makes a site 16 blocks out on the level, 8 up and 8 down; clocks need 8 blocks
+  between them. Staff within 16 join a clock with room (8 a clock). At each shift they walk up, punch in one at a time
+  (the bell for the late), take a Job Card and go; off shift they stand round the clock, facing it. Its screen has a
+  **Roster** (rename, recall), the **Job Rack**, the **Pay Drawer** (wages taken at dawn; a hopper may fill it) and the
+  **Shifts** (Day, Night or Redstone for each worker; undead start on Night). Undead within 2 blocks of their own clock
+  do not burn: it has an awning.
+- **The Clipboard and Job Cards.** Bind a Clipboard to your clock, mark containers as Pick-Ups and Drop-Offs and two
+  corners as an area, then **Print** a Job Card from one paper. Cards go in the Job Rack, where idle staff take the one
+  they can do with the fewest workers on it, or to one worker by hand. Marks show as chalk lines to whoever holds the
+  Clipboard (the client value `staffChalk`).
+- **Four jobs.** **Hauling** carries from Pick-Ups to Drop-Offs (filters obeyed; it waits at a full Drop-Off and for a
+  cat on the chest), **Sorting** empties one Pick-Up by filter with "Everything else" for the rest, **Farming** harvests
+  ripe crops and replants, shears sheep and milks cows in a pen, and **Security** patrols the site and sees hostiles
+  off with the species' own attack (melee, arrows from the Pick-Up, a blaze's fireballs that light nothing, a snow
+  golem's snowballs; a parrot or an armadillo raises the alarm). Each species has its aptitudes from the book's table:
+  zombies cannot read the labels, cats have one job, fliers fly, slimes hop, endermen teleport between stops. Nobody
+  breaks a block, tramples farmland, loads a chunk or leaves the site.
+- **The Hard Hat.** **Use** it on a worker: undead staff in one may work days and do not burn, and falling blocks do
+  staff no harm ("Policy 4.1: hard hats, not helmets."). A player may wear one too (a leather helmet's armour, half the
+  harm from falling blocks). It never wears out.
+- **The Supervisor's Whistle.** **Use** it on up to six of your staff to make a **detail** that follows you (Follow and
+  Hold in the air, **Sneak** + **Use** stands them down) and fights what you point at; cats, wolves, parrots and foxes
+  are pets that keep you company instead. A detail never follows through a portal; left far behind or five minutes
+  without you, it takes the company shuttle back to its clock without loading a chunk. A jar whistles through a
+  Speaker Grille.
+- **Quirks.** The enderman stops when stared at ("Do you mind?"), a piglin skims one item in 64 into its pocket, a
+  chicken lays into what it carries, a goat rams a colleague, a llama left unpaid spits at whoever opens its clock, a
+  dolphin surfaces for air, a villager will not trade on shift, an iron golem offers villager staff a poppy, a witch
+  splashes hurt colleagues with Regeneration.
+- **A rule change:** Turret Pedestals now spare lanyarded monsters and all staff, and iron golems, snow golems and
+  wolves leave staff alone unless staff start it.
+- Operators have `/headoffice staff list`, `recall` and `pause` (the pause is kept with the world and shown by
+  `/headoffice status`). Staff think twice a second, each in turn.
+- The Safety Placard has four new notices, among them "STAFF ARE NOT LUNCH", and its lettering was redrawn: V comes to
+  a point, M has its notch and N's diagonal runs to the foot, on every notice in both languages.
+- Five advancements (Non-Human Resources, Restructuring, Clocking In, In Writing, Away Day), three memos and six
+  handbook entries.
+- Worlds from 0.6.3 load as they are. A 0.7.0 game can join a 0.6.3 server; a 0.6.3 game cannot join a 0.7.0 server.
+  Update both.
+
+<details><summary>What changed in 0.6.3, 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
+
 ### What's new in 0.6.3
 
 - **Every body does something.** The ten hosts that had no trick have an Ability at 50% sync: the cow's **Moo**
@@ -3238,7 +3443,6 @@ The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
 - Worlds from 0.6.2 load as they are. A 0.6.3 game can join a 0.6.2 server; a 0.6.2 game cannot join a 0.6.3 server.
   Update both.
 
-<details><summary>What changed in 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.6.2
 

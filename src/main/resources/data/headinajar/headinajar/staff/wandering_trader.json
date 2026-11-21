@@ -13,5 +13,24 @@
     "complaint.smell": 1,
     "complaint.overtime": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.25,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "hands": true,
+    "walk": 0.432,
+    "move": "walk",
+    "attack": "melee",
+    "melee": 2,
+    "quirks": [
+      "trader_stays"
+    ]
   }
 }

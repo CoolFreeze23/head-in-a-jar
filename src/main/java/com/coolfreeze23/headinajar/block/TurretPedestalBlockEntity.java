@@ -157,22 +157,9 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         setChanged();
     }
 
-    /** Whether this turret would ever shoot at {@code e}. */
+    /** Whether this turret would ever shoot at {@code e}: the company's friend-or-foe rule (which never targets staff). */
     public boolean mayTarget(LivingEntity e) {
-        if (!e.isAlive() || e.isInvulnerable()) return false;
-        if (e instanceof Player p) {
-            if (p.isCreative() || p.isSpectator() || p.getUUID().equals(owner)) return false;
-            if (!Config.get(Config.PVP_TURRETS, false)) return false;
-            Player o = owner == null || level == null ? null : level.getPlayerByUUID(owner);
-            return o == null || !o.isAlliedTo(p);
-        }
-        if (e instanceof OwnableEntity pet && pet.getOwnerUUID() != null) return false;
-        if (e instanceof AbstractVillager || e instanceof IronGolem) return false;
-        if (owner != null && level != null) {
-            Player o = level.getPlayerByUUID(owner);
-            if (o != null && o.isAlliedTo(e)) return false;
-        }
-        return e instanceof Enemy;
+        return com.coolfreeze23.headinajar.staff.work.FriendOrFoe.mayTarget(owner, level, e);
     }
 
     public LivingEntity findTarget() {
@@ -421,7 +408,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     }
 
     /** A species' alarm: its staff file's sound, else its own ambient sound (a creature from another mod), or none. */
-    static net.minecraft.sounds.SoundEvent alarmSound(ServerLevel level, EntityType<?> type) {
+    public static net.minecraft.sounds.SoundEvent alarmSound(ServerLevel level, EntityType<?> type) {
         var id = com.coolfreeze23.headinajar.staff.StaffTable.alarm(type);
         if (id != null) {
             var s = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(id);

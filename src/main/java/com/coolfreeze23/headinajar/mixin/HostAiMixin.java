@@ -11,15 +11,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * A host's own mind is switched off: no goals, no brain. The mod may drive the body itself instead, through
- * {@code mind.MobMotor}: the headless chicken's run (0.7.0's staff brain goes beside it here).
+ * {@code mind.MobMotor}: the headless chicken's run. A worker hired with a Staff Lanyard has its own mind switched off
+ * the same way and runs the staff brain instead ({@code staff.work.Workforce.tick}).
  */
 @Mixin(Mob.class)
 public abstract class HostAiMixin {
     @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true)
     private void headinajar$noAi(CallbackInfo ci) {
+        Mob mob = (Mob) (Object) this;
+        if (com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mob) && !Hosts.isHost(mob)) {
+            ci.cancel();
+            com.coolfreeze23.headinajar.staff.work.Workforce.tick(mob);
+            return;
+        }
         if (!Hosts.isHost((Entity) (Object) this)) return;
         ci.cancel();
-        Mob mob = (Mob) (Object) this;
         if (HeadlessChicken.runs(mob)) HeadlessChicken.tick(mob);
         else HeadlessChicken.rest(mob);
     }

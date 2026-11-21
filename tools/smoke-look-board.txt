@@ -1,0 +1,1548 @@
+# Every hireable species with a staff fit, as workers: three takes (loop only; + Hard Hat; + carrying).
+# The creatures are given a worker record by setup (data merge) so every family shows, flying and hostile ones too;
+# hiring is not what this proves. The creatures of a take are dropped into the void and killed there before the next (a /kill
+# on the board splits slimes into small ones that stand in the shots; left alive in the void, the old take's creatures
+# would take the next take's data merges). Shots: front three-quarter (the creature's left) and side, at 5 blocks.
+@world flat
+@difficulty easy
+@clean
+time set 6000
+weather clear
+gamerule doDaylightCycle false
+gamerule doMobSpawning false
+hud off
+# --- take: loop (in rain: undead burn at noon without a hat, and rain is the one vanilla thing that stops it without a helmet)
+weather rain
+tp @e[type=!player] 0 -400 0
+kill @e[type=!player]
+wait 10
+wait 5
+summon zombie -35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie"]}
+data merge entity @e[tag=board_zombie,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_zombie,limit=1] armor.head with air
+summon husk -25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_husk"]}
+data merge entity @e[tag=board_husk,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_husk,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_husk,limit=1] armor.head with air
+summon drowned -15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_drowned"]}
+data merge entity @e[tag=board_drowned,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_drowned,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_drowned,limit=1] armor.head with air
+summon zombie_villager -5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_villager"]}
+data merge entity @e[tag=board_zombie_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie_villager,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_zombie_villager,limit=1] armor.head with air
+summon skeleton 5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton"]}
+data merge entity @e[tag=board_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_skeleton,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_skeleton,limit=1] armor.head with air
+summon stray 15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_stray"]}
+data merge entity @e[tag=board_stray,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_stray,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_stray,limit=1] armor.head with air
+summon wither_skeleton 25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wither_skeleton"]}
+data merge entity @e[tag=board_wither_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wither_skeleton,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_wither_skeleton,limit=1] armor.head with air
+summon bogged 35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bogged"]}
+data merge entity @e[tag=board_bogged,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_bogged,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_bogged,limit=1] armor.head with air
+summon piglin 45 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin"]}
+data merge entity @e[tag=board_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_piglin,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_piglin,limit=1] armor.head with air
+summon piglin_brute 55 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin_brute"]}
+data merge entity @e[tag=board_piglin_brute,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_piglin_brute,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_piglin_brute,limit=1] armor.head with air
+summon zombified_piglin 65 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombified_piglin"]}
+data merge entity @e[tag=board_zombified_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombified_piglin,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_zombified_piglin,limit=1] armor.head with air
+summon enderman 76 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_enderman"]}
+data merge entity @e[tag=board_enderman,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_enderman,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_enderman,limit=1] armor.head with air
+summon villager -35 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_villager"]}
+data merge entity @e[tag=board_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_villager,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_villager,limit=1] armor.head with air
+summon wandering_trader -25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wandering_trader"]}
+data merge entity @e[tag=board_wandering_trader,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wandering_trader,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_wandering_trader,limit=1] armor.head with air
+summon witch -15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_witch"]}
+data merge entity @e[tag=board_witch,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_witch,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_witch,limit=1] armor.head with air
+summon vindicator -5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_vindicator"]}
+data merge entity @e[tag=board_vindicator,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_vindicator,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_vindicator,limit=1] armor.head with air
+summon pillager 5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pillager"]}
+data merge entity @e[tag=board_pillager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_pillager,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_pillager,limit=1] armor.head with air
+summon evoker 15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_evoker"]}
+data merge entity @e[tag=board_evoker,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_evoker,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_evoker,limit=1] armor.head with air
+summon illusioner 25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_illusioner"]}
+data merge entity @e[tag=board_illusioner,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_illusioner,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_illusioner,limit=1] armor.head with air
+summon iron_golem 36 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_iron_golem"]}
+data merge entity @e[tag=board_iron_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_iron_golem,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_iron_golem,limit=1] armor.head with air
+summon snow_golem 47 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem"]}
+data merge entity @e[tag=board_snow_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_snow_golem,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_snow_golem,limit=1] armor.head with air
+summon snow_golem 57 -60 22 {Pumpkin:0b,NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem_sheared"]}
+data merge entity @e[tag=board_snow_golem_sheared,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_snow_golem_sheared,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_snow_golem_sheared,limit=1] armor.head with air
+summon allay 67 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_allay"]}
+data merge entity @e[tag=board_allay,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_allay,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_allay,limit=1] armor.head with air
+summon blaze 77 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_blaze"]}
+data merge entity @e[tag=board_blaze,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_blaze,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_blaze,limit=1] armor.head with air
+summon cow -35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cow"]}
+data merge entity @e[tag=board_cow,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cow,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_cow,limit=1] armor.head with air
+summon mooshroom -25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mooshroom"]}
+data merge entity @e[tag=board_mooshroom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_mooshroom,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_mooshroom,limit=1] armor.head with air
+summon pig -15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pig"]}
+data merge entity @e[tag=board_pig,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_pig,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_pig,limit=1] armor.head with air
+summon sheep -5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sheep"]}
+data merge entity @e[tag=board_sheep,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_sheep,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_sheep,limit=1] armor.head with air
+summon wolf 5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wolf"]}
+data merge entity @e[tag=board_wolf,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wolf,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_wolf,limit=1] armor.head with air
+summon fox 15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_fox"]}
+data merge entity @e[tag=board_fox,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_fox,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_fox,limit=1] armor.head with air
+summon cat 25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cat"]}
+data merge entity @e[tag=board_cat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cat,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_cat,limit=1] armor.head with air
+summon ocelot 35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ocelot"]}
+data merge entity @e[tag=board_ocelot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ocelot,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_ocelot,limit=1] armor.head with air
+summon chicken 45 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_chicken"]}
+data merge entity @e[tag=board_chicken,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_chicken,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_chicken,limit=1] armor.head with air
+summon rabbit 55 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_rabbit"]}
+data merge entity @e[tag=board_rabbit,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_rabbit,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_rabbit,limit=1] armor.head with air
+summon goat 65 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_goat"]}
+data merge entity @e[tag=board_goat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_goat,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_goat,limit=1] armor.head with air
+summon panda 75 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_panda"]}
+data merge entity @e[tag=board_panda,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_panda,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_panda,limit=1] armor.head with air
+summon polar_bear 85 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_polar_bear"]}
+data merge entity @e[tag=board_polar_bear,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_polar_bear,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_polar_bear,limit=1] armor.head with air
+summon horse -35 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_horse"]}
+data merge entity @e[tag=board_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_horse,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_horse,limit=1] armor.head with air
+summon donkey -25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_donkey"]}
+data merge entity @e[tag=board_donkey,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_donkey,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_donkey,limit=1] armor.head with air
+summon mule -15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mule"]}
+data merge entity @e[tag=board_mule,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_mule,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_mule,limit=1] armor.head with air
+summon skeleton_horse -5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton_horse"]}
+data merge entity @e[tag=board_skeleton_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_skeleton_horse,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_skeleton_horse,limit=1] armor.head with air
+summon zombie_horse 5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_horse"]}
+data merge entity @e[tag=board_zombie_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie_horse,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_zombie_horse,limit=1] armor.head with air
+summon llama 15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_llama"]}
+data merge entity @e[tag=board_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_llama,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_llama,limit=1] armor.head with air
+summon trader_llama 25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_trader_llama"]}
+data merge entity @e[tag=board_trader_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_trader_llama,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_trader_llama,limit=1] armor.head with air
+summon camel 36 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_camel"]}
+data merge entity @e[tag=board_camel,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_camel,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_camel,limit=1] armor.head with air
+summon hoglin 47 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_hoglin"]}
+data merge entity @e[tag=board_hoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_hoglin,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_hoglin,limit=1] armor.head with air
+summon zoglin 57 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zoglin"]}
+data merge entity @e[tag=board_zoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zoglin,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_zoglin,limit=1] armor.head with air
+summon ravager 69 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ravager"]}
+data merge entity @e[tag=board_ravager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ravager,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_ravager,limit=1] armor.head with air
+summon sniffer 83 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sniffer"]}
+data merge entity @e[tag=board_sniffer,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_sniffer,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_sniffer,limit=1] armor.head with air
+summon turtle -35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_turtle"]}
+data merge entity @e[tag=board_turtle,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_turtle,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_turtle,limit=1] armor.head with air
+summon armadillo -25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_armadillo"]}
+data merge entity @e[tag=board_armadillo,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_armadillo,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_armadillo,limit=1] armor.head with air
+summon axolotl -15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_axolotl"]}
+data merge entity @e[tag=board_axolotl,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_axolotl,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_axolotl,limit=1] armor.head with air
+summon frog -5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_frog"]}
+data merge entity @e[tag=board_frog,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_frog,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_frog,limit=1] armor.head with air
+summon spider 5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_spider"]}
+data merge entity @e[tag=board_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_spider,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_spider,limit=1] armor.head with air
+summon cave_spider 15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cave_spider"]}
+data merge entity @e[tag=board_cave_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cave_spider,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_cave_spider,limit=1] armor.head with air
+summon strider 25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_strider"]}
+data merge entity @e[tag=board_strider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_strider,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_strider,limit=1] armor.head with air
+summon endermite 35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_endermite"]}
+data merge entity @e[tag=board_endermite,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_endermite,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_endermite,limit=1] armor.head with air
+summon silverfish 45 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_silverfish"]}
+data merge entity @e[tag=board_silverfish,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_silverfish,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_silverfish,limit=1] armor.head with air
+summon slime 55 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_slime"]}
+data merge entity @e[tag=board_slime,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_slime,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_slime,limit=1] armor.head with air
+summon magma_cube 65 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_magma_cube"]}
+data merge entity @e[tag=board_magma_cube,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_magma_cube,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_magma_cube,limit=1] armor.head with air
+summon parrot 75 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_parrot"]}
+data merge entity @e[tag=board_parrot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_parrot,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_parrot,limit=1] armor.head with air
+summon bee 85 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bee"]}
+data merge entity @e[tag=board_bee,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_bee,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_bee,limit=1] armor.head with air
+summon ghast -30 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ghast"]}
+data merge entity @e[tag=board_ghast,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ghast,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_ghast,limit=1] armor.head with air
+summon squid -15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_squid"]}
+data merge entity @e[tag=board_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_squid,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_squid,limit=1] armor.head with air
+summon glow_squid -5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_glow_squid"]}
+data merge entity @e[tag=board_glow_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_glow_squid,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_glow_squid,limit=1] armor.head with air
+summon dolphin 5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_dolphin"]}
+data merge entity @e[tag=board_dolphin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_dolphin,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_dolphin,limit=1] armor.head with air
+summon phantom 15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_phantom"]}
+data merge entity @e[tag=board_phantom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_phantom,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_phantom,limit=1] armor.head with air
+summon giant 42 -60 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_giant"]}
+data merge entity @e[tag=board_giant,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_giant,limit=1] armor.head with headinajar:hard_hat
+item replace entity @e[tag=board_giant,limit=1] armor.head with air
+wait 30
+tp @s -38.54 -60.23 4.46 facing -35 -58.83 8
+shot loop_bipeds_zombie_34
+tp @s -40.00 -60.23 8 facing -35 -58.83 8
+shot loop_bipeds_zombie_side
+tp @s -28.54 -60.23 4.46 facing -25 -58.83 8
+shot loop_bipeds_husk_34
+tp @s -30.00 -60.23 8 facing -25 -58.83 8
+shot loop_bipeds_husk_side
+tp @s -18.54 -60.23 4.46 facing -15 -58.83 8
+shot loop_bipeds_drowned_34
+tp @s -20.00 -60.23 8 facing -15 -58.83 8
+shot loop_bipeds_drowned_side
+tp @s -8.54 -60.23 4.46 facing -5 -58.83 8
+shot loop_bipeds_zombie_villager_34
+tp @s -10.00 -60.23 8 facing -5 -58.83 8
+shot loop_bipeds_zombie_villager_side
+tp @s 1.46 -60.21 4.46 facing 5 -58.81 8
+shot loop_bipeds_skeleton_34
+tp @s 0.00 -60.21 8 facing 5 -58.81 8
+shot loop_bipeds_skeleton_side
+tp @s 11.46 -60.21 4.46 facing 15 -58.81 8
+shot loop_bipeds_stray_34
+tp @s 10.00 -60.21 8 facing 15 -58.81 8
+shot loop_bipeds_stray_side
+tp @s 21.46 -59.96 4.46 facing 25 -58.56 8
+shot loop_bipeds_wither_skeleton_34
+tp @s 20.00 -59.96 8 facing 25 -58.56 8
+shot loop_bipeds_wither_skeleton_side
+tp @s 31.46 -60.21 4.46 facing 35 -58.81 8
+shot loop_bipeds_bogged_34
+tp @s 30.00 -60.21 8 facing 35 -58.81 8
+shot loop_bipeds_bogged_side
+tp @s 41.46 -60.23 4.46 facing 45 -58.83 8
+shot loop_bipeds_piglin_34
+tp @s 40.00 -60.23 8 facing 45 -58.83 8
+shot loop_bipeds_piglin_side
+tp @s 51.46 -60.23 4.46 facing 55 -58.83 8
+shot loop_bipeds_piglin_brute_34
+tp @s 50.00 -60.23 8 facing 55 -58.83 8
+shot loop_bipeds_piglin_brute_side
+tp @s 61.46 -60.23 4.46 facing 65 -58.83 8
+shot loop_bipeds_zombified_piglin_34
+tp @s 60.00 -60.23 8 facing 65 -58.83 8
+shot loop_bipeds_zombified_piglin_side
+tp @s 72.18 -59.66 4.18 facing 76 -58.26 8
+shot loop_bipeds_enderman_34
+tp @s 70.60 -59.66 8 facing 76 -58.26 8
+shot loop_bipeds_enderman_side
+tp @s -38.54 -60.23 18.46 facing -35 -58.83 22
+shot loop_robes_villager_34
+tp @s -40.00 -60.23 22 facing -35 -58.83 22
+shot loop_robes_villager_side
+tp @s -28.54 -60.23 18.46 facing -25 -58.83 22
+shot loop_robes_wandering_trader_34
+tp @s -30.00 -60.23 22 facing -25 -58.83 22
+shot loop_robes_wandering_trader_side
+tp @s -18.54 -60.23 18.46 facing -15 -58.83 22
+shot loop_robes_witch_34
+tp @s -20.00 -60.23 22 facing -15 -58.83 22
+shot loop_robes_witch_side
+tp @s -8.54 -60.23 18.46 facing -5 -58.83 22
+shot loop_robes_vindicator_34
+tp @s -10.00 -60.23 22 facing -5 -58.83 22
+shot loop_robes_vindicator_side
+tp @s 1.46 -60.23 18.46 facing 5 -58.83 22
+shot loop_robes_pillager_34
+tp @s 0.00 -60.23 22 facing 5 -58.83 22
+shot loop_robes_pillager_side
+tp @s 11.46 -60.23 18.46 facing 15 -58.83 22
+shot loop_robes_evoker_34
+tp @s 10.00 -60.23 22 facing 15 -58.83 22
+shot loop_robes_evoker_side
+tp @s 21.46 -60.23 18.46 facing 25 -58.83 22
+shot loop_robes_illusioner_34
+tp @s 20.00 -60.23 22 facing 25 -58.83 22
+shot loop_robes_illusioner_side
+tp @s 32.18 -59.78 18.18 facing 36 -58.38 22
+shot loop_robes_iron_golem_34
+tp @s 30.60 -59.78 22 facing 36 -58.38 22
+shot loop_robes_iron_golem_side
+tp @s 43.46 -60.26 18.46 facing 47 -58.86 22
+shot loop_robes_snow_golem_34
+tp @s 42.00 -60.26 22 facing 47 -58.86 22
+shot loop_robes_snow_golem_side
+tp @s 53.46 -60.26 18.46 facing 57 -58.86 22
+shot loop_robes_snow_golem_sheared_34
+tp @s 52.00 -60.26 22 facing 57 -58.86 22
+shot loop_robes_snow_golem_sheared_side
+tp @s 63.46 -60.04 18.46 facing 67 -58.64 22
+shot loop_robes_allay_34
+tp @s 62.00 -60.04 22 facing 67 -58.64 22
+shot loop_robes_allay_side
+tp @s 73.46 -59.32 18.46 facing 77 -57.92 22
+shot loop_robes_blaze_34
+tp @s 72.00 -59.32 22 facing 77 -57.92 22
+shot loop_robes_blaze_side
+tp @s -38.54 -60.56 32.46 facing -35 -59.16 36
+shot loop_quadrupeds_cow_34
+tp @s -40.00 -60.56 36 facing -35 -59.16 36
+shot loop_quadrupeds_cow_side
+tp @s -28.54 -60.56 32.46 facing -25 -59.16 36
+shot loop_quadrupeds_mooshroom_34
+tp @s -30.00 -60.56 36 facing -25 -59.16 36
+shot loop_quadrupeds_mooshroom_side
+tp @s -18.54 -60.86 32.46 facing -15 -59.46 36
+shot loop_quadrupeds_pig_34
+tp @s -20.00 -60.86 36 facing -15 -59.46 36
+shot loop_quadrupeds_pig_side
+tp @s -8.54 -60.62 32.46 facing -5 -59.22 36
+shot loop_quadrupeds_sheep_34
+tp @s -10.00 -60.62 36 facing -5 -59.22 36
+shot loop_quadrupeds_sheep_side
+tp @s 1.46 -60.89 32.46 facing 5 -59.49 36
+shot loop_quadrupeds_wolf_34
+tp @s 0.00 -60.89 36 facing 5 -59.49 36
+shot loop_quadrupeds_wolf_side
+tp @s 11.46 -60.98 32.46 facing 15 -59.58 36
+shot loop_quadrupeds_fox_34
+tp @s 10.00 -60.98 36 facing 15 -59.58 36
+shot loop_quadrupeds_fox_side
+tp @s 21.46 -60.98 32.46 facing 25 -59.58 36
+shot loop_quadrupeds_cat_34
+tp @s 20.00 -60.98 36 facing 25 -59.58 36
+shot loop_quadrupeds_cat_side
+tp @s 31.46 -60.98 32.46 facing 35 -59.58 36
+shot loop_quadrupeds_ocelot_34
+tp @s 30.00 -60.98 36 facing 35 -59.58 36
+shot loop_quadrupeds_ocelot_side
+tp @s 41.46 -60.98 32.46 facing 45 -59.58 36
+shot loop_quadrupeds_chicken_34
+tp @s 40.00 -60.98 36 facing 45 -59.58 36
+shot loop_quadrupeds_chicken_side
+tp @s 51.46 -61.10 32.46 facing 55 -59.70 36
+shot loop_quadrupeds_rabbit_34
+tp @s 50.00 -61.10 36 facing 55 -59.70 36
+shot loop_quadrupeds_rabbit_side
+tp @s 61.46 -60.62 32.46 facing 65 -59.22 36
+shot loop_quadrupeds_goat_34
+tp @s 60.00 -60.62 36 facing 65 -59.22 36
+shot loop_quadrupeds_goat_side
+tp @s 71.46 -60.65 32.46 facing 75 -59.25 36
+shot loop_quadrupeds_panda_34
+tp @s 70.00 -60.65 36 facing 75 -59.25 36
+shot loop_quadrupeds_panda_side
+tp @s 81.46 -60.56 32.46 facing 85 -59.16 36
+shot loop_quadrupeds_polar_bear_34
+tp @s 80.00 -60.56 36 facing 85 -59.16 36
+shot loop_quadrupeds_polar_bear_side
+tp @s -38.54 -60.44 46.46 facing -35 -59.04 50
+shot loop_long_horse_34
+tp @s -40.00 -60.44 50 facing -35 -59.04 50
+shot loop_long_horse_side
+tp @s -28.54 -60.50 46.46 facing -25 -59.10 50
+shot loop_long_donkey_34
+tp @s -30.00 -60.50 50 facing -25 -59.10 50
+shot loop_long_donkey_side
+tp @s -18.54 -60.44 46.46 facing -15 -59.04 50
+shot loop_long_mule_34
+tp @s -20.00 -60.44 50 facing -15 -59.04 50
+shot loop_long_mule_side
+tp @s -8.54 -60.44 46.46 facing -5 -59.04 50
+shot loop_long_skeleton_horse_34
+tp @s -10.00 -60.44 50 facing -5 -59.04 50
+shot loop_long_skeleton_horse_side
+tp @s 1.46 -60.44 46.46 facing 5 -59.04 50
+shot loop_long_zombie_horse_34
+tp @s 0.00 -60.44 50 facing 5 -59.04 50
+shot loop_long_zombie_horse_side
+tp @s 11.46 -60.28 46.46 facing 15 -58.88 50
+shot loop_long_llama_34
+tp @s 10.00 -60.28 50 facing 15 -58.88 50
+shot loop_long_llama_side
+tp @s 21.46 -60.28 46.46 facing 25 -58.88 50
+shot loop_long_trader_llama_34
+tp @s 20.00 -60.28 50 facing 25 -58.88 50
+shot loop_long_trader_llama_side
+tp @s 32.18 -59.98 46.18 facing 36 -58.58 50
+shot loop_long_camel_34
+tp @s 30.60 -59.98 50 facing 36 -58.58 50
+shot loop_long_camel_side
+tp @s 43.46 -60.56 46.46 facing 47 -59.16 50
+shot loop_long_hoglin_34
+tp @s 42.00 -60.56 50 facing 47 -59.16 50
+shot loop_long_hoglin_side
+tp @s 53.46 -60.56 46.46 facing 57 -59.16 50
+shot loop_long_zoglin_34
+tp @s 52.00 -60.56 50 facing 57 -59.16 50
+shot loop_long_zoglin_side
+tp @s 64.54 -60.08 45.54 facing 69 -58.68 50
+shot loop_long_ravager_34
+tp @s 62.70 -60.08 50 facing 69 -58.68 50
+shot loop_long_ravager_side
+tp @s 78.54 -60.35 45.54 facing 83 -58.95 50
+shot loop_long_sniffer_34
+tp @s 76.70 -60.35 50 facing 83 -58.95 50
+shot loop_long_sniffer_side
+tp @s -38.54 -61.16 60.46 facing -35 -59.76 64
+shot loop_small_turtle_34
+tp @s -40.00 -61.16 64 facing -35 -59.76 64
+shot loop_small_turtle_side
+tp @s -28.54 -61.01 60.46 facing -25 -59.61 64
+shot loop_small_armadillo_34
+tp @s -30.00 -61.01 64 facing -25 -59.61 64
+shot loop_small_armadillo_side
+tp @s -18.54 -61.15 60.46 facing -15 -59.75 64
+shot loop_small_axolotl_34
+tp @s -20.00 -61.15 64 facing -15 -59.75 64
+shot loop_small_axolotl_side
+tp @s -8.54 -61.07 60.46 facing -5 -59.67 64
+shot loop_small_frog_34
+tp @s -10.00 -61.07 64 facing -5 -59.67 64
+shot loop_small_frog_side
+tp @s 1.46 -60.86 60.46 facing 5 -59.46 64
+shot loop_small_spider_34
+tp @s 0.00 -60.86 64 facing 5 -59.46 64
+shot loop_small_spider_side
+tp @s 11.46 -61.10 60.46 facing 15 -59.70 64
+shot loop_small_cave_spider_34
+tp @s 10.00 -61.10 64 facing 15 -59.70 64
+shot loop_small_cave_spider_side
+tp @s 21.46 -60.38 60.46 facing 25 -58.98 64
+shot loop_small_strider_34
+tp @s 20.00 -60.38 64 facing 25 -58.98 64
+shot loop_small_strider_side
+tp @s 31.46 -61.22 60.46 facing 35 -59.82 64
+shot loop_small_endermite_34
+tp @s 30.00 -61.22 64 facing 35 -59.82 64
+shot loop_small_endermite_side
+tp @s 41.46 -61.22 60.46 facing 45 -59.82 64
+shot loop_small_silverfish_34
+tp @s 40.00 -61.22 64 facing 45 -59.82 64
+shot loop_small_silverfish_side
+tp @s 51.46 -60.78 60.46 facing 55 -59.38 64
+shot loop_small_slime_34
+tp @s 50.00 -60.78 64 facing 55 -59.38 64
+shot loop_small_slime_side
+tp @s 61.46 -60.78 60.46 facing 65 -59.38 64
+shot loop_small_magma_cube_34
+tp @s 60.00 -60.78 64 facing 65 -59.38 64
+shot loop_small_magma_cube_side
+tp @s 71.46 -59.86 60.46 facing 75 -58.46 64
+shot loop_small_parrot_34
+tp @s 70.00 -59.86 64 facing 75 -58.46 64
+shot loop_small_parrot_side
+tp @s 81.46 -60.04 60.46 facing 85 -58.64 64
+shot loop_small_bee_34
+tp @s 80.00 -60.04 64 facing 85 -58.64 64
+shot loop_small_bee_side
+tp @s -36.36 -58.00 71.64 facing -30 -56.60 78
+shot loop_floaters_ghast_34
+tp @s -39.00 -58.00 78 facing -30 -56.60 78
+shot loop_floaters_ghast_side
+tp @s -18.54 -59.92 74.46 facing -15 -58.52 78
+shot loop_floaters_squid_34
+tp @s -20.00 -59.92 78 facing -15 -58.52 78
+shot loop_floaters_squid_side
+tp @s -8.54 -59.92 74.46 facing -5 -58.52 78
+shot loop_floaters_glow_squid_34
+tp @s -10.00 -59.92 78 facing -5 -58.52 78
+shot loop_floaters_glow_squid_side
+tp @s 1.46 -60.04 74.46 facing 5 -58.64 78
+shot loop_floaters_dolphin_34
+tp @s 0.00 -60.04 78 facing 5 -58.64 78
+shot loop_floaters_dolphin_side
+tp @s 11.46 -60.10 74.46 facing 15 -58.70 78
+shot loop_floaters_phantom_34
+tp @s 10.00 -60.10 78 facing 15 -58.70 78
+shot loop_floaters_phantom_side
+tp @s 28.00 -54.20 64.00 facing 42 -52.80 78
+shot loop_floaters_giant_34
+tp @s 22.20 -54.20 78 facing 42 -52.80 78
+shot loop_floaters_giant_side
+# --- take: hat
+weather clear
+tp @e[type=!player] 0 -400 0
+kill @e[type=!player]
+wait 10
+wait 5
+summon zombie -35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie"]}
+data merge entity @e[tag=board_zombie,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie,limit=1] armor.head with headinajar:hard_hat
+summon husk -25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_husk"]}
+data merge entity @e[tag=board_husk,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_husk,limit=1] armor.head with headinajar:hard_hat
+summon drowned -15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_drowned"]}
+data merge entity @e[tag=board_drowned,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_drowned,limit=1] armor.head with headinajar:hard_hat
+summon zombie_villager -5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_villager"]}
+data merge entity @e[tag=board_zombie_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie_villager,limit=1] armor.head with headinajar:hard_hat
+summon skeleton 5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton"]}
+data merge entity @e[tag=board_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_skeleton,limit=1] armor.head with headinajar:hard_hat
+summon stray 15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_stray"]}
+data merge entity @e[tag=board_stray,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_stray,limit=1] armor.head with headinajar:hard_hat
+summon wither_skeleton 25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wither_skeleton"]}
+data merge entity @e[tag=board_wither_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wither_skeleton,limit=1] armor.head with headinajar:hard_hat
+summon bogged 35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bogged"]}
+data merge entity @e[tag=board_bogged,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_bogged,limit=1] armor.head with headinajar:hard_hat
+summon piglin 45 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin"]}
+data merge entity @e[tag=board_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_piglin,limit=1] armor.head with headinajar:hard_hat
+summon piglin_brute 55 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin_brute"]}
+data merge entity @e[tag=board_piglin_brute,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_piglin_brute,limit=1] armor.head with headinajar:hard_hat
+summon zombified_piglin 65 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombified_piglin"]}
+data merge entity @e[tag=board_zombified_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombified_piglin,limit=1] armor.head with headinajar:hard_hat
+summon enderman 76 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_enderman"]}
+data merge entity @e[tag=board_enderman,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_enderman,limit=1] armor.head with headinajar:hard_hat
+summon villager -35 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_villager"]}
+data merge entity @e[tag=board_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_villager,limit=1] armor.head with headinajar:hard_hat
+summon wandering_trader -25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wandering_trader"]}
+data merge entity @e[tag=board_wandering_trader,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wandering_trader,limit=1] armor.head with headinajar:hard_hat
+summon witch -15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_witch"]}
+data merge entity @e[tag=board_witch,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_witch,limit=1] armor.head with headinajar:hard_hat
+summon vindicator -5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_vindicator"]}
+data merge entity @e[tag=board_vindicator,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_vindicator,limit=1] armor.head with headinajar:hard_hat
+summon pillager 5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pillager"]}
+data merge entity @e[tag=board_pillager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_pillager,limit=1] armor.head with headinajar:hard_hat
+summon evoker 15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_evoker"]}
+data merge entity @e[tag=board_evoker,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_evoker,limit=1] armor.head with headinajar:hard_hat
+summon illusioner 25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_illusioner"]}
+data merge entity @e[tag=board_illusioner,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_illusioner,limit=1] armor.head with headinajar:hard_hat
+summon iron_golem 36 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_iron_golem"]}
+data merge entity @e[tag=board_iron_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_iron_golem,limit=1] armor.head with headinajar:hard_hat
+summon snow_golem 47 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem"]}
+data merge entity @e[tag=board_snow_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_snow_golem,limit=1] armor.head with headinajar:hard_hat
+summon snow_golem 57 -60 22 {Pumpkin:0b,NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem_sheared"]}
+data merge entity @e[tag=board_snow_golem_sheared,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_snow_golem_sheared,limit=1] armor.head with headinajar:hard_hat
+summon allay 67 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_allay"]}
+data merge entity @e[tag=board_allay,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_allay,limit=1] armor.head with headinajar:hard_hat
+summon blaze 77 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_blaze"]}
+data merge entity @e[tag=board_blaze,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_blaze,limit=1] armor.head with headinajar:hard_hat
+summon cow -35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cow"]}
+data merge entity @e[tag=board_cow,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cow,limit=1] armor.head with headinajar:hard_hat
+summon mooshroom -25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mooshroom"]}
+data merge entity @e[tag=board_mooshroom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_mooshroom,limit=1] armor.head with headinajar:hard_hat
+summon pig -15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pig"]}
+data merge entity @e[tag=board_pig,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_pig,limit=1] armor.head with headinajar:hard_hat
+summon sheep -5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sheep"]}
+data merge entity @e[tag=board_sheep,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_sheep,limit=1] armor.head with headinajar:hard_hat
+summon wolf 5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wolf"]}
+data merge entity @e[tag=board_wolf,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_wolf,limit=1] armor.head with headinajar:hard_hat
+summon fox 15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_fox"]}
+data merge entity @e[tag=board_fox,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_fox,limit=1] armor.head with headinajar:hard_hat
+summon cat 25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cat"]}
+data merge entity @e[tag=board_cat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cat,limit=1] armor.head with headinajar:hard_hat
+summon ocelot 35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ocelot"]}
+data merge entity @e[tag=board_ocelot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ocelot,limit=1] armor.head with headinajar:hard_hat
+summon chicken 45 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_chicken"]}
+data merge entity @e[tag=board_chicken,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_chicken,limit=1] armor.head with headinajar:hard_hat
+summon rabbit 55 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_rabbit"]}
+data merge entity @e[tag=board_rabbit,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_rabbit,limit=1] armor.head with headinajar:hard_hat
+summon goat 65 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_goat"]}
+data merge entity @e[tag=board_goat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_goat,limit=1] armor.head with headinajar:hard_hat
+summon panda 75 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_panda"]}
+data merge entity @e[tag=board_panda,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_panda,limit=1] armor.head with headinajar:hard_hat
+summon polar_bear 85 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_polar_bear"]}
+data merge entity @e[tag=board_polar_bear,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_polar_bear,limit=1] armor.head with headinajar:hard_hat
+summon horse -35 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_horse"]}
+data merge entity @e[tag=board_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_horse,limit=1] armor.head with headinajar:hard_hat
+summon donkey -25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_donkey"]}
+data merge entity @e[tag=board_donkey,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_donkey,limit=1] armor.head with headinajar:hard_hat
+summon mule -15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mule"]}
+data merge entity @e[tag=board_mule,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_mule,limit=1] armor.head with headinajar:hard_hat
+summon skeleton_horse -5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton_horse"]}
+data merge entity @e[tag=board_skeleton_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_skeleton_horse,limit=1] armor.head with headinajar:hard_hat
+summon zombie_horse 5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_horse"]}
+data merge entity @e[tag=board_zombie_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zombie_horse,limit=1] armor.head with headinajar:hard_hat
+summon llama 15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_llama"]}
+data merge entity @e[tag=board_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_llama,limit=1] armor.head with headinajar:hard_hat
+summon trader_llama 25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_trader_llama"]}
+data merge entity @e[tag=board_trader_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_trader_llama,limit=1] armor.head with headinajar:hard_hat
+summon camel 36 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_camel"]}
+data merge entity @e[tag=board_camel,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_camel,limit=1] armor.head with headinajar:hard_hat
+summon hoglin 47 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_hoglin"]}
+data merge entity @e[tag=board_hoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_hoglin,limit=1] armor.head with headinajar:hard_hat
+summon zoglin 57 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zoglin"]}
+data merge entity @e[tag=board_zoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_zoglin,limit=1] armor.head with headinajar:hard_hat
+summon ravager 69 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ravager"]}
+data merge entity @e[tag=board_ravager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ravager,limit=1] armor.head with headinajar:hard_hat
+summon sniffer 83 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sniffer"]}
+data merge entity @e[tag=board_sniffer,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_sniffer,limit=1] armor.head with headinajar:hard_hat
+summon turtle -35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_turtle"]}
+data merge entity @e[tag=board_turtle,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_turtle,limit=1] armor.head with headinajar:hard_hat
+summon armadillo -25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_armadillo"]}
+data merge entity @e[tag=board_armadillo,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_armadillo,limit=1] armor.head with headinajar:hard_hat
+summon axolotl -15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_axolotl"]}
+data merge entity @e[tag=board_axolotl,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_axolotl,limit=1] armor.head with headinajar:hard_hat
+summon frog -5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_frog"]}
+data merge entity @e[tag=board_frog,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_frog,limit=1] armor.head with headinajar:hard_hat
+summon spider 5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_spider"]}
+data merge entity @e[tag=board_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_spider,limit=1] armor.head with headinajar:hard_hat
+summon cave_spider 15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cave_spider"]}
+data merge entity @e[tag=board_cave_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_cave_spider,limit=1] armor.head with headinajar:hard_hat
+summon strider 25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_strider"]}
+data merge entity @e[tag=board_strider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_strider,limit=1] armor.head with headinajar:hard_hat
+summon endermite 35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_endermite"]}
+data merge entity @e[tag=board_endermite,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_endermite,limit=1] armor.head with headinajar:hard_hat
+summon silverfish 45 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_silverfish"]}
+data merge entity @e[tag=board_silverfish,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_silverfish,limit=1] armor.head with headinajar:hard_hat
+summon slime 55 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_slime"]}
+data merge entity @e[tag=board_slime,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_slime,limit=1] armor.head with headinajar:hard_hat
+summon magma_cube 65 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_magma_cube"]}
+data merge entity @e[tag=board_magma_cube,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_magma_cube,limit=1] armor.head with headinajar:hard_hat
+summon parrot 75 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_parrot"]}
+data merge entity @e[tag=board_parrot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_parrot,limit=1] armor.head with headinajar:hard_hat
+summon bee 85 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bee"]}
+data merge entity @e[tag=board_bee,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_bee,limit=1] armor.head with headinajar:hard_hat
+summon ghast -30 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ghast"]}
+data merge entity @e[tag=board_ghast,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_ghast,limit=1] armor.head with headinajar:hard_hat
+summon squid -15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_squid"]}
+data merge entity @e[tag=board_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_squid,limit=1] armor.head with headinajar:hard_hat
+summon glow_squid -5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_glow_squid"]}
+data merge entity @e[tag=board_glow_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_glow_squid,limit=1] armor.head with headinajar:hard_hat
+summon dolphin 5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_dolphin"]}
+data merge entity @e[tag=board_dolphin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_dolphin,limit=1] armor.head with headinajar:hard_hat
+summon phantom 15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_phantom"]}
+data merge entity @e[tag=board_phantom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_phantom,limit=1] armor.head with headinajar:hard_hat
+summon giant 42 -60 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_giant"]}
+data merge entity @e[tag=board_giant,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4]}}}
+item replace entity @e[tag=board_giant,limit=1] armor.head with headinajar:hard_hat
+wait 30
+tp @s -38.54 -60.23 4.46 facing -35 -58.83 8
+shot hat_bipeds_zombie_34
+tp @s -40.00 -60.23 8 facing -35 -58.83 8
+shot hat_bipeds_zombie_side
+tp @s -28.54 -60.23 4.46 facing -25 -58.83 8
+shot hat_bipeds_husk_34
+tp @s -30.00 -60.23 8 facing -25 -58.83 8
+shot hat_bipeds_husk_side
+tp @s -18.54 -60.23 4.46 facing -15 -58.83 8
+shot hat_bipeds_drowned_34
+tp @s -20.00 -60.23 8 facing -15 -58.83 8
+shot hat_bipeds_drowned_side
+tp @s -8.54 -60.23 4.46 facing -5 -58.83 8
+shot hat_bipeds_zombie_villager_34
+tp @s -10.00 -60.23 8 facing -5 -58.83 8
+shot hat_bipeds_zombie_villager_side
+tp @s 1.46 -60.21 4.46 facing 5 -58.81 8
+shot hat_bipeds_skeleton_34
+tp @s 0.00 -60.21 8 facing 5 -58.81 8
+shot hat_bipeds_skeleton_side
+tp @s 11.46 -60.21 4.46 facing 15 -58.81 8
+shot hat_bipeds_stray_34
+tp @s 10.00 -60.21 8 facing 15 -58.81 8
+shot hat_bipeds_stray_side
+tp @s 21.46 -59.96 4.46 facing 25 -58.56 8
+shot hat_bipeds_wither_skeleton_34
+tp @s 20.00 -59.96 8 facing 25 -58.56 8
+shot hat_bipeds_wither_skeleton_side
+tp @s 31.46 -60.21 4.46 facing 35 -58.81 8
+shot hat_bipeds_bogged_34
+tp @s 30.00 -60.21 8 facing 35 -58.81 8
+shot hat_bipeds_bogged_side
+tp @s 41.46 -60.23 4.46 facing 45 -58.83 8
+shot hat_bipeds_piglin_34
+tp @s 40.00 -60.23 8 facing 45 -58.83 8
+shot hat_bipeds_piglin_side
+tp @s 51.46 -60.23 4.46 facing 55 -58.83 8
+shot hat_bipeds_piglin_brute_34
+tp @s 50.00 -60.23 8 facing 55 -58.83 8
+shot hat_bipeds_piglin_brute_side
+tp @s 61.46 -60.23 4.46 facing 65 -58.83 8
+shot hat_bipeds_zombified_piglin_34
+tp @s 60.00 -60.23 8 facing 65 -58.83 8
+shot hat_bipeds_zombified_piglin_side
+tp @s 72.18 -59.66 4.18 facing 76 -58.26 8
+shot hat_bipeds_enderman_34
+tp @s 70.60 -59.66 8 facing 76 -58.26 8
+shot hat_bipeds_enderman_side
+tp @s -38.54 -60.23 18.46 facing -35 -58.83 22
+shot hat_robes_villager_34
+tp @s -40.00 -60.23 22 facing -35 -58.83 22
+shot hat_robes_villager_side
+tp @s -28.54 -60.23 18.46 facing -25 -58.83 22
+shot hat_robes_wandering_trader_34
+tp @s -30.00 -60.23 22 facing -25 -58.83 22
+shot hat_robes_wandering_trader_side
+tp @s -18.54 -60.23 18.46 facing -15 -58.83 22
+shot hat_robes_witch_34
+tp @s -20.00 -60.23 22 facing -15 -58.83 22
+shot hat_robes_witch_side
+tp @s -8.54 -60.23 18.46 facing -5 -58.83 22
+shot hat_robes_vindicator_34
+tp @s -10.00 -60.23 22 facing -5 -58.83 22
+shot hat_robes_vindicator_side
+tp @s 1.46 -60.23 18.46 facing 5 -58.83 22
+shot hat_robes_pillager_34
+tp @s 0.00 -60.23 22 facing 5 -58.83 22
+shot hat_robes_pillager_side
+tp @s 11.46 -60.23 18.46 facing 15 -58.83 22
+shot hat_robes_evoker_34
+tp @s 10.00 -60.23 22 facing 15 -58.83 22
+shot hat_robes_evoker_side
+tp @s 21.46 -60.23 18.46 facing 25 -58.83 22
+shot hat_robes_illusioner_34
+tp @s 20.00 -60.23 22 facing 25 -58.83 22
+shot hat_robes_illusioner_side
+tp @s 32.18 -59.78 18.18 facing 36 -58.38 22
+shot hat_robes_iron_golem_34
+tp @s 30.60 -59.78 22 facing 36 -58.38 22
+shot hat_robes_iron_golem_side
+tp @s 43.46 -60.26 18.46 facing 47 -58.86 22
+shot hat_robes_snow_golem_34
+tp @s 42.00 -60.26 22 facing 47 -58.86 22
+shot hat_robes_snow_golem_side
+tp @s 53.46 -60.26 18.46 facing 57 -58.86 22
+shot hat_robes_snow_golem_sheared_34
+tp @s 52.00 -60.26 22 facing 57 -58.86 22
+shot hat_robes_snow_golem_sheared_side
+tp @s 63.46 -60.04 18.46 facing 67 -58.64 22
+shot hat_robes_allay_34
+tp @s 62.00 -60.04 22 facing 67 -58.64 22
+shot hat_robes_allay_side
+tp @s 73.46 -59.32 18.46 facing 77 -57.92 22
+shot hat_robes_blaze_34
+tp @s 72.00 -59.32 22 facing 77 -57.92 22
+shot hat_robes_blaze_side
+tp @s -38.54 -60.56 32.46 facing -35 -59.16 36
+shot hat_quadrupeds_cow_34
+tp @s -40.00 -60.56 36 facing -35 -59.16 36
+shot hat_quadrupeds_cow_side
+tp @s -28.54 -60.56 32.46 facing -25 -59.16 36
+shot hat_quadrupeds_mooshroom_34
+tp @s -30.00 -60.56 36 facing -25 -59.16 36
+shot hat_quadrupeds_mooshroom_side
+tp @s -18.54 -60.86 32.46 facing -15 -59.46 36
+shot hat_quadrupeds_pig_34
+tp @s -20.00 -60.86 36 facing -15 -59.46 36
+shot hat_quadrupeds_pig_side
+tp @s -8.54 -60.62 32.46 facing -5 -59.22 36
+shot hat_quadrupeds_sheep_34
+tp @s -10.00 -60.62 36 facing -5 -59.22 36
+shot hat_quadrupeds_sheep_side
+tp @s 1.46 -60.89 32.46 facing 5 -59.49 36
+shot hat_quadrupeds_wolf_34
+tp @s 0.00 -60.89 36 facing 5 -59.49 36
+shot hat_quadrupeds_wolf_side
+tp @s 11.46 -60.98 32.46 facing 15 -59.58 36
+shot hat_quadrupeds_fox_34
+tp @s 10.00 -60.98 36 facing 15 -59.58 36
+shot hat_quadrupeds_fox_side
+tp @s 21.46 -60.98 32.46 facing 25 -59.58 36
+shot hat_quadrupeds_cat_34
+tp @s 20.00 -60.98 36 facing 25 -59.58 36
+shot hat_quadrupeds_cat_side
+tp @s 31.46 -60.98 32.46 facing 35 -59.58 36
+shot hat_quadrupeds_ocelot_34
+tp @s 30.00 -60.98 36 facing 35 -59.58 36
+shot hat_quadrupeds_ocelot_side
+tp @s 41.46 -60.98 32.46 facing 45 -59.58 36
+shot hat_quadrupeds_chicken_34
+tp @s 40.00 -60.98 36 facing 45 -59.58 36
+shot hat_quadrupeds_chicken_side
+tp @s 51.46 -61.10 32.46 facing 55 -59.70 36
+shot hat_quadrupeds_rabbit_34
+tp @s 50.00 -61.10 36 facing 55 -59.70 36
+shot hat_quadrupeds_rabbit_side
+tp @s 61.46 -60.62 32.46 facing 65 -59.22 36
+shot hat_quadrupeds_goat_34
+tp @s 60.00 -60.62 36 facing 65 -59.22 36
+shot hat_quadrupeds_goat_side
+tp @s 71.46 -60.65 32.46 facing 75 -59.25 36
+shot hat_quadrupeds_panda_34
+tp @s 70.00 -60.65 36 facing 75 -59.25 36
+shot hat_quadrupeds_panda_side
+tp @s 81.46 -60.56 32.46 facing 85 -59.16 36
+shot hat_quadrupeds_polar_bear_34
+tp @s 80.00 -60.56 36 facing 85 -59.16 36
+shot hat_quadrupeds_polar_bear_side
+tp @s -38.54 -60.44 46.46 facing -35 -59.04 50
+shot hat_long_horse_34
+tp @s -40.00 -60.44 50 facing -35 -59.04 50
+shot hat_long_horse_side
+tp @s -28.54 -60.50 46.46 facing -25 -59.10 50
+shot hat_long_donkey_34
+tp @s -30.00 -60.50 50 facing -25 -59.10 50
+shot hat_long_donkey_side
+tp @s -18.54 -60.44 46.46 facing -15 -59.04 50
+shot hat_long_mule_34
+tp @s -20.00 -60.44 50 facing -15 -59.04 50
+shot hat_long_mule_side
+tp @s -8.54 -60.44 46.46 facing -5 -59.04 50
+shot hat_long_skeleton_horse_34
+tp @s -10.00 -60.44 50 facing -5 -59.04 50
+shot hat_long_skeleton_horse_side
+tp @s 1.46 -60.44 46.46 facing 5 -59.04 50
+shot hat_long_zombie_horse_34
+tp @s 0.00 -60.44 50 facing 5 -59.04 50
+shot hat_long_zombie_horse_side
+tp @s 11.46 -60.28 46.46 facing 15 -58.88 50
+shot hat_long_llama_34
+tp @s 10.00 -60.28 50 facing 15 -58.88 50
+shot hat_long_llama_side
+tp @s 21.46 -60.28 46.46 facing 25 -58.88 50
+shot hat_long_trader_llama_34
+tp @s 20.00 -60.28 50 facing 25 -58.88 50
+shot hat_long_trader_llama_side
+tp @s 32.18 -59.98 46.18 facing 36 -58.58 50
+shot hat_long_camel_34
+tp @s 30.60 -59.98 50 facing 36 -58.58 50
+shot hat_long_camel_side
+tp @s 43.46 -60.56 46.46 facing 47 -59.16 50
+shot hat_long_hoglin_34
+tp @s 42.00 -60.56 50 facing 47 -59.16 50
+shot hat_long_hoglin_side
+tp @s 53.46 -60.56 46.46 facing 57 -59.16 50
+shot hat_long_zoglin_34
+tp @s 52.00 -60.56 50 facing 57 -59.16 50
+shot hat_long_zoglin_side
+tp @s 64.54 -60.08 45.54 facing 69 -58.68 50
+shot hat_long_ravager_34
+tp @s 62.70 -60.08 50 facing 69 -58.68 50
+shot hat_long_ravager_side
+tp @s 78.54 -60.35 45.54 facing 83 -58.95 50
+shot hat_long_sniffer_34
+tp @s 76.70 -60.35 50 facing 83 -58.95 50
+shot hat_long_sniffer_side
+tp @s -38.54 -61.16 60.46 facing -35 -59.76 64
+shot hat_small_turtle_34
+tp @s -40.00 -61.16 64 facing -35 -59.76 64
+shot hat_small_turtle_side
+tp @s -28.54 -61.01 60.46 facing -25 -59.61 64
+shot hat_small_armadillo_34
+tp @s -30.00 -61.01 64 facing -25 -59.61 64
+shot hat_small_armadillo_side
+tp @s -18.54 -61.15 60.46 facing -15 -59.75 64
+shot hat_small_axolotl_34
+tp @s -20.00 -61.15 64 facing -15 -59.75 64
+shot hat_small_axolotl_side
+tp @s -8.54 -61.07 60.46 facing -5 -59.67 64
+shot hat_small_frog_34
+tp @s -10.00 -61.07 64 facing -5 -59.67 64
+shot hat_small_frog_side
+tp @s 1.46 -60.86 60.46 facing 5 -59.46 64
+shot hat_small_spider_34
+tp @s 0.00 -60.86 64 facing 5 -59.46 64
+shot hat_small_spider_side
+tp @s 11.46 -61.10 60.46 facing 15 -59.70 64
+shot hat_small_cave_spider_34
+tp @s 10.00 -61.10 64 facing 15 -59.70 64
+shot hat_small_cave_spider_side
+tp @s 21.46 -60.38 60.46 facing 25 -58.98 64
+shot hat_small_strider_34
+tp @s 20.00 -60.38 64 facing 25 -58.98 64
+shot hat_small_strider_side
+tp @s 31.46 -61.22 60.46 facing 35 -59.82 64
+shot hat_small_endermite_34
+tp @s 30.00 -61.22 64 facing 35 -59.82 64
+shot hat_small_endermite_side
+tp @s 41.46 -61.22 60.46 facing 45 -59.82 64
+shot hat_small_silverfish_34
+tp @s 40.00 -61.22 64 facing 45 -59.82 64
+shot hat_small_silverfish_side
+tp @s 51.46 -60.78 60.46 facing 55 -59.38 64
+shot hat_small_slime_34
+tp @s 50.00 -60.78 64 facing 55 -59.38 64
+shot hat_small_slime_side
+tp @s 61.46 -60.78 60.46 facing 65 -59.38 64
+shot hat_small_magma_cube_34
+tp @s 60.00 -60.78 64 facing 65 -59.38 64
+shot hat_small_magma_cube_side
+tp @s 71.46 -59.86 60.46 facing 75 -58.46 64
+shot hat_small_parrot_34
+tp @s 70.00 -59.86 64 facing 75 -58.46 64
+shot hat_small_parrot_side
+tp @s 81.46 -60.04 60.46 facing 85 -58.64 64
+shot hat_small_bee_34
+tp @s 80.00 -60.04 64 facing 85 -58.64 64
+shot hat_small_bee_side
+tp @s -36.36 -58.00 71.64 facing -30 -56.60 78
+shot hat_floaters_ghast_34
+tp @s -39.00 -58.00 78 facing -30 -56.60 78
+shot hat_floaters_ghast_side
+tp @s -18.54 -59.92 74.46 facing -15 -58.52 78
+shot hat_floaters_squid_34
+tp @s -20.00 -59.92 78 facing -15 -58.52 78
+shot hat_floaters_squid_side
+tp @s -8.54 -59.92 74.46 facing -5 -58.52 78
+shot hat_floaters_glow_squid_34
+tp @s -10.00 -59.92 78 facing -5 -58.52 78
+shot hat_floaters_glow_squid_side
+tp @s 1.46 -60.04 74.46 facing 5 -58.64 78
+shot hat_floaters_dolphin_34
+tp @s 0.00 -60.04 78 facing 5 -58.64 78
+shot hat_floaters_dolphin_side
+tp @s 11.46 -60.10 74.46 facing 15 -58.70 78
+shot hat_floaters_phantom_34
+tp @s 10.00 -60.10 78 facing 15 -58.70 78
+shot hat_floaters_phantom_side
+tp @s 28.00 -54.20 64.00 facing 42 -52.80 78
+shot hat_floaters_giant_34
+tp @s 22.20 -54.20 78 facing 42 -52.80 78
+shot hat_floaters_giant_side
+# --- take: crate
+tp @e[type=!player] 0 -400 0
+kill @e[type=!player]
+wait 10
+wait 5
+summon zombie -35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie"]}
+data merge entity @e[tag=board_zombie,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_zombie,limit=1] armor.head with headinajar:hard_hat
+summon husk -25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_husk"]}
+data merge entity @e[tag=board_husk,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_husk,limit=1] armor.head with headinajar:hard_hat
+summon drowned -15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_drowned"]}
+data merge entity @e[tag=board_drowned,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_drowned,limit=1] armor.head with headinajar:hard_hat
+summon zombie_villager -5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_villager"]}
+data merge entity @e[tag=board_zombie_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_zombie_villager,limit=1] armor.head with headinajar:hard_hat
+summon skeleton 5 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton"]}
+data merge entity @e[tag=board_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_skeleton,limit=1] armor.head with headinajar:hard_hat
+summon stray 15 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_stray"]}
+data merge entity @e[tag=board_stray,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_stray,limit=1] armor.head with headinajar:hard_hat
+summon wither_skeleton 25 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wither_skeleton"]}
+data merge entity @e[tag=board_wither_skeleton,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_wither_skeleton,limit=1] armor.head with headinajar:hard_hat
+summon bogged 35 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bogged"]}
+data merge entity @e[tag=board_bogged,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_bogged,limit=1] armor.head with headinajar:hard_hat
+summon piglin 45 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin"]}
+data merge entity @e[tag=board_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_piglin,limit=1] armor.head with headinajar:hard_hat
+summon piglin_brute 55 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_piglin_brute"]}
+data merge entity @e[tag=board_piglin_brute,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_piglin_brute,limit=1] armor.head with headinajar:hard_hat
+summon zombified_piglin 65 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombified_piglin"]}
+data merge entity @e[tag=board_zombified_piglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_zombified_piglin,limit=1] armor.head with headinajar:hard_hat
+summon enderman 76 -60 8 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_enderman"]}
+data merge entity @e[tag=board_enderman,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_enderman,limit=1] armor.head with headinajar:hard_hat
+summon villager -35 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_villager"]}
+data merge entity @e[tag=board_villager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_villager,limit=1] armor.head with headinajar:hard_hat
+summon wandering_trader -25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wandering_trader"]}
+data merge entity @e[tag=board_wandering_trader,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_wandering_trader,limit=1] armor.head with headinajar:hard_hat
+summon witch -15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_witch"]}
+data merge entity @e[tag=board_witch,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_witch,limit=1] armor.head with headinajar:hard_hat
+summon vindicator -5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_vindicator"]}
+data merge entity @e[tag=board_vindicator,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_vindicator,limit=1] armor.head with headinajar:hard_hat
+summon pillager 5 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pillager"]}
+data merge entity @e[tag=board_pillager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_pillager,limit=1] armor.head with headinajar:hard_hat
+summon evoker 15 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_evoker"]}
+data merge entity @e[tag=board_evoker,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_evoker,limit=1] armor.head with headinajar:hard_hat
+summon illusioner 25 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_illusioner"]}
+data merge entity @e[tag=board_illusioner,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_illusioner,limit=1] armor.head with headinajar:hard_hat
+summon iron_golem 36 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_iron_golem"]}
+data merge entity @e[tag=board_iron_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_iron_golem,limit=1] armor.head with headinajar:hard_hat
+summon snow_golem 47 -60 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem"]}
+data merge entity @e[tag=board_snow_golem,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_snow_golem,limit=1] armor.head with headinajar:hard_hat
+summon snow_golem 57 -60 22 {Pumpkin:0b,NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_snow_golem_sheared"]}
+data merge entity @e[tag=board_snow_golem_sheared,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_snow_golem_sheared,limit=1] armor.head with headinajar:hard_hat
+summon allay 67 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_allay"]}
+data merge entity @e[tag=board_allay,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_allay,limit=1] armor.head with headinajar:hard_hat
+summon blaze 77 -59 22 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_blaze"]}
+data merge entity @e[tag=board_blaze,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_blaze,limit=1] armor.head with headinajar:hard_hat
+summon cow -35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cow"]}
+data merge entity @e[tag=board_cow,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_cow,limit=1] armor.head with headinajar:hard_hat
+summon mooshroom -25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mooshroom"]}
+data merge entity @e[tag=board_mooshroom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_mooshroom,limit=1] armor.head with headinajar:hard_hat
+summon pig -15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_pig"]}
+data merge entity @e[tag=board_pig,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_pig,limit=1] armor.head with headinajar:hard_hat
+summon sheep -5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sheep"]}
+data merge entity @e[tag=board_sheep,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_sheep,limit=1] armor.head with headinajar:hard_hat
+summon wolf 5 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_wolf"]}
+data merge entity @e[tag=board_wolf,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_wolf,limit=1] armor.head with headinajar:hard_hat
+summon fox 15 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_fox"]}
+data merge entity @e[tag=board_fox,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_fox,limit=1] armor.head with headinajar:hard_hat
+summon cat 25 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cat"]}
+data merge entity @e[tag=board_cat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_cat,limit=1] armor.head with headinajar:hard_hat
+summon ocelot 35 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ocelot"]}
+data merge entity @e[tag=board_ocelot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_ocelot,limit=1] armor.head with headinajar:hard_hat
+summon chicken 45 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_chicken"]}
+data merge entity @e[tag=board_chicken,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_chicken,limit=1] armor.head with headinajar:hard_hat
+summon rabbit 55 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_rabbit"]}
+data merge entity @e[tag=board_rabbit,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_rabbit,limit=1] armor.head with headinajar:hard_hat
+summon goat 65 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_goat"]}
+data merge entity @e[tag=board_goat,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_goat,limit=1] armor.head with headinajar:hard_hat
+summon panda 75 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_panda"]}
+data merge entity @e[tag=board_panda,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_panda,limit=1] armor.head with headinajar:hard_hat
+summon polar_bear 85 -60 36 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_polar_bear"]}
+data merge entity @e[tag=board_polar_bear,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_polar_bear,limit=1] armor.head with headinajar:hard_hat
+summon horse -35 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_horse"]}
+data merge entity @e[tag=board_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_horse,limit=1] armor.head with headinajar:hard_hat
+summon donkey -25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_donkey"]}
+data merge entity @e[tag=board_donkey,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_donkey,limit=1] armor.head with headinajar:hard_hat
+summon mule -15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_mule"]}
+data merge entity @e[tag=board_mule,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_mule,limit=1] armor.head with headinajar:hard_hat
+summon skeleton_horse -5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_skeleton_horse"]}
+data merge entity @e[tag=board_skeleton_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_skeleton_horse,limit=1] armor.head with headinajar:hard_hat
+summon zombie_horse 5 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zombie_horse"]}
+data merge entity @e[tag=board_zombie_horse,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_zombie_horse,limit=1] armor.head with headinajar:hard_hat
+summon llama 15 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_llama"]}
+data merge entity @e[tag=board_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_llama,limit=1] armor.head with headinajar:hard_hat
+summon trader_llama 25 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_trader_llama"]}
+data merge entity @e[tag=board_trader_llama,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_trader_llama,limit=1] armor.head with headinajar:hard_hat
+summon camel 36 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_camel"]}
+data merge entity @e[tag=board_camel,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_camel,limit=1] armor.head with headinajar:hard_hat
+summon hoglin 47 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_hoglin"]}
+data merge entity @e[tag=board_hoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_hoglin,limit=1] armor.head with headinajar:hard_hat
+summon zoglin 57 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_zoglin"]}
+data merge entity @e[tag=board_zoglin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_zoglin,limit=1] armor.head with headinajar:hard_hat
+summon ravager 69 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ravager"]}
+data merge entity @e[tag=board_ravager,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_ravager,limit=1] armor.head with headinajar:hard_hat
+summon sniffer 83 -60 50 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_sniffer"]}
+data merge entity @e[tag=board_sniffer,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_sniffer,limit=1] armor.head with headinajar:hard_hat
+summon turtle -35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_turtle"]}
+data merge entity @e[tag=board_turtle,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_turtle,limit=1] armor.head with headinajar:hard_hat
+summon armadillo -25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_armadillo"]}
+data merge entity @e[tag=board_armadillo,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_armadillo,limit=1] armor.head with headinajar:hard_hat
+summon axolotl -15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_axolotl"]}
+data merge entity @e[tag=board_axolotl,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_axolotl,limit=1] armor.head with headinajar:hard_hat
+summon frog -5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_frog"]}
+data merge entity @e[tag=board_frog,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_frog,limit=1] armor.head with headinajar:hard_hat
+summon spider 5 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_spider"]}
+data merge entity @e[tag=board_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_spider,limit=1] armor.head with headinajar:hard_hat
+summon cave_spider 15 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_cave_spider"]}
+data merge entity @e[tag=board_cave_spider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_cave_spider,limit=1] armor.head with headinajar:hard_hat
+summon strider 25 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_strider"]}
+data merge entity @e[tag=board_strider,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_strider,limit=1] armor.head with headinajar:hard_hat
+summon endermite 35 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_endermite"]}
+data merge entity @e[tag=board_endermite,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_endermite,limit=1] armor.head with headinajar:hard_hat
+summon silverfish 45 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_silverfish"]}
+data merge entity @e[tag=board_silverfish,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_silverfish,limit=1] armor.head with headinajar:hard_hat
+summon slime 55 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_slime"]}
+data merge entity @e[tag=board_slime,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_slime,limit=1] armor.head with headinajar:hard_hat
+summon magma_cube 65 -60 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_magma_cube"]}
+data merge entity @e[tag=board_magma_cube,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_magma_cube,limit=1] armor.head with headinajar:hard_hat
+summon parrot 75 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_parrot"]}
+data merge entity @e[tag=board_parrot,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_parrot,limit=1] armor.head with headinajar:hard_hat
+summon bee 85 -59 64 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_bee"]}
+data merge entity @e[tag=board_bee,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_bee,limit=1] armor.head with headinajar:hard_hat
+summon ghast -30 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_ghast"]}
+data merge entity @e[tag=board_ghast,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_ghast,limit=1] armor.head with headinajar:hard_hat
+summon squid -15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_squid"]}
+data merge entity @e[tag=board_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_squid,limit=1] armor.head with headinajar:hard_hat
+summon glow_squid -5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_glow_squid"]}
+data merge entity @e[tag=board_glow_squid,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_glow_squid,limit=1] armor.head with headinajar:hard_hat
+summon dolphin 5 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_dolphin"]}
+data merge entity @e[tag=board_dolphin,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_dolphin,limit=1] armor.head with headinajar:hard_hat
+summon phantom 15 -59 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_phantom"]}
+data merge entity @e[tag=board_phantom,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_phantom,limit=1] armor.head with headinajar:hard_hat
+summon giant 42 -60 78 {NoAI:1b,Silent:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:["board_giant"]}
+data merge entity @e[tag=board_giant,limit=1] {"neoforge:attachments":{"headinajar:worker":{employer:[I;1,2,3,4],carried:[{id:"minecraft:wheat",count:4}]}}}
+item replace entity @e[tag=board_giant,limit=1] armor.head with headinajar:hard_hat
+wait 30
+tp @s -38.54 -60.23 4.46 facing -35 -58.83 8
+shot crate_bipeds_zombie_34
+tp @s -40.00 -60.23 8 facing -35 -58.83 8
+shot crate_bipeds_zombie_side
+tp @s -28.54 -60.23 4.46 facing -25 -58.83 8
+shot crate_bipeds_husk_34
+tp @s -30.00 -60.23 8 facing -25 -58.83 8
+shot crate_bipeds_husk_side
+tp @s -18.54 -60.23 4.46 facing -15 -58.83 8
+shot crate_bipeds_drowned_34
+tp @s -20.00 -60.23 8 facing -15 -58.83 8
+shot crate_bipeds_drowned_side
+tp @s -8.54 -60.23 4.46 facing -5 -58.83 8
+shot crate_bipeds_zombie_villager_34
+tp @s -10.00 -60.23 8 facing -5 -58.83 8
+shot crate_bipeds_zombie_villager_side
+tp @s 1.46 -60.21 4.46 facing 5 -58.81 8
+shot crate_bipeds_skeleton_34
+tp @s 0.00 -60.21 8 facing 5 -58.81 8
+shot crate_bipeds_skeleton_side
+tp @s 11.46 -60.21 4.46 facing 15 -58.81 8
+shot crate_bipeds_stray_34
+tp @s 10.00 -60.21 8 facing 15 -58.81 8
+shot crate_bipeds_stray_side
+tp @s 21.46 -59.96 4.46 facing 25 -58.56 8
+shot crate_bipeds_wither_skeleton_34
+tp @s 20.00 -59.96 8 facing 25 -58.56 8
+shot crate_bipeds_wither_skeleton_side
+tp @s 31.46 -60.21 4.46 facing 35 -58.81 8
+shot crate_bipeds_bogged_34
+tp @s 30.00 -60.21 8 facing 35 -58.81 8
+shot crate_bipeds_bogged_side
+tp @s 41.46 -60.23 4.46 facing 45 -58.83 8
+shot crate_bipeds_piglin_34
+tp @s 40.00 -60.23 8 facing 45 -58.83 8
+shot crate_bipeds_piglin_side
+tp @s 51.46 -60.23 4.46 facing 55 -58.83 8
+shot crate_bipeds_piglin_brute_34
+tp @s 50.00 -60.23 8 facing 55 -58.83 8
+shot crate_bipeds_piglin_brute_side
+tp @s 61.46 -60.23 4.46 facing 65 -58.83 8
+shot crate_bipeds_zombified_piglin_34
+tp @s 60.00 -60.23 8 facing 65 -58.83 8
+shot crate_bipeds_zombified_piglin_side
+tp @s 72.18 -59.66 4.18 facing 76 -58.26 8
+shot crate_bipeds_enderman_34
+tp @s 70.60 -59.66 8 facing 76 -58.26 8
+shot crate_bipeds_enderman_side
+tp @s -38.54 -60.23 18.46 facing -35 -58.83 22
+shot crate_robes_villager_34
+tp @s -40.00 -60.23 22 facing -35 -58.83 22
+shot crate_robes_villager_side
+tp @s -28.54 -60.23 18.46 facing -25 -58.83 22
+shot crate_robes_wandering_trader_34
+tp @s -30.00 -60.23 22 facing -25 -58.83 22
+shot crate_robes_wandering_trader_side
+tp @s -18.54 -60.23 18.46 facing -15 -58.83 22
+shot crate_robes_witch_34
+tp @s -20.00 -60.23 22 facing -15 -58.83 22
+shot crate_robes_witch_side
+tp @s -8.54 -60.23 18.46 facing -5 -58.83 22
+shot crate_robes_vindicator_34
+tp @s -10.00 -60.23 22 facing -5 -58.83 22
+shot crate_robes_vindicator_side
+tp @s 1.46 -60.23 18.46 facing 5 -58.83 22
+shot crate_robes_pillager_34
+tp @s 0.00 -60.23 22 facing 5 -58.83 22
+shot crate_robes_pillager_side
+tp @s 11.46 -60.23 18.46 facing 15 -58.83 22
+shot crate_robes_evoker_34
+tp @s 10.00 -60.23 22 facing 15 -58.83 22
+shot crate_robes_evoker_side
+tp @s 21.46 -60.23 18.46 facing 25 -58.83 22
+shot crate_robes_illusioner_34
+tp @s 20.00 -60.23 22 facing 25 -58.83 22
+shot crate_robes_illusioner_side
+tp @s 32.18 -59.78 18.18 facing 36 -58.38 22
+shot crate_robes_iron_golem_34
+tp @s 30.60 -59.78 22 facing 36 -58.38 22
+shot crate_robes_iron_golem_side
+tp @s 43.46 -60.26 18.46 facing 47 -58.86 22
+shot crate_robes_snow_golem_34
+tp @s 42.00 -60.26 22 facing 47 -58.86 22
+shot crate_robes_snow_golem_side
+tp @s 53.46 -60.26 18.46 facing 57 -58.86 22
+shot crate_robes_snow_golem_sheared_34
+tp @s 52.00 -60.26 22 facing 57 -58.86 22
+shot crate_robes_snow_golem_sheared_side
+tp @s 63.46 -60.04 18.46 facing 67 -58.64 22
+shot crate_robes_allay_34
+tp @s 62.00 -60.04 22 facing 67 -58.64 22
+shot crate_robes_allay_side
+tp @s 73.46 -59.32 18.46 facing 77 -57.92 22
+shot crate_robes_blaze_34
+tp @s 72.00 -59.32 22 facing 77 -57.92 22
+shot crate_robes_blaze_side
+tp @s -38.54 -60.56 32.46 facing -35 -59.16 36
+shot crate_quadrupeds_cow_34
+tp @s -40.00 -60.56 36 facing -35 -59.16 36
+shot crate_quadrupeds_cow_side
+tp @s -28.54 -60.56 32.46 facing -25 -59.16 36
+shot crate_quadrupeds_mooshroom_34
+tp @s -30.00 -60.56 36 facing -25 -59.16 36
+shot crate_quadrupeds_mooshroom_side
+tp @s -18.54 -60.86 32.46 facing -15 -59.46 36
+shot crate_quadrupeds_pig_34
+tp @s -20.00 -60.86 36 facing -15 -59.46 36
+shot crate_quadrupeds_pig_side
+tp @s -8.54 -60.62 32.46 facing -5 -59.22 36
+shot crate_quadrupeds_sheep_34
+tp @s -10.00 -60.62 36 facing -5 -59.22 36
+shot crate_quadrupeds_sheep_side
+tp @s 1.46 -60.89 32.46 facing 5 -59.49 36
+shot crate_quadrupeds_wolf_34
+tp @s 0.00 -60.89 36 facing 5 -59.49 36
+shot crate_quadrupeds_wolf_side
+tp @s 11.46 -60.98 32.46 facing 15 -59.58 36
+shot crate_quadrupeds_fox_34
+tp @s 10.00 -60.98 36 facing 15 -59.58 36
+shot crate_quadrupeds_fox_side
+tp @s 21.46 -60.98 32.46 facing 25 -59.58 36
+shot crate_quadrupeds_cat_34
+tp @s 20.00 -60.98 36 facing 25 -59.58 36
+shot crate_quadrupeds_cat_side
+tp @s 31.46 -60.98 32.46 facing 35 -59.58 36
+shot crate_quadrupeds_ocelot_34
+tp @s 30.00 -60.98 36 facing 35 -59.58 36
+shot crate_quadrupeds_ocelot_side
+tp @s 41.46 -60.98 32.46 facing 45 -59.58 36
+shot crate_quadrupeds_chicken_34
+tp @s 40.00 -60.98 36 facing 45 -59.58 36
+shot crate_quadrupeds_chicken_side
+tp @s 51.46 -61.10 32.46 facing 55 -59.70 36
+shot crate_quadrupeds_rabbit_34
+tp @s 50.00 -61.10 36 facing 55 -59.70 36
+shot crate_quadrupeds_rabbit_side
+tp @s 61.46 -60.62 32.46 facing 65 -59.22 36
+shot crate_quadrupeds_goat_34
+tp @s 60.00 -60.62 36 facing 65 -59.22 36
+shot crate_quadrupeds_goat_side
+tp @s 71.46 -60.65 32.46 facing 75 -59.25 36
+shot crate_quadrupeds_panda_34
+tp @s 70.00 -60.65 36 facing 75 -59.25 36
+shot crate_quadrupeds_panda_side
+tp @s 81.46 -60.56 32.46 facing 85 -59.16 36
+shot crate_quadrupeds_polar_bear_34
+tp @s 80.00 -60.56 36 facing 85 -59.16 36
+shot crate_quadrupeds_polar_bear_side
+tp @s -38.54 -60.44 46.46 facing -35 -59.04 50
+shot crate_long_horse_34
+tp @s -40.00 -60.44 50 facing -35 -59.04 50
+shot crate_long_horse_side
+tp @s -28.54 -60.50 46.46 facing -25 -59.10 50
+shot crate_long_donkey_34
+tp @s -30.00 -60.50 50 facing -25 -59.10 50
+shot crate_long_donkey_side
+tp @s -18.54 -60.44 46.46 facing -15 -59.04 50
+shot crate_long_mule_34
+tp @s -20.00 -60.44 50 facing -15 -59.04 50
+shot crate_long_mule_side
+tp @s -8.54 -60.44 46.46 facing -5 -59.04 50
+shot crate_long_skeleton_horse_34
+tp @s -10.00 -60.44 50 facing -5 -59.04 50
+shot crate_long_skeleton_horse_side
+tp @s 1.46 -60.44 46.46 facing 5 -59.04 50
+shot crate_long_zombie_horse_34
+tp @s 0.00 -60.44 50 facing 5 -59.04 50
+shot crate_long_zombie_horse_side
+tp @s 11.46 -60.28 46.46 facing 15 -58.88 50
+shot crate_long_llama_34
+tp @s 10.00 -60.28 50 facing 15 -58.88 50
+shot crate_long_llama_side
+tp @s 21.46 -60.28 46.46 facing 25 -58.88 50
+shot crate_long_trader_llama_34
+tp @s 20.00 -60.28 50 facing 25 -58.88 50
+shot crate_long_trader_llama_side
+tp @s 32.18 -59.98 46.18 facing 36 -58.58 50
+shot crate_long_camel_34
+tp @s 30.60 -59.98 50 facing 36 -58.58 50
+shot crate_long_camel_side
+tp @s 43.46 -60.56 46.46 facing 47 -59.16 50
+shot crate_long_hoglin_34
+tp @s 42.00 -60.56 50 facing 47 -59.16 50
+shot crate_long_hoglin_side
+tp @s 53.46 -60.56 46.46 facing 57 -59.16 50
+shot crate_long_zoglin_34
+tp @s 52.00 -60.56 50 facing 57 -59.16 50
+shot crate_long_zoglin_side
+tp @s 64.54 -60.08 45.54 facing 69 -58.68 50
+shot crate_long_ravager_34
+tp @s 62.70 -60.08 50 facing 69 -58.68 50
+shot crate_long_ravager_side
+tp @s 78.54 -60.35 45.54 facing 83 -58.95 50
+shot crate_long_sniffer_34
+tp @s 76.70 -60.35 50 facing 83 -58.95 50
+shot crate_long_sniffer_side
+tp @s -38.54 -61.16 60.46 facing -35 -59.76 64
+shot crate_small_turtle_34
+tp @s -40.00 -61.16 64 facing -35 -59.76 64
+shot crate_small_turtle_side
+tp @s -28.54 -61.01 60.46 facing -25 -59.61 64
+shot crate_small_armadillo_34
+tp @s -30.00 -61.01 64 facing -25 -59.61 64
+shot crate_small_armadillo_side
+tp @s -18.54 -61.15 60.46 facing -15 -59.75 64
+shot crate_small_axolotl_34
+tp @s -20.00 -61.15 64 facing -15 -59.75 64
+shot crate_small_axolotl_side
+tp @s -8.54 -61.07 60.46 facing -5 -59.67 64
+shot crate_small_frog_34
+tp @s -10.00 -61.07 64 facing -5 -59.67 64
+shot crate_small_frog_side
+tp @s 1.46 -60.86 60.46 facing 5 -59.46 64
+shot crate_small_spider_34
+tp @s 0.00 -60.86 64 facing 5 -59.46 64
+shot crate_small_spider_side
+tp @s 11.46 -61.10 60.46 facing 15 -59.70 64
+shot crate_small_cave_spider_34
+tp @s 10.00 -61.10 64 facing 15 -59.70 64
+shot crate_small_cave_spider_side
+tp @s 21.46 -60.38 60.46 facing 25 -58.98 64
+shot crate_small_strider_34
+tp @s 20.00 -60.38 64 facing 25 -58.98 64
+shot crate_small_strider_side
+tp @s 31.46 -61.22 60.46 facing 35 -59.82 64
+shot crate_small_endermite_34
+tp @s 30.00 -61.22 64 facing 35 -59.82 64
+shot crate_small_endermite_side
+tp @s 41.46 -61.22 60.46 facing 45 -59.82 64
+shot crate_small_silverfish_34
+tp @s 40.00 -61.22 64 facing 45 -59.82 64
+shot crate_small_silverfish_side
+tp @s 51.46 -60.78 60.46 facing 55 -59.38 64
+shot crate_small_slime_34
+tp @s 50.00 -60.78 64 facing 55 -59.38 64
+shot crate_small_slime_side
+tp @s 61.46 -60.78 60.46 facing 65 -59.38 64
+shot crate_small_magma_cube_34
+tp @s 60.00 -60.78 64 facing 65 -59.38 64
+shot crate_small_magma_cube_side
+tp @s 71.46 -59.86 60.46 facing 75 -58.46 64
+shot crate_small_parrot_34
+tp @s 70.00 -59.86 64 facing 75 -58.46 64
+shot crate_small_parrot_side
+tp @s 81.46 -60.04 60.46 facing 85 -58.64 64
+shot crate_small_bee_34
+tp @s 80.00 -60.04 64 facing 85 -58.64 64
+shot crate_small_bee_side
+tp @s -36.36 -58.00 71.64 facing -30 -56.60 78
+shot crate_floaters_ghast_34
+tp @s -39.00 -58.00 78 facing -30 -56.60 78
+shot crate_floaters_ghast_side
+tp @s -18.54 -59.92 74.46 facing -15 -58.52 78
+shot crate_floaters_squid_34
+tp @s -20.00 -59.92 78 facing -15 -58.52 78
+shot crate_floaters_squid_side
+tp @s -8.54 -59.92 74.46 facing -5 -58.52 78
+shot crate_floaters_glow_squid_34
+tp @s -10.00 -59.92 78 facing -5 -58.52 78
+shot crate_floaters_glow_squid_side
+tp @s 1.46 -60.04 74.46 facing 5 -58.64 78
+shot crate_floaters_dolphin_34
+tp @s 0.00 -60.04 78 facing 5 -58.64 78
+shot crate_floaters_dolphin_side
+tp @s 11.46 -60.10 74.46 facing 15 -58.70 78
+shot crate_floaters_phantom_34
+tp @s 10.00 -60.10 78 facing 15 -58.70 78
+shot crate_floaters_phantom_side
+tp @s 28.00 -54.20 64.00 facing 42 -52.80 78
+shot crate_floaters_giant_34
+tp @s 22.20 -54.20 78 facing 42 -52.80 78
+shot crate_floaters_giant_side
+time set 18000
+wait 25
+tp @s -38.50 -59.80 4.50 facing -35 -58.80 8
+shot night_zombie
+setblock -36 -60 7 torch
+wait 5
+shot torch_zombie
+tp @s 1.50 -59.80 4.50 facing 5 -58.80 8
+shot night_skeleton
+setblock 4 -60 7 torch
+wait 5
+shot torch_skeleton
+tp @s 41.50 -59.80 4.50 facing 45 -58.80 8
+shot night_piglin
+setblock 44 -60 7 torch
+wait 5
+shot torch_piglin
+time set 6000
+hud on

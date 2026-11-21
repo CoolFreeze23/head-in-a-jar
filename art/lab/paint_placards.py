@@ -1,6 +1,6 @@
-"""Safety Placard notices 12, 16 and 18, in English and Brazilian Portuguese, drawn the way the twelve are.
+"""Safety Placard notices 12, 13, 14, 16, 18, 19 and 20, in English and Brazilian Portuguese, drawn the way the twelve are.
 
-    python art/lab/paint_placards.py            # writes textures/placard/<lang>/notice_12.png, 16 and 18
+    python art/lab/paint_placards.py            # writes textures/placard/<lang>/notice_<n>.png for each
     python art/lab/paint_placards.py --check    # no writes: fails if a notice does not fit or a PNG differs
 
 The notices are lettering, not painting: art/machines/safety_placard/placard_text.py sets each language line in the
@@ -22,6 +22,17 @@ NOTICES = {
     16: {'en_us': 'QUIET FLOOR: THE WARDEN IS WORKING', 'pt_br': 'SILÊNCIO: WARDEN TRABALHANDO'},   # pt: the road sign
     # "HOMENS TRABALHANDO"; "ANDAR SILENCIOSO: O WARDEN ESTÁ TRABALHANDO" needs five lines and runs into the screws
     18: {'en_us': 'PLEASE DO NOT TAP THE GLASS', 'pt_br': 'FAVOR NÃO BATER NO VIDRO'},
+    13: {'en_us': 'HARD HATS MUST BE WORN BEYOND THIS POINT', 'pt_br': 'CAPACETE OBRIGATÓRIO A PARTIR DAQUI'},
+    # en: hand break, THIS POINT kept together (the natural wrap gives BEYOND THIS / POINT); pt wraps by itself in four
+    # lines ("USO OBRIGATÓRIO DE CAPACETE A PARTIR DAQUI" takes five and runs to the board's last texel row)
+    14: {'en_us': 'NIGHT SHIFT ONLY AFTER DUSK', 'pt_br': 'TURNO DA NOITE SÓ APÓS ESCURECER'},
+    # pt: hand break, SÓ APÓS kept together (the natural wrap gives NOITE SÓ / APÓS)
+    19: {'en_us': 'ALL STAFF MUST WEAR LANYARDS. THIS MEANS YOU, BESSIE',
+         'pt_br': 'TODOS DE CRACHÁ. ATÉ VOCÊ, MIMOSA'},   # en wraps by itself; pt: hand break TODOS DE / CRACHÁ. /
+    # ATÉ VOCÊ, / MIMOSA (four lines; "ISSO INCLUI VOCÊ" took five); MIMOSA lands on a line of her own in both
+    20: {'en_us': 'STAFF ARE NOT LUNCH', 'pt_br': 'COLEGA NÃO É ALMOÇO'},   # pt: FUNCIONÁRIO is 45 texels, one more than
+    # the field's 44, so "FUNCIONÁRIO NÃO É ALMOÇO" cannot set; COLEGA ("colleague") keeps the deadpan; hand break
+    # COLEGA / NÃO É / ALMOÇO (the natural wrap splits NÃO from É)
 }
 
 

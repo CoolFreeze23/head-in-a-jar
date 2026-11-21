@@ -21,7 +21,8 @@ import java.util.UUID;
 
 /**
  * /headoffice trust add|remove|list: who may open your corpse and handle your head.
- * /headoffice status [player]; and for operators, /headoffice separate &lt;player&gt; and /headoffice restore &lt;player&gt;.
+ * /headoffice status [player]; and for operators, /headoffice separate &lt;player&gt; and /headoffice restore &lt;player&gt;,
+ * and /headoffice staff list|recall|pause ({@link StaffCommands}).
  */
 public final class HeadOfficeCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -43,6 +44,7 @@ public final class HeadOfficeCommand {
                         .executes(c -> status(c, c.getSource().getPlayerOrException()))
                         .then(Commands.argument("player", EntityArgument.player()).requires(s -> s.hasPermission(2))
                                 .executes(c -> status(c, EntityArgument.getPlayer(c, "player")))))
+                .then(StaffCommands.node())
                 .then(Commands.literal("separate").requires(s -> s.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.player()).executes(c -> {
                             ServerPlayer p = EntityArgument.getPlayer(c, "player");
@@ -105,6 +107,10 @@ public final class HeadOfficeCommand {
         c.getSource().sendSuccess(() -> Component.translatable("command.headinajar.status", player.getDisplayName(),
                 Component.translatable("command.headinajar.status.form." + state.form().getSerializedName()), state.quality(), headText, bodyText,
                 state.charge()), false);
+        // an operator's mandatory break for staff is said here while it is on
+        if (com.coolfreeze23.headinajar.staff.work.WorkPause.get(c.getSource().getServer()).paused()) {
+            c.getSource().sendSuccess(() -> Component.translatable("command.headinajar.staff.status_paused"), false);
+        }
         return 1;
     }
 

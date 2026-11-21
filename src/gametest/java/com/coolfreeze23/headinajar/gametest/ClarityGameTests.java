@@ -232,7 +232,7 @@ public class ClarityGameTests {
         }
         ItemStack book = recipe.get().value().getResultItem(h.getLevel().registryAccess());
         var content = book.get(DataComponents.WRITTEN_BOOK_CONTENT);
-        h.assertTrue(content != null && content.pages().size() >= 80 && content.pages().size() <= 180,
+        h.assertTrue(content != null && content.pages().size() >= 80 && content.pages().size() <= 220,
                 "the written edition has " + (content == null ? 0 : content.pages().size()) + " pages");
         // the contents page sends the reader to each chapter
         int links = 0;

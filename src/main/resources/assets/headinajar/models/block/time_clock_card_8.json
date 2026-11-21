@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "0": "headinajar:block/machine/time_clock",
+    "particle": "headinajar:block/machine/time_clock"
+  },
+  "elements": [
+    {
+      "name": "slip_8",
+      "from": [
+        1,
+        1,
+        6
+      ],
+      "to": [
+        3,
+        4,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.125,
+            0.25,
+            7.375,
+            1
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            7,
+            0.25,
+            7.125,
+            1
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            0.25,
+            7.75,
+            1
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            7.375,
+            0.25,
+            7.5,
+            1
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            7.375,
+            0.25,
+            7.125,
+            0
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            7.625,
+            0,
+            7.375,
+            0.25
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

@@ -252,7 +252,7 @@ public class BodiesAtWorkGameTests {
     @GameTest(template = "platform")
     public static void placardCyclesThroughTheNewNotice(GameTestHelper h) {
         h.assertValueEqual(SafetyPlacardBlock.next(11), 12, "after notice 11");
-        h.assertValueEqual(SafetyPlacardBlock.next(12), 16, "after notice 12");
+        h.assertValueEqual(SafetyPlacardBlock.next(12), 13, "after notice 12 (13 from 0.7.0)");
         // a real use on a placed placard showing 11 turns it to 12
         BlockPos wall = FLOOR.north(), at = FLOOR;
         h.setBlock(wall, Blocks.STONE);

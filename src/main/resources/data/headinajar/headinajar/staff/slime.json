@@ -8,5 +8,22 @@
     "complaint.chair": 1,
     "complaint.jar": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "carry_items": 16,
+    "hands": false,
+    "walk": 1.0,
+    "move": "hop",
+    "attack": "melee",
+    "quirks": [
+      "carried_inside"
+    ]
   }
 }

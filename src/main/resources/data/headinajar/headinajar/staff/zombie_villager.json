@@ -15,5 +15,25 @@
     "complaint.dental": 1,
     "goodbye": 1,
     "lookout": 1
+  },
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.25,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "cannot": {
+      "sorting": "card.cannot.sorting_undead"
+    },
+    "shift": "night",
+    "carry": 1,
+    "hands": true,
+    "walk": 0.939,
+    "move": "walk",
+    "attack": "melee",
+    "quirks": [
+      "burns"
+    ]
   }
 }

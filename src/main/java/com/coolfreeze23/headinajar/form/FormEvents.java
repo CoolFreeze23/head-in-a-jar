@@ -151,6 +151,8 @@ public final class FormEvents {
     /** Cancels what a locked-out jar tried; a bare jar is told why (the Nudge), with the line for what it reached for. */
     private static void lockout(Player player, ICancellableEvent event, java.util.function.Supplier<String> reason) {
         if (!lockedOut(player)) return;
+        // the Supervisor's Whistle blows through a Speaker Grille; without one the jar is told it can't whistle (WhistleItem)
+        if (com.coolfreeze23.headinajar.item.WhistleItem.grille(player, event)) return;
         event.setCanceled(true);
         if (player instanceof ServerPlayer server && state(player).form() == Form.JAR) Refusals.nudge(server, reason.get());
     }

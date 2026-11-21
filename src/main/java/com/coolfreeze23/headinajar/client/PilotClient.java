@@ -40,7 +40,8 @@ public final class PilotClient {
             if (m == null) sentFor = -1;
             return;
         }
-        int arms = (mc.options.keyAttack.isDown() ? 1 : 0) | (mc.options.keyUse.isDown() ? 2 : 0);
+        // a Whistle in hand: the buttons are the Whistle's, not the arms' (WhistleClient)
+        int arms = com.coolfreeze23.headinajar.client.staff.WhistleClient.blowing(mc.player) ? 0 : (mc.options.keyAttack.isDown() ? 1 : 0) | (mc.options.keyUse.isDown() ? 2 : 0);
         if (arms != sentArms || sentFor != m.getId()) PacketDistributor.sendToServer(new Network.ArmInput(sentArms = arms));
         sentFor = m.getId();
         boolean jumping = mc.options.keyJump.isDown();

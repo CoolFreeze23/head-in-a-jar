@@ -1,0 +1,30 @@
+{
+  "name": "O Relógio de Ponto",
+  "icon": "headinajar:time_clock",
+  "category": "headinajar:staffing",
+  "sortnum": 13,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "headinajar:time_clock",
+      "text": "Um Relógio de Ponto cria um $(l)local$(): 16 blocos para os lados, 8 para cima e 8 para baixo. Relógios precisam de 8 blocos entre si. Use-o para o Quadro de Pessoal, de Tarefas, a Gaveta e os Turnos."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A cada turno a equipe chega, bate o ponto um de cada vez, pega um cartão e vai. Fora do turno fica em fila junto ao relógio, de frente para ele. Quem atrasa ganha o sino."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Turnos$()$(br)Dia: 1.000 a 11.000$(br)Noite: 13.000 a 23.000$(br)Redstone: enquanto o relógio tiver sinal$(br2)As horas são as da Superfície em todo lugar. Mortos-vivos começam na Noite; Dia exige Capacete.",
+      "title": "Formulário 11-T"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Ao amanhecer cada funcionário tira o salário da Gaveta de Pagamento, como a cabeça no pedestal tira do baú. Um funil pode encher a gaveta; só a equipe tira dela.$(br2)Quem não tem confiança é barrado."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Mortos-vivos a até 2 blocos do próprio relógio não queimam: o relógio tem toldo.$(br2)Relógio quebrado derruba gaveta e quadro; a equipe espera outro relógio a 16 blocos.$(br2)$(o)Bata o ponto. Bata a saída. Não bata em mais nada.$()"
+    }
+  ]
+}

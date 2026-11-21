@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:non_human_resources",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "clocking_in"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:time_clock"
+    },
+    "title": {
+      "translate": "advancements.headinajar.clocking_in.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.clocking_in.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

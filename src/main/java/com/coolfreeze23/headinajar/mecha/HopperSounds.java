@@ -155,6 +155,11 @@ public final class HopperSounds {
     public static void load() {
     }
 
+    /** A sound's registered holder (the Hard Hat's equip sound is the Chimera's clonk). */
+    public static DeferredHolder<SoundEvent, SoundEvent> holder(String id) {
+        return EVENTS.get(id);
+    }
+
     /** The registered event by name ("servo", "mecha.servo" or "headinajar:mecha.servo"), or null. */
     public static SoundEvent get(String id) {
         String name = id.startsWith("headinajar:") ? id.substring(11) : id;
