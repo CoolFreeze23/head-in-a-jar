@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:secondment",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "team_spirit"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:neural_lace"
+    },
+    "title": {
+      "translate": "advancements.headinajar.team_spirit.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.team_spirit.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

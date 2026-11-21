@@ -211,6 +211,8 @@ public final class WorkerLines {
             Vec3 at = e.getPosition(pt);
             Vec3 tag = e.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, e.getViewYRot(pt));
             double y = at.y + (tag == null ? e.getBbHeight() : tag.y) + 0.5 + (named(e) ? 0.3 : 0.05);
+            // over a seated secondee's jar (0.7.1)
+            y += com.coolfreeze23.headinajar.client.second.SecondeeLayer.lift(e);
             double dx = at.x - cam.x, dy = y - cam.y, dz = at.z - cam.z;
             if (dx * dx + dy * dy + dz * dz > RANGE * RANGE) continue;
             Wrapped w = wrap(line, font, language);

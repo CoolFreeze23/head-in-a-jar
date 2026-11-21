@@ -128,6 +128,16 @@ WORK = {
         (None, 'if(between(t,0.24,0.42),sin(2*PI*2200*mod(t-0.24,0.045))*exp(-260*mod(t-0.24,0.045))'
                '*min(1,mod(t-0.24,0.045)/0.0005)*exp(-6*(t-0.24))*0.25,0)', 'highpass=f=800'),
     ], 'highpass=f=150,volume=0.55'),
+    # The Secondment Collar is fitted (0.7.1; its sounds.json entry and subtitle come from tools/gen_p42_secondment.py):
+    # the open brass ring slides round the neck (a dry rasp), its two halves meet with a heavy click, the spring catch
+    # drops a beat later, and the ring hums a moment on its own note.
+    'staff/collar_fitted': (0.6, [
+        (71, 'if(lt(t,0.16),sin(PI*t/0.16)^2,0)*0.3', 'highpass=f=700,lowpass=f=3200'),
+        (None, _struck(0.16, 1250, (1, 2.4, 3.9), (0.45, 0.25, 0.12), (40, 70, 110)), 'anull'),
+        (72, 'if(gte(t,0.16),exp(-500*(t-0.16)),0)*0.6', 'highpass=f=2200'),
+        (None, _struck(0.23, 3600, (1, 1.48), (0.35, 0.2), (180, 260)), 'anull'),
+        (None, _struck(0.24, 880, (1, 2.32), (0.12, 0.05), (7, 11)), 'anull'),
+    ], 'highpass=f=120,volume=0.62'),
 }
 
 

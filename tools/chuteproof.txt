@@ -1,0 +1,40 @@
+@world flat
+@clean
+# The Golden Parachute over a player's jar drawn through the class as it was before the parachute was generalised to
+# any entity (the smoke fixture ParachuteBefore) and through today's Parachute: every vertex of every draw compared.
+# On the ground (the flare), in the air (descend, steer), first person and third person looking down (faint cloth).
+wait 40
+chuteproof ground, first person
+view 1
+look 0 80
+wait 20
+chuteproof ground, third person looking down
+view 0
+look 0 0
+tp @s ~ ~30 ~
+wait 2
+chuteproof air, first person
+view 1
+look 0 80
+tp @s ~ ~30 ~
+wait 2
+chuteproof air, third person looking down
+view 0
+look 0 0
+# A Redundancy Package summoned with a zombie head 6 blocks up, 4 blocks in front: its canopy (the Golden
+# Parachute's at half size until the derived model lands), in flight and down.
+tp @s 0 -60 0 0 10
+wait 10
+summon headinajar:redundancy_package 0 -54 4 {Head:{id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie",Entity:{}}}}}
+wait 12
+shot package_deploy
+wait 20
+shot package_open
+view 1
+look 150 15
+wait 10
+shot package_open_side
+wait 50
+shot package_down
+inspect near redundancy 10
+inspect blocks jarred_head -5 -62 -5 5 -55 10

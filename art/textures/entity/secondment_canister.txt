@@ -1,0 +1,38 @@
+# The broth canister on the back of the Secondment Collar: a 2 x 3 x 2 px cube, box UV, one 8 x 5 block per sight-glass
+# step: (0, 0) full, (8, 0) two thirds, (0, 5) one third, (8, 5) empty. Steel with a brass band round the top (the
+# filler cap's ring) and a brass cap; the whole back face (+z) is the sight glass, 2 x 3, filled from the bottom one
+# row a third: broth in one red (flesh 2, the house's broth as in the Cerebral Array's urn), empty glass dark teal
+# (teal glass 0) with no glint. (A 1 px tube with a pale glint read as a second liquid, and its last third was one
+# texel at five blocks.)
+# Box UV (vanilla ModelPart, w 2, h 3, d 2 at u, v): top u+2, bottom u+4 (rows v, v+1); sides on rows v+2..v+4:
+# -x u+0, -z u+2 (faces the ring), +x u+4, +z u+6 (the glass: columns u+6, u+7).
+texture: entity/secondment_canister.png
+size: 16x16
+key:
+  ..  clear
+  b3  brass.3
+  b4  brass.4
+  b5  brass.5
+  s1  steel.1
+  s2  steel.2
+  s3  steel.3
+  s4  steel.4
+  t0  teal_glass.0
+  f2  flesh.2
+pixels:
+.. .. b5 b4 s1 s1 .. .. .. .. b5 b4 s1 s1 .. ..
+.. .. b4 b3 s1 s1 .. .. .. .. b4 b3 s1 s1 .. ..
+b4 b4 b4 b4 b3 b3 f2 f2 b4 b4 b4 b4 b3 b3 t0 t0
+s4 s3 s3 s3 s3 s2 f2 f2 s4 s3 s3 s3 s3 s2 f2 f2
+s2 s2 s2 s2 s2 s1 f2 f2 s2 s2 s2 s2 s2 s1 f2 f2
+.. .. b5 b4 s1 s1 .. .. .. .. b5 b4 s1 s1 .. ..
+.. .. b4 b3 s1 s1 .. .. .. .. b4 b3 s1 s1 .. ..
+b4 b4 b4 b4 b3 b3 t0 t0 b4 b4 b4 b4 b3 b3 t0 t0
+s4 s3 s3 s3 s3 s2 t0 t0 s4 s3 s3 s3 s3 s2 t0 t0
+s2 s2 s2 s2 s2 s1 f2 f2 s2 s2 s2 s2 s2 s1 t0 t0
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+.. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..

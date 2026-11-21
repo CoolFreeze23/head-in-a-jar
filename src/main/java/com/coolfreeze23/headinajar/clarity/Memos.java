@@ -55,7 +55,8 @@ public final class Memos {
         // 0.7.0
         FIRST_HIRE("staffing/workforce"),
         FIRST_CLOCK("staffing/time_clock"),
-        DETAIL_HOME("staffing/whistle");
+        DETAIL_HOME("staffing/whistle"),
+        SECONDMENT("staffing/secondment");
 
         public final String entry;
 

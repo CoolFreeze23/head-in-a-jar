@@ -99,7 +99,8 @@ public final class HostEvents {
             data.freshness -= perTick;
             // a ripe host's flies and sag are drawn by each client from the freshness it is sent: no particle packets
             if (data.freshness <= 0) {
-                // it falls apart: normal loot, and the jar pops out
+                // it falls apart: normal loot, and the jar pops out (a seconded head leaves first, under its canopy)
+                com.coolfreeze23.headinajar.staff.second.SecondeeEvents.beforeWastage(host);
                 host.ejectPassengers();
                 host.hurt(host.damageSources().genericKill(), Float.MAX_VALUE);
                 return;
@@ -111,7 +112,10 @@ public final class HostEvents {
             if (data.sync >= 100) com.coolfreeze23.headinajar.Advance.grant(pilot, "synced");
         }
 
-        float sync = data.effectiveSync();
+        // a collared host: the canister, team sync (0.7.1)
+        com.coolfreeze23.headinajar.staff.second.SecondeeEvents.tick(host, data, time);
+        // a seconded host's traits and 100% bonus open with its team sync (Hosts.bodySync); a ridden host's as always
+        float sync = Hosts.bodySync(host);
         attributes(host, def, data, sync);
         if (def != null && sync >= 25) traits(host, def, pilot);
         HostTricks.tick(host, data, def, pilot, time);
@@ -182,7 +186,7 @@ public final class HostEvents {
         if (!Hosts.isHost(e)) return;
         if (e instanceof Mob mob) HostTricks.hurt(event, mob, Hosts.data(e));
         HostDefinition def = Hosts.definition(e);
-        if (def == null || Hosts.data(e).effectiveSync() < 25) return;
+        if (def == null || Hosts.bodySync(e) < 25) return;
         var src = event.getSource();
         if (def.has("half_fall_damage") && src.is(DamageTypeTags.IS_FALL)) event.setAmount(event.getAmount() * 0.5f);
         if (def.has("fire_immune") && src.is(DamageTypeTags.IS_FIRE)) event.setCanceled(true);
@@ -196,7 +200,7 @@ public final class HostEvents {
         LivingEntity target = event.getNewAboutToBeSetTarget();
         if (target == null) return;
         Entity host = Hosts.isHost(target) ? target : target.getVehicle() != null && Hosts.isHost(target.getVehicle()) ? target.getVehicle() : null;
-        if (host == null || Hosts.data(host).effectiveSync() < 25) return;
+        if (host == null || Hosts.bodySync(host) < 25) return;
         HostDefinition def = Hosts.definition(host);
         if (def == null) return;
         for (String tag : def.neutralTo()) {

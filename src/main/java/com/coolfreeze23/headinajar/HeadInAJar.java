@@ -41,6 +41,8 @@ public class HeadInAJar {
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.RegisterCommandsEvent e) ->
                 com.coolfreeze23.headinajar.command.HeadOfficeCommand.register(e.getDispatcher()));
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.staff.StaffEvents.class);
+        // the secondment (0.7.1)
+        com.coolfreeze23.headinajar.staff.second.SecondeeEvents.register();
         // the workforce (0.7.0)
         NeoForge.EVENT_BUS.register(com.coolfreeze23.headinajar.item.StaffLanyardItem.class);
         com.coolfreeze23.headinajar.staff.work.WorkRules.register();

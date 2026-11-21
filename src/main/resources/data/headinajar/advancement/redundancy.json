@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:secondment",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "redundancy"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_ingot"
+    },
+    "title": {
+      "translate": "advancements.headinajar.redundancy.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.redundancy.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

@@ -19,7 +19,14 @@ public abstract class HostAiMixin {
     @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true)
     private void headinajar$noAi(CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
-        if (com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mob) && !Hosts.isHost(mob)) {
+        // a host with a seconded head on its collar is a worker too: the head's mind drives the body (with secondments
+        // switched off on the server it stands by where it is, its head still seated)
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob) && !com.coolfreeze23.headinajar.staff.second.Secondees.enabled()) {
+            ci.cancel();
+            return;
+        }
+        if (com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mob)
+                && (!Hosts.isHost(mob) || com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob))) {
             ci.cancel();
             com.coolfreeze23.headinajar.staff.work.Workforce.tick(mob);
             return;

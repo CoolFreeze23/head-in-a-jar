@@ -41,6 +41,16 @@ public final class Hosts {
         return entity instanceof Mob && entity.hasData(ModRegistry.HOST_DATA) && entity.getData(ModRegistry.HOST_DATA).host;
     }
 
+    /**
+     * The sync the body's traits, Ability, Secondary and 100% bonus open with: a seconded host's team sync (0.7.1: a mob
+     * head earns it at work, whatever a jar once earned riding the body); for every other host its sync as always
+     * ({@link HostData#effectiveSync}: a shell is always fully synced).
+     */
+    public static float bodySync(Entity host) {
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(host)) return com.coolfreeze23.headinajar.staff.second.Secondees.teamSync(host);
+        return data(host).effectiveSync();
+    }
+
     /** The creature's data file, on either side (a client reads the copy the server sent). */
     public static HostDefinition definition(Entity entity) {
         ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());

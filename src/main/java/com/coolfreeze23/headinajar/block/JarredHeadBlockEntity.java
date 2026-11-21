@@ -70,6 +70,8 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
     private EntityType<?> parsedType;
     /** The jar it went into (an item id), or null when none is recorded (a head cut before 0.6.0: a Life Support Jar). */
     private String jar;
+    /** A seconded head's jar glass, kept while it sits here (0.7.1: a head that landed keeps its cracks), or -1. */
+    private int glass = -1;
     /** Its Personnel File (server; null until it is registered). */
     private com.coolfreeze23.headinajar.staff.StaffFile staff;
     /** Whether this load has been checked for a file yet (not saved: the first tick after every load looks). */
@@ -144,6 +146,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         entity = tag.getCompound("Entity");
         if (tag.contains("LastRestock")) lastRestock = tag.getLong("LastRestock");
         jar = tag.contains("Jar") ? tag.getString("Jar") : null;
+        glass = tag.contains(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) ? tag.getInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) : -1;
         staff = com.coolfreeze23.headinajar.staff.Staff.fromHeadTag(tag);
         // the file goes on the block, not also inside the stored mob
         com.coolfreeze23.headinajar.staff.Staff.stripEntity(entity);
@@ -246,6 +249,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         tag.put("Entity", entity.copy());
         if (lastRestock != 0) tag.putLong("LastRestock", lastRestock);
         if (jar != null) tag.putString("Jar", jar);
+        if (glass >= 0) tag.putInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS, glass);
         if (staff != null) tag.put("Staff", staff.save());
         // the bowl's broth, the day it last gave blood and its other days go with it: breaking a head is no fresh start
         CompoundTag desk = writeDesk();
@@ -617,6 +621,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         tag.putLong("LastRestock", lastRestock);
         // written only once known, so an old head's save keeps exactly its old keys until it is registered
         if (jar != null) tag.putString("Jar", jar);
+        if (glass >= 0) tag.putInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS, glass);
         if (staff != null) tag.put("Staff", staff.save());
         CompoundTag desk = writeDesk();
         if (!desk.isEmpty()) tag.put("Desk", desk);
@@ -633,6 +638,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         entity = tag.getCompound("Entity");
         lastRestock = tag.getLong("LastRestock");
         jar = tag.contains("Jar") ? tag.getString("Jar") : null;
+        glass = tag.contains(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) ? tag.getInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) : -1;
         staff = com.coolfreeze23.headinajar.staff.StaffFile.load(tag.get("Staff"));
         filed = false;
         readDesk(tag.getCompound("Desk"));

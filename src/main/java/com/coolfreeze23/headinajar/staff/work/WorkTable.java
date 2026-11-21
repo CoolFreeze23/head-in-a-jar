@@ -84,8 +84,20 @@ public final class WorkTable {
     private WorkTable() {
     }
 
-    /** The work row of a living creature: its species' row, with a villager's profession's fields over it. Null: none. */
+    /**
+     * The work row of a living creature: its species' row, with a villager's profession's fields over it; for a host
+     * with a seconded head, the head's skills on the body's hardware ({@code staff.second.Secondees.spec}). Null: none.
+     */
     public static Spec of(Mob mob) {
+        // at 100% team sync the pair works 10% faster and carries 10% more (0.7.1, staff.second.BodyWork.atFull)
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob)) {
+            return com.coolfreeze23.headinajar.staff.second.BodyWork.atFull(mob, com.coolfreeze23.headinajar.staff.second.Secondees.spec(mob));
+        }
+        return ofSpecies(mob);
+    }
+
+    /** The creature's own row (its species', a villager's profession over it), whatever is seated on it. */
+    public static Spec ofSpecies(Mob mob) {
         Spec spec = of(mob.getType());
         if (spec == null || spec.professions().isEmpty() || !(mob instanceof VillagerDataHolder v)) return spec;
         var key = BuiltInRegistries.VILLAGER_PROFESSION.getKey(v.getVillagerData().getProfession());

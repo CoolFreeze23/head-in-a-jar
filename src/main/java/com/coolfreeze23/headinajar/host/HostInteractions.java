@@ -96,6 +96,9 @@ public final class HostInteractions {
             if (player != null) host.dropLeash(true, !clicker.hasInfiniteMaterials());
             return InteractionResult.SUCCESS;
         }
+        // a Secondment Collar, a jarred head, and what a collared host takes through its collar (0.7.1)
+        InteractionResult second = com.coolfreeze23.headinajar.staff.second.Secondment.instrument(clicker, player, held, host, hand);
+        if (second != null) return second;
         if (held.isEmpty()) return null;
         // as always: Embalming Fluid and Neural Lace act whoever holds them
         if (held.is(ModRegistry.EMBALMING_FLUID.get())) {
@@ -118,7 +121,8 @@ public final class HostInteractions {
             if (data.shell) return refuse(player, host, "host.lace_shell", held.getHoverName());
             if (data.laced) return refuse(player, host, "host.lace_again", held.getHoverName());
             if (player != null) {
-                if (data.sync < 50) {
+                // a seconded head's team sync counts as the body's sync for the lace
+                if (data.sync < 50 && com.coolfreeze23.headinajar.staff.second.Secondees.teamSync(host) < 50) {
                     player.displayClientMessage(Component.translatable("message.headinajar.lace_needs_sync"), true);
                 } else {
                     data.laced = true;

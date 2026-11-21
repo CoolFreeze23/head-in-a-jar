@@ -145,6 +145,8 @@ public final class Detail {
 
     /** Whether a fighter: in Security with an attack of its own, and not one of the pets. */
     public static boolean fighter(Mob mob) {
+        // a secondee: an attacking head, or a body whose open trick fights; else it keeps you company (0.7.1)
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob)) return com.coolfreeze23.headinajar.staff.second.BodyWork.fighter(mob);
         if (Pets.isPet(mob)) return false;
         WorkTable.Spec spec = WorkTable.of(mob);
         return spec != null && spec.can(WorkTable.SECURITY) && !"none".equals(spec.attack()) && !"lookout".equals(spec.attack());

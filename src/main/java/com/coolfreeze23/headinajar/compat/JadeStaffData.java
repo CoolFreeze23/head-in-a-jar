@@ -140,10 +140,15 @@ final class JadeStaffData {
             if (!(accessor.getEntity() instanceof Mob mob)) return;
             // a host printed to order says so (the host line itself is drawn from the client's host data)
             if (com.coolfreeze23.headinajar.host.PrintedHosts.printed(mob)) data.putBoolean("Printed", true);
+            // a collared host's collar, head, team sync, broth and glass (0.7.1)
+            com.coolfreeze23.headinajar.staff.second.SecondeeLook.jadeData(data, mob);
             StaffFile f = Staff.of(mob);
             if (f == null) return;
-            String dept = Hosts.isHost(mob) && Hosts.data(mob).shell ? Staff.TEMPS : Staff.department(mob.getType());
-            write(data, f, mob.getType(), dept, Band.NONE, accessor.getPlayer());
+            // a secondee's file is its seated head's: its species and department are the head's, not the body's
+            EntityType<?> type = com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob) ? com.coolfreeze23.headinajar.staff.second.Secondees.headType(mob) : mob.getType();
+            if (type == null) type = mob.getType();
+            String dept = Hosts.isHost(mob) && Hosts.data(mob).shell ? Staff.TEMPS : Staff.department(type);
+            write(data, f, type, dept, Band.NONE, accessor.getPlayer());
             work(data, mob);
         }
 

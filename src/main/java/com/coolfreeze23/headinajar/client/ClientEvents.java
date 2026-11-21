@@ -47,7 +47,10 @@ public final class ClientEvents {
     /** A host's head is gone: skip its head part while it draws. */
     @SubscribeEvent
     public static void renderHostPre(net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<?, ?> event) {
-        if (com.coolfreeze23.headinajar.client.body.HostFx.headHidden(event.getEntity())) HostHeads.hide(event.getRenderer().getModel());
+        if (com.coolfreeze23.headinajar.client.body.HostFx.headHidden(event.getEntity())) {
+            HostHeads.hide(event.getRenderer().getModel());
+            HostHeads.hideLayers(event.getRenderer());
+        }
     }
 
     @SubscribeEvent

@@ -38,16 +38,16 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
- * The Time Clock's screen ({@link TimeClockMenu}), drawn with fills in the house's grey: four tabs under the title (the
- * Roster, the Job Rack, the Pay Drawer, the Shifts), the open one raised, and the player's inventory below on every tab.
+ * The Time Clock's screen ({@link TimeClockMenu}), drawn with fills in the house's grey: five tabs under the title (the
+ * Roster, the Job Rack, the Pay Drawer, the Shifts, the Broth), the open one raised, and the player's inventory below on every tab.
  * Everything it shows is read from the menu each frame ({@code menu.roster}, the tab, the picked row); the screen keeps
  * only what is on screen: the scroll, and a name being typed.
  */
 public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     private static final String KEY = "gui.headinajar.time_clock.";
-    private static final String[] TAB_KEYS = {"roster", "rack", "drawer", "shifts"};
+    private static final String[] TAB_KEYS = {"roster", "rack", "drawer", "shifts", "broth"};
     // the panel's layout (panel px)
-    private static final int X0 = 8, X1 = 168, TAB_Y = 15, TAB_H = 18, TAB_W = 39, TAB_STEP = 40, BODY_Y = TAB_Y + TAB_H;
+    private static final int X0 = 8, X1 = 168, TAB_Y = 15, TAB_H = 18, TAB_W = 31, TAB_STEP = 32, BODY_Y = TAB_Y + TAB_H;
     /** The roster's rows: eight of 10 px (the default clock's whole staff), then Rename and Recall. */
     private static final int ROW_Y = 35, ROW_H = 10, ROWS = 8, BUTTON_Y = ROW_Y + ROWS * ROW_H + 1, BUTTON_H = 12;
     /** The Shifts tab's rows: eight of 11 px, each with its three buttons. */
@@ -55,6 +55,11 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     /** Columns of a roster row: species, name, job card, shift, morale, status. */
     private static final int COL_NAME = 18, NAME_ROOM = 50, COL_JOB = 70, COL_SHIFT = 80, COL_FACE = 89, COL_STATUS = 99;
     private static final int SCROLL_W = 3;
+    /** The Broth tab (0.7.1): the tank's line and gauge, then six rows of canisters, each with its own small gauge. */
+    private static final int BROTH_Y = BODY_Y + 4, GAUGE_Y = BROTH_Y + 11, GAUGE_H = 10, CAN_Y = GAUGE_Y + GAUGE_H + 4, CAN_ROWS = 6,
+            CAN_GAUGE_X = 96, CAN_GAUGE_W = 40, CAN_GAUGE_H = 6;
+    private static final int BROTH = 0xFFC89A48, BROTH_TOP = 0xFFE3BE72, DRY = 0xA03A2A;
+    private static final int CAN = com.coolfreeze23.headinajar.staff.second.SecondeeData.CANISTER;
     private static final int TEXT = 0x404040, FAINT = 0x8A8A8A, NOTE = 0x5A5A5A;
     private static final Pattern ARG = Pattern.compile("%(\\d+\\$)?s");
 
@@ -63,6 +68,8 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     private Tooltip pickFirst, outOfReach;
     /** The first row shown (the Roster and the Shifts share it). */
     private int scroll;
+    /** The first canister row shown on the Broth tab. */
+    private int brothScroll;
     /** The worker whose name is being typed (its entity id), or -1. */
     private int renaming = -1;
     private final Map<EntityType<?>, ItemStack> eggs = new HashMap<>();
@@ -75,7 +82,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         imageHeight = TimeClockMenu.HEIGHT;
         inventoryLabelY = TimeClockMenu.INV_Y - 11;
         tabIcons = new ItemStack[]{new ItemStack(WorkRegistry.STAFF_LANYARD.get()), new ItemStack(WorkRegistry.JOB_CARD.get()),
-                new ItemStack(Items.EMERALD), new ItemStack(Items.CLOCK)};
+                new ItemStack(Items.EMERALD), new ItemStack(Items.CLOCK), new ItemStack(com.coolfreeze23.headinajar.registry.ModFluids.BROTH.bucket.get())};
     }
 
     @Override
@@ -241,7 +248,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     public boolean mouseClicked(double mx, double my, int button) {
         if (button == 0) {
             int x = (int) Math.floor(mx) - leftPos, y = (int) Math.floor(my) - topPos;
-            for (int t = 0; t < 4; t++) {
+            for (int t = 0; t < TimeClockMenu.TABS; t++) {
                 int tx = X0 + t * TAB_STEP;
                 if (x >= tx && x < tx + TAB_W && y >= TAB_Y && y < BODY_Y) {
                     showTab(t);
@@ -284,6 +291,13 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
     public boolean mouseScrolled(double mx, double my, double sx, double sy) {
         int tab = menu.tab();
         List<ClockNet.Row> rows = rows();
+        if (tab == TimeClockMenu.BROTH && sy != 0) {
+            int n = secondees().size();
+            if (n > CAN_ROWS) {
+                brothScroll = Math.max(0, Math.min(n - CAN_ROWS, brothScroll + (sy > 0 ? -1 : 1)));
+                return true;
+            }
+        }
         if ((tab == TimeClockMenu.ROSTER || tab == TimeClockMenu.SHIFTS) && rows.size() > visibleRows() && sy != 0) {
             scroll += sy > 0 ? -1 : 1;
             sync();
@@ -378,6 +392,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
             case TimeClockMenu.RACK -> rack(g);
             case TimeClockMenu.DRAWER -> drawer(g);
             case TimeClockMenu.SHIFTS -> shifts(g, mx, my);
+            case TimeClockMenu.BROTH -> broth(g, mx, my);
             default -> {
             }
         }
@@ -390,7 +405,7 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
         // the panel's edge under the tabs, broken where the open tab joins it
         g.fill(x + 4, y + BODY_Y - 1, x + imageWidth - 4, y + BODY_Y, 0xFF555555);
         g.fill(x + 4, y + BODY_Y, x + imageWidth - 4, y + BODY_Y + 1, 0xFFFFFFFF);
-        for (int t = 0; t < 4; t++) {
+        for (int t = 0; t < TimeClockMenu.TABS; t++) {
             int tx = x + X0 + t * TAB_STEP, ty = y + TAB_Y;
             boolean up = t == open, hover = !up && mx >= X0 + t * TAB_STEP && mx < X0 + t * TAB_STEP + TAB_W && my >= TAB_Y && my < BODY_Y;
             if (up) {
@@ -496,6 +511,106 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
             g.renderItem(stack, ix, iy);
             g.renderItemDecorations(font, stack, ix, iy, Integer.toString(o.count()));
         }
+    }
+
+    // --- the Broth tab (0.7.1) -----------------------------------------------------------------------------------------
+
+    /** The roster places of the seated secondees, in roster order. */
+    private List<Integer> secondees() {
+        List<Integer> out = new ArrayList<>();
+        int n = Math.min(rows().size(), TimeClockMenu.BROTH_ROWS);
+        for (int i = 0; i < n; i++) if (menu.canister(i) >= 0) out.add(i);
+        return out;
+    }
+
+    private void broth(GuiGraphics g, int mx, int my) {
+        int tank = menu.brothTank();
+        g.drawString(font, cut(Component.translatable(KEY + "broth_tank"), 80), X0, BROTH_Y, TEXT, false);
+        Component mb = Component.translatable(KEY + "broth_mb", tank, com.coolfreeze23.headinajar.staff.second.BrothTank.TANK);
+        g.drawString(font, mb, X1 - font.width(mb), BROTH_Y, NOTE, false);
+        gauge(g, X0, GAUGE_Y, X1 - X0, GAUGE_H, tank, com.coolfreeze23.headinajar.staff.second.BrothTank.TANK, CAN);
+        if (menu.roster == null) {
+            wrapped(g, Component.translatable(KEY + "no_rows"), CAN_Y + 2, 5);
+            return;
+        }
+        List<Integer> places = secondees();
+        if (places.isEmpty()) {
+            wrapped(g, Component.translatable(KEY + "no_secondees"), CAN_Y + 2, 6);
+            return;
+        }
+        brothScroll = Math.max(0, Math.min(brothScroll, places.size() - CAN_ROWS));
+        List<ClockNet.Row> rows = rows();
+        int hovered = canisterAt(places, mx, my);
+        int right = places.size() > CAN_ROWS ? X1 - SCROLL_W - 2 : X1;
+        // the small gauge ends before the widest amount it can be given (a full canister), so "499 mB" never runs into it
+        int gaugeX = Math.min(CAN_GAUGE_X, right - font.width(Component.translatable(KEY + "canister_mb", CAN)) - 3 - CAN_GAUGE_W);
+        for (int i = 0; i < CAN_ROWS && brothScroll + i < places.size(); i++) {
+            int place = places.get(brothScroll + i), y = CAN_Y + i * ROW_H, mB = menu.canister(place);
+            ClockNet.Row row = rows.get(place);
+            if (brothScroll + i == hovered) g.fill(X0 - 1, y, right, y + ROW_H, 0xFFD6D6D6);
+            else if ((brothScroll + i) % 2 == 1) g.fill(X0 - 1, y, right, y + ROW_H, 0xFFBCBCBC);
+            boolean far = row.entity() < 0;
+            icon(g, egg(row), X0, y + 1, far);
+            g.drawString(font, cut(row.name(), gaugeX - COL_NAME - 3), COL_NAME, y + 1, far ? FAINT : TEXT, false);
+            gauge(g, gaugeX, y + 2, CAN_GAUGE_W, CAN_GAUGE_H, mB, CAN, 0);
+            Component left = Component.translatable(KEY + "canister_mb", mB);
+            g.drawString(font, left, right - font.width(left), y + 1, mB <= 0 ? DRY : TEXT, false);
+        }
+        if (places.size() > CAN_ROWS) {
+            int x0 = X1 - SCROLL_W, track = CAN_ROWS * ROW_H, thumb = Math.max(6, track * CAN_ROWS / places.size());
+            int ty = CAN_Y + (track - thumb) * brothScroll / (places.size() - CAN_ROWS);
+            g.fill(x0 - 1, CAN_Y - 1, X1 + 1, CAN_Y + track + 1, 0xFF373737);
+            g.fill(x0, CAN_Y, X1, CAN_Y + track, 0xFF8B8B8B);
+            g.fill(x0, ty, X1, ty + thumb, 0xFFE0E0E0);
+            g.fill(x0 + 1, ty + 1, X1, ty + thumb, 0xFFAAAAAA);
+        }
+    }
+
+    /** A sunk gauge filled with broth to {@code amount} of {@code most}, with a mark each {@code every} (0: none). */
+    private static void gauge(GuiGraphics g, int x, int y, int w, int h, int amount, int most, int every) {
+        g.fill(x, y, x + w, y + h, 0xFF373737);
+        g.fill(x + 1, y + 1, x + w, y + h, 0xFFFFFFFF);
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, 0xFF8B8B8B);
+        int inner = w - 2, fill = most <= 0 ? 0 : (int) Math.round(inner * (double) Math.max(0, Math.min(amount, most)) / most);
+        if (amount > 0) fill = Math.max(1, fill);
+        if (fill > 0) {
+            g.fill(x + 1, y + 1, x + 1 + fill, y + h - 1, BROTH);
+            g.fill(x + 1, y + 1, x + 1 + fill, y + 2, BROTH_TOP);
+        }
+        if (every > 0) {
+            for (int m = every; m < most; m += every) {
+                int mx = x + 1 + (int) Math.round(inner * (double) m / most);
+                g.fill(mx, y + 1, mx + 1, y + h - 1, 0x50000000);
+            }
+        }
+    }
+
+    /** The canister row under the pointer (an index into the secondees' list), or -1. */
+    private int canisterAt(List<Integer> places, int x, int y) {
+        if (x < X0 || x >= X1 || y < CAN_Y) return -1;
+        int i = (y - CAN_Y) / ROW_H;
+        if (i >= CAN_ROWS) return -1;
+        int r = brothScroll + i;
+        return r < places.size() ? r : -1;
+    }
+
+    private List<Component> brothTooltip(int x, int y) {
+        if (x >= X0 && x < X1 && y >= GAUGE_Y && y < GAUGE_Y + GAUGE_H) {
+            return List.of(Component.translatable(KEY + "broth_tank"),
+                    Component.translatable(KEY + "broth_mb", menu.brothTank(), com.coolfreeze23.headinajar.staff.second.BrothTank.TANK).withStyle(ChatFormatting.GRAY),
+                    Component.translatable(KEY + "broth_hint").withStyle(ChatFormatting.DARK_GRAY));
+        }
+        if (menu.roster == null) return null;
+        List<Integer> places = secondees();
+        int r = canisterAt(places, x, y);
+        if (r < 0) return null;
+        int place = places.get(r), mB = menu.canister(place);
+        ClockNet.Row row = rows().get(place);
+        List<Component> tip = new ArrayList<>();
+        tip.add(row.name());
+        tip.add(Component.translatable(KEY + "canister_line", mB, CAN).withStyle(ChatFormatting.GRAY));
+        if (mB <= 0) tip.add(Component.translatable("staff.headinajar.say.secondment.dry").withStyle(ChatFormatting.YELLOW));
+        return tip;
     }
 
     /** A row's ground: striped, lighter under the pointer, blue when picked. */
@@ -674,10 +789,11 @@ public class TimeClockScreen extends AbstractContainerScreen<TimeClockMenu> {
 
     /** What the pointer is over (panel px), as tooltip lines; null for nothing. */
     private List<Component> tooltip(int x, int y) {
-        for (int t = 0; t < 4; t++) {
+        for (int t = 0; t < TimeClockMenu.TABS; t++) {
             int tx = X0 + t * TAB_STEP;
             if (x >= tx && x < tx + TAB_W && y >= TAB_Y && y < BODY_Y) return List.of(Component.translatable(KEY + TAB_KEYS[t]));
         }
+        if (menu.tab() == TimeClockMenu.BROTH) return brothTooltip(x, y);
         ClockNet.ClockRoster roster = menu.roster;
         if (roster == null) return null;
         List<ClockNet.Row> rows = roster.rows();

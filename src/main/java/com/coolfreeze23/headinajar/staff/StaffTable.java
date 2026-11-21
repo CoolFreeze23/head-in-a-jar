@@ -168,6 +168,7 @@ public final class StaffTable {
                 }
             });
             rows = Map.copyOf(out);
+            com.coolfreeze23.headinajar.staff.second.Secondees.forget();
             HeadInAJar.LOGGER.info("Loaded {} staff table rows", out.size());
         }
     }

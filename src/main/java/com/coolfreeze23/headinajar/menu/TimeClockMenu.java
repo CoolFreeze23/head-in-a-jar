@@ -34,13 +34,19 @@ import java.util.UUID;
  * slots, only this site's cards), the Pay Drawer (9 slots) and the Shifts (Day, Night or Redstone per worker). The rack
  * and drawer slots are live only on their own tab; the player's inventory is below on every tab.
  * <p>
- * Buttons: {@link #TAB} + tab (0-3). Orders for one worker (Recall, a shift) come as {@code ClockNet.ClockOrder} by the
+ * The fifth tab, the Broth (0.7.1), shows the clock's Broth tank and each seconded head's canister on the roster, from
+ * the menu's data ({@link #brothData}: the tank's mB, then a canister per roster place, mB + 1, or 0 for a worker that
+ * is not a seated secondee or not here).
+ * <p>
+ * Buttons: {@link #TAB} + tab (0-4). Orders for one worker (Recall, a shift) come as {@code ClockNet.ClockOrder} by the
  * worker's UUID, a rename as {@code WorkerNet.Text} by its entity id, so a roster that changes under the screen never
  * sends an order to the wrong worker.
  * the shift's ordinal, acts on the picked row. Every id stays under 128.
  */
 public class TimeClockMenu extends AbstractContainerMenu {
-    public static final int ROSTER = 0, RACK = 1, DRAWER = 2, SHIFTS = 3;
+    public static final int ROSTER = 0, RACK = 1, DRAWER = 2, SHIFTS = 3, BROTH = 4, TABS = 5;
+    /** The Broth tab's data: the tank (mB), then one canister for each roster place up to the most a clock may hold. */
+    public static final int BROTH_TANK = 0, BROTH_ROWS = 64, BROTH_DATA = 1 + BROTH_ROWS;
     public static final int TAB = 0;
     public static final int WIDTH = 176, HEIGHT = 222;
     /** Where the slots sit on the 176 x 222 screen. */
@@ -53,6 +59,7 @@ public class TimeClockMenu extends AbstractContainerMenu {
     private final BlockPos pos;
     private final Player player;
     private final DataSlot tab = DataSlot.standalone();
+    private final net.minecraft.world.inventory.ContainerData broth;
     /** Client: the roster row picked for Rename and Recall, or -1 (the screen's own; the server never needs it). */
     private int selected = -1;
     /** Client: the rows as last sent (null until the first arrives, or for a game without the channel). */
@@ -106,6 +113,42 @@ public class TimeClockMenu extends AbstractContainerMenu {
         }
         for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, INV_X + col * 18, HOTBAR_Y));
         addDataSlot(tab);
+        broth = serverClock != null ? brothData(serverClock) : new net.minecraft.world.inventory.SimpleContainerData(BROTH_DATA);
+        addDataSlots(broth);
+    }
+
+    /** Server: the Broth tab's numbers, read from the clock as they stand (sent when they change). */
+    private static net.minecraft.world.inventory.ContainerData brothData(TimeClockBlockEntity clock) {
+        return new net.minecraft.world.inventory.ContainerData() {
+            @Override
+            public int get(int i) {
+                if (i == BROTH_TANK) return clock.broth().getFluidAmount();
+                int place = i - 1;
+                if (place < 0 || place >= clock.roster().size() || !(clock.getLevel() instanceof ServerLevel level)) return 0;
+                var d = com.coolfreeze23.headinajar.staff.second.Secondees.data(level.getEntity(clock.roster().get(place)));
+                return d == null || !d.seated() ? 0 : d.canister + 1;
+            }
+
+            @Override
+            public void set(int i, int v) {
+            }
+
+            @Override
+            public int getCount() {
+                return BROTH_DATA;
+            }
+        };
+    }
+
+    /** The Broth tank's mB (both sides: the client's as last sent). */
+    public int brothTank() {
+        return broth.get(BROTH_TANK);
+    }
+
+    /** The canister of the worker at this roster place, mB; -1 when it is not a seated secondee (or not here). */
+    public int canister(int place) {
+        if (place < 0 || place >= BROTH_ROWS) return -1;
+        return broth.get(1 + place) - 1;
     }
 
     /** The clock (the server's; on the client, the client's copy, which holds no staff). */
@@ -140,7 +183,7 @@ public class TimeClockMenu extends AbstractContainerMenu {
     @Override
     public boolean clickMenuButton(Player p, int id) {
         if (!(p instanceof ServerPlayer sp) || clock == null || !clock.trusts(p)) return false;
-        if (id >= TAB && id < TAB + 4) {
+        if (id >= TAB && id < TAB + TABS) {
             tab.set(id - TAB);
             return true;
         }

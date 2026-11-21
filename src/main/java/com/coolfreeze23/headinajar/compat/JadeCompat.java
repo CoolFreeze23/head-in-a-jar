@@ -78,6 +78,10 @@ public class JadeCompat implements IWailaPlugin {
             var data = Hosts.data(mob);
             if (data.shell) return;
             tooltip.add(Component.translatable("jade.headinajar.host", Math.round(data.freshness), Math.round(data.effectiveSync())).withStyle(ChatFormatting.GRAY));
+            // a collared host: what sits on its neck, and its upkeep (0.7.1)
+            for (Component line : com.coolfreeze23.headinajar.staff.second.SecondeeLook.jadeLines(accessor.getServerData(), mob.getType())) {
+                tooltip.add(line.copy().withStyle(ChatFormatting.GRAY));
+            }
             // what riding it would give, and at what sync
             var def = Hosts.definition(mob);
             if (def != null && (def.primary().isPresent() || def.secondary().isPresent())) {

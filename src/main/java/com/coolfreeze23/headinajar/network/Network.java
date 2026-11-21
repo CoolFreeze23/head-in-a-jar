@@ -260,6 +260,8 @@ public final class Network {
         com.coolfreeze23.headinajar.host.TrickNet.register(registrar.optional());
         // the workforce's lines, looks, names and the whistle's point (added in 0.7.0), optional too
         com.coolfreeze23.headinajar.staff.work.WorkerNet.register(registrar.optional());
+        // what sits on a collared host's neck (added in 0.7.1), optional too: a game without it draws a plain host
+        com.coolfreeze23.headinajar.staff.second.SecondeeSync.registerPayload(registrar.optional());
     }
 
     /** The mecha arm buttons a pilot holds (the ArmInput payload's handler). */

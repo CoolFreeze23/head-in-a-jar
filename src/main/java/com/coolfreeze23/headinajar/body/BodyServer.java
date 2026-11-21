@@ -94,6 +94,22 @@ public final class BodyServer {
     }
 
     /**
+     * A jarred head seats on a host's collar (a secondment): the same twist and seal, and the host wakes, groggy, in the
+     * head's voice. There is no pilot ({@code -1} on the effect).
+     */
+    public static void seat(Mob host, net.minecraft.world.entity.EntityType<?> headType) {
+        if (!(host.level() instanceof ServerLevel level)) return;
+        Vec3 at = neck(host);
+        play(level, at, BodySounds.BAYONET.get(), SoundSource.NEUTRAL, 1.0f, 0.97f + level.random.nextFloat() * 0.06f);
+        Fx.send(level, Fx.of(Fx.HOST_SEAT, at, null, -1, host.getId(), 0));
+        later(level, 8, () -> {
+            if (!host.isAlive()) return;
+            SoundEvent voice = MobVoice.ambient(level, headType);
+            if (voice != null) play(level, host.getEyePosition(), voice, host.getSoundSource(), 0.6f, 0.65f);
+        });
+    }
+
+    /**
      * However a hosted jar comes off (sneak, the host dying, a command), its host is heard letting go. Last in line and
      * never for a refused dismount (a flier too high up refuses one every tick sneak is held).
      */
@@ -197,6 +213,16 @@ public final class BodyServer {
                 failed = true;
                 return null;
             }
+        }
+
+        /** One stand-in per species and level, never added to the world: a seated head's own voice. */
+        private static final java.util.Map<ServerLevel, java.util.Map<net.minecraft.world.entity.EntityType<?>, Mob>> STAND_INS = new java.util.WeakHashMap<>();
+
+        static SoundEvent ambient(ServerLevel level, net.minecraft.world.entity.EntityType<?> type) {
+            if (type == null) return null;
+            Mob mob = STAND_INS.computeIfAbsent(level, l -> new java.util.HashMap<>()).computeIfAbsent(type,
+                    t -> t.create(level) instanceof Mob m ? m : null);
+            return mob == null ? null : ambient(mob);
         }
     }
 

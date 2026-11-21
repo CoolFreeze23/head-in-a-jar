@@ -39,7 +39,8 @@ public final class CollarRing {
                 .texOffs(56, 0).addBox(-h - 1, 23, -1, 1, 1, 2)
                 .texOffs(56, 4).addBox(h, 23, -1, 1, 1, 2);
         root.addOrReplaceChild("ring", b, PartPose.ZERO);
-        return LayerDefinition.create(mesh, 64, 16).bakeRoot().getChild("ring");
+        // the sheet is 64 x 32 (the side walls' faces lie on rows 8-24)
+        return LayerDefinition.create(mesh, 64, 32).bakeRoot().getChild("ring");
     }
 
     /**
@@ -52,18 +53,7 @@ public final class CollarRing {
             compact = ring(13);
         }
         ModelPart ring = small ? compact : wide;
-        Long seated = HostFx.seatedAt(host.getId());
-        float twist = 0;
-        if (seated != null && Minecraft.getInstance().level != null) {
-            float t = Minecraft.getInstance().level.getGameTime() - seated + pt;
-            // a quarter turn back, then home with a small overshoot: 2 ticks still, 6 to turn
-            float u = Mth.clamp((t - 2) / 6f, 0, 1);
-            float back = 1 - u;
-            float over = u < 1 ? Mth.sin(u * Mth.PI) * 0.08f : 0;
-            twist = (-90 * back * back - 90 * over * 0.5f) * Mth.DEG_TO_RAD;
-            if (t < 2) twist = -90 * Mth.DEG_TO_RAD;
-        }
-        ring.yRot = twist;
+        ring.yRot = twist(host, pt);
         pose.pushPose();
         pose.scale(-1, -1, 1);
         pose.translate(0, -1.501f, 0);
@@ -71,9 +61,27 @@ public final class CollarRing {
         pose.popPose();
     }
 
+    /**
+     * The ring's turn now (radians about the jar's axis, in the ring's own flipped model space): a quarter turn back
+     * when this client saw a jar seat on {@code host}, then home with a small overshoot (2 ticks still, 6 to turn); 0
+     * otherwise. The collar's canister turns with it.
+     */
+    public static float twist(Entity host, float pt) {
+        Long seated = HostFx.seatedAt(host.getId());
+        if (seated == null || Minecraft.getInstance().level == null) return 0;
+        float t = Minecraft.getInstance().level.getGameTime() - seated + pt;
+        if (t < 2) return -90 * Mth.DEG_TO_RAD;
+        float u = Mth.clamp((t - 2) / 6f, 0, 1);
+        float back = 1 - u;
+        float over = u < 1 ? Mth.sin(u * Mth.PI) * 0.08f : 0;
+        return (-90 * back * back - 90 * over * 0.5f) * Mth.DEG_TO_RAD;
+    }
+
     /** Clears the baked rings after a resource reload (they are rebuilt on the next frame). */
     public static void reset() {
         wide = compact = null;
+        // the collar's canister, drawn with the ring on a secondee (0.7.1)
+        com.coolfreeze23.headinajar.client.second.CollarCanister.reset();
     }
 
     private CollarRing() {

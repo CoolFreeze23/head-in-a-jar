@@ -141,6 +141,9 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
             setChanged();
         }
     };
+    /** The Broth tank (0.7.1): 4,000 mB for the site's seconded heads, filled by bucket and pipe, drunk only by them. */
+    private final net.neoforged.neoforge.fluids.capability.templates.FluidTank broth = com.coolfreeze23.headinajar.staff.second.BrothTank.make(this::setChanged);
+    private final net.neoforged.neoforge.fluids.capability.IFluidHandler brothPipes = com.coolfreeze23.headinajar.staff.second.BrothTank.pipes(broth);
 
     public TimeClockBlockEntity(BlockPos pos, BlockState state) {
         super(WorkRegistry.TIME_CLOCK_BE.get(), pos, state);
@@ -327,6 +330,17 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
                 return true;
             }
         };
+    }
+
+    // --- the Broth tank (0.7.1) -------------------------------------------------------------------------------------
+
+    public net.neoforged.neoforge.fluids.capability.templates.FluidTank broth() {
+        return broth;
+    }
+
+    /** What pipes see: broth in from every side, nothing out. */
+    public net.neoforged.neoforge.fluids.capability.IFluidHandler brothPipes() {
+        return brothPipes;
     }
 
     /** Takes one wage from the drawer, counted first so a short pile is never half taken. Returns whether it was there. */
@@ -777,6 +791,7 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         tag.putLong("LastDawn", lastDawn);
         if (powered) tag.putBoolean("Powered", true);
         tag.putLong("PoweredAt", poweredAt);
+        if (!broth.isEmpty()) tag.put("Broth", broth.writeToNBT(registries, new CompoundTag()));
     }
 
     @Override
@@ -799,5 +814,7 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         lastDawn = tag.contains("LastDawn") ? tag.getLong("LastDawn") : -1;
         powered = tag.getBoolean("Powered");
         poweredAt = tag.getLong("PoweredAt");
+        broth.setFluid(net.neoforged.neoforge.fluids.FluidStack.EMPTY);
+        if (tag.contains("Broth")) broth.readFromNBT(registries, tag.getCompound("Broth"));
     }
 }

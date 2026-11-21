@@ -240,6 +240,8 @@ public final class Staff {
                 yield Component.translatable(key, Component.translatable(parts[0]), parts.length > 1 ? parts[1] : "", day);
             }
             case "left" -> Component.translatable(key, day, reason(e.a()));
+            // a secondment: the body's species (its name's key)
+            case "seconded", "unseconded", "redundancy" -> Component.translatable(key, Component.translatable(e.a()), day);
             default -> Component.translatable(key, day);
         };
     }

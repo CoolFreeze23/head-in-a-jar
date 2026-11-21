@@ -218,15 +218,24 @@ public final class Shifts {
             }
             case QUEUED -> {
                 d.status = status("waiting");
-                if (walk(mob, d, queueSpot(c, c.queuePlace(id)), c.box())) face(mob, c);
+                BlockPos spot = waitSpot(mob, c, c.queuePlace(id));
+                if (spot == null) {
+                    sayOnce(mob, d, "secondment.clock_on_land");
+                } else if (walk(mob, d, spot, c.box())) {
+                    face(mob, c);
+                }
             }
             case NONE -> {
                 d.status = status("waiting");
-                if (horizontal(mob.position(), Vec3.atCenterOf(c.getBlockPos())) <= QUEUE_AT) {
+                BlockPos spot = waitSpot(mob, c, Math.max(0, c.queuePlace(id)));
+                if (spot == null) {
+                    // a swimmer at a clock with no water within reach of it: it says so, rather than waiting in silence
+                    sayOnce(mob, d, "secondment.clock_on_land");
+                } else if (horizontal(mob.position(), Vec3.atCenterOf(c.getBlockPos())) <= QUEUE_AT) {
                     c.queuePunch(id, stamp, sinceStart(d.shift, c) > LATE_TICKS);
-                    if (walk(mob, d, queueSpot(c, c.queuePlace(id)), c.box())) face(mob, c);
+                    if (walk(mob, d, waitSpot(mob, c, c.queuePlace(id)), c.box())) face(mob, c);
                 } else {
-                    walk(mob, d, queueSpot(c, Math.max(0, c.queuePlace(id))), c.box());
+                    walk(mob, d, spot, c.box());
                 }
             }
         }
@@ -404,6 +413,49 @@ public final class Shifts {
         return queueSpot(c, 0);
     }
 
+    /**
+     * Where this worker waits its turn to punch: its place in the queue in front of the clock, or for a swimmer (a squid
+     * body, a fish in the water) the water by the clock, from where it punches once it has had its time to step up (the
+     * clock takes a punch from anyone within reach of it). Null: a swimmer at a clock with no water within reach.
+     */
+    static BlockPos waitSpot(Mob mob, TimeClockBlockEntity c, int place) {
+        if (!swimmer(mob)) return queueSpot(c, place);
+        return wetSpot(mob, c);
+    }
+
+    /** Whether it gets about only in water (a squid body; a fish or other water mover while it is in the water). */
+    public static boolean swimmer(Mob mob) {
+        String f = Movers.family(mob);
+        return Movers.SQUID.equals(f) || Movers.WATER.equals(f) && mob.isInWater();
+    }
+
+    /**
+     * The water within reach of the clock (and in its box) where this swimmer fits, nearest to it (a notch of water up to
+     * the clock's face can be too tight to swim into); null if there is none.
+     */
+    public static BlockPos wetSpot(Mob mob, TimeClockBlockEntity c) {
+        Level level = c.getLevel();
+        if (level == null) return null;
+        BlockPos clock = c.getBlockPos();
+        Vec3 centre = Vec3.atCenterOf(clock);
+        AABB box = c.box();
+        int r = (int) TimeClockBlockEntity.PUNCH_REACH;
+        BlockPos best = null;
+        double bestD = Double.MAX_VALUE;
+        for (BlockPos p : BlockPos.betweenClosed(clock.offset(-r, -2, -r), clock.offset(r, 1, r))) {
+            Vec3 at = Vec3.atBottomCenterOf(p);
+            if (horizontal(at, centre) > TimeClockBlockEntity.PUNCH_REACH - 0.5 || !level.isLoaded(p)) continue;
+            BlockPos mid = BlockPos.containing(at.x, at.y + mob.getBbHeight() * 0.5, at.z);
+            if (!level.getFluidState(mid).is(net.minecraft.tags.FluidTags.WATER) || !Movers.fits(mob, at, box)) continue;
+            double dd = at.distanceToSqr(mob.position());
+            if (dd < bestD) {
+                bestD = dd;
+                best = p.immutable();
+            }
+        }
+        return best;
+    }
+
     /** Where the {@code place}th in the queue waits (0: at the punch; the punching one keeps the front). */
     static BlockPos queueSpot(TimeClockBlockEntity c, int place) {
         BlockPos p = c.front().relative(c.facing(), Math.max(0, place));
@@ -484,7 +536,7 @@ public final class Shifts {
     /** Whether it has not been paid today (a species that takes no wage is always paid). */
     public static boolean unpaid(Mob mob, Level level) {
         StaffFile f = Staff.of(mob);
-        return f != null && f.staff() && f.paidThrough < Staff.day(level) && !StaffTable.wage(mob.getType()).none();
+        return f != null && f.staff() && f.paidThrough < Staff.day(level) && !StaffTable.wage(com.coolfreeze23.headinajar.staff.second.Secondees.payType(mob)).none();
     }
 
     /**
@@ -500,7 +552,7 @@ public final class Shifts {
         long day = Staff.day(level);
         if (f.lastDawn >= day) return;
         f.lastDawn = day;
-        StaffTable.Wage wage = StaffTable.wage(mob.getType());
+        StaffTable.Wage wage = StaffTable.wage(com.coolfreeze23.headinajar.staff.second.Secondees.payType(mob));
         boolean paid = f.paidThrough >= day || wage.none() || c.takeWage(wage);
         if (paid) {
             f.paidThrough = Math.max(f.paidThrough, day);
@@ -529,7 +581,7 @@ public final class Shifts {
     static boolean payLate(TimeClockBlockEntity c, Mob mob) {
         StaffFile f = Staff.of(mob);
         if (f == null || !(mob.level() instanceof ServerLevel level)) return false;
-        if (!c.takeWage(StaffTable.wage(mob.getType()))) return false;
+        if (!c.takeWage(StaffTable.wage(com.coolfreeze23.headinajar.staff.second.Secondees.payType(mob)))) return false;
         f.paidThrough = Staff.day(level);
         mob.setData(ModRegistry.STAFF, f);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, mob.getX(), mob.getY() + mob.getBbHeight(), mob.getZ(), 5, 0.25, 0.2, 0.25, 0);
@@ -550,6 +602,8 @@ public final class Shifts {
             mob.heal(CLERIC_HEAL);
             level.sendParticles(ParticleTypes.HEART, mob.getX(), mob.getY() + mob.getBbHeight() + 0.2, mob.getZ(), 3, 0.3, 0.2, 0.3, 0);
         }
+        // a seconded head's canister tops up from the clock's Broth tank (0.7.1)
+        com.coolfreeze23.headinajar.staff.second.Broth.punchedIn(c, mob);
     }
 
     private static boolean clericOnSite(TimeClockBlockEntity c, ServerLevel level) {

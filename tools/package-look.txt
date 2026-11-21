@@ -1,0 +1,40 @@
+@world flat
+@clean
+# The Redundancy Package seen from outside, its own canopy (the derived model): a zombie head in a Life Support Jar
+# and one in a Compact Jar, each summoned 8 blocks up and filmed every frame from 7 blocks off as it opens, then from
+# close by as it comes down and is placed. Plus a librarian's head, for the jar's room.
+time set noon
+tp @s 0 -60 -10 0 0
+wait 20
+watch 7 -53 4.5 90 -8
+wait 10
+summon headinajar:redundancy_package 0.5 -52 4.5 {Rotation:[90f,0f],Head:{id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie",Jar:"headinajar:life_support_jar",Entity:{}}}}}
+frames wide_open 40
+wait 6
+shot look_deploy
+wait 20
+shot look_open
+wait 20
+watch 3 -58.5 4.5 90 10
+wait 40
+frames wide_land 70
+wait 70
+shot look_landed
+watch 2.5 -59 1.5 50 25
+wait 5
+shot look_placed
+inspect blocks jarred_head -6 -62 -2 6 -50 10
+watch 7 -53 10.5 90 -8
+summon headinajar:redundancy_package 0.5 -52 10.5 {Rotation:[90f,0f],Head:{id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:zombie",Jar:"headinajar:compact_life_support_jar",Entity:{}}}}}
+frames compact_open 40
+wait 30
+shot look_compact_open
+watch 3 -58.5 10.5 90 10
+wait 50
+frames compact_land 70
+wait 70
+shot look_compact_landed
+watch 7 -53 16.5 90 -8
+summon headinajar:redundancy_package 0.5 -52 16.5 {Rotation:[90f,0f],Head:{id:"headinajar:jarred_head",count:1,components:{"minecraft:custom_data":{Type:"minecraft:villager",Entity:{VillagerData:{profession:"minecraft:librarian",type:"minecraft:plains",level:1}}}}}}
+wait 40
+shot look_villager

@@ -129,6 +129,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue DETAIL_SHUTTLE = B
             .comment("A detail left far from home takes the company shuttle back to its Time Clock (false: it stays where it was left, on Hold).")
             .define("detailShuttle", true);
+    public static final ModConfigSpec.BooleanValue SECONDMENT = B
+            .comment("A Secondment Collar can be fitted to a host and a jarred head seated on it (false: the collar refuses; heads already seated stand by where they are).")
+            .define("secondment", true);
 
     static {
         B.pop().push("heads");

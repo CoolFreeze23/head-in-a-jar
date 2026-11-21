@@ -82,6 +82,11 @@ public record Fx(int kind, Vec3 a, Vec3 b, int entityA, int entityB, float arg, 
     public static final int GENE_WEEP = 25;
     /** Spare kinds kept for the gene work: 26-27 Livestock and Field Office, 28 Night Shift and the rest, 29 actives. */
     public static final int GENE_SPARE_A = 26, GENE_SPARE_B = 27, GENE_SPARE_C = 28, GENE_SPARE_D = 29;
+    /**
+     * A seconded pair reached a quarter of team sync (0.7.1): a = the host's feet, entityB = the host, arg = the quarter
+     * (1-4; 4 is 100%). Each client runs the sync ring down the body, the pale one on the ground at 4.
+     */
+    public static final int TEAM_SYNC_PULSE = 30;
 
     public static final int TOOL_SYRINGE = 1, TOOL_SUTURE = 2, TOOL_WRENCH = 3;
 

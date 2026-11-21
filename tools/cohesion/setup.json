@@ -25,7 +25,14 @@
  "items": {
   "(empty)": "minecraft:air",
   "any item": "minecraft:stick",
-  "any bucket": "minecraft:bucket"
+  "any bucket": "minecraft:bucket",
+  "headinajar:jarred_head (zombie)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+  "headinajar:jarred_head (cow)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:cow\",Entity:{}}]",
+  "headinajar:jarred_head (creeper)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:creeper\",Entity:{}}]",
+  "headinajar:jarred_head (villager librarian)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:villager\",Entity:{VillagerData:{profession:\"minecraft:librarian\",level:1,type:\"minecraft:plains\"}}}]",
+  "headinajar:jarred_head (zombie, Compact Jar)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{},Jar:\"headinajar:compact_life_support_jar\"}]",
+  "headinajar:jarred_head (zombie, on another employer's staff)": "headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{},Staff:{number:901,species:\"minecraft:zombie\",employer:[I;1,2,3,4],employerName:\"Bystander\"}}]",
+  "minecraft:name_tag (named Ernest)": "minecraft:name_tag[minecraft:custom_name='\"Ernest\"']"
  },
  "entity_aim": {
   "minecraft:pig": 0.45,
@@ -1501,6 +1508,19 @@
     "wait 3"
    ],
    "approx": "the worker is a cow given a worker record by /data (employer Dev, NoAI); it joins the detail by a real Whistle click (pre) before the act"
+  },
+  "host (sawn cow)": {
+   "steps": [
+    "hostify minecraft:cow {T}",
+    "wait 5",
+    "/data merge entity @e[type=minecraft:cow,{NEAR_T},limit=1] {NoAI:1b}"
+   ],
+   "aim": [
+    0.5,
+    0.7,
+    0.5
+   ],
+   "mob": "minecraft:cow"
   }
  },
  "setups": {
@@ -2335,7 +2355,194 @@
    "item": "headinajar:job_card[headinajar:job_card={order:{clock:{dimension:\"minecraft:overworld\",pos:[I;{POS_S+-3,0,2}]},job:\"hauling\",stops:[{pos:[I;{POS_T+0,0,0}],drop_off:0b},{pos:[I;{POS_T+1,0,0}],drop_off:1b}]},printer:\"Dev\",day:0L}]",
    "approx": "worker record (employer Dev, no clock) put on at summon, NoAI; the card is given with its component"
   },
-  "no detail": {}
+  "no detail": {},
+  "an empty collar (fitted by a real Use first)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33"
+   ],
+   "approx": "the collar fitted by a real Use (key use) as set-up"
+  },
+  "a jarred zombie head seated (collar and head by a real Use first)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+    "wait 3",
+    "key use",
+    "wait 33"
+   ],
+   "post": [
+    "/kill @e[type=minecraft:cow,{NEAR_T}]",
+    "wait 3",
+    "/kill @e[type=headinajar:redundancy_package,{SEL}]",
+    "wait 2"
+   ],
+   "approx": "the collar and a jarred zombie head fitted by two real Uses (key use) as set-up; the cow host has NoAI (its brain never runs)"
+  },
+  "a jarred zombie head seated; glass 5 of 10 (secondee verb)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "secondee glass 5",
+    "wait 5"
+   ],
+   "post": [
+    "/kill @e[type=minecraft:cow,{NEAR_T}]",
+    "wait 3",
+    "/kill @e[type=headinajar:redundancy_package,{SEL}]",
+    "wait 2"
+   ],
+   "approx": "the collar and a jarred zombie head fitted by two real Uses (key use) as set-up; the cow host has NoAI (its brain never runs); the glass set by the smoke verb"
+  },
+  "a jarred zombie head seated; canister full (secondee verb)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+    "wait 3",
+    "key use",
+    "wait 33"
+   ],
+   "post": [
+    "/kill @e[type=minecraft:cow,{NEAR_T}]",
+    "wait 3",
+    "/kill @e[type=headinajar:redundancy_package,{SEL}]",
+    "wait 2"
+   ],
+   "approx": "the collar and a jarred zombie head fitted by two real Uses (key use) as set-up; the cow host has NoAI (its brain never runs); the canister set by the smoke verb just before the click (the seated head sips 1 mB every 120 ticks, so a full canister set earlier was 499 by the click in one walk; about 1 walk in 6 a sip can still land in the last 20 ticks)",
+   "pre": [
+    "secondee canister 500"
+   ]
+  },
+  "a jarred zombie head seated; team sync 60 (secondee verb)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "secondee teamsync 60",
+    "wait 5"
+   ],
+   "post": [
+    "/kill @e[type=minecraft:cow,{NEAR_T}]",
+    "wait 3",
+    "/kill @e[type=headinajar:redundancy_package,{SEL}]",
+    "wait 2"
+   ],
+   "approx": "the collar and a jarred zombie head fitted by two real Uses (key use) as set-up; the cow host has NoAI (its brain never runs); team sync set by the smoke verb"
+  },
+  "a jarred zombie head seated; 10 health (data merge)": {
+   "steps": [
+    "/data merge entity @e[type=minecraft:cow,{NEAR_T},limit=1] {Health:10f}",
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "/item replace entity @s weapon.mainhand with headinajar:jarred_head[minecraft:custom_data={Type:\"minecraft:zombie\",Entity:{}}]",
+    "wait 3",
+    "key use",
+    "wait 33"
+   ],
+   "post": [
+    "/kill @e[type=minecraft:cow,{NEAR_T}]",
+    "wait 3",
+    "/kill @e[type=headinajar:redundancy_package,{SEL}]",
+    "wait 2"
+   ],
+   "approx": "the collar and a jarred zombie head fitted by two real Uses (key use) as set-up; the cow host has NoAI (its brain never runs); health 10 of 10 by /data before the fit"
+  },
+  "staff.secondment off (smoke verb)": {
+   "steps": [
+    "secondmentforwalk off",
+    "wait 2"
+   ],
+   "post": [
+    "secondmentforwalk on"
+   ],
+   "approx": "the server option set by the smoke verb secondmentforwalk, put back on after"
+  },
+  "an empty collar, then staff.secondment off (smoke verb)": {
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "secondmentforwalk off",
+    "wait 2"
+   ],
+   "post": [
+    "secondmentforwalk on"
+   ],
+   "approx": "the collar fitted by a real Use (key use) as set-up; the server option set by the smoke verb, put back on after"
+  },
+  "a collar of another employer's (data merge)": {
+   "steps": [
+    "/data merge entity @e[type=minecraft:cow,{NEAR_T},limit=1] {\"neoforge:attachments\":{\"headinajar:secondee\":{collar:1b,employer:[I;1,2,3,4]}}}",
+    "wait 5"
+   ],
+   "approx": "the collar record put on by /data (a dummy employer); the client is not told of it"
+  },
+  "the stand-in jar riding it": {
+   "bystander": true,
+   "steps": [
+    "bystander spawn {T+2,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander useentity nearest minecraft:cow",
+    "wait 10"
+   ],
+   "approx": "the stand-in jar climbs on by a real use packet"
+  },
+  "an empty collar; the stand-in jar riding it": {
+   "bystander": true,
+   "steps": [
+    "lookpos {TC+0,0.7,0}",
+    "wait 3",
+    "/item replace entity @s weapon.mainhand with headinajar:secondment_collar",
+    "wait 3",
+    "key use",
+    "wait 33",
+    "bystander spawn {T+2,0,0} 90",
+    "wait 5",
+    "bystander form jar",
+    "wait 5",
+    "bystander useentity nearest minecraft:cow",
+    "wait 10"
+   ],
+   "approx": "the collar fitted by a real Use (key use) as set-up; the stand-in jar climbs on by a real use packet"
+  }
  },
  "pairs": {
   "P094": {
@@ -2474,6 +2681,13 @@
   },
   "N127": {
    "action": "widget Print"
+  },
+  "N253": {
+   "aim": [
+    0.5,
+    1.3,
+    0.1
+   ]
   }
  },
  "items_tokens": {

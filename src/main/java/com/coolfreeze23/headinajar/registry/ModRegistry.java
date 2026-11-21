@@ -488,6 +488,8 @@ public final class ModRegistry {
     public static void register(IEventBus bus) {
         // the workforce's entries (0.7.0) join these registers before they are handed over
         WorkRegistry.register(bus);
+        // and the secondment's (0.7.1)
+        SecondRegistry.register(bus);
         ITEMS.register(bus);
         BLOCKS.register(bus);
         ENTITIES.register(bus);

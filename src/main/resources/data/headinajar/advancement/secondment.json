@@ -1,0 +1,26 @@
+{
+  "parent": "headinajar:hosted",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "secondment"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:secondment_collar"
+    },
+    "title": {
+      "translate": "advancements.headinajar.secondment.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.secondment.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

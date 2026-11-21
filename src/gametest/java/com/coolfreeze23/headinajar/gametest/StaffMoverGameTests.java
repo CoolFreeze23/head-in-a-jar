@@ -208,6 +208,40 @@ public class StaffMoverGameTests {
         travel(h, box(h, CLOCK), List.of(new Trip(spider, stop, h.getTick())), false, p);
     }
 
+    /**
+     * 0.7.1: a stop on the edge row of a wall's top, six blocks up (a Security area along the top): the spider climbs
+     * the face under it and steps on over the edge onto the stop. It used to let go level with the stop, hang over the
+     * edge and drop six blocks (three hearts), and climb and drop again.
+     */
+    @GameTest(template = "site34", timeoutTicks = 600)
+    public static void aClimberStepsOntoAStopAtTheEdgeOfItsWall(GameTestHelper h) {
+        // a wall 7 long, 3 thick, 6 high; the stop is the open spot over its south row
+        fill(h, new BlockPos(22, 5, 14), new BlockPos(28, 10, 16), Blocks.STONE);
+        ServerPlayer p = player(h, new BlockPos(2, 5, 2));
+        Mob spider = hired(h, p, EntityType.SPIDER, new BlockPos(25, 5, 22));
+        float health = spider.getHealth();
+        BlockPos stop = h.absolutePos(new BlockPos(25, 11, 16));
+        AABB box = box(h, CLOCK);
+        long[] there = {-1};
+        h.onEachTick(() -> {
+            h.assertTrue(spider.getHealth() >= health, "the spider was hurt on the way: " + spider.getHealth() + " of " + health);
+            if (there[0] < 0) {
+                if (WorkerPaths.arrived(spider, stop)) {
+                    there[0] = h.getTick();
+                } else {
+                    WorkerData d = Workforce.data(spider);
+                    if (d != null) WorkerPaths.go(spider, d, stop, 1.0, box, false);
+                }
+                return;
+            }
+            h.assertTrue(spider.getY() > stop.getY() - 0.5, "the spider dropped off the top: y " + String.format("%.1f", spider.getY()));
+            if (h.getTick() - there[0] >= 40) {
+                h.assertTrue(spider.onGround(), "the spider is not standing on the top");
+                done(h, p);
+            }
+        });
+    }
+
     @GameTest(template = "site34", timeoutTicks = 500)
     public static void climbersWalkTheFlatToo(GameTestHelper h) {
         lanes(h, List.of(EntityType.SPIDER, EntityType.CAVE_SPIDER), true);

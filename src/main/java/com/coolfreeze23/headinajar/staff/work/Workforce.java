@@ -321,6 +321,70 @@ public final class Workforce {
         return d;
     }
 
+    /**
+     * Puts a creature on the workforce with no Lanyard: a host whose collar has just taken a jarred head (0.7.1). Its
+     * file is already on it (the head's); it awaits assignment as a hired worker does. {@code type} is the species the
+     * Roster shows (the head's).
+     */
+    public static WorkerData enlist(ServerLevel level, Mob mob, UUID employer, net.minecraft.world.entity.EntityType<?> type) {
+        WorkerData d = new WorkerData();
+        d.employer = employer;
+        d.hiredDay = Staff.day(level);
+        d.wasPersistent = true;
+        WorkTable.Spec spec = WorkTable.of(mob);
+        d.shift = spec == null ? WorkerData.Shift.DAY : spec.defaultShift();
+        d.state = WorkerData.State.AWAITING;
+        mob.setData(WorkRegistry.WORKER, d);
+        mob.setPersistenceRequired();
+        calm(level, mob);
+        keepRange(mob);
+        StaffFile f = Staff.of(mob);
+        // on the payroll from today, as a hire is (a head already on it keeps its morale and pay record)
+        if (f != null) {
+            long day = Staff.day(level);
+            f.left = null;
+            if (!f.staff()) {
+                f.morale = StaffBlocks.START;
+                f.lowDawns = 0;
+            }
+            f.paidThrough = Math.max(f.paidThrough, day);
+            f.lastDawn = Math.max(f.lastDawn, day);
+            mob.setData(com.coolfreeze23.headinajar.registry.ModRegistry.STAFF, f);
+        }
+        WorkerIndex.get(level.getServer()).seen(employer, mob.getUUID(), f == null ? 0 : f.number,
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString(), WorkerIndex.at(mob));
+        d.status = "staff.headinajar.status.awaiting";
+        WorkerLooks.changed(mob);
+        return d;
+    }
+
+    /**
+     * Takes a worker off the workforce at once, with no notice and no Exit Interview: its carry and tool set down, its
+     * personal card back to the rack (else at its feet), off its clock, its detail and the index, then the record
+     * removed ({@link #release}). A seconded head being unseated, or its body lost under it.
+     */
+    public static void discharge(Mob mob) {
+        WorkerData d = data(mob);
+        if (d == null || !(mob.level() instanceof ServerLevel level)) return;
+        setDown(mob, d);
+        if (!d.card.isEmpty()) {
+            ItemStack card = d.card;
+            d.card = ItemStack.EMPTY;
+            if (!Sites.returnCard(level, d.clock, card)) mob.spawnAtLocation(card);
+        }
+        Sites.leave(level, d.clock, mob.getUUID());
+        WorkerIndex.get(level.getServer()).remove(d.employer, mob.getUUID());
+        if (d.detail != null) {
+            ServerPlayer lead = level.getServer().getPlayerList().getPlayer(d.detail);
+            if (lead != null) {
+                java.util.List<UUID> roll = new java.util.ArrayList<>(Detail.members(lead));
+                if (roll.remove(mob.getUUID())) Detail.save(lead, roll, Detail.mode(lead));
+            }
+        }
+        d.dropTask();
+        release(mob);
+    }
+
     /** Clears a creature's vanilla mind: no target, no anger, no path, an empty brain (it re-senses after Let go). */
     @SuppressWarnings("unchecked")
     static void calm(ServerLevel level, Mob mob) {
@@ -376,6 +440,11 @@ public final class Workforce {
         }
         if (d.state == WorkerData.State.NOTICE) {
             Refusals.deny(player, StaffShake.at(mob), "staff.already_let_go", name(mob));
+            return true;
+        }
+        // a seconded head is not let go from its body: it is unseated, file and grade kept
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob)) {
+            Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(mob), "secondment.let_go");
             return true;
         }
         long now = player.serverLevel().getGameTime();

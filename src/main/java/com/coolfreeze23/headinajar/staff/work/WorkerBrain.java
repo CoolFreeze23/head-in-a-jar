@@ -24,6 +24,7 @@ public final class WorkerBrain {
         THINKING.set(true);
         try {
             if (LetGo.escorting(mob)) return;
+            if (com.coolfreeze23.headinajar.staff.second.Broth.holds(mob, d)) return; // a dry secondee stands by or walks home for broth (0.7.1)
             Quirks.think(mob, d);
             switch (d.state) {
                 case ON_JOB -> {

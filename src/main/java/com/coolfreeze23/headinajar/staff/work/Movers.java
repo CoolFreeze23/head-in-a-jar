@@ -115,7 +115,8 @@ public final class Movers {
     /** The movement family of a worker (its species' row; walk if it has none). */
     public static String family(Mob mob) {
         WorkTable.Spec spec = WorkTable.of(mob);
-        return spec == null ? WALK : spec.move();
+        // a seconded body hops or hovers only with its trick, else it walks (0.7.1, staff.second.BodyWork)
+        return spec == null ? WALK : com.coolfreeze23.headinajar.staff.second.BodyWork.family(mob, spec.move());
     }
 
     /**
@@ -157,6 +158,8 @@ public final class Movers {
      */
     public static boolean arrived(Mob mob, BlockPos to) {
         if (solid(mob.level(), to)) return mob.getBoundingBox().inflate(REACH).contains(Vec3.atCenterOf(to));
+        // a climber still on the wall below a spot at the top of it is not there: stopped there, it falls off
+        if (clinging(mob)) return false;
         double dx = mob.getX() - (to.getX() + 0.5), dz = mob.getZ() - (to.getZ() + 0.5);
         double r = ON_SPOT + Math.max(0, Mth.ceil(mob.getBbWidth()) - 1);
         return dx * dx + dz * dz <= r * r && Math.abs(mob.getY() - to.getY()) < 1.5;
@@ -180,7 +183,13 @@ public final class Movers {
         PathNavigation nav = mob.getNavigation();
         // still following its own path to this stop (not one something else has since given it)
         if (!nav.isDone()) return nav.getTargetPos() == null || nav.getTargetPos().closerThan(r.to, 3);
-        return CLIMB.equals(r.family) && mob.level().getGameTime() - r.started < CLIMB_TICKS;
+        // a climber on its wall is still on its way, however long the climb is
+        return CLIMB.equals(r.family) && (clinging(mob) || mob.level().getGameTime() - r.started < CLIMB_TICKS);
+    }
+
+    /** A climber off the ground (on a wall, or over the edge at its top), not riding and not swimming. */
+    static boolean clinging(Mob mob) {
+        return !mob.onGround() && !mob.isInLiquid() && !mob.isPassenger() && CLIMB.equals(family(mob));
     }
 
     /** Whether it has a way to go it has not finished (the pause stops it). */
@@ -202,6 +211,8 @@ public final class Movers {
      */
     static boolean go(Mob mob, BlockPos to, double speed, AABB box) {
         ROUTES.remove(mob);
+        // a seconded body may hop, sprint or hover to this stop with its Ability (0.7.1, staff.second.BodyWork)
+        com.coolfreeze23.headinajar.staff.second.BodyWork.setOff(mob, to);
         String family = family(mob);
         long now = mob.level().getGameTime();
         double pace = speed * walk(mob);
@@ -421,6 +432,7 @@ public final class Movers {
         }
         switch (r.family) {
             case HOP -> hop(mob, r);
+            case CLIMB -> climbOn(mob, r);
             case FLY_FREE -> fly(mob, r);
             case SQUID -> {
                 if (mob instanceof Squid squid) swim(squid, r);
@@ -428,6 +440,16 @@ public final class Movers {
             default -> {
             }
         }
+    }
+
+    /**
+     * A climber at the top of its wall with its path done: the spider's own last stretch lets go as soon as it is level
+     * with a stop near the edge, and it hung over the edge and dropped (six blocks: three hearts, enough to kill a
+     * host). It is steered on over the top onto the stop instead.
+     */
+    private static void climbOn(Mob mob, Route r) {
+        if (!mob.getNavigation().isDone() || !clinging(mob) || mob.getY() < r.to.getY() - 1) return;
+        mob.getMoveControl().setWantedPosition(r.to.getX() + 0.5, r.to.getY(), r.to.getZ() + 0.5, r.speed);
     }
 
     /** With nowhere to go: a squid stops paddling, a phantom circles where it is, a ghast stops drifting. */

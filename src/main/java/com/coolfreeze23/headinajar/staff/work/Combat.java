@@ -62,6 +62,10 @@ public final class Combat {
         if (!FriendOrFoe.mayTarget(d.employer, mob.level(), target)) return false;
         if (box != null && !box.contains(target.position())) return false;
         String attack = spec.attack();
+        // a secondee's body joins in: its Ability and Secondary at this foe, on their cooldowns; a head with no attack of
+        // its own closes in to use them (0.7.1, staff.second.BodyWork)
+        double body = com.coolfreeze23.headinajar.staff.second.BodyWork.fight(mob, d, target, box);
+        if ((attack == null || "none".equals(attack)) && body > 0) return com.coolfreeze23.headinajar.staff.second.BodyWork.closeIn(mob, d, target, box, body);
         if (attack == null || "none".equals(attack)) return false;
         mob.getLookControl().setLookAt(target, 30, 30);
         return switch (attack) {
@@ -114,6 +118,7 @@ public final class Combat {
         if (slot < 0) {
             d.heldUp = true;
             Workforce.say(mob, "no_arrows");
+            com.coolfreeze23.headinajar.staff.second.BodyWork.dry(mob); // a seconded head clicks dry once, as its turret would (0.7.1)
             return false;
         }
         d.heldUp = false;
@@ -131,6 +136,7 @@ public final class Combat {
         ItemStack held = mob.getMainHandItem();
         ItemStack weapon = held.getItem() instanceof ProjectileWeaponItem ? held : new ItemStack(crossbow ? Items.CROSSBOW : Items.BOW);
         AbstractArrow arrow = ProjectileUtil.getMobArrow(mob, one, 1.0f, weapon);
+        com.coolfreeze23.headinajar.staff.second.BodyWork.fromJar(mob, arrow); // a seconded head shoots from its jar (0.7.1)
         arrow.pickup = AbstractArrow.Pickup.ALLOWED;
         double dx = target.getX() - mob.getX(), dy = target.getY(1 / 3.0) - arrow.getY(), dz = target.getZ() - mob.getZ();
         double flat = Math.sqrt(dx * dx + dz * dz);
@@ -162,6 +168,7 @@ public final class Combat {
         Vec3 v = new Vec3(mob.getRandom().triangle(aim.x, 2.297 * spread), aim.y, mob.getRandom().triangle(aim.z, 2.297 * spread));
         SmallFireball ball = new SmallFireball(level, mob, v.normalize());
         ball.setPos(ball.getX(), mob.getY(0.5) + 0.5, ball.getZ());
+        com.coolfreeze23.headinajar.staff.second.BodyWork.fromJar(mob, ball); // a seconded head shoots from its jar (0.7.1)
         level.levelEvent(null, 1018, mob.blockPosition(), 0);
         level.addFreshEntity(ball);
         return true;
@@ -175,6 +182,7 @@ public final class Combat {
         }
         if (!(mob.level() instanceof ServerLevel level) || !ready(LAST_SHOT, mob, SNOWBALL_TICKS)) return true;
         Snowball ball = new Snowball(level, mob);
+        com.coolfreeze23.headinajar.staff.second.BodyWork.fromJar(mob, ball); // a seconded head shoots from its jar (0.7.1)
         double dx = target.getX() - mob.getX(), dy = target.getEyeY() - 1.1 - ball.getY(), dz = target.getZ() - mob.getZ();
         ball.setItem(new ItemStack(Items.SNOWBALL));
         ball.shoot(dx, dy + Math.sqrt(dx * dx + dz * dz) * 0.2, dz, VELOCITY, 12);

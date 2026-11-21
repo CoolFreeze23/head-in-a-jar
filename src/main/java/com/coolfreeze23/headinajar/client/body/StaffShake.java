@@ -69,7 +69,9 @@ public final class StaffShake {
         bodyRotO = e.yBodyRotO;
         headRot = e.yHeadRot;
         headRotO = e.yHeadRotO;
-        if (BODY.contains(e.getType())) {
+        // a host with no head on its neck has nothing to turn: its body shakes (a seated secondee's head shakes in its jar)
+        if (BODY.contains(e.getType()) || com.coolfreeze23.headinajar.host.Hosts.isHost(e)
+                && !com.coolfreeze23.headinajar.client.second.SecondeeClient.seated(e)) {
             e.yBodyRot += a;
             e.yBodyRotO += a;
         }

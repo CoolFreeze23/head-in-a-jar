@@ -110,8 +110,10 @@ public final class StaffCommands {
                     case SHUTTLE -> "detail";
                     default -> d.state.getSerializedName();
                 });
+        // a secondee is its head on its body, with the team sync they have (0.7.1)
+        Component kind = com.coolfreeze23.headinajar.staff.second.SecondeeLook.listKind(mob);
         return Component.translatable("command.headinajar.staff.list", Staff.number(f == null ? e.number : f.number), Workforce.name(mob),
-                mob.getType().getDescription(), d.clock == null ? "-" : place(d.clock), jobText, status);
+                kind != null ? kind : mob.getType().getDescription(), d.clock == null ? "-" : place(d.clock), jobText, status);
     }
 
     private static String place(GlobalPos at) {

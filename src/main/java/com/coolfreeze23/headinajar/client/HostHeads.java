@@ -31,6 +31,11 @@ public final class HostHeads {
         if (model instanceof net.minecraft.client.model.HumanoidModel<?> humanoid) HIDDEN.add(humanoid.hat);
     }
 
+    /** Skips one more part while this host draws (a collared host's Hard Hat, worn on its jar's lid instead: 0.7.1). */
+    public static void hidePart(ModelPart part) {
+        if (part != null) HIDDEN.add(part);
+    }
+
     public static void reveal() {
         HIDDEN.clear();
         ARMS.clear();
@@ -85,5 +90,64 @@ public final class HostHeads {
             }
         }
         return Optional.empty();
+    }
+
+    /** Each layer class's own model fields (none for the layers that draw with the body's model). */
+    private static final Map<Class<?>, java.util.List<Field>> LAYER_MODELS = new HashMap<>();
+    private static Field layersField;
+    private static boolean layersLooked;
+
+    /**
+     * A host's layers that draw a model of their own over the body (a drowned's or a stray's overlay, a sheep's wool, a
+     * horse's or llama's gear): their heads are skipped too, or a headless drowned or stray showed its overlay's head
+     * above the neck (seen at the empty collar in 0.7.1). Armour is left as it always was.
+     */
+    public static void hideLayers(net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> renderer) {
+        java.util.List<?> layers = layers(renderer);
+        if (layers == null) return;
+        for (Object layer : layers) {
+            if (layer instanceof net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer<?, ?, ?>) continue;
+            for (Field f : LAYER_MODELS.computeIfAbsent(layer.getClass(), HostHeads::modelFields)) {
+                try {
+                    if (f.get(layer) instanceof EntityModel<?> model && model != renderer.getModel()) hide(model);
+                } catch (IllegalAccessException e) {
+                    // not readable: that layer draws as before
+                }
+            }
+        }
+    }
+
+    private static java.util.List<?> layers(net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?> renderer) {
+        if (!layersLooked) {
+            layersLooked = true;
+            try {
+                layersField = net.minecraft.client.renderer.entity.LivingEntityRenderer.class.getDeclaredField("layers");
+                layersField.setAccessible(true);
+            } catch (ReflectiveOperationException | RuntimeException e) {
+                layersField = null;
+            }
+        }
+        if (layersField == null) return null;
+        try {
+            return (java.util.List<?>) layersField.get(renderer);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    private static java.util.List<Field> modelFields(Class<?> type) {
+        java.util.List<Field> out = new java.util.ArrayList<>();
+        for (Class<?> c = type; c != null && c != Object.class; c = c.getSuperclass()) {
+            for (Field f : c.getDeclaredFields()) {
+                if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) || !EntityModel.class.isAssignableFrom(f.getType())) continue;
+                try {
+                    f.setAccessible(true);
+                    out.add(f);
+                } catch (RuntimeException e) {
+                    // skipped
+                }
+            }
+        }
+        return out;
     }
 }

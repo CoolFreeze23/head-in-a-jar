@@ -116,6 +116,10 @@ public final class SawTable {
         if (mob instanceof com.coolfreeze23.headinajar.entity.MechaEntity || mob instanceof com.coolfreeze23.headinajar.entity.ShellEntity) {
             return Verdict.no("saw.machine");
         }
+        // a seconded head is unseated first (a secondee is never let go: its body goes back to being a host)
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(mob)) {
+            return Verdict.no("secondment.saw", com.coolfreeze23.headinajar.staff.work.Workforce.name(mob));
+        }
         // living staff are let go before anything else is done to them
         if (com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(mob)) return Verdict.no("staff.saw", com.coolfreeze23.headinajar.staff.work.Workforce.name(mob));
         if (Hosts.isHost(mob)) return Verdict.no("saw.host");

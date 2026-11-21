@@ -87,6 +87,8 @@ final class Security {
             if (!Combat.fight(mob, d, target, box)) mob.getLookControl().setLookAt(target, 30, 30);
             return;
         }
+        // nothing in sight: a seconded bat body's Echolocation lights up foes in the box (0.7.1, staff.second.BodyWork)
+        com.coolfreeze23.headinajar.staff.second.BodyWork.patrol(mob, d, box);
         // ranged staff keep arrows in their carry
         if (ranged(spec) && arrows(d) == 0 && !card.order().pickUps().isEmpty()) {
             if (now >= p.noArrows && fetchArrows(level, mob, d, spec, p, box)) return;

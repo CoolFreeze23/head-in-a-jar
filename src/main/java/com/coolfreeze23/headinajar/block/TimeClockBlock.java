@@ -104,6 +104,14 @@ public class TimeClockBlock extends Block implements EntityBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (stack.is(WorkRegistry.CLIPBOARD.get())) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
+        // a bucket (or any container) of fluid pours into the Broth tank, or is refused (0.7.1)
+        var fluid = net.neoforged.neoforge.fluids.FluidUtil.getFluidContained(stack);
+        if (fluid.isPresent() && !fluid.get().isEmpty()) {
+            if (player instanceof ServerPlayer sp && level.getBlockEntity(pos) instanceof TimeClockBlockEntity clock) {
+                com.coolfreeze23.headinajar.staff.second.BrothTank.pour(sp, hand, clock, stack, fluid.get(), hit.getDirection());
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 

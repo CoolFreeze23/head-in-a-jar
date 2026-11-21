@@ -66,6 +66,9 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
         if (entity.isInvisible()) return;
         WorkerLines.Look look = WorkerLines.look(entity);
         boolean hat = entity.getItemBySlot(EquipmentSlot.HEAD).is(WorkRegistry.HARD_HAT.get());
+        // a collared host (0.7.1): its hat is on its jar's lid and its badge on the collar (SecondeeLayer draws both)
+        boolean collared = com.coolfreeze23.headinajar.client.second.SecondeeClient.collared(entity);
+        if (collared) hat = false;
         if (look == null && !hat) return;
         M model = getParentModel();
         StaffFit.Fit fit = StaffFit.of(entity.getType());
@@ -86,7 +89,7 @@ public class StaffLayer<T extends LivingEntity, M extends EntityModel<T>> extend
                 }
                 pose.popPose();
             }
-            if (look.colour >= 0 && StaffBadge.shown()) lanyard(pose, buffers, light, overlay, entity, model, fit, look, partialTick);
+            if (look.colour >= 0 && StaffBadge.shown() && !collared) lanyard(pose, buffers, light, overlay, entity, model, fit, look, partialTick);
         }
         pose.popPose();
     }

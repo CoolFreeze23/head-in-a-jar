@@ -421,6 +421,8 @@ public class SmokeClient {
                 var seen = com.coolfreeze23.headinajar.client.HopperRenderer.modulesSeen();
                 report.add("modules seen: " + seen.size() + " " + String.join(" ", seen));
             }
+            // chuteproof LABEL: the Golden Parachute over this player drawn through the old class and today's, every vertex compared
+            case "chuteproof" -> report.add(ChuteProof.run(mc, parts.length > 1 ? parts[1].trim() : ""));
             case "chute" -> {
                 // chute: every Golden Parachute this client draws, with its clip and tick; and the piloted Kite's flight clip
                 report.add("chute -> " + com.coolfreeze23.headinajar.client.Parachute.describe());
@@ -739,7 +741,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown", "secondee", "secondmentforwalk" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -1138,6 +1140,36 @@ public class SmokeClient {
                                     com.coolfreeze23.headinajar.host.Hosts::isHost);
                             hosts.sort(java.util.Comparator.comparingDouble(who::distanceToSqr));
                             report.add("mount -> " + (!hosts.isEmpty() && FormActions.mountHost(who, hosts.get(0))));
+                        }
+                        case "secondmentforwalk" -> {
+                            // secondmentforwalk on|off: setup for the cohesion walker's rows with secondments switched off
+                            // (no command sets the server option staff.secondment); each such row puts it back on after itself
+                            com.coolfreeze23.headinajar.Config.SECONDMENT.set(parts[1].trim().equals("on"));
+                            report.add("secondmentforwalk -> " + com.coolfreeze23.headinajar.Config.SECONDMENT.get());
+                        }
+                        case "secondee" -> {
+                            // secondee canister|glass|teamsync N: setup (no press sets these) for the look's pictures of the
+                            // sight-glass steps, the glass and the team-sync ring: the nearest collared host within 8 gets
+                            // the value, and its clients are told as the parts tell them (SecondeeSync.changed)
+                            String[] a = parts[1].split(" ");
+                            var hosts = player.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, player.getBoundingBox().inflate(8),
+                                    com.coolfreeze23.headinajar.staff.second.Secondees::collared);
+                            hosts.sort(java.util.Comparator.comparingDouble(player::distanceToSqr));
+                            if (hosts.isEmpty()) {
+                                report.add("secondee -> no collared host within 8");
+                            } else {
+                                var host = hosts.get(0);
+                                var d = com.coolfreeze23.headinajar.staff.second.Secondees.data(host);
+                                float v = Float.parseFloat(a[1]);
+                                switch (a[0]) {
+                                    case "canister" -> d.canister = (int) v;
+                                    case "glass" -> d.glass = (int) v;
+                                    case "teamsync" -> d.teamSync = v;
+                                    default -> report.add("secondee -> canister, glass or teamsync, not " + a[0]);
+                                }
+                                com.coolfreeze23.headinajar.staff.second.SecondeeSync.changed(host);
+                                report.add("secondee " + a[0] + " " + a[1] + " -> " + host.getType().toShortString() + " step " + com.coolfreeze23.headinajar.staff.second.SecondeeSync.step(host));
+                            }
                         }
                         case "sync" -> {
                             // sync N [bystander]: the sync of the host the player (or the stand-in) rides

@@ -194,7 +194,8 @@ public final class HostFx {
         if (f != null) f.color(0x151317).size(0.045f).life(2).add();
     }
 
-    private static void syncPulse(Mob mob, boolean full) {
+    /** The teal ring down the body at a quarter of sync (a pale one on the ground at 100); also a secondee's team sync (0.7.1). */
+    public static void syncPulse(Mob mob, boolean full) {
         float h = mob.getBbHeight();
         for (int k = 0; k < 4; k++) {
             int step = k;

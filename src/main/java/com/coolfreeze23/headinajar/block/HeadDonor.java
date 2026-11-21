@@ -194,6 +194,37 @@ public final class HeadDonor {
         com.coolfreeze23.headinajar.clarity.Memos.send(player, com.coolfreeze23.headinajar.clarity.Memos.Memo.FIRST_STATION_DRAW);
     }
 
+    /**
+     * A sampling tool held sneaking on a seconded host: the head is drawn through its collar, once a day, by the same
+     * rules as a station's head (its file is on the host while it is seated). A plain use draws the body instead.
+     */
+    public static boolean collar(ServerPlayer player, ItemStack stack, InteractionHand hand, net.minecraft.world.entity.Mob host, ItemStack head) {
+        if (!(stack.getItem() instanceof GeneticsItems.SyringeItem tool)) return false;
+        EntityType<?> type = JarredHeadItem.type(head);
+        if (type == null) return false;
+        Refuser refuser = Refuser.at(host);
+        StaffFile f = Staff.of(host);
+        if (!mayDraw(player, f)) {
+            Refusals.deny(player, refuser, "staff.not_yours", Staff.name(f), Staff.employer(f));
+            return true;
+        }
+        if (wrongTool(player, tool, type) != null) return toolRefused(player, refuser);
+        ServerLevel level = player.serverLevel();
+        long day = Staff.day(level);
+        if (day(head) == day) {
+            Refusals.deny(player, refuser, "library.rested");
+            return true;
+        }
+        CustomData.update(DataComponents.CUSTOM_DATA, head, t -> t.putLong(DAY, day));
+        if (f != null) {
+            f.note("sampled", day, "");
+            host.setData(ModRegistry.STAFF, f);
+        }
+        take(player, stack, hand, type, quality(level, true), host.blockPosition(), com.coolfreeze23.headinajar.staff.second.Secondees.entityTag(head));
+        com.coolfreeze23.headinajar.clarity.Memos.send(player, com.coolfreeze23.headinajar.clarity.Memos.Memo.FIRST_STATION_DRAW);
+        return true;
+    }
+
     /** A sampling tool used on a Cerebral Array: the first jarred head that has not given today. */
     public static boolean array(ServerPlayer player, ItemStack stack, InteractionHand hand, CerebralArrayBlockEntity array) {
         if (!on() || !(stack.getItem() instanceof GeneticsItems.SyringeItem tool)) return false;

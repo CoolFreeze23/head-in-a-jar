@@ -115,5 +115,7 @@ public final class WorkRegistry {
     private static void capabilities(RegisterCapabilitiesEvent event) {
         // the Pay Drawer: hoppers fill it from any side, nothing is taken out by automation; the rack is not automatable
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, TIME_CLOCK_BE.get(), (be, side) -> be.automation(side));
+        // the Broth tank (0.7.1): pipes fill it from any side, nothing drains it
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, TIME_CLOCK_BE.get(), (be, side) -> be.brothPipes());
     }
 }

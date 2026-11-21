@@ -308,6 +308,10 @@ public final class FormActions {
     public static boolean mountHost(ServerPlayer player, net.minecraft.world.entity.Mob host) {
         JarState state = state(player);
         if (!com.coolfreeze23.headinajar.host.Hosts.isHost(host) || !host.isAlive()) return false;
+        // a body with a seconded head on staff takes no jar until the head is unseated
+        if (com.coolfreeze23.headinajar.staff.second.Secondees.seated(host)) {
+            return Refusals.deny(player, com.coolfreeze23.headinajar.feedback.Refuser.at(host), "secondment.boarding_seconded");
+        }
         if (host.isVehicle() && !(host.getFirstPassenger() == null)) return false;
         boolean mecha = host instanceof com.coolfreeze23.headinajar.entity.MechaEntity;
         // someone else's mecha is refused before a linked player is put into their head for nothing

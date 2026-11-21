@@ -1,0 +1,46 @@
+@world flat
+@clean
+# A cow host on a 5-block stone platform (5 x 6), a collar and a zombie's jarred head seated by real use, then the body killed: where
+# the Redundancy Package goes, tick by tick, and what it looks like on the way down.
+time set noon
+fill -2 -60 0 2 -56 5 stone
+hostify cow 0 -55 4
+tp @s 0 -55 2 0 0
+give @s headinajar:secondment_collar
+wait 5
+lookat cow 1.0
+key use
+wait 10
+give @s headinajar:jarred_head[custom_data={Type:"minecraft:zombie",Entity:{}}]
+hotbar 2
+wait 5
+lookat cow 1.0
+key use
+wait 20
+inspect near cow 6
+tp @s 0 -60 -8 0 0
+watch 7 -54 4.5 90 5
+wait 5
+kill @e[type=cow]
+wait 2
+inspect near redundancy 12
+shot kill_02
+wait 8
+inspect near redundancy 12
+shot kill_10
+wait 10
+inspect near redundancy 12
+shot kill_20
+wait 10
+inspect near redundancy 12
+shot kill_30
+wait 10
+inspect near redundancy 12
+shot kill_40
+wait 20
+inspect near redundancy 12
+shot kill_60
+wait 30
+inspect near redundancy 12
+inspect blocks jarred_head -8 -62 -8 8 -50 12
+shot kill_90

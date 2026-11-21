@@ -504,6 +504,8 @@ VERBS = {
     "headblock": rf"^headblock {XYZ} [a-z_:]+(?:,[a-z_:]+)*$",
     "chair": rf"^chair {XYZ}$",
     "genes": r"^genes (?:me|mecha) [a-z_]+(?:,[a-z_]+)*$",
+    # set-up verbs of the secondment rows: a collared host's canister, glass or team sync; the server option staff.secondment
+    "secondee": rf"^secondee (?:canister|glass|teamsync) {F}$", "secondmentforwalk": r"^secondmentforwalk (?:on|off)$",
     "bystander": None,
 }
 BYSTANDER = {
@@ -556,7 +558,7 @@ def lint_line(line, ids, enums):
         if not balanced(line):
             return "unbalanced brackets or quotes"
         for ident in re.findall(r"\bheadinajar:([a-z0-9_]+)", line):
-            if "headinajar:" + ident not in ids and ident not in ("host", "cranial_saline", "nutrient_broth", "worker", "order"):
+            if "headinajar:" + ident not in ids and ident not in ("host", "cranial_saline", "nutrient_broth", "worker", "order", "secondee"):
                 return f"unknown id headinajar:{ident}"
         return None
     if w == "grab":

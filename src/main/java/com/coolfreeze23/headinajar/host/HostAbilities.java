@@ -269,6 +269,218 @@ public final class HostAbilities {
         }
     }
 
+    // --- the job brain's use of a seconded body (0.7.1) -------------------------------------------------------------
+
+    /** {@link #fireFor}'s answer for a type the brain never uses: explode ("Staff do not explode."), groan, wind charge. */
+    public static final String NEVER = "secondment.no_explode";
+    /** {@link #fireFor}'s answer for a witch's potion with a friend within 4 of its foe: it is not thrown. */
+    public static final String FRIENDS_NEAR = "secondment.friends_near";
+    /** How far above a seated body's neck the jar's middle is: where its shots leave from. */
+    public static final double JAR_MID = 0.45;
+
+    /**
+     * A seconded host's Ability or Secondary used by the job brain ({@code staff.second.BodyWork}), beside {@link #fire}
+     * and never touching the player's path: aimed from the jar at {@code target}, every shot owned by the host, and every
+     * area effect on foes only (the company's friend-or-foe rule for {@code employer}: never the employer, other staff,
+     * villagers, golems, pets, allies or animals). Never explode, groan or wind charge ({@link #NEVER}); a teleport is
+     * the movers' hop to a stop (the brain chooses the cell), so it is not fired here. Ranges, sight and cooldowns are the
+     * brain's to check. Returns null when it fired, else why not.
+     */
+    public static String fireFor(Mob host, LivingEntity target, HostDefinition.Ability a, java.util.UUID employer) {
+        if (!(host.level() instanceof ServerLevel level) || a == null) return NO_TARGET;
+        Vec3 from = com.coolfreeze23.headinajar.body.BodyServer.neck(host).add(0, JAR_MID, 0);
+        Vec3 aim = target == null ? Vec3.directionFromRotation(0, host.getYRot()) : target.getBoundingBox().getCenter().subtract(from);
+        Vec3 dir = aim.lengthSqr() < 1e-6 ? Vec3.directionFromRotation(0, host.getYRot()) : aim.normalize();
+        double flat = Math.sqrt(aim.x * aim.x + aim.z * aim.z);
+        java.util.function.Predicate<LivingEntity> foe = e -> e != host && e.isAlive()
+                && com.coolfreeze23.headinajar.staff.work.FriendOrFoe.mayTarget(employer, level, e);
+        switch (a.type()) {
+            case "explode", "groan", "wind_charge" -> {
+                return NEVER;
+            }
+            case "arrows" -> {
+                if (target == null) return NO_TARGET;
+                int count = (int) a.param("count", 3);
+                for (int i = 0; i < count; i++) {
+                    var arrow = new net.minecraft.world.entity.projectile.Arrow(level, host, new ItemStack(Items.ARROW), null);
+                    arrow.setPos(from.add(dir.scale(0.5)));
+                    arrow.shoot(aim.x, aim.y + flat * 0.2, aim.z, 1.6f, 4f);
+                    arrow.pickup = net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED;
+                    level.addFreshEntity(arrow);
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.SKELETON_SHOOT, SoundSource.HOSTILE, 1, 1);
+                return null;
+            }
+            case "fireball" -> {
+                if (target == null) return NO_TARGET;
+                boolean large = a.param("large", 0) > 0;
+                int count = large ? 1 : (int) a.param("count", 3);
+                for (int i = 0; i < count; i++) {
+                    // three small ones spread a little; a ghast's one goes where it is aimed, as a ghast's does
+                    double spread = large ? 0 : 0.05;
+                    Vec3 d = dir.add(level.random.nextGaussian() * spread, level.random.nextGaussian() * spread, level.random.nextGaussian() * spread);
+                    var ball = large ? new LargeFireball(level, host, d, (int) a.param("power", 1)) : new SmallFireball(level, host, d);
+                    ball.setPos(from.add(dir.scale(large ? 1.2 : 0.6)));
+                    level.addFreshEntity(ball);
+                }
+                level.playSound(null, host.blockPosition(), large ? SoundEvents.GHAST_SHOOT : SoundEvents.BLAZE_SHOOT, SoundSource.HOSTILE, 1, 1);
+                return null;
+            }
+            case "web" -> {
+                if (target == null) return NO_TARGET;
+                BlockPos at = target.blockPosition();
+                // a web only fills air, and only where the employer may build (when they are here to ask)
+                if (!level.getBlockState(at).isAir()) return "host.web_blocked";
+                ServerPlayer boss = employer == null ? null : level.getServer().getPlayerList().getPlayer(employer);
+                if (boss != null && boss.level() == level && !level.mayInteract(boss, at)) return "host.web_blocked";
+                level.setBlockAndUpdate(at, Blocks.COBWEB.defaultBlockState());
+                WebShots.get(level).add(at, level.getGameTime() + 200);
+                level.playSound(null, host.blockPosition(), SoundEvents.SPIDER_AMBIENT, SoundSource.HOSTILE, 1, 1.4f);
+                return null;
+            }
+            case "charge", "pounce" -> {
+                Vec3 along = new Vec3(dir.x, 0, dir.z);
+                along = along.lengthSqr() < 1e-6 ? Vec3.directionFromRotation(0, host.getYRot()) : along.normalize();
+                Vec3 push = along.scale(a.param("speed", 1.4));
+                host.setDeltaMovement(push.x, a.type().equals("pounce") ? 0.5 : host.getDeltaMovement().y, push.z);
+                host.hurtMarked = true;
+                float damage = (float) a.param("damage", 6);
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().expandTowards(push.scale(2)).inflate(0.5), foe)) {
+                    com.coolfreeze23.headinajar.staff.work.Combat.credit(host, e);
+                    e.hurt(host.damageSources().mobAttack(host), damage);
+                    e.knockback(a.param("knockback", 1.5), -push.x, -push.z);
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.RAVAGER_ATTACK, SoundSource.HOSTILE, 1, 1.2f);
+                return null;
+            }
+            case "toss" -> {
+                // a player only where the company's rule lets staff fight players at all (genetics.pvpTurrets)
+                if (target == null || !foe.test(target)) return NO_TARGET;
+                target.setDeltaMovement(target.getDeltaMovement().add(0, a.param("power", 1.2), 0));
+                target.hurtMarked = true;
+                level.playSound(null, host.blockPosition(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 1, 1);
+                return null;
+            }
+            case "roar" -> {
+                double r = a.param("radius", 6);
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(r), foe)) {
+                    e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, (int) a.param("duration", 40), 4));
+                    e.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, (int) a.param("duration", 40), 0));
+                    e.knockback(0.8, host.getX() - e.getX(), host.getZ() - e.getZ());
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 1.5f, 1);
+                return null;
+            }
+            case "ink" -> {
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(a.param("radius", 6)), foe)) {
+                    e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80));
+                }
+                level.sendParticles(ParticleTypes.SQUID_INK, host.getX(), host.getY() + 0.5, host.getZ(), 40, 1, 0.5, 1, 0.05);
+                level.playSound(null, host.blockPosition(), SoundEvents.SQUID_SQUIRT, SoundSource.NEUTRAL, 1, 1);
+                return null;
+            }
+            case "echolocation" -> {
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(a.param("radius", 16)), foe)) {
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200));
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.BAT_AMBIENT, SoundSource.NEUTRAL, 1.5f, 0.5f);
+                return null;
+            }
+            case "sonic_boom" -> {
+                if (target == null || !foe.test(target)) return NO_TARGET;
+                com.coolfreeze23.headinajar.staff.work.Combat.credit(host, target);
+                target.hurt(level.damageSources().sonicBoom(host), (float) a.param("damage", 10));
+                Vec3 d = target.getEyePosition().subtract(from);
+                for (int i = 1; i < (int) d.length(); i++) {
+                    Vec3 p = from.add(d.normalize().scale(i));
+                    level.sendParticles(ParticleTypes.SONIC_BOOM, p.x, p.y, p.z, 1, 0, 0, 0, 0);
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
+                return null;
+            }
+            case "potion" -> {
+                if (target == null) return NO_TARGET;
+                // thrown only when nobody the company spares is within 4 of the foe (the splash would reach them)
+                boolean friends = !level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(4),
+                        e -> e != host && e != target && e.isAlive() && e.distanceToSqr(target) <= 16 && !foe.test(e)).isEmpty();
+                if (friends) return FRIENDS_NEAR;
+                var potion = new net.minecraft.world.entity.projectile.ThrownPotion(level, host);
+                potion.setItem(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.SPLASH_POTION, net.minecraft.world.item.alchemy.Potions.WEAKNESS));
+                potion.setPos(from.add(dir.scale(0.5)));
+                potion.shoot(aim.x, aim.y + flat * 0.2, aim.z, 0.75f, 2f);
+                level.addFreshEntity(potion);
+                level.playSound(null, host.blockPosition(), SoundEvents.WITCH_THROW, SoundSource.HOSTILE, 1, 1);
+                return null;
+            }
+            case "spit" -> {
+                if (target == null) return NO_TARGET;
+                var spit = new net.minecraft.world.entity.projectile.LlamaSpit(net.minecraft.world.entity.EntityType.LLAMA_SPIT, level);
+                spit.setOwner(host);
+                spit.setPos(from.x, from.y, from.z);
+                spit.shoot(aim.x, aim.y + flat * 0.15, aim.z, 1.5f, 1f);
+                level.addFreshEntity(spit);
+                level.playSound(null, host.blockPosition(), SoundEvents.LLAMA_SPIT, SoundSource.NEUTRAL, 1, 1);
+                return null;
+            }
+            case "hiss" -> {
+                double r = a.param("radius", 8);
+                var creepers = level.getEntitiesOfClass(net.minecraft.world.entity.monster.Creeper.class, host.getBoundingBox().inflate(r),
+                        c -> foe.test(c) && c.distanceToSqr(host) <= r * r);
+                if (creepers.isEmpty()) return "host.no_creepers";
+                for (var c : creepers) {
+                    // its fuse winds back and it walks away from the body
+                    c.setTarget(null);
+                    ((com.coolfreeze23.headinajar.mixin.CreeperSwellAccess) c).headinajar$setSwell(0);
+                    c.setSwellDir(-1);
+                    Vec3 away = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosAway(c, 16, 7, host.position());
+                    if (away != null) c.getNavigation().moveTo(away.x, away.y, away.z, 1.25);
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.CAT_HISS, SoundSource.NEUTRAL, 1.5f, 1);
+                return null;
+            }
+            case "rear" -> {
+                double r = a.param("radius", 3), reach = r + host.getBbWidth() / 2;
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(r),
+                        e -> foe.test(e) && e.distanceToSqr(host) <= reach * reach)) {
+                    e.knockback(a.param("knockback", 1.2), host.getX() - e.getX(), host.getZ() - e.getZ());
+                    e.hurtMarked = true;
+                }
+                if (host instanceof net.minecraft.world.entity.animal.horse.AbstractHorse horse) horse.standIfPossible();
+                level.playSound(null, host.blockPosition(), SoundEvents.HORSE_ANGRY, SoundSource.NEUTRAL, 1, 1);
+                return null;
+            }
+            case "bell" -> {
+                // the village bell at work: raiders on site show through walls; nobody else is told anything
+                double r = a.param("radius", 32);
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, host.getBoundingBox().inflate(r),
+                        e -> foe.test(e) && e.getType().is(net.minecraft.tags.EntityTypeTags.RAIDERS) && e.distanceToSqr(host) <= r * r)) {
+                    e.addEffect(new MobEffectInstance(MobEffects.GLOWING, (int) a.param("duration", 200)));
+                }
+                level.playSound(null, host.blockPosition(), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, 2, 1);
+                return null;
+            }
+            case "sprint" -> {
+                host.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) a.param("duration", 100), (int) a.param("amplifier", 2)));
+                level.playSound(null, host.blockPosition(), SoundEvents.HORSE_GALLOP, SoundSource.NEUTRAL, 1, 1);
+                return null;
+            }
+            case "hover" -> {
+                host.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (int) a.param("duration", 30), 0));
+                host.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) a.param("duration", 30) + 60, 0));
+                return null;
+            }
+            case "lay_egg" -> {
+                level.addFreshEntity(new ItemEntity(level, host.getX(), host.getY(), host.getZ(), new ItemStack(Items.EGG)));
+                level.playSound(null, host.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1, 1);
+                return null;
+            }
+            default -> {
+                // a teleport (the movers' hop), or one of the 0.6.3 tricks the brain does not use (staff.second.BodyWork)
+                return HostTricks.UNKNOWN;
+            }
+        }
+    }
+
     /** Melts Web Shot cobwebs after 10 seconds (checked once a second, in the dimension they were shot in). */
     public static void tickWebs(ServerLevel level) {
         WebShots.get(level).tick(level);

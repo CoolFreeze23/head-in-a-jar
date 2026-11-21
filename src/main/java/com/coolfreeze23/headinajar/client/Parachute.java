@@ -17,7 +17,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -51,11 +52,40 @@ import java.util.Set;
  * fold {@code land} (40 ticks) or {@code water} (60) kept drawn where it came down. It swings with the jar's drift at
  * the swivel. Seen from the pilot's own camera looking down steeply, the panels and crown are drawn faint so the ground
  * shows through; the valance and tassels stay solid.
+ * <p>
+ * Any entity may carry one ({@link #render(Entity, Style, float, PoseStack, MultiBufferSource, int)}), drawn in a
+ * {@link Style}: a player's jar under the Golden Parachute ({@link #GOLDEN}), a seconded head's Redundancy Package
+ * under its own small canopy ({@link #PACKAGE}, {@link #PACKAGE_COMPACT}).
  */
 public final class Parachute {
     private static final ResourceLocation GEO = HeadInAJar.id("geo/entity/golden_parachute.geo.json");
     private static final ResourceLocation ANIMATIONS = HeadInAJar.id("animations/entity/golden_parachute.animation.json");
     private static final ResourceLocation TEXTURE = HeadInAJar.id("textures/entity/golden_parachute.png");
+
+    /**
+     * How a canopy is drawn over what it carries: its model, clips and texture (each drawn as modelled, 16 px a block,
+     * its origin at the carrier's feet, turned with it), its clips' sounds' pitch, the crown's height over the feet
+     * (blocks, where its gilt flakes start), and the bones tied to the carrier itself, left out once it is down and the
+     * carrier has gone on without them (a package's parcel stays on the head's lid: the head is on its plinth by then).
+     */
+    public record Style(ResourceLocation geo, ResourceLocation animations, ResourceLocation texture, float pitch, double crown,
+                        Set<String> tied) {
+    }
+
+    /** The Golden Parachute over a player's jar fired clear of a mecha. */
+    public static final Style GOLDEN = new Style(GEO, ANIMATIONS, TEXTURE, 1, 46 / 16.0, Set.of());
+    private static final ResourceLocation PACKAGE_TEXTURE = HeadInAJar.id("textures/entity/redundancy_package.png");
+    /** The package's parcel, its ties and its label: on the jar's lid. */
+    private static final Set<String> PARCEL = Set.of("harness", "pack", "flap", "tag");
+    /**
+     * A seconded head's Redundancy Package over a wide jar (Life Support, Reinforced, Executive): its own canopy, half
+     * the Golden Parachute, a parcel tied to the lid, the parachute's bones and clips; its sounds a little higher.
+     */
+    public static final Style PACKAGE = new Style(HeadInAJar.id("geo/entity/redundancy_package.geo.json"),
+            HeadInAJar.id("animations/entity/redundancy_package.animation.json"), PACKAGE_TEXTURE, 1.3f, 32 / 16.0, PARCEL);
+    /** The same over the Compact Jar, whose lid is lower: everything above the lid 1 px down. */
+    public static final Style PACKAGE_COMPACT = new Style(HeadInAJar.id("geo/entity/redundancy_package_compact.geo.json"),
+            HeadInAJar.id("animations/entity/redundancy_package_compact.animation.json"), PACKAGE_TEXTURE, 1.3f, 31 / 16.0, PARCEL);
     private static final int DEPLOY = 30, STREAM_FROM = 13, LAND = 40, WATER = 60, FLARE = 16, STEER = 12;
     /** Sideways drift that steers (blocks a tick), and the flare's height over the ground (blocks). */
     static final double STEER_SPEED = 0.03, FLARE_HEIGHT = 2.5;
@@ -86,7 +116,7 @@ public final class Parachute {
     private Parachute() {
     }
 
-    /** The server says this player's parachute changed state; {@code age} is the ticks since the jar was fired. */
+    /** The server says this entity's parachute changed state; {@code age} is the ticks since it was fired. */
     public static void set(int entityId, int state, int age, float rate) {
         var level = Minecraft.getInstance().level;
         if (level == null) return;
@@ -98,7 +128,7 @@ public final class Parachute {
             c.water = state == HopperNet.SUNK;
             var e = level.getEntity(entityId);
             c.landed = e != null ? e.position() : c.lastPos;
-            c.landYaw = e instanceof Player p ? p.yBodyRot : 0;
+            c.landYaw = e instanceof LivingEntity l ? l.yBodyRot : e != null ? e.getYRot() : 0;
             return;
         }
         if (c == null || c.foldAt >= 0) {
@@ -114,8 +144,33 @@ public final class Parachute {
         return CHUTES.containsKey(entityId);
     }
 
+    /**
+     * An entity whose canopy's state rides its own synced data (the Redundancy Package): tells this client's canopy the
+     * state when it differs from the one last told ({@code told}, the caller's), and returns the state told.
+     * {@code firedAt}: the game tick it was fired.
+     */
+    public static int follow(Entity e, int told, int state, long firedAt, float rate) {
+        if (state == told) return told;
+        set(e.getId(), state, (int) Math.max(0, e.level().getGameTime() - firedAt), rate);
+        return state;
+    }
+
+    /** The entity is gone from this client: its canopy with it. */
+    public static void forget(int entityId) {
+        CHUTES.remove(entityId);
+    }
+
+    /** The yaw a carrier's canopy turns with: a creature's body, anything else's own. */
+    private static float bodyYaw(Entity e) {
+        return e instanceof LivingEntity l ? l.yBodyRot : e.getYRot();
+    }
+
+    private static float bodyYaw(Entity e, float partialTick) {
+        return e instanceof LivingEntity l ? Mth.rotLerp(partialTick, l.yBodyRotO, l.yBodyRot) : Mth.rotLerp(partialTick, e.yRotO, e.getYRot());
+    }
+
     /** The clip and tick of a parachute now (also what the dev harness reports). */
-    static String[] choose(Player player, Chute c, double now) {
+    static String[] choose(Entity carrier, Chute c, double now) {
         if (c.foldAt >= 0) {
             double t = now - c.foldAt;
             return new String[]{c.water ? "water" : "land", Double.toString(t)};
@@ -127,11 +182,11 @@ public final class Parachute {
         }
         if (t < DEPLOY) return new String[]{"deploy", Double.toString(t)};
         // the flare, once, when the ground comes within reach below
-        if (c.flareAt < 0 && !player.level().noCollision(player, player.getBoundingBox().expandTowards(0, -FLARE_HEIGHT, 0))) c.flareAt = now;
+        if (c.flareAt < 0 && !carrier.level().noCollision(carrier, carrier.getBoundingBox().expandTowards(0, -FLARE_HEIGHT, 0))) c.flareAt = now;
         if (c.flareAt >= 0 && now - c.flareAt < FLARE) return new String[]{"flare", Double.toString(now - c.flareAt)};
         // steering: the drift across the jar's facing
-        Vec3 v = new Vec3(player.getX() - player.xo, 0, player.getZ() - player.zo);
-        float yaw = player.yBodyRot * Mth.DEG_TO_RAD;
+        Vec3 v = new Vec3(carrier.getX() - carrier.xo, 0, carrier.getZ() - carrier.zo);
+        float yaw = bodyYaw(carrier) * Mth.DEG_TO_RAD;
         double across = v.x * -Mth.cos(yaw) + v.z * -Mth.sin(yaw);
         int side = across > STEER_SPEED ? 1 : across < -STEER_SPEED ? -1 : 0;
         if (side != 0) {
@@ -146,26 +201,31 @@ public final class Parachute {
         return new String[]{"descend", Double.toString(now)};
     }
 
-    /** Draws the parachute over a player's jar (the pose is at the player's feet). */
-    public static void render(Player player, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
-        Chute c = CHUTES.get(player.getId());
+    /** Draws the Golden Parachute over a player's jar (the pose is at the player's feet). */
+    public static void render(Entity carrier, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+        render(carrier, GOLDEN, partialTick, pose, buffers, light);
+    }
+
+    /** Draws the parachute over anything that carries one, in its style (the pose is at the carrier's feet). */
+    public static void render(Entity carrier, Style style, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+        Chute c = CHUTES.get(carrier.getId());
         if (c == null) return;
-        double now = player.level().getGameTime() + partialTick;
-        if (player.isRemoved() || now - c.firedAt > 1500 || c.foldAt >= 0 && now - c.foldAt >= (c.water ? WATER : LAND)) {
-            CHUTES.remove(player.getId());
+        double now = carrier.level().getGameTime() + partialTick;
+        if (carrier.isRemoved() || now - c.firedAt > 1500 || c.foldAt >= 0 && now - c.foldAt >= (c.water ? WATER : LAND)) {
+            CHUTES.remove(carrier.getId());
             return;
         }
-        Model model = model();
+        Model model = model(style);
         if (model == null) return;
-        c.lastPos = player.position();
-        String[] choice = choose(player, c, now);
+        c.lastPos = carrier.position();
+        String[] choice = choose(carrier, c, now);
         String clip = choice[0];
         double tick = Double.parseDouble(choice[1]);
-        effects(player, c, model, clip, tick);
+        effects(carrier, style, c, model, clip, tick);
         model.pose(clip, tick);
         // the swing with the jar's drift, damped; eased out once it is down
-        var v = player.getDeltaMovement();
-        if (player != Minecraft.getInstance().player) v = new Vec3(player.getX() - player.xo, player.getY() - player.yo, player.getZ() - player.zo);
+        var v = carrier.getDeltaMovement();
+        if (carrier != Minecraft.getInstance().player) v = new Vec3(carrier.getX() - carrier.xo, carrier.getY() - carrier.yo, carrier.getZ() - carrier.zo);
         float down = c.foldAt >= 0 ? 0 : 1;
         c.swingX += ((float) Mth.clamp(-v.z * 60, -25, 25) * down - c.swingX) * 0.08f;
         c.swingZ += ((float) Mth.clamp(v.x * 60, -25, 25) * down - c.swingZ) * 0.08f;
@@ -173,28 +233,29 @@ public final class Parachute {
         pose.pushPose();
         if (c.foldAt >= 0 && c.landed != null) {
             // the cloth lies where it came down, whatever the jar does next
-            double x = Mth.lerp(partialTick, player.xo, player.getX()), y = Mth.lerp(partialTick, player.yo, player.getY()), z = Mth.lerp(partialTick, player.zo, player.getZ());
+            double x = Mth.lerp(partialTick, carrier.xo, carrier.getX()), y = Mth.lerp(partialTick, carrier.yo, carrier.getY()), z = Mth.lerp(partialTick, carrier.zo, carrier.getZ());
             pose.translate(c.landed.x - x, c.landed.y - y, c.landed.z - z);
             yaw = c.landYaw;
         } else {
-            yaw = Mth.rotLerp(partialTick, player.yBodyRotO, player.yBodyRot);
+            yaw = bodyYaw(carrier, partialTick);
         }
         pose.mulPose(Axis.YP.rotationDegrees(180 - yaw));
         var mc = Minecraft.getInstance();
-        boolean faint = player == mc.getCameraEntity() && !mc.options.getCameraType().isFirstPerson()
+        boolean faint = carrier == mc.getCameraEntity() && !mc.options.getCameraType().isFirstPerson()
                 && (mc.gameRenderer.getMainCamera().getXRot() > FAINT_PITCH
-                || mc.gameRenderer.getMainCamera().getPosition().y > player.getY() + 39 / 16.0);
+                || mc.gameRenderer.getMainCamera().getPosition().y > carrier.getY() + 39 / 16.0);
         // two passes, one buffer each (asking for the second buffer ends the first): the solid cubes, then the faint cloth
-        VertexConsumer solid = buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
-        for (GeoBone top : model.baked.topLevelBones()) walk(pose, top, solid, false, faint, 180 - yaw, c, light);
+        VertexConsumer solid = buffers.getBuffer(RenderType.entityCutoutNoCull(style.texture()));
+        for (GeoBone top : model.baked.topLevelBones()) walk(pose, top, solid, false, faint, 180 - yaw, c, light, c.foldAt >= 0 ? style.tied() : Set.of());
         if (faint) {
-            VertexConsumer thin = buffers.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            for (GeoBone top : model.baked.topLevelBones()) walk(pose, top, thin, true, faint, 180 - yaw, c, light);
+            VertexConsumer thin = buffers.getBuffer(RenderType.entityTranslucent(style.texture()));
+            for (GeoBone top : model.baked.topLevelBones()) walk(pose, top, thin, true, faint, 180 - yaw, c, light, c.foldAt >= 0 ? style.tied() : Set.of());
         }
         pose.popPose();
     }
 
-    private static void walk(PoseStack pose, GeoBone bone, VertexConsumer vc, boolean thinPass, boolean faint, float turn, Chute c, int light) {
+    private static void walk(PoseStack pose, GeoBone bone, VertexConsumer vc, boolean thinPass, boolean faint, float turn, Chute c, int light,
+                             Set<String> leftOut) {
         pose.pushPose();
         if (bone.getName().equals("canopy") && (c.swingX != 0 || c.swingZ != 0)) {
             // the drift's swing, in the world's frame, about the swivel
@@ -207,7 +268,7 @@ public final class Parachute {
             pose.translate(-px, -py, -pz);
         }
         RenderUtil.prepMatrixForBone(pose, bone);
-        if (!bone.isHidden()) {
+        if (!bone.isHidden() && !leftOut.contains(bone.getName())) {
             List<GeoCube> cubes = bone.getCubes();
             boolean cloth = bone.getName().equals("cloth") || bone.getName().equals("pilot");
             for (int i = 0; i < cubes.size(); i++) {
@@ -215,7 +276,7 @@ public final class Parachute {
                 if (see == thinPass) cube(pose, cubes.get(i), vc, light, see ? FAINT_ALPHA << 24 | 0xFFFFFF : 0xFFFFFFFF);
             }
         }
-        if (!bone.isHidingChildren()) for (GeoBone child : bone.getChildBones()) walk(pose, child, vc, thinPass, faint, turn, c, light);
+        if (!bone.isHidingChildren()) for (GeoBone child : bone.getChildBones()) walk(pose, child, vc, thinPass, faint, turn, c, light, leftOut);
         pose.popPose();
     }
 
@@ -240,7 +301,7 @@ public final class Parachute {
     }
 
     /** The clips' sounds and particles, each once as its tick passes (none for a clip met part-way: nothing of the past). */
-    private static void effects(Player player, Chute c, Model model, String clip, double tick) {
+    private static void effects(Entity carrier, Style style, Chute c, Model model, String clip, double tick) {
         double before = c.tick;
         boolean same = clip.equals(c.clip);
         c.clip = clip;
@@ -248,15 +309,15 @@ public final class Parachute {
         Animation a = model.clips.get(clip);
         if (a == null || !same || tick <= before || tick - before > 3) return;
         var mc = Minecraft.getInstance();
-        if (mc.gameRenderer.getMainCamera().getPosition().distanceToSqr(player.position()) > 32 * 32) return;
-        Vec3 at = c.foldAt >= 0 && c.landed != null ? c.landed : player.position();
+        if (mc.gameRenderer.getMainCamera().getPosition().distanceToSqr(carrier.position()) > 32 * 32) return;
+        Vec3 at = c.foldAt >= 0 && c.landed != null ? c.landed : carrier.position();
         for (SoundKeyframeData s : a.keyFrames().sounds()) {
             if (s.getStartTick() <= before || s.getStartTick() > tick) continue;
             String[] p = s.getSound().split("\\|");
             var sound = HopperSounds.get(p[0].trim());
             if (sound == null) continue;
             float pitch = p.length > 2 ? Float.parseFloat(p[2].trim()) : 1;
-            player.level().playLocalSound(at.x, at.y + 2, at.z, sound, SoundSource.PLAYERS, 1, HopperSounds.pitch(p[0].trim(), pitch, player.getRandom()), false);
+            carrier.level().playLocalSound(at.x, at.y + 2, at.z, sound, SoundSource.PLAYERS, 1, HopperSounds.pitch(p[0].trim(), pitch * style.pitch(), carrier.getRandom()), false);
         }
         for (ParticleKeyframeData d : a.keyFrames().particles()) {
             if (d.getStartTick() <= before || d.getStartTick() > tick) continue;
@@ -267,9 +328,9 @@ public final class Parachute {
                 default -> null;
             };
             if (type == null) continue;
-            double y = at.y + (c.foldAt >= 0 ? 0.3 : 46 / 16.0);
+            double y = at.y + (c.foldAt >= 0 ? 0.3 : style.crown());
             for (int i = 0; i < 6; i++) {
-                player.level().addParticle(type, at.x + (player.getRandom().nextDouble() - 0.5) * 1.6, y, at.z + (player.getRandom().nextDouble() - 0.5) * 1.6,
+                carrier.level().addParticle(type, at.x + (carrier.getRandom().nextDouble() - 0.5) * 1.6, y, at.z + (carrier.getRandom().nextDouble() - 0.5) * 1.6,
                         0, 0.02, 0);
             }
         }
@@ -341,14 +402,19 @@ public final class Parachute {
         }
     }
 
-    private static Model loaded;
+    /** One posing model per model file (it takes the bones' rest pose when it is made, so only one may pose them). */
+    private static final Map<ResourceLocation, Model> LOADED = new HashMap<>();
 
     /** The model as loaded (again after a resource reload bakes a new one), or null before GeckoLib has it. */
-    static Model model() {
-        BakedGeoModel baked = GeckoLibCache.getBakedModels().get(GEO);
-        BakedAnimations animations = GeckoLibCache.getBakedAnimations().get(ANIMATIONS);
+    static Model model(Style style) {
+        BakedGeoModel baked = GeckoLibCache.getBakedModels().get(style.geo());
+        BakedAnimations animations = GeckoLibCache.getBakedAnimations().get(style.animations());
         if (baked == null || animations == null) return null;
-        if (loaded == null || loaded.baked != baked) loaded = new Model(baked, animations);
+        Model loaded = LOADED.get(style.geo());
+        if (loaded == null || loaded.baked != baked) {
+            loaded = new Model(baked, animations);
+            LOADED.put(style.geo(), loaded);
+        }
         return loaded;
     }
 
