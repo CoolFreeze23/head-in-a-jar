@@ -1,0 +1,224 @@
+@world flat
+@difficulty easy
+@gamemode creative
+# setup: a clear day, no spawns
+gamerule doMobSpawning false
+gamerule doDaylightCycle false
+time set 1000
+weather clear
+tp @s 0 -60 0 0 10
+wait 30
+# setup saw path (plain jar) for five heads, at z=5
+jarhead minecraft:copper_golem -6 -60 5
+jarhead minecraft:nautilus -3 -60 5
+jarhead minecraft:zombie_nautilus 0 -60 5
+jarhead minecraft:camel_husk 3 -60 5
+jarhead minecraft:parched 6 -60 5
+# three by real use of the saw: creaking (plain jar), happy ghast (Executive), sulfur cube (Reinforced)
+summon minecraft:creaking -9 -60 14 {NoAI:1b,Health:0.5f}
+summon minecraft:happy_ghast 9 -60 16 {NoAI:1b,Health:4f}
+summon minecraft:sulfur_cube 13 -60 13 {NoAI:1b,Health:2f,Size:1}
+wait 5
+item replace entity @s hotbar.0 with headinajar:surgical_saw
+hotbar 1
+item replace entity @s weapon.offhand with headinajar:life_support_jar
+tp @s -9 -60 11 0 0
+lookat creaking 2
+observe 30
+key use
+wait 20
+item replace entity @s weapon.offhand with headinajar:executive_life_support_jar
+tp @s 9 -60 11 0 0
+lookat happy_ghast 2
+key use
+wait 20
+item replace entity @s weapon.offhand with headinajar:reinforced_life_support_jar
+tp @s 13 -60 10 0 20
+lookat sulfur_cube 0.3
+key use
+wait 20
+item replace entity @s weapon.offhand with minecraft:air
+# place them by real use, looking down at the grass at z=5
+tp @s -8.5 -60 4.5 0 70
+hotbar 2
+key use
+wait 10
+tp @s 9.5 -60 4.5 0 70
+hotbar 3
+key use
+wait 10
+tp @s 12.5 -60 4.5 0 70
+hotbar 4
+key use
+wait 10
+inspect blocks jarred_head -12 -61 3 14 -59 7
+hud off
+tp @s 1.5 -58 -3 0 20
+wait 20
+shot e_row
+tp @s -8.5 -59.3 3.1 0 22
+wait 8
+shot f_head_creaking
+tp @s -5.5 -59.3 3.1 0 22
+wait 8
+shot f_head_copper_golem
+tp @s -2.5 -59.3 3.1 0 22
+wait 8
+shot f_head_nautilus
+tp @s 0.5 -59.3 3.1 0 22
+wait 8
+shot f_head_zombie_nautilus
+tp @s 3.5 -59.3 3.1 0 22
+wait 8
+shot f_head_camel_husk
+tp @s 6.5 -59.3 3.1 0 22
+wait 8
+shot f_head_parched
+tp @s 9.5 -59.3 3.1 0 22
+wait 8
+shot f_head_happy_ghast
+tp @s 12.5 -59.3 3.1 0 22
+wait 8
+shot f_head_sulfur_cube
+hud on
+hotbar 1
+# hosts at z=26, spaced 8: five by the setup saw, the creaking and the happy ghast by real use (no jar)
+hostify minecraft:copper_golem -16 -60 26
+hostify minecraft:nautilus -8 -60 26
+hostify minecraft:zombie_nautilus 0 -60 26
+hostify minecraft:camel_husk 8 -60 26
+hostify minecraft:parched 16 -60 26
+summon minecraft:creaking 24 -60 26 {NoAI:1b,Health:0.5f}
+summon minecraft:happy_ghast 36 -60 26 {NoAI:1b,Health:4f}
+wait 5
+tp @s 24 -60 23 0 0
+lookat creaking 2
+key use
+wait 20
+tp @s 36 -60 21 0 0
+lookat happy_ghast 2
+key use
+wait 20
+inspect near creaking 6
+inspect near happy_ghast 8
+jar
+wait 10
+tp @s -15.5 -60 23 0 0
+wait 5
+lookat copper_golem 1
+key use
+wait 20
+riding copper_golem
+hud off
+view 2
+wait 10
+shot g_host_copper_golem_front
+view 1
+wait 10
+shot g_host_copper_golem_back
+view 0
+hud on
+sneak
+wait 20
+tp @s -7.5 -60 23 0 0
+wait 5
+lookat nautilus 1
+key use
+wait 20
+riding nautilus
+hud off
+view 2
+wait 10
+shot g_host_nautilus_front
+view 1
+wait 10
+shot g_host_nautilus_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 0.5 -60 23 0 0
+wait 5
+lookat zombie_nautilus 1
+key use
+wait 20
+riding zombie_nautilus
+hud off
+view 2
+wait 10
+shot g_host_zombie_nautilus_front
+view 1
+wait 10
+shot g_host_zombie_nautilus_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 8.5 -60 23 0 0
+wait 5
+lookat camel_husk 1
+key use
+wait 20
+riding camel_husk
+hud off
+view 2
+wait 10
+shot g_host_camel_husk_front
+view 1
+wait 10
+shot g_host_camel_husk_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 16.5 -60 23 0 0
+wait 5
+lookat parched 1
+key use
+wait 20
+riding parched
+hud off
+view 2
+wait 10
+shot g_host_parched_front
+view 1
+wait 10
+shot g_host_parched_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 24.5 -60 23 0 0
+wait 5
+lookat creaking 1
+key use
+wait 20
+riding creaking
+hud off
+view 2
+wait 10
+shot g_host_creaking_front
+view 1
+wait 10
+shot g_host_creaking_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 36.5 -60 21 0 0
+wait 5
+lookat happy_ghast 1
+key use
+wait 20
+riding happy_ghast
+hud off
+view 2
+wait 10
+shot g_host_happy_ghast_front
+view 1
+wait 10
+shot g_host_happy_ghast_back
+view 0
+hud on
+sneak
+wait 20

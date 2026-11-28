@@ -116,6 +116,7 @@ public final class Chimera {
             case MARROW -> 0xE8E0C8;
             case OIL -> 0x3A3028;
             case ECTO -> 0x90F0B0;
+            case SAP -> 0xC8742A;
         };
     }
 

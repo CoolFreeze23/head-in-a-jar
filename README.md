@@ -24,7 +24,7 @@ DOLORES's voice). This page describes release **0.7.2**.
 - Minecraft **1.21.1** with **NeoForge 21.1.200** or newer.
 - **GeckoLib 4.9.3** or a newer 4.x for 1.21.1 (required; GeckoLib 5 is not accepted).
 - Install it on both the client and the server.
-- Optional: Curios, JEI, Jade, Patchouli, Entity Model Features (see [Other mods](#other-mods)).
+- Optional: Curios, JEI, Jade, Patchouli, Entity Model Features, Vanilla Backport 1.2.2 (see [Other mods](#other-mods)).
 
 ## How to read this page
 
@@ -3340,6 +3340,7 @@ are in `config/headinajar-client.toml`.
 | `staff.promotedArrayBonus` | 150 | 100 to 300 | What a promoted head makes at a Cerebral Array, in percent of its species' rate. |
 | `staff.strikes` | true | true / false | Neglected sites go on strike at dawn (never in a world's first week). Off: no strikes. |
 | `staff.boardUnionises` | true | true / false | A "unionise" motion that really carries walks out a site near the Array that already meets the strike test. Off: the motion is only words. |
+| `combat.lanceUnseatsHosts` | true | true / false | A lance's unseating hit (a charging spear, or any weapon in `#minecraft:spears` that knocks a rider off) takes a jar off its host body, Rover or Spider Walker. Off: hosts hold, as mechas, Neural Sockets and the Passenger Pod do. |
 | `bodies.headlessChicken` | true | true / false | A chicken host nobody rides runs in circles round where it was cut. Off: it stands still like any host. |
 
 </details>
@@ -3513,6 +3514,26 @@ None is needed. Each hook turns on only when its mod is there.
   Blazing Soul (L_Ender's Cataclysm's Ignis), Atomic Breath (OreSpawn's Godzilla). Creatures from Twilight Forest,
   Friends & Foes and OreSpawn also carry some vanilla genes.
 
+### Vanilla Backport (the supplier)
+
+Vanilla Backport brings creatures from newer Minecraft to 1.21.1 under
+their own names. Head Office calls it **the supplier**, and the supplier has not been told. It is optional: Head in a
+Jar never requires it, and without it the game plays exactly as 0.7.2 did. The version tested is **Vanilla Backport
+1.2.2** (with its Platform library 1.4.2) on NeoForge 1.21.1; older versions are refused at start-up.
+
+With it installed:
+
+- The creaking, happy ghast, copper golem, nautilus, zombie nautilus, camel husk, parched and sulfur cube each have a
+  title, department, blood type, jar and their own refusals, instead of reading "General Staff"; seven of them can be
+  hosts, and six can be hired with a Staff Lanyard.
+- The Directory gains a New Arrivals row and a hidden advancement, New Starters. The Complete Census stays at 77.
+- Copper chests and shelves work as Pick-Ups and Drop-Offs for staff.
+- A charging spear can unseat a jar from its host (the Unseating Policy; `combat.lanceUnseatsHosts`).
+- `/headoffice status` lists the new arrivals on file.
+
+Everything is filed under the creatures' `minecraft:` names and loads only when they exist, so a world that drops the
+supplier keeps its heads as "Discontinued model" until it comes back.
+
 ## Sounds
 
 The mod brings its own sounds, and every one has a subtitle in English and Brazilian Portuguese. None borrows another
@@ -3574,6 +3595,105 @@ hear (no bees, beacons or anvils standing in). Below, sounds are named by their 
 ## Release notes
 
 The notes for every release are also kept in [CHANGELOG.md](CHANGELOG.md).
+
+### What's new in 0.8.0 · The Supplier Contract
+
+Head in a Jar now works with Vanilla Backport, which brings the newer Minecraft creatures to 1.21.1. Head Office calls
+it "the supplier". It is optional: without it nothing changes, and with it every new creature gets its proper file
+instead of being treated as a generic one.
+
+<img src="docs/images/new_arrivals_jars.png" width="560" alt="Eight Life Support Jars on grass, each with a new creature's head floating in green saline: a creaking's bark head with orange eyes, a copper golem's head with its antenna, a nautilus and a zombie nautilus with their tentacles, a camel husk's head and neck, a parched skull, a happy ghast's smiling face in an Executive jar and a whole sulfur cube in a Reinforced jar">
+
+#### New
+
+- **Eight new arrivals on file.** With the supplier installed, the creaking, happy ghast, copper golem, nautilus,
+  zombie nautilus, camel husk, parched and sulfur cube each have a title, a department, a blood type, the right jar
+  and their own refusals. The happy ghast's head needs an Executive jar, as its sad cousin's does; the sulfur cube is
+  all head and goes in a Reinforced jar.
+- **Hosts for seven of them.** Saw one at half health and a jar sits on its neck: the jar now sits on top of the happy
+  ghast instead of sinking into it.
+
+  <img src="docs/images/new_arrivals_hosts.png" width="560" alt="Five headless host bodies on grass, each with a jar on its neck and a zombie head in the jar: a copper golem, a nautilus standing on its shell, a camel husk, a parched skeleton and a creaking">
+
+- **Hiring.** The Staff Lanyard takes the happy ghast, copper golem, nautilus, zombie nautilus, camel husk and parched,
+  each with its own wage. A creaking answers to its heart ("Already employed by its heart."), and a mount with a
+  rider already works for the rider.
+- **New Arrivals in the Directory.** The DNA Sequencer's Directory gains a last row for them, and a hidden
+  advancement, New Starters, for sampling every one. The Complete Census stays at 77, so a finished Directory stays
+  finished.
+- **Copper chests and shelves are containers to staff.** Mark them with the Clipboard as Pick-Ups or Drop-Offs; hauling
+  and sorting use them like any chest.
+
+  <img src="docs/images/copper_hauler.gif" width="420" alt="A hired copper golem named Trevor walks from a copper chest on the left to an oak shelf on the right and back, past a Time Clock standing behind them: first an apple appears on the shelf, then a loaf of bread">
+
+- **The Unseating Policy.** A charging spear knocks riders off. A jar on a host comes off beside the body with one knock
+  on the glass, and the body keeps standing. Mecha pilots, the Lunk, the Passenger Pod and Neural Sockets hold. A
+  server value turns it off for hosts.
+
+  <img src="docs/images/unseating.gif" width="420" alt="Third person behind a jar riding a headless cow at a gallop across grass toward a zombie horseman in an iron helmet with a spear; the spear strikes, the picture breaks into static for a moment and the jar falls into the grass beside the cow, which keeps standing while the horseman rides past; then the jar's own view from the grass, looking up at the headless cow named Bessie">
+
+- **Discontinued models.** Open a world without the supplier and the heads of its creatures are kept, not lost: they
+  say "Discontinued model", cannot be placed, and come back when the supplier does. Staff that vanished with it are
+  listed in one memo.
+- `/headoffice status` lists the new arrivals on file, or "none. The supplier has not delivered."
+
+#### Updating
+
+- Without Vanilla Backport the game plays as 0.7.2, and 0.7.2 worlds load with nothing changed. A 0.8.0 game and a
+  0.7.2 server can join each other either way, as long as both have Vanilla Backport or neither does: Vanilla Backport
+  turns away a game or server without it.
+- Vanilla Backport 1.2.2 (with its Platform library) is the version tested. It is never required.
+
+<details><summary>Full details</summary>
+
+**The new arrivals**
+
+| Creature | Title | Department | Blood | Jar |
+|---|---|---|---|---|
+| Creaking | Night Auditor | The Competition | Sap (drawn with the Oil Tap) | Life Support Jar |
+| Happy ghast | Chief Happiness Officer | Logistics | Warm | Executive |
+| Copper golem | Records Clerk | Logistics | Oil | Life Support Jar |
+| Nautilus | Diving Officer | Marine Division | Cold | Life Support Jar |
+| Zombie nautilus | Salvage | Marine Division | Grave | Life Support Jar |
+| Camel husk | Desert Operations | Logistics | Grave | Life Support Jar |
+| Parched | Compliance (Desert) | Night Shift | Marrow | Life Support Jar |
+| Sulfur cube | Containment | Facilities | Brimstone | Reinforced (all head) |
+
+- Wages: a resin clump (creaking), a snowball (happy ghast), a copper nugget (copper golem), any fish (nautilus), two
+  rotten flesh (zombie nautilus), a rabbit's foot (camel husk), a bone (parched). The sulfur cube is not hired yet:
+  "HR has no job description for a Sulfur Cube yet."
+- Babies (the ghastling, a small cube) get the child-labour line. A ridden mount: "Already employed by Husk."
+- The parched's head shoots Weakness arrows on a Turret Pedestal; the zombie nautilus's bites.
+- New desk rivals and colleagues: the Night Auditor and the Grief Counsellor (-5 morale within 4 blocks), the two
+  copper golems if Friends & Foes is also installed ("There are now two copper golem departments. A merger is under
+  review. Neither department has been told."), the Chief Happiness Officer and the Sleep Auditor (+2 within 8).
+- A staff row can now name its head's Cerebral Array rate, turret attack and Neural Socket program; every existing
+  creature's numbers are unchanged.
+- At the machines: Embalming Fluid and Neural Lace refuse creaking and camel husk bodies; honeycomb waxes a copper
+  golem host as the game does and is refused elsewhere ("Honeycomb is for copper. HR has had to say this more than
+  once."); the Body Locker refuses a happy ghast and a creaking bound to its heart, and a stored copper golem stops
+  weathering; the Galvanic Pile refuses resin, the Saline Mixer a dried ghast, the Charging Dock copper blocks; the
+  Cerebral Array refuses a copper golem statue ("Statues do not attend meetings. They have been to enough."); a mecha
+  refuses copper parts, harnesses and nautilus armour; a jarred head will not go in a bundle ("A colleague is not
+  luggage. Carry it by hand, like a professional."), and still goes in a shulker box.
+- Exit Interview reasons: "dried out" (a nautilus), "its heart was broken" and "wandered too far from its heart" (a
+  creaking), "retired in place" (a copper golem that became a statue).
+- The Unseating Policy, line by line: a mecha pilot, "Restraint held. The lance has been noted."; a hosted jar,
+  "Unseated by Zombie's Iron Spear. Bessie is where you left her." and a first memo with where it happened (the charge
+  that takes the jar passes over the body under it, so Bessie is still there); a Rover or
+  Spider Walker, "Unseated. The Rover kept going for a bit."; the Lunk, "The Lunk does not do falling over."; the
+  Passenger Pod, "The pod is glazed. Passengers stay in."; a Neural Socket, "The clamps held. Please stop stabbing the
+  switchboard."; a secondee's head, "The collar holds. Secondees are bolted on."; a patient lanced out of the Separation
+  Chair before the cut has the procedure called off. Hidden advancement: Relieved of Your Post. Server value
+  `combat.lanceUnseatsHosts` (default true).
+- Every stored creature record (jarred heads, the Body Locker, the Assembly Gantry, the company shuttle, the Time Clock's
+  arrivals) is now stamped with the game version it was saved in, ready for a future Minecraft version. Records from
+  0.7.2 are read exactly as before.
+- A placed head of a creature that is no longer installed draws an empty jar; Jade says "On leave."
+
+</details>
+
+<details><summary>What changed in 0.7.2, 0.7.1, 0.7.0, 0.6.3, 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.7.2 · The moments
 
@@ -3706,8 +3826,6 @@ grievances when they are neglected, and go on strike when a whole site is.
   the game yet.
 
 </details>
-
-<details><summary>What changed in 0.7.1, 0.7.0, 0.6.3, 0.6.2, 0.6.1, 0.6.0, 0.5.4, 0.5.3, 0.5.2, 0.5.1, 0.5.0, 0.4.0, 0.3.0 and 0.2.0</summary>
 
 ### What's new in 0.7.1 · Secondment
 

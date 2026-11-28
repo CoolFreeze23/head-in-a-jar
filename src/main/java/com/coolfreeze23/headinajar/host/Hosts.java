@@ -118,9 +118,14 @@ public final class Hosts {
         @Override
         protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
             Map<ResourceLocation, HostDefinition> out = new HashMap<>();
-            files.forEach((file, json) -> HostDefinition.CODEC.parse(JsonOps.INSTANCE, json)
-                    .resultOrPartial(err -> HeadInAJar.LOGGER.warn("Host file {}: {}", file, err))
-                    .ifPresent(def -> out.put(def.entity(), def)));
+            var ops = makeConditionalOps();
+            files.forEach((file, json) -> {
+                // a file whose neoforge:conditions fail (a creature that is not registered) is skipped, as other data is
+                if (!net.neoforged.neoforge.common.conditions.ICondition.conditionsMatched(ops, json)) return;
+                HostDefinition.CODEC.parse(JsonOps.INSTANCE, json)
+                        .resultOrPartial(err -> HeadInAJar.LOGGER.warn("Host file {}: {}", file, err))
+                        .ifPresent(def -> out.put(def.entity(), def));
+            });
             definitions = Map.copyOf(out);
             HeadInAJar.LOGGER.info("Loaded {} host definitions", out.size());
         }

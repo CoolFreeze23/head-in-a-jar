@@ -1,0 +1,19 @@
+{
+  "entity": "minecraft:sulfur_cube",
+  "wage": {
+    "item": "minecraft:slime_ball",
+    "count": 1
+  },
+  "noise": "staff.headinajar.noise.sulfur_cube",
+  "alarm": "minecraft:entity.sulfur_cube.squish",
+  "array": 10,
+  "turret": "lookout",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:sulfur_cube"
+    }
+  ]
+}

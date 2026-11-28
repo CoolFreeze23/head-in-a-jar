@@ -177,6 +177,14 @@ public final class Config {
             .define("headlessChicken", true);
 
     static {
+        B.pop().push("combat");
+    }
+
+    public static final ModConfigSpec.BooleanValue LANCE_UNSEATS_HOSTS = B
+            .comment("A lance's unseating hit (a charged spear, or any weapon tagged minecraft:spears that knocks a rider off) takes a jar off its host body, Rover or Spider Walker (false: hosts hold, as mechas, sockets and the Passenger Pod do).")
+            .define("lanceUnseatsHosts", true);
+
+    static {
         B.pop();
     }
 

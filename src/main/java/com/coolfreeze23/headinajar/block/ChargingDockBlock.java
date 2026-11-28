@@ -128,6 +128,19 @@ public class ChargingDockBlock extends BaseEntityBlock implements com.coolfreeze
         return new Entity(pos, state);
     }
 
+    /** 0.8.0: a copper block held to the plate is told the dock is the battery (else the click is the plain one below). */
+    @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                                               Player player, net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
+        if (stack.is(com.coolfreeze23.headinajar.supplier.SuppliedMachines.COPPER_BLOCKS) && level.getBlockEntity(pos) instanceof Entity dock) {
+            if (player instanceof ServerPlayer server) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(server, com.coolfreeze23.headinajar.feedback.Refuser.at(dock), "dock.copper");
+            }
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
+    }
+
     /** A click, in any form: a body carrying its head sets it down on the plate; anyone else hears what it holds. */
     @Override
     protected net.minecraft.world.InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {

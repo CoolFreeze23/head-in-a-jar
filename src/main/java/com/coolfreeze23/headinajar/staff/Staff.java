@@ -36,10 +36,17 @@ public final class Staff {
     public static final List<String> DEPARTMENTS = List.of("livestock", "field_office", "logistics", "security", "night_shift", "facilities",
             "accounts", "legal", "sales", "marine", "demolitions", "senior_management");
     public static final String BOARD = "board", TEMPS = "temp_agency", GENERAL = "general";
-    private static final List<TagKey<EntityType<?>>> TAGS = new ArrayList<>();
+    /**
+     * Departments for creatures that are not the company's (0.8.0): The Competition, a rival firm in the remote-body
+     * sector (the creaking). Looked up after the fourteen, from their own tags; they have no Directory column and no
+     * gene strip, since none of their creatures is in the census or carries a gene.
+     */
+    public static final List<String> OUTSIDE = List.of("competition");
+    private static final List<TagKey<EntityType<?>>> TAGS = new ArrayList<>(), OUTSIDE_TAGS = new ArrayList<>();
 
     static {
         for (String d : DEPARTMENTS) TAGS.add(TagKey.create(Registries.ENTITY_TYPE, HeadInAJar.id("department/" + d)));
+        for (String d : OUTSIDE) OUTSIDE_TAGS.add(TagKey.create(Registries.ENTITY_TYPE, HeadInAJar.id("department/" + d)));
     }
 
     /** What tests can read: every numbering, newest last ("number:species:key"). */
@@ -197,6 +204,7 @@ public final class Staff {
         if (type == null) return GENERAL;
         if (type == EntityType.ENDER_DRAGON) return BOARD;
         for (int i = 0; i < TAGS.size(); i++) if (type.is(TAGS.get(i))) return DEPARTMENTS.get(i);
+        for (int i = 0; i < OUTSIDE_TAGS.size(); i++) if (type.is(OUTSIDE_TAGS.get(i))) return OUTSIDE.get(i);
         return GENERAL;
     }
 
@@ -248,7 +256,7 @@ public final class Staff {
 
     /** A reason for leaving: a reason key's word, or a killer's name as it was. */
     public static Component reason(String why) {
-        return why.startsWith("staff.headinajar.reason.") ? Component.translatable(why) : Component.literal(why);
+        return why.startsWith("staff.headinajar.reason.") ? com.coolfreeze23.headinajar.supplier.Lines.of(why) : Component.literal(why);
     }
 
     /** Whether this file's creature could ever leave the company with an Exit Interview (it has an employer). */

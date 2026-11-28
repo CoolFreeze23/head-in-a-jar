@@ -221,6 +221,17 @@ public final class Directory extends SavedData {
             com.coolfreeze23.headinajar.Advance.grant(p, "complete_census");
             Memos.send(p, Memos.Memo.CENSUS);
         }
+        // 0.8.0: the New Arrivals row has its own induction; the census stays the 77
+        List<String> arrivals = com.coolfreeze23.headinajar.supplier.Supplier.delivered();
+        if (!arrivals.isEmpty()) {
+            for (Set<String> s : book.sets.values()) {
+                if (s.stream().anyMatch(arrivals::contains)) {
+                    Memos.send(p, Memos.Memo.NEW_ARRIVAL);
+                    break;
+                }
+            }
+            if (book.sets.get(Stamp.SAMPLED).containsAll(arrivals)) com.coolfreeze23.headinajar.Advance.grant(p, "new_starters");
+        }
         for (Set<String> s : book.sets.values()) {
             if (s.stream().anyMatch(REDACTED::contains)) {
                 com.coolfreeze23.headinajar.Advance.grant(p, "off_the_books");

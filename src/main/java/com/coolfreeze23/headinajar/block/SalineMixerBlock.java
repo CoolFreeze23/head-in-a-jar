@@ -31,6 +31,13 @@ public class SalineMixerBlock extends KitMachineBlock<SalineMixerBlockEntity> {
     protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, net.minecraft.world.level.Level level,
                                                                net.minecraft.core.BlockPos pos, net.minecraft.world.entity.player.Player player,
                                                                net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
+        // 0.8.0: a dried ghast wants saline, not to be made into it (else it would open the mixer's screen)
+        if (com.coolfreeze23.headinajar.supplier.SuppliedMachines.driedGhast(stack) && level.getBlockEntity(pos) instanceof SalineMixerBlockEntity mixer) {
+            if (player instanceof net.minecraft.server.level.ServerPlayer server) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(server, com.coolfreeze23.headinajar.feedback.Refuser.at(mixer), "mixer.dried_ghast");
+            }
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         var result = super.useItemOn(stack, state, level, pos, player, hand, hit);
         if (result == net.minecraft.world.ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION && stack.is(net.minecraft.world.item.Items.BUCKET)
                 && level.getBlockEntity(pos) instanceof SalineMixerBlockEntity mixer) {

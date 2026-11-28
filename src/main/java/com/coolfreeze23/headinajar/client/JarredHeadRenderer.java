@@ -69,7 +69,19 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
     @Override
     public void render(JarredHeadBlockEntity head, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
         EntityType<?> type = head.entityType();
-        if (type == null || head.getLevel() == null) return;
+        if (head.getLevel() == null) return;
+        if (type == null) {
+            // a discontinued model ("On leave."): its jar stays on the plinth, glass and saline, empty until its creature
+            // is registered again
+            if (head.onLeave()) {
+                pose.pushPose();
+                pose.translate(0.5, 7 / 16.0, 0.5);
+                pose.mulPose(Axis.YP.rotationDegrees(-head.getBlockState().getValue(JarredHeadBlock.FACING).toYRot()));
+                draw(null, null, 0, head.jar(), pose, buffers, light, head.getLevel().getGameTime() + partialTick, 0, 0, 1, true, Extra.NONE);
+                pose.popPose();
+            }
+            return;
+        }
         float age = head.getLevel().getGameTime() + partialTick;
         float yaw = Mth.lerp(partialTick, head.yawPrev, head.yaw), pitch = Mth.lerp(partialTick, head.pitchPrev, head.pitch);
         double now = head.getLevel().getGameTime() + partialTick;
@@ -449,11 +461,21 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
 
     /** A creature turned this way looks out of the jar's front (-Z), as a head part does. */
     private static final float FACING_YAW = 180;
-    /** Long swimmers show their side, as fish in a tank do (a fish facing you is a sliver). */
-    private static final Set<EntityType<?>> SIDE_ON = Set.of(EntityType.COD, EntityType.SALMON, EntityType.TROPICAL_FISH, EntityType.TADPOLE,
-            EntityType.SILVERFISH, EntityType.ENDERMITE);
+    /**
+     * Long swimmers show their side, as fish in a tank do (a fish facing you is a sliver). These tables are keyed by id
+     * string (0.8.0), so a creature another mod delivers under vanilla's name has a row without its class being named.
+     */
+    private static final Set<String> SIDE_ON = ids("cod", "salmon", "tropical_fish", "tadpole", "silverfish", "endermite");
     /** Heads whose face is on their sides, down a long snout: turned three-quarters, so the eyes show. */
-    private static final Set<EntityType<?>> THREE_QUARTER = Set.of(EntityType.HOGLIN, EntityType.ZOGLIN, EntityType.FROG);
+    private static final Set<String> THREE_QUARTER = ids("hoglin", "zoglin", "frog");
+
+    private static Set<String> ids(String... paths) {
+        return java.util.Arrays.stream(paths).map(p -> "minecraft:" + p).collect(java.util.stream.Collectors.toUnmodifiableSet());
+    }
+
+    private static String id(EntityType<?> type) {
+        return net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
+    }
 
     /** Draws {@code part} at the given place and turn (px, radians), its own pose put back afterwards. */
     private static void part(ModelPart part, PoseStack pose, VertexConsumer buffer, int light, int overlay,
@@ -485,30 +507,38 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
     // --- what each creature looks like, worked out once ----------------------------------------------------------
 
     /** Creatures that are all head: drawn whole in the jar. */
-    private static final Set<EntityType<?>> ALL_HEAD = Set.of(EntityType.SLIME, EntityType.MAGMA_CUBE, EntityType.SHULKER, EntityType.VEX, EntityType.BEE,
-            EntityType.SILVERFISH, EntityType.ENDERMITE, EntityType.TADPOLE, EntityType.GHAST,
+    private static final Set<String> ALL_HEAD = ids("slime", "magma_cube", "shulker", "vex", "bee",
+            "silverfish", "endermite", "tadpole", "ghast",
             // a fish's head alone is a stub of a block: the whole fish reads
-            EntityType.COD, EntityType.SALMON);
+            "cod", "salmon",
+            // 0.8.0: the sulfur cube is one cube, as a slime is
+            "sulfur_cube");
 
     /**
      * Parts beside the head that belong to the face (siblings in the model, not the head's own children): a chicken's beak
      * and wattle, a rabbit's ears and nose. Field names, as the model classes have them.
      */
-    private static final Map<EntityType<?>, String[]> EXTRAS = Map.of(
-            EntityType.CHICKEN, new String[]{"beak", "redThing"},
-            EntityType.RABBIT, new String[]{"rightEar", "leftEar", "nose"});
+    private static final Map<String, String[]> EXTRAS = Map.of(
+            "minecraft:chicken", new String[]{"beak", "redThing"},
+            "minecraft:rabbit", new String[]{"rightEar", "leftEar", "nose"});
 
     /**
      * Creatures with no head part whose drawing whole would not fit the jar's saline: the parts that stand for the head
      * (the first is the head, the rest go with it). A ghast's body is its face, a squid's mantle its head; a strider is
-     * all body on legs; the Wither is three heads.
+     * all body on legs; the Wither is three heads. The first part is looked for anywhere in the model (a nautilus keeps
+     * its body under a root part), the rest among the model root's own children.
      */
-    private static final Map<EntityType<?>, String[]> PARTS = Map.of(
-            EntityType.GHAST, new String[]{"body"},
-            EntityType.SQUID, new String[]{"body"},
-            EntityType.GLOW_SQUID, new String[]{"body"},
-            EntityType.STRIDER, new String[]{"body"},
-            EntityType.WITHER, new String[]{"center_head", "right_head", "left_head"});
+    private static final Map<String, String[]> PARTS = Map.of(
+            "minecraft:ghast", new String[]{"body"},
+            "minecraft:squid", new String[]{"body"},
+            "minecraft:glow_squid", new String[]{"body"},
+            "minecraft:strider", new String[]{"body"},
+            "minecraft:wither", new String[]{"center_head", "right_head", "left_head"},
+            // 0.8.0: the happy ghast is its face, as the ghast is; a nautilus's head is the part with the tentacles, under
+            // its shell
+            "minecraft:happy_ghast", new String[]{"body"},
+            "minecraft:nautilus", new String[]{"body"},
+            "minecraft:zombie_nautilus", new String[]{"body"});
 
     /** Layers that dress the head with a model of their own and a texture of their own (wool, a drowned's weed, a stray's rags). */
     private static final Set<String> HEAD_LAYERS = Set.of("SheepFurLayer", "DrownedOuterLayer", "SkeletonClothingLayer");
@@ -614,13 +644,15 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
                 if (parts.hasChild("upper_mouth")) horseMouth = parts.getChild("upper_mouth");
             }
         }
-        String[] parts = PARTS.get(type);
-        if (parts != null && model instanceof HierarchicalModel<?> hierarchical && hierarchical.root().hasChild(parts[0])) head = hierarchical.root().getChild(parts[0]);
+        String key = id(type);
+        String[] parts = PARTS.get(key);
+        var named = parts != null && model instanceof HierarchicalModel<?> hierarchical ? hierarchical.getAnyDescendantWithName(parts[0]) : java.util.Optional.<ModelPart>empty();
+        if (named.isPresent()) head = named.get();
         else parts = null;
-        boolean whole = parts == null && (ALL_HEAD.contains(type) || head == null);
+        boolean whole = parts == null && (ALL_HEAD.contains(key) || head == null);
         Look look = new Look(type, entity, renderer, whole);
-        if (SIDE_ON.contains(type)) look.side = 90;
-        else if (THREE_QUARTER.contains(type)) look.side = 35;
+        if (SIDE_ON.contains(key)) look.side = 90;
+        else if (THREE_QUARTER.contains(key)) look.side = 35;
         if (head == null && model instanceof HierarchicalModel<?> hierarchical) {
             // no head: its whole body stands for one where only a face is wanted (the Cerebral Array's specimen jars)
             head = hierarchical.root();
@@ -648,7 +680,7 @@ public class JarredHeadRenderer implements BlockEntityRenderer<JarredHeadBlockEn
                     poses.add(relative(root.getChild(parts[i]), headPose));
                 }
             }
-            for (String name : EXTRAS.getOrDefault(type, new String[0])) {
+            for (String name : EXTRAS.getOrDefault(key, new String[0])) {
                 ModelPart p = field(model, name);
                 if (p != null) {
                     extras.add(p);

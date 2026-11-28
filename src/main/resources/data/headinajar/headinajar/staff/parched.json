@@ -1,0 +1,33 @@
+{
+  "entity": "minecraft:parched",
+  "wage": {
+    "item": "minecraft:bone",
+    "count": 1
+  },
+  "noise": "staff.headinajar.noise.parched",
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0,
+      "sorting": 1.0,
+      "farming": 1.0,
+      "security": 1.0
+    },
+    "shift": "any",
+    "carry": 1,
+    "hands": true,
+    "walk": 0.864,
+    "move": "walk",
+    "attack": "bow"
+  },
+  "array": 10,
+  "turret": "bow_weakness",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:parched"
+    }
+  ]
+}

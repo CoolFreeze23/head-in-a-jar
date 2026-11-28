@@ -166,7 +166,7 @@ public final class GeneticsItems {
                 return InteractionResult.FAIL;
             }
             BloodType blood = BloodType.of(target);
-            boolean right = kind.bloodless ? blood == kind : !blood.bloodless;
+            boolean right = kind.draws(blood);
             if (!right) {
                 // a bloodless tool on another bloodless kind names the one tool that creature takes
                 Item takes = kind.bloodless && blood.bloodless ? toolFor(blood) : null;
@@ -208,7 +208,7 @@ public final class GeneticsItems {
         public static Item toolFor(BloodType blood) {
             return switch (blood) {
                 case MARROW -> ModRegistry.MARROW_DRILL.get();
-                case OIL -> ModRegistry.OIL_TAP.get();
+                case OIL, SAP -> ModRegistry.OIL_TAP.get();
                 case ECTO -> ModRegistry.ECTO_TRAP.get();
                 default -> null;
             };

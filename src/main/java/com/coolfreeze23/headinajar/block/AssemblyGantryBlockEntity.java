@@ -110,6 +110,8 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
     /** The frame built, waiting for its moment to stand on the pad (LEAD ticks after the press); saved with the Gantry. */
     private MechaEntity pending;
     private CompoundTag pendingSave;
+    /** The data version {@link #pendingSave} was written at (0: before stamps). */
+    private int pendingStamp;
     private UUID jobMecha, jobPlayer;
     private long chargedAt = Long.MIN_VALUE / 2;
     // --- client only ---------------------------------------------------------------------------------------------
@@ -646,9 +648,13 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
         // a frame built but not yet stood on the pad keeps its modules: it stands as soon as the Gantry ticks again
         if (pending != null) {
             CompoundTag e = new CompoundTag();
-            if (pending.saveAsPassenger(e)) tag.put("PendingBuild", e);
+            if (pending.saveAsPassenger(e)) {
+                tag.put("PendingBuild", e);
+                com.coolfreeze23.headinajar.supplier.Records.stamp(tag, "PendingBuild");
+            }
         } else if (pendingSave != null) {
             tag.put("PendingBuild", pendingSave);
+            com.coolfreeze23.headinajar.supplier.Records.put(tag, "PendingBuild", pendingStamp);
         }
     }
 
@@ -662,6 +668,7 @@ public class AssemblyGantryBlockEntity extends BlockEntity implements MenuProvid
         old.deserializeNBT(registries, saved);
         for (int i = 0; i < items.getSlots(); i++) items.setStackInSlot(i, i < old.getSlots() ? old.getStackInSlot(i) : ItemStack.EMPTY);
         pendingSave = tag.contains("PendingBuild") ? tag.getCompound("PendingBuild") : null;
+        pendingStamp = com.coolfreeze23.headinajar.supplier.Records.stampOf(tag, "PendingBuild");
     }
 
     /** Only what a client draws (never the save). */

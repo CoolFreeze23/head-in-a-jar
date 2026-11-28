@@ -86,6 +86,10 @@ public final class StaffEvents {
     /** Why a member of staff left: a reason key, or the killer's own name. */
     public static String reason(LivingEntity dead, DamageSource source, StaffFile f) {
         if (Hosts.isHost(dead) && Hosts.data(dead).freshness <= 0 && source.is(DamageTypes.GENERIC_KILL)) return "staff.headinajar.reason.wastage";
+        // 0.8.0: a creaking bound to a heart takes no harm; it dies only when its heart is broken (by a hand or a blast),
+        // so whoever broke it, its heart was broken
+        if (dead instanceof net.minecraft.world.entity.Mob mob && !source.is(DamageTypes.GENERIC_KILL)
+                && com.coolfreeze23.headinajar.staff.work.Workforce.heartBound(mob)) return "staff.headinajar.reason.heart_broken";
         Entity killer = source.getEntity();
         if (killer != null && f.employer != null && f.employer.equals(killer.getUUID())) return "staff.headinajar.reason.management";
         if (source.is(DamageTypes.FALL)) return "staff.headinajar.reason.fall";
@@ -94,6 +98,9 @@ public final class StaffEvents {
         if (source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.CAMPFIRE)
                 || source.is(DamageTypes.HOT_FLOOR)) return "staff.headinajar.reason.burned";
         if (source.is(DamageTypes.DROWN)) return "staff.headinajar.reason.drowned";
+        // 0.8.0: a nautilus left out of the water (by id: any other creature drying out is still a workplace incident)
+        if (source.is(DamageTypes.DRY_OUT) && com.coolfreeze23.headinajar.supplier.SuppliedMachines.NAUTILUS.equals(
+                com.coolfreeze23.headinajar.supplier.SuppliedMachines.id(dead))) return "staff.headinajar.reason.dried_out";
         if (source.is(DamageTypeTags.IS_EXPLOSION)) return "staff.headinajar.reason.explosion";
         if (killer instanceof LivingEntity living && killer != dead) return living.getName().getString();
         return "staff.headinajar.reason.other";
@@ -107,12 +114,20 @@ public final class StaffEvents {
         // a creature cut into a jar goes on as a head: it has not left
         if (f == null || f.left != null || swallowed(dead) || f.employer == null) return;
         if (!Hosts.isHost(dead) && !com.coolfreeze23.headinajar.staff.work.Workforce.isWorker(dead)) return;
+        close(level, dead, f, reason(dead, event.getSource(), f), true);
+    }
+
+    /**
+     * A member of staff has left ({@code why}: a reason key or a killer's name): the file is closed and the Exit
+     * Interview goes out, with HR's Condolence Card for a death ({@code card}). Also for staff who leave the world
+     * without a death the game reports (0.8.0, {@code supplier.SuppliedMachines#left}).
+     */
+    public static void close(ServerLevel level, LivingEntity leaver, StaffFile f, String why, boolean card) {
         long day = Staff.day(level);
-        String why = reason(dead, event.getSource(), f);
         f.left = new StaffFile.Left(day, why);
         f.note("left", day, why);
-        dead.setData(com.coolfreeze23.headinajar.registry.ModRegistry.STAFF, f);
-        exitInterview(level, dead, f, why, true);
+        leaver.setData(com.coolfreeze23.headinajar.registry.ModRegistry.STAFF, f);
+        exitInterview(level, leaver, f, why, card);
     }
 
     /**

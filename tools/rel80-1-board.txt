@@ -1,0 +1,60 @@
+@world flat
+@difficulty easy
+@gamemode creative
+# setup: a clear day, no spawns, the player at the origin facing south
+gamerule doMobSpawning false
+gamerule doDaylightCycle false
+time set 1000
+weather clear
+tp @s 0 -60 0 0 10
+wait 30
+/headoffice status
+wait 10
+# jarred heads by the saw's own path (setup verb jarhead: plain jar in the off hand), one per new arrival
+jarhead minecraft:creaking -6 -60 4
+jarhead minecraft:copper_golem -4 -60 4
+jarhead minecraft:nautilus -2 -60 4
+jarhead minecraft:zombie_nautilus 0 -60 4
+jarhead minecraft:camel_husk 2 -60 4
+jarhead minecraft:parched 4 -60 4
+# the happy ghast (Executive jar) and the sulfur cube (Reinforced jar) by real use of the saw
+summon minecraft:happy_ghast 8 -60 9 {NoAI:1b,Health:4f}
+summon minecraft:sulfur_cube 11 -60 6 {NoAI:1b,Health:2f,Size:1}
+wait 5
+item replace entity @s weapon.mainhand with headinajar:surgical_saw
+item replace entity @s weapon.offhand with headinajar:executive_life_support_jar
+tp @s 8 -60 4 0 0
+lookat happy_ghast 2
+observe 30
+key use
+wait 30
+item replace entity @s weapon.offhand with headinajar:reinforced_life_support_jar
+tp @s 11 -60 3 0 20
+lookat sulfur_cube 0.3
+key use
+wait 30
+inspect me
+tp @s 1 -59 0 0 25
+wait 20
+report placed heads row (z=4) from the front
+hud off
+shot a_heads_row
+tp @s -6 -59 2 0 35
+wait 10
+shot b_head_creaking
+tp @s -4 -59 2 0 35
+wait 10
+shot b_head_copper_golem
+tp @s -2 -59 2 0 35
+wait 10
+shot b_head_nautilus
+tp @s 0 -59 2 0 35
+wait 10
+shot b_head_zombie_nautilus
+tp @s 2 -59 2 0 35
+wait 10
+shot b_head_camel_husk
+tp @s 4 -59 2 0 35
+wait 10
+shot b_head_parched
+hud on

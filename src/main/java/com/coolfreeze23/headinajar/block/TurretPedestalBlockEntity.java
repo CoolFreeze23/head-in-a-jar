@@ -78,6 +78,8 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     /** Client: the mount's pitch (degrees, + up) and last tick's. */
     public float pitch, pitchO;
     public static final int RANGE = 16, FE_PER_TICK = 10, IDLE_FE_PER_TICK = 1;
+    /** A parched head's arrows: Weakness for 30 s (its own arrows' 600 ticks), drawn every 3.5 s (its own 70 ticks). */
+    public static final int WEAKNESS_TICKS = 600, SLOW_DRAW = 70;
     /** Has a target (shooting or reloading): runs at the firing rate. Not saved. */
     private boolean engaged;
     /** A bow head with a target and no arrow to fire: it clicks, waits, and its lamp says so. Not saved. */
@@ -252,7 +254,9 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
         // in the turret and a fireball or a potion bursts on it
         Vec3 flat = new Vec3(dir.x, 0, dir.z);
         Vec3 muzzle = flat.lengthSqr() < 1.0E-4 ? from.add(0, 0.7, 0) : from.add(flat.normalize().scale(0.8));
-        if (type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED) {
+        // what it fires is its staff row's attack (the old table for a creature whose row does not say)
+        String attack = HeadJobs.turretAttack(type);
+        if (HeadJobs.arrows(attack)) {
             if (!takeArrow()) {
                 // nothing to fire: one dry click, then a second's wait before it looks again (at the watching rate)
                 if (!dry) level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_DRY_CLICK.get(), SoundSource.BLOCKS, 1, 1.2f);
@@ -263,22 +267,24 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             }
             dry = false;
             Arrow arrow = tagged(new Arrow(level, muzzle.x, muzzle.y, muzzle.z, new ItemStack(Items.ARROW), null));
-            if (type == EntityType.STRAY) arrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
-            if (type == EntityType.BOGGED) arrow.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
+            if (HeadJobs.BOW_SLOWNESS.equals(attack)) arrow.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
+            if (HeadJobs.BOW_POISON.equals(attack)) arrow.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
+            // a parched's arrow: Weakness for 30 s, as its own are, and it draws slower than a skeleton (3.5 s)
+            if (HeadJobs.BOW_WEAKNESS.equals(attack)) arrow.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, WEAKNESS_TICKS));
             arrow.pickup = net.minecraft.world.entity.projectile.AbstractArrow.Pickup.DISALLOWED;
             arrow.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.15, dir.z, 1.8f, 2f);
             level.addFreshEntity(arrow);
             level.playSound(null, worldPosition, SoundEvents.SKELETON_SHOOT, SoundSource.BLOCKS, 1, 1);
             kit.event(EV_SHOT, SHOT);
-            cooldown = rate(20);
-        } else if (type == EntityType.BLAZE) {
+            cooldown = rate(HeadJobs.BOW_WEAKNESS.equals(attack) ? SLOW_DRAW : 20);
+        } else if (HeadJobs.FIREBALL.equals(attack)) {
             Vec3 v = dir.normalize();
             SmallFireball ball = tagged(new SmallFireball(level, muzzle.x, muzzle.y, muzzle.z, v));
             level.addFreshEntity(ball);
             level.playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1, 1);
             kit.event(EV_SHOT, CHARGE);
             cooldown = rate(30);
-        } else if (type == EntityType.GUARDIAN || type == EntityType.ELDER_GUARDIAN) {
+        } else if (HeadJobs.LASER.equals(attack)) {
             // a 2 s lock, then the laser
             if (target.getId() != lockedId) {
                 lockedId = target.getId();
@@ -299,7 +305,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
                 cooldown = rate(20);
                 showLock(-1);
             }
-        } else if (type == EntityType.CREEPER) {
+        } else if (HeadJobs.PULSE.equals(attack)) {
             if (target.distanceToSqr(from) > 9) return;
             kit.event(EV_SHOT, PULSE);
             // the blast hurts and throws only what the turret would aim at; its owner, pets and villagers stand fast
@@ -316,27 +322,27 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             }, from.x, from.y, from.z, 3, false, Level.ExplosionInteraction.NONE, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER,
                     SoundEvents.GENERIC_EXPLODE);
             items.setStackInSlot(0, ItemStack.EMPTY);
-        } else if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) {
+        } else if (HeadJobs.BITE.equals(attack)) {
             if (target.distanceToSqr(from) > 2.5 * 2.5) return;
             target.hurt(level.damageSources().generic(), 4);
             level.playSound(null, worldPosition, com.coolfreeze23.headinajar.fx.HouseSounds.TURRET_THUMP.get(), SoundSource.BLOCKS, 0.6f, 1.4f);
             kit.event(EV_SHOT, LUNGE);
             cooldown = rate(20);
-        } else if (type == EntityType.SNOW_GOLEM) {
+        } else if (HeadJobs.SNOWBALL.equals(attack)) {
             // the slowness comes with the snowball, on whatever it hits (TurretShots)
             Snowball ball = tagged(new Snowball(level, muzzle.x, muzzle.y, muzzle.z));
             ball.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 1.6f, 1f);
             level.addFreshEntity(ball);
             kit.event(EV_SHOT, SHOT);
             cooldown = rate(10);
-        } else if (type == EntityType.WITCH) {
+        } else if (HeadJobs.POTION.equals(attack)) {
             ThrownPotion potion = tagged(new ThrownPotion(level, muzzle.x, muzzle.y, muzzle.z));
             potion.setItem(PotionContents.createItemStack(Items.SPLASH_POTION, Potions.WEAKNESS));
             potion.shoot(dir.x, dir.y + dir.horizontalDistance() * 0.2, dir.z, 0.9f, 2f);
             level.addFreshEntity(potion);
             kit.event(EV_SHOT, LOB);
             cooldown = rate(60);
-        } else if (type == EntityType.EVOKER) {
+        } else if (HeadJobs.FANGS.equals(attack)) {
             Vec3 step = new Vec3(dir.x, 0, dir.z).normalize();
             for (int i = 1; i <= Math.min(16, (int) dir.horizontalDistance() + 1); i++) {
                 Vec3 p = from.add(step.scale(i));
@@ -409,7 +415,14 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
 
     /** A species' alarm: its staff file's sound, else its own ambient sound (a creature from another mod), or none. */
     public static net.minecraft.sounds.SoundEvent alarmSound(ServerLevel level, EntityType<?> type) {
-        var id = com.coolfreeze23.headinajar.staff.StaffTable.alarm(type);
+        return alarmSound(level, type, com.coolfreeze23.headinajar.staff.StaffTable.alarm(type));
+    }
+
+    /**
+     * The same for a given sound id: an id the game has no sound for (a row naming a sound its supplier took away) falls
+     * back to the creature's ambient sound, never to silence or a crash.
+     */
+    public static net.minecraft.sounds.SoundEvent alarmSound(ServerLevel level, EntityType<?> type, net.minecraft.resources.ResourceLocation id) {
         if (id != null) {
             var s = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(id);
             if (s != null) return s;
@@ -498,7 +511,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
     }
 
     private static boolean bow(EntityType<?> type) {
-        return type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED;
+        return HeadJobs.arrows(HeadJobs.turretAttack(type));
     }
 
     /** Whether a container under or beside the pedestal holds an arrow (nothing is taken). */
@@ -553,7 +566,7 @@ public class TurretPedestalBlockEntity extends BlockEntity implements HasItems, 
             // what the head will need, or use up, said as it goes in
             if (bow(type) && !arrowsInReach()) {
                 com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.no_arrows", Component.translatable("block.minecraft.chest"));
-            } else if (type == EntityType.CREEPER) {
+            } else if (HeadJobs.PULSE.equals(HeadJobs.turretAttack(type))) {
                 com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.creeper_once");
             } else if (lookout) {
                 com.coolfreeze23.headinajar.feedback.Warnings.warn(player, 0, "turret.lookout", type.getDescription());

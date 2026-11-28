@@ -28,7 +28,9 @@ import java.util.Set;
 @EventBusSubscriber(modid = HeadInAJar.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public record TreadmillRate(Optional<Integer> fe, Optional<String> refuse) {
     /** The refusals a row may name (each has its line, {@code refusal.headinajar.treadmill.<kind>}). */
-    public static final Set<String> KINDS = Set.of("flier", "ghast", "swimmer", "strider", "heavy", "bounce");
+    public static final Set<String> KINDS = Set.of("flier", "ghast", "swimmer", "strider", "heavy", "bounce",
+            // 0.8.0: a creature that walks only while nobody watches (the belt's console is always watching)
+            "watched");
 
     public static final Codec<TreadmillRate> CODEC = RecordCodecBuilder.<TreadmillRate>create(i -> i.group(
             Codec.intRange(0, 100_000).optionalFieldOf("fe").forGetter(TreadmillRate::fe),

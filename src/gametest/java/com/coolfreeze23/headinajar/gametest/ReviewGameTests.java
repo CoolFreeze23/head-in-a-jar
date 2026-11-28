@@ -274,7 +274,8 @@ public class ReviewGameTests {
         done(h, p, other);
     }
 
-    @GameTest(template = "platform32", timeoutTicks = 1200)
+    // a batch of its own: with the supplier's tests on the grid its hauler was drawn off by a neighbouring site
+    @GameTest(template = "platform32", timeoutTicks = 1200, batch = "senior_carries_alone")
     public static void aSeniorAssociateCarriesHalfAgain(GameTestHelper h) {
         ServerPlayer p = boss(h);
         TimeClockBlockEntity clock = clock(h, p, CLOCK);

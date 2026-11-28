@@ -1,0 +1,34 @@
+{
+  "entity": "minecraft:camel_husk",
+  "wage": {
+    "item": "minecraft:rabbit_foot",
+    "count": 1
+  },
+  "noise": "staff.headinajar.noise.camel_husk",
+  "alarm": "minecraft:entity.camel_husk.ambient",
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.5
+    },
+    "cannot": {
+      "sorting": "card.cannot.sorting_undead"
+    },
+    "shift": "any",
+    "carry": 3,
+    "hands": false,
+    "walk": 2.4,
+    "move": "walk",
+    "attack": "none"
+  },
+  "array": 20,
+  "turret": "lookout",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:camel_husk"
+    }
+  ]
+}

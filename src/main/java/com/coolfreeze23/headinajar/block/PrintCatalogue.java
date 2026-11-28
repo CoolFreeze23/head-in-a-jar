@@ -74,13 +74,19 @@ public final class PrintCatalogue {
                 "zombie", "husk", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "creeper", "blaze", "piglin",
                 "piglin_brute", "zombified_piglin", "squid", "glow_squid", "dolphin", "guardian", "phantom", "strider", "llama",
                 "trader_llama");
+        // 0.8.0, the new arrivals that fit the door (by id: a world without them never asks): the nautili are small and
+        // marine; the parched is a skeleton's size and does not burn. The creaking, the happy ghast and the camel husk are
+        // too tall, the copper golem is Facilities', the sulfur cube is all head: the rules below say so.
+        put(Size.SMALL, "nautilus", "zombie_nautilus");
+        put(Size.MEDIUM, "parched");
     }
 
     /** Delivered into water: they drown, dry out or flop on a dry doorstep. */
     private static final Set<String> MARINE = Set.of("squid", "glow_squid", "dolphin", "guardian", "cod", "salmon", "tropical_fish",
-            "pufferfish", "axolotl");
-    /** Burn in daylight with nothing over them (the husk does not). */
-    private static final Set<String> BURNS = Set.of("zombie", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "phantom");
+            "pufferfish", "axolotl", "nautilus", "zombie_nautilus");
+    /** Burn in daylight with nothing over them (the husk and the parched do not). */
+    private static final Set<String> BURNS = Set.of("zombie", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "phantom",
+            "zombie_nautilus");
 
     private static void put(Size size, String... paths) {
         for (String path : paths) SIZES.put(ResourceLocation.withDefaultNamespace(path), size);

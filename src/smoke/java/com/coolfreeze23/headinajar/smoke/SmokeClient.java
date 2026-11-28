@@ -564,6 +564,16 @@ public class SmokeClient {
                 if (value != null) value.set(Boolean.parseBoolean(a[1]));
                 report.add("clientcfg " + parts[1].trim() + " -> " + (value == null ? "unknown" : value.get()));
             }
+            case "servercfg" -> {
+                // servercfg lanceUnseatsHosts true|false: sets the mod's server option (setup, as an operator editing the file)
+                String[] a = parts[1].trim().split(" ");
+                var value = switch (a[0]) {
+                    case "lanceUnseatsHosts" -> com.coolfreeze23.headinajar.Config.LANCE_UNSEATS_HOSTS;
+                    default -> null;
+                };
+                if (value != null) value.set(Boolean.parseBoolean(a[1]));
+                report.add("servercfg " + parts[1].trim() + " -> " + (value == null ? "unknown" : value.get()));
+            }
             case "report" -> report.add(parts[1]);
             // legbench N FRAMES: the Spider Walker's leg code timed on this client (LegBench.java)
             case "legbench" -> report.add(LegBench.run(mc, parts.length > 1 ? parts[1].trim().split(" +") : new String[0]));
@@ -755,7 +765,7 @@ public class SmokeClient {
                     furnace.resize(mc, furnace.width, furnace.height);
                 }
             }
-            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown", "secondee", "secondmentforwalk", "teamleadforpromotion", "gradeforstrike", "gradeforbadge", "tasksforreview", "stafffile", "strikeprobe", "gradeforcheck", "strikeforcheck", "grievanceforcheck" -> {
+            case "jar", "jar5", "body", "grab", "tkgrab", "dock", "cradlehead", "mastroute", "jam", "locker", "throw", "fit", "charge", "sign", "swap", "separate", "pickup", "chair", "hostify", "mount", "sync", "jarhead", "mecha", "gantry", "arms", "lab", "genes", "headblock", "pilotgenes", "drive", "compact", "vitals", "headvitals", "refit", "library", "cassette", "file", "pick", "fileraw", "sob", "fleecegrown", "secondee", "secondmentforwalk", "teamleadforpromotion", "gradeforstrike", "gradeforbadge", "tasksforreview", "stafffile", "strikeprobe", "gradeforcheck", "strikeforcheck", "grievanceforcheck", "memos" -> {
                 // jar | jar5 (take the head off) | body (put it back on the nearest own body) | fit MODULE,MODULE | charge N | grab | throw
                 var server = mc.getSingleplayerServer();
                 var uuid = mc.player.getUUID();
@@ -1182,6 +1192,17 @@ public class SmokeClient {
                                 }
                                 report.add(out.toString());
                             }
+                        }
+                        case "memos" -> {
+                            // memos: reads (changes nothing) the player's memos: each one had or waiting, and whether one may go now
+                            StringBuilder b = new StringBuilder("memos -> canSendNow " + com.coolfreeze23.headinajar.clarity.Memos.canSendNow(player)
+                                    + ", chair near " + com.coolfreeze23.headinajar.block.ChairQuiet.near(player) + ";");
+                            for (var m : com.coolfreeze23.headinajar.clarity.Memos.Memo.values()) {
+                                boolean had = com.coolfreeze23.headinajar.clarity.Memos.sent(player, m);
+                                int waiting = com.coolfreeze23.headinajar.clarity.MemoQueue.waiting(player, m);
+                                if (had || waiting > 0) b.append(" ").append(m.name()).append(had ? " had" : "").append(waiting > 0 ? " waiting " + waiting : "");
+                            }
+                            report.add(b.toString());
                         }
                         case "stafffile" -> {
                             // stafffile TYPE: reads (changes nothing) the staff file of the nearest creature whose type id

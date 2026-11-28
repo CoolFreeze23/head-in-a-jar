@@ -171,6 +171,7 @@ import gen_p40_bodies; gen_p40_bodies.run(EN, PT, write, shaped)  # the 0.6.3 re
 import gen_p41_workforce; gen_p41_workforce.run(EN, PT, write, shaped)  # the 0.7.0 release: the Staff Lanyard, the Time Clock, jobs, the Whistle
 import gen_p42_secondment; gen_p42_secondment.run(EN, PT, write, shaped)  # the 0.7.1 release: the Secondment Collar, team sync, the Redundancy Package
 import gen_p43_moments; gen_p43_moments.run(EN, PT, write, shaped)  # the 0.7.2 release: grades, the Review, the Promotion, grievances, strikes
+import gen_p44_supplier; gen_p44_supplier.run(EN, PT, write, shaped)  # the 0.8.0 release: the supplier contract, the new arrivals' rows, the plumbing
 import gen_p27_clarity; gen_p27_clarity.run(EN, PT, write, shaped)  # HUD, tooltips, memos, career advancements, the handbook
 assert set(EN) == set(PT), set(EN) ^ set(PT)
 write('assets/headinajar/lang/en_us.json', EN)

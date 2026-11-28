@@ -94,6 +94,13 @@ public class GalvanicPileBlock extends BaseEntityBlock implements com.coolfreeze
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof GalvanicPileBlockEntity pile)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        // 0.8.0: resin is not meat (it would otherwise only show the pile's status)
+        if (stack.is(com.coolfreeze23.headinajar.supplier.SuppliedMachines.RESIN)) {
+            if (!level.isClientSide) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny((ServerPlayer) player, com.coolfreeze23.headinajar.feedback.Refuser.at(pile), "pile.resin");
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         if (GalvanicPileBlockEntity.fuelValue(stack) <= 0) {
             // food it doesn't burn (cooked meat, bread): refused, naming what it does burn
             if (stack.has(net.minecraft.core.component.DataComponents.FOOD)) {

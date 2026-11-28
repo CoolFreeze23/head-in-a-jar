@@ -107,7 +107,8 @@ public final class DirectoryView {
         for (String d : CHIP_ORDER) byDepartment.put(d, new ArrayList<>());
         for (String id : Directory.VANILLA) {
             EntityType<?> type = type(id);
-            if (type != null) byDepartment.get(Staff.department(type)).add(cell(id, type));
+            // a department with no column (one outside the company's) files the creature under General Staff
+            if (type != null) byDepartment.getOrDefault(Staff.department(type), byDepartment.get(Staff.GENERAL)).add(cell(id, type));
         }
         // other firms: every mod creature a department tag or a gene names, and any id on file (a mod since removed)
         Set<String> firms = new LinkedHashSet<>();
@@ -128,6 +129,11 @@ public final class DirectoryView {
             if (!cells.isEmpty()) out.add(new Section(Staff.departmentName(CHIP_ORDER[i]), i, cells));
         }
         byFirm.forEach((ns, cells) -> out.add(new Section(Component.translatable("gui.headinajar.directory.other_firms", firmName(ns)), -1, cells)));
+        // 0.8.0: the last row, New Arrivals: one cell for each newer creature this game has (a ghastling is its happy
+        // ghast's cell), drawn only when there is at least one; none of them counts towards the census
+        List<Cell> arrivals = new ArrayList<>();
+        for (String id : com.coolfreeze23.headinajar.supplier.Supplier.delivered()) arrivals.add(cell(id, type(id)));
+        if (!arrivals.isEmpty()) out.add(new Section(Component.translatable("gui.headinajar.directory.new_arrivals"), -1, arrivals));
         return out;
     }
 

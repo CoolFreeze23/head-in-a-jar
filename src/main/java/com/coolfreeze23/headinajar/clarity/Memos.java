@@ -61,7 +61,12 @@ public final class Memos {
         TEAM_LEAD("staffing/grades"),
         PROMOTION("staffing/promotion"),
         GRIEVANCE("staffing/pay"),
-        STRIKE("staffing/strikes");
+        STRIKE("staffing/strikes"),
+        // 0.8.0
+        NEW_ARRIVAL("research/directory"),
+        UNSEATED("staffing/riding"),
+        /** Sent each time it is due (staff can go missing again), so its bit is never set. */
+        DISCONTINUED("staffing/personnel");
 
         public final String entry;
 
@@ -72,6 +77,20 @@ public final class Memos {
         public String key() {
             return "memo.headinajar." + name().toLowerCase(java.util.Locale.ROOT);
         }
+    }
+
+    /**
+     * A memo whose moment can come round again (staff gone missing twice): never marked as had, and queued like any
+     * other, so it still keeps to one memo a minute.
+     */
+    public static boolean canSendNow(ServerPlayer player) {
+        return !MemoQueue.mustWait(player);
+    }
+
+    public static void sendAgain(ServerPlayer player, Memo memo, Object... args) {
+        if (player instanceof net.neoforged.neoforge.common.util.FakePlayer) return;
+        if (MemoQueue.mustWait(player)) MemoQueue.hold(player, memo, args);
+        else deliver(player, memo, args);
     }
 
     /** What was sent to whom, for tests (newest last). */
@@ -149,7 +168,7 @@ public final class Memos {
     /** The memo as its reader sees it: who it is from, the text, and the handbook entry that says more. */
     public static MutableComponent line(Memo memo, Object... args) {
         MutableComponent text = Component.translatable("memo.headinajar.from").withStyle(ChatFormatting.GOLD)
-                .append(" ").append(Component.translatable(memo.key(), args).withStyle(ChatFormatting.WHITE));
+                .append(" ").append(com.coolfreeze23.headinajar.supplier.Lines.of(memo.key(), args).withStyle(ChatFormatting.WHITE));
         if (Handbook.patchouli()) {
             String target = HeadInAJar.MOD_ID + ":" + memo.entry;
             text.append(" ").append(Component.translatable("memo.headinajar.link").withStyle(s -> s.withColor(ChatFormatting.AQUA)

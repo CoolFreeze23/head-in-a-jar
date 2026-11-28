@@ -1,0 +1,73 @@
+{
+  "parent": "headinajar:out_for_blood",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "new_starters"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:blood_sample"
+    },
+    "title": {
+      "translate": "advancements.headinajar.new_starters.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.new_starters.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:or",
+      "values": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:creaking"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:happy_ghast"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:copper_golem"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:nautilus"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:zombie_nautilus"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:camel_husk"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:parched"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:sulfur_cube"
+        }
+      ]
+    }
+  ]
+}

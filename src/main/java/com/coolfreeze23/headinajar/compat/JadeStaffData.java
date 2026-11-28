@@ -59,6 +59,9 @@ final class JadeStaffData {
             if (be instanceof JarredHeadBlockEntity head && head.entityType() != null) {
                 write(data, head.staff(), head.entityType(), Staff.department(head.entityType()), Band.of(head.staff()), viewer);
                 desk(data, head);
+            } else if (be instanceof JarredHeadBlockEntity head && head.onLeave()) {
+                // a creature this world has never heard of: the jar stands empty, and the head is away
+                data.putBoolean("OnLeave", true);
             } else if (be instanceof com.coolfreeze23.headinajar.block.LeechJarBlockEntity && accessor.getLevel() != null) {
                 // a Leech Jar touching a head it cannot draw says why
                 String why = com.coolfreeze23.headinajar.block.HeadDonor.leechRefusal(accessor.getLevel(), accessor.getPosition());
@@ -185,6 +188,7 @@ final class JadeStaffData {
                     data.contains("Emp") ? Component.literal(data.getString("Emp")) : Component.translatable("staff.headinajar.on_file")));
             return out;
         }
+        if (data.getBoolean("OnLeave")) out.add(Component.translatable("jade.headinajar.on_leave"));
         if (data.contains("Leech")) out.add(Component.translatable("jade.headinajar.library." + data.getString("Leech")));
         staff(data, out);
         work(data, out);

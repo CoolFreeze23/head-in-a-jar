@@ -26,7 +26,7 @@ DOLORES). Esta página descreve a versão **0.7.2**.
 - Minecraft **1.21.1** com **NeoForge 21.1.200** ou mais recente.
 - **GeckoLib 4.9.3** ou uma 4.x mais recente para 1.21.1 (obrigatório; o GeckoLib 5 não é aceito).
 - Instale no cliente e no servidor.
-- Opcional: Curios, JEI, Jade, Patchouli, Entity Model Features (veja [Outros mods](#outros-mods)).
+- Opcional: Curios, JEI, Jade, Patchouli, Entity Model Features, Vanilla Backport 1.2.2 (veja [Outros mods](#outros-mods)).
 
 ## Como ler esta página
 
@@ -3517,6 +3517,7 @@ cliente ficam em `config/headinajar-client.toml`.
 | `staff.promotedArrayBonus` | 150 | 100 a 300 | Quanto uma cabeça promovida rende numa Matriz Cerebral, em porcentagem da taxa da espécie. |
 | `staff.strikes` | true | true / false | Locais negligenciados entram em greve ao amanhecer (nunca na primeira semana do mundo). Desligado: sem greves. |
 | `staff.boardUnionises` | true | true / false | Uma moção "formar um sindicato" aprovada de verdade faz cruzar os braços um local perto da Matriz que já cumpre o critério de greve. Desligado: a moção é só palavras. |
+| `combat.lanceUnseatsHosts` | true | true / false | Um golpe de lança que desmonta (uma lança em carga, ou qualquer arma em `#minecraft:spears` que derruba quem está montado) tira um pote do corpo hospedeiro, do Rover ou do Andador Aranha. Desligado: hospedeiros seguram, como mechas, Soquetes Neurais e a Cápsula de Passageiro. |
 | `bodies.headlessChicken` | true | true / false | Uma galinha hospedeira que ninguém monta corre em círculos em volta de onde foi cortada. Desligado: fica parada como qualquer hospedeiro. |
 
 </details>
@@ -3698,6 +3699,27 @@ Nenhum é necessário. Cada integração só liga quando o mod dela está presen
   da Hidra (a Hydra do Twilight Forest), Alma Flamejante (o Ignis do L_Ender's Cataclysm), Sopro Atômico (o Godzilla do
   OreSpawn). Criaturas do Twilight Forest, do Friends & Foes e do OreSpawn também carregam alguns genes vanilla.
 
+### Vanilla Backport (o fornecedor)
+
+O Vanilla Backport traz criaturas do Minecraft mais novo para a 1.21.1 com os nomes delas. A Matriz chama ele de **o
+fornecedor**, e ninguém avisou o fornecedor. É opcional: o Head in a Jar nunca exige ele, e sem ele o jogo funciona
+exatamente como na 0.7.2. A versão testada é o **Vanilla Backport 1.2.2** (com a biblioteca Platform 1.4.2) no
+NeoForge 1.21.1; versões mais antigas são recusadas ao abrir o jogo.
+
+Com ele instalado:
+
+- O rangedor, o ghast feliz, o golem de cobre, o náutilo, o náutilo zumbi, o camelo-múmia, o ressecado e o cubo de
+  enxofre têm cada um cargo, departamento, tipo sanguíneo, pote e as suas próprias recusas, em vez de "Pessoal Geral";
+  sete deles podem ser hospedeiros, e seis podem ser contratados com um Crachá de Funcionário.
+- O Diretório ganha uma linha Novos Contratados e uma conquista oculta, Recém-Chegados. O Censo Completo continua em
+  77.
+- Baús de cobre e estantes funcionam como Coleta e Entrega para a equipe.
+- Uma lança em carga pode derrubar um pote do hospedeiro (a Política de Desmontagem; `combat.lanceUnseatsHosts`).
+- `/headoffice status` lista os novos contratados em arquivo.
+
+Tudo é arquivado com os nomes `minecraft:` das criaturas e só carrega quando elas existem, então um mundo que perde o
+fornecedor guarda as cabeças como "Modelo fora de linha" até ele voltar.
+
 ## Sons
 
 O mod traz sons próprios, e cada um tem legenda em inglês e em português do Brasil. Nenhum pega mais emprestada a legenda
@@ -3763,6 +3785,107 @@ ou bigornas fazendo as vezes). Abaixo, os sons são chamados pelas legendas.
 ## Notas de versão
 
 As notas de cada versão também ficam em [CHANGELOG.md](CHANGELOG.md).
+
+### Novidades da 0.8.0 · O Contrato com o Fornecedor
+
+O Head in a Jar agora funciona com o Vanilla Backport, que traz as criaturas do Minecraft mais novo para a 1.21.1. A
+Matriz chama ele de "o fornecedor". É opcional: sem ele nada muda, e com ele cada criatura nova ganha a sua própria
+ficha em vez de ser tratada como uma criatura qualquer.
+
+<img src="docs/images/new_arrivals_jars.png" width="560" alt="Oito Potes de Suporte Vital na grama, cada um com a cabeça de uma criatura nova flutuando no soro verde: a cabeça de casca de um rangedor com olhos laranja, a cabeça de um golem de cobre com a antena, um náutilo e um náutilo zumbi com os tentáculos, a cabeça e o pescoço de um camelo-múmia, um crânio de ressecado, o rosto sorridente de um ghast feliz num pote Executivo e um cubo de enxofre inteiro num pote Reforçado">
+
+#### Novidades
+
+- **Oito novos contratados em arquivo.** Com o fornecedor instalado, o rangedor, o ghast feliz, o golem de cobre, o
+  náutilo, o náutilo zumbi, o camelo-múmia, o ressecado e o cubo de enxofre têm cada um cargo, departamento, tipo
+  sanguíneo, o pote certo e as suas próprias recusas. A cabeça do ghast feliz pede um pote Executivo, como a do primo
+  triste; o cubo de enxofre é todo cabeça e vai num pote Reforçado.
+- **Hospedeiros para sete deles.** Serre um com metade da vida ou menos e o pote se senta no pescoço: no ghast feliz o
+  pote agora fica em cima dele, em vez de afundar.
+
+  <img src="docs/images/new_arrivals_hosts.png" width="560" alt="Cinco corpos hospedeiros sem cabeça na grama, cada um com um pote no pescoço e uma cabeça de zumbi dentro: um golem de cobre, um náutilo em pé sobre a concha, um camelo-múmia, um esqueleto ressecado e um rangedor">
+
+- **Contratação.** O Crachá de Funcionário aceita o ghast feliz, o golem de cobre, o náutilo, o náutilo zumbi, o
+  camelo-múmia e o ressecado, cada um com o seu salário. Um rangedor só obedece ao coração ("Já trabalha para o
+  próprio coração."), e uma montaria com cavaleiro já trabalha para ele.
+- **Novos Contratados no Diretório.** O Diretório do Sequenciador de DNA ganha uma última linha para eles, e uma
+  conquista oculta, Recém-Chegados, por coletar amostra de todos. O Censo Completo continua em 77, então um Diretório
+  completo continua completo.
+- **Baús de cobre e estantes viram recipientes para a equipe.** Marque com a Prancheta como Coleta ou Entrega; o
+  transporte e a triagem usam como qualquer baú.
+
+  <img src="docs/images/copper_hauler.gif" width="420" alt="Um golem de cobre contratado, chamado Trevor, anda de um baú de cobre à esquerda até uma estante de carvalho à direita e volta, passando por um Relógio de Ponto atrás deles: primeiro aparece uma maçã na estante, depois um pão">
+
+- **A Política de Desmontagem.** Uma lança em carga derruba quem está montado. Um pote num hospedeiro cai ao lado do
+  corpo com uma pancada no vidro, e o corpo continua de pé. Pilotos de mecha, o Brutamontes, a Cápsula de Passageiro e
+  os Soquetes Neurais seguram. Um valor do servidor desliga isso para hospedeiros.
+
+  <img src="docs/images/unseating.gif" width="420" alt="Terceira pessoa atrás de um pote montado numa vaca sem cabeça a galope pela grama, rumo a um cavaleiro zumbi de capacete de ferro com uma lança; a lança acerta, a imagem vira chuvisco por um instante e o pote cai na grama ao lado da vaca, que continua de pé enquanto o cavaleiro passa; depois a vista do próprio pote, da grama, olhando para cima para a vaca sem cabeça chamada Bessie">
+
+- **Modelos fora de linha.** Abra um mundo sem o fornecedor e as cabeças das criaturas dele ficam guardadas, não
+  somem: dizem "Modelo fora de linha", não podem ser colocadas e voltam quando o fornecedor voltar. A equipe que sumiu
+  com ele aparece listada num só memorando.
+- `/headoffice status` lista os novos contratados em arquivo, ou "nenhum. O fornecedor não entregou."
+
+#### Atualizando
+
+- Sem o Vanilla Backport o jogo funciona como a 0.7.2, e mundos da 0.7.2 abrem sem nada mudado. Um jogo 0.8.0 e um
+  servidor 0.7.2 se conectam nos dois sentidos, desde que os dois tenham o Vanilla Backport ou nenhum tenha: o próprio
+  Vanilla Backport recusa jogo ou servidor sem ele.
+- A versão testada é o Vanilla Backport 1.2.2 (com a biblioteca Platform). Ele nunca é obrigatório.
+
+<details><summary>Todos os detalhes</summary>
+
+**Os novos contratados**
+
+| Criatura | Cargo | Departamento | Sangue | Pote |
+|---|---|---|---|---|
+| Rangedor | Auditor Noturno | A Concorrência | Seiva (tirada com a Torneira de Óleo) | Pote de Suporte Vital |
+| Ghast feliz | Diretor de Felicidade | Logística | Quente | Executivo |
+| Golem de cobre | Arquivista | Logística | Óleo | Pote de Suporte Vital |
+| Náutilo | Oficial de Mergulho | Divisão Marítima | Frio | Pote de Suporte Vital |
+| Náutilo zumbi | Salvados | Divisão Marítima | Cova | Pote de Suporte Vital |
+| Camelo-múmia | Operações no Deserto | Logística | Cova | Pote de Suporte Vital |
+| Ressecado | Compliance (Deserto) | Turno da Noite | Medula | Pote de Suporte Vital |
+| Cubo de enxofre | Contenção | Instalações | Enxofre | Reforçado (todo cabeça) |
+
+- Salários: um torrão de resina (rangedor), uma bola de neve (ghast feliz), uma pepita de cobre (golem de cobre),
+  qualquer peixe (náutilo), duas carnes podres (náutilo zumbi), um pé de coelho (camelo-múmia), um osso (ressecado). O
+  cubo de enxofre ainda não é contratado: "O RH ainda não tem descrição de cargo para Cubo de Enxofre."
+- Filhotes (o ghastinho, um cubo pequeno) recebem a fala do trabalho infantil. Uma montaria com cavaleiro já trabalha
+  para ele: "Já trabalha para Husk."
+- A cabeça do ressecado atira flechas de Fraqueza no Pedestal de Torreta; a do náutilo zumbi morde.
+- Novos rivais e colegas de mesa: o Auditor Noturno e o Apoio ao Luto (-5 de moral a até 4 blocos), os dois golens de
+  cobre se o Friends & Foes também estiver instalado ("Agora existem dois departamentos de golens de cobre. Uma fusão
+  está em estudo. Nenhum dos dois foi avisado."), o Diretor de Felicidade e o Auditor do Sono (+2 a até 8).
+- Uma linha da equipe agora pode dizer a taxa da cabeça na Matriz Cerebral, o ataque na torreta e o programa no
+  Soquete Neural; os números de todas as criaturas que já existiam não mudam.
+- Nas máquinas: o Fluido de Embalsamar e a Renda Neural recusam corpos de rangedor e de camelo-múmia; o favo de mel
+  encera um hospedeiro golem de cobre como o jogo faz e é recusado nos outros ("Favo de mel é para cobre. O RH já teve
+  que repetir isso mais de uma vez."); o Armário de Corpos recusa um ghast feliz e um rangedor preso ao coração, e um
+  golem de cobre guardado para de oxidar; a Pilha Galvânica recusa resina, o Misturador de Soro um ghast seco, a Base
+  de Recarga blocos de cobre; a Matriz Cerebral recusa uma estátua de golem de cobre ("Estátua não vai a reunião. Já
+  ficou parada em reuniões demais."); um mecha recusa peças de cobre, arreios e armadura de náutilo; uma cabeça em pote
+  não entra numa trouxa ("Colega não é bagagem. Leve na mão, como um profissional."), e continua entrando numa caixa
+  de shulker.
+- Motivos na Entrevista de Desligamento: "ficou a ver navios" (um náutilo), "teve o coração partido" e "longe dos
+  olhos, longe do coração" (um rangedor), "aposentou-se no próprio posto" (um golem de cobre que virou estátua).
+- A Política de Desmontagem, fala por fala: um piloto de mecha, "O cinto aguentou. A lança foi anotada."; um pote num
+  hospedeiro, "Desmontado por Iron Spear de Zombie. Bessie está onde você a deixou." e um primeiro memorando com o
+  lugar (a carga que tira o pote passa por cima do corpo embaixo dele, então Bessie continua lá); um Rover ou Andador Aranha, "Desmontado. O Rover seguiu sem você por um tempo."; o Brutamontes, "O
+  Brutamontes não faz essa coisa de cair."; a Cápsula de Passageiro, "A cápsula é envidraçada. Passageiro fica
+  dentro."; um Soquete Neural, "As garras aguentaram. Por favor, pare de espetar a central telefônica."; a cabeça de
+  um destacado, "A coleira segura. Destacado vem parafusado."; um paciente derrubado da Cadeira de Separação antes do
+  corte tem o procedimento cancelado. Conquista oculta: Dispensado do Posto. Valor do servidor
+  `combat.lanceUnseatsHosts` (padrão true).
+- Todo registro de criatura guardado (cabeças em pote, o Armário de Corpos, o Pórtico de Montagem, o transporte da
+  firma, as chegadas do Relógio de Ponto) agora leva carimbada a versão do jogo em que foi salvo, pronto para uma
+  futura versão do Minecraft. Registros da 0.7.2 são lidos exatamente como antes.
+- Uma cabeça colocada de uma criatura que não está mais instalada aparece num pote vazio; o Jade diz "De licença."
+
+</details>
+
+<details><summary>O que mudou na 0.7.2</summary>
 
 ### Novidades da 0.7.2 · Os momentos
 
@@ -3911,6 +4034,7 @@ quando é negligenciada e entra em greve quando um local inteiro é.
 
 </details>
 
+</details>
 
 As notas das versões anteriores (0.2.0 a 0.7.1) estão no [CHANGELOG.md](CHANGELOG.md), em inglês.
 

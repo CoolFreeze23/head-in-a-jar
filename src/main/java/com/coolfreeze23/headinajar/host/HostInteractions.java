@@ -41,6 +41,8 @@ public final class HostInteractions {
         Player clicker = event.getEntity();
         ServerPlayer player = clicker instanceof ServerPlayer sp ? sp : null;
         ItemStack held = event.getItemStack();
+        // 0.8.0: honeycomb on a copper golem's body is the golem's own use (the game waxes it); not cancelled here
+        if (com.coolfreeze23.headinajar.supplier.SuppliedMachines.waxesItself(clicker, held, host)) return;
         InteractionResult tool = instrument(clicker, player, held, host, event.getHand());
         if (tool != null) {
             event.setCanceled(true);
@@ -75,6 +77,11 @@ public final class HostInteractions {
         if (jarLike) {
             if (host instanceof MechaEntity mecha && !mecha.isOwnedBy(player)) {
                 Refusals.deny(player, Refuser.at(mecha), "mecha.not_yours");
+            } else if (host instanceof net.minecraft.world.entity.Mob m && !host.isVehicle() && form == Form.JAR
+                    && com.coolfreeze23.headinajar.staff.work.Workforce.heartBound(m)) {
+                // 0.8.0: a creaking bound to its heart takes no rider (the game's own rule): say whose it is, not that
+                // someone is in it
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(player, com.coolfreeze23.headinajar.staff.StaffShake.at(m), "lanyard.heart");
             } else if (!FormActions.mountHost(player, host) && (form == Form.JAR || host.isVehicle())) {
                 // a linked player whose climb failed after the swap has been told so by mountHost
                 player.displayClientMessage(Component.translatable("message.headinajar.host_busy"), true);
@@ -105,6 +112,9 @@ public final class HostInteractions {
             if (data.shell) return refuse(player, host, "host.embalm_shell", held.getHoverName());
             // a laced body never decays: the fluid would be poured away for nothing
             if (data.laced) return refuse(player, host, "host.embalm_laced", held.getHoverName());
+            // 0.8.0: a new arrival's body that never rots keeps the fluid, in its own words
+            String never = com.coolfreeze23.headinajar.supplier.SuppliedMachines.embalmRefusal(host);
+            if (never != null) return refuseShaking(player, host, never);
             if (player != null) {
                 data.freshness = 100;
                 data.embalmedUntil = host.level().getGameTime() + 24000;
@@ -120,6 +130,8 @@ public final class HostInteractions {
         if (held.is(ModRegistry.NEURAL_LACE.get())) {
             if (data.shell) return refuse(player, host, "host.lace_shell", held.getHoverName());
             if (data.laced) return refuse(player, host, "host.lace_again", held.getHoverName());
+            String never = com.coolfreeze23.headinajar.supplier.SuppliedMachines.laceRefusal(host);
+            if (never != null) return refuseShaking(player, host, never);
             if (player != null) {
                 // a seconded head's team sync counts as the body's sync for the lace
                 if (data.sync < 50 && com.coolfreeze23.headinajar.staff.second.Secondees.teamSync(host) < 50) {
@@ -155,6 +167,11 @@ public final class HostInteractions {
                     Math.round(mecha.getHealth()), Math.round(mecha.getMaxHealth())), true);
             return InteractionResult.SUCCESS;
         }
+        // 0.8.0: what the supplier delivers is not a mecha's: copper is not plating, a harness and nautilus armour are not its
+        if (host instanceof MechaEntity mecha) {
+            String not = com.coolfreeze23.headinajar.supplier.SuppliedMachines.mechaRefusal(held);
+            if (not != null) return refuse(player, host, not, com.coolfreeze23.headinajar.supplier.SuppliedMachines.frameName(mecha));
+        }
         if ((held.is(ModRegistry.PLASMA_PELLET.get()) || held.is(ModRegistry.BIO_GEL.get())) && host instanceof MechaEntity mecha) {
             Component hold = Component.translatable(ModRegistry.mechaModule(MechaModule.CARGO_HOLD).getDescriptionId());
             if (!mecha.has(MechaModule.CARGO_HOLD)) return refuse(player, host, "mecha.no_cargo", hold, Component.translatable("block.headinajar.assembly_gantry"));
@@ -166,6 +183,9 @@ public final class HostInteractions {
         if (held.is(ModRegistry.SUTURE_KIT.get()) && state.form() == Form.LINKED && state.carryingHead()) return InteractionResult.PASS;
         // a jar climbing on keeps whatever it happens to hold; a person's vanilla items do what they would
         if (jarLike) return null;
+        // 0.8.0: honeycomb on a new arrival's body other than an unwaxed copper golem's (that one went to the golem)
+        String honey = com.coolfreeze23.headinajar.supplier.SuppliedMachines.honeycombRefusal(held, host);
+        if (honey != null) return refuseShaking(player, host, honey);
         boolean machine = host instanceof MechaEntity || host instanceof ShellEntity;
         if (held.is(Items.LEAD)) {
             if (machine) return refuse(player, host, "host.lead_machine", held.getHoverName());
@@ -194,6 +214,12 @@ public final class HostInteractions {
      */
     private static InteractionResult refuse(ServerPlayer player, Mob host, String reason, Object... args) {
         if (player != null) Refusals.deny(player, Refuser.at(host), reason, args);
+        return InteractionResult.CONSUME;
+    }
+
+    /** The same, with the body shaking no (0.8.0's refusals at a creature's body). */
+    private static InteractionResult refuseShaking(ServerPlayer player, Mob host, String reason, Object... args) {
+        if (player != null) Refusals.deny(player, com.coolfreeze23.headinajar.staff.StaffShake.at(host), reason, args);
         return InteractionResult.CONSUME;
     }
 }

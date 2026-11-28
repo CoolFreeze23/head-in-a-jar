@@ -135,6 +135,8 @@ public class ClipboardItem extends Item {
             return said(player, level, pos, "message.headinajar.clipboard.corner_cleared");
         }
         if (!player.mayBuild() || !level.mayInteract(player, pos)) return Refusals.deny(player, here, "clipboard.not_yours");
+        // a copper golem statue holds nothing and is not a corner either
+        if (level.getBlockState(pos).is(com.coolfreeze23.headinajar.supplier.SuppliedContainers.STATUES)) return Refusals.deny(player, here, "clipboard.statue");
         boolean container = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, face) != null
                 || level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null) != null;
         if (container) {
@@ -149,7 +151,9 @@ public class ClipboardItem extends Item {
             List<Order.Stop> l = new ArrayList<>(o.stops());
             l.add(new Order.Stop(pos.immutable(), face, dropOff, ItemStack.EMPTY, false));
             board.set(WorkRegistry.ORDER.get(), o.withStops(l));
-            return said(player, level, pos, dropOff ? "message.headinajar.clipboard.drop_off" : "message.headinajar.clipboard.pick_up");
+            // a copper chest is filed as a chest, and the mark says so
+            String copper = level.getBlockState(pos).is(com.coolfreeze23.headinajar.supplier.SuppliedContainers.COPPER_CHEST_TAG) ? "_copper" : "";
+            return said(player, level, pos, (dropOff ? "message.headinajar.clipboard.drop_off" : "message.headinajar.clipboard.pick_up") + copper);
         }
         // a corner
         if (o.corner().isEmpty()) {
@@ -183,7 +187,7 @@ public class ClipboardItem extends Item {
     }
 
     private static boolean said(ServerPlayer player, ServerLevel level, BlockPos pos, String key) {
-        player.displayClientMessage(Component.translatable(key), true);
+        player.displayClientMessage(com.coolfreeze23.headinajar.supplier.Lines.of(key), true);
         scribble(level, pos);
         return true;
     }

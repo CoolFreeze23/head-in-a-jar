@@ -1,0 +1,68 @@
+{
+  "parent": "headinajar:hosted",
+  "criteria": {
+    "done": {
+      "trigger": "headinajar:event",
+      "conditions": {
+        "event": "relieved_of_your_post"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "headinajar:life_support_jar"
+    },
+    "title": {
+      "translate": "advancements.headinajar.relieved_of_your_post.title"
+    },
+    "description": {
+      "translate": "advancements.headinajar.relieved_of_your_post.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:or",
+      "values": [
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:wooden_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:stone_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:copper_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:iron_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:golden_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:diamond_spear"
+        },
+        {
+          "type": "headinajar:registered",
+          "registry": "item",
+          "id": "minecraft:netherite_spear"
+        }
+      ]
+    }
+  ]
+}

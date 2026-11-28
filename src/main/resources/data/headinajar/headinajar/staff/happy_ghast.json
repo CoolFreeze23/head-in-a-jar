@@ -1,0 +1,31 @@
+{
+  "entity": "minecraft:happy_ghast",
+  "wage": {
+    "item": "minecraft:snowball",
+    "count": 1
+  },
+  "noise": "staff.headinajar.noise.happy_ghast",
+  "alarm": "minecraft:entity.happy_ghast.ambient",
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.0
+    },
+    "shift": "any",
+    "carry": 16,
+    "hands": false,
+    "walk": 1.0,
+    "move": "fly_free",
+    "attack": "none"
+  },
+  "array": 20,
+  "turret": "lookout",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:happy_ghast"
+    }
+  ]
+}

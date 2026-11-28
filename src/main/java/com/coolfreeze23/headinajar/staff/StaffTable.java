@@ -49,12 +49,16 @@ public final class StaffTable {
      * One species' row: its wage, its noise, how many bell lines it has ({@code bell.headinajar.<ns>.<path>.<n>}, 0 for
      * none), its desk job's id (null for none), the sound its Lookout raises the alarm with (null: its ambient sound),
      * and what it dislikes at dawn ({@code rain}, {@code thunder}, {@code open_sky}, {@code hot}, {@code warm},
-     * {@code not_nether}, {@code warped_fungus}, {@code noise}, {@code water}).
+     * {@code not_nether}, {@code warped_fungus}, {@code noise}, {@code water}). Its head's work at the stations (0.8.0):
+     * {@code array}, FE/t in a Cerebral Array; {@code turret}, its attack at a Turret Pedestal ({@code lookout} for
+     * none); {@code socket}, its Neural Socket program ({@code none} for none). Each is null when the row does not say,
+     * and {@code HeadJobs} then answers from its own table.
      */
     public record Row(Wage wage, String noise, int bells, String desk, ResourceLocation alarm, java.util.Set<String> dislikes,
-                      Map<String, Integer> lines, com.coolfreeze23.headinajar.staff.work.WorkTable.Spec work) {
+                      Map<String, Integer> lines, com.coolfreeze23.headinajar.staff.work.WorkTable.Spec work,
+                      Integer array, String turret, String socket) {
         public Row(Wage wage, String noise) {
-            this(wage, noise, 0, null, null, java.util.Set.of(), Map.of(), null);
+            this(wage, noise, 0, null, null, java.util.Set.of(), Map.of(), null, null, null, null);
         }
     }
 
@@ -116,6 +120,11 @@ public final class StaffTable {
         return row != null && row.dislikes().contains(what);
     }
 
+    /** Whether a row is on file for this id (a row for a creature that is not registered is never loaded). */
+    public static boolean hasRow(ResourceLocation id) {
+        return rows.containsKey(id);
+    }
+
     public static int size() {
         return rows.size();
     }
@@ -146,7 +155,20 @@ public final class StaffTable {
         }
         // what it does at work, if HR has a job description for it (0.7.0)
         var work = com.coolfreeze23.headinajar.staff.work.WorkTable.parse(o.get("work"), null);
-        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "", bells, desk, alarm, java.util.Set.copyOf(dislikes), Map.copyOf(lines), work);
+        // what its head does at the stations (0.8.0); a row that does not say leaves it to HeadJobs' own table
+        Integer array = o.has("array") ? Math.max(0, o.get("array").getAsInt()) : null;
+        String turret = o.has("turret") ? o.get("turret").getAsString() : null;
+        if (turret != null && !com.coolfreeze23.headinajar.block.HeadJobs.TURRET_ATTACKS.contains(turret)) {
+            HeadInAJar.LOGGER.warn("Staff row {}: no turret attack called {}; its head keeps watch instead", o.get("entity"), turret);
+            turret = com.coolfreeze23.headinajar.block.HeadJobs.LOOKOUT;
+        }
+        String socket = o.has("socket") ? o.get("socket").getAsString() : null;
+        if (socket != null && !com.coolfreeze23.headinajar.block.HeadJobs.SOCKET_PROGRAMS.contains(socket)) {
+            HeadInAJar.LOGGER.warn("Staff row {}: no Neural Socket program called {}; its head runs none", o.get("entity"), socket);
+            socket = com.coolfreeze23.headinajar.block.HeadJobs.NO_PROGRAM;
+        }
+        return new Row(wage, o.has("noise") ? o.get("noise").getAsString() : "", bells, desk, alarm, java.util.Set.copyOf(dislikes), Map.copyOf(lines), work,
+                array, turret, socket);
     }
 
     /** Loads {@code data/<ns>/headinajar/staff/*.json}. */
@@ -158,8 +180,11 @@ public final class StaffTable {
         @Override
         protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
             Map<ResourceLocation, Row> out = new HashMap<>();
+            var ops = makeConditionalOps();
             files.forEach((file, json) -> {
                 try {
+                    // a row whose neoforge:conditions fail (a creature or wage not registered) is skipped
+                    if (!net.neoforged.neoforge.common.conditions.ICondition.conditionsMatched(ops, json)) return;
                     JsonObject o = json.getAsJsonObject();
                     ResourceLocation entity = ResourceLocation.tryParse(o.get("entity").getAsString());
                     if (entity != null) out.put(entity, parse(o));

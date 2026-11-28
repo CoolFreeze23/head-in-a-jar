@@ -107,11 +107,32 @@ public final class HeadOfficeCommand {
         c.getSource().sendSuccess(() -> Component.translatable("command.headinajar.status", player.getDisplayName(),
                 Component.translatable("command.headinajar.status.form." + state.form().getSerializedName()), state.quality(), headText, bodyText,
                 state.charge()), false);
+        // the supplier audit (0.8.0): which newer creatures are registered, so an operator sees why one has no title
+        c.getSource().sendSuccess(() -> arrivals(c.getSource().getServer()), false);
         // an operator's mandatory break for staff is said here while it is on
         if (com.coolfreeze23.headinajar.staff.work.WorkPause.get(c.getSource().getServer()).paused()) {
             c.getSource().sendSuccess(() -> Component.translatable("command.headinajar.staff.status_paused"), false);
         }
         return 1;
+    }
+
+    /** "New arrivals on file: Creaking, Happy Ghast, ... Strains: Cow, Pig, Chicken.", or its "none" twin. */
+    public static Component arrivals(net.minecraft.server.MinecraftServer server) {
+        java.util.List<String> on = com.coolfreeze23.headinajar.supplier.Supplier.delivered();
+        if (on.isEmpty()) return com.coolfreeze23.headinajar.supplier.Lines.of("command.headinajar.status.arrivals.none");
+        Component names = names(on);
+        if (!com.coolfreeze23.headinajar.supplier.Supplier.strains(server)) return com.coolfreeze23.headinajar.supplier.Lines.of("command.headinajar.status.arrivals", names);
+        return com.coolfreeze23.headinajar.supplier.Lines.of("command.headinajar.status.arrivals.strains", names,
+                names(com.coolfreeze23.headinajar.supplier.Supplier.STRAINS.stream().map(s -> "minecraft:" + s).toList()));
+    }
+
+    private static Component names(java.util.List<String> ids) {
+        net.minecraft.network.chat.MutableComponent out = Component.empty();
+        for (int i = 0; i < ids.size(); i++) {
+            if (i > 0) out.append(", ");
+            out.append(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.get(net.minecraft.resources.ResourceLocation.parse(ids.get(i))).getDescription());
+        }
+        return out;
     }
 
     private static String blocks(HeadRegistry.Spot spot) {

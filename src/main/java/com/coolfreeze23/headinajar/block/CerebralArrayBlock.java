@@ -40,6 +40,12 @@ public class CerebralArrayBlock extends KitMachineBlock<CerebralArrayBlockEntity
                     com.coolfreeze23.headinajar.feedback.Refuser.at(a), "staff.board_cake");
             return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
+        // 0.8.0: a copper golem statue is not a head for the Board (it would otherwise open the Array's screen)
+        if (stack.is(com.coolfreeze23.headinajar.supplier.SuppliedMachines.STATUE_ITEMS) && level.getBlockEntity(pos) instanceof CerebralArrayBlockEntity a) {
+            if (!level.isClientSide) com.coolfreeze23.headinajar.feedback.Refusals.deny((net.minecraft.server.level.ServerPlayer) player,
+                    com.coolfreeze23.headinajar.feedback.Refuser.at(a), "array.statue");
+            return net.minecraft.world.ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 

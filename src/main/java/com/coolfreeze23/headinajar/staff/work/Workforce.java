@@ -232,6 +232,14 @@ public final class Workforce {
         if (!enabled()) return new Object[]{"lanyard.disabled"};
         WorkTable.Spec spec = WorkTable.of(mob);
         if (mob.isBaby()) return new Object[]{"lanyard.baby"};
+        // 0.8.0, the new arrivals (by id, so a game without them never asks): a creaking bound to a heart answers to the
+        // heart; a mount with a creature riding it (a jockey) already works for its rider
+        if (com.coolfreeze23.headinajar.supplier.Supplier.newArrival(mob.getType())) {
+            if (heartBound(mob)) return new Object[]{"lanyard.heart"};
+            for (Entity rider : mob.getPassengers()) {
+                if (rider instanceof Mob && !(rider instanceof Player)) return new Object[]{"lanyard.poach", rider.getDisplayName()};
+            }
+        }
         boolean hostile = mob instanceof Enemy;
         if (hostile && spec != null && spec.refusal() == null && !overqualified(mob)) {
             if (!Config.get(Config.HIRE_HOSTILES, true)) return new Object[]{"lanyard.no_hostiles"};
@@ -258,6 +266,15 @@ public final class Workforce {
         int have = WorkerIndex.get(player.server).count(player.getUUID());
         if (have >= max) return new Object[]{"lanyard.headcount", have};
         return null;
+    }
+
+    /**
+     * Whether this is a creaking bound to a creaking heart: it has a home in its saved data ({@code home_pos}, as the
+     * creature itself saves it; read from the record, not asked of the creature's class).
+     */
+    public static boolean heartBound(Mob mob) {
+        if (!"minecraft:creaking".equals(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString())) return false;
+        return mob.saveWithoutId(new net.minecraft.nbt.CompoundTag()).contains("home_pos");
     }
 
     static boolean overqualified(Mob mob) {

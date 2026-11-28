@@ -309,7 +309,8 @@ public class StrikeGameTests {
         });
     }
 
-    @GameTest(template = "platform32", timeoutTicks = 200)
+    // a batch of its own: with the supplier's tests on the grid, a neighbouring site's strike or motion reached it
+    @GameTest(template = "platform32", timeoutTicks = 200, batch = "never_first_week_alone")
     public static void neverInTheFirstWeek(GameTestHelper h) {
         ServerPlayer p = boss(h, new BlockPos(2, 6, 2));
         TimeClockBlockEntity c = clock(h, CLOCK, p);
@@ -355,7 +356,8 @@ public class StrikeGameTests {
         });
     }
 
-    @GameTest(template = "platform32", timeoutTicks = 300)
+    // a batch of its own, for the same reason as neverInTheFirstWeek
+    @GameTest(template = "platform32", timeoutTicks = 300, batch = "cool_down_alone")
     public static void coolDownHolds(GameTestHelper h) {
         ServerPlayer p = boss(h, new BlockPos(2, 6, 2));
         onStrike(h, p, (c, cows) -> {
@@ -438,7 +440,8 @@ public class StrikeGameTests {
         boardCase(h, 5, UNION, false, false, "unionise carried at a content site");
     }
 
-    @GameTest(template = "platform32", timeoutTicks = 200)
+    // a batch of its own: a unionise motion carried by another test within 48 blocks would start this site's strike
+    @GameTest(template = "platform32", timeoutTicks = 200, batch = "board_unionises_off")
     public static void boardUnionisesOffKeepsItAJoke(GameTestHelper h) {
         ServerPlayer p = boss(h, new BlockPos(2, 6, 2));
         TimeClockBlockEntity c = clock(h, CLOCK, p);

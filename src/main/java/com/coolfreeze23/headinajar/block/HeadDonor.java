@@ -61,7 +61,7 @@ public final class HeadDonor {
     /** The tool routing and refusals of {@link GeneticsItems.SyringeItem#draw}, for a head's species: null when it may draw. */
     static String wrongTool(ServerPlayer player, GeneticsItems.SyringeItem tool, EntityType<?> type) {
         BloodType blood = BloodType.of(type);
-        boolean right = tool.kind().bloodless ? blood == tool.kind() : !blood.bloodless;
+        boolean right = tool.kind().draws(blood);
         if (!right) {
             Item takes = tool.kind().bloodless && blood.bloodless ? GeneticsItems.SyringeItem.toolFor(blood) : null;
             player.displayClientMessage(takes != null ? Component.translatable("message.headinajar.other_bloodless_tool", takes.getDescription())
@@ -246,7 +246,7 @@ public final class HeadDonor {
             }
             // the wrong tool for this director: the next one may take it (the line says what this one needs)
             BloodType blood = BloodType.of(type);
-            boolean right = tool.kind().bloodless ? blood == tool.kind() : !blood.bloodless;
+            boolean right = tool.kind().draws(blood);
             if (!right || type.is(BloodType.THICK_HIDE) && !tool.bosses()) {
                 if (refused == null) refused = "tool:" + i;
                 continue;

@@ -103,12 +103,28 @@ public final class DeskJobs {
     /** The Nether floor a piglin head is calm on. */
     public static final TagKey<Block> NETHER_FLOOR = TagKey.create(Registries.BLOCK, HeadInAJar.id("nether_floor"));
 
+    /**
+     * A pair of species that mind each other at dawn, by id (a pair with a creature that is not registered never meets),
+     * and the line one of them says when the other is close enough ({@code desk.headinajar.<line>}; null for none).
+     */
+    public record Pair(String a, String b, String line) {
+        boolean of(String x, String y) {
+            return a.equals(x) && b.equals(y) || a.equals(y) && b.equals(x);
+        }
+    }
+
     /** Rival species: a head with one of these within 4 blocks loses 5 at dawn. */
-    private static final List<EntityType<?>[]> RIVALS = List.of(
-            new EntityType<?>[]{EntityType.VILLAGER, EntityType.ZOMBIE_VILLAGER}, new EntityType<?>[]{EntityType.VILLAGER, EntityType.PILLAGER},
-            new EntityType<?>[]{EntityType.VILLAGER, EntityType.VINDICATOR}, new EntityType<?>[]{EntityType.SKELETON, EntityType.WOLF},
-            new EntityType<?>[]{EntityType.PIGLIN, EntityType.WITHER_SKELETON}, new EntityType<?>[]{EntityType.CREEPER, EntityType.CAT},
-            new EntityType<?>[]{EntityType.CREEPER, EntityType.OCELOT}, new EntityType<?>[]{EntityType.SPIDER, EntityType.ARMADILLO});
+    private static final List<Pair> RIVALS = List.of(
+            new Pair("minecraft:villager", "minecraft:zombie_villager", null), new Pair("minecraft:villager", "minecraft:pillager", null),
+            new Pair("minecraft:villager", "minecraft:vindicator", null), new Pair("minecraft:skeleton", "minecraft:wolf", null),
+            new Pair("minecraft:piglin", "minecraft:wither_skeleton", null), new Pair("minecraft:creeper", "minecraft:cat", null),
+            new Pair("minecraft:creeper", "minecraft:ocelot", null), new Pair("minecraft:spider", "minecraft:armadillo", null),
+            // 0.8.0, the new arrivals: one works when nobody watches, one weeps when everybody does; and two copper golem
+            // departments, one from each supplier
+            new Pair("minecraft:creaking", "minecraft:ghast", "rivals.night_auditor"),
+            new Pair("minecraft:copper_golem", "friendsandfoes:copper_golem", "rivals.copper_golems"));
+    /** Colleagues across departments: a head with one of these within 8 counts it as a colleague (+2 at dawn, once). */
+    private static final List<Pair> COLLEAGUES = List.of(new Pair("minecraft:happy_ghast", "minecraft:phantom", "colleagues.wellbeing_sleep"));
 
     /** One blaze per furnace: when each furnace was last breathed on, per level (not saved). */
     private static final Map<Level, Map<Long, Long>> BREATHED = new WeakHashMap<>();
@@ -661,20 +677,61 @@ public final class DeskJobs {
     private static void neighbours(ServerLevel level, BlockPos pos, JarredHeadBlockEntity head, StaffFile f, EntityType<?> type) {
         String dept = Staff.department(type);
         boolean colleague = false, rival = false;
+        // a pair's line is said once a dawn, by its first member (so the two heads do not both say it)
+        String said = null, self = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
         for (Map.Entry<BlockPos, EntityType<?>> e : HeadDonor.headsNear(level, pos, (int) REACH).entrySet()) {
             if (e.getKey().equals(pos)) continue;
             EntityType<?> other = e.getValue();
             double d = e.getKey().distSqr(pos);
             if (!colleague && d <= REACH * REACH && Staff.department(other).equals(dept) && !Staff.GENERAL.equals(dept)) colleague = true;
-            if (!rival && d <= 16 && rivals(type, other)) rival = true;
+            if (!colleague && d <= REACH * REACH) {
+                Pair p = pair(COLLEAGUES, type, other);
+                if (p != null) {
+                    colleague = true;
+                    if (said == null && p.a().equals(self)) said = p.line();
+                }
+            }
+            if (!rival && d <= 16) {
+                Pair p = pair(RIVALS, type, other);
+                if (p != null) {
+                    rival = true;
+                    if (said == null && p.a().equals(self)) said = p.line();
+                }
+            }
         }
         if (colleague) StaffBlocks.adjust(f, COLLEAGUE);
         if (rival) StaffBlocks.adjust(f, RIVAL);
+        // a pair with a line of its own says it, over the head, at the dawn it counts
+        if (said != null) line(head, null, said);
     }
 
     public static boolean rivals(EntityType<?> a, EntityType<?> b) {
-        for (EntityType<?>[] pair : RIVALS) if (pair[0] == a && pair[1] == b || pair[0] == b && pair[1] == a) return true;
-        return false;
+        return pair(RIVALS, a, b) != null;
+    }
+
+    /** Whether two species count as colleagues across departments. */
+    public static boolean colleagues(EntityType<?> a, EntityType<?> b) {
+        return pair(COLLEAGUES, a, b) != null;
+    }
+
+    private static Pair pair(List<Pair> pairs, EntityType<?> a, EntityType<?> b) {
+        if (a == null || b == null) return null;
+        return pair(pairs, BuiltInRegistries.ENTITY_TYPE.getKey(a).toString(), BuiltInRegistries.ENTITY_TYPE.getKey(b).toString());
+    }
+
+    private static Pair pair(List<Pair> pairs, String x, String y) {
+        for (Pair p : pairs) if (p.of(x, y)) return p;
+        return null;
+    }
+
+    /** The rival pair of two species by id (one may be from a mod that is not installed), or null. */
+    public static Pair rivalPair(String a, String b) {
+        return pair(RIVALS, a, b);
+    }
+
+    /** The cross-department colleague pair of two species by id, or null. */
+    public static Pair colleaguePair(String a, String b) {
+        return pair(COLLEAGUES, a, b);
     }
 
     /** The dislikes that can be seen at dawn itself: rain or thunder now, the biome, the dimension, warped fungus. */

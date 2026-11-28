@@ -72,5 +72,15 @@ versionRange="[3.0.0,)"
 ordering="NONE"
 side="CLIENT"
 
+# Vanilla Backport: newer vanilla content on 1.21.1, under the minecraft namespace. 1.2.2 is the version the hooks are
+# written against (older ones lack some of its mobs and blocks). AFTER: it is loaded first, so in each registry its
+# entries are added before ours and its event listeners run before ours.
+[[dependencies.${mod_id}]]
+modId="vanillabackport"
+type="optional"
+versionRange="[1.2.2,)"
+ordering="AFTER"
+side="BOTH"
+
 [[mixins]]
 config="headinajar.mixins.json"

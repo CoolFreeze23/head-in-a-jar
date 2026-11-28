@@ -27,6 +27,16 @@
     "minecraft:camel": {
       "fe": 24
     },
+    "minecraft:camel_husk": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:camel_husk"
+        }
+      ],
+      "fe": 12
+    },
     "minecraft:cat": {
       "fe": 6
     },
@@ -39,8 +49,28 @@
     "minecraft:cod": {
       "refuse": "swimmer"
     },
+    "minecraft:copper_golem": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:copper_golem"
+        }
+      ],
+      "fe": 6
+    },
     "minecraft:cow": {
       "fe": 10
+    },
+    "minecraft:creaking": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:creaking"
+        }
+      ],
+      "refuse": "watched"
     },
     "minecraft:creeper": {
       "fe": 8
@@ -84,6 +114,16 @@
     "minecraft:guardian": {
       "refuse": "swimmer"
     },
+    "minecraft:happy_ghast": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:happy_ghast"
+        }
+      ],
+      "refuse": "ghast"
+    },
     "minecraft:hoglin": {
       "refuse": "heavy"
     },
@@ -111,11 +151,31 @@
     "minecraft:mule": {
       "fe": 18
     },
+    "minecraft:nautilus": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:nautilus"
+        }
+      ],
+      "refuse": "swimmer"
+    },
     "minecraft:ocelot": {
       "fe": 8
     },
     "minecraft:panda": {
       "fe": 12
+    },
+    "minecraft:parched": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:parched"
+        }
+      ],
+      "fe": 4
     },
     "minecraft:parrot": {
       "refuse": "flier"
@@ -227,6 +287,16 @@
     },
     "minecraft:zombie_horse": {
       "fe": 6
+    },
+    "minecraft:zombie_nautilus": {
+      "neoforge:conditions": [
+        {
+          "type": "headinajar:registered",
+          "registry": "entity_type",
+          "id": "minecraft:zombie_nautilus"
+        }
+      ],
+      "refuse": "swimmer"
     },
     "minecraft:zombie_villager": {
       "fe": 6

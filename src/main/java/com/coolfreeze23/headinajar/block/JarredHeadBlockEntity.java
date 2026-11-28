@@ -63,6 +63,8 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
     /** Client: each block event's last param (the piglin's inspection length). */
     private final int[] param = new int[EVENTS];
     private CompoundTag entity = new CompoundTag();
+    /** The data version the record was written at (0: written before records were stamped). Kept as it came. */
+    private int entityStamp;
     private long lastRestock;
     private Villager trader;
     /** {@link #type} parsed once (it is drawn every frame). */
@@ -144,6 +146,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
     public void load(CompoundTag tag) {
         type = tag.getString("Type");
         entity = tag.getCompound("Entity");
+        entityStamp = com.coolfreeze23.headinajar.supplier.Records.stampOf(tag, "Entity");
         if (tag.contains("LastRestock")) lastRestock = tag.getLong("LastRestock");
         jar = tag.contains("Jar") ? tag.getString("Jar") : null;
         glass = tag.contains(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) ? tag.getInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) : -1;
@@ -225,6 +228,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         if (level instanceof ServerLevel server) DeskIndex.remove(server, this);
         type = BuiltInRegistries.ENTITY_TYPE.getKey(to).toString();
         entity = record;
+        entityStamp = com.coolfreeze23.headinajar.supplier.Records.now();
         if (staff != null) staff.species = type;
         setChanged();
         if (level instanceof ServerLevel server) DeskIndex.update(server, this);
@@ -234,6 +238,21 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
     /** The stored mob's record (server: the whole mob; client: what draws it). Changes are the caller's to save. */
     public CompoundTag record() {
         return entity;
+    }
+
+    /** The data version its record was written at, 0 for a record written before stamps. */
+    public int entityStamp() {
+        return entityStamp;
+    }
+
+    /** The creature id it was recorded as, registered or not ("" for none). */
+    public String typeId() {
+        return type;
+    }
+
+    /** A head of a creature this game has never heard of: it draws as an empty jar, and is "On leave". */
+    public boolean onLeave() {
+        return entityType() == null && com.coolfreeze23.headinajar.supplier.Records.discontinued(type);
     }
 
     /** The record changed (a dye, a shorn fleece, a horn): saved, and the look sent to clients. */
@@ -247,6 +266,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         CompoundTag tag = new CompoundTag();
         tag.putString("Type", type);
         tag.put("Entity", entity.copy());
+        com.coolfreeze23.headinajar.supplier.Records.put(tag, "Entity", entityStamp);
         if (lastRestock != 0) tag.putLong("LastRestock", lastRestock);
         if (jar != null) tag.putString("Jar", jar);
         if (glass >= 0) tag.putInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS, glass);
@@ -450,6 +470,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         CompoundTag tag = new CompoundTag();
         trader.saveWithoutId(tag);
         entity = tag;
+        entityStamp = com.coolfreeze23.headinajar.supplier.Records.now();
         trader = null;
         setChanged();
     }
@@ -569,6 +590,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
             CompoundTag tag = new CompoundTag();
             head.trader.saveWithoutId(tag);
             head.entity = tag;
+            head.entityStamp = com.coolfreeze23.headinajar.supplier.Records.now();
             head.trader = null;
             head.setChanged();
         }
@@ -618,6 +640,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         super.saveAdditional(tag, registries);
         tag.putString("Type", type);
         tag.put("Entity", entity);
+        com.coolfreeze23.headinajar.supplier.Records.put(tag, "Entity", entityStamp);
         tag.putLong("LastRestock", lastRestock);
         // written only once known, so an old head's save keeps exactly its old keys until it is registered
         if (jar != null) tag.putString("Jar", jar);
@@ -636,6 +659,7 @@ public class JarredHeadBlockEntity extends BlockEntity implements com.coolfreeze
         super.loadAdditional(tag, registries);
         type = tag.getString("Type");
         entity = tag.getCompound("Entity");
+        entityStamp = com.coolfreeze23.headinajar.supplier.Records.stampOf(tag, "Entity");
         lastRestock = tag.getLong("LastRestock");
         jar = tag.contains("Jar") ? tag.getString("Jar") : null;
         glass = tag.contains(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) ? tag.getInt(com.coolfreeze23.headinajar.staff.second.Secondment.GLASS) : -1;

@@ -49,6 +49,7 @@ public class JarredHeadItem extends Item {
         entity.remove("Passengers");
         com.coolfreeze23.headinajar.staff.Staff.stripEntity(entity);
         tag.put("Entity", entity);
+        com.coolfreeze23.headinajar.supplier.Records.stamp(tag, "Entity");
         if (!jar.isEmpty()) tag.putString("Jar", BuiltInRegistries.ITEM.getKey(jar.getItem()).toString());
         var file = com.coolfreeze23.headinajar.staff.Staff.of(mob);
         if (file != null) tag.put(com.coolfreeze23.headinajar.staff.Staff.ON_HEAD, file.save());
@@ -62,6 +63,17 @@ public class JarredHeadItem extends Item {
         return com.coolfreeze23.headinajar.block.HeadInfo.jar(data == null ? null : data.getUnsafe());
     }
 
+    /** The creature id the head was recorded as ("" for none), registered or not. */
+    public static String typeId(ItemStack stack) {
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        return data == null ? "" : data.getUnsafe().getString("Type");
+    }
+
+    /** A head of a creature this game has never heard of: its record is kept, untouched, until the creature is back. */
+    public static boolean discontinued(ItemStack stack) {
+        return com.coolfreeze23.headinajar.supplier.Records.discontinued(typeId(stack));
+    }
+
     public static EntityType<?> type(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return null;
@@ -73,6 +85,9 @@ public class JarredHeadItem extends Item {
     @Override
     public Component getName(ItemStack stack) {
         EntityType<?> type = type(stack);
+        if (type == null && discontinued(stack)) {
+            return Component.translatable("item.headinajar.jarred_head.of", com.coolfreeze23.headinajar.supplier.Records.speciesName(typeId(stack)));
+        }
         return type == null ? super.getName(stack) : Component.translatable("item.headinajar.jarred_head.of", type.getDescription());
     }
 
@@ -81,6 +96,13 @@ public class JarredHeadItem extends Item {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         if (!level.getBlockState(pos).canBeReplaced()) return InteractionResult.FAIL;
+        // a discontinued model is not seated: the item keeps its record until its creature is registered again
+        if (discontinued(context.getItemInHand())) {
+            if (context.getPlayer() instanceof net.minecraft.server.level.ServerPlayer placer) {
+                com.coolfreeze23.headinajar.feedback.Refusals.deny(placer, "head.discontinued");
+            }
+            return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+        }
         if (level.isClientSide) return InteractionResult.SUCCESS;
         // the head looks the opposite way to the block's facing (the plinth's front and the badge with it): facing the
         // way the placer looks, it looks back at them
@@ -115,12 +137,17 @@ public class JarredHeadItem extends Item {
                 tooltip.add(Component.translatable("item.headinajar.jarred_head.title", Component.translatable(title)).withStyle(ChatFormatting.GOLD));
             }
         }
+        if (type == null && discontinued(stack)) {
+            tooltip.add(Component.translatable("item.headinajar.jarred_head.discontinued",
+                    com.coolfreeze23.headinajar.supplier.Records.speciesName(typeId(stack))).withStyle(ChatFormatting.RED));
+        }
         if (type == EntityType.VILLAGER) tooltip.add(Component.translatable("item.headinajar.jarred_head.trades").withStyle(ChatFormatting.GREEN));
         var jar = BuiltInRegistries.ITEM.getOptional(ResourceLocation.tryParse(jar(stack)));
         jar.ifPresent(item -> tooltip.add(Component.translatable("item.headinajar.jarred_head.jar", item.getDescription()).withStyle(ChatFormatting.GRAY)));
         var file = com.coolfreeze23.headinajar.staff.Staff.of(stack);
         if (file != null) tooltip.add(Component.translatable("item.headinajar.jarred_head.staff", com.coolfreeze23.headinajar.staff.Staff.number(file.number),
                 com.coolfreeze23.headinajar.staff.Staff.departmentName(com.coolfreeze23.headinajar.staff.Staff.department(type(stack)))).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.headinajar.jarred_head.how").withStyle(ChatFormatting.DARK_GRAY));
+        // a discontinued model is not seated, so it is not told to be
+        if (!(type == null && discontinued(stack))) tooltip.add(Component.translatable("item.headinajar.jarred_head.how").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

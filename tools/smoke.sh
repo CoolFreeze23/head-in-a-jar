@@ -6,7 +6,8 @@
 #                         from SMOKE_PACK_DIR into run-smoke-pack (the instance is only read); default: plain dev settings
 #   SMOKE_PACK_DIR        the instance's minecraft folder (default: the Prism Launcher instance "CrazyCraft 5.0")
 #   SMOKE_MODS=a,b,...    extra mod groups from libs-smoke/<group> (sodium iris shoulder camera culling dynlights),
-#                         "anim" for Punchy and Not Enough Animations, "noemf" to leave EMF/ETF out
+#                         "anim" for Punchy and Not Enough Animations, "noemf" to leave EMF/ETF out,
+#                         "novb" to leave Vanilla Backport and Platform out (they run whenever their jars are in libs/)
 #   SMOKE_PACK_MODS=1     the same as SMOKE_MODS=anim (kept for old scripts)
 #   SMOKE_SHADER=FILE     a shader pack zip from the instance's shaderpacks folder, switched on through Iris (needs iris);
 #                         "off" or unset writes enableShaders=false

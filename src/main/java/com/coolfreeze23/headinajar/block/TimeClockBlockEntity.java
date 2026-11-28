@@ -91,6 +91,8 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
     private String ownerName = "";
     private final List<UUID> roster = new ArrayList<>();
     private final List<CompoundTag> arrivals = new ArrayList<>();
+    /** The data version each arrival's record was written at, in step with {@link #arrivals} (0: unknown). */
+    private final List<Integer> arrivalStamps = new ArrayList<>();
     /** The last day a dawn was run here (-1 none). */
     public long lastDawn = -1;
     /** Who works which rack posting (not saved: staff take their postings again after a load). */
@@ -502,7 +504,13 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
 
     /** A worker's whole record, to be set down here the next time this clock ticks (the company shuttle home). */
     public void arrive(CompoundTag entity) {
+        arrive(entity, com.coolfreeze23.headinajar.supplier.Records.now());
+    }
+
+    /** As {@link #arrive(CompoundTag)}, keeping the data version the record was written at ({@code stamp}; 0 unknown). */
+    public void arrive(CompoundTag entity, int stamp) {
         arrivals.add(entity);
+        arrivalStamps.add(stamp);
         setChanged();
     }
 
@@ -518,9 +526,13 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
 
     private void setDown(ServerLevel level, Vec3 at, WorkerData.State state) {
         List<CompoundTag> now = new ArrayList<>(arrivals);
+        List<Integer> stamps = new ArrayList<>(arrivalStamps);
         arrivals.clear();
+        arrivalStamps.clear();
         setChanged();
-        for (CompoundTag tag : now) {
+        for (int i = 0; i < now.size(); i++) {
+            CompoundTag tag = now.get(i);
+            int stamp = i < stamps.size() ? stamps.get(i) : 0;
             if (tag.hasUUID("UUID") && level.getEntity(tag.getUUID("UUID")) != null) continue;
             Entity e = EntityType.loadEntityRecursive(tag, level, x -> {
                 x.moveTo(at.x, at.y, at.z, x.getYRot(), x.getXRot());
@@ -528,7 +540,10 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
             });
             if (e == null || !level.addFreshEntity(e)) {
                 // not set down: kept for the next tick, unless it is already back
-                if (e != null && level.getEntity(e.getUUID()) == null) arrivals.add(tag);
+                if (e != null && level.getEntity(e.getUUID()) == null) {
+                    arrivals.add(tag);
+                    arrivalStamps.add(stamp);
+                }
                 continue;
             }
             WorkerData d = Workforce.data(e);
@@ -808,6 +823,14 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         ListTag arr = new ListTag();
         arr.addAll(arrivals);
         tag.put("Arrivals", arr);
+        // beside the list, one stamp per record (0 for one written before stamps; none at all when no record has one)
+        int[] stamps = new int[arrivals.size()];
+        boolean stamped = false;
+        for (int i = 0; i < stamps.length; i++) {
+            stamps[i] = i < arrivalStamps.size() ? arrivalStamps.get(i) : 0;
+            stamped |= stamps[i] > 0;
+        }
+        if (stamped) tag.putIntArray("Arrivals" + com.coolfreeze23.headinajar.supplier.Records.SUFFIX, stamps);
         tag.putLong("LastDawn", lastDawn);
         if (powered) tag.putBoolean("Powered", true);
         tag.putLong("PoweredAt", poweredAt);
@@ -831,7 +854,12 @@ public class TimeClockBlockEntity extends BlockEntity implements KitMachine, Men
         if (tag.contains("Rack")) rack.deserializeNBT(registries, tag.getCompound("Rack"));
         if (tag.contains("Drawer")) drawer.deserializeNBT(registries, tag.getCompound("Drawer"));
         arrivals.clear();
-        for (Tag t : tag.getList("Arrivals", Tag.TAG_COMPOUND)) arrivals.add((CompoundTag) t);
+        arrivalStamps.clear();
+        int[] stamps = tag.getIntArray("Arrivals" + com.coolfreeze23.headinajar.supplier.Records.SUFFIX);
+        for (Tag t : tag.getList("Arrivals", Tag.TAG_COMPOUND)) {
+            arrivalStamps.add(arrivals.size() < stamps.length ? stamps[arrivals.size()] : 0);
+            arrivals.add((CompoundTag) t);
+        }
         lastDawn = tag.contains("LastDawn") ? tag.getLong("LastDawn") : -1;
         powered = tag.getBoolean("Powered");
         poweredAt = tag.getLong("PoweredAt");

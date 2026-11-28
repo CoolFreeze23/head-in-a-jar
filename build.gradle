@@ -145,19 +145,31 @@ dependencies {
             "maven.modrinth:entitytexturefeatures:7.2.4-neoforge-1.21", // types in Entity Model Features' API
             "maven.modrinth:shoulder-surfing-reloaded:1.21.1-5.2.0+neoforge",
     ].each { compileOnly(it) { transitive = false } }
+    // Vanilla Backport and its Platform library: no Maven repository, and their licence forbids re-hosting or
+    // bundling, so the jars are read from the local libs/ folder (not committed). The match is empty when they are
+    // absent; nothing in the mod needs them to build.
+    compileOnly fileTree(dir: 'libs', include: ['VanillaBackport-neoforge-*.jar', 'Platform-neoforge-*.jar'])
+    // -Psupplier: the GameTest server also loads them (from libs/), so the tests of the supplied creatures run; without
+    // the switch the GameTest server runs exactly as before, whatever is in libs/
+    if (project.hasProperty('supplier')) {
+        def supplied = fileTree(dir: 'libs', include: ['VanillaBackport-neoforge-*.jar', 'Platform-neoforge-*.jar'])
+        if (supplied.files.size() < 2) throw new GradleException('-Psupplier needs the Vanilla Backport and Platform jars in libs/')
+        gametestRuntimeOnly supplied
+    }
     // the local folders below are for the hidden dev client only (tools/smoke.sh), not for building the mod
     // the hidden smoke client also runs them, so their screens and tooltips can be checked
     // (SMOKE_MODS containing "noemf" leaves Entity Model Features and Entity Texture Features out, "nopatchouli" Patchouli,
-    // so the written handbook is used)
+    // so the written handbook is used, "novb" Vanilla Backport and Platform)
     def smokeMods = (System.getenv('SMOKE_MODS') ?: '').toLowerCase().split('[ ,]+').findAll { it } as Set
     def smokeLeftOut = (smokeMods.contains('noemf') ? ['entity_model_features*', 'entity_texture_features*'] : []) +
-            (smokeMods.contains('nopatchouli') ? ['Patchouli*'] : [])
+            (smokeMods.contains('nopatchouli') ? ['Patchouli*'] : []) +
+            (smokeMods.contains('novb') ? ['VanillaBackport-*', 'Platform-*'] : [])
     smokeRuntimeOnly fileTree(dir: 'libs', include: ['*.jar'], exclude: smokeLeftOut)
     // SMOKE_PACK_MODS=1 (or SMOKE_MODS=anim) also runs the pack's animation mods (libs-smoke/*.jar, not committed)
     if (System.getenv('SMOKE_PACK_MODS') || smokeMods.contains('anim')) smokeRuntimeOnly fileTree(dir: 'libs-smoke', include: ['*.jar'])
     // SMOKE_MODS=sodium,iris,shoulder,camera,culling,...: each group is the folder libs-smoke/<group> (iris brings sodium)
     if (smokeMods.contains('iris')) smokeMods += 'sodium'
-    smokeMods.findAll { !(it in ['anim', 'noemf', 'nopatchouli']) }.each { group ->
+    smokeMods.findAll { !(it in ['anim', 'noemf', 'nopatchouli', 'novb']) }.each { group ->
         smokeRuntimeOnly fileTree(dir: "libs-smoke/${group}", include: ['*.jar'])
     }
 }

@@ -174,9 +174,10 @@ public class TreadmillGameTests {
     @GameTest(template = "platform", batch = BATCH)
     public static void everyTreadmillRateInTheTable(GameTestHelper h) {
         TreadmillBlockEntity belt = belt(h, FLOOR);
-        // the data map holds exactly the table
+        // the data map holds exactly the table (the new arrivals' rows, there only when the supplier is, are tested with them)
         Set<String> rows = new HashSet<>();
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) if (TreadmillRate.of(type) != null) rows.add(BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
+        rows.removeAll(com.coolfreeze23.headinajar.supplier.Supplier.NEW_ARRIVALS);
         h.assertTrue(rows.equals(TABLE.keySet()), "the data map's rows differ from the table: " + rows.size() + " vs " + TABLE.size());
         Map<String, Object> table = new HashMap<>(TABLE);
         // the default: a land body with no row (no vanilla walker is left without one; a shulker stands in for a modded host)

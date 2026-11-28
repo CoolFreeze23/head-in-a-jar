@@ -1,0 +1,55 @@
+@world flat
+@difficulty easy
+@gamemode creative
+# setup: night (a zombie nautilus host burns by day, as a zombie does), no spawns
+gamerule doMobSpawning false
+gamerule doDaylightCycle false
+time set 18000
+weather clear
+tp @s 0 -60 0 0 10
+wait 30
+item replace entity @s hotbar.0 with headinajar:surgical_saw
+hotbar 1
+hostify minecraft:zombie_nautilus 8 -60 10
+summon minecraft:happy_ghast 20 -60 12 {NoAI:1b,Health:4f}
+wait 5
+tp @s 20 -60 7 0 0
+lookat happy_ghast 2
+observe 30
+key use
+wait 20
+tp @s 0 -60 0 0 10
+jar
+wait 10
+tp @s 8.5 -60 7 0 0
+lookat zombie_nautilus 1
+key use
+wait 20
+riding zombie_nautilus
+hud off
+view 2
+wait 10
+shot h_host_zombie_nautilus_front
+view 1
+wait 10
+shot h_host_zombie_nautilus_back
+view 0
+hud on
+sneak
+wait 20
+tp @s 20.5 -60 6 0 0
+lookat happy_ghast 1
+key use
+wait 20
+riding happy_ghast
+hud off
+view 2
+wait 10
+shot h_host_happy_ghast_front
+view 1
+wait 10
+shot h_host_happy_ghast_back
+view 0
+hud on
+sneak
+wait 20

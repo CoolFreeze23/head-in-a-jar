@@ -1,0 +1,27 @@
+{
+  "entity": "minecraft:creaking",
+  "wage": {
+    "item": "minecraft:resin_clump",
+    "count": 1
+  },
+  "noise": "staff.headinajar.noise.creaking",
+  "alarm": "minecraft:entity.creaking.activate",
+  "work": {
+    "hire": "lanyard.creaking"
+  },
+  "array": 10,
+  "turret": "lookout",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:creaking"
+    },
+    {
+      "type": "headinajar:registered",
+      "registry": "item",
+      "id": "minecraft:resin_clump"
+    }
+  ]
+}

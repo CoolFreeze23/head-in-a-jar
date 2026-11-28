@@ -33,6 +33,8 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
     private int shownStored;
     private String look = "";
     private CompoundTag stored;
+    /** The data version the stored body was written at (0: before stamps). */
+    private int storedStamp;
     private String storedName = "";
     /**
      * Who checked the body in: only they, or someone they trust, take it out. Saved as {@code StoredOwner}; a locker
@@ -74,18 +76,27 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
                 player.displayClientMessage(Component.translatable("message.headinajar.locker_none"), true);
                 return;
             }
+            // 0.8.0: a happy ghast does not fit, and a creaking bound to a heart is the heart's
+            String refused = com.coolfreeze23.headinajar.supplier.SuppliedMachines.lockerRefusal(host);
+            if (refused != null) {
+                Refusals.deny(sp, source, refused);
+                return;
+            }
             CompoundTag tag = new CompoundTag();
             if (!host.save(tag)) {
                 Refusals.deny(sp, source, "locker.cannot_store", host.getDisplayName());
                 return;
             }
+            com.coolfreeze23.headinajar.supplier.SuppliedMachines.checkIn(host, tag, server.getGameTime());
+            String line = com.coolfreeze23.headinajar.supplier.SuppliedMachines.storedLine(host);
             stored = tag;
+            storedStamp = com.coolfreeze23.headinajar.supplier.Records.now();
             storedName = host.getDisplayName().getString();
             storedOwner = sp.getUUID();
             host.discard();
             kit.event(EV_CHECKIN, 0);
             server.playSound(null, worldPosition, com.coolfreeze23.headinajar.machine.MachineSounds.LOCKER_THUNK.get(), SoundSource.BLOCKS, 1, 0.95f + server.random.nextFloat() * 0.1f);
-            player.displayClientMessage(Component.translatable("message.headinajar.locker_stored", storedName), true);
+            player.displayClientMessage(com.coolfreeze23.headinajar.supplier.Lines.of(line, storedName), true);
         } else {
             // the ticket: the body goes back to whoever checked it in, or to someone they trust
             if (storedOwner != null && !com.coolfreeze23.headinajar.form.HeadRegistry.get(server.getServer()).trusts(storedOwner, sp)) {
@@ -117,7 +128,8 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
 
     /** Lets the stored body out in front of the locker. False (and it stays stored) if it can't be loaded. */
     private boolean release(ServerLevel server) {
-        Entity entity = EntityType.loadEntityRecursive(stored, server, e -> e);
+        // a copper golem's weathering clock is moved on by its time inside (0.8.0); any other record is let out as stored
+        Entity entity = EntityType.loadEntityRecursive(com.coolfreeze23.headinajar.supplier.SuppliedMachines.checkOut(stored, server.getGameTime()), server, e -> e);
         if (entity == null) return false;
         Direction front = getBlockState().getValue(MachineBlock.FACING);
         Vec3 at = Vec3.atBottomCenterOf(worldPosition.relative(front));
@@ -246,7 +258,10 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        if (stored != null) tag.put("Stored", stored);
+        if (stored != null) {
+            tag.put("Stored", stored);
+            com.coolfreeze23.headinajar.supplier.Records.put(tag, "Stored", storedStamp);
+        }
         tag.putString("StoredName", storedName);
         if (storedOwner != null) tag.putUUID("StoredOwner", storedOwner);
         tag.put("Energy", energy.serializeNBT(registries));
@@ -256,6 +271,7 @@ public class BodyLockerBlockEntity extends BlockEntity implements com.coolfreeze
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         stored = tag.contains("Stored") ? tag.getCompound("Stored") : null;
+        storedStamp = com.coolfreeze23.headinajar.supplier.Records.stampOf(tag, "Stored");
         storedName = tag.getString("StoredName");
         storedOwner = tag.hasUUID("StoredOwner") ? tag.getUUID("StoredOwner") : null;
         if (tag.contains("Energy")) energy.deserializeNBT(registries, tag.get("Energy"));

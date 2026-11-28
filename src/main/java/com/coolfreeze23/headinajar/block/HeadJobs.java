@@ -34,16 +34,70 @@ public final class HeadJobs {
         return HeadInfo.of(stack).profession();
     }
 
+    // --- the stations: what the staff row says, and the old tables for a row that does not say -----------------------
+
+    /**
+     * The attacks a head can make on a Turret Pedestal (a staff row's {@code turret}), and {@link #LOOKOUT} for none:
+     * arrows (plain, Slowness, Poison, Weakness), a fireball, the guardian's laser, the creeper's pulse, a bite, a
+     * snowball, a splash of Weakness, a line of fangs.
+     */
+    public static final String LOOKOUT = "lookout", BOW = "bow", BOW_SLOWNESS = "bow_slowness", BOW_POISON = "bow_poison",
+            BOW_WEAKNESS = "bow_weakness", FIREBALL = "fireball", LASER = "laser", PULSE = "pulse", BITE = "bite", SNOWBALL = "snowball",
+            POTION = "potion", FANGS = "fangs";
+    public static final java.util.Set<String> TURRET_ATTACKS = java.util.Set.of(LOOKOUT, BOW, BOW_SLOWNESS, BOW_POISON, BOW_WEAKNESS, FIREBALL,
+            LASER, PULSE, BITE, SNOWBALL, POTION, FANGS);
+    /** The Neural Socket programs (a staff row's {@code socket}): a beat, a count, a stare; {@link #NO_PROGRAM} for none. */
+    public static final String NO_PROGRAM = "none", BEAT = "beat", COUNT = "count", STARE = "stare";
+    public static final java.util.Set<String> SOCKET_PROGRAMS = java.util.Set.of(NO_PROGRAM, BEAT, COUNT, STARE);
+
     /** What a head would do on a Turret Pedestal: false for heads with no attack (a pig, a cow). */
     public static boolean turretJob(EntityType<?> type) {
-        return type == EntityType.SKELETON || type == EntityType.STRAY || type == EntityType.BOGGED || type == EntityType.BLAZE
-                || type == EntityType.GUARDIAN || type == EntityType.ELDER_GUARDIAN || type == EntityType.CREEPER || type == EntityType.ZOMBIE
-                || type == EntityType.HUSK || type == EntityType.DROWNED || type == EntityType.SNOW_GOLEM || type == EntityType.WITCH || type == EntityType.EVOKER;
+        return !LOOKOUT.equals(turretAttack(type));
+    }
+
+    /** A head's attack on a Turret Pedestal ({@link #LOOKOUT} for none): its staff row's, else the old table's. */
+    public static String turretAttack(EntityType<?> type) {
+        var row = com.coolfreeze23.headinajar.staff.StaffTable.row(type);
+        return row != null && row.turret() != null ? row.turret() : turretTable(type);
+    }
+
+    /** The turret table as it was before the staff rows said (a creature with no row, or a row that does not say). */
+    public static String turretTable(EntityType<?> type) {
+        if (type == EntityType.SKELETON) return BOW;
+        if (type == EntityType.STRAY) return BOW_SLOWNESS;
+        if (type == EntityType.BOGGED) return BOW_POISON;
+        if (type == EntityType.BLAZE) return FIREBALL;
+        if (type == EntityType.GUARDIAN || type == EntityType.ELDER_GUARDIAN) return LASER;
+        if (type == EntityType.CREEPER) return PULSE;
+        if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) return BITE;
+        if (type == EntityType.SNOW_GOLEM) return SNOWBALL;
+        if (type == EntityType.WITCH) return POTION;
+        if (type == EntityType.EVOKER) return FANGS;
+        return LOOKOUT;
+    }
+
+    /** Whether an attack shoots arrows from a chest beside the pedestal. */
+    public static boolean arrows(String attack) {
+        return attack.startsWith(BOW);
     }
 
     /** Whether a head has a program to run in a Neural Socket on its own. */
     public static boolean socketJob(EntityType<?> type) {
-        return type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED || type == EntityType.VILLAGER || type == EntityType.ENDERMAN;
+        return type != null && !NO_PROGRAM.equals(socketProgram(type));
+    }
+
+    /** A head's Neural Socket program ({@link #NO_PROGRAM} for none): its staff row's, else the old table's. */
+    public static String socketProgram(EntityType<?> type) {
+        var row = com.coolfreeze23.headinajar.staff.StaffTable.row(type);
+        return row != null && row.socket() != null ? row.socket() : socketTable(type);
+    }
+
+    /** The socket table as it was before the staff rows said. */
+    public static String socketTable(EntityType<?> type) {
+        if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) return BEAT;
+        if (type == EntityType.VILLAGER) return COUNT;
+        if (type == EntityType.ENDERMAN) return STARE;
+        return NO_PROGRAM;
     }
 
     /** FE/t a head makes in a Cerebral Array by thinking very hard about broth. The Dragon Head needs a Board Room Core. */
@@ -52,8 +106,15 @@ public final class HeadJobs {
         return arrayOutput(type(stack));
     }
 
-    /** FE/t a jarred head of this creature makes in a Cerebral Array (0 for none). */
+    /** FE/t a jarred head of this creature makes in a Cerebral Array (0 for none): its staff row's, else the old table's. */
     public static int arrayOutput(EntityType<?> type) {
+        if (type == null) return 0;
+        var row = com.coolfreeze23.headinajar.staff.StaffTable.row(type);
+        return row != null && row.array() != null ? row.array() : arrayTable(type);
+    }
+
+    /** The Array table as it was before the staff rows said. */
+    public static int arrayTable(EntityType<?> type) {
         if (type == null) return 0;
         if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) return 20;
         if (type == EntityType.VILLAGER || type == EntityType.ZOMBIE_VILLAGER || type == EntityType.WANDERING_TRADER) return 40;

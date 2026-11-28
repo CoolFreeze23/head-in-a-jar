@@ -176,6 +176,7 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, NeuralSocketBlockEntity s) {
         work(level, pos, state, s);
+        s.clamp(level, pos);
         com.coolfreeze23.headinajar.staff.StaffBlocks.stationTick(s, s.items, 1, null);
         // what it shows: the clamps (a jar or a head on it), the bars, the lamp
         s.occupied = s.occupant != null || !s.head().isEmpty();
@@ -189,6 +190,26 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
         else lamp = com.coolfreeze23.headinajar.machine.MachineLamp.READY;
         s.kit.tick(lamp, false, false, 0);
     }
+
+    /**
+     * The clamps against a lance: a plugged-in jar shoved off its seat while a spear is charged at it, or just after it
+     * was lanced (a mounted charge rides through it), is put back on the socket rather than let go. Keyed to the lance,
+     * so any other shove lets it go as before.
+     */
+    private void clamp(Level level, BlockPos pos) {
+        if (occupant == null || !(level instanceof ServerLevel server) || !(server.getPlayerByUUID(occupant) instanceof ServerPlayer p)
+                || FormActions.state(p).form() != Form.SOCKET) return;
+        Vec3 top = Vec3.atBottomCenterOf(pos.above());
+        double dx = p.getX() - top.x, dz = p.getZ() - top.z, flat = dx * dx + dz * dz;
+        if (flat < 0.01 || flat > 9 || Math.abs(p.getY() - top.y) > 2) return;
+        if (com.coolfreeze23.headinajar.host.Unseating.recentlyLanced(p, CLAMP_TICKS) || com.coolfreeze23.headinajar.host.Unseating.charger(p) != null) {
+            p.teleportTo(server, top.x, top.y, top.z, p.getYRot(), p.getXRot());
+            p.setDeltaMovement(Vec3.ZERO);
+        }
+    }
+
+    /** How long after a lance hit the clamps keep putting a shoved jar back (ticks). */
+    public static final int CLAMP_TICKS = 40;
 
     /** The six faces' levels, 4 bits each by the face's 3D index. */
     public int packedLevels() {
@@ -284,11 +305,16 @@ public class NeuralSocketBlockEntity extends BlockEntity implements HasItems, He
             return;
         }
         long t = level.getGameTime();
+        // the program is its staff row's (the old table for a creature whose row does not say)
         int program;
-        if (type == EntityType.ZOMBIE || type == EntityType.HUSK || type == EntityType.DROWNED) program = (t % 20) < 10 ? 15 : 0;
-        else if (type == EntityType.VILLAGER) program = (int) ((t / 10) % 8) * 2 + 1;
-        else if (type == EntityType.ENDERMAN) program = stared(level, pos) ? 15 : 0;
-        else return;
+        switch (HeadJobs.socketProgram(type)) {
+            case HeadJobs.BEAT -> program = (t % 20) < 10 ? 15 : 0;
+            case HeadJobs.COUNT -> program = (int) ((t / 10) % 8) * 2 + 1;
+            case HeadJobs.STARE -> program = stared(level, pos) ? 15 : 0;
+            default -> {
+                return;
+            }
+        }
         for (Direction d : Direction.values()) s.setOutput(d, program);
     }
 

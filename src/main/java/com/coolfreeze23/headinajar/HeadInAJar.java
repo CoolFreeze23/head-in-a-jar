@@ -22,6 +22,7 @@ public class HeadInAJar {
     public HeadInAJar(IEventBus modBus, ModContainer container) {
         ModRegistry.register(modBus);
         Advance.register(modBus);
+        com.coolfreeze23.headinajar.supplier.Supplier.register(modBus); // 0.8.0: the headinajar:registered condition
         com.coolfreeze23.headinajar.registry.ModSounds.register(modBus);
         com.coolfreeze23.headinajar.fx.FxParticles.register(modBus);
         modBus.addListener(Network::register);

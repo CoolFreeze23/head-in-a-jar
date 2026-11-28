@@ -93,17 +93,17 @@ public final class Shuttle {
             d.state = was;
             return false;
         }
-        send(level.getServer(), d.clock, tag);
+        send(level.getServer(), d.clock, tag, com.coolfreeze23.headinajar.supplier.Records.now());
         puff(mob);
         mob.discard();
         return true;
     }
 
     /** A record to its clock now, or kept until the clock is loaded. */
-    private static void send(MinecraftServer server, GlobalPos clock, CompoundTag tag) {
+    private static void send(MinecraftServer server, GlobalPos clock, CompoundTag tag, int stamp) {
         TimeClockBlockEntity c = Sites.clock(server.overworld(), clock);
-        if (c != null) c.arrive(tag);
-        else data(server).hold(clock, tag);
+        if (c != null) c.arrive(tag, stamp);
+        else data(server).hold(clock, tag, stamp);
     }
 
     /** The catch-up shuttle: gone in a puff, beside the player {@link #CATCH_UP_TICKS} later (or home). */
@@ -117,7 +117,7 @@ public final class Shuttle {
         }
         Data data = data(level.getServer());
         data.catching.add(new Catching(p.getUUID(), level.dimension(), mob.blockPosition(), level.getServer().overworld().getGameTime() + CATCH_UP_TICKS,
-                d.clock, tag));
+                d.clock, tag, com.coolfreeze23.headinajar.supplier.Records.now()));
         data.setDirty();
         puff(mob);
         mob.discard();
@@ -138,8 +138,8 @@ public final class Shuttle {
             data.setDirty();
             if (!beside(server, c)) {
                 // the shuttle home instead; one with no site is set down where it left, awaiting a clock
-                if (c.clock != null) send(server, c.clock, homeBound(c.tag));
-                else data.waiting.add(new Waiting(GlobalPos.of(c.dim, c.from), gone(c.tag)));
+                if (c.clock != null) send(server, c.clock, homeBound(c.tag), c.stamp);
+                else data.waiting.add(new Waiting(GlobalPos.of(c.dim, c.from), gone(c.tag), c.stamp));
             }
         }
         if (now % 20 != 0 || data.waiting.isEmpty()) return;
@@ -149,7 +149,7 @@ public final class Shuttle {
             if (level == null || !level.isLoaded(w.clock.pos())) continue;
             TimeClockBlockEntity c = Sites.clock(level, w.clock);
             if (c != null) {
-                c.arrive(w.tag);
+                c.arrive(w.tag, w.stamp);
                 it.remove();
                 data.setDirty();
             } else if (setDown(level, gone(w.tag), w.clock.pos(), null) != Placed.NOT_YET) {
@@ -252,12 +252,12 @@ public final class Shuttle {
 
     // --- the records -------------------------------------------------------------------------------------------------
 
-    /** A record bound for a clock that is not loaded. */
-    record Waiting(GlobalPos clock, CompoundTag tag) {
+    /** A record bound for a clock that is not loaded ({@code stamp}: the data version it was written at, 0 unknown). */
+    record Waiting(GlobalPos clock, CompoundTag tag, int stamp) {
     }
 
     /** A record catching up with its player. */
-    record Catching(UUID player, ResourceKey<Level> dim, BlockPos from, long due, GlobalPos clock, CompoundTag tag) {
+    record Catching(UUID player, ResourceKey<Level> dim, BlockPos from, long due, GlobalPos clock, CompoundTag tag, int stamp) {
     }
 
     /** The world's shuttle records (saved data {@code headinajar_shuttle}). */
@@ -285,7 +285,12 @@ public final class Shuttle {
 
         /** Keeps a record bound home for a clock that is not loaded now (it goes into the arrivals when it is). */
         public void hold(GlobalPos clock, CompoundTag entity) {
-            waiting.add(new Waiting(clock, homeBound(entity)));
+            hold(clock, entity, com.coolfreeze23.headinajar.supplier.Records.now());
+        }
+
+        /** As {@link #hold(GlobalPos, CompoundTag)}, keeping the data version the record was written at (0: unknown). */
+        public void hold(GlobalPos clock, CompoundTag entity, int stamp) {
+            waiting.add(new Waiting(clock, homeBound(entity), stamp));
             setDirty();
         }
 
@@ -323,6 +328,7 @@ public final class Shuttle {
                 CompoundTag t = new CompoundTag();
                 if (x.clock() != null) t.put("Clock", pos(x.clock()));
                 t.put("Entity", x.tag());
+                com.coolfreeze23.headinajar.supplier.Records.put(t, "Entity", x.stamp());
                 w.add(t);
             }
             tag.put("Waiting", w);
@@ -335,6 +341,7 @@ public final class Shuttle {
                 t.putLong("Due", x.due());
                 if (x.clock() != null) t.put("Clock", pos(x.clock()));
                 t.put("Entity", x.tag());
+                com.coolfreeze23.headinajar.supplier.Records.put(t, "Entity", x.stamp());
                 c.add(t);
             }
             tag.put("Catching", c);
@@ -362,13 +369,14 @@ public final class Shuttle {
             Data d = new Data();
             for (Tag t : tag.getList("Waiting", Tag.TAG_COMPOUND)) {
                 CompoundTag c = (CompoundTag) t;
-                d.waiting.add(new Waiting(c.contains("Clock") ? pos(c.get("Clock")) : null, c.getCompound("Entity")));
+                d.waiting.add(new Waiting(c.contains("Clock") ? pos(c.get("Clock")) : null, c.getCompound("Entity"),
+                        com.coolfreeze23.headinajar.supplier.Records.stampOf(c, "Entity")));
             }
             for (Tag t : tag.getList("Catching", Tag.TAG_COMPOUND)) {
                 CompoundTag c = (CompoundTag) t;
                 ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(c.getString("Dim")));
                 d.catching.add(new Catching(c.getUUID("Player"), dim, BlockPos.of(c.getLong("From")), c.getLong("Due"), c.contains("Clock") ? pos(c.get("Clock")) : null,
-                        c.getCompound("Entity")));
+                        c.getCompound("Entity"), com.coolfreeze23.headinajar.supplier.Records.stampOf(c, "Entity")));
             }
             for (Tag t : tag.getList("Leavers", Tag.TAG_COMPOUND)) {
                 CompoundTag c = (CompoundTag) t;

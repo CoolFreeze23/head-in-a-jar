@@ -1,0 +1,39 @@
+{
+  "entity": "minecraft:zombie_nautilus",
+  "wage": {
+    "item": "minecraft:rotten_flesh",
+    "count": 2
+  },
+  "noise": "staff.headinajar.noise.zombie_nautilus",
+  "work": {
+    "hire": true,
+    "jobs": {
+      "hauling": 1.5,
+      "security": 1.0
+    },
+    "cannot": {
+      "sorting": "card.cannot.sorting_undead"
+    },
+    "shift": "night",
+    "carry": 2,
+    "hands": false,
+    "walk": 0.8,
+    "move": "water",
+    "attack": "melee",
+    "melee": 3,
+    "water": true,
+    "quirks": [
+      "burns"
+    ]
+  },
+  "array": 20,
+  "turret": "bite",
+  "socket": "none",
+  "neoforge:conditions": [
+    {
+      "type": "headinajar:registered",
+      "registry": "entity_type",
+      "id": "minecraft:zombie_nautilus"
+    }
+  ]
+}

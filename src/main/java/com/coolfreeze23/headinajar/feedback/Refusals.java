@@ -89,7 +89,7 @@ public final class Refusals {
 
     /** The text of a refusal. */
     public static Component line(String reason, Object... args) {
-        return Component.translatable(PREFIX + reason, args);
+        return com.coolfreeze23.headinajar.supplier.Lines.of(PREFIX + reason, args);
     }
 
     /**
